@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/list_item"
+    style="@style/LayoutMatchWrap">
+
+    <RelativeLayout
+        style="@style/LayoutMatchWrap"
+        android:padding="@dimen/size5">
+
+        <TextView
+            android:id="@+id/msg_txt"
+            style="@style/LayoutWrap"
+            android:layout_marginEnd="@dimen/size5"
+            android:layout_marginStart="@dimen/size5"
+            android:gravity="start"
+            android:minHeight="@dimen/size20"
+            android:padding="@dimen/size7"
+            android:text="@string/app_name"
+            android:background="@drawable/chat_bubble_receiver"
+            android:textColor="@color/colorWhite"
+            android:textSize="@dimen/text14" />
+
+        <TextView
+            android:id="@+id/time_txt"
+            style="@style/LayoutWrap"
+            android:layout_below="@+id/msg_txt"
+            android:gravity="end"
+            android:maxLines="1"
+            android:padding="@dimen/size7"
+            android:visibility="gone"
+            android:textColor="@color/colorBlack"
+            android:textSize="@dimen/text12" />
+    </RelativeLayout>
+
+
+</RelativeLayout>

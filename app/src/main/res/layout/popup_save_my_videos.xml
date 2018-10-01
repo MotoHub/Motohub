@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/LayoutMatch"
+    android:background="@color/transparent50">
+
+
+    <LinearLayout
+        android:id="@+id/bottom_lay"
+        style="@style/LayoutMatchWrap"
+        android:layout_alignParentBottom="true"
+        android:background="@color/colorWhite"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/save_my_video_btn"
+            style="@style/LayoutMatchWrap"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/size40"
+            android:layout_marginBottom="@dimen/size10"
+            android:layout_marginTop="@dimen/size10"
+            android:background="@null"
+            android:text="@string/save_my_video"
+            android:textColor="@color/colorBlack"
+            android:textSize="@dimen/text14" />
+
+    </LinearLayout>
+
+</RelativeLayout>
+

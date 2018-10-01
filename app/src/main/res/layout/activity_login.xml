@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/login_co_layout"
+    style="@style/LayoutMatch"
+    tools:context="online.motohub.activity.LoginActivity">
+
+    <RelativeLayout style="@style/LayoutMatch">
+
+        <ImageView
+            android:id="@+id/app_logo"
+            android:layout_width="@dimen/size150"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/login_box"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="@dimen/size10"
+            android:layout_marginTop="@dimen/size10"
+            android:contentDescription="@string/app_name"
+            android:src="@drawable/app_logo" />
+
+        <RelativeLayout
+            android:id="@+id/login_box"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_margin="@dimen/size10">
+
+            <LinearLayout
+                android:id="@+id/form_box"
+                style="@style/LayoutMatchWrap"
+                android:layout_marginBottom="@dimen/size10"
+                android:background="@drawable/gray_border_bg"
+                android:orientation="vertical">
+
+                <EditText
+                    android:id="@+id/email_et"
+                    style="@style/LayoutMatchWrap"
+                    android:layout_height="@dimen/size40"
+                    android:background="@null"
+                    android:hint="@string/email"
+                    android:inputType="textEmailAddress"
+                    android:paddingEnd="@dimen/size5"
+                    android:paddingStart="@dimen/size5"
+                    android:textColor="@color/colorBlack"
+                    android:textColorHint="@color/colorGrey"
+                    android:textSize="@dimen/text14" />
+
+                <View
+                    style="@style/LayoutMatchWrap"
+                    android:layout_height="@dimen/size1"
+                    android:background="@color/colorGrey" />
+
+                <EditText
+                    android:id="@+id/pwd_et"
+                    style="@style/LayoutMatchWrap"
+                    android:layout_height="@dimen/size40"
+                    android:background="@null"
+                    android:hint="@string/pwd"
+                    android:inputType="textPassword"
+                    android:paddingEnd="@dimen/size5"
+                    android:paddingStart="@dimen/size5"
+                    android:textColor="@color/colorBlack"
+                    android:textColorHint="@color/colorGrey"
+                    android:textSize="@dimen/text14" />
+
+            </LinearLayout>
+
+            <CheckBox
+                android:id="@+id/terms_conditions_check_box"
+                style="@style/LayoutWrap"
+                android:layout_below="@+id/form_box"
+                android:layout_marginBottom="@dimen/size10"
+                android:layout_marginEnd="@dimen/size10"
+                android:text="@string/terms_and_conditions"
+                android:textColor="@color/colorBlack"
+                android:textSize="@dimen/text12"
+                android:theme="@style/MyCheckBox" />
+
+            <Button
+                android:id="@+id/email_login_btn"
+                style="@style/LayoutMatchWrap"
+                android:layout_height="@dimen/size40"
+                android:layout_below="@+id/terms_conditions_check_box"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="@dimen/size10"
+                android:background="@drawable/black_orange_btn_bg"
+                android:drawablePadding="@dimen/sizeMinus30"
+                android:paddingEnd="@dimen/size0"
+                android:paddingStart="@dimen/size10"
+                android:text="@string/login"
+                android:textColor="@color/text_color"
+                android:textSize="@dimen/text16"
+                android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/fb_login_btn"
+                style="@style/LayoutMatchWrap"
+                android:layout_height="@dimen/size40"
+                android:layout_below="@id/email_login_btn"
+                android:layout_marginBottom="@dimen/size10"
+                android:background="@drawable/black_orange_btn_bg"
+                android:drawablePadding="@dimen/sizeMinus30"
+                android:drawableStart="@drawable/fb_icon"
+                android:paddingEnd="@dimen/size0"
+                android:paddingStart="@dimen/size10"
+                android:text="@string/fb_login"
+                android:textColor="@color/text_color"
+                android:textSize="@dimen/text16"
+                android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/register_btn"
+                style="@style/LayoutMatchWrap"
+                android:layout_height="@dimen/size40"
+                android:layout_below="@+id/fb_login_btn"
+                android:layout_centerHorizontal="true"
+                android:background="@drawable/black_orange_btn_bg"
+                android:paddingEnd="@dimen/size0"
+                android:paddingStart="@dimen/size10"
+                android:text="@string/register"
+                android:layout_marginBottom="@dimen/size10"
+                android:textColor="@color/text_color"
+                android:textSize="@dimen/text16"
+                android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/forgot_pwd_btn"
+                style="@style/LayoutMatchWrap"
+                android:layout_height="@dimen/size40"
+                android:background="@drawable/black_orange_btn_bg"
+                android:textColor="@color/text_color"
+                android:layout_below="@+id/register_btn"
+                android:textStyle="bold"
+                android:paddingEnd="@dimen/size0"
+                android:text="@string/forgot_pwd"
+                android:paddingStart="@dimen/size10"
+                android:layout_centerHorizontal="true"
+                android:textSize="@dimen/text16" />
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+</android.support.design.widget.CoordinatorLayout>

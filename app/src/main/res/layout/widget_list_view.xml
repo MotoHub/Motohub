@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/list_view_co_layout"
+    style="@style/LayoutMatch">
+
+    <RelativeLayout style="@style/LayoutMatch">
+
+        <include
+            android:id="@+id/include"
+            layout="@layout/widget_toolbar" />
+
+
+        <RelativeLayout
+            style="@style/LayoutMatch"
+            android:layout_below="@+id/include"
+            android:layout_margin="@dimen/size10"
+            android:background="@drawable/orange_border_bg"
+            android:theme="@style/Theme.AppCompat.Light">
+
+            <ListView
+                android:id="@+id/widget_list_view"
+                style="@style/LayoutMatch"
+                android:divider="@android:color/transparent"
+                android:dividerHeight="@dimen/size5"
+                android:clickable="true"
+                android:padding="@dimen/size2"
+                android:scrollbars="none"
+                android:focusable="true" />
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/done_floating_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="@dimen/size16"
+        android:clickable="true"
+        android:visibility="gone"
+        app:fabSize="normal"
+        app:srcCompat="@drawable/done_icon" />
+
+</android.support.design.widget.CoordinatorLayout>

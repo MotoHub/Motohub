@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FF444444">
+
+    <include
+        android:id="@+id/toolbarLayout"
+        layout="@layout/widget_toolbar" />
+
+    <!-- Camera -->
+    <com.otaliastudios.cameraview.CameraView
+        android:id="@+id/camera"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/toolbarLayout"
+        android:layout_gravity="center"
+        android:keepScreenOn="true"
+        app:cameraAudio="on"
+        app:cameraCropOutput="false"
+        app:cameraFacing="back"
+        app:cameraFlash="off"
+        app:cameraGestureLongTap="none"
+        app:cameraGesturePinch="zoom"
+        app:cameraGestureScrollHorizontal="exposureCorrection"
+        app:cameraGestureScrollVertical="none"
+        app:cameraGestureTap="focusWithMarker"
+        app:cameraGrid="off"
+        app:cameraJpegQuality="100"
+        app:cameraPlaySounds="true"
+        app:cameraSessionType="picture" />
+
+    <TextView
+        android:id="@+id/tv_timer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/toolbarLayout"
+        android:layout_marginEnd="@dimen/size5"
+        android:layout_marginTop="@dimen/size15"
+        android:text="0:0"
+        android:layout_marginStart="@dimen/size10"
+        android:textColor="@color/colorRed"
+        android:visibility="gone" />
+
+    <ImageButton
+        android:id="@+id/toggleCamera"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:background="@drawable/green_background"
+        app:srcCompat="@drawable/ic_switch"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/toolbarLayout"
+        android:layout_marginEnd="@dimen/size5"
+        android:contentDescription="@string/app_name"
+        android:layout_marginTop="@dimen/size5"/>
+
+    <!-- Controls -->
+    <LinearLayout
+        android:id="@+id/control_lay"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal"
+        android:padding="16dp"
+        android:weightSum="2">
+
+        <ImageButton
+            android:id="@+id/capturePhoto"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:visibility="gone"
+            android:contentDescription="@string/app_name"
+            android:background="@drawable/green_background"
+            app:srcCompat="@drawable/ic_photo" />
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="1"/>
+
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <ImageButton
+                android:id="@+id/stopVideo"
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:contentDescription="@string/app_name"
+                android:background="@drawable/red_background"
+                app:srcCompat="@drawable/ic_stop_record" />
+
+            <ImageButton
+                android:id="@+id/captureVideo"
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:background="@drawable/green_background"
+                app:srcCompat="@drawable/ic_video"
+                android:contentDescription="@string/app_name" />
+
+        </FrameLayout>
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="1" />
+
+    </LinearLayout>
+
+    <android.support.v4.widget.NestedScrollView
+        android:id="@+id/controls"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/white"
+        app:behavior_hideable="true"
+        app:behavior_peekHeight="300dp"
+        app:behavior_skipCollapsed="false"
+        app:layout_behavior="@string/bottom_sheet_behavior">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" />
+    </android.support.v4.widget.NestedScrollView>
+</RelativeLayout>

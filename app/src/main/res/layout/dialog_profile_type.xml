@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/LayoutWrap"
+    android:layout_gravity="center"
+    android:background="@drawable/alert_bg"
+    android:padding="@dimen/size20"
+    tools:context="online.motohub.fragment.dialog.AppDialogFragment">
+
+    <RelativeLayout
+        android:id="@+id/check_box_layout"
+        style="@style/LayoutWrap"
+        android:layout_alignEnd="@+id/done_btn"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignRight="@+id/done_btn">
+
+        <CheckBox
+            android:id="@+id/bike_cb"
+            style="@style/LayoutWrap"
+            android:text="@string/bike"
+            android:textColor="@color/colorBlack"
+            android:textSize="@dimen/text16"
+            android:theme="@style/MyCheckBox" />
+
+        <CheckBox
+            android:id="@+id/boat_cb"
+            style="@style/LayoutWrap"
+            android:layout_below="@+id/bike_cb"
+            android:layout_marginTop="@dimen/size10"
+            android:text="@string/boat"
+            android:textColor="@color/colorBlack"
+            android:textSize="@dimen/text16"
+            android:theme="@style/MyCheckBox" />
+
+        <CheckBox
+            android:id="@+id/car_cb"
+            style="@style/LayoutWrap"
+            android:layout_below="@+id/boat_cb"
+            android:layout_marginTop="@dimen/size10"
+            android:text="@string/car"
+            android:textColor="@color/colorBlack"
+            android:textSize="@dimen/text16"
+            android:theme="@style/MyCheckBox" />
+
+        <CheckBox
+            android:id="@+id/kart_cb"
+            style="@style/LayoutWrap"
+            android:layout_below="@+id/car_cb"
+            android:layout_marginTop="@dimen/size10"
+            android:text="@string/kart"
+            android:textColor="@color/colorBlack"
+            android:textSize="@dimen/text16"
+            android:theme="@style/MyCheckBox" />
+
+    </RelativeLayout>
+
+    <Button
+        android:id="@+id/done_btn"
+        android:layout_width="@dimen/size150"
+        android:layout_height="@dimen/size40"
+        android:layout_below="@id/check_box_layout"
+        android:layout_marginTop="@dimen/size20"
+        android:background="@drawable/black_orange_btn_bg"
+        android:text="@string/done"
+        android:textAllCaps="false"
+        android:textColor="@color/text_color"
+        android:textSize="@dimen/text16"
+        android:textStyle="bold" />
+
+</RelativeLayout>

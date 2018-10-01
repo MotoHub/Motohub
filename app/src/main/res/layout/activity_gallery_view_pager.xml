@@ -1,0 +1,18 @@
+<RelativeLayout android:id="@+id/view_pager_lay"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorBlack"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <include layout="@layout/widget_toolbar"
+        android:id="@+id/include" />
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/promoter_viewpager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/include"
+       />
+
+
+</RelativeLayout>

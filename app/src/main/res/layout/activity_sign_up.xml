@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/sign_up_co_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout style="@style/LayoutMatch">
+
+        <include
+            android:id="@+id/include"
+            layout="@layout/widget_toolbar" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/form_box"
+            android:layout_below="@id/include"
+            android:layout_marginBottom="@dimen/size5">
+
+            <ImageView
+                android:id="@+id/app_logo"
+                android:layout_width="@dimen/size150"
+                android:layout_height="match_parent"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="@dimen/size10"
+                android:layout_marginTop="@dimen/size10"
+                android:contentDescription="@string/app_name"
+                android:src="@drawable/app_logo" />
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/form_box"
+            style="@style/LayoutMatchWrap"
+            android:layout_centerInParent="true"
+            android:layout_margin="@dimen/size10"
+            android:background="@drawable/gray_border_bg"
+            android:orientation="vertical">
+
+            <EditText
+                android:id="@+id/first_name_et"
+                style="@style/LayoutMatchWrap"
+                android:layout_height="@dimen/size40"
+                android:background="@null"
+                android:hint="@string/first_name"
+                android:inputType="textPersonName|textCapSentences"
+                android:paddingEnd="@dimen/size5"
+                android:paddingStart="@dimen/size5"
+                android:textColor="@color/colorBlack"
+                android:textColorHint="@color/colorGrey"
+                android:textSize="@dimen/text14" />
+
+            <View
+                style="@style/LayoutMatchWrap"
+                android:layout_height="@dimen/size1"
+                android:background="@color/colorGrey" />
+
+            <EditText
+                android:id="@+id/last_name_et"
+                style="@style/LayoutMatchWrap"
+                android:layout_height="@dimen/size40"
+                android:background="@null"
+                android:hint="@string/last_name"
+                android:inputType="textPersonName|textCapSentences"
+                android:paddingEnd="@dimen/size5"
+                android:paddingStart="@dimen/size5"
+                android:textColor="@color/colorBlack"
+                android:textColorHint="@color/colorGrey"
+                android:textSize="@dimen/text14" />
+
+            <View
+                style="@style/LayoutMatchWrap"
+                android:layout_height="@dimen/size1"
+                android:background="@color/colorGrey" />
+
+            <EditText
+                android:id="@+id/phone_number_et"
+                style="@style/LayoutMatchWrap"
+                android:layout_height="@dimen/size40"
+                android:background="@null"
+                android:hint="@string/phone_number"
+                android:inputType="number"
+                android:paddingEnd="@dimen/size5"
+                android:paddingStart="@dimen/size5"
+                android:textColor="@color/colorBlack"
+                android:textColorHint="@color/colorGrey"
+                android:textSize="@dimen/text14"
+                android:visibility="gone" />
+
+            <View
+                style="@style/LayoutMatchWrap"
+                android:layout_height="@dimen/size1"
+                android:background="@color/colorGrey" />
+
+
+            <EditText
+                android:id="@+id/email_et"
+                style="@style/LayoutMatchWrap"
+                android:layout_height="@dimen/size40"
+                android:background="@null"
+                android:hint="@string/email"
+                android:inputType="textEmailAddress"
+                android:paddingEnd="@dimen/size5"
+                android:paddingStart="@dimen/size5"
+                android:textColor="@color/colorBlack"
+                android:textColorHint="@color/colorGrey"
+                android:textSize="@dimen/text14" />
+
+            <View
+                style="@style/LayoutMatchWrap"
+                android:layout_height="@dimen/size1"
+                android:background="@color/colorGrey" />
+
+            <EditText
+                android:id="@+id/pwd_et"
+                style="@style/LayoutMatchWrap"
+                android:layout_height="@dimen/size40"
+                android:background="@null"
+                android:hint="@string/pwd"
+                android:inputType="textPassword"
+                android:paddingEnd="@dimen/size5"
+                android:paddingStart="@dimen/size5"
+                android:textColor="@color/colorBlack"
+                android:textColorHint="@color/colorGrey"
+                android:textSize="@dimen/text14" />
+
+            <View
+                style="@style/LayoutMatchWrap"
+                android:layout_height="@dimen/size1"
+                android:background="@color/colorGrey" />
+
+            <EditText
+                android:id="@+id/conf_pwd_et"
+                style="@style/LayoutMatchWrap"
+                android:layout_height="@dimen/size40"
+                android:background="@null"
+                android:hint="@string/confirm_pwd"
+                android:inputType="textPassword"
+                android:paddingEnd="@dimen/size5"
+                android:paddingStart="@dimen/size5"
+                android:textColor="@color/colorBlack"
+                android:textColorHint="@color/colorGrey"
+                android:textSize="@dimen/text14" />
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/submit_btn"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/size40"
+            android:layout_below="@+id/form_box"
+            android:layout_marginLeft="@dimen/size10"
+            android:layout_marginRight="@dimen/size10"
+            android:background="@drawable/black_orange_btn_bg"
+            android:text="@string/submit"
+            android:textAllCaps="false"
+            android:textColor="@color/text_color"
+            android:textSize="@dimen/text16"
+            android:textStyle="bold" />
+
+    </RelativeLayout>
+
+</android.support.design.widget.CoordinatorLayout>

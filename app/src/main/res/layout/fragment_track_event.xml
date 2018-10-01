@@ -1,0 +1,24 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/track_event_fragment_lay">
+
+    <ListView
+        android:id="@+id/track_event_rv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:nestedScrollingEnabled="true" />
+
+    <TextView
+        android:id="@+id/no_track_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/size60"
+        android:gravity="center"
+        android:text="@string/no_track_created_error"
+        android:textColor="@color/colorBlack"
+        android:textSize="@dimen/text16"
+        android:visibility="gone" />
+
+</RelativeLayout>

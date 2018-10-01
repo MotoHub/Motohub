@@ -1,0 +1,416 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/chat_box_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <include
+        android:id="@+id/include"
+        layout="@layout/widget_toolbar" />
+
+    <LinearLayout
+        android:id="@+id/livelinearlay"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/include"
+        android:layout_marginBottom="@dimen/size5"
+        android:layout_marginLeft="@dimen/size10"
+        android:layout_marginRight="@dimen/size10"
+        android:layout_marginTop="@dimen/size15"
+        android:orientation="horizontal"
+        android:weightSum="4">
+
+        <Button
+            android:id="@+id/btnSpectatorLive"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/size10"
+            android:layout_weight="2"
+            android:background="@drawable/black_orange_btn_bg"
+            android:padding="@dimen/size5"
+            android:text="@string/spectator_live"
+            android:textAllCaps="false"
+            android:textColor="@color/text_color"
+            android:textSize="@dimen/text16" />
+
+        <Button
+            android:id="@+id/btnLiveFeed"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/size10"
+            android:layout_weight="2"
+            android:background="@drawable/black_orange_btn_bg"
+            android:padding="@dimen/size5"
+            android:text="@string/live_feed"
+            android:textAllCaps="false"
+            android:textColor="@color/text_color"
+            android:textSize="@dimen/text16"
+            android:visibility="visible"/>
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/liveTimeTableRelativeLay"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/livelinearlay"
+        android:layout_marginBottom="@dimen/size5"
+        android:layout_marginLeft="@dimen/size10"
+        android:layout_marginRight="@dimen/size10"
+        android:layout_marginTop="@dimen/size5"
+        android:background="@color/colorGrey">
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/eventTimeTableCardView"
+            style="@style/LayoutMatchWrap"
+            android:layout_margin="@dimen/size5">
+
+            <RelativeLayout
+                android:id="@+id/timetable_view_lay"
+                style="@style/LayoutMatchWrap"
+                android:background="@color/colorWhite"
+                android:padding="@dimen/size5">
+
+                <TextView
+                    android:id="@+id/liveTimeTableTxt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:text="@string/time_table"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="@dimen/text16" />
+
+                <TextView
+                    android:id="@+id/event_start_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/liveTimeTableTxt"
+                    android:text="@string/event_start_time"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="@dimen/text16" />
+
+                <TextView
+                    android:id="@+id/event_start_time_txt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_below="@+id/liveTimeTableTxt"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="@dimen/text16" />
+
+                <TextView
+                    android:id="@+id/event_end_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/event_start_time"
+                    android:layout_marginTop="@dimen/size10"
+                    android:text="@string/event_end_time"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="@dimen/text16" />
+
+                <TextView
+                    android:id="@+id/event_end_time_txt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_below="@+id/event_start_time_txt"
+                    android:layout_marginTop="@dimen/size10"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="@dimen/text16" />
+
+            </RelativeLayout>
+
+        </android.support.v7.widget.CardView>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/lChat"
+        android:layout_below="@+id/liveTimeTableRelativeLay"
+        android:layout_marginBottom="@dimen/size5"
+        android:layout_marginLeft="@dimen/size10"
+        android:layout_marginRight="@dimen/size10"
+        android:layout_marginTop="@dimen/size5"
+        android:background="@drawable/orange_border_bg">
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/promoterCardView"
+            style="@style/LayoutMatchWrap"
+            android:layout_marginEnd="@dimen/size5"
+            android:layout_marginStart="@dimen/size5"
+            android:layout_marginTop="@dimen/size5"
+            android:background="@color/colorWhite"
+            android:visibility="gone"
+            app:cardCornerRadius="@dimen/size5">
+
+            <RelativeLayout
+                android:id="@+id/promoterLay"
+                style="@style/LayoutMatchWrap"
+                android:background="@color/colorLighterGrey"
+                android:padding="@dimen/size5">
+
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/profileImgView"
+                    android:layout_width="@dimen/size55"
+                    android:layout_height="@dimen/size55"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="@dimen/size5"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/default_profile_icon" />
+
+                <ImageView
+                    android:id="@+id/drop_down"
+                    android:layout_width="@dimen/size30"
+                    android:layout_height="@dimen/size30"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="@dimen/size5"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/drop_down_icon"
+                    android:contentDescription="@string/app_name"/>
+
+                <LinearLayout
+                    style="@style/LayoutMatchWrap"
+                    android:layout_centerVertical="true"
+                    android:layout_toEndOf="@+id/profileImgView"
+                    android:layout_toStartOf="@+id/drop_down"
+                    android:gravity="center|start"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/receiverNameTv"
+                        style="@style/LayoutMatchWrap"
+                        android:maxLines="1"
+                        android:padding="@dimen/size2"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="@dimen/text12"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/receiverMsgTv"
+                        style="@style/LayoutWrap"
+                        android:autoLink="all"
+                        android:gravity="start"
+                        android:linksClickable="true"
+                        android:maxLines="3"
+                        android:padding="@dimen/size2"
+                        android:textAlignment="textStart"
+                        android:textColor="@color/colorWhite"
+                        android:textColorLink="@color/colorOrange"
+                        android:textSize="@dimen/text12"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
+
+            </RelativeLayout>
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/promoterCardView"
+            android:layout_centerInParent="true" />
+
+    </RelativeLayout>
+
+    <!--<RelativeLayout
+        android:id="@+id/sendBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="@dimen/size5"
+        android:layout_marginLeft="@dimen/size10"
+        android:layout_marginRight="@dimen/size10"
+        android:layout_marginTop="@dimen/size5"
+        android:background="@null"
+        android:minHeight="@dimen/size30">
+
+        <RelativeLayout
+            android:id="@+id/writeChatBox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/size5"
+            android:layout_toStartOf="@+id/send_btn"
+            android:background="@drawable/orange_border_bg">
+
+            <EditText
+                android:id="@+id/writeChatEt"
+                style="@style/LayoutWrap"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentStart="true"
+                android:background="@null"
+                android:gravity="top"
+                android:inputType="textMultiLine"
+                android:minHeight="@dimen/size30"
+                android:paddingBottom="@dimen/size5"
+                android:paddingEnd="@dimen/size5"
+                android:paddingLeft="@dimen/size5"
+                android:paddingRight="@dimen/size5"
+                android:paddingStart="@dimen/size5"
+                android:paddingTop="@dimen/size5"
+                android:textColor="@color/colorBlack"
+                android:textSize="@dimen/text14" />
+
+            <ImageButton
+                android:id="@+id/fileAttachImgBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/writeChatEt"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:background="@null"
+                android:contentDescription="@string/app_name"
+                android:minHeight="@dimen/size30"
+                android:src="@android:drawable/ic_menu_camera" />
+
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/send_btn"
+            style="@style/LayoutWrap"
+            android:layout_alignBottom="@+id/writeChatBox"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:background="@drawable/black_orange_btn_bg"
+            android:clickable="true"
+            android:gravity="center"
+            android:minHeight="@dimen/size30"
+            android:paddingBottom="@dimen/size5"
+            android:paddingEnd="@dimen/size16"
+            android:paddingLeft="@dimen/size16"
+            android:paddingRight="@dimen/size16"
+            android:paddingStart="@dimen/size16"
+            android:paddingTop="@dimen/size5"
+            android:text="@string/send"
+            android:textAlignment="center"
+            android:textColor="@color/text_color"
+            android:textSize="@dimen/text14" />
+
+    </RelativeLayout>-->
+
+    <LinearLayout
+        android:id="@+id/lChat"
+        style="@style/LayoutMatchWrap"
+        android:layout_alignParentBottom="true"
+        android:layout_centerVertical="true"
+        android:layout_toEndOf="@+id/user_img_lay"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/imageConstraintLay"
+            style="@style/LayoutMatchWrap"
+            android:background="@color/colorGrey"
+            android:visibility="gone">
+
+            <ImageView
+                android:id="@+id/iv_post_image"
+                android:layout_width="@dimen/size150"
+                android:layout_height="@dimen/size150"
+                android:contentDescription="@string/app_name"
+                android:scaleType="centerCrop"
+                android:padding="@dimen/size2"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/iv_remove_image"
+                android:layout_width="@dimen/size20"
+                android:layout_height="@dimen/size20"
+                android:contentDescription="@string/app_name"
+                app:layout_constraintRight_toRightOf="@+id/iv_post_image"
+                app:layout_constraintTop_toTopOf="@+id/iv_post_image"
+                app:srcCompat="@drawable/cancel_orange_circle_icon" />
+
+        </android.support.constraint.ConstraintLayout>
+	
+	 <include layout="@layout/reply_chat_layout"
+            android:id="@+id/replyChatLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/size5"
+            android:visibility="gone"
+            android:layout_marginStart="@dimen/size5"
+            android:layout_marginEnd="@dimen/size5"/>
+
+        <RelativeLayout
+            android:id="@+id/sendBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/size5"
+            android:background="@null"
+            android:minHeight="@dimen/size30">
+
+            <RelativeLayout
+                android:id="@+id/writeChatBox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/size5"
+                android:layout_toStartOf="@+id/send_btn"
+                android:background="@drawable/orange_border_bg">
+
+                <EditText
+                    android:id="@+id/writeChatEt"
+                    style="@style/LayoutWrap"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentStart="true"
+                    android:background="@null"
+                    android:gravity="top"
+                    android:inputType="textMultiLine"
+                    android:minHeight="@dimen/size30"
+                    android:paddingBottom="@dimen/size5"
+                    android:paddingEnd="@dimen/size5"
+                    android:paddingLeft="@dimen/size5"
+                    android:paddingRight="@dimen/size5"
+                    android:paddingStart="@dimen/size5"
+                    android:paddingTop="@dimen/size5"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="@dimen/text14" />
+
+                <ImageView
+                    android:id="@+id/fileAttachImgBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBottom="@+id/writeChatEt"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:contentDescription="@string/app_name"
+                    android:src="@android:drawable/ic_menu_camera" />
+
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/send_btn"
+                style="@style/LayoutWrap"
+                android:layout_alignBottom="@+id/writeChatBox"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:background="@drawable/black_orange_btn_bg"
+                android:clickable="true"
+                android:gravity="center"
+                android:minHeight="@dimen/size30"
+                android:paddingBottom="@dimen/size5"
+                android:paddingEnd="@dimen/size16"
+                android:paddingLeft="@dimen/size16"
+                android:paddingRight="@dimen/size16"
+                android:paddingStart="@dimen/size16"
+                android:paddingTop="@dimen/size5"
+                android:text="@string/send"
+                android:textAlignment="center"
+                android:textColor="@color/text_color"
+                android:textSize="@dimen/text14" />
+
+        </RelativeLayout>
+
+    </LinearLayout>
+</RelativeLayout>

@@ -1,0 +1,106 @@
+
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/LayoutMatch"
+    android:fillViewport="true">
+
+<RelativeLayout android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/track_contact_lay"
+    tools:context="online.motohub.fragment.track.TrackContactFragment"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <TextView
+        android:id="@+id/contact_person_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:text="@string/track_contact_name"
+        android:textColor="@color/colorBlack" />
+
+    <TextView
+        android:id="@+id/contact_person_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_toEndOf="@+id/contact_person_label"
+        android:padding="10dp"
+        android:textColor="@color/colorBlack" />
+
+    <TextView
+        android:id="@+id/contact_number_label"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/contact_person_label"
+        android:padding="10dp"
+        android:text="@string/track_contact_number"
+        android:textColor="@color/colorBlack" />
+
+    <TextView
+        android:id="@+id/contact_number_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:linksClickable="true"
+        android:autoLink="phone"
+        android:textColorLink="@color/colorOrange"
+        android:layout_below="@+id/contact_person_text"
+        android:layout_toEndOf="@+id/contact_person_label"
+        android:padding="10dp"
+        android:textColor="@color/colorBlack" />
+
+
+    <TextView
+        android:id="@+id/contact_mail_label"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/contact_number_label"
+        android:padding="10dp"
+        android:text="@string/track_contact_mail"
+        android:textColor="@color/colorBlack" />
+
+    <TextView
+        android:id="@+id/contact_mail_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:autoLink="email"
+        android:linksClickable="true"
+        android:textColorLink="@color/colorOrange"
+        android:layout_below="@+id/contact_number_text"
+        android:layout_toEndOf="@+id/contact_person_label"
+        android:padding="10dp"
+        android:textColor="@color/colorBlack" />
+
+
+    <TextView
+        android:id="@+id/location_label"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/contact_mail_label"
+        android:padding="10dp"
+        android:text="@string/track_profile_location"
+        android:textColor="@color/colorBlack" />
+
+    <TextView
+        android:id="@+id/location_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:autoLink="all"
+        android:linksClickable="true"
+        android:textColorLink="@color/colorOrange"
+        android:layout_below="@+id/contact_mail_text"
+        android:layout_toEndOf="@+id/contact_person_label"
+        android:padding="10dp"
+        android:textColor="@color/colorBlack" />
+
+    <com.google.android.gms.maps.MapView
+        android:id="@+id/contact_location_map_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/location_label"
+        android:layout_marginTop="@dimen/size20" />
+ </RelativeLayout>
+</android.support.v4.widget.NestedScrollView>

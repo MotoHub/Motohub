@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/search_lay"
+        style="@style/LayoutMatchWrap"
+        android:layout_margin="@dimen/size5"
+        android:background="@drawable/orange_border_bg"
+        android:orientation="vertical"
+        android:visibility="visible">
+
+        <EditText
+            android:id="@+id/search_edt"
+            style="@style/LayoutMatchWrap"
+            android:layout_height="@dimen/size30"
+            android:background="@null"
+            android:hint="@string/search_here"
+            android:padding="@dimen/size5"
+            android:textColor="@color/colorBlack"
+            android:textColorHint="@color/colorGrey"
+            android:textSize="@dimen/text12" />
+    </LinearLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_videos"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </android.support.v7.widget.RecyclerView>
+
+    <TextView
+        android:id="@+id/txt_no_data"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="@dimen/size100"
+        android:gravity="center"
+        android:visibility="gone"
+        android:text="@string/video_not_found"
+        android:textColor="@color/colorBlack" />
+
+</LinearLayout>

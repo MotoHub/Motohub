@@ -1,0 +1,346 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/complete_profile_co_layout"
+    style="@style/LayoutMatch"
+    tools:context="online.motohub.activity.CompleteProfileActivity">
+
+    <include layout="@layout/widget_toolbar" />
+
+    <ScrollView
+        android:id="@+id/profile_scroll_view"
+        style="@style/LayoutMatch"
+        android:layout_marginTop="@dimen/size56"
+        android:scrollbars="none">
+
+        <RelativeLayout style="@style/LayoutMatchWrap">
+
+            <RelativeLayout
+                android:id="@+id/relativeLayout_img"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/coverImage"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/size100"
+                    android:clickable="true"
+                    android:contentDescription="@string/upload_moto_photo"
+                    android:focusable="true"
+                    android:scaleType="centerCrop"
+                    app:srcCompat="@drawable/default_cover_img" />
+
+                <ImageButton
+                    android:id="@+id/ib_add_cover_photo"
+                    android:layout_width="@dimen/size32"
+                    android:layout_height="@dimen/size32"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginEnd="@dimen/size10"
+                    android:layout_marginTop="@dimen/size10"
+                    android:background="@drawable/bg_add_photo"
+                    android:contentDescription="@string/camera"
+                    android:padding="@dimen/size7"
+                    android:scaleType="fitCenter"
+                    app:srcCompat="@drawable/ic_add_photo" />
+
+                <View
+                    android:id="@+id/cover_line"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/size3"
+                    android:layout_below="@+id/coverImage"
+                    android:background="@color/colorLighterGrey" />
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/add_profile_img"
+                    android:layout_width="@dimen/size80"
+                    android:layout_height="@dimen/size80"
+                    android:layout_centerHorizontal="true"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="@dimen/size50"
+                    android:clickable="true"
+                    android:contentDescription="@string/upload_moto_photo"
+                    android:focusable="true"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/default_profile_icon"
+                    app:civ_border_color="@color/colorLighterGrey"
+                    app:civ_border_width="@dimen/size3" />
+
+                <TextView
+                    android:id="@+id/upload_profile_img_tv"
+                    style="@style/LayoutMatchWrap"
+                    android:layout_below="@+id/add_profile_img"
+                    android:layout_marginTop="@dimen/size5"
+                    android:text="@string/upload_moto_photo"
+                    android:textAlignment="center"
+                    android:textColor="@color/text_color_two"
+                    android:textSize="@dimen/text12" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/relativeLayout_img"
+                android:padding="@dimen/size10">
+
+                <TextView
+                    android:id="@+id/profile_title_tv"
+                    style="@style/LayoutMatchWrap"
+                    android:layout_marginTop="@dimen/size5"
+                    android:text="@string/app_name"
+                    android:textAlignment="center"
+                    android:textColor="@color/colorOrange"
+                    android:textSize="@dimen/text16"
+                    android:textStyle="bold" />
+
+                <LinearLayout
+                    android:id="@+id/form_box"
+                    style="@style/LayoutMatchWrap"
+                    android:layout_below="@+id/profile_title_tv"
+                    android:layout_marginTop="@dimen/size10"
+                    android:background="@drawable/gray_border_bg"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        style="@style/LayoutMatchWrap"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="@dimen/size0"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:padding="@dimen/size10"
+                            android:text="@string/profile_type"
+                            android:textColor="@color/colorBlack"
+                            android:textSize="@dimen/text12"
+                            android:textStyle="bold" />
+
+
+                        <RelativeLayout
+                            style="@style/LayoutMatch"
+                            android:layout_width="0dip"
+                            android:layout_weight="1">
+
+                            <Spinner
+                                android:id="@+id/profile_type_spin"
+                                style="@style/CustomSpinner"
+                                android:background="@color/transparent" />
+
+                            <ImageView
+                                style="@style/LayoutMatch"
+                                android:layout_width="@dimen/size20"
+                                android:layout_alignParentEnd="true"
+                                android:layout_marginEnd="@dimen/size5"
+                                android:src="@drawable/drop_down_icon" />
+                        </RelativeLayout>
+
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/size1"
+                        android:background="@color/colorGrey" />
+
+                    <LinearLayout
+                        style="@style/LayoutMatchWrap"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/driver_tv"
+                            android:layout_width="@dimen/size0"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:padding="@dimen/size10"
+                            android:text="@string/driver"
+                            android:textColor="@color/colorBlack"
+                            android:textSize="@dimen/text12"
+                            android:textStyle="bold" />
+
+                        <EditText
+                            android:id="@+id/driver_et"
+                            android:layout_width="@dimen/size0"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:background="@null"
+                            android:hint="@string/driver"
+                            android:inputType="text"
+                            android:textColor="@color/colorBlack"
+                            android:textColorHint="@color/colorGrey"
+                            android:textSize="@dimen/text12" />
+
+                    </LinearLayout>
+
+                    <View
+                        android:id="@+id/driver_line"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/size1"
+                        android:background="@color/colorGrey" />
+
+                    <LinearLayout
+                        android:id="@+id/name_of_moto_box"
+                        style="@style/LayoutMatchWrap"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/name_of_moto_tv"
+                            android:layout_width="@dimen/size0"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:padding="@dimen/size10"
+                            android:text="@string/name_of_moto"
+                            android:textColor="@color/colorBlack"
+                            android:textSize="@dimen/text12"
+                            android:textStyle="bold" />
+
+                        <EditText
+                            android:id="@+id/name_of_moto_et"
+                            android:layout_width="@dimen/size0"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:background="@null"
+                            android:hint="@string/name_of_moto"
+                            android:inputType="text"
+                            android:textColor="@color/colorBlack"
+                            android:textColorHint="@color/colorGrey"
+                            android:textSize="@dimen/text12" />
+
+                    </LinearLayout>
+
+                    <View
+                        android:id="@+id/name_of_moto_line"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/size1"
+                        android:background="@color/colorGrey" />
+
+                    <LinearLayout
+                        android:id="@+id/make_box"
+                        style="@style/LayoutMatchWrap"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/make_tv"
+                            android:layout_width="@dimen/size0"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:padding="@dimen/size10"
+                            android:text="@string/make"
+                            android:textColor="@color/colorBlack"
+                            android:textSize="@dimen/text12"
+                            android:textStyle="bold" />
+
+                        <EditText
+                            android:id="@+id/make_et"
+                            android:layout_width="@dimen/size0"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:background="@null"
+                            android:hint="@string/make"
+                            android:inputType="text"
+                            android:textColor="@color/colorBlack"
+                            android:textColorHint="@color/colorGrey"
+                            android:textSize="@dimen/text12" />
+
+                    </LinearLayout>
+
+                    <View
+                        android:id="@+id/make_line"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/size1"
+                        android:background="@color/colorGrey" />
+
+                    <LinearLayout
+                        android:id="@+id/model_box"
+                        style="@style/LayoutMatchWrap"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/model_tv"
+                            android:layout_width="@dimen/size0"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:padding="@dimen/size10"
+                            android:text="@string/model"
+                            android:textColor="@color/colorBlack"
+                            android:textSize="@dimen/text12"
+                            android:textStyle="bold" />
+
+                        <EditText
+                            android:id="@+id/model_et"
+                            android:layout_width="@dimen/size0"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:background="@null"
+                            android:hint="@string/model"
+                            android:inputType="text"
+                            android:textColor="@color/colorBlack"
+                            android:textColorHint="@color/colorGrey"
+                            android:textSize="@dimen/text12" />
+
+                    </LinearLayout>
+
+                    <View
+                        android:id="@+id/model_line"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/size1"
+                        android:background="@color/colorGrey" />
+
+                    <LinearLayout
+                        android:id="@+id/phone_box"
+                        style="@style/LayoutMatchWrap"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/phone_tv"
+                            android:layout_width="@dimen/size0"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:padding="@dimen/size10"
+                            android:text="@string/phone_number"
+                            android:textColor="@color/colorBlack"
+                            android:textSize="@dimen/text12"
+                            android:textStyle="bold" />
+
+                        <EditText
+                            android:id="@+id/phone_et"
+                            android:layout_width="@dimen/size0"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:background="@null"
+                            android:hint="@string/phone_number"
+                            android:inputType="phone"
+                            android:maxLength="10"
+                            android:textColor="@color/colorBlack"
+                            android:textColorHint="@color/colorGrey"
+                            android:textSize="@dimen/text12" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <RelativeLayout
+                    android:id="@+id/upgrade_box"
+                    style="@style/LayoutMatchWrap"
+                    android:layout_below="@+id/form_box">
+
+                    <Button
+                        android:id="@+id/upgrade_btn"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/size40"
+                        android:layout_marginTop="@dimen/size20"
+                        android:background="@drawable/black_orange_btn_bg"
+                        android:text="@string/upgrade_profile"
+                        android:textAllCaps="false"
+                        android:textColor="@color/text_color"
+                        android:textSize="@dimen/text16"
+                        android:textStyle="bold" />
+
+                </RelativeLayout>
+
+            </RelativeLayout>
+
+        </RelativeLayout>
+
+    </ScrollView>
+
+</android.support.design.widget.CoordinatorLayout>

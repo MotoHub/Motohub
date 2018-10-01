@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/LayoutMatchWrap"
+    android:background="@color/colorWhite"
+    android:paddingBottom="@dimen/size10"
+    android:paddingTop="@dimen/size10"
+    tools:context="online.motohub.fragment.dialog.AppDialogFragment">
+
+    <RelativeLayout
+        android:id="@+id/deleteConversationsLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/ripple_effect"
+        android:clickable="true"
+        android:focusable="true">
+
+        <ImageView
+            android:id="@+id/delete_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_margin="@dimen/size10"
+            android:contentDescription="@string/app_name"
+            app:srcCompat="@drawable/delete_icon" />
+
+
+        <TextView
+            android:id="@+id/delete_txt"
+            style="@style/LayoutWrap"
+            android:layout_alignBottom="@+id/delete_icon"
+            android:layout_alignTop="@+id/delete_icon"
+            android:layout_toEndOf="@+id/delete_icon"
+            android:layout_toRightOf="@+id/delete_icon"
+            android:gravity="center_vertical"
+            android:text="@string/delete"
+            android:textColor="@color/colorBlack"
+            android:textSize="@dimen/text14" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/blockLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/deleteConversationsLayout"
+        android:background="@drawable/ripple_effect"
+        android:clickable="true">
+
+        <ImageView
+            android:id="@+id/gallery_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_margin="@dimen/size10"
+            android:contentDescription="@string/app_name"
+            app:srcCompat="@drawable/ic_block_recyclerview" />
+
+        <TextView
+            android:id="@+id/gallery_tv"
+            style="@style/LayoutWrap"
+            android:layout_alignBottom="@+id/gallery_icon"
+            android:layout_alignTop="@+id/gallery_icon"
+            android:layout_toEndOf="@id/gallery_icon"
+            android:layout_toRightOf="@+id/gallery_icon"
+            android:gravity="center_vertical"
+            android:text="@string/block"
+            android:textColor="@color/colorBlack"
+            android:textSize="@dimen/text14" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/reviewLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/blockLayout"
+        android:background="@drawable/ripple_effect"
+        android:clickable="true"
+        android:focusable="true">
+
+        <ImageView
+            android:id="@+id/review_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_margin="@dimen/size10"
+            android:contentDescription="@string/app_name"
+            app:srcCompat="@drawable/ic_rate_review_recyclerview" />
+
+        <TextView
+            android:id="@+id/review_txt"
+            style="@style/LayoutWrap"
+            android:layout_alignBottom="@+id/review_icon"
+            android:layout_alignTop="@+id/review_icon"
+            android:layout_toEndOf="@id/review_icon"
+            android:layout_toRightOf="@+id/review_icon"
+            android:gravity="center_vertical"
+            android:text="@string/review"
+            android:textColor="@color/colorBlack"
+            android:textSize="@dimen/text14" />
+
+    </RelativeLayout>
+
+</RelativeLayout>

@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    android:orientation="vertical"
+    tools:context="online.motohub.activity.PaymentActivity">
+
+    <include
+        android:id="@+id/include"
+        layout="@layout/widget_toolbar" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="@dimen/size10"
+        android:layout_marginRight="@dimen/size10"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_card_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/size20"
+            android:text="@string/card_holder_name"
+            android:textColor="@color/colorBlack"
+            android:textSize="@dimen/text16" />
+
+        <EditText
+            android:id="@+id/et_card_name"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/size40"
+            android:hint="@string/name"
+            android:textColorHint="@color/colorGrey"
+            android:inputType="text"
+            android:layout_marginEnd="@dimen/size20"
+            android:layout_marginTop="@dimen/size20"
+            android:background="@drawable/orange_border_bg"
+            android:padding="@dimen/size5"
+            android:labelFor="@+id/et_card_name"
+            android:maxLines="1"
+            android:textColor="@color/colorBlack"
+            android:textCursorDrawable="@null"
+            android:textSize="@dimen/text16" />
+
+
+        <TextView
+            android:id="@+id/input_layout_number"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/size20"
+            android:text="@string/card_number"
+            android:textColor="@color/colorBlack"
+            android:textSize="@dimen/text16" />
+
+        <EditText
+            android:id="@+id/et_card_number"
+            android:layout_width="match_parent"
+            android:padding="@dimen/size5"
+            android:layout_height="@dimen/size40"
+            android:layout_marginEnd="@dimen/size20"
+            android:textColorHint="@color/colorGrey"
+            android:layout_marginTop="@dimen/size20"
+            android:hint="4111 1111 1111 1111"
+            android:background="@drawable/orange_border_bg"
+            android:inputType="number"
+            android:labelFor="@+id/et_card_number"
+            android:maxLength="19"
+            android:maxLines="1"
+            android:textColor="@color/colorBlack"
+            android:textCursorDrawable="@null"
+            android:textSize="@dimen/text16" />
+
+        <RelativeLayout
+            android:id="@+id/rl_payment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/size30">
+
+            <TextView
+                android:id="@+id/tv_exp_date"
+                android:layout_width="170dp"
+                android:layout_height="wrap_content"
+                android:text="@string/expiry_date"
+                android:textColor="@color/colorBlack"
+                android:textSize="@dimen/text16" />
+
+            <EditText
+                android:id="@+id/et_card_exp_date"
+                android:textColorHint="@color/colorGrey"
+                android:padding="@dimen/size5"
+                android:layout_width="170dp"
+                android:layout_height="@dimen/size40"
+                android:layout_below="@+id/tv_exp_date"
+                android:layout_marginTop="@dimen/size20"
+                android:background="@drawable/orange_border_bg"
+                android:inputType="date"
+                android:hint="@string/expiry_date_hint"
+                android:labelFor="@+id/et_card_exp_date"
+                android:maxLength="5"
+                android:textColor="@color/colorBlack"
+                android:textSize="@dimen/text16" />
+
+            <TextView
+                android:id="@+id/tv_cvc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/size10"
+                android:layout_toEndOf="@+id/tv_exp_date"
+                android:textColor="@color/colorBlack"
+                android:text="@string/cvv"
+                android:textSize="@dimen/text16" />
+
+            <EditText
+                android:id="@+id/et_cvc"
+                android:padding="@dimen/size5"
+                android:layout_width="100dp"
+                android:layout_height="@dimen/size40"
+                android:textColorHint="@color/colorGrey"
+                android:layout_below="@+id/tv_exp_date"
+                android:hint="123"
+                android:layout_marginStart="@dimen/size10"
+                android:layout_marginTop="@dimen/size20"
+                android:layout_toEndOf="@+id/et_card_exp_date"
+                android:background="@drawable/orange_border_bg"
+                android:inputType="date"
+                android:labelFor="@+id/et_cvc"
+                android:maxLength="3"
+                android:textColor="@color/colorBlack"
+                android:textSize="@dimen/text16" />
+
+            <Button
+                android:id="@+id/pay_btn"
+                style="@style/LayoutMatchWrap"
+                android:layout_height="@dimen/size40"
+                android:layout_alignParentBottom="true"
+                android:layout_margin="@dimen/size10"
+                android:background="@drawable/black_orange_btn_bg"
+                android:text="@string/enter"
+                android:textColor="@color/text_color"
+                android:textSize="@dimen/text16"
+                android:textStyle="bold" />
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

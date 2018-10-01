@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/size60"
+    android:padding="@dimen/size5"
+    tools:context="online.motohub.fragment.dialog.AppDialogFragment">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/circular_img_view"
+        android:layout_width="@dimen/size50"
+        android:layout_height="@dimen/size50"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="@dimen/size5"
+        android:layout_marginStart="@dimen/size5"
+        android:scaleType="centerCrop"
+        android:src="@drawable/default_profile_icon" />
+
+    <LinearLayout
+        android:id="@+id/text_view_box"
+        style="@style/LayoutWrapMatch"
+        android:layout_marginEnd="@dimen/size10"
+        android:layout_marginLeft="@dimen/size10"
+        android:layout_marginRight="@dimen/size10"
+        android:layout_marginStart="@dimen/size10"
+        android:layout_toEndOf="@+id/circular_img_view"
+        android:layout_toLeftOf="@+id/tag_cb"
+        android:layout_toRightOf="@+id/circular_img_view"
+        android:layout_toStartOf="@+id/tag_cb"
+        android:gravity="center_vertical"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/name_tv"
+            style="@style/LayoutMatchWrap"
+            android:gravity="center_vertical"
+            android:maxLines="1"
+            android:paddingBottom="@dimen/size2"
+            android:text="@string/app_name"
+            android:textColor="@color/colorBlack"
+            android:textSize="@dimen/text12"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+    <CheckBox
+        android:id="@+id/tag_cb"
+        style="@style/LayoutWrapMatch"
+        android:layout_alignBottom="@+id/circular_img_view"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@+id/circular_img_view"
+        android:padding="@dimen/size5"
+        android:theme="@style/MyCheckBox" />
+
+</RelativeLayout>

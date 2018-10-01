@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center">
+
+    <RelativeLayout
+        android:layout_width="@dimen/size330"
+        android:layout_height="260dp"
+        android:layout_below="@+id/iv"
+        android:layout_centerInParent="true"
+        android:layout_marginEnd="@dimen/size10"
+        android:layout_marginLeft="@dimen/size10"
+        android:layout_marginRight="@dimen/size10"
+        android:layout_marginStart="@dimen/size10"
+        android:layout_marginTop="-35dp"
+        android:background="@drawable/blend_fill_white">
+
+        <TextView
+            android:id="@+id/out_of_likes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/size35"
+            android:text="@string/your_trial_period_has_been_end"
+            android:textColor="@color/colorBlack"
+            android:textSize="@dimen/size18"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/get_unlimited_likes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/out_of_likes"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/size15"
+            android:text="@string/please_subscribe_to_continue"
+            android:textColor="@color/colorBlack" />
+
+        <TextView
+            android:id="@+id/tv_for"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/get_unlimited_likes"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/size15"
+            android:text="@string/_for"
+            android:textColor="@color/colorBlack" />
+
+        <TextView
+            android:id="@+id/tv_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_for"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/size15"
+            android:textColor="@color/colorBlack" />
+
+        <Button
+            android:id="@+id/btn_subscribe"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_price"
+            android:layout_marginEnd="@dimen/size25"
+            android:layout_marginLeft="@dimen/size25"
+            android:layout_marginRight="@dimen/size25"
+            android:layout_marginStart="@dimen/size25"
+            android:layout_marginTop="@dimen/size25"
+            android:background="@drawable/orange_btn_bg"
+            android:text="@string/subscribe_now"
+            android:textColor="@color/colorWhite" />
+
+    </RelativeLayout>
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/iv"
+        android:layout_width="90dp"
+        android:layout_height="90dp"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/ic_money"
+        app:civ_border_color="@color/colorWhite"
+        app:civ_border_width="@dimen/size5"
+        app:civ_fill_color="@color/colorOrange" />
+
+</RelativeLayout>

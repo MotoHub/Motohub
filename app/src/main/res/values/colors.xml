@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorBlack">#000000</color>
+    <color name="colorWhite">#FFFFFF</color>
+    <color name="colorLighterGrey">#80D3D3D3</color>
+    <color name="colorLightGrey">#8CFFFFFF</color>
+    <color name="colorGrey">#809E9E9E</color>
+    <color name="colorDarkGrey">#FF666666</color>
+    <color name="colorLightOrange">#C38200</color>
+    <color name="colorOrange">#FF6600</color>
+    <color name="transparent50">#80000000</color>
+    <color name="transparentColor">#DCDCDC</color>
+    <color name="transparent">#00000000</color>
+
+
+    <color name="controlButtonPressed">#80ff8400</color>
+    <color name="multiStateButtonPressed">#80ff8400</color>
+    <color name="multiStateButtonDisabled">#c1636363</color>
+
+
+    <color name="dataTableRowBackground1">#00ffffff</color>
+    <color name="dataTableRowBackground2">#1affffff</color>
+    <color name="dataTableHeaderBackground">#1a1a1a</color>
+    <color name="dataTableSubHeaderBackground">#da212121</color>
+    <color name="ash">#616161</color>
+    <color name="colorRed">#ffff0000</color>
+
+</resources>

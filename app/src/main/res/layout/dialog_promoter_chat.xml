@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="@style/LayoutMatch"
+    android:background="@color/transparent50"
+    android:padding="@dimen/size20">
+
+    <RelativeLayout
+        style="@style/LayoutMatchWrap"
+        android:layout_centerInParent="true"
+        android:background="@color/colorOrange">
+
+        <RelativeLayout
+            android:id="@+id/title_box"
+            style="@style/LayoutMatchWrap"
+            android:background="@color/colorOrange">
+
+            <TextView
+                android:id="@+id/title_tv"
+                style="@style/LayoutWrap"
+                android:padding="@dimen/size10"
+                android:textColor="@color/colorBlack"
+                android:textSize="@dimen/text16" />
+
+            <ImageButton
+                android:id="@+id/close_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/title_tv"
+                android:layout_alignParentEnd="true"
+                android:layout_alignTop="@+id/title_tv"
+                android:background="@null"
+                android:contentDescription="@string/app_name"
+                android:padding="@dimen/size10"
+                app:srcCompat="@drawable/close_icon" />
+
+        </RelativeLayout>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rvEventChat"
+            style="@style/LayoutMatchWrap"
+            android:layout_below="@+id/title_box"
+            android:background="@color/colorWhite"
+            android:paddingBottom="@dimen/size10"
+            android:paddingTop="@dimen/size10"
+            android:scrollbars="none" />
+    </RelativeLayout>
+
+</RelativeLayout>

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/live_stream_co_layout"
+    style="@style/LayoutMatch">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <include
+            android:id="@+id/include"
+            layout="@layout/widget_toolbar" />
+
+        <RelativeLayout
+            android:id="@+id/main_lay"
+            android:layout_width="match_parent"
+            android:layout_below="@+id/include"
+            android:layout_height="match_parent"
+            android:background="@android:color/black"
+            android:orientation="vertical">
+
+            <SurfaceView
+                android:id="@+id/surface_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_centerInParent="true" />
+
+            <RelativeLayout
+                style="@style/LayoutMatch"
+                android:layout_alignBottom="@+id/surface_view"
+                android:layout_alignTop="@+id/surface_view">
+
+                <ImageView
+                    android:id="@+id/left_arrow"
+                    android:layout_width="@dimen/size50"
+                    android:layout_height="@dimen/size50"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerInParent="true"
+                    android:onClick="onClick"
+                    android:padding="@dimen/size5"
+                    android:visibility="gone"
+                    app:srcCompat="@drawable/arrow_back_icon" />
+
+
+                <ImageView
+                    android:id="@+id/right_arrow"
+                    android:layout_width="@dimen/size50"
+                    android:layout_height="@dimen/size50"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerInParent="true"
+                    android:onClick="onClick"
+                    android:padding="@dimen/size5"
+                    android:visibility="gone"
+                    app:srcCompat="@drawable/arrow_right_icon" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/progress_lay"
+                style="@style/LayoutMatch"
+                android:layout_alignBottom="@+id/surface_view"
+                android:layout_alignTop="@+id/surface_view"
+                android:background="@color/transparent50"
+                android:clickable="false"
+                android:visibility="gone">
+
+                <ProgressBar
+                    android:id="@+id/progress_bar"
+                    android:layout_width="@dimen/size50"
+                    android:layout_height="@dimen/size50"
+                    android:layout_centerInParent="true"
+                    android:indeterminate="true"
+                    android:theme="@style/MyProgressBarTheme" />
+
+
+            </RelativeLayout>
+        </RelativeLayout>
+    </RelativeLayout>
+</android.support.design.widget.CoordinatorLayout>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="@style/LayoutWrap"
+    android:layout_marginBottom="@dimen/size5"
+    android:layout_marginLeft="@dimen/size5"
+    android:layout_marginStart="@dimen/size5"
+    android:background="@drawable/orange_round_bg"
+    android:orientation="horizontal"
+    android:paddingEnd="@dimen/size5"
+    android:paddingLeft="@dimen/size0"
+    android:paddingRight="@dimen/size5"
+    android:paddingStart="@dimen/size0">
+
+    <TextView
+        android:id="@+id/name_of_tag"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/size10"
+        android:layout_marginStart="@dimen/size10"
+        android:layout_weight="1"
+        android:maxLines="3"
+        android:padding="@dimen/size5"
+        android:text="@string/app_name"
+        android:textColor="@color/colorBlack"
+        android:textSize="@dimen/text12"
+        android:textStyle="bold" />
+
+    <ImageView
+        android:id="@+id/close_btn"
+        android:layout_width="@dimen/size24"
+        android:layout_height="@dimen/size24"
+        android:layout_gravity="center_vertical"
+        android:layout_marginEnd="@dimen/size5"
+        android:layout_marginRight="@dimen/size5"
+        android:background="@null"
+        android:clickable="true"
+        android:contentDescription="@string/app_name"
+        android:padding="@dimen/size4"
+        app:srcCompat="@drawable/close_icon" />
+
+</LinearLayout>

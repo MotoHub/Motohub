@@ -1,0 +1,679 @@
+<resources>
+
+    <string name="app_name">MotoHUB</string>
+    <item name="glide_tag" type="id" />
+    <!--TODO New Key - df.motohub.online-->
+    <!--<string name="dream_factory_api_key">08cd4cbab53c7513cfea748e1291ba5ca9a0e816c2d12bbc6bbf6b30d58df56b</string>-->
+    <!--TODO OLD KEY - motodev.spotya.online -->
+    <string name="dream_factory_api_key">dfbf68a171defe454d9b7c26005aa894de3b7e0768778b04890642167621e10c</string>
+    <string name="camera">Camera</string>
+    <string name="gallery">Gallery</string>
+
+    <!--Login Strings-->
+    <string name="fb_login">Login with Facebook</string>
+    <string name="login">Login</string>
+    <string name="register">Register</string>
+    <string name="forgot_pwd">Forgot Password</string>
+    <string name="first_name">First Name</string>
+    <string name="last_name">Last Name</string>
+    <string name="pwd">Password</string>
+    <string name="confirm_pwd">Confirm Password</string>
+    <string name="submit">Submit</string>
+    <string name="terms_conditions">Terms and Conditions</string>
+    <string name="accept_terms_and_con">Please accept the Terms and Conditions</string>
+    <string name="terms_and_conditions">I have read and accept the Terms and Conditions</string>
+    <string name="registration_success">You\'ve successfully registered your email!, Please Login to continue!</string>
+    <string name="something_wrong">Something went wrong. Please try again</string>
+    <string name="session_updated">Session Token updated successfully. Please try again!</string>
+    <string name="alert_settings">Permission must be required for this app, Please enable the permissions in app settings under the permissions section.</string>
+    <!--Facebook Credentials-->
+    <string name="facebook_app_id">1356755097715445</string>
+
+    <!--InApp Billing-->
+    <string name="license_key">MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAijKHwN4Qvc2My8/INd2JNI31Zl1iO7NxLwdus7956M+NzomG1ubL7oM/jrHZcE7z1ywist61UaKaZkVf1glo40s65m4kpX996k/MjygZZiesxc+u5gDu2PgWk2s5Y9Pxmim3/jQBTTvcf5mzZORMhqnuV2eMU8WP2DTLWhr9vsBAxwlf6cZ/wc6wBpgQNVXml+v80kvdKdUJJWbNjtRmbmofxJPJeeWnwMLVVw+uGaZzCJ9tl2a+wJF6P4YdNms1Lz2ZGrTmZ9KKrXjaC2oPUSUL3iMhJCfL2ckewRfBIa9d39zKZwgwvTBs2YqhwDfhp6OfDG04iGx+kszTHbc/dQIDAQAB</string>
+    <string name="Subscribe">Subscribe</string>
+    <string name="buy">Buy</string>
+    <string name="cancel">Cancel</string>
+    <string name="monthly"> / Month</string>
+    <string name="yearly"> / Year</string>
+
+    <!--Forgot Password Screen-->
+    <string name="pwd_reset">Password Reset</string>
+    <string name="forgot_pwd_msg">Please enter your email address and click send code.</string>
+    <string name="send_code">Send Code</string>
+    <string name="already_have_code">I already have a code</string>
+    <string name="email_hint">Email</string>
+
+    <!--Alert Messages-->
+    <string name="empty_all">Please enter all the fields</string>
+    <string name="empty_email">Please enter your Email</string>
+    <string name="valid_email">Please enter the valid Email</string>
+    <string name="empty_pwd">Please enter your Password</string>
+    <string name="length_pwd">Password should be minimum 6 digits</string>
+    <string name="empty_conf_pwd">Please enter the Confirm Password</string>
+    <string name="empty_reset_code">Please enter the Reset Code</string>
+    <string name="mismatch_old_pwd">Please enter the your valid Old Password</string>
+
+    <!--Reset Password Screen-->
+    <string name="reset_password_msg">Please enter your email an the code we sent to you in order to create your new password.</string>
+    <string name="enter_code">Enter Code</string>
+    <string name="reset_code_hint">Reset Code</string>
+    <string name="change_pwd">Change Password</string>
+    <string name="new_pwd_hint">New Password</string>
+    <string name="conf_new_pwd">Confirm New Password</string>
+
+
+    <!--Profile Strings-->
+    <string name="ok">OK</string>
+    <string name="create_your_profile">Create Your Profile</string>
+    <string name="complete_your_profile">Complete Your Moto PROFILE</string>
+    <string name="update_your_profile">Update Your Moto PROFILE</string>
+    <string name="update">Update</string>
+    <string name="view_your_profile">View Your Profile</string>
+    <string name="car">Car</string>
+    <string name="boat">Boat</string>
+    <string name="spectator">Spectator</string>
+    <string name="shop">Performance Shop</string>
+    <string name="performance_shop">Performance \n Shop</string>
+    <string name="bike">Bike</string>
+    <string name="media_and_photography">Media &amp; \n Photography</string>
+    <string name="kart">Kart</string>
+    <string name="memo">For all Race Tracks/Promoters/Clubs/News and Media Please go to
+        www.motohub.online to create your profile.</string>
+    <string name="profile_trial">Your profile has been created successfully and opted for free use
+        for 30 days. Your profile needs Subscription to continue after the end
+        of a trial.
+    </string>
+    <string name="enter">ENTER</string>
+    <string name="upload_moto_photo">Upload a MotoPHOTO</string>
+    <string name="upload_photo">Upload a PHOTO</string>
+    <string name="upload">Upload</string>
+    <string name="name">Name</string>
+    <string name="driver">Driver</string>
+    <string name="name_of_moto">Name of Moto</string>
+    <string name="profile_type">Profile Type</string>
+    <string name="make">Make</string>
+    <string name="model">Model</string>
+    <string name="hp">HP</string>
+    <string name="cc">CC</string>
+    <string name="engine_specs">Engine Specs</string>
+    <string name="drive_line">Driveline</string>
+    <string name="panel_and_paint">Panel &amp; Paint</string>
+    <string name="wheels_and_tyres">Wheels &amp; Tyres</string>
+    <string name="more_info">More Information</string>
+    <string name="tag_sponsor">Tag Sponsor</string>
+    <string name="tag_profile">Tag Profiles</string>
+    <string name="tag">Tag</string>
+    <string name="tagged_profile">Tagged Profiles</string>
+    <string name="tagged_profile_name">\@%s</string>
+    <string name="what_do_you_want_to_follow">What do you want to follow?</string>
+    <string name="everything_moto">Everything MOTO!!!</string>
+    <string name="or">Or</string>
+    <string name="select">Select</string>
+    <string name="select_profile">Select Profile</string>
+    <string name="done">Done</string>
+    <string name="next">Next</string>
+    <string name="moto_tutorial">MotoHUB Tutorial</string>
+    <string name="skip">Skip</string>
+    <string name="get_started">Let\'s Get Started</string>
+    <string name="update_profile_success">Profile Updated Successfully!!!</string>
+    <string name="ECU">ECU</string>
+    <string name="gear_box">Gear Box</string>
+    <string name="differential">Differential</string>
+    <string name="clutch">Clutch</string>
+    <string name="injection">Injection</string>
+    <string name="fuel_system">Fuel System</string>
+    <string name="turbo">Turbo</string>
+    <string name="suspension">Suspension</string>
+    <string name="tyres">Tyres</string>
+    <string name="exhaust">Exhaust</string>
+    <string name="forks">Forks</string>
+    <string name="shock">Shock</string>
+    <string name="lap_timer">Lap Timer</string>
+    <string name="rear_set">Rear Sets</string>
+    <string name="handle_bar">Handle Bars</string>
+    <string name="fairings">Fairing</string>
+    <string name="chain">Chain</string>
+    <string name="sprockets">Sprockets</string>
+    <string name="engine_cover">Engine Covers</string>
+    <string name="brake_master">Brake Master</string>
+    <string name="brake_pads">Brake Pads</string>
+    <string name="filter">Filter</string>
+    <string name="brake_fluid">Brake Fluid</string>
+    <string name="engine_oil">Engine Oil</string>
+    <string name="chain_lube">Chain Lube</string>
+    <string name="boots">Boots</string>
+    <string name="helmet">Helmet</string>
+    <string name="suit">Suit</string>
+    <string name="gloves">Gloves</string>
+    <string name="chest_protection">Chest Protection</string>
+    <string name="back_protection">Back Protection</string>
+
+    <!--Profile Toasts-->
+    <string name="use_desktop_version">Please use Desktop version for this profile.</string>
+    <string name="give_moto_photo">Please give MotoPHOTO!</string>
+    <string name="give_profile_pic">Please upload profile pic</string>
+    <string name="enter_all_fields">Please enter all the fields.</string>
+    <string name="enter_name">Please enter your Name.</string>
+    <string name="enter_first_name">Please enter your First Name</string>
+    <string name="enter_last_name">Please enter your Last Name</string>
+    <string name="enter_email">Please enter your Email</string>
+    <string name="enter_valid_email">Please enter a valid Email</string>
+    <string name="enter_pwd">Please enter your Password</string>
+    <string name="enter_min_pwd">Description should be minimum 6 digits</string>
+    <string name="enter_conf_pwd">Please enter your Confirm Password</string>
+    <string name="mismatch_pwd">Password and Confirm Password doesn\'t match</string>
+    <string name="driver_name_err">Please enter Driver Name.</string>
+    <string name="make_name_err">Please enter Maker.</string>
+    <string name="model_err">Please enter Model.</string>
+    <string name="hp_err">Please enter a valid HP.</string>
+    <string name="engine_specs_err">Please enter Engine Specs.</string>
+    <string name="drive_line_err">Please enter Driveline.</string>
+    <string name="panel_and_paint_err">Please enter Panel &amp; Paint.</string>
+    <string name="wheels_and_tyres_err">Please enter Wheels &amp; Tyres.</string>
+    <string name="more_info_err">Please enter More Information.</string>
+    <string name="follow_moto_err">Please follow one or more moto!</string>
+    <string name="failed">Failed!, Please try again!</string>
+    <string name="internet_failure">Failed!, Please check your internet connection!</string>
+    <string name="internet_err">Please check your internet connection!</string>
+    <string name="profile_created">Profile Created!</string>
+    <string name="profile_completed">Profile Creation Completed!</string>
+    <string name="ecu_err">Please enter ECU.</string>
+    <string name="diff_err">Plese enter Differencial.</string>
+    <string name="gear_err">Plasxe enter GearBox.</string>
+    <string name="clutch_err">Please enter Clutch.</string>
+    <string name="injection_err">Please enter Injection.</string>
+    <string name="fuel_err">Please enter Fuel System.</string>
+    <string name="turbo_err">Please enter Turbo.</string>
+    <string name="suspension_err">Please enter Suspension.</string>
+
+    <!--Profile View Strings-->
+    <string name="search">Search</string>
+    <string name="notifications">Notifications</string>
+    <string name="news_and_media">News &amp; Media</string>
+    <string name="messages">Messages</string>
+    <string name="message">Message</string>
+    <string name="Tracks">Tracks</string>
+    <string name="followers">Followers</string>
+    <string name="following">Following</string>
+    <string name="UnFollow">UnFollow</string>
+    <string name="moto_feed">MotoFeed</string>
+    <string name="news_feed">NewsFeed</string>
+    <string name="my_moto_file">My Profile</string>
+    <string name="create_new_profile">Create a New Profile</string>
+    <string name="other_profiles">Other Profiles</string>
+    <string name="blocked_users">Blocked Users</string>
+    <string name="message_not_allowed_err">Please follow before chat!</string>
+    <string name="alert_block">Do you want to block this profile?</string>
+    <string name="alert_unblock">Do you want to unblock this profile?</string>
+    <string name="follow_success">You\'ve successfully followed!</string>
+    <string name="un_follow_success">You\'ve successfully un-followed!</string>
+    <string name="block_success">You\'ve successfully blocked!</string>
+    <string name="un_block_success">You\'ve successfully un-blocked!</string>
+    <string name="no_profile_found_err">No Profile(s) found!, Please Create a new Profile!</string>
+    <string name="no_profile_found_to_follow_err">No Profile(s) found!</string>
+
+    <string name="no_followers_found_err">No follower(s) found!</string>
+    <string name="no_following_found_err">No following(s) found!</string>
+    <string name="no_blocked_users_found_err">No Blocked Users found!</string>
+    <string name="no_notification_found">There\'s no notifications found!</string>
+
+    <string name="subscribe_alert">Subscription Expired!\nPlease subscribe to further access…</string>
+    <!--My Moto File Strings-->
+    <string name="find_friends">Find friends (or) vehicles</string>
+    <string name="your_build">Your Build</string>
+    <string name="photos">Photos</string>
+    <string name="videos">Videos</string>
+    <string name="view_photos">View Photos</string>
+    <string name="view_videos">View Videos</string>
+    <string name="photos_and_videos">Photos/Videos</string>
+    <string name="vehicle_info">Vehicle\nInformation</string>
+    <string name="vehicle_information">Vehicle Information</string>
+    <string name="write_a_post">Write a post&#8230;</string>
+    <string name="moto_file">MotoFile</string>
+    <string name="follow">Follow</string>
+    <string name="un_follow">UnFollow</string>
+    <string name="block">Block</string>
+    <string name="un_block">UnBlock</string>
+    <string name="post">Post</string>
+    <string name="post_success">Posted Successfully!</string>
+    <string name="post_delete">Post Deleted Successfully!</string>
+    <string name="no_posts_err">No Post(s) Found!</string>
+    <string name="zero">0</string>
+    <string name="tag_err">Can\'t Tag! No Following(s) Found!</string>
+    <string name="write_new_post"> Write New Post</string>
+    <string name="win_car">Win a Car</string>
+    <!--Dialog Strings-->
+    <string name="ensure_exit">Do you want to Exit the App?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="search_sponsor">Search for your sponsor</string>
+    <string name="no_sponsor_found_err">No Sponsors Found!</string>
+    <string name="enter_sponsor_email">Couldn\'t find them? Enter email address here</string>
+    <string name="enter_email_err">Please give Email Address!</string>
+    <string name="enter_valid_email_err">Please give a valid Email Address!</string>
+    <string name="add">Add</string>
+    <string name="email">Email</string>
+    <string name="send">Send</string>
+    <string name="save">Save</string>
+    <string name="edit">Edit</string>
+    <string name="delete">Delete</string>
+
+    <!--Events Strings-->
+    <string name="event">Event/LiveStreaming</string>
+    <string name="find_event">Find an Event</string>
+    <string name="event_results">View Event Results</string>
+    <string name="who_is_going">Who\'s Going</string>
+    <string name="time_table">Timetable</string>
+    <string name="group_chat">Group Chat</string>
+    <string name="book_now">Book Now</string>
+    <string name="booked">Booked</string>
+    <string name="view_results">View Results</string>
+    <string name="first">1st</string>
+    <string name="second">2nd</string>
+    <string name="third">3rd</string>
+    <string name="more_inf">More Info</string>
+    <string name="no_events_err">Events are not available!</string>
+    <string name="check_follower">Sorry, Couldn\'t share this post, Kindly follow some profile to share!</string>
+
+    <!--Chat Strings-->
+    <string name="sender_name">Sender Name</string>
+    <string name="receiver_name">Receiver Name</string>
+    <string name="time">Time</string>
+    <string name="create_new_group">Create New Group</string>
+    <string name="enter_group_name">Enter Group Name</string>
+    <string name="selected_profiles">Selected Profile(s)</string>
+    <string name="group_members">Group Member(s)</string>
+    <string name="select_profiles">Select Profile(s)</string>
+    <string name="select_profile_err">Please select at-least one Profile!</string>
+    <string name="grp_name_err">Please enter group name!</string>
+    <string name="grp_img_err">Please give Group Image!</string>
+
+    <!--permission toasts-->
+    <string name="camera_permission_denied">Can\'t take photo!, permission was denied!</string>
+    <string name="storage_permission_denied">Can\'t access gallery!, permission was denied!</string>
+
+    <!-- gallery -->
+    <string name="picture_not_found">No pictures found!</string>
+    <string name="video_not_found">No videos found!</string>
+    <string name="try_again">Try again!</string>
+    <string name="update_success">Updated successfully!</string>
+    <string name="file_not_found">File not found!</string>
+    <string name="no_cover_pic_err">Please give a cover picture!</string>
+    <string name="no_profile_pic_err">Please give a profile picture!</string>
+    <string name="select_file_to_upload">Select image to upload</string>
+    <string name="uploading_video">Your video will upload shortly...</string>
+    <!-- time table -->
+    <string name="buffering">Buffering&#8230;</string>
+    <string name="event_name">Event name : </string>
+    <string name="event_date">Event date : </string>
+    <string name="session_name">Session name : </string>
+    <string name="session_start_time">Start time : </string>
+    <string name="session_end_time">End time : </string>
+    <string name="session_start_time_value">5:00 pm </string>
+    <string name="session_end_time_value">6:50 pm</string>
+    <string name="session_parser_error">unable to parse date</string>
+    <string name="session_end_date">Last day of event</string>
+    <string name="session_start_date">First day of event</string>
+    <string name="session_no_data_available">No session available</string>
+    <string name="session_reload">Reload this page</string>
+    <string name="alert_session_none">Sessions are not created for this event</string>
+    <string name="event_nobody_registered">No one has registered for this event!</string>
+    <string name="event_grp_nobody_registered">Can\'t Chat!, No one has registered for this event!</string>
+    <string name="event_grp_profile_not_registered">Can\'t Chat!, You haven\'t registered for this event!</string>
+
+    <!-- File Name Paths -->
+    <string name="util_app_folder_root_path">/MotoHub</string>
+    <string name="file_provider_authority" translatable="false">online.motohub.fileprovider</string>
+
+    <!-- Track -->
+    <string name="track_name">YMCA</string>
+    <string name="track_description">Description for track</string>
+    <string name="track_profile_title">Track Profile</string>
+    <string name="track_profile_contact">Contact</string>
+    <string name="track_profile_event">Events</string>
+    <string name="track_contact_name">Contact name</string>
+    <string name="track_contact_number">Contact number</string>
+    <string name="track_contact_mail">E-mail</string>
+    <string name="track_profile_feed">Feed</string>
+    <string name="track_profile_location">Location</string>
+    <string name="events">Events</string>
+
+    <!-- Google map api-->
+    <string name="google_map_api_key">AIzaSyDgKqv9DyeIMUKJ-db1uJB2UDZkvm2EpnE</string>
+
+    <!-- Stripe Event Payment-->
+    <string name="pay">Pay $</string>
+    <string name="payment">Payment</string>
+    <!--<string name="stripe_publishable_key">pk_live_0lNqitBOxZ7k047UP7YOuLX9</string>-->
+    <string name="stripe_publishable_key">pk_test_ekMAB911KAE6zRavSnmDdym1</string>
+    <string name="card_number">Card Number</string>
+    <string name="expiry_date">Expiry Date</string>
+
+    <!-- Posts and Comments-->
+    <string name="write_something">write something..</string>
+    <string name="empty_comments">Comments</string>
+    <string name="no_comments">No Comments</string>
+    <string name="share">Share</string>
+    <string name="like">Like</string>
+    <string name="post_video_uploading">Your video post started uploading!</string>
+    <string name="post_video_uploading_update">Your updated video post started uploading!.</string>
+    <string name="post_video_err">Can\'t upload this video!, This video exceeds file upload limit 15 MB!</string>
+
+    <!--Edit Post Activity Strings-->
+    <string name="edit_post">Edit Post</string>
+    <string name="post_update_success">Post Updated Successfully!</string>
+
+    <!--Facebook share post string-->
+    <string name="share_post">Share This Post</string>
+    <string name="friends">Friends</string>
+    <string name="facebook">Facebook</string>
+    <string name="facebook_login">Facebook Login</string>
+    <!-- NewsAndMedia/Clubs/Promoters -->
+    <string name="home">Home</string>
+    <string name="clubs">Clubs</string>
+    <string name="promoters">Promoters</string>
+    <string name="no_news_media_err">No News/Media(s) found!</string>
+    <string name="no_promoters_err">No Promoter(s) found!</string>
+    <string name="no_clubs_err">No Club(s) found!</string>
+
+    <!-- Live Stream -->
+    <string name="retry">Retry</string>
+    <string name="video_completed">Video Completed</string>
+    <string name="no_broadcast">No one broadcast the live video</string>
+
+    <string name="start_live">Start Live</string>
+    <string name="view_live">View Live</string>
+
+    <string name="dialog_title_error">An error occurred</string>
+    <string name="dialog_button_ok">OK</string>
+    <string name="dialog_button_cancel">Cancel</string>
+    <string name="dialog_button_close">Close</string>
+
+    <string name="status_connecting">Connecting&#8230;</string>
+    <string name="status_connected">Connected</string>
+    <string name="status_disconnecting">Disconnecting&#8230;</string>
+    <string name="status_buffering">Buffering&#8230;</string>
+    <string name="button_dismiss">Dismiss</string>
+    <string name="button_cancel">Cancel</string>
+    <string name="msg_please_wait">Please wait</string>
+
+    <string name="label_datagrid_table_title">Table Title</string>
+    <string name="label_datagrid_header_property">Property</string>
+    <string name="label_datagrid_header_setting">Setting</string>
+    <string name="label_datagrid_header_key">Key</string>
+    <string name="label_datagrid_header_name">Name</string>
+    <string name="label_datagrid_header_value">Value</string>
+
+    <string name="connection_settings_title">Connection Settings</string>
+    <string name="connection_settings_summary">Specify the connection settings for the Wowza Streaming Engine</string>
+
+    <string name="wz_live_host_address_title">Host Address</string>
+    <string name="wz_live_host_address_summary">The hostname or IP address of a Wowza Streaming Engine server</string>
+    <string name="wz_live_host_address_dialog_title">Enter the hostname or IP address</string>
+    <string name="wz_live_host_address_default_value">208.109.95.214</string>
+
+    <string name="wz_live_port_number_title">Port Number</string>
+    <string name="wz_live_port_number_summary">The port no. for the Wowza Streaming Engine</string>
+    <string name="wz_live_port_number_dialog_title">Enter the port number</string>
+    <string name="wz_live_port_number_default_value">1935</string>
+
+    <string name="wz_live_app_name_title">Application Name</string>
+    <string name="wz_live_app_name_summary">The name of the live streaming application</string>
+    <string name="wz_live_app_name_dialog_title">Enter the application name</string>
+    <string name="wz_live_app_name_default_value">live</string>
+
+    <string name="wz_live_stream_name_title">Stream Name</string>
+    <string name="wz_live_stream_name_summary">The name of the live stream</string>
+    <string name="wz_live_stream_name_dialog_title">Enter the steam name</string>
+    <string name="wz_live_stream_name_default_value">myStream</string>
+
+    <string name="wz_live_username_title">Source User Name</string>
+    <string name="wz_live_username_summary">The username for source authentication</string>
+    <string name="wz_live_username_dialog_title">Enter the source username</string>
+    <string name="wz_live_username_default_value">motohub</string>
+
+    <string name="wz_live_password_title">Source Password</string>
+    <string name="wz_live_password_summary">The password for source authentication</string>
+    <string name="wz_live_password_dialog_title">Enter the source password</string>
+    <string name="wz_live_password_default_value">motohub</string>
+
+    <!-- Video preferences strings -->
+    <string name="video_settings_title">Video Stream Settings</string>
+    <string name="video_settings_summary">Specify the settings for the video stream</string>
+
+    <string name="wz_video_enabled_title">Enable video streaming</string>
+    <string name="wz_video_enabled_title_summary">Indicates if video should be streamed</string>
+    <string name="wz_video_enabled_default_value">true</string>
+
+    <string name="wz_video_preset_title">Commonly used presets</string>
+    <string name="wz_video_preset_summary">Select from a list of optimized frame size / bitrate combinations</string>
+    <string name="wz_video_preset_dialog_title">Select a frame size / bitrate combination</string>
+    <string name="wz_video_preset_default_value">4</string>
+
+    <string name="wz_video_frame_size_title">Video frame size (px)</string>
+    <string name="wz_video_frame_size_summary">The video frame size</string>
+    <string name="wz_video_frame_size_dialog_title">Select a video frame size (px)</string>
+    <string name="wz_video_frame_size_default_value">4</string>
+
+    <string name="wz_video_bitrate_title">Bitrate (kbps)</string>
+    <string name="wz_video_bitrate_summary">The bitrate for the video stream</string>
+    <string name="wz_video_bitrate_dialog_title">Enter the video stream bitrate (kbps)</string>
+    <string name="wz_video_bitrate_default_value">50</string>
+
+    <string name="wz_video_framerate_title">Framerate (fps)</string>
+    <string name="wz_video_framerate_summary">The framerate for the video stream</string>
+    <string name="wz_video_framerate_dialog_title">Enter the framerate (fps)</string>
+    <string name="wz_video_framerate_default_value">30</string>
+
+    <string name="wz_video_keyframe_interval_title">Keyframe interval</string>
+    <string name="wz_video_keyframe_interval_summary">The # of frames in between each keyframe</string>
+    <string name="wz_video_keyframe_interval_dialog_title">Enter the # of frames in between each keyframe</string>
+    <string name="wz_video_keyframe_interval_default_value">30</string>
+
+    <string name="wz_video_player_prebuffer_duration_title">Playback pre-buffer duration</string>
+    <string name="wz_video_player_prebuffer_duration_summary">The # of seconds buffered before playback begins</string>
+    <string name="wz_video_player_prebuffer_duration_dialog_title">Enter the # of seconds to buffer before playback begins</string>
+    <string name="wz_video_player_prebuffer_duration_default_value">0</string>
+
+    <string name="wz_video_profile_level_title">H.264 profile level</string>
+    <string name="wz_video_profile_level_summary">The H.264 profile and profile level</string>
+    <string name="wz_video_profile_level_dialog_title">Select a H.264 profile level</string>
+    <string name="wz_video_profile_level_default_value">1</string>
+
+    <string name="wz_video_letterbox_portrait_title">Letterboxed portrait video</string>
+    <string name="wz_video_letterbox_portrait_summary">Video captured in portrait mode will be letter boxed</string>
+    <string name="wz_video_letterbox_portrait_default_value">false</string>
+
+    <string name="wz_video_captured_video_rotates_title">Captured video rotates</string>
+    <string name="wz_video_captured_video_rotates_summary">The captured video rotates as the device is rotated</string>
+    <string name="wz_video_captured_video_rotates_default_value">true</string>
+
+    <string name="wz_video_resize_to_aspect_title">Camera preview matches frame size</string>
+    <string name="wz_video_resize_to_aspect_summary">Resize the camera preview view to fit the frame size aspect ratio</string>
+    <string name="wz_video_resize_to_aspect_default_value">false</string>
+
+    <string name="wz_video_scale_and_crop_title">Scale and crop video to fill entire view</string>
+    <string name="wz_video_scale_and_crop_summary">The video stream will be scaled to fill the entire view and some of the video frame may be cropped.</string>
+    <string name="wz_video_scale_and_crop_default_value">false</string>
+
+    <string name="wz_video_use_abr_title">Enable Adaptive Bitrate</string>
+    <string name="wz_video_use_abr_summary">The video bitrate will be dynamically adjusted based on bandwidth</string>
+    <string name="wz_video_use_abr_default_value">false</string>
+
+    <!-- Audio preferences strings -->
+    <string name="audio_settings_title">Audio Stream Settings</string>
+    <string name="audio_settings_summary">Specify the settings for the audio stream</string>
+
+    <string name="wz_audio_enabled_title">Enable audio streaming</string>
+    <string name="wz_audio_enabled_title_summary">Indicates if audio should be streamed</string>
+    <string name="wz_audio_enabled_default_value">true</string>
+
+    <string name="wz_audio_samplerate_title">Sample rate (Hz)</string>
+    <string name="wz_audio_samplerate_summary">The sample rate for the audio stream (hz)</string>
+    <string name="wz_audio_samplerate_dialog_title">Enter the sample rate (Hz)</string>
+    <string name="wz_audio_samplerate_default_value">44100</string>
+
+    <string name="wz_audio_bitrate_title">Bitrate (bps)</string>
+    <string name="wz_audio_bitrate_summary">The bitrate for the audio stream</string>
+    <string name="wz_audio_bitrate_dialog_title">Enter the audio stream bitrate (bps)</string>
+    <string name="wz_audio_bitrate_default_value">64000</string>
+
+    <string name="wz_audio_stereo_title">Stream stereo audio</string>
+    <string name="wz_audio_stereo_summary">The audio will be streamed in stereo</string>
+    <string name="wz_audio_stereo_default_value">true</string>
+
+    <!-- Debug preferences strings -->
+    <string name="wz_debug_settings_title">SDK Debug Settings</string>
+    <string name="wz_debug_settings_summary">Useful settings for app debugging</string>
+
+    <string name="wz_debug_net_log_level_title">Network logging level</string>
+    <string name="wz_debug_net_log_level_summary">The logging level for network-related SDK operations</string>
+    <string name="wz_debug_net_log_level_dialog_title">Select the logging level</string>
+    <string name="wz_debug_net_log_level_default_value">2</string>
+
+    <string name="wz_debug_bandwidth_monitor_log_level_title">Streaming Monitor logging level</string>
+    <string name="wz_debug_bandwidth_monitor_log_level_summary">The logging level for the Streaming Monitor</string>
+    <string name="wz_debug_bandwidth_monitor_log_level_dialog_title">Select the logging level</string>
+    <string name="wz_debug_bandwidth_monitor_log_level_default_value">0</string>
+    <string name="audio_meter_help">Press the mic icon to toggle the audio level meter</string>
+    <string name="audio_bluetooth_help">The Bluetooth mic will be used for audio input if present</string>
+
+    <string name="audio_meter_title">GoCoder SDK Bluetooth Mic Example</string>
+    <string name="audio_bluetooth_title">GoCoder SDK Audio Meter Example</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="conversation">Conversation</string>
+    <string name="delete_conversation">Delete Conversation</string>
+    <string name="upgrade_profile">Upgrade to Racer Profile</string>
+    <string name="upgrade">Upgrade</string>
+    <!--EXTRA-->
+    <string name="todo">TODO</string>
+    <string name="folder_name">Folder Name</string>
+    <string name="_231">Number of Videos:</string>
+    <string name="api_err">Failed to connect with Internet.</string>
+    <string name="purchase_racer_profile">Upgrade to Racing Profile for booking.</string>
+    <string name="purchase_racer_profile_win_car">Upgrade to Racing Profile for access win a car or pay $</string>
+    <string name="card_holder_name">Card Holder Name</string>
+    <string name="cvv">CVV</string>
+    <string name="event_questions">Event Questions</string>
+    <string name="pref_title_vibrate">Vibrate</string>
+    <string name="allownotification">Allow Notification</string>
+    <string name="notification_sound">Notification Sound</string>
+    <string name="enable_notificaton">Enable/Disable Notifications</string>
+    <string name="on_off_sound">Turn On/Off Sound</string>
+    <string name="review">Review</string>
+    <string name="notification_vibration">Notification Vibration</string>
+    <string name="on_off_vib">Turn On/Off Vibration</string>
+    <string name="save_my_video">Save to My Video</string>
+
+    <!--Live Stream-->
+    <string name="search_here">Search here</string>
+    <string name="send_stream_request">Send Stream Request</string>
+    <string name="request_sent">Request Sent</string>
+    <string name="cancel_request">Cancel Request</string>
+    <string name="start_stream">Start Stream</string>
+    <string name="start_live_stream">Start Live Stream</string>
+    <string name="request_sent_already">Request already sent  to this user</string>
+    <string name="view_stream">View Stream</string>
+
+    <string name="view_live_stream">View Live Stream</string>
+    <string name="view_my_live_stream">View My Live Stream</string>
+    <string name="view_stream_request">View Stream Requests</string>
+    <string name="accept">Accept</string>
+    <string name="accepted">Accepted</string>
+    <string name="decline">Decline</string>
+    <string name="request_accepted_already">Request already accepted for this user</string>
+    <string name="requested_users">Requested User\'s</string>
+    <string name="moto_live">MOTOHUB - LIVE</string>
+    <string name="multi_stream">MULTI STREAM</string>
+    <string name="go_live">GO LIVE</string>
+    <string name="event_live_streams">Event Live Streams</string>
+    <string name="friends_live_streams">Friends Live Streams</string>
+    <string name="empty_promoters">No Promoter\'s are found!!!. Please follow your Promoter\'s first!!!</string>
+    <string name="empty_friends">No friend\'s are found!!!. Please follow your friend\'s first!!!</string>
+    <string name="empty_event_live_streams">No Promoter Stream\'s are found!!!.</string>
+    <string name="empty_friends_live_streams">No Friend\'s Stream\'s are found!!!.</string>
+    <string name="live_stream">Live Stream</string>
+    <string name="on_demand">On Demand</string>
+    <!--TODO remove this-->
+    <string name="username">Username</string>
+    <string name="name_of_driver">Name of Driver</string>
+    <string name="address">1820 Watching</string>
+    <string name="under_dev">Under Development</string>
+    <string name="post_shared">Post Shared Successfully.</string>
+    <string name="all_ready_post_shared">Already post shared.</string>
+    <string name="live">Live</string>
+    <string name="performance">Performance</string>
+    <string name="Choose_a_Follow_Category">Choose the Category</string>
+    <string name="reply">Reply</string>
+    <string name="comments">Comments</string>
+    <string name="shares">Shares</string>
+    <string name="likes">Likes</string>
+    <string name="live_video">Live Video</string>
+    <string name="coming_soon">Coming Soon</string>
+    <string name="logout_alert">Are you sure to logout?</string>
+    <string name="logout">Log Out</string>
+    <string name="now_track_error">No Tracks Found.</string>
+    <string name="no_track_created_error">No Tracks are created.</string>
+    <string name="follow_err">Kindly UnBlock this profile to follow.</string>
+    <string name="block_follow_err">You can\'t follow this user because he/she blocked your profile.</string>
+    <string name="payment_must_update">Payment Succeeded! You must update this record. \nPlease try again</string>
+    <string name="alert_live_pay_amount">To view stream, please pay $</string>
+    <string name="un_subscribe">UnSubscribe</string>
+    <string name="subscribe_success">You have successfully subscribed the club.</string>
+    <string name="un_subscribe_success">You have successfully unsubscribe the club.</string>
+    <string name="comment_likes">Comment Likes</string>
+    <string name="replies">Replies</string>
+    <string name="pending">Pending</string>
+    <string name="name_of">Rego or Name of </string>
+    <string name="promoter_account_err">No Promoter Accounts are added.</string>
+    <string name="trailer">Trailer</string>
+    <string name="event_price">Event Price</string>
+    <string name="event_add_on">Add On</string>
+    <string name="add_on">Add ons:</string>
+    <string name="total_price">Total Price</string>
+    <string name="no_add_on">No Add On found for this event.</string>
+    <string name="reply_likes">Reply Likes</string>
+    <string name="invalid_credentials">Invalid credentials.</string>
+    <string name="phone_number">Phone Number</string>
+    <string name="enter_phone_number">Please enter your Phone Number.</string>
+    <string name="spectator_live">Spectator Live</string>
+    <string name="live_feed">Live Feed</string>
+    <string name="event_start_time">Event Start Time</string>
+    <string name="event_end_time">Event End Time</string>
+
+    <!-- Notification Error -->
+    <string name="post_deleted_err">This Post was Deleted.</string>
+    <string name="my_story">My Story</string>
+    <string name="single_stream">Single Stream</string>
+    <string name="caption">Write caption...</string>
+    <string name="post_edit_err">Please specify the post content to update.</string>
+
+    <!--Tutorial Screen-->
+    <string name="t1">Welcome to your news feed. Scroll up and down to see what\'s going on in the motorsport community.</string>
+    <string name="t2">Here you will find race tracks, promoters, clubs and news and media.</string>
+    <string name="t3">The "on demand" section is shared to everyone one the app, to upload a video Add videos to your profile.</string>
+    <string name="t4">Here you will find all the latest events and live streaming. This is where you will also book into events and view live time table</string>
+    <string name="t5">Let\'s check out your profile.\nMake your first post here also posts to your friends</string>
+    <string name="t6">Update your vehicle specs here</string>
+    <string name="t7">Here is where you post to share to on demand.\nGood goes out to all users</string>
+    <string name="event_booked_successfully">Successfully booked an event.</string>
+    <string name="no_performance_shop_err">No PerformanceShop Found.</string>
+    <string name="month">/Month</string>
+    <string name="please_subscribe_to_continue">Please subscribe to continue</string>
+    <string name="_for">for</string>
+    <string name="your_trial_period_has_been_end">Your trial period has been end</string>
+    <string name="subscribe_now">Subscribe Now</string>
+
+    <!--Report Screen-->
+    <string name="choose_an_option">Choose a Reason</string>
+    <string name="report">Report</string>
+    <string name="report_reason">Reporting Reason</string>
+    <string name="track_profile_photos">Photos</string>
+    <string name="track_profile_videos">Videos</string>
+    <string name="comment_post">Commented to this post.</string>
+    <string name="phoneAlertMsg">Note : Your phone number is only used to find your friends, and won\'t be made public</string>
+    <string name="no_live_events_err">No Events</string>
+</resources>

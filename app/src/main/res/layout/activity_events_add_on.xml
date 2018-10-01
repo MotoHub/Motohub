@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorLightGrey"
+    >
+
+    <include
+        android:id="@+id/include"
+        layout="@layout/widget_toolbar" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:textSize="@dimen/text16"
+            android:textColor="@color/colorBlack"
+            android:id="@+id/noAddOnTxt"
+            android:layout_below="@+id/include"
+            android:layout_centerInParent="true"
+            android:layout_marginTop="@dimen/size20"
+            android:text="@string/no_add_on"
+            android:visibility="gone"
+            />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rvAddOn"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/include"
+            android:layout_marginTop="@dimen/size10"
+            android:layout_margin="@dimen/size5"
+            android:layout_above="@+id/doneBtn"
+            />
+
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/black_orange_btn_bg"
+            android:textColor="@color/text_color"
+            android:textSize="@dimen/text16"
+            android:id="@+id/doneBtn"
+            android:text="@string/done"
+            android:layout_margin="@dimen/size10"
+            android:layout_alignParentBottom="true"
+            android:textAllCaps="false"
+
+            />
+
+</RelativeLayout>

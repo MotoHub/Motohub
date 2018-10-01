@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/pick_img_parent_view"
+    style="@style/LayoutMatch"
+    android:background="@color/colorWhite"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:orientation="vertical">
+
+        <include layout="@layout/widget_toolbar" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/img_files_list_view"
+            style="@style/LayoutMatch"
+            android:background="@color/colorLighterGrey"
+            android:divider="@android:color/transparent"
+            android:listSelector="@android:color/transparent"
+            android:scrollbars="none" />
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/view_pager_lay"
+        style="@style/LayoutMatch"
+        android:background="@color/colorBlack"
+        android:visibility="gone">
+
+        <android.support.v4.view.ViewPager
+            android:id="@+id/pager"
+            style="@style/LayoutMatch"
+            android:layout_above="@+id/bottom_lay" />
+
+        <LinearLayout
+            android:id="@+id/bottom_lay"
+            style="@style/LayoutMatchWrap"
+            android:layout_alignParentBottom="true"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:padding="@dimen/size10"
+            android:weightSum="2">
+
+            <Button
+                android:id="@+id/cancel_btn"
+                style="@style/LayoutMatchWrap"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/size40"
+                android:layout_margin="@dimen/size5"
+                android:layout_weight="1"
+                android:background="@color/colorOrange"
+                android:text="@string/cancel"
+                android:textSize="@dimen/text14"
+                android:visibility="visible" />
+
+            <Button
+                android:id="@+id/select_btn"
+                style="@style/LayoutMatchWrap"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/size40"
+                android:layout_margin="@dimen/size5"
+                android:layout_weight="1"
+                android:background="@color/colorOrange"
+                android:text="@string/select"
+                android:textSize="@dimen/text14"
+                android:visibility="visible" />
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</FrameLayout>

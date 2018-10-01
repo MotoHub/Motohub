@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/list_view_co_layout"
+    style="@style/LayoutMatch">
+
+    <RelativeLayout style="@style/LayoutMatch">
+
+        <include
+            android:id="@+id/include"
+            layout="@layout/widget_toolbar" />
+
+        <RelativeLayout
+            android:id="@+id/searchBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/include"
+            android:layout_margin="@dimen/size10">
+
+            <EditText
+                android:id="@+id/searchEt"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/size34"
+                android:layout_alignParentStart="true"
+                android:layout_marginEnd="@dimen/size5"
+                android:background="@drawable/orange_border_bg"
+                android:hint="@string/search"
+                android:inputType="text"
+                android:maxLines="1"
+                android:paddingBottom="@dimen/size3"
+                android:paddingEnd="@dimen/size5"
+                android:paddingLeft="@dimen/size5"
+                android:paddingRight="@dimen/size5"
+                android:paddingStart="@dimen/size5"
+                android:paddingTop="@dimen/size3"
+                android:textColor="@color/colorBlack"
+                android:textColorHint="@color/colorGrey"
+                android:textSize="@dimen/text14" />
+
+            <ImageButton
+                android:id="@+id/searchBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="@dimen/size10"
+                android:layout_centerVertical="true"
+                android:background="@drawable/white_orange_bg"
+                android:contentDescription="@string/app_name"
+                android:padding="@dimen/size5"
+                app:srcCompat="@drawable/search_icon" />
+
+        </RelativeLayout>
+
+
+        <RelativeLayout
+            style="@style/LayoutMatch"
+            android:layout_below="@+id/searchBox"
+            android:layout_margin="@dimen/size10"
+            android:background="@drawable/orange_border_bg"
+            android:theme="@style/Theme.AppCompat.Light">
+
+            <ListView
+                android:id="@+id/widget_list_view"
+                style="@style/LayoutMatch"
+                android:divider="@android:color/transparent"
+                android:dividerHeight="@dimen/size5"
+                android:clickable="true"
+                android:padding="@dimen/size2"
+                android:scrollbars="none"
+                android:focusable="true" />
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/done_floating_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="@dimen/size16"
+        android:clickable="true"
+        android:visibility="gone"
+        app:fabSize="normal"
+        app:srcCompat="@drawable/done_icon" />
+
+</android.support.design.widget.CoordinatorLayout>

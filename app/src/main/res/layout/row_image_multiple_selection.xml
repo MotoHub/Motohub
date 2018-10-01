@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="@style/LayoutWrap"
+    android:layout_margin="@dimen/size5"
+    app:cardElevation="@dimen/size2">
+
+    <RelativeLayout
+        android:id="@+id/row_adapter_picker_image_layout"
+        style="@style/LayoutWrap"
+        android:background="@color/colorWhite">
+
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/row_picker_img_pager_thumbnail_image_view"
+                style="@style/LayoutWrap"
+                android:layout_width="@dimen/size150"
+                android:layout_height="@dimen/size150"
+                android:contentDescription="@null"
+                android:scaleType="centerCrop"
+                android:src="@drawable/default_cover_img" />
+
+            <ImageView
+                android:id="@+id/iv_check"
+                android:layout_width="@dimen/size20"
+                android:layout_height="@dimen/size20"
+                android:layout_gravity="bottom|end"
+                android:src="@drawable/ic_check_white"
+                android:layout_marginBottom="@dimen/size2"
+                android:layout_marginEnd="@dimen/size2"
+                android:layout_marginRight="@dimen/size2"
+                android:visibility="gone"
+                android:background="@drawable/circle_green_send_btn" />
+        </FrameLayout>
+
+    </RelativeLayout>
+
+</android.support.v7.widget.CardView>

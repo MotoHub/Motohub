@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/list_item"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/size70"
+    android:descendantFocusability="blocksDescendants"
+    android:paddingBottom="@dimen/size5"
+    android:paddingEnd="@dimen/size10"
+    android:paddingLeft="@dimen/size10"
+    android:paddingRight="@dimen/size10"
+    android:paddingStart="@dimen/size10"
+    android:paddingTop="@dimen/size5">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/circular_img_view"
+        android:layout_width="@dimen/size50"
+        android:layout_height="@dimen/size50"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="@dimen/size5"
+        android:layout_marginStart="@dimen/size5"
+        android:scaleType="centerCrop"
+        android:src="@drawable/default_profile_icon" />
+
+    <LinearLayout
+        android:id="@+id/text_view_box"
+        style="@style/LayoutWrapMatch"
+        android:layout_marginLeft="@dimen/size5"
+        android:layout_marginStart="@dimen/size5"
+        android:layout_toEndOf="@+id/circular_img_view"
+        android:layout_toLeftOf="@+id/rightLayout"
+        android:layout_toRightOf="@+id/circular_img_view"
+        android:layout_toStartOf="@+id/rightLayout"
+        android:descendantFocusability="blocksDescendants"
+        android:gravity="center_vertical"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/top_tv"
+            style="@style/LayoutMatchWrap"
+            android:gravity="center_vertical"
+            android:maxLines="1"
+            android:paddingBottom="@dimen/size2"
+            android:text="@string/app_name"
+            android:textColor="@color/colorBlack"
+            android:textSize="@dimen/text16"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/bottom_tv"
+            style="@style/LayoutMatchWrap"
+            android:maxLines="1"
+            android:paddingTop="@dimen/size2"
+            android:text="@string/app_name"
+            android:textColor="@color/colorDarkGrey"
+            android:textSize="@dimen/text14"
+            android:visibility="gone" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/rightLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_alignBottom="@+id/circular_img_view"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@+id/circular_img_view"
+        android:background="@null"
+        android:clickable="false"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:gravity="center_vertical"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/right_arrow"
+            style="@style/LayoutWrapMatch"
+            android:layout_gravity="end"
+            android:background="@null"
+            android:contentDescription="@string/app_name"
+            android:padding="@dimen/size5"
+            app:srcCompat="@drawable/right_arrow_icon" />
+
+        <TextView
+            android:id="@+id/action_btn"
+            android:layout_width="@dimen/size90"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_margin="@dimen/size5"
+            android:background="@drawable/black_orange_btn_bg"
+            android:clickable="true"
+            android:focusable="true"
+            android:paddingBottom="@dimen/size5"
+            android:paddingTop="@dimen/size5"
+            android:text="@string/follow"
+            android:textAlignment="center"
+            android:textColor="@color/text_color"
+            android:textSize="@dimen/text14"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/follow_following_btn"
+            android:layout_width="@dimen/size90"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_margin="@dimen/size5"
+            android:background="@drawable/black_orange_btn_bg"
+            android:clickable="true"
+            android:focusable="true"
+            android:paddingBottom="@dimen/size5"
+            android:paddingTop="@dimen/size5"
+            android:text="@string/follow"
+            android:textAlignment="center"
+            android:textColor="@color/text_color"
+            android:textSize="@dimen/text14"
+            android:visibility="gone" />
+
+    </LinearLayout>
+
+</RelativeLayout>

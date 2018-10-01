@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="@style/LayoutMatchWrap"
+    android:background="@color/colorLighterGrey"
+    android:padding="@dimen/size2">
+
+    <LinearLayout
+        android:id="@+id/multi_img"
+        style="@style/LayoutMatchWrap"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/top_lay"
+            style="@style/LayoutMatchWrap"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/img1_lay"
+                style="@style/LayoutWrap"
+                android:layout_width="0dp"
+                android:layout_margin="@dimen/size3"
+                android:layout_weight="1"
+                app:cardBackgroundColor="@color/colorWhite">
+
+                <RelativeLayout
+                    style="@style/LayoutWrap"
+                    android:layout_gravity="center">
+
+                    <ProgressBar
+                        android:layout_width="@dimen/size20"
+                        android:layout_height="@dimen/size20"
+                        android:layout_centerInParent="true"
+                        android:visibility="gone" />
+
+                    <ImageView
+                        android:id="@+id/img1"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/size150"
+                        android:layout_centerInParent="true"
+                        android:padding="@dimen/size3"
+                        android:scaleType="centerCrop"
+                        app:srcCompat="@drawable/default_cover_img" />
+
+                    <ImageView
+                        android:id="@+id/playicon1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:src="@drawable/playbutton"
+                        android:visibility="gone" />
+
+                </RelativeLayout>
+
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/img2_lay"
+                style="@style/LayoutWrap"
+                android:layout_width="0dp"
+                android:layout_margin="@dimen/size3"
+                android:layout_weight="1"
+                app:cardBackgroundColor="@color/colorWhite">
+
+                <RelativeLayout
+                    style="@style/LayoutWrap"
+                    android:layout_gravity="center">
+
+                    <ProgressBar
+                        android:layout_width="@dimen/size20"
+                        android:layout_height="@dimen/size20"
+                        android:layout_centerInParent="true"
+                        android:visibility="gone" />
+
+                    <ImageView
+                        android:id="@+id/img2"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/size150"
+                        android:layout_centerInParent="true"
+                        android:padding="@dimen/size3"
+                        android:scaleType="centerCrop"
+                        app:srcCompat="@drawable/default_cover_img" />
+
+                    <ImageView
+                        android:id="@+id/playicon2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:src="@drawable/playbutton"
+                        android:visibility="gone" />
+
+                </RelativeLayout>
+
+            </android.support.v7.widget.CardView>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/bottom_lay"
+            style="@style/LayoutMatchWrap"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/img3_lay"
+                style="@style/LayoutWrap"
+                android:layout_width="0dp"
+                android:layout_margin="@dimen/size3"
+                android:layout_weight="1"
+                app:cardBackgroundColor="@color/colorWhite">
+
+                <RelativeLayout
+                    style="@style/LayoutWrap"
+                    android:layout_gravity="center">
+
+                    <ProgressBar
+                        android:layout_width="@dimen/size20"
+                        android:layout_height="@dimen/size20"
+                        android:layout_centerInParent="true"
+                        android:visibility="gone" />
+
+                    <ImageView
+                        android:id="@+id/img3"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/size150"
+                        android:layout_centerInParent="true"
+                        android:padding="@dimen/size3"
+                        android:scaleType="centerCrop"
+                        app:srcCompat="@drawable/default_cover_img" />
+
+                    <ImageView
+                        android:id="@+id/playicon3"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:src="@drawable/playbutton"
+                        android:visibility="gone" />
+
+                </RelativeLayout>
+
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/img4_lay"
+                style="@style/LayoutWrap"
+                android:layout_width="0dp"
+                android:layout_margin="@dimen/size3"
+                android:layout_weight="1"
+                app:cardBackgroundColor="@color/colorWhite">
+
+                <RelativeLayout
+                    style="@style/LayoutWrap"
+                    android:layout_gravity="center">
+
+                    <ProgressBar
+                        android:layout_width="@dimen/size20"
+                        android:layout_height="@dimen/size20"
+                        android:layout_centerInParent="true"
+                        android:visibility="gone" />
+
+                    <ImageView
+                        android:id="@+id/img4"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/size150"
+                        android:layout_centerInParent="true"
+                        android:padding="@dimen/size3"
+                        android:scaleType="centerCrop"
+                        app:srcCompat="@drawable/default_cover_img" />
+
+                    <ImageView
+                        android:id="@+id/playicon4"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:src="@drawable/playbutton"
+                        android:visibility="gone" />
+
+                    <LinearLayout
+                        android:id="@+id/more_lay"
+                        style="@style/LayoutMatch"
+                        android:layout_alignBottom="@id/img4"
+                        android:layout_alignTop="@+id/img4"
+                        android:background="@color/transparent50"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:visibility="visible">
+
+                        <TextView
+                            android:id="@+id/img_count_txt"
+                            style="@style/LayoutWrap"
+                            android:layout_gravity="center"
+                            android:padding="@dimen/size5"
+                            android:text="+1 More"
+                            android:textColor="@color/colorWhite"
+                            android:textSize="@dimen/text20"
+                            android:textStyle="bold" />
+
+                    </LinearLayout>
+
+                </RelativeLayout>
+
+            </android.support.v7.widget.CardView>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</RelativeLayout>
+
