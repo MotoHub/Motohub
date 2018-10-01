@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/live_stream_co_layout"
+    style="@style/LayoutMatch"
+    tools:context="online.motohub.activity.LiveStreamingActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <include
+            android:id="@+id/include"
+            layout="@layout/widget_toolbar" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/black"
+            android:orientation="vertical">
+
+
+            <VideoView
+                android:id="@+id/video_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_centerInParent="true"
+                android:layout_gravity="center"/>
+
+            <RelativeLayout
+                style="@style/LayoutMatch"
+                android:layout_alignBottom="@+id/video_view"
+                android:layout_alignTop="@+id/video_view">
+
+                <ImageView
+                    android:id="@+id/left_arrow"
+                    android:layout_width="@dimen/size50"
+                    android:layout_height="@dimen/size50"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerInParent="true"
+                    android:onClick="onClick"
+                    android:padding="@dimen/size5"
+                    android:visibility="gone"
+                    app:srcCompat="@drawable/arrow_back_icon" />
+
+
+                <ImageView
+                    android:id="@+id/right_arrow"
+                    android:layout_width="@dimen/size50"
+                    android:layout_height="@dimen/size50"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerInParent="true"
+                    android:onClick="onClick"
+                    android:padding="@dimen/size5"
+                    android:visibility="gone"
+                    app:srcCompat="@drawable/arrow_right_icon" />
+            </RelativeLayout>
+        </RelativeLayout>
+    </LinearLayout>
+</android.support.design.widget.CoordinatorLayout>

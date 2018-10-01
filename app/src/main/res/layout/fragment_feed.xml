@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/clubfeedlay"
+    style="@style/LayoutMatch">
+
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefreshLayout"
+        style="@style/LayoutMatchWrap">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycler_view"
+            style="@style/LayoutMatchWrap"
+            android:background="@color/colorLighterGrey" />
+    </android.support.v4.widget.SwipeRefreshLayout>
+
+</RelativeLayout>

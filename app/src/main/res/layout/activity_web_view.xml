@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/LayoutMatch">
+
+    <include
+        android:id="@+id/header_lay"
+        layout="@layout/widget_toolbar" />
+
+    <WebView
+        android:id="@+id/web_view"
+        style="@style/LayoutMatch"
+        android:layout_above="@+id/bottom_lay"
+        android:layout_below="@+id/header_lay" />
+
+    <LinearLayout
+        android:id="@+id/bottom_lay"
+        style="@style/LayoutMatchWrap"
+        android:layout_alignParentBottom="true"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <CheckBox
+            android:id="@+id/terms_conditions_check_box"
+            style="@style/LayoutWrap"
+            android:text="@string/terms_and_conditions"
+            android:textColor="@color/colorBlack"
+            android:textSize="@dimen/text12"
+            android:theme="@style/MyCheckBox" />
+
+        <Button
+            android:id="@+id/submit_btn"
+            style="@style/LayoutWrap"
+            android:layout_height="@dimen/size40"
+            android:layout_margin="@dimen/size5"
+            android:background="@drawable/black_orange_btn_bg"
+            android:text="@string/submit"
+            android:textColor="@color/text_color"
+            android:textSize="@dimen/text16"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+</RelativeLayout>

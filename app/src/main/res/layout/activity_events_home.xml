@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/events_home_co_layout"
+    style="@style/LayoutMatch">
+
+    <RelativeLayout style="@style/LayoutMatch">
+
+        <include
+            android:id="@+id/include"
+            layout="@layout/widget_toolbar" />
+
+        <LinearLayout
+            android:id="@+id/events_box"
+            style="@style/LayoutMatchWrap"
+            android:layout_below="@+id/include"
+            android:layout_marginTop="@dimen/size40"
+            android:baselineAligned="false"
+            android:orientation="horizontal"
+            android:padding="@dimen/size1">
+
+            <Space
+                android:layout_width="@dimen/size0"
+                android:layout_height="@dimen/size100"
+                android:layout_weight="0.3" />
+
+            <RelativeLayout
+                android:id="@+id/find_event_box"
+                android:layout_width="@dimen/size0"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/black_orange_btn_bg"
+                android:clickable="true"
+                android:gravity="center"
+                android:paddingTop="@dimen/size5">
+
+                <ImageView
+                    android:id="@+id/find_event_img_view"
+                    android:layout_width="@dimen/size50"
+                    android:layout_height="@dimen/size50"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="@dimen/size5"
+                    android:background="@null"
+                    android:contentDescription="@string/app_name"
+                    android:src="@drawable/find_an_event_bg" />
+
+                <TextView
+                    android:id="@+id/find_event_tv"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_below="@+id/find_event_img_view"
+                    android:layout_marginEnd="@dimen/size5"
+                    android:layout_marginLeft="@dimen/size5"
+                    android:layout_marginRight="@dimen/size5"
+                    android:layout_marginStart="@dimen/size5"
+                    android:gravity="center"
+                    android:minHeight="@dimen/size40"
+                    android:text="@string/find_event"
+                    android:textColor="@color/text_color"
+                    android:textSize="@dimen/text14" />
+
+            </RelativeLayout>
+
+            <Space
+                android:layout_width="@dimen/size0"
+                android:layout_height="match_parent"
+                android:layout_weight="0.2" />
+
+            <RelativeLayout
+                android:id="@+id/event_results_box"
+                android:layout_width="@dimen/size0"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/black_orange_btn_bg"
+                android:clickable="true"
+                android:gravity="center"
+                android:padding="@dimen/size3">
+
+                <ImageView
+                    android:id="@+id/event_results_img_view"
+                    android:layout_width="@dimen/size50"
+                    android:layout_height="@dimen/size50"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="@dimen/size5"
+                    android:background="@null"
+                    android:contentDescription="@string/app_name"
+                    android:src="@drawable/event_result_bg" />
+
+                <TextView
+                    android:id="@+id/event_results_tv"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_below="@+id/event_results_img_view"
+                    android:layout_marginEnd="@dimen/size5"
+                    android:layout_marginLeft="@dimen/size5"
+                    android:layout_marginRight="@dimen/size5"
+                    android:layout_marginStart="@dimen/size5"
+                    android:gravity="center"
+                    android:minHeight="@dimen/size40"
+                    android:text="@string/event_results"
+                    android:textColor="@color/text_color"
+                    android:textSize="@dimen/text14" />
+
+            </RelativeLayout>
+
+            <Space
+                android:layout_width="@dimen/size0"
+                android:layout_height="match_parent"
+                android:layout_weight="0.3" />
+
+        </LinearLayout>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/events_list_view"
+            style="@style/LayoutMatch"
+            android:layout_marginTop="@dimen/size20"
+            android:layout_below="@+id/events_box"
+            android:divider="@android:color/transparent"
+            android:dividerHeight="@dimen/size10"
+            android:paddingBottom="@dimen/size10"
+            android:paddingTop="@dimen/size10"
+            android:scrollbars="none" />
+
+    </RelativeLayout>
+
+</android.support.design.widget.CoordinatorLayout>

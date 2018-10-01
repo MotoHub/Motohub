@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/popup_window"
+    style="@style/LayoutMatchWrap"
+    android:background="@color/colorWhite"
+    android:paddingBottom="@dimen/size10"
+    android:paddingTop="@dimen/size10"
+    tools:context="online.motohub.fragment.dialog.AppDialogFragment">
+
+    <TextView
+        android:id="@+id/txtvwShareTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:text="@string/share_post"
+        android:textColor="@color/colorOrange"
+        android:textSize="@dimen/text16" />
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/clShare"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txtvwShareTitle"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/size30">
+
+        <LinearLayout
+            android:id="@+id/Friends_lay"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/imgvwFriends"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:contentDescription="@string/app_name"
+                android:scaleType="center"
+                android:src="@drawable/followers_icon" />
+
+            <TextView
+                android:id="@+id/txtvwFriends"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="5dp"
+                android:gravity="center"
+                android:text="@string/friends"
+                android:textColor="@color/colorBlack"
+                android:textSize="@dimen/text14" />
+
+        </LinearLayout>
+
+        <Space
+            android:id="@+id/space"
+            android:layout_width="30dp"
+            android:layout_height="31dp"
+            android:layout_weight="0.3"
+            app:layout_constraintLeft_toRightOf="@+id/Friends_lay" />
+
+        <LinearLayout
+            android:id="@+id/facebook_lay"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintLeft_toRightOf="@+id/space"
+            app:layout_constraintRight_toRightOf="parent">
+
+            <ImageView
+                android:id="@+id/imgvwFacebook"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:contentDescription="@string/app_name"
+                android:scaleType="center"
+                android:src="@drawable/fb_icon" />
+
+            <TextView
+                android:id="@+id/txtvwFacebook"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="5dp"
+                android:gravity="center"
+                android:text="@string/facebook"
+                android:textColor="@color/colorBlack"
+                android:textSize="@dimen/text14" />
+
+        </LinearLayout>
+
+    </android.support.constraint.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/txtvwCancel"
+        android:layout_width="match_parent"
+        android:layout_height="46dp"
+        android:layout_below="@+id/clShare"
+        android:layout_marginTop="@dimen/size30"
+        android:layout_marginLeft="@dimen/size20"
+        android:layout_marginRight="@dimen/size20"
+        android:background="@drawable/black_orange_btn_bg"
+        android:gravity="center_horizontal|center_vertical"
+        android:text="@string/cancel"
+        android:textColor="@color/text_color"
+        android:textSize="@dimen/text14" />
+
+</RelativeLayout>
+

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/LayoutMatch"
+    android:background="@color/transparent50">
+
+    <RelativeLayout style="@style/LayoutMatch">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:background="@android:color/white"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/single_stream_btn"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/size40"
+                android:layout_margin="@dimen/size10"
+                android:background="@drawable/black_orange_btn_bg"
+                android:textColor="@color/text_color"
+                android:textSize="@dimen/text16"
+                android:textStyle="italic|bold" />
+
+            <Button
+                android:id="@+id/multi_stream_btn"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/size40"
+                android:layout_margin="@dimen/size10"
+                android:background="@drawable/black_orange_btn_bg"
+                android:textColor="@color/text_color"
+                android:textSize="@dimen/text16"
+                android:textStyle="italic|bold" />
+
+        </LinearLayout>
+    </RelativeLayout>
+</android.support.constraint.ConstraintLayout>

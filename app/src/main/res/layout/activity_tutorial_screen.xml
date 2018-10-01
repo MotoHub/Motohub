@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/tutorial_parent"
+    style="@style/LayoutMatch"
+    android:background="@color/colorWhite">
+
+    <RelativeLayout style="@style/LayoutMatch">
+
+        <LinearLayout
+            android:id="@+id/header_lay"
+            style="@style/LayoutMatchWrap"
+            android:orientation="vertical">
+
+            <include layout="@layout/widget_toolbar" />
+
+        </LinearLayout>
+
+        <android.support.v4.view.ViewPager
+            android:id="@+id/pager"
+            style="@style/LayoutMatch"
+            android:layout_above="@+id/bottom_lay"
+            android:layout_below="@+id/header_lay" />
+
+        <RelativeLayout
+            style="@style/LayoutMatch"
+            android:layout_alignBottom="@+id/pager"
+            android:layout_alignTop="@+id/pager">
+
+            <ImageView
+                android:id="@+id/left_arrow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_centerInParent="true"
+                android:onClick="onClick"
+                android:padding="@dimen/size5"
+                android:visibility="visible"
+                app:srcCompat="@drawable/arrow_back_icon" />
+
+
+            <ImageView
+                android:id="@+id/right_arrow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerInParent="true"
+                android:onClick="onClick"
+                android:padding="@dimen/size5"
+                app:srcCompat="@drawable/arrow_right_icon" />
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/bottom_lay"
+            style="@style/LayoutMatchWrap"
+            android:layout_alignParentBottom="true"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="@dimen/size10">
+
+            <LinearLayout
+                android:id="@+id/dot_lay"
+                style="@style/LayoutWrap"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:padding="@dimen/size10" />
+
+            <Button
+                android:id="@+id/get_started_btn"
+                style="@style/LayoutMatchWrap"
+                android:layout_height="@dimen/size40"
+                android:background="@drawable/black_orange_btn_bg"
+                android:text="@string/skip"
+                android:textAllCaps="false"
+                android:textColor="@color/text_color"
+                android:textSize="@dimen/text14"
+                android:visibility="visible" />
+        </LinearLayout>
+
+
+    </RelativeLayout>
+
+</android.support.design.widget.CoordinatorLayout>

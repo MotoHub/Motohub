@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.AppBarLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="?attr/actionBarSize"
+    android:theme="@style/ThemeOverlay.AppCompat.Light">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        style="@style/LayoutMatch"
+        android:background="@color/colorBlack"
+        app:layout_scrollFlags="enterAlways"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+
+        <ImageButton
+            android:id="@+id/toolbar_back_img_btn"
+            style="@style/LayoutWrap"
+            android:layout_gravity="start"
+            android:background="@null"
+            android:contentDescription="@string/app_name"
+            android:paddingBottom="@dimen/size17"
+            android:paddingEnd="@dimen/size0"
+            android:paddingLeft="@dimen/size10"
+            android:paddingRight="@dimen/size0"
+            android:paddingStart="@dimen/size10"
+            android:paddingTop="@dimen/size17"
+            android:visibility="gone"
+            app:srcCompat="@drawable/arrow_back_icon" />
+
+        <TextView
+            android:id="@+id/toolbar_title"
+            style="@style/LayoutWrap"
+            android:layout_gravity="center"
+            android:clickable="true"
+            android:focusable="true"
+            android:padding="@dimen/size5"
+            android:text="@string/app_name"
+            android:textAllCaps="true"
+            android:textColor="@color/colorOrange"
+            android:textSize="@dimen/text16" />
+
+        <ImageView
+            android:id="@+id/toolbar_settings_img_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:clickable="true"
+            android:contentDescription="@string/app_name"
+            android:focusable="true"
+            android:paddingBottom="@dimen/size17"
+            android:paddingEnd="@dimen/size10"
+            android:paddingLeft="@dimen/size0"
+            android:paddingRight="@dimen/size10"
+            android:paddingStart="@dimen/size0"
+            android:paddingTop="@dimen/size17"
+            android:src="@drawable/settings_icon"
+            android:visibility="gone" />
+
+        <ImageView
+            android:id="@+id/toolbar_messages_img_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:clickable="true"
+            android:contentDescription="@string/app_name"
+            android:focusable="true"
+            android:paddingBottom="@dimen/size17"
+            android:paddingEnd="@dimen/size5"
+            android:paddingLeft="@dimen/size0"
+            android:paddingRight="@dimen/size5"
+            android:paddingStart="@dimen/size0"
+            android:paddingTop="@dimen/size17"
+            android:src="@drawable/messages_icon"
+            android:visibility="gone" />
+
+        <ImageView
+            android:id="@+id/toolbar_notification_img_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:clickable="true"
+            android:contentDescription="@string/app_name"
+            android:focusable="true"
+            android:paddingBottom="@dimen/size17"
+            android:paddingEnd="@dimen/size5"
+            android:paddingLeft="@dimen/size0"
+            android:paddingRight="@dimen/size5"
+            android:paddingStart="@dimen/size0"
+            android:paddingTop="@dimen/size17"
+            android:src="@drawable/notification_orange_icon"
+            android:visibility="gone" />
+
+    </android.support.v7.widget.Toolbar>
+
+</android.support.design.widget.AppBarLayout>

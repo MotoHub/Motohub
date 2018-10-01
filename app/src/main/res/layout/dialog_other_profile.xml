@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:layout_marginEnd="@dimen/size20"
+    android:layout_marginLeft="@dimen/size20"
+    android:layout_marginRight="@dimen/size20"
+    android:layout_marginStart="@dimen/size20"
+    android:background="@drawable/alert_bg"
+    tools:context="online.motohub.fragment.dialog.AppDialogFragment">
+
+    <RelativeLayout
+        android:id="@+id/title_box"
+        style="@style/LayoutMatchWrap"
+        android:background="@color/colorOrange">
+
+        <TextView
+            android:id="@+id/title_tv"
+            style="@style/LayoutWrap"
+            android:padding="@dimen/size10"
+            android:text="@string/other_profiles"
+            android:textColor="@color/colorBlack"
+            android:textSize="@dimen/text16" />
+
+        <ImageButton
+            android:id="@+id/close_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/title_tv"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignTop="@+id/title_tv"
+            android:background="@null"
+            android:contentDescription="@string/app_name"
+            android:padding="@dimen/size10"
+            app:srcCompat="@drawable/close_icon" />
+
+    </RelativeLayout>
+
+    <Spinner
+        android:id="@+id/moto_type_spinner"
+        style="@style/MySpinnerTheme"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/size30"
+        android:layout_below="@+id/title_box"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/size20"
+        android:entries="@array/empty_array"
+        android:gravity="center"
+        android:minWidth="@dimen/size150" />
+
+    <TextView
+        android:id="@+id/okay_btn"
+        style="@style/LayoutWrap"
+        android:layout_below="@id/moto_type_spinner"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="@dimen/size20"
+        android:layout_marginTop="@dimen/size20"
+        android:background="@drawable/black_orange_btn_bg"
+        android:clickable="true"
+        android:paddingBottom="@dimen/size5"
+        android:paddingEnd="@dimen/size20"
+        android:paddingLeft="@dimen/size20"
+        android:paddingRight="@dimen/size20"
+        android:paddingStart="@dimen/size20"
+        android:paddingTop="@dimen/size5"
+        android:text="@string/ok"
+        android:textAlignment="center"
+        android:textColor="@color/text_color"
+        android:textSize="@dimen/text14" />
+
+</RelativeLayout>

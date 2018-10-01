@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/create_profile_co_layout"
+    style="@style/LayoutMatch"
+    tools:context="online.motohub.activity.ComingSoonActivity">
+    <include
+        android:id="@+id/include"
+        layout="@layout/widget_toolbar" />
+    <RelativeLayout
+        style="@style/LayoutMatch"
+        android:layout_marginTop="?attr/actionBarSize">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/text25"
+        android:textStyle="italic|bold"
+        android:text="@string/coming_soon"
+        android:textColor="@color/colorOrange"
+        android:layout_centerInParent="true"
+
+        />
+
+    </RelativeLayout>
+</android.support.design.widget.CoordinatorLayout>

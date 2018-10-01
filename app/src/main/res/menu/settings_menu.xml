@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:theme="@style/PopupMenu">
+
+    <item android:id="@+id/create_new_profile"
+        app:showAsAction="never"
+        android:title="@string/create_new_profile" />
+
+    <item android:id="@+id/other_profiles"
+        app:showAsAction="never"
+        android:title="@string/other_profiles" />
+
+    <item android:id="@+id/notification_settings"
+        app:showAsAction="never"
+        android:title="@string/notifications" />
+
+    <item android:id="@+id/blocked_users"
+        app:showAsAction="never"
+        android:title="@string/blocked_users" />
+
+    <item android:id="@+id/logout"
+        app:showAsAction="never"
+        android:title="@string/com_facebook_loginview_log_out_button"/>
+
+</menu>

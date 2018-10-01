@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/LayoutMatchWrap"
+    android:background="@color/colorWhite"
+    android:paddingBottom="@dimen/size10"
+    android:paddingTop="@dimen/size10"
+    tools:context="online.motohub.fragment.dialog.AppDialogFragment">
+
+    <RelativeLayout
+        android:id="@+id/cameraLayout_video"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/ripple_effect"
+        android:clickable="true"
+        android:focusable="true">
+
+        <ImageView
+            android:id="@+id/camera_icon"
+            android:layout_width="@dimen/size50"
+            android:layout_height="@dimen/size50"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_margin="@dimen/size10"
+            android:contentDescription="@string/app_name"
+            android:src="@drawable/camera_icon" />
+
+        <TextView
+            android:id="@+id/camera_tv"
+            style="@style/LayoutWrap"
+            android:layout_alignBottom="@+id/camera_icon"
+            android:layout_alignTop="@+id/camera_icon"
+            android:layout_toEndOf="@+id/camera_icon"
+            android:layout_toRightOf="@+id/camera_icon"
+            android:gravity="center_vertical"
+            android:text="@string/camera"
+            android:textColor="@color/colorBlack"
+            android:textSize="@dimen/text14" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/galleryLayout_video"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/cameraLayout_video"
+        android:background="@drawable/ripple_effect"
+        android:clickable="true">
+
+        <ImageView
+            android:id="@+id/gallery_icon"
+            android:layout_width="@dimen/size50"
+            android:layout_height="@dimen/size50"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_margin="@dimen/size10"
+            android:contentDescription="@string/app_name"
+            android:src="@drawable/gallery_icon" />
+
+        <TextView
+            android:id="@+id/gallery_tv"
+            style="@style/LayoutWrap"
+            android:layout_alignBottom="@+id/gallery_icon"
+            android:layout_alignTop="@+id/gallery_icon"
+            android:layout_toEndOf="@id/gallery_icon"
+            android:layout_toRightOf="@+id/gallery_icon"
+            android:gravity="center_vertical"
+            android:text="@string/gallery"
+            android:textColor="@color/colorBlack"
+            android:textSize="@dimen/text14" />
+
+    </RelativeLayout>
+
+</RelativeLayout>

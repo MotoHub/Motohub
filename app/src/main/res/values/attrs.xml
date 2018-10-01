@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="MultiStateButton">
+        <attr name="offSrc" format="integer"/>
+        <attr name="isOn" format="boolean"/>
+        <attr name="pressedColor" format="color"/>
+    </declare-styleable>
+
+    <declare-styleable name="ZoomImageView">
+        <attr name="doubleClickTimeInMillis" format="integer"/>
+        <attr name="mininumZoomLevel" format="float" />
+        <attr name="maximumZoomLevel" format="float"/>
+        <attr name="doubleClickZoomLevel" format="float" />
+        <attr name="isMinimumZoomLevelRelativeToView" format="boolean" />
+        <attr name="isMaximumZoomLevelRelativeToView" format="boolean"/>
+        <attr name="adjustToBounds" format="boolean"/>
+        <attr name="doubleClickAdjust" format="boolean"/>
+        <attr name="allowExcedLimitsWhenMovingImage" format="boolean"/>
+        <attr name="blockImageInTheMidleWhileIsSmallerThanView" format="boolean"/>
+    </declare-styleable>
+</resources>

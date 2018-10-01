@@ -1,0 +1,2134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/complete_profile_co_layout"
+    style="@style/LayoutMatch"
+    tools:context="online.motohub.activity.CompleteProfileActivity">
+
+    <include layout="@layout/widget_toolbar" />
+
+    <ScrollView
+        android:id="@+id/profile_scroll_view"
+        style="@style/LayoutMatch"
+        android:layout_marginTop="@dimen/size56"
+        android:scrollbars="none">
+
+        <RelativeLayout style="@style/LayoutMatchWrap">
+
+            <RelativeLayout
+                android:id="@+id/relativeLayout_img"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/coverImage"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/size100"
+                    android:clickable="true"
+                    android:contentDescription="@string/upload_moto_photo"
+                    android:focusable="true"
+                    android:scaleType="centerCrop"
+                    app:srcCompat="@drawable/default_cover_img" />
+
+                <ImageButton
+                    android:id="@+id/ib_add_cover_photo"
+                    android:layout_width="@dimen/size32"
+                    android:layout_height="@dimen/size32"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginEnd="@dimen/size10"
+                    android:layout_marginTop="@dimen/size10"
+                    android:background="@drawable/bg_add_photo"
+                    android:contentDescription="@string/camera"
+                    android:padding="@dimen/size7"
+                    android:scaleType="fitCenter"
+                    app:srcCompat="@drawable/ic_add_photo" />
+
+                <View
+                    android:id="@+id/cover_line"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_below="@+id/coverImage"
+                    android:background="@color/colorLighterGrey" />
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/add_profile_img"
+                    android:layout_width="@dimen/size80"
+                    android:layout_height="@dimen/size80"
+                    android:layout_centerHorizontal="true"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="@dimen/size50"
+                    android:clickable="true"
+                    android:contentDescription="@string/upload_moto_photo"
+                    android:focusable="true"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/default_profile_icon"
+                    app:civ_border_color="@color/colorLighterGrey"
+                    app:civ_border_width="@dimen/size5" />
+
+                <TextView
+                    android:id="@+id/upload_profile_img_tv"
+                    style="@style/LayoutMatchWrap"
+                    android:layout_below="@+id/add_profile_img"
+                    android:layout_marginTop="@dimen/size5"
+                    android:text="@string/upload_moto_photo"
+                    android:textAlignment="center"
+                    android:textColor="@color/text_color_two"
+                    android:textSize="@dimen/text12" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/relativeLayout_img"
+                android:padding="@dimen/size10">
+
+                <TextView
+                    android:id="@+id/profile_title_tv"
+                    style="@style/LayoutWrap"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="@dimen/size5"
+                    android:text="@string/app_name"
+                    android:textAlignment="center"
+                    android:textColor="@color/colorOrange"
+                    android:textSize="@dimen/text16"
+                    android:textStyle="bold" />
+
+                <LinearLayout
+                    android:id="@+id/linearLikeLay"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_toStartOf="@+id/profile_title_tv"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/likeBtn"
+                        android:layout_width="@dimen/size30"
+                        android:layout_height="@dimen/size30"
+                        android:layout_gravity="center"
+                        android:layout_marginStart="@dimen/size10"
+                        android:background="@drawable/ripple_effect"
+                        android:clickable="true"
+                        android:contentDescription="@string/like"
+                        android:focusable="true"
+                        android:gravity="center"
+                        android:paddingBottom="@dimen/size5"
+                        app:srcCompat="@drawable/like_to_like_click_bg" />
+
+                    <TextView
+                        android:id="@+id/like_count_txt"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginStart="@dimen/size5"
+                        android:textColor="@color/colorDarkGrey"
+                        android:textSize="@dimen/text14" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/form_box"
+                    style="@style/LayoutMatchWrap"
+                    android:layout_below="@+id/profile_title_tv"
+                    android:layout_marginTop="@dimen/size10"
+                    android:background="@drawable/gray_border_bg"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        style="@style/LayoutMatchWrap"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/driver_tv"
+                            android:layout_width="@dimen/size0"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:padding="@dimen/size10"
+                            android:text="@string/driver"
+                            android:textColor="@color/colorBlack"
+                            android:textSize="@dimen/text12"
+                            android:textStyle="bold" />
+
+                        <EditText
+                            android:id="@+id/driver_et"
+                            android:layout_width="@dimen/size0"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:background="@null"
+                            android:hint="@string/driver"
+                            android:inputType="text"
+                            android:padding="@dimen/size10"
+                            android:textColor="@color/colorBlack"
+                            android:textColorHint="@color/colorGrey"
+                            android:textSize="@dimen/text12" />
+
+                    </LinearLayout>
+
+                    <View
+                        android:id="@+id/driver_line"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/size1"
+                        android:background="@color/colorGrey" />
+
+                    <LinearLayout
+                        android:id="@+id/name_of_moto_box"
+                        style="@style/LayoutMatchWrap"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/name_of_moto_tv"
+                            android:layout_width="@dimen/size0"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:padding="@dimen/size10"
+                            android:text="@string/name_of_moto"
+                            android:textColor="@color/colorBlack"
+                            android:textSize="@dimen/text12"
+                            android:textStyle="bold" />
+
+                        <EditText
+                            android:id="@+id/name_of_moto_et"
+                            android:layout_width="@dimen/size0"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:background="@null"
+                            android:hint="@string/name_of_moto"
+                            android:inputType="text"
+                            android:padding="@dimen/size10"
+                            android:textColor="@color/colorBlack"
+                            android:textColorHint="@color/colorGrey"
+                            android:textSize="@dimen/text12" />
+
+                    </LinearLayout>
+
+                    <View
+                        android:id="@+id/name_of_moto_line"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/size1"
+                        android:background="@color/colorGrey" />
+
+                    <LinearLayout
+                        android:id="@+id/make_box"
+                        style="@style/LayoutMatchWrap"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/make_tv"
+                            android:layout_width="@dimen/size0"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:padding="@dimen/size10"
+                            android:text="@string/make"
+                            android:textColor="@color/colorBlack"
+                            android:textSize="@dimen/text12"
+                            android:textStyle="bold" />
+
+                        <EditText
+                            android:id="@+id/make_et"
+                            android:layout_width="@dimen/size0"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:background="@null"
+                            android:hint="@string/make"
+                            android:inputType="text"
+                            android:padding="@dimen/size10"
+                            android:textColor="@color/colorBlack"
+                            android:textColorHint="@color/colorGrey"
+                            android:textSize="@dimen/text12" />
+
+                    </LinearLayout>
+
+                    <View
+                        android:id="@+id/make_line"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/size1"
+                        android:background="@color/colorGrey" />
+
+                    <LinearLayout
+                        android:id="@+id/model_box"
+                        style="@style/LayoutMatchWrap"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/model_tv"
+                            android:layout_width="@dimen/size0"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:padding="@dimen/size10"
+                            android:text="@string/model"
+                            android:textColor="@color/colorBlack"
+                            android:textSize="@dimen/text12"
+                            android:textStyle="bold" />
+
+                        <EditText
+                            android:id="@+id/model_et"
+                            android:layout_width="@dimen/size0"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:background="@null"
+                            android:hint="@string/model"
+                            android:inputType="text"
+                            android:padding="@dimen/size10"
+                            android:textColor="@color/colorBlack"
+                            android:textColorHint="@color/colorGrey"
+                            android:textSize="@dimen/text12" />
+
+                    </LinearLayout>
+
+                    <View
+                        android:id="@+id/model_line"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/size1"
+                        android:background="@color/colorGrey" />
+
+                    <LinearLayout
+                        style="@style/LayoutMatchWrap"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/phone_tv"
+                            android:layout_width="@dimen/size0"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:padding="@dimen/size10"
+                            android:text="@string/phone_number"
+                            android:textColor="@color/colorBlack"
+                            android:textSize="@dimen/text12"
+                            android:textStyle="bold" />
+
+                        <EditText
+                            android:id="@+id/phone_et"
+                            android:layout_width="@dimen/size0"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:background="@null"
+                            android:hint="@string/phone_number"
+                            android:inputType="phone"
+                            android:maxLength="10"
+                            android:padding="@dimen/size10"
+                            android:textColor="@color/colorBlack"
+                            android:textColorHint="@color/colorGrey"
+                            android:textSize="@dimen/text12" />
+
+                    </LinearLayout>
+
+                    <View
+                        android:id="@+id/phone_line"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/size1"
+                        android:background="@color/colorGrey" />
+
+                    <LinearLayout
+                        android:id="@+id/hp_box"
+                        style="@style/LayoutMatchWrap"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/hp_tv"
+                            android:layout_width="@dimen/size0"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:padding="@dimen/size10"
+                            android:text="@string/hp"
+                            android:textColor="@color/colorBlack"
+                            android:textSize="@dimen/text12"
+                            android:textStyle="bold" />
+
+                        <EditText
+                            android:id="@+id/hp_et"
+                            android:layout_width="@dimen/size0"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:background="@null"
+                            android:hint="@string/hp"
+                            android:inputType="numberDecimal"
+                            android:maxLength="10"
+                            android:padding="@dimen/size10"
+                            android:textColor="@color/colorBlack"
+                            android:textColorHint="@color/colorGrey"
+                            android:textSize="@dimen/text12" />
+
+                    </LinearLayout>
+
+                    <View
+                        android:id="@+id/hp_line"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/size1"
+                        android:background="@color/colorGrey" />
+
+                    <LinearLayout
+                        android:id="@+id/engine_specs_box"
+                        style="@style/LayoutMatchWrap"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/engine_specs_tv"
+                            android:layout_width="@dimen/size0"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:padding="@dimen/size10"
+                            android:text="@string/engine_specs"
+                            android:textColor="@color/colorBlack"
+                            android:textSize="@dimen/text12"
+                            android:textStyle="bold" />
+
+                        <EditText
+                            android:id="@+id/engine_specs_et"
+                            android:layout_width="@dimen/size0"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:background="@null"
+                            android:hint="@string/engine_specs"
+                            android:inputType="text"
+                            android:padding="@dimen/size10"
+                            android:textColor="@color/colorBlack"
+                            android:textColorHint="@color/colorGrey"
+                            android:textSize="@dimen/text12" />
+
+                        <ImageView
+                            android:id="@+id/tag_sponsor_eng_specs_tv"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:contentDescription="@string/app_name"
+                            android:gravity="end|center_vertical"
+                            android:padding="@dimen/size10"
+                            android:tag="@string/engine_specs"
+                            android:visibility="gone"
+                            app:srcCompat="@drawable/tag_profile_icon" />
+
+                    </LinearLayout>
+
+                    <View
+                        android:id="@+id/engine_specs_line"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/size1"
+                        android:background="@color/colorGrey" />
+
+
+                    <LinearLayout
+                        android:id="@+id/ecu_box"
+                        style="@style/LayoutMatchWrap"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/ecu"
+                            android:layout_width="@dimen/size0"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:padding="@dimen/size10"
+                            android:text="@string/ECU"
+                            android:textColor="@color/colorBlack"
+                            android:textSize="@dimen/text12"
+                            android:textStyle="bold" />
+
+                        <EditText
+                            android:id="@+id/ecu_et"
+                            android:layout_width="@dimen/size0"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:background="@null"
+                            android:hint="@string/ECU"
+                            android:inputType="text"
+                            android:padding="@dimen/size10"
+                            android:textColor="@color/colorBlack"
+                            android:textColorHint="@color/colorGrey"
+                            android:textSize="@dimen/text12" />
+
+                        <ImageView
+                            android:id="@+id/tag_sponsor_ecu"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:contentDescription="@string/app_name"
+                            android:gravity="end|center_vertical"
+                            android:padding="@dimen/size10"
+                            android:tag="@string/ECU"
+                            android:visibility="gone"
+                            app:srcCompat="@drawable/tag_profile_icon" />
+
+                    </LinearLayout>
+
+                    <View
+                        android:id="@+id/ecu_line"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/size1"
+                        android:background="@color/colorGrey" />
+
+                    <LinearLayout
+                        android:id="@+id/gear_box"
+                        style="@style/LayoutMatchWrap"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/gear_tv"
+                            android:layout_width="@dimen/size0"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:padding="@dimen/size10"
+                            android:text="@string/gear_box"
+                            android:textColor="@color/colorBlack"
+                            android:textSize="@dimen/text12"
+                            android:textStyle="bold" />
+
+                        <EditText
+                            android:id="@+id/gear_et"
+                            android:layout_width="@dimen/size0"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:background="@null"
+                            android:hint="@string/gear_box"
+                            android:inputType="text"
+                            android:padding="@dimen/size10"
+                            android:textColor="@color/colorBlack"
+                            android:textColorHint="@color/colorGrey"
+                            android:textSize="@dimen/text12" />
+
+                        <ImageView
+                            android:id="@+id/tag_sponsor_gear"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:contentDescription="@string/app_name"
+                            android:gravity="end|center_vertical"
+                            android:padding="@dimen/size10"
+                            android:tag="@string/gear_box"
+                            android:visibility="gone"
+                            app:srcCompat="@drawable/tag_profile_icon" />
+
+                    </LinearLayout>
+
+                    <View
+                        android:id="@+id/gear_line"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/size1"
+                        android:background="@color/colorGrey" />
+
+                    <LinearLayout
+                        android:id="@+id/diff_box"
+                        style="@style/LayoutMatchWrap"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/diff_tv"
+                            android:layout_width="@dimen/size0"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:padding="@dimen/size10"
+                            android:text="@string/differential"
+                            android:textColor="@color/colorBlack"
+                            android:textSize="@dimen/text12"
+                            android:textStyle="bold" />
+
+                        <EditText
+                            android:id="@+id/diff_et"
+                            android:layout_width="@dimen/size0"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:background="@null"
+                            android:hint="@string/differential"
+                            android:inputType="text"
+                            android:padding="@dimen/size10"
+                            android:textColor="@color/colorBlack"
+                            android:textColorHint="@color/colorGrey"
+                            android:textSize="@dimen/text12" />
+
+                        <ImageView
+                            android:id="@+id/tag_sponsor_diff"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:contentDescription="@string/app_name"
+                            android:gravity="end|center_vertical"
+                            android:padding="@dimen/size10"
+                            android:tag="@string/differential"
+                            android:visibility="gone"
+                            app:srcCompat="@drawable/tag_profile_icon" />
+
+                    </LinearLayout>
+
+                    <View
+                        android:id="@+id/diff_line"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/size1"
+                        android:background="@color/colorGrey" />
+
+                    <LinearLayout
+                        android:id="@+id/clutch_box"
+                        style="@style/LayoutMatchWrap"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/clutch_tv"
+                            android:layout_width="@dimen/size0"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:padding="@dimen/size10"
+                            android:text="@string/clutch"
+                            android:textColor="@color/colorBlack"
+                            android:textSize="@dimen/text12"
+                            android:textStyle="bold" />
+
+                        <EditText
+                            android:id="@+id/clutch_et"
+                            android:layout_width="@dimen/size0"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:background="@null"
+                            android:hint="@string/clutch"
+                            android:inputType="text"
+                            android:padding="@dimen/size10"
+                            android:textColor="@color/colorBlack"
+                            android:textColorHint="@color/colorGrey"
+                            android:textSize="@dimen/text12" />
+
+                        <ImageView
+                            android:id="@+id/tag_sponsor_clutch"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:contentDescription="@string/app_name"
+                            android:gravity="end|center_vertical"
+                            android:padding="@dimen/size10"
+                            android:tag="@string/clutch"
+                            android:visibility="gone"
+                            app:srcCompat="@drawable/tag_profile_icon" />
+
+                    </LinearLayout>
+
+                    <View
+                        android:id="@+id/clutch_line"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/size1"
+                        android:background="@color/colorGrey" />
+
+                    <LinearLayout
+                        android:id="@+id/injection_box"
+                        style="@style/LayoutMatchWrap"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/injection_tv"
+                            android:layout_width="@dimen/size0"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:padding="@dimen/size10"
+                            android:text="@string/injection"
+                            android:textColor="@color/colorBlack"
+                            android:textSize="@dimen/text12"
+                            android:textStyle="bold" />
+
+                        <EditText
+                            android:id="@+id/injection_et"
+                            android:layout_width="@dimen/size0"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:background="@null"
+                            android:hint="@string/injection"
+                            android:inputType="text"
+                            android:padding="@dimen/size10"
+                            android:textColor="@color/colorBlack"
+                            android:textColorHint="@color/colorGrey"
+                            android:textSize="@dimen/text12" />
+
+                        <ImageView
+                            android:id="@+id/tag_sponsor_injection"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:contentDescription="@string/app_name"
+                            android:gravity="end|center_vertical"
+                            android:padding="@dimen/size10"
+                            android:tag="@string/injection"
+                            android:visibility="gone"
+                            app:srcCompat="@drawable/tag_profile_icon" />
+
+                    </LinearLayout>
+
+                    <View
+                        android:id="@+id/injection_line"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/size1"
+                        android:background="@color/colorGrey" />
+
+                    <LinearLayout
+                        android:id="@+id/fuel_box"
+                        style="@style/LayoutMatchWrap"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/fuel_tv"
+                            android:layout_width="@dimen/size0"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:padding="@dimen/size10"
+                            android:text="@string/fuel_system"
+                            android:textColor="@color/colorBlack"
+                            android:textSize="@dimen/text12"
+                            android:textStyle="bold" />
+
+                        <EditText
+                            android:id="@+id/fuel_et"
+                            android:layout_width="@dimen/size0"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:background="@null"
+                            android:hint="@string/fuel_system"
+                            android:inputType="text"
+                            android:padding="@dimen/size10"
+                            android:textColor="@color/colorBlack"
+                            android:textColorHint="@color/colorGrey"
+                            android:textSize="@dimen/text12" />
+
+                        <ImageView
+                            android:id="@+id/tag_sponsor_fuel"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:contentDescription="@string/app_name"
+                            android:gravity="end|center_vertical"
+                            android:padding="@dimen/size10"
+                            android:tag="@string/fuel_system"
+                            android:visibility="gone"
+                            app:srcCompat="@drawable/tag_profile_icon" />
+
+                    </LinearLayout>
+
+                    <View
+                        android:id="@+id/fuel_line"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/size1"
+                        android:background="@color/colorGrey" />
+
+                    <LinearLayout
+                        android:id="@+id/turbo_box"
+                        style="@style/LayoutMatchWrap"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/turbo_tv"
+                            android:layout_width="@dimen/size0"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:padding="@dimen/size10"
+                            android:text="@string/turbo"
+                            android:textColor="@color/colorBlack"
+                            android:textSize="@dimen/text12"
+                            android:textStyle="bold" />
+
+                        <EditText
+                            android:id="@+id/turbo_et"
+                            android:layout_width="@dimen/size0"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:background="@null"
+                            android:hint="@string/turbo"
+                            android:inputType="text"
+                            android:padding="@dimen/size10"
+                            android:textColor="@color/colorBlack"
+                            android:textColorHint="@color/colorGrey"
+                            android:textSize="@dimen/text12" />
+
+                        <ImageView
+                            android:id="@+id/tag_sponsor_turbo"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:contentDescription="@string/app_name"
+                            android:gravity="end|center_vertical"
+                            android:padding="@dimen/size10"
+                            android:tag="@string/turbo"
+                            android:visibility="gone"
+                            app:srcCompat="@drawable/tag_profile_icon" />
+
+                    </LinearLayout>
+
+                    <View
+                        android:id="@+id/turbo_line"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/size1"
+                        android:background="@color/colorGrey" />
+
+                    <LinearLayout
+                        android:id="@+id/suspension_box"
+                        style="@style/LayoutMatchWrap"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/suspension_tv"
+                            android:layout_width="@dimen/size0"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:padding="@dimen/size10"
+                            android:text="@string/suspension"
+                            android:textColor="@color/colorBlack"
+                            android:textSize="@dimen/text12"
+                            android:textStyle="bold" />
+
+                        <EditText
+                            android:id="@+id/suspension_et"
+                            android:layout_width="@dimen/size0"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:background="@null"
+                            android:hint="@string/suspension"
+                            android:inputType="text"
+                            android:padding="@dimen/size10"
+                            android:textColor="@color/colorBlack"
+                            android:textColorHint="@color/colorGrey"
+                            android:textSize="@dimen/text12" />
+
+                        <ImageView
+                            android:id="@+id/tag_sponsor_suspension"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:contentDescription="@string/app_name"
+                            android:gravity="end|center_vertical"
+                            android:padding="@dimen/size10"
+                            android:tag="@string/suspension"
+                            android:visibility="gone"
+                            app:srcCompat="@drawable/tag_profile_icon" />
+
+                    </LinearLayout>
+
+                    <View
+                        android:id="@+id/suspension_line"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/size1"
+                        android:background="@color/colorGrey" />
+
+                    <LinearLayout
+                        android:id="@+id/tyres_box"
+                        style="@style/LayoutMatchWrap"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/tyres_tv"
+                            android:layout_width="@dimen/size0"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:padding="@dimen/size10"
+                            android:text="@string/tyres"
+                            android:textColor="@color/colorBlack"
+                            android:textSize="@dimen/text12"
+                            android:textStyle="bold" />
+
+                        <EditText
+                            android:id="@+id/tyres_et"
+                            android:layout_width="@dimen/size0"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:background="@null"
+                            android:hint="@string/tyres"
+                            android:inputType="text"
+                            android:padding="@dimen/size10"
+                            android:textColor="@color/colorBlack"
+                            android:textColorHint="@color/colorGrey"
+                            android:textSize="@dimen/text12" />
+
+                        <ImageView
+                            android:id="@+id/tag_sponsor_tyres"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:contentDescription="@string/app_name"
+                            android:gravity="end|center_vertical"
+                            android:padding="@dimen/size10"
+                            android:tag="@string/tyres"
+                            android:visibility="gone"
+                            app:srcCompat="@drawable/tag_profile_icon" />
+
+                    </LinearLayout>
+
+                    <View
+                        android:id="@+id/tyres_line"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/size1"
+                        android:background="@color/colorGrey" />
+
+                    <LinearLayout
+                        android:id="@+id/exhaust_box"
+                        style="@style/LayoutMatchWrap"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/exhaust_tv"
+                            android:layout_width="@dimen/size0"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:padding="@dimen/size10"
+                            android:text="@string/exhaust"
+                            android:textColor="@color/colorBlack"
+                            android:textSize="@dimen/text12"
+                            android:textStyle="bold" />
+
+                        <EditText
+                            android:id="@+id/exhaust_et"
+                            android:layout_width="@dimen/size0"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:background="@null"
+                            android:hint="@string/exhaust"
+                            android:inputType="text"
+                            android:padding="@dimen/size10"
+                            android:textColor="@color/colorBlack"
+                            android:textColorHint="@color/colorGrey"
+                            android:textSize="@dimen/text12" />
+
+                        <ImageView
+                            android:id="@+id/tag_sponsor_exhaust"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:contentDescription="@string/app_name"
+                            android:gravity="end|center_vertical"
+                            android:padding="@dimen/size10"
+                            android:tag="@string/exhaust"
+                            android:visibility="gone"
+                            app:srcCompat="@drawable/tag_profile_icon" />
+
+                    </LinearLayout>
+
+                    <View
+                        android:id="@+id/exhaust_line"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/size1"
+                        android:background="@color/colorGrey" />
+
+                    <LinearLayout
+                        android:id="@+id/fork_box"
+                        style="@style/LayoutMatchWrap"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/fork_tv"
+                            android:layout_width="@dimen/size0"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:padding="@dimen/size10"
+                            android:text="@string/forks"
+                            android:textColor="@color/colorBlack"
+                            android:textSize="@dimen/text12"
+                            android:textStyle="bold" />
+
+                        <EditText
+                            android:id="@+id/fork_et"
+                            android:layout_width="@dimen/size0"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:background="@null"
+                            android:hint="@string/forks"
+                            android:inputType="text"
+                            android:padding="@dimen/size10"
+                            android:textColor="@color/colorBlack"
+                            android:textColorHint="@color/colorGrey"
+                            android:textSize="@dimen/text12" />
+
+                        <ImageView
+                            android:id="@+id/tag_sponsor_fork"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:contentDescription="@string/app_name"
+                            android:gravity="end|center_vertical"
+                            android:padding="@dimen/size10"
+                            android:tag="@string/forks"
+                            android:visibility="gone"
+                            app:srcCompat="@drawable/tag_profile_icon" />
+
+                    </LinearLayout>
+
+                    <View
+                        android:id="@+id/fork_line"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/size1"
+                        android:background="@color/colorGrey" />
+
+                    <LinearLayout
+                        android:id="@+id/shock_box"
+                        style="@style/LayoutMatchWrap"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/shock_tv"
+                            android:layout_width="@dimen/size0"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:padding="@dimen/size10"
+                            android:text="@string/shock"
+                            android:textColor="@color/colorBlack"
+                            android:textSize="@dimen/text12"
+                            android:textStyle="bold" />
+
+                        <EditText
+                            android:id="@+id/shock_et"
+                            android:layout_width="@dimen/size0"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:background="@null"
+                            android:hint="@string/shock"
+                            android:inputType="text"
+                            android:padding="@dimen/size10"
+                            android:textColor="@color/colorBlack"
+                            android:textColorHint="@color/colorGrey"
+                            android:textSize="@dimen/text12" />
+
+                        <ImageView
+                            android:id="@+id/tag_sponsor_shock"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:contentDescription="@string/app_name"
+                            android:gravity="end|center_vertical"
+                            android:padding="@dimen/size10"
+                            android:tag="@string/shock"
+                            android:visibility="gone"
+                            app:srcCompat="@drawable/tag_profile_icon" />
+
+                    </LinearLayout>
+
+                    <View
+                        android:id="@+id/shock_line"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/size1"
+                        android:background="@color/colorGrey" />
+
+                    <LinearLayout
+                        android:id="@+id/lap_timer_box"
+                        style="@style/LayoutMatchWrap"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/lap_timer_tv"
+                            android:layout_width="@dimen/size0"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:padding="@dimen/size10"
+                            android:text="@string/lap_timer"
+                            android:textColor="@color/colorBlack"
+                            android:textSize="@dimen/text12"
+                            android:textStyle="bold" />
+
+                        <EditText
+                            android:id="@+id/lap_timer_et"
+                            android:layout_width="@dimen/size0"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:background="@null"
+                            android:hint="@string/lap_timer"
+                            android:inputType="text"
+                            android:padding="@dimen/size10"
+                            android:textColor="@color/colorBlack"
+                            android:textColorHint="@color/colorGrey"
+                            android:textSize="@dimen/text12" />
+
+                        <ImageView
+                            android:id="@+id/tag_sponsor_lap_timer"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:contentDescription="@string/app_name"
+                            android:gravity="end|center_vertical"
+                            android:padding="@dimen/size10"
+                            android:tag="@string/lap_timer"
+                            android:visibility="gone"
+                            app:srcCompat="@drawable/tag_profile_icon" />
+
+                    </LinearLayout>
+
+                    <View
+                        android:id="@+id/lap_timer_line"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/size1"
+                        android:background="@color/colorGrey" />
+
+                    <LinearLayout
+                        android:id="@+id/rear_set_box"
+                        style="@style/LayoutMatchWrap"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/rear_set_tv"
+                            android:layout_width="@dimen/size0"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:padding="@dimen/size10"
+                            android:text="@string/rear_set"
+                            android:textColor="@color/colorBlack"
+                            android:textSize="@dimen/text12"
+                            android:textStyle="bold" />
+
+                        <EditText
+                            android:id="@+id/rear_set_et"
+                            android:layout_width="@dimen/size0"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:background="@null"
+                            android:hint="@string/rear_set"
+                            android:inputType="text"
+                            android:padding="@dimen/size10"
+                            android:textColor="@color/colorBlack"
+                            android:textColorHint="@color/colorGrey"
+                            android:textSize="@dimen/text12" />
+
+                        <ImageView
+                            android:id="@+id/tag_sponsor_rear_set"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:contentDescription="@string/app_name"
+                            android:gravity="end|center_vertical"
+                            android:padding="@dimen/size10"
+                            android:tag="@string/rear_set"
+                            android:visibility="gone"
+                            app:srcCompat="@drawable/tag_profile_icon" />
+
+                    </LinearLayout>
+
+                    <View
+                        android:id="@+id/rear_set_line"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/size1"
+                        android:background="@color/colorGrey" />
+
+                    <LinearLayout
+                        android:id="@+id/handle_bar_box"
+                        style="@style/LayoutMatchWrap"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/handle_bar_tv"
+                            android:layout_width="@dimen/size0"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:padding="@dimen/size10"
+                            android:text="@string/handle_bar"
+                            android:textColor="@color/colorBlack"
+                            android:textSize="@dimen/text12"
+                            android:textStyle="bold" />
+
+                        <EditText
+                            android:id="@+id/handle_bar_et"
+                            android:layout_width="@dimen/size0"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:background="@null"
+                            android:hint="@string/handle_bar"
+                            android:inputType="text"
+                            android:padding="@dimen/size10"
+                            android:textColor="@color/colorBlack"
+                            android:textColorHint="@color/colorGrey"
+                            android:textSize="@dimen/text12" />
+
+                        <ImageView
+                            android:id="@+id/tag_sponsor_handle_bar"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:contentDescription="@string/app_name"
+                            android:gravity="end|center_vertical"
+                            android:padding="@dimen/size10"
+                            android:tag="@string/handle_bar"
+                            android:visibility="gone"
+                            app:srcCompat="@drawable/tag_profile_icon" />
+
+                    </LinearLayout>
+
+                    <View
+                        android:id="@+id/handle_bar_line"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/size1"
+                        android:background="@color/colorGrey" />
+
+                    <LinearLayout
+                        android:id="@+id/fairings_box"
+                        style="@style/LayoutMatchWrap"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/fairings_tv"
+                            android:layout_width="@dimen/size0"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:padding="@dimen/size10"
+                            android:text="@string/fairings"
+                            android:textColor="@color/colorBlack"
+                            android:textSize="@dimen/text12"
+                            android:textStyle="bold" />
+
+                        <EditText
+                            android:id="@+id/fairings_et"
+                            android:layout_width="@dimen/size0"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:background="@null"
+                            android:hint="@string/fairings"
+                            android:inputType="text"
+                            android:padding="@dimen/size10"
+                            android:textColor="@color/colorBlack"
+                            android:textColorHint="@color/colorGrey"
+                            android:textSize="@dimen/text12" />
+
+                        <ImageView
+                            android:id="@+id/tag_sponsor_fairings"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:contentDescription="@string/app_name"
+                            android:gravity="end|center_vertical"
+                            android:padding="@dimen/size10"
+                            android:tag="@string/fairings"
+                            android:visibility="gone"
+                            app:srcCompat="@drawable/tag_profile_icon" />
+
+                    </LinearLayout>
+
+                    <View
+                        android:id="@+id/fairings_line"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/size1"
+                        android:background="@color/colorGrey" />
+
+                    <LinearLayout
+                        android:id="@+id/chain_box"
+                        style="@style/LayoutMatchWrap"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/chain_tv"
+                            android:layout_width="@dimen/size0"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:padding="@dimen/size10"
+                            android:text="@string/chain"
+                            android:textColor="@color/colorBlack"
+                            android:textSize="@dimen/text12"
+                            android:textStyle="bold" />
+
+                        <EditText
+                            android:id="@+id/chain_et"
+                            android:layout_width="@dimen/size0"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:background="@null"
+                            android:hint="@string/chain"
+                            android:inputType="text"
+                            android:padding="@dimen/size10"
+                            android:textColor="@color/colorBlack"
+                            android:textColorHint="@color/colorGrey"
+                            android:textSize="@dimen/text12" />
+
+                        <ImageView
+                            android:id="@+id/tag_sponsor_chain"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:contentDescription="@string/app_name"
+                            android:gravity="end|center_vertical"
+                            android:padding="@dimen/size10"
+                            android:tag="@string/chain"
+                            android:visibility="gone"
+                            app:srcCompat="@drawable/tag_profile_icon" />
+
+                    </LinearLayout>
+
+                    <View
+                        android:id="@+id/chain_line"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/size1"
+                        android:background="@color/colorGrey" />
+
+                    <LinearLayout
+                        android:id="@+id/sprockets_box"
+                        style="@style/LayoutMatchWrap"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/sprockets_tv"
+                            android:layout_width="@dimen/size0"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:padding="@dimen/size10"
+                            android:text="@string/sprockets"
+                            android:textColor="@color/colorBlack"
+                            android:textSize="@dimen/text12"
+                            android:textStyle="bold" />
+
+                        <EditText
+                            android:id="@+id/sprockets_et"
+                            android:layout_width="@dimen/size0"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:background="@null"
+                            android:hint="@string/sprockets"
+                            android:inputType="text"
+                            android:padding="@dimen/size10"
+                            android:textColor="@color/colorBlack"
+                            android:textColorHint="@color/colorGrey"
+                            android:textSize="@dimen/text12" />
+
+                        <ImageView
+                            android:id="@+id/tag_sponsor_sprockets"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:contentDescription="@string/app_name"
+                            android:gravity="end|center_vertical"
+                            android:padding="@dimen/size10"
+                            android:tag="@string/sprockets"
+                            android:visibility="gone"
+                            app:srcCompat="@drawable/tag_profile_icon" />
+
+                    </LinearLayout>
+
+                    <View
+                        android:id="@+id/sprockets_line"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/size1"
+                        android:background="@color/colorGrey" />
+
+                    <LinearLayout
+                        android:id="@+id/engine_cover_box"
+                        style="@style/LayoutMatchWrap"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/engine_cover_tv"
+                            android:layout_width="@dimen/size0"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:padding="@dimen/size10"
+                            android:text="@string/engine_cover"
+                            android:textColor="@color/colorBlack"
+                            android:textSize="@dimen/text12"
+                            android:textStyle="bold" />
+
+                        <EditText
+                            android:id="@+id/engine_cover_et"
+                            android:layout_width="@dimen/size0"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:background="@null"
+                            android:hint="@string/engine_cover"
+                            android:inputType="text"
+                            android:padding="@dimen/size10"
+                            android:textColor="@color/colorBlack"
+                            android:textColorHint="@color/colorGrey"
+                            android:textSize="@dimen/text12" />
+
+                        <ImageView
+                            android:id="@+id/tag_sponsor_engine_cover"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:contentDescription="@string/app_name"
+                            android:gravity="end|center_vertical"
+                            android:padding="@dimen/size10"
+                            android:tag="@string/engine_cover"
+                            android:visibility="gone"
+                            app:srcCompat="@drawable/tag_profile_icon" />
+
+                    </LinearLayout>
+
+                    <View
+                        android:id="@+id/engine_cover_line"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/size1"
+                        android:background="@color/colorGrey" />
+
+                    <LinearLayout
+                        android:id="@+id/brake_master_box"
+                        style="@style/LayoutMatchWrap"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/brake_master_tv"
+                            android:layout_width="@dimen/size0"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:padding="@dimen/size10"
+                            android:text="@string/brake_master"
+                            android:textColor="@color/colorBlack"
+                            android:textSize="@dimen/text12"
+                            android:textStyle="bold" />
+
+                        <EditText
+                            android:id="@+id/brake_master_et"
+                            android:layout_width="@dimen/size0"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:background="@null"
+                            android:hint="@string/brake_master"
+                            android:inputType="text"
+                            android:padding="@dimen/size10"
+                            android:textColor="@color/colorBlack"
+                            android:textColorHint="@color/colorGrey"
+                            android:textSize="@dimen/text12" />
+
+                        <ImageView
+                            android:id="@+id/tag_sponsor_brake_master"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:contentDescription="@string/app_name"
+                            android:gravity="end|center_vertical"
+                            android:padding="@dimen/size10"
+                            android:tag="@string/brake_master"
+                            android:visibility="gone"
+                            app:srcCompat="@drawable/tag_profile_icon" />
+
+                    </LinearLayout>
+
+                    <View
+                        android:id="@+id/brake_master_line"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/size1"
+                        android:background="@color/colorGrey" />
+
+                    <LinearLayout
+                        android:id="@+id/brake_pad_box"
+                        style="@style/LayoutMatchWrap"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/brake_pad_tv"
+                            android:layout_width="@dimen/size0"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:padding="@dimen/size10"
+                            android:text="@string/brake_pads"
+                            android:textColor="@color/colorBlack"
+                            android:textSize="@dimen/text12"
+                            android:textStyle="bold" />
+
+                        <EditText
+                            android:id="@+id/brake_pad_et"
+                            android:layout_width="@dimen/size0"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:background="@null"
+                            android:hint="@string/brake_pads"
+                            android:inputType="text"
+                            android:padding="@dimen/size10"
+                            android:textColor="@color/colorBlack"
+                            android:textColorHint="@color/colorGrey"
+                            android:textSize="@dimen/text12" />
+
+                        <ImageView
+                            android:id="@+id/tag_sponsor_brake_pad"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:contentDescription="@string/app_name"
+                            android:gravity="end|center_vertical"
+                            android:padding="@dimen/size10"
+                            android:tag="@string/brake_pads"
+                            android:visibility="gone"
+                            app:srcCompat="@drawable/tag_profile_icon" />
+
+                    </LinearLayout>
+
+                    <View
+                        android:id="@+id/brake_pad_line"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/size1"
+                        android:background="@color/colorGrey" />
+
+                    <LinearLayout
+                        android:id="@+id/filter_box"
+                        style="@style/LayoutMatchWrap"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/filter_tv"
+                            android:layout_width="@dimen/size0"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:padding="@dimen/size10"
+                            android:text="@string/filter"
+                            android:textColor="@color/colorBlack"
+                            android:textSize="@dimen/text12"
+                            android:textStyle="bold" />
+
+                        <EditText
+                            android:id="@+id/filter_et"
+                            android:layout_width="@dimen/size0"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:background="@null"
+                            android:hint="@string/filter"
+                            android:inputType="text"
+                            android:padding="@dimen/size10"
+                            android:textColor="@color/colorBlack"
+                            android:textColorHint="@color/colorGrey"
+                            android:textSize="@dimen/text12" />
+
+                        <ImageView
+                            android:id="@+id/tag_sponsor_filter"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:contentDescription="@string/app_name"
+                            android:gravity="end|center_vertical"
+                            android:padding="@dimen/size10"
+                            android:tag="@string/filter"
+                            android:visibility="gone"
+                            app:srcCompat="@drawable/tag_profile_icon" />
+
+                    </LinearLayout>
+
+                    <View
+                        android:id="@+id/filter_line"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/size1"
+                        android:background="@color/colorGrey" />
+
+                    <LinearLayout
+                        android:id="@+id/brake_fluid_box"
+                        style="@style/LayoutMatchWrap"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/brake_fluid_tv"
+                            android:layout_width="@dimen/size0"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:padding="@dimen/size10"
+                            android:text="@string/brake_fluid"
+                            android:textColor="@color/colorBlack"
+                            android:textSize="@dimen/text12"
+                            android:textStyle="bold" />
+
+                        <EditText
+                            android:id="@+id/brake_fluid_et"
+                            android:layout_width="@dimen/size0"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:background="@null"
+                            android:hint="@string/brake_fluid"
+                            android:inputType="text"
+                            android:padding="@dimen/size10"
+                            android:textColor="@color/colorBlack"
+                            android:textColorHint="@color/colorGrey"
+                            android:textSize="@dimen/text12" />
+
+                        <ImageView
+                            android:id="@+id/tag_sponsor_brake_fluid"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:contentDescription="@string/app_name"
+                            android:gravity="end|center_vertical"
+                            android:padding="@dimen/size10"
+                            android:tag="@string/brake_fluid"
+                            android:visibility="gone"
+                            app:srcCompat="@drawable/tag_profile_icon" />
+
+                    </LinearLayout>
+
+                    <View
+                        android:id="@+id/brake_fluid_line"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/size1"
+                        android:background="@color/colorGrey" />
+
+                    <LinearLayout
+                        android:id="@+id/engine_oil_box"
+                        style="@style/LayoutMatchWrap"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/engine_oil_tv"
+                            android:layout_width="@dimen/size0"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:padding="@dimen/size10"
+                            android:text="@string/engine_oil"
+                            android:textColor="@color/colorBlack"
+                            android:textSize="@dimen/text12"
+                            android:textStyle="bold" />
+
+                        <EditText
+                            android:id="@+id/engine_oil_et"
+                            android:layout_width="@dimen/size0"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:background="@null"
+                            android:hint="@string/engine_oil"
+                            android:inputType="text"
+                            android:padding="@dimen/size10"
+                            android:textColor="@color/colorBlack"
+                            android:textColorHint="@color/colorGrey"
+                            android:textSize="@dimen/text12" />
+
+                        <ImageView
+                            android:id="@+id/tag_sponsor_engine_oil"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:contentDescription="@string/app_name"
+                            android:gravity="end|center_vertical"
+                            android:padding="@dimen/size10"
+                            android:tag="@string/engine_oil"
+                            android:visibility="gone"
+                            app:srcCompat="@drawable/tag_profile_icon" />
+
+                    </LinearLayout>
+
+                    <View
+                        android:id="@+id/engine_oil_line"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/size1"
+                        android:background="@color/colorGrey" />
+
+                    <LinearLayout
+                        android:id="@+id/chain_lube_box"
+                        style="@style/LayoutMatchWrap"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/chain_lube_tv"
+                            android:layout_width="@dimen/size0"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:padding="@dimen/size10"
+                            android:text="@string/chain_lube"
+                            android:textColor="@color/colorBlack"
+                            android:textSize="@dimen/text12"
+                            android:textStyle="bold" />
+
+                        <EditText
+                            android:id="@+id/chain_lube_et"
+                            android:layout_width="@dimen/size0"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:background="@null"
+                            android:hint="@string/chain_lube"
+                            android:inputType="text"
+                            android:padding="@dimen/size10"
+                            android:textColor="@color/colorBlack"
+                            android:textColorHint="@color/colorGrey"
+                            android:textSize="@dimen/text12" />
+
+                        <ImageView
+                            android:id="@+id/tag_sponsor_chain_lube"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:contentDescription="@string/app_name"
+                            android:gravity="end|center_vertical"
+                            android:padding="@dimen/size10"
+                            android:tag="@string/chain_lube"
+                            android:visibility="gone"
+                            app:srcCompat="@drawable/tag_profile_icon" />
+
+                    </LinearLayout>
+
+                    <View
+                        android:id="@+id/chain_lube_line"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/size1"
+                        android:background="@color/colorGrey" />
+
+
+                    <LinearLayout
+                        android:id="@+id/panel_and_paint_box"
+                        style="@style/LayoutMatchWrap"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/panel_and_paint_tv"
+                            android:layout_width="@dimen/size0"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:padding="@dimen/size10"
+                            android:text="@string/panel_and_paint"
+                            android:textColor="@color/colorBlack"
+                            android:textSize="@dimen/text12"
+                            android:textStyle="bold" />
+
+                        <EditText
+                            android:id="@+id/panel_and_paint_et"
+                            android:layout_width="@dimen/size0"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:background="@null"
+                            android:hint="@string/panel_and_paint"
+                            android:inputType="text"
+                            android:padding="@dimen/size10"
+                            android:textColor="@color/colorBlack"
+                            android:textColorHint="@color/colorGrey"
+                            android:textSize="@dimen/text12" />
+
+                        <ImageView
+                            android:id="@+id/tag_sponsor_panel_and_paint_tv"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:contentDescription="@string/app_name"
+                            android:gravity="end|center_vertical"
+                            android:padding="@dimen/size10"
+                            android:tag="@string/panel_and_paint"
+                            android:visibility="gone"
+                            app:srcCompat="@drawable/tag_profile_icon" />
+
+                    </LinearLayout>
+
+                    <View
+                        android:id="@+id/panel_and_paint_line"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/size1"
+                        android:background="@color/colorGrey" />
+
+
+                    <LinearLayout
+                        android:id="@+id/wheels_and_tyres_box"
+                        style="@style/LayoutMatchWrap"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/wheels_and_tyres_tv"
+                            android:layout_width="@dimen/size0"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:padding="@dimen/size10"
+                            android:text="@string/wheels_and_tyres"
+                            android:textColor="@color/colorBlack"
+                            android:textSize="@dimen/text12"
+                            android:textStyle="bold" />
+
+                        <EditText
+                            android:id="@+id/wheels_and_tyres_et"
+                            android:layout_width="@dimen/size0"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:background="@null"
+                            android:hint="@string/wheels_and_tyres"
+                            android:inputType="text"
+                            android:padding="@dimen/size10"
+                            android:textColor="@color/colorBlack"
+                            android:textColorHint="@color/colorGrey"
+                            android:textSize="@dimen/text12" />
+
+                        <ImageView
+                            android:id="@+id/tag_sponsor_wheels_and_tyres_tv"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:contentDescription="@string/app_name"
+                            android:gravity="end|center_vertical"
+                            android:padding="@dimen/size10"
+                            android:tag="@string/wheels_and_tyres"
+                            android:visibility="gone"
+                            app:srcCompat="@drawable/tag_profile_icon" />
+
+                    </LinearLayout>
+
+                    <View
+                        android:id="@+id/wheels_and_tyres_line"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/size1"
+                        android:background="@color/colorGrey" />
+
+                    <LinearLayout
+                        android:id="@+id/trailer_box"
+                        style="@style/LayoutMatchWrap"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/trailer_tv"
+                            android:layout_width="@dimen/size0"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:padding="@dimen/size10"
+                            android:text="@string/trailer"
+                            android:textColor="@color/colorBlack"
+                            android:textSize="@dimen/text12"
+                            android:textStyle="bold" />
+
+                        <EditText
+                            android:id="@+id/trailer_et"
+                            android:layout_width="@dimen/size0"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:background="@null"
+                            android:hint="@string/trailer"
+                            android:inputType="text"
+                            android:padding="@dimen/size10"
+                            android:textColor="@color/colorBlack"
+                            android:textColorHint="@color/colorGrey"
+                            android:textSize="@dimen/text12" />
+
+                        <ImageView
+                            android:id="@+id/tag_sponsor_trailer"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:contentDescription="@string/app_name"
+                            android:gravity="end|center_vertical"
+                            android:padding="@dimen/size10"
+                            android:tag="@string/trailer"
+                            android:visibility="gone"
+                            app:srcCompat="@drawable/tag_profile_icon" />
+
+                    </LinearLayout>
+
+                    <View
+                        android:id="@+id/trailer_line"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/size1"
+                        android:background="@color/colorGrey" />
+
+                    <LinearLayout
+                        android:id="@+id/boots_box"
+                        style="@style/LayoutMatchWrap"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/boots_tv"
+                            android:layout_width="@dimen/size0"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:padding="@dimen/size10"
+                            android:text="@string/boots"
+                            android:textColor="@color/colorBlack"
+                            android:textSize="@dimen/text12"
+                            android:textStyle="bold" />
+
+                        <EditText
+                            android:id="@+id/boots_et"
+                            android:layout_width="@dimen/size0"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:background="@null"
+                            android:hint="@string/boots"
+                            android:inputType="text"
+                            android:padding="@dimen/size10"
+                            android:textColor="@color/colorBlack"
+                            android:textColorHint="@color/colorGrey"
+                            android:textSize="@dimen/text12" />
+
+                        <ImageView
+                            android:id="@+id/tag_sponsor_boots"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:contentDescription="@string/app_name"
+                            android:gravity="end|center_vertical"
+                            android:padding="@dimen/size10"
+                            android:tag="@string/boots"
+                            android:visibility="gone"
+                            app:srcCompat="@drawable/tag_profile_icon" />
+
+                    </LinearLayout>
+
+                    <View
+                        android:id="@+id/boots_line"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/size1"
+                        android:background="@color/colorGrey" />
+
+                    <LinearLayout
+                        android:id="@+id/helmet_box"
+                        style="@style/LayoutMatchWrap"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/helmet_tv"
+                            android:layout_width="@dimen/size0"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:padding="@dimen/size10"
+                            android:text="@string/helmet"
+                            android:textColor="@color/colorBlack"
+                            android:textSize="@dimen/text12"
+                            android:textStyle="bold" />
+
+                        <EditText
+                            android:id="@+id/helmet_et"
+                            android:layout_width="@dimen/size0"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:background="@null"
+                            android:hint="@string/helmet"
+                            android:inputType="text"
+                            android:padding="@dimen/size10"
+                            android:textColor="@color/colorBlack"
+                            android:textColorHint="@color/colorGrey"
+                            android:textSize="@dimen/text12" />
+
+                        <ImageView
+                            android:id="@+id/tag_sponsor_helmet"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:contentDescription="@string/app_name"
+                            android:gravity="end|center_vertical"
+                            android:padding="@dimen/size10"
+                            android:tag="@string/helmet"
+                            android:visibility="gone"
+                            app:srcCompat="@drawable/tag_profile_icon" />
+
+                    </LinearLayout>
+
+                    <View
+                        android:id="@+id/helmet_line"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/size1"
+                        android:background="@color/colorGrey" />
+
+                    <LinearLayout
+                        android:id="@+id/suit_box"
+                        style="@style/LayoutMatchWrap"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/suit_tv"
+                            android:layout_width="@dimen/size0"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:padding="@dimen/size10"
+                            android:text="@string/suit"
+                            android:textColor="@color/colorBlack"
+                            android:textSize="@dimen/text12"
+                            android:textStyle="bold" />
+
+                        <EditText
+                            android:id="@+id/suit_et"
+                            android:layout_width="@dimen/size0"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:background="@null"
+                            android:hint="@string/suit"
+                            android:inputType="text"
+                            android:padding="@dimen/size10"
+                            android:textColor="@color/colorBlack"
+                            android:textColorHint="@color/colorGrey"
+                            android:textSize="@dimen/text12" />
+
+                        <ImageView
+                            android:id="@+id/tag_sponsor_suit"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:contentDescription="@string/app_name"
+                            android:gravity="end|center_vertical"
+                            android:padding="@dimen/size10"
+                            android:tag="@string/suit"
+                            android:visibility="gone"
+                            app:srcCompat="@drawable/tag_profile_icon" />
+
+                    </LinearLayout>
+
+                    <View
+                        android:id="@+id/suit_line"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/size1"
+                        android:background="@color/colorGrey" />
+
+                    <LinearLayout
+                        android:id="@+id/gloves_box"
+                        style="@style/LayoutMatchWrap"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/gloves_tv"
+                            android:layout_width="@dimen/size0"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:padding="@dimen/size10"
+                            android:text="@string/gloves"
+                            android:textColor="@color/colorBlack"
+                            android:textSize="@dimen/text12"
+                            android:textStyle="bold" />
+
+                        <EditText
+                            android:id="@+id/gloves_et"
+                            android:layout_width="@dimen/size0"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:background="@null"
+                            android:hint="@string/gloves"
+                            android:inputType="text"
+                            android:padding="@dimen/size10"
+                            android:textColor="@color/colorBlack"
+                            android:textColorHint="@color/colorGrey"
+                            android:textSize="@dimen/text12" />
+
+                        <ImageView
+                            android:id="@+id/tag_sponsor_gloves"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:contentDescription="@string/app_name"
+                            android:gravity="end|center_vertical"
+                            android:padding="@dimen/size10"
+                            android:tag="@string/gloves"
+                            android:visibility="gone"
+                            app:srcCompat="@drawable/tag_profile_icon" />
+
+                    </LinearLayout>
+
+                    <View
+                        android:id="@+id/gloves_line"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/size1"
+                        android:background="@color/colorGrey" />
+
+                    <LinearLayout
+                        android:id="@+id/back_protection_box"
+                        style="@style/LayoutMatchWrap"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/back_protection_tv"
+                            android:layout_width="@dimen/size0"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:padding="@dimen/size10"
+                            android:text="@string/back_protection"
+                            android:textColor="@color/colorBlack"
+                            android:textSize="@dimen/text12"
+                            android:textStyle="bold" />
+
+                        <EditText
+                            android:id="@+id/back_protection_et"
+                            android:layout_width="@dimen/size0"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:background="@null"
+                            android:hint="@string/back_protection"
+                            android:inputType="text"
+                            android:padding="@dimen/size10"
+                            android:textColor="@color/colorBlack"
+                            android:textColorHint="@color/colorGrey"
+                            android:textSize="@dimen/text12" />
+
+                        <ImageView
+                            android:id="@+id/tag_sponsor_back_protection"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:contentDescription="@string/app_name"
+                            android:gravity="end|center_vertical"
+                            android:padding="@dimen/size10"
+                            android:tag="@string/back_protection"
+                            android:visibility="gone"
+                            app:srcCompat="@drawable/tag_profile_icon" />
+
+                    </LinearLayout>
+
+                    <View
+                        android:id="@+id/back_protection_line"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/size1"
+                        android:background="@color/colorGrey" />
+
+                    <LinearLayout
+                        android:id="@+id/chest_protection_box"
+                        style="@style/LayoutMatchWrap"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/chest_protection_tv"
+                            android:layout_width="@dimen/size0"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:padding="@dimen/size10"
+                            android:text="@string/chest_protection"
+                            android:textColor="@color/colorBlack"
+                            android:textSize="@dimen/text12"
+                            android:textStyle="bold" />
+
+                        <EditText
+                            android:id="@+id/chest_protection_et"
+                            android:layout_width="@dimen/size0"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:background="@null"
+                            android:hint="@string/chest_protection"
+                            android:inputType="text"
+                            android:padding="@dimen/size10"
+                            android:textColor="@color/colorBlack"
+                            android:textColorHint="@color/colorGrey"
+                            android:textSize="@dimen/text12" />
+
+                        <ImageView
+                            android:id="@+id/tag_sponsor_chest_protection"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:contentDescription="@string/app_name"
+                            android:gravity="end|center_vertical"
+                            android:padding="@dimen/size10"
+                            android:tag="@string/chest_protection"
+                            android:visibility="gone"
+                            app:srcCompat="@drawable/tag_profile_icon" />
+
+                    </LinearLayout>
+
+                    <View
+                        android:id="@+id/chest_protection_line"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/size1"
+                        android:background="@color/colorGrey" />
+
+                    <LinearLayout
+                        android:id="@+id/more_info_box"
+                        style="@style/LayoutMatchWrap"
+
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/more_info_tv"
+                            android:layout_width="@dimen/size0"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:padding="@dimen/size10"
+                            android:text="@string/more_info"
+                            android:textColor="@color/colorBlack"
+                            android:textSize="@dimen/text12"
+                            android:textStyle="bold" />
+
+                        <EditText
+                            android:id="@+id/more_info_et"
+                            android:layout_width="@dimen/size0"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:background="@null"
+                            android:gravity="start|top"
+                            android:hint="@string/more_info"
+                            android:scrollbars="vertical"
+                            android:inputType="textMultiLine"
+                            android:padding="@dimen/size10"
+                            android:textColor="@color/colorBlack"
+                            android:textColorHint="@color/colorGrey"
+                            android:textSize="@dimen/text12" />
+
+                        <ImageView
+                            android:id="@+id/tag_sponsor_more_info_tv"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:contentDescription="@string/app_name"
+                            android:gravity="end|center_vertical"
+                            android:padding="@dimen/size10"
+                            android:tag="@string/more_info"
+                            android:visibility="gone"
+                            app:srcCompat="@drawable/tag_profile_icon" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <RelativeLayout
+                    android:id="@+id/submit_box"
+                    style="@style/LayoutMatchWrap"
+                    android:layout_below="@+id/form_box">
+
+                    <Button
+                        android:id="@+id/submit_btn"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/size40"
+                        android:layout_marginTop="@dimen/size20"
+                        android:background="@drawable/black_orange_btn_bg"
+                        android:text="@string/get_started"
+                        android:textAllCaps="false"
+                        android:textColor="@color/text_color"
+                        android:textSize="@dimen/text16"
+                        android:textStyle="bold" />
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/upgrade_box"
+                    style="@style/LayoutMatchWrap"
+                    android:layout_below="@+id/submit_box"
+                    android:visibility="gone">
+
+                    <Button
+                        android:id="@+id/upgrade_btn"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/size40"
+                        android:layout_marginTop="@dimen/size20"
+                        android:background="@drawable/black_orange_btn_bg"
+                        android:text="@string/upgrade_profile"
+                        android:textAllCaps="false"
+                        android:textColor="@color/text_color"
+                        android:textSize="@dimen/text16"
+                        android:textStyle="bold" />
+
+                </RelativeLayout>
+
+            </RelativeLayout>
+        </RelativeLayout>
+
+    </ScrollView>
+
+</android.support.design.widget.CoordinatorLayout>

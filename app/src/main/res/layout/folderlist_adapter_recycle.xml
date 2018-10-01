@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="150dp"
+    android:layout_height="150dp"
+    android:layout_weight="1"
+    android:layout_margin="10dp"
+    android:gravity="center"
+    android:background="#7F000000"
+    android:orientation="horizontal"
+    tools:context="online.motohub.activity.VideoPicker">
+
+    <ImageView
+        android:id="@+id/row_picker_video_img_folder_backgroundImg"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:contentDescription="@null"
+        app:srcCompat="@drawable/com_facebook_profile_picture_blank_portrait" />
+
+        <ImageView
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:id="@+id/folderIcon"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:contentDescription="@null"
+            android:background="#7F000000"
+            app:srcCompat="@drawable/ic_folder" />
+
+            <TextView
+                android:id="@+id/textNameFolder"
+                android:layout_width="match_parent"
+                android:layout_height="32dp"
+                android:ellipsize="end"
+                android:gravity="right"
+                android:layout_alignParentBottom="true"
+                android:layout_toLeftOf="@+id/folderIcon"
+                android:paddingTop="5dp"
+                android:paddingRight="10dp"
+                android:textStyle="bold"
+                android:background="#7F000000"
+                android:maxLines="1"
+                android:text="@string/folder_name"
+                android:textColor="@color/colorWhite" />
+
+            <TextView
+                android:id="@+id/textNumberVideo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/_231"
+                android:layout_alignParentRight="true"
+                android:paddingRight="10dp"
+                android:gravity="right"
+                android:textColor="@android:color/black"/>
+
+</RelativeLayout>

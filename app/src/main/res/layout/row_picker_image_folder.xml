@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="@style/LayoutMatchWrap"
+    android:gravity="center">
+
+    <android.support.v7.widget.CardView
+        style="@style/LayoutMatch"
+        android:layout_width="0dp"
+        android:layout_margin="@dimen/size5"
+        android:layout_weight="1"
+        app:cardElevation="@dimen/size2">
+
+        <RelativeLayout
+            android:id="@+id/row_picker_img_folder_container"
+            style="@style/LayoutMatchWrap"
+            android:background="@color/ash"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/row_picker_img_folder_backgroundImg"
+                style="@style/LayoutMatchWrap"
+                android:layout_height="@dimen/size150"
+                android:contentDescription="@null"
+                android:layout_centerInParent="true"
+                android:scaleType="centerCrop"
+                app:srcCompat="@drawable/com_facebook_profile_picture_blank_portrait" />
+
+            <RelativeLayout
+                style="@style/LayoutMatchWrap"
+                android:layout_below="@+id/row_picker_img_folder_backgroundImg"
+                android:background="@color/ash"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/row_picker_img_folder_iv"
+                    android:layout_width="@dimen/size30"
+                    android:layout_height="@dimen/size30"
+                    android:layout_alignParentEnd="true"
+                    android:background="#7F000000"
+                    android:contentDescription="@null"
+                    app:srcCompat="@drawable/ic_folder" />
+
+                <TextView
+                    android:id="@+id/row_picker_img_folder_name_tv"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/size30"
+                    android:layout_toStartOf="@+id/row_picker_img_folder_iv"
+                    android:background="#7F000000"
+                    android:maxLines="2"
+                    android:padding="5dp"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="14sp" />
+            </RelativeLayout>
+        </RelativeLayout>
+    </android.support.v7.widget.CardView>
+</LinearLayout>

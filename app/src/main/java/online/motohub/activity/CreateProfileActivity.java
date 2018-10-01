@@ -1,0 +1,212 @@
+package online.motohub.activity;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.v7.widget.Toolbar;
+import android.view.View;
+import android.widget.CompoundButton;
+import android.widget.ToggleButton;
+
+import java.util.ArrayList;
+
+import butterknife.BindString;
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnCheckedChanged;
+import butterknife.OnClick;
+import online.motohub.R;
+import online.motohub.fragment.dialog.AppDialogFragment;
+import online.motohub.util.AppConstants;
+
+/**
+ * Create Profile Activity.
+ *
+ * @version 1.0, 27/04/2017
+ * @since 1.0
+ */
+public class CreateProfileActivity extends BaseActivity {
+
+    @BindView(R.id.create_profile_co_layout)
+    CoordinatorLayout mCoordinatorLayout;
+    @BindView(R.id.toolbar)
+    Toolbar mToolbar;
+    @BindView(R.id.bike_toggle_btn)
+    ToggleButton mBikeToggleBtn;
+    @BindView(R.id.boat_toggle_btn)
+    ToggleButton mBoatToggleBtn;
+    @BindView(R.id.car_toggle_btn)
+    ToggleButton mCarToggleBtn;
+    @BindView(R.id.kart_toggle_btn)
+    ToggleButton mKartToggleBtn;
+    @BindView(R.id.spectator_toggle_btn)
+    ToggleButton mSpectatorToggleBtn;
+    @BindView(R.id.per_shop_toggle_btn)
+    ToggleButton mPerShopToggleBtn;
+    @BindView(R.id.media_photography_toggle_btn)
+    ToggleButton mMediaAndPhotoToggleBtn;
+    @BindString(R.string.create_your_profile)
+    String mToolbarTitle;
+    @BindString(R.string.memo)
+    String mMemoStr;
+    @BindString(R.string.select_profile_err)
+    String mSelectProfileErr;
+    ArrayList<String> mProfileTypes = new ArrayList<>();
+    private boolean mCreateProfAfterReg = false;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_create_profile);
+        ButterKnife.bind(this);
+        initView();
+    }
+
+    private void initView() {
+        setToolbar(mToolbar, mToolbarTitle);
+        mCreateProfAfterReg = getIntent().getBooleanExtra(CREATE_PROF_AFTER_REG, false);
+        if (mCreateProfAfterReg) {
+            clearProfileTypePreferences();
+            showToolbarBtn(mToolbar, R.id.toolbar_back_img_btn);
+        }
+    }
+
+    @OnClick({R.id.toolbar_back_img_btn, R.id.enter_btn})
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.toolbar_back_img_btn:
+                super.onBackPressed();
+                break;
+            case R.id.enter_btn:
+                if (mProfileTypes.size() > 0) {
+                    Intent mIntent = new Intent(this, CompleteProfileActivity.class);
+                    mIntent.putStringArrayListExtra(PROFILE_TYPE, mProfileTypes);
+                    mIntent.putExtra(AppConstants.TAG, getIntent().getStringExtra(AppConstants.TAG));
+                    if (mCreateProfAfterReg) {
+                        mIntent.putExtra(CREATE_PROF_AFTER_REG, true);
+                        startActivityForResult(mIntent, AppConstants.CREATE_PROFILE_RES);
+                    } else {
+                        startActivity(mIntent);
+                    }
+                } else {
+                    showSnackBar(mCoordinatorLayout, mSelectProfileErr);
+                }
+                break;
+        }
+    }
+
+    @OnCheckedChanged({R.id.bike_toggle_btn, R.id.boat_toggle_btn, R.id.car_toggle_btn,
+            R.id.kart_toggle_btn, R.id.spectator_toggle_btn, R.id.per_shop_toggle_btn,
+            R.id.media_photography_toggle_btn})
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        switch (buttonView.getId()) {
+            case R.id.bike_toggle_btn:
+                if (isChecked) {
+                    mBoatToggleBtn.setChecked(false);
+                    mCarToggleBtn.setChecked(false);
+                    mKartToggleBtn.setChecked(false);
+                    mSpectatorToggleBtn.setChecked(false);
+                }
+                addOrRemoveProfileTypes(BIKE, isChecked);
+                break;
+            case R.id.boat_toggle_btn:
+                if (isChecked) {
+                    mBikeToggleBtn.setChecked(false);
+                    mCarToggleBtn.setChecked(false);
+                    mKartToggleBtn.setChecked(false);
+                    mSpectatorToggleBtn.setChecked(false);
+                }
+                addOrRemoveProfileTypes(BOAT, isChecked);
+                break;
+            case R.id.car_toggle_btn:
+                if (isChecked) {
+                    mBikeToggleBtn.setChecked(false);
+                    mBoatToggleBtn.setChecked(false);
+                    mKartToggleBtn.setChecked(false);
+                    mSpectatorToggleBtn.setChecked(false);
+                }
+                addOrRemoveProfileTypes(CAR, isChecked);
+                break;
+            case R.id.kart_toggle_btn:
+                if (isChecked) {
+                    mBikeToggleBtn.setChecked(false);
+                    mBoatToggleBtn.setChecked(false);
+                    mCarToggleBtn.setChecked(false);
+                    mSpectatorToggleBtn.setChecked(false);
+                }
+                addOrRemoveProfileTypes(KART, isChecked);
+                break;
+            case R.id.spectator_toggle_btn:
+                if (isChecked) {
+                    mBikeToggleBtn.setChecked(false);
+                    mBoatToggleBtn.setChecked(false);
+                    mCarToggleBtn.setChecked(false);
+                    mKartToggleBtn.setChecked(false);
+                }
+                addOrRemoveProfileTypes(SPECTATOR, isChecked);
+                break;
+            case R.id.per_shop_toggle_btn:
+                if (isChecked) {
+                    mPerShopToggleBtn.setChecked(false);
+                }
+                showAppDialog(AppDialogFragment.ALERT_TIP_DIALOG, null);
+                break;
+            case R.id.media_photography_toggle_btn:
+                if (isChecked) {
+                    mMediaAndPhotoToggleBtn.setChecked(false);
+                }
+                showAppDialog(AppDialogFragment.ALERT_TIP_DIALOG, null);
+                break;
+        }
+    }
+
+    private void addOrRemoveProfileTypes(String profile_type, boolean isChecked) {
+        if (isChecked) {
+            mProfileTypes.add(profile_type);
+        } else {
+            mProfileTypes.remove(profile_type);
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (mCreateProfAfterReg) {
+            super.onBackPressed();
+        } else {
+            showAppDialog(AppDialogFragment.ALERT_EXIT_DIALOG, null);
+        }
+    }
+
+    @Override
+    public void alertDialogPositiveBtnClick(
+            BaseActivity activity, String mDialogType,
+            StringBuilder profileTypesStr,
+            ArrayList<String> profileTypes,
+            int position) {
+        super.alertDialogPositiveBtnClick(
+                activity,
+                mDialogType,
+                profileTypesStr,
+                profileTypes,
+                position);
+        switch (mDialogType) {
+            case AppDialogFragment.ALERT_EXIT_DIALOG:
+                finishAffinity();
+                break;
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_OK) {
+            switch (requestCode) {
+                case AppConstants.CREATE_PROFILE_RES:
+                    Intent intent = new Intent();
+                    setResult(RESULT_OK, intent);
+                    finish();
+                    break;
+            }
+        }
+    }
+
+}

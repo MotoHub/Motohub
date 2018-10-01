@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/events_question_list_adap_layout"
+    android:orientation="vertical"
+    style="@style/LayoutMatchWrap"
+    android:focusable="true"
+    android:focusableInTouchMode="true">
+    <LinearLayout
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="@dimen/size10">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:id="@+id/qtn_number_tv"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/text16"
+        android:layout_below="@+id/include"
+        android:textColor="@color/colorBlack"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/qtn_tv"
+        android:textSize="@dimen/text16"
+        android:textColor="@color/colorBlack"
+        android:layout_toRightOf="@+id/qtn_number_tv"
+        android:layout_marginLeft="@dimen/size5"/>
+
+    </LinearLayout>
+
+    <EditText
+        android:id="@+id/answer_et"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/text16"
+        android:background="@drawable/orange_border_bg"
+        android:padding="@dimen/size5"
+        android:textColor="@color/colorBlack"
+        android:layout_margin="@dimen/size10"/>
+
+</LinearLayout>

@@ -1,0 +1,8 @@
+<android.support.v7.widget.RecyclerView android:id="@+id/events_list_view"
+    style="@style/LayoutMatch"
+    android:divider="@android:color/transparent"
+    android:dividerHeight="@dimen/size10"
+    android:paddingBottom="@dimen/size10"
+    android:paddingTop="@dimen/size10"
+    android:scrollbars="none"
+    xmlns:android="http://schemas.android.com/apk/res/android" />

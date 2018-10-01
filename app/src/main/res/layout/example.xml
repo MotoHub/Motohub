@@ -1,0 +1,76 @@
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:Skeleton="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/cardView"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="-10dp"
+    android:layoutDirection="ltr"
+    app:cardBackgroundColor="@color/colorWhite"
+    app:cardCornerRadius="5dp"
+    app:cardElevation="10dp"
+    app:cardUseCompatPadding="true"
+    app:contentPadding="0dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:baselineAligned="false"
+        android:orientation="vertical">
+
+        <!--Photo-->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <android.support.v7.widget.AppCompatImageView
+                android:id="@+id/photoACImgV"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="@color/transparent"
+                android:scaleType="centerCrop"
+                app:srcCompat="@drawable/default_cover_img" />
+
+            <ImageView
+                android:id="@+id/playBtn"
+                android:layout_width="@dimen/size50"
+                android:layout_height="@dimen/size50"
+                android:layout_centerInParent="true"
+                android:contentDescription="@string/app_name"
+                app:srcCompat="@drawable/play_icon" />
+
+        </RelativeLayout>
+
+        <!--Content-->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="8dp">
+
+            <TextView
+                android:id="@+id/titleTv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="start|center_vertical"
+                android:text="Title"
+                android:textColor="@color/colorBlack"
+                android:textSize="16sp" />
+
+        </RelativeLayout>
+
+        <ImageView
+            android:id="@+id/iv_check"
+            android:layout_width="@dimen/size20"
+            android:layout_height="@dimen/size20"
+            android:layout_gravity="bottom|end"
+            android:layout_marginBottom="@dimen/size2"
+            android:layout_marginEnd="@dimen/size2"
+            android:layout_marginRight="@dimen/size2"
+            android:background="@drawable/circle_green_send_btn"
+            android:src="@drawable/ic_check_white"
+            android:visibility="visible" />
+
+    </LinearLayout>
+
+</android.support.v7.widget.CardView>

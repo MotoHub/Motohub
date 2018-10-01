@@ -1,0 +1,24 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/LayoutMatch"
+    android:gravity="center"
+    android:background="@color/transparent50"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="@dimen/size70"
+        android:layout_height="@dimen/size70"
+        android:layout_gravity="center"
+        android:layout_margin="@dimen/size10"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <ProgressBar
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="@dimen/size10"
+            android:indeterminate="true" />
+    </LinearLayout>
+
+</LinearLayout>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+    <data>
+        <variable
+            name="user"
+            type="online.motohub.model.User" />
+    </data>
+
+    <RelativeLayout
+        style="@style/LayoutWrap"
+        android:layout_gravity="center"
+        tools:context="online.motohub.activity.TempActivity">
+
+        <TextView
+            android:id="@+id/firstName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/size5"
+            android:text="@{user.firstName}"
+            android:textColor="@color/colorBlack" />
+
+        <TextView
+            android:id="@+id/lastName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/firstName"
+            android:padding="@dimen/size5"
+            android:text="@{user.lastName}"
+            android:textColor="@color/colorBlack"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/lastName"
+            android:padding="@dimen/size5"
+            android:text="@{String.valueOf(user.age)}"
+            android:textColor="@color/colorBlack" />
+    </RelativeLayout>
+</layout>

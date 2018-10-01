@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/main_lay"
+    style="@style/LayoutMatchWrap"
+    android:background="@color/colorWhite">
+
+    <RelativeLayout style="@style/LayoutMatchWrap">
+
+        <RelativeLayout
+            android:id="@+id/header_lay"
+            style="@style/LayoutMatch"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/colorBlack">
+
+            <RelativeLayout
+                android:id="@+id/right_btn_lay"
+                style="@style/LayoutMatch"
+                android:layout_width="@dimen/size34"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:background="@color/colorBlack"
+                android:clickable="true"
+                android:gravity="center">
+
+                <ImageView
+                    android:id="@+id/close_btn"
+                    style="@style/LayoutMatch"
+                    android:layout_centerVertical="true"
+                    android:clickable="false"
+                    android:contentDescription="@string/app_name"
+                    android:padding="@dimen/size5"
+                    app:srcCompat="@drawable/arrow_back_icon" />
+
+            </RelativeLayout>
+            <RelativeLayout
+                style="@style/LayoutMatch"
+                >
+                <TextView
+                    android:id="@+id/title_txt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:textColor="@color/colorOrange"
+                    android:textSize="@dimen/text20"
+                    />
+            </RelativeLayout>
+
+        </RelativeLayout>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/feeds_likes_list_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/header_lay"
+            android:background="@color/colorWhite"
+            android:divider="@android:color/transparent"
+            android:listSelector="@android:color/transparent"
+            android:scrollbars="none" />
+
+    </RelativeLayout>
+
+</RelativeLayout>

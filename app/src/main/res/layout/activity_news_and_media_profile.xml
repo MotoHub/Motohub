@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/promoterCoLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout style="@style/LayoutMatch">
+
+        <include
+            android:id="@+id/include"
+            layout="@layout/widget_toolbar" />
+
+        <android.support.design.widget.CoordinatorLayout
+            android:id="@+id/inner_co_layout"
+            style="@style/LayoutMatchWrap"
+            android:layout_below="@+id/include">
+
+            <android.support.design.widget.AppBarLayout
+                style="@style/LayoutMatchWrap"
+                android:fitsSystemWindows="true"
+                android:theme="@style/ThemeOverlay.AppCompat.Light">
+
+                <android.support.design.widget.CollapsingToolbarLayout
+                    android:id="@+id/collapsing_toolbar"
+                    style="@style/LayoutMatchWrap"
+                    android:background="@color/colorWhite"
+                    android:fitsSystemWindows="true"
+                    android:theme="@style/ThemeOverlay.AppCompat.Light"
+                    app:layout_scrollFlags="scroll|exitUntilCollapsed">
+
+                    <RelativeLayout style="@style/LayoutMatchWrap">
+
+                        <ImageView
+                            android:id="@+id/cover_photo_img_view"
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/size150"
+                            android:contentDescription="@string/app_name"
+                            android:scaleType="fitXY"
+                            app:srcCompat="@drawable/default_cover_img" />
+
+                        <View
+                            android:id="@+id/cover_line"
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/size10"
+                            android:layout_below="@+id/cover_photo_img_view"
+                            android:background="@color/colorLighterGrey" />
+
+                        <RelativeLayout
+                            android:id="@+id/promoter_box"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/cover_line"
+                            android:padding="@dimen/size5">
+
+                            <de.hdodenhof.circleimageview.CircleImageView
+                                android:id="@+id/profile_img"
+                                android:layout_width="@dimen/size60"
+                                android:layout_height="@dimen/size60"
+                                android:layout_centerVertical="true"
+                                android:clickable="true"
+                                android:focusable="true"
+                                android:src="@drawable/default_profile_icon" />
+
+                            <RelativeLayout
+                                android:id="@+id/profileDetailsBox"
+                                style="@style/LayoutWrap"
+                                android:layout_marginStart="@dimen/size5"
+                                android:layout_toEndOf="@id/profile_img"
+                                android:layout_toStartOf="@id/followers_box">
+
+                                <TextView
+                                    android:id="@+id/promoterName"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_margin="@dimen/size2"
+                                    android:clickable="true"
+                                    android:focusable="true"
+                                    android:maxLines="2"
+                                    android:textColor="@color/colorBlack"
+                                    android:textSize="@dimen/text12"
+                                    android:textStyle="bold"
+                                    tools:ignore="TooDeepLayout" />
+
+                                <TextView
+                                    android:id="@+id/followBtn"
+                                    android:layout_width="@dimen/size90"
+                                    android:layout_height="wrap_content"
+                                    android:layout_below="@+id/promoterName"
+                                    android:layout_margin="@dimen/size2"
+                                    android:layout_marginTop="@dimen/size5"
+                                    android:background="@drawable/black_orange_btn_bg"
+                                    android:clickable="true"
+                                    android:focusable="true"
+                                    android:paddingBottom="@dimen/size5"
+                                    android:paddingTop="@dimen/size5"
+                                    android:text="@string/follow"
+                                    android:textAlignment="center"
+                                    android:textColor="@color/text_color"
+                                    android:textSize="@dimen/text12" />
+
+                            </RelativeLayout>
+
+                            <LinearLayout
+                                android:id="@+id/followers_box"
+                                style="@style/LayoutWrapMatch"
+                                android:layout_alignParentEnd="true"
+                                android:layout_centerInParent="true"
+                                android:clickable="true"
+                                android:focusable="true"
+                                android:gravity="center"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:id="@+id/followers_count_tv"
+                                    style="@style/LayoutMatchWrap"
+                                    android:gravity="center"
+                                    android:padding="@dimen/size3"
+                                    android:text="@string/zero"
+                                    android:textColor="@color/colorBlack"
+                                    android:textSize="@dimen/text12"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:id="@+id/followers_tv"
+                                    style="@style/LayoutMatchWrap"
+                                    android:gravity="center"
+                                    android:padding="@dimen/size3"
+                                    android:text="@string/followers"
+                                    android:textColor="@color/colorOrange"
+                                    android:textSize="@dimen/text12"
+                                    android:textStyle="bold" />
+
+                            </LinearLayout>
+
+                            <Space
+                                android:layout_width="@dimen/size5"
+                                android:layout_height="match_parent" />
+
+                        </RelativeLayout>
+
+                        <View
+                            android:id="@+id/userBoxSeparator"
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/size10"
+                            android:layout_below="@+id/promoter_box"
+                            android:background="@color/colorLighterGrey" />
+
+                    </RelativeLayout>
+
+                </android.support.design.widget.CollapsingToolbarLayout>
+
+            </android.support.design.widget.AppBarLayout>
+
+<!--            <android.support.v4.widget.SwipeRefreshLayout
+                android:id="@+id/swipeRefreshLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior">
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/recycler_view"
+                    style="@style/LayoutMatch"
+                    android:background="@color/colorLighterGrey"
+                    tools:listitem="@layout/row_profile_post_item" />
+            </android.support.v4.widget.SwipeRefreshLayout>-->
+
+            <android.support.v4.view.ViewPager
+                android:id="@+id/perf_profile_view_pager"
+                style="@style/LayoutMatchWrap"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+                <android.support.design.widget.TabLayout
+                    android:id="@+id/perf_profile_pager_tab"
+                    style="@style/LayoutMatchWrap"
+                    app:tabGravity="fill"
+                    app:tabMode="fixed"
+                    app:tabSelectedTextColor="@color/colorOrange"
+                    app:tabTextAppearance="@android:style/TextAppearance.Widget.TabWidget"
+                    app:tabTextColor="@color/colorGrey" />
+
+            </android.support.v4.view.ViewPager>
+
+        </android.support.design.widget.CoordinatorLayout>
+
+    </RelativeLayout>
+
+</android.support.design.widget.CoordinatorLayout>

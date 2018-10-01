@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/LayoutMatchWrap"
+    android:paddingEnd="@dimen/size10"
+    android:paddingLeft="@dimen/size10"
+    android:paddingRight="@dimen/size10"
+    android:paddingStart="@dimen/size10">
+
+    <TextView
+        android:id="@+id/ended_on_tv"
+        style="@style/LayoutMatchWrap"
+        android:text="@string/app_name"
+        android:textColor="@color/colorBlack"
+        android:textSize="@dimen/text14" />
+
+    <RelativeLayout
+        style="@style/LayoutMatchWrap"
+        android:layout_below="@+id/ended_on_tv"
+        android:layout_marginTop="@dimen/size5"
+        android:background="@drawable/orange_border_bg"
+        android:padding="@dimen/size10">
+
+        <TextView
+            android:id="@+id/moto_event_name_tv"
+            style="@style/LayoutWrap"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@+id/view_event_result_btn"
+            android:layout_toStartOf="@+id/view_event_result_btn"
+            android:gravity="center_vertical"
+            android:text="@string/app_name"
+            android:textColor="@color/colorBlack"
+            android:textSize="@dimen/text14" />
+
+        <Button
+            android:id="@+id/view_event_result_btn"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:background="@drawable/black_orange_btn_bg"
+            android:maxHeight="@dimen/size50"
+            android:minHeight="@dimen/size30"
+            android:paddingEnd="@dimen/size10"
+            android:paddingLeft="@dimen/size10"
+            android:paddingRight="@dimen/size10"
+            android:paddingStart="@dimen/size10"
+            android:text="@string/view_results"
+            android:textAllCaps="false"
+            android:textColor="@color/text_color"
+            android:textSize="@dimen/text12" />
+
+    </RelativeLayout>
+
+</RelativeLayout>

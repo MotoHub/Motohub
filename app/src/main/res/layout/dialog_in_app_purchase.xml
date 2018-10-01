@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/LayoutWrap"
+    android:layout_gravity="center"
+    android:layout_marginEnd="@dimen/size20"
+    android:layout_marginLeft="@dimen/size20"
+    android:layout_marginRight="@dimen/size20"
+    android:layout_marginStart="@dimen/size20"
+    android:background="@drawable/alert_bg"
+    tools:context="online.motohub.fragment.dialog.AppDialogFragment">
+
+    <RelativeLayout
+        android:id="@+id/title_box"
+        style="@style/LayoutMatchWrap"
+        android:background="@color/colorOrange">
+
+        <TextView
+            android:id="@+id/title_tv"
+            style="@style/LayoutWrap"
+            android:padding="@dimen/size10"
+            android:text="@string/Subscribe"
+            android:textColor="@color/colorBlack"
+            android:textSize="@dimen/text16" />
+
+        <ImageButton
+            android:id="@+id/close_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/title_tv"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignTop="@+id/title_tv"
+            android:background="@null"
+            android:contentDescription="@string/app_name"
+            android:padding="@dimen/size10"
+            app:srcCompat="@drawable/close_icon" />
+
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/profile_type_tv"
+        style="@style/LayoutWrap"
+        android:layout_below="@+id/title_box"
+        android:layout_centerHorizontal="true"
+        android:padding="@dimen/size10"
+        android:text="@string/name"
+        android:textColor="@color/colorBlack"
+        android:textSize="@dimen/text14" />
+
+    <RelativeLayout
+        android:id="@+id/month_box"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/profile_type_tv">
+
+        <TextView
+            android:id="@+id/monthly_val_tv"
+            style="@style/LayoutWrap"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@+id/buy_monthly_btn"
+            android:layout_toStartOf="@+id/buy_monthly_btn"
+            android:padding="@dimen/size10"
+            android:text="@string/monthly"
+            android:textColor="@color/colorBlack"
+            android:textSize="@dimen/text14" />
+
+        <TextView
+            android:id="@+id/buy_monthly_btn"
+            style="@style/LayoutWrap"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_margin="@dimen/size10"
+            android:background="@drawable/black_orange_btn_bg"
+            android:clickable="true"
+            android:paddingBottom="@dimen/size5"
+            android:paddingEnd="@dimen/size16"
+            android:paddingLeft="@dimen/size16"
+            android:paddingRight="@dimen/size16"
+            android:paddingStart="@dimen/size16"
+            android:paddingTop="@dimen/size5"
+            android:text="@string/buy"
+            android:textAlignment="center"
+            android:textColor="@color/text_color"
+            android:textSize="@dimen/text14" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/year_box"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/month_box"
+        android:layout_marginBottom="@dimen/size10">
+
+        <TextView
+            android:id="@+id/yearly_val_tv"
+            style="@style/LayoutWrap"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@+id/buy_yearly_btn"
+            android:layout_toStartOf="@+id/buy_yearly_btn"
+            android:padding="@dimen/size10"
+            android:text="@string/yearly"
+            android:textColor="@color/colorBlack"
+            android:textSize="@dimen/text14" />
+
+        <TextView
+            android:id="@+id/buy_yearly_btn"
+            style="@style/LayoutWrap"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_margin="@dimen/size10"
+            android:background="@drawable/black_orange_btn_bg"
+            android:clickable="true"
+            android:paddingBottom="@dimen/size5"
+            android:paddingEnd="@dimen/size16"
+            android:paddingLeft="@dimen/size16"
+            android:paddingRight="@dimen/size16"
+            android:paddingStart="@dimen/size16"
+            android:paddingTop="@dimen/size5"
+            android:text="@string/buy"
+            android:textAlignment="center"
+            android:textColor="@color/text_color"
+            android:textSize="@dimen/text14" />
+
+    </RelativeLayout>
+
+</RelativeLayout>

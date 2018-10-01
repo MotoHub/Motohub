@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#a7a2a2"
+    android:orientation="vertical">
+
+    <include layout="@layout/widget_toolbar" />
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/size15"
+        android:layout_marginRight="@dimen/size15"
+        android:layout_marginTop="@dimen/size15"
+        android:elevation="3dp"
+        app:cardBackgroundColor="@color/colorWhite"
+        app:cardCornerRadius="@dimen/size10"
+        app:cardElevation="10dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="20dp">
+
+            <TextView
+                android:id="@+id/txt_event_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="10dp"
+                android:background="@color/colorWhite"
+                android:gravity="center_horizontal"
+                android:text="Event Name"
+                android:textColor="@color/colorBlack"
+                android:textSize="@dimen/size16"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/txt_no_videos"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="10dp"
+                android:background="@color/colorWhite"
+                android:gravity="center_horizontal"
+                android:text="No. of Videos"
+                android:textColor="@color/colorBlack"
+                android:textSize="@dimen/size14" />
+
+            <TextView
+                android:id="@+id/btn_watch"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/size10"
+                android:background="@drawable/rounded_button"
+                android:clickable="true"
+                android:drawableLeft="@drawable/ic_play_circle"
+                android:elevation="4dp"
+                android:gravity="center"
+                android:text="Watch Now"
+                android:textAlignment="center"
+                android:textColor="@color/colorWhite"
+                android:textSize="15sp"
+                android:visibility="gone" />
+
+            <com.github.ybq.android.spinkit.SpinKitView xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/loader"
+                style="@style/SpinKitView.Large.Wave"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_centerVertical="true"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/size10"
+                app:SpinKit_Color="@color/colorOrange" />
+
+
+        </LinearLayout>
+
+
+    </android.support.v7.widget.CardView>
+
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/size15"
+        android:layout_marginRight="@dimen/size15"
+        android:layout_marginTop="@dimen/size15"
+        android:elevation="3dp"
+        app:cardBackgroundColor="@color/colorWhite"
+        app:cardCornerRadius="@dimen/size10"
+        app:cardElevation="10dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="20dp">
+
+            <TextView
+                android:id="@+id/txt_event_name1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="10dp"
+                android:background="@color/colorWhite"
+                android:gravity="center_horizontal"
+                android:text="Event Name"
+                android:textColor="@color/colorBlack"
+                android:textSize="@dimen/size16"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/txt_no_videos1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="10dp"
+                android:background="@color/colorWhite"
+                android:gravity="center_horizontal"
+                android:text="No. of Videos"
+                android:textColor="@color/colorBlack"
+                android:textSize="@dimen/size14" />
+
+            <TextView
+                android:id="@+id/btn_watch1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/size10"
+                android:background="@drawable/rounded_button"
+                android:clickable="true"
+                android:drawableLeft="@drawable/ic_play_circle"
+                android:elevation="4dp"
+                android:gravity="center"
+                android:text="Watch Now"
+                android:textAlignment="center"
+                android:textColor="@color/colorWhite"
+                android:textSize="15sp"
+                android:visibility="gone" />
+
+            <com.github.ybq.android.spinkit.SpinKitView
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/loader1"
+                style="@style/SpinKitView.Large.Wave"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_centerVertical="true"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/size10"
+                app:SpinKit_Color="@color/colorOrange" />
+
+
+        </LinearLayout>
+
+
+    </android.support.v7.widget.CardView>
+
+
+</LinearLayout>

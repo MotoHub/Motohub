@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/complete_profile_co_layout"
+    style="@style/LayoutMatch"
+    tools:context="online.motohub.activity.CompleteProfileActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <include
+            android:id="@+id/include"
+            layout="@layout/widget_toolbar" />
+
+        <TextView
+            android:id="@+id/what_you_follow_tv"
+            style="@style/LayoutMatchWrap"
+            android:layout_below="@+id/include"
+            android:layout_marginTop="@dimen/size20"
+            android:text="@string/what_do_you_want_to_follow"
+            android:textAlignment="center"
+            android:textColor="@color/colorBlack"
+            android:textSize="@dimen/text16"
+            android:textStyle="bold" />
+
+        <CheckBox
+            android:id="@+id/everything_moto_check_box"
+            style="@style/LayoutWrap"
+            android:layout_below="@+id/what_you_follow_tv"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/size10"
+            android:button="@null"
+            android:drawableEnd="?android:attr/listChoiceIndicatorMultiple"
+            android:drawableRight="?android:attr/listChoiceIndicatorMultiple"
+            android:text="@string/everything_moto"
+            android:textColor="@color/colorBlack"
+            android:textSize="@dimen/text12"
+            android:theme="@style/MyCheckBox" />
+
+        <TextView
+            android:id="@+id/or_tv"
+            style="@style/LayoutMatchWrap"
+            android:layout_below="@+id/everything_moto_check_box"
+            android:layout_marginTop="@dimen/size5"
+            android:text="@string/or"
+            android:textAlignment="center"
+            android:textColor="@color/colorBlack"
+            android:textSize="@dimen/text14"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/moto_type_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/or_tv"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/size10"
+            android:background="@drawable/spinner_bg"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center_vertical"
+            android:paddingEnd="@dimen/size34"
+            android:paddingLeft="@dimen/size10"
+            android:paddingRight="@dimen/size34"
+            android:paddingStart="@dimen/size10"
+            android:text="@string/select"
+            android:textColor="@color/colorBlack"
+            android:textSize="@dimen/text12" />
+
+        <RelativeLayout
+            style="@style/LayoutMatchWrap"
+            android:layout_below="@+id/moto_type_tv"
+            android:gravity="bottom"
+            android:padding="@dimen/size10">
+
+            <Button
+                android:id="@+id/submit_btn"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/size40"
+                android:layout_marginTop="@dimen/size20"
+                android:background="@drawable/black_orange_btn_bg"
+                android:text="@string/done"
+                android:textAllCaps="false"
+                android:textColor="@color/text_color"
+                android:textSize="@dimen/text16"
+                android:textStyle="bold" />
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+</android.support.design.widget.CoordinatorLayout>

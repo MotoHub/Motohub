@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    
+    <string-array name="moto_type">
+        <item>All</item>
+       <!-- <item>CLUB MEET</item>
+        <item>SHOW AND SHINE/HARD PARK EVENTS</item>-->
+        <item>BIKE</item>
+        <item>BOAT</item>
+        <item>CAR</item>
+        <item>KART</item>
+    </string-array>
+
+    <string-array name="empty_array">
+        <item>Profile(s) Not Available</item>
+    </string-array>
+
+    <string-array name="racer_type">
+        <item>Car</item>
+        <item>Bike</item>
+        <item>Boat</item>
+        <item>Kart</item>
+    </string-array>
+    <string-array name="net_log_levels_names_array">
+        <item>VERBOSE</item>
+        <item>DEBUG</item>
+        <item>INFO</item>
+        <item>WARN</item>
+        <item>ERROR</item>
+    </string-array>
+
+    <string-array name="net_log_levels_values_array">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+    </string-array>
+
+    <string-array name="bandwidth_monitor_log_level_names_array">
+        <item>Do not log bandwidth stats</item>
+        <item>Summary stats only</item>
+        <item>Detailed stats</item>
+    </string-array>
+
+    <string-array name="bandwidth_monitor_log_level_values_array">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+    </string-array>
+
+    <string-array name="report_array">
+        <item>Why is it inappropriate?</item>
+        <item>It\'s sexually inappropriate</item>
+        <item>It\'s violent or prohibited content</item>
+        <item>It\'s offensive</item>
+        <item>It\'s misleading or a scam</item>
+        <item>I disagree with it</item>
+        <item>It\'s false news story</item>
+        <item>It\'s spam</item>
+        <item>Something else</item>
+    </string-array>
+    
+</resources>

@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/create_grp_co_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <include
+            android:id="@+id/include"
+            layout="@layout/widget_toolbar" />
+
+        <LinearLayout
+            android:id="@+id/grpInfoLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/include"
+            android:layout_marginEnd="@dimen/size10"
+            android:layout_marginLeft="@dimen/size10"
+            android:layout_marginRight="@dimen/size10"
+            android:layout_marginStart="@dimen/size10"
+            android:layout_marginTop="@dimen/size10"
+            android:orientation="horizontal">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/grp_chat_img"
+                android:layout_width="@dimen/size60"
+                android:layout_height="@dimen/size60"
+                android:clickable="true"
+                android:focusable="true"
+                android:scaleType="centerCrop"
+                android:src="@drawable/add_img_icon" />
+
+            <EditText
+                android:id="@+id/grp_name_et"
+                style="@style/LayoutMatchWrap"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="@dimen/size10"
+                android:layout_marginStart="@dimen/size10"
+                android:background="@drawable/orange_border_bg"
+                android:hint="@string/enter_group_name"
+                android:imeOptions="actionDone"
+                android:inputType="text"
+                android:maxLines="1"
+                android:padding="@dimen/size5"
+                android:textColor="@color/colorBlack"
+                android:textColorHint="@color/colorGrey"
+                android:textSize="@dimen/text14" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/selected_profiles_tv"
+            style="@style/LayoutMatchWrap"
+            android:layout_below="@+id/grpInfoLayout"
+            android:layout_marginLeft="@dimen/size10"
+            android:layout_marginRight="@dimen/size10"
+            android:layout_marginTop="@dimen/size10"
+            android:text="@string/selected_profiles"
+            android:textColor="@color/colorBlack"
+            android:textSize="@dimen/text14"
+            android:visibility="gone" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/grp_selected_profiles_rv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/selected_profiles_tv"
+            android:layout_marginLeft="@dimen/size10"
+            android:layout_marginRight="@dimen/size10"
+            android:paddingTop="@dimen/size10" />
+
+        <TextView
+            android:id="@+id/select_profiles_tv"
+            style="@style/LayoutMatchWrap"
+            android:layout_below="@+id/grp_selected_profiles_rv"
+            android:layout_marginLeft="@dimen/size10"
+            android:layout_marginRight="@dimen/size10"
+            android:layout_marginTop="@dimen/size10"
+            android:text="@string/select_profiles"
+            android:textColor="@color/colorBlack"
+            android:textSize="@dimen/text14" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/grp_select_profiles_rv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/select_profiles_tv"
+            android:paddingTop="@dimen/size10" />
+
+    </RelativeLayout>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/done_floating_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="@dimen/size16"
+        android:clickable="true"
+        android:focusable="true"
+        app:fabSize="normal"
+        app:srcCompat="@drawable/done_icon" />
+
+</android.support.design.widget.CoordinatorLayout>

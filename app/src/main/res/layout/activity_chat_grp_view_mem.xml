@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/grpChatMemLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <include
+            android:id="@+id/include"
+            layout="@layout/widget_toolbar" />
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/grp_chat_img"
+            android:layout_width="@dimen/size90"
+            android:layout_height="@dimen/size90"
+            android:layout_below="@id/include"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/size10"
+            android:clickable="true"
+            android:focusable="true"
+            android:scaleType="centerCrop"
+            android:src="@drawable/default_group_icon" />
+
+        <TextView
+            android:id="@+id/grp_name_tv"
+            style="@style/LayoutMatchWrap"
+            android:layout_below="@+id/grp_chat_img"
+            android:layout_marginLeft="@dimen/size10"
+            android:layout_marginRight="@dimen/size10"
+            android:maxLines="1"
+            android:padding="@dimen/size5"
+            android:textAlignment="center"
+            android:textColor="@color/colorBlack"
+            android:textSize="@dimen/text16"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/group_members_tv"
+            style="@style/LayoutMatchWrap"
+            android:layout_below="@+id/grp_name_tv"
+            android:layout_marginLeft="@dimen/size10"
+            android:layout_marginRight="@dimen/size10"
+            android:layout_marginTop="@dimen/size10"
+            android:text="@string/group_members"
+            android:textAlignment="center"
+            android:textColor="@color/colorBlack"
+            android:textSize="@dimen/text16"
+            android:textStyle="bold" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/grp_members_rv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_below="@+id/group_members_tv"
+            android:layout_marginBottom="@dimen/size10"
+            android:layout_marginLeft="@dimen/size10"
+            android:layout_marginRight="@dimen/size10"
+            android:paddingTop="@dimen/size10" />
+
+    </RelativeLayout>
+
+</android.support.design.widget.CoordinatorLayout>

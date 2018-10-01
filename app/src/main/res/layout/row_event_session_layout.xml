@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/session_layout"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/size5"
+    android:background="@color/colorBlack"
+    android:orientation="vertical"
+    android:padding="@dimen/size2"
+    >
+
+<RelativeLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@color/colorOrange"
+    android:padding="@dimen/size5">
+
+    <LinearLayout
+        android:id="@+id/session_name_container"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="1">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:text="@string/session_name"
+            android:textColor="@color/colorBlack"
+            />
+
+        <TextView
+            android:id="@+id/session_name_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:textColor="@color/colorBlack"
+            android:text="@string/session_name"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/session_start_time_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/session_name_container"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:textColor="@color/colorBlack"
+            android:text="@string/session_start_time"
+            />
+
+        <TextView
+            android:id="@+id/session_start_time_text_view"
+            android:textColor="@color/colorBlack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:text="@string/session_start_time_value"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/session_end_time_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/session_start_time_container"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:textColor="@color/colorBlack"
+            android:text="@string/session_end_time"
+             />
+
+        <TextView
+            android:id="@+id/session_end_time_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:textColor="@color/colorBlack"
+            android:text="@string/session_end_time_value"
+             />
+
+    </LinearLayout>
+
+    <!--<View
+        android:background="@color/colorWhite"
+        android:layout_width="@dimen/size2"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="@dimen/size5"
+        android:layout_toRightOf="@+id/session_name_container"
+        />-->
+</RelativeLayout>
+
+</RelativeLayout>

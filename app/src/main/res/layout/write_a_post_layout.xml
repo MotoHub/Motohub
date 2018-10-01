@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/LayoutMatchWrap"
+    android:layout_marginBottom="@dimen/size10"
+    app:cardBackgroundColor="@color/colorWhite"
+    app:cardCornerRadius="@dimen/size0"
+    app:cardPreventCornerOverlap="true"
+    app:cardUseCompatPadding="false">
+
+    <RelativeLayout
+        style="@style/LayoutMatchWrap"
+        android:id="@+id/write_post_card"
+        android:paddingBottom="@dimen/size10"
+        android:paddingEnd="@dimen/size10"
+        android:paddingLeft="@dimen/size10"
+        android:paddingRight="@dimen/size10"
+        android:paddingStart="@dimen/size10"
+        android:paddingTop="@dimen/size10">
+
+        <RelativeLayout
+            android:id="@+id/writePostEditTextBox"
+            style="@style/LayoutMatchWrap"
+            android:background="@drawable/orange_border_bg">
+
+            <EditText
+                android:id="@+id/write_post_et"
+                style="@style/LayoutMatchWrap"
+                android:background="@null"
+                android:gravity="top"
+                android:hint="@string/write_a_post"
+                android:inputType="textMultiLine"
+                android:minHeight="@dimen/size70"
+                android:paddingBottom="@dimen/size5"
+                android:paddingEnd="@dimen/size5"
+                android:paddingLeft="@dimen/size5"
+                android:paddingRight="@dimen/size5"
+                android:paddingTop="@dimen/size5"
+                android:textColor="@color/colorBlack"
+                android:textColorHint="@color/ash"
+                android:textSize="@dimen/text12" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/post_content_box"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/writePostEditTextBox">
+
+            <FrameLayout
+                android:id="@+id/close_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:visibility="gone">
+
+                <ImageButton
+                    android:id="@+id/remove_post_img_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/size5"
+                    android:background="@null"
+                    android:contentDescription="@string/app_name"
+                    app:srcCompat="@drawable/close_icon" />
+
+            </FrameLayout>
+
+            <RelativeLayout
+                android:id="@+id/imageframe"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/close_layout">
+
+                <ImageView
+                    android:id="@+id/post_picture_img_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/size5"
+                    android:layout_marginRight="@dimen/size5"
+                    android:contentDescription="@string/app_name"
+                    android:visibility="gone" />
+
+                <ImageView
+                    android:id="@+id/play"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:layout_centerVertical="true"
+                    android:background="@drawable/playbutton"
+                    android:contentDescription="@string/app_name"
+                    android:visibility="gone" />
+
+            </RelativeLayout>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/tag_profiles_recycler_view"
+                style="@style/LayoutMatchWrap"
+                android:layout_below="@+id/imageframe"
+                android:maxHeight="@dimen/size100"
+                android:padding="@dimen/size5"
+                android:scrollbars="vertical"
+                android:visibility="gone"
+                tools:listitem="@layout/row_tag_item" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            style="@style/LayoutMatchWrap"
+            android:layout_below="@+id/post_content_box">
+
+            <ImageButton
+                android:id="@+id/tag_profile_img"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/post_btn"
+                android:layout_alignTop="@+id/post_btn"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="@dimen/size3"
+                android:layout_toStartOf="@+id/add_post_video"
+                android:background="@null"
+                android:contentDescription="@string/app_name"
+                app:srcCompat="@drawable/tag_bg" />
+
+            <ImageButton
+                android:id="@+id/add_post_video"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/post_btn"
+                android:layout_alignTop="@+id/post_btn"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="@dimen/size3"
+                android:layout_toStartOf="@+id/add_post_img"
+                android:background="@null"
+                android:contentDescription="@string/app_name"
+                app:srcCompat="@drawable/video_bg" />
+
+            <ImageButton
+                android:id="@+id/add_post_img"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/post_btn"
+                android:layout_alignTop="@+id/post_btn"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="@dimen/size3"
+                android:layout_toStartOf="@+id/post_btn"
+                android:background="@null"
+                android:contentDescription="@string/app_name"
+                app:srcCompat="@drawable/photo_bg" />
+
+            <TextView
+                android:id="@+id/post_btn"
+                style="@style/LayoutWrap"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginTop="@dimen/size5"
+                android:background="@drawable/black_orange_btn_bg"
+                android:clickable="true"
+                android:focusable="true"
+                android:paddingBottom="@dimen/size5"
+                android:paddingEnd="@dimen/size16"
+                android:paddingLeft="@dimen/size16"
+                android:paddingRight="@dimen/size16"
+                android:paddingTop="@dimen/size5"
+                android:text="@string/post"
+                android:textAlignment="center"
+                android:textColor="@color/text_color"
+                android:textSize="@dimen/text12" />
+
+            <RelativeLayout
+                android:id="@+id/live_box"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:layout_margin="@dimen/size4"
+                android:layout_toStartOf="@+id/tag_profile_img"
+                android:clickable="true"
+                android:focusable="true"
+                android:visibility="gone">
+
+                <ImageButton
+                    android:id="@+id/live_btn"
+                    style="@style/LayoutWrap"
+                    android:layout_width="@dimen/size40"
+                    android:layout_height="@dimen/size40"
+                    android:background="@null"
+                    android:clickable="false"
+                    android:contentDescription="@string/app_name"
+                    android:src="@drawable/live" />
+
+                <TextView
+                    android:id="@+id/live_tv"
+                    style="@style/LayoutMatchWrap"
+                    android:layout_centerVertical="true"
+                    android:layout_margin="@dimen/size5"
+                    android:layout_toEndOf="@+id/live_btn"
+                    android:text="@string/live"
+                    android:textColor="@color/text_color_two"
+                    android:textSize="@dimen/text14" />
+
+            </RelativeLayout>
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+</android.support.v7.widget.CardView>

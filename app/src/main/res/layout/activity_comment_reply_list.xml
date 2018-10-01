@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/main_lay"
+    style="@style/LayoutMatchWrap"
+    android:background="@color/colorWhite">
+    <RelativeLayout style="@style/LayoutMatch">
+
+        <include
+            android:id="@+id/include"
+            layout="@layout/widget_toolbar" />
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/footer_lay"
+            android:layout_below="@+id/include"
+            android:id="@+id/svReply"
+            >
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/commentRelativeLay"
+            android:background="@color/colorGrey"
+            >
+
+
+        <android.support.v7.widget.CardView
+            style="@style/LayoutMatchWrap"
+            android:id="@+id/commentCardView"
+            android:layout_margin="@dimen/size5">
+            <RelativeLayout
+                android:id="@+id/comment_view_lay"
+                style="@style/LayoutMatchWrap"
+                android:background="@color/colorWhite"
+                android:padding="@dimen/size5"
+                >
+
+                <RelativeLayout
+                    android:id="@+id/comment_user_img_lay"
+                    style="@style/LayoutWrap"
+                    android:layout_gravity="center">
+
+                    <ProgressBar
+                        android:layout_width="@dimen/size20"
+                        android:layout_height="@dimen/size20"
+                        android:layout_centerInParent="true" />
+
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/comment_user_img"
+                        android:layout_width="@dimen/size34"
+                        android:layout_height="@dimen/size34"
+                        android:src="@drawable/default_profile_icon" />
+
+                </RelativeLayout>
+
+                <LinearLayout
+                    style="@style/LayoutMatchWrap"
+                    android:id="@+id/commentLinearLay"
+                    android:layout_centerVertical="true"
+                    android:layout_toEndOf="@+id/comment_user_img_lay"
+                    android:gravity="center|start"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/comment_user_name_txt"
+                        style="@style/LayoutWrap"
+                        android:layout_marginStart="@dimen/size5"
+                        android:padding="@dimen/size1"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="@dimen/text16"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/comment_txt"
+                        style="@style/LayoutWrap"
+                        android:maxLines="3"
+                        android:layout_marginStart="@dimen/size5"
+                        android:padding="@dimen/size1"
+                        android:autoLink="all"
+                        android:linksClickable="true"
+                        android:textColorLink="@color/colorOrange"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="@dimen/text16"
+                        android:visibility="gone"/>
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/ivCommentImg"
+                        android:adjustViewBounds="true"
+                        android:visibility="gone"
+                        android:contentDescription="@string/app_name"/>
+
+                </LinearLayout>
+            </RelativeLayout>
+        </android.support.v7.widget.CardView>
+
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/feeds_comments_list_view"
+            style="@style/LayoutMatchWrap"
+            android:layout_below="@+id/commentCardView"
+            android:background="@color/colorWhite"
+            android:divider="@android:color/transparent"
+            android:listSelector="@android:color/transparent"
+            />
+
+
+        </RelativeLayout>
+        </ScrollView>
+        <RelativeLayout
+            android:id="@+id/footer_lay"
+            style="@style/LayoutMatchWrap"
+            android:layout_alignParentBottom="true"
+            android:background="@color/colorGrey"
+            android:padding="@dimen/size5">
+
+            <RelativeLayout
+                android:id="@+id/user_img_lay"
+                style="@style/LayoutWrap"
+                android:layout_gravity="center">
+
+                <ProgressBar
+                    android:layout_width="@dimen/size20"
+                    android:layout_height="@dimen/size20"
+                    android:layout_centerInParent="true" />
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/user_img"
+                    android:layout_width="@dimen/size50"
+                    android:layout_height="@dimen/size50"
+                    android:src="@drawable/default_profile_icon" />
+
+            </RelativeLayout>
+
+            <LinearLayout
+                style="@style/LayoutMatchWrap"
+                android:layout_centerVertical="true"
+                android:layout_toEndOf="@+id/user_img_lay"
+                android:gravity="center|start"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/name_txt"
+                    style="@style/LayoutWrap"
+                    android:layout_marginStart="@dimen/size5"
+                    android:padding="@dimen/size1"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="@dimen/text14"
+                    android:textStyle="bold" />
+
+                <android.support.constraint.ConstraintLayout
+                    style="@style/LayoutMatchWrap"
+                    android:id="@+id/imageConstraintLay"
+                    android:visibility="gone">
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:adjustViewBounds="true"
+                        android:id="@+id/iv_post_image"
+                        android:contentDescription="@string/app_name"
+                        />
+                    <ImageView
+                        android:layout_width="@dimen/size20"
+                        android:layout_height="@dimen/size20"
+                        android:id="@+id/iv_remove_image"
+                        app:layout_constraintRight_toRightOf="@+id/iv_post_image"
+                        app:layout_constraintTop_toTopOf="@+id/iv_post_image"
+                        android:contentDescription="@string/app_name"
+                        app:srcCompat="@drawable/cancel_orange_circle_icon"/>
+
+                </android.support.constraint.ConstraintLayout>
+
+                <RelativeLayout style="@style/LayoutMatchWrap">
+
+                    <EditText
+                        android:id="@+id/comment_edt"
+                        style="@style/LayoutMatchWrap"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/size3"
+                        android:layout_toStartOf="@+id/post_btn"
+                        android:background="@color/colorLightGrey"
+                        android:hint="@string/write_something"
+                        android:inputType="textMultiLine|textAutoCorrect|textCapSentences"
+                        android:paddingStart="@dimen/size5"
+                        android:paddingTop="@dimen/size5"
+                        android:paddingBottom="@dimen/size5"
+                        android:paddingEnd="@dimen/size30"
+                        android:textColor="@color/colorBlack"
+                        android:textColorHint="@color/colorGrey"
+                        android:textSize="@dimen/text12" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/ivPost"
+                        android:contentDescription="@string/app_name"
+                        android:src="@android:drawable/ic_menu_camera"
+                        android:layout_toStartOf="@+id/post_btn"/>
+
+                    <Button
+                        android:id="@+id/post_btn"
+                        android:layout_width="@dimen/size60"
+                        android:layout_height="@dimen/size25"
+                        android:layout_alignParentEnd="true"
+                        android:layout_margin="@dimen/size3"
+                        android:textColor="@color/text_color"
+                        android:background="@drawable/black_orange_btn_bg"
+                        android:layout_centerVertical="true"
+                        android:text="@string/post"
+                        android:textSize="@dimen/text12" />
+
+                </RelativeLayout>
+
+            </LinearLayout>
+
+        </RelativeLayout>
+    </RelativeLayout>
+</RelativeLayout>

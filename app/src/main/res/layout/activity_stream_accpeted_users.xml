@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/parent_lay"
+    style="@style/LayoutMatch"
+    android:background="@color/colorWhite">
+
+    <RelativeLayout style="@style/LayoutMatch">
+
+        <include
+            android:id="@+id/include"
+            layout="@layout/widget_toolbar" />
+
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/swipe_to_refresh"
+            style="@style/LayoutMatch"
+            android:layout_above="@+id/search_lay"
+            android:layout_below="@+id/include">
+
+            <android.support.v4.widget.NestedScrollView style="@style/LayoutMatchWrap">
+
+                <RelativeLayout style="@style/LayoutMatchWrap">
+
+                    <LinearLayout
+                        android:id="@+id/button_lay"
+                        style="@style/LayoutMatchWrap"
+                        android:layout_margin="@dimen/size15"
+                        android:orientation="vertical">
+
+                        <Button
+                            android:id="@+id/view_stream_btn"
+                            style="@style/LayoutMatchWrap"
+                            android:layout_height="@dimen/size40"
+                            android:background="@drawable/black_orange_btn_bg"
+                            android:padding="@dimen/size5"
+                            android:text="@string/view_my_live_stream"
+                            android:textAllCaps="true"
+                            android:textColor="@color/text_color"
+                            android:textSize="@dimen/text16"
+                            android:textStyle="bold" />
+
+                        <Button
+                            android:id="@+id/view_request_btn"
+                            style="@style/LayoutMatchWrap"
+                            android:layout_height="@dimen/size40"
+                            android:layout_marginTop="@dimen/size5"
+                            android:background="@drawable/black_orange_btn_bg"
+                            android:padding="@dimen/size5"
+                            android:text="@string/view_stream_request"
+                            android:textAllCaps="true"
+                            android:textColor="@color/text_color"
+                            android:textSize="@dimen/text16"
+                            android:textStyle="bold" />
+
+                        <Button
+                            android:id="@+id/moto_live_btn"
+                            style="@style/LayoutMatchWrap"
+                            android:layout_height="@dimen/size40"
+                            android:layout_marginTop="@dimen/size5"
+                            android:background="@drawable/black_orange_btn_bg"
+                            android:padding="@dimen/size5"
+                            android:text="@string/moto_live"
+                            android:textAllCaps="true"
+                            android:textColor="@color/text_color"
+                            android:textSize="@dimen/text16"
+                            android:textStyle="bold" />
+
+                        <Button
+                            android:id="@+id/multi_stream_btn"
+                            style="@style/LayoutMatchWrap"
+                            android:layout_height="@dimen/size40"
+                            android:layout_marginTop="@dimen/size5"
+                            android:background="@drawable/black_orange_btn_bg"
+                            android:padding="@dimen/size5"
+                            android:text="@string/go_live"
+                            android:textAllCaps="true"
+                            android:textColor="@color/text_color"
+                            android:textSize="@dimen/text16"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/users_list"
+                        style="@style/LayoutMatch"
+                        android:layout_below="@+id/button_lay"
+
+                        android:background="@color/colorLighterGrey"
+                        android:divider="@android:color/transparent"
+                        android:listSelector="@android:color/transparent"
+                        android:nestedScrollingEnabled="false"
+                        android:scrollbars="none"
+                        tools:targetApi="lollipop" />
+
+                </RelativeLayout>
+
+            </android.support.v4.widget.NestedScrollView>
+        </android.support.v4.widget.SwipeRefreshLayout>
+
+        <LinearLayout
+            android:id="@+id/search_lay"
+            style="@style/LayoutMatchWrap"
+            android:layout_alignParentBottom="true"
+            android:layout_margin="@dimen/size5"
+            android:background="@drawable/search_bg"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <EditText
+                android:id="@+id/search_edt"
+                style="@style/LayoutMatchWrap"
+                android:layout_height="@dimen/size30"
+                android:background="@null"
+                android:hint="@string/search_here"
+                android:maxLines="1"
+                android:padding="@dimen/size5"
+                android:textColor="@color/colorBlack"
+                android:textColorHint="@color/colorDarkGrey"
+                android:textSize="@dimen/text12" />
+        </LinearLayout>
+    </RelativeLayout>
+
+</android.support.design.widget.CoordinatorLayout>

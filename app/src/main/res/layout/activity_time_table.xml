@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/time_table_parent"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+    <include
+        android:id="@+id/layout"
+        layout="@layout/widget_toolbar" />
+
+    <LinearLayout
+        android:id="@+id/event_name_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/layout"
+        android:orientation="horizontal"
+        android:weightSum="1">
+
+        <TextView
+            android:layout_width="@dimen/size0"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:gravity="end"
+            android:padding="@dimen/size10"
+            android:text="@string/event_name"
+            android:textColor="@color/colorBlack" />
+
+        <TextView
+            android:id="@+id/time_table_event_name_text_view"
+            android:layout_width="@dimen/size0"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:padding="@dimen/size10"
+            android:textColor="@color/colorBlack" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/time_table_event_date_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/event_name_container"
+        android:orientation="horizontal"
+        android:weightSum="1">
+
+        <ImageView
+            android:id="@+id/time_table_event_before_iv"
+            android:layout_width="@dimen/size0"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="0.2"
+            android:background="@color/colorOrange"
+            android:contentDescription="@null"
+            app:srcCompat="@drawable/white_back_icon" />
+
+        <TextView
+            android:layout_width="@dimen/size0"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.3"
+            android:gravity="end"
+            android:padding="@dimen/size10"
+            android:text="@string/event_date"
+            android:textColor="@color/colorBlack"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/time_table_event_date_text_view"
+            android:layout_width="@dimen/size0"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.6"
+            android:gravity="center"
+            android:padding="@dimen/size10"
+            android:textColor="@color/colorBlack" />
+
+        <ImageView
+            android:id="@+id/time_table_event_next_iv"
+            android:layout_width="@dimen/size0"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="0.2"
+            android:background="@color/colorOrange"
+            android:contentDescription="@null"
+            android:textAllCaps="false"
+            app:srcCompat="@drawable/white_next_icon" />
+
+    </LinearLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/time_table_event_session_rv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/time_table_event_date_container" />
+
+</RelativeLayout>

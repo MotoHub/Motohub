@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/row_track_container"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/size5"
+    android:background="@drawable/orange_border_bg"
+    android:gravity="top"
+    android:padding="@dimen/size5">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/row_track_circular_img_view"
+        android:layout_width="@dimen/size50"
+        android:layout_height="@dimen/size50"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="@dimen/size5"
+        android:layout_marginStart="@dimen/size5"
+        android:scaleType="centerCrop"
+        />
+        <TextView
+            android:id="@+id/row_track_name_tv"
+            style="@style/LayoutMatchWrap"
+            android:layout_toEndOf="@+id/row_track_circular_img_view"
+            android:layout_toRightOf="@+id/row_track_circular_img_view"
+            android:layout_centerInParent="true"
+            android:orientation="vertical"
+            android:gravity="center_vertical"
+            android:maxLines="1"
+            android:paddingBottom="@dimen/size2"
+            android:text="@string/track_name"
+            android:textColor="@color/colorBlack"
+            android:textSize="@dimen/text12"
+            android:textStyle="bold" />
+
+    <ImageView
+        android:id="@+id/right_arrow"
+        style="@style/LayoutWrapMatch"
+        android:layout_gravity="end"
+        android:background="@null"
+        android:contentDescription="@string/app_name"
+        android:padding="@dimen/size5"
+        app:srcCompat="@drawable/right_arrow_icon" />
+
+</RelativeLayout>
