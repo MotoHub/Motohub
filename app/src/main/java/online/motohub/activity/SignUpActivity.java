@@ -17,6 +17,7 @@ import online.motohub.R;
 import online.motohub.model.ErrorMessage;
 import online.motohub.model.SignUpResModel;
 import online.motohub.retrofit.RetrofitClient;
+import online.motohub.util.DialogManager;
 
 public class SignUpActivity extends BaseActivity {
 
@@ -58,6 +59,12 @@ public class SignUpActivity extends BaseActivity {
         setupUI(mCoordinatorLayout);
         setToolbar(mToolbar, getString(R.string.register));
         setToolbarLeftBtn(mToolbar);
+    }
+
+    @Override
+    protected void onDestroy() {
+        DialogManager.hideProgress();
+        super.onDestroy();
     }
 
     @OnClick({R.id.submit_btn, R.id.toolbar_back_img_btn})

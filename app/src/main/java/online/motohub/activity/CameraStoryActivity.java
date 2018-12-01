@@ -23,7 +23,6 @@ import com.otaliastudios.cameraview.Size;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,6 +31,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import online.motohub.R;
 import online.motohub.interfaces.PermissionCallback;
+import online.motohub.util.DialogManager;
 import online.motohub.util.story.ControlView;
 
 public class CameraStoryActivity extends BaseActivity implements View.OnClickListener {
@@ -120,7 +120,7 @@ public class CameraStoryActivity extends BaseActivity implements View.OnClickLis
         }
     }
 
-    private boolean isPermissionAdded() {
+    public boolean isPermissionAdded() {
         boolean addPermission = true;
         if (android.os.Build.VERSION.SDK_INT >= 23) {
             int permissionCamera = ContextCompat.checkSelfPermission(this, android.Manifest.permission.CAMERA);
@@ -255,16 +255,21 @@ public class CameraStoryActivity extends BaseActivity implements View.OnClickLis
         camera.capturePicture();
     }
 
+
     private void captureVideo() {
-        if (camera.getSessionType() != SessionType.VIDEO) {
-            message("Can't record video while session type is 'picture'.", false);
-            return;
+        try {
+            if (camera.getSessionType() != SessionType.VIDEO) {
+                message("Can't record video while session type is 'picture'.", false);
+                return;
+            }
+            if (mCapturingPicture || mCapturingVideo) return;
+            mCapturingVideo = true;
+            message("Recording for 30 seconds...", true);
+            camera.startCapturingVideo(createNewFile(), 30 * 1000);
+            startTimer();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        if (mCapturingPicture || mCapturingVideo) return;
-        mCapturingVideo = true;
-        message("Recording for 30 seconds...", true);
-        camera.startCapturingVideo(createNewFile(), 30 * 1000);
-        startTimer();
     }
 
     private void startTimer() {
@@ -308,6 +313,7 @@ public class CameraStoryActivity extends BaseActivity implements View.OnClickLis
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        DialogManager.hideProgress();
         camera.destroy();
         stopTimer();
     }

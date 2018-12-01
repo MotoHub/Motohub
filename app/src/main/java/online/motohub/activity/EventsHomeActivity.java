@@ -7,8 +7,9 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.widget.ListView;
 import android.widget.Toast;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 
@@ -18,6 +19,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import online.motohub.R;
 import online.motohub.adapter.EventsFindAdapter;
+import online.motohub.application.MotoHub;
 import online.motohub.fragment.dialog.AppDialogFragment;
 import online.motohub.model.EventsModel;
 import online.motohub.model.EventsResModel;
@@ -29,6 +31,7 @@ import online.motohub.model.SessionModel;
 import online.motohub.model.promoter_club_news_media.PromoterFollowerModel;
 import online.motohub.retrofit.RetrofitClient;
 import online.motohub.util.AppConstants;
+import online.motohub.util.DialogManager;
 import online.motohub.util.PreferenceUtils;
 
 public class EventsHomeActivity extends BaseActivity {
@@ -77,9 +80,15 @@ public class EventsHomeActivity extends BaseActivity {
 
     }
 
+    @Override
+    protected void onDestroy() {
+        DialogManager.hideProgress();
+        super.onDestroy();
+    }
+
     private void setAdapter() {
-        if (mEventsFindAdapter == null) {
-            mEventsFindAdapter = new EventsFindAdapter(this, mNewEventsBookedListData, mMyProfileResModel, true);
+        if (mEventsFindAdapter == null && mMyProfileResModel.getID() != 0) {
+            mEventsFindAdapter = new EventsFindAdapter(this, mNewEventsBookedListData, mMyProfileResModel, null, true);
             mEventsBookedListView.setLayoutManager(new LinearLayoutManager(this));
             mEventsBookedListView.setAdapter(mEventsFindAdapter);
         } else {
@@ -89,14 +98,14 @@ public class EventsHomeActivity extends BaseActivity {
 
     private void getMyProfiles() {
         String mFilter = "ID=" + mCurrentProfileID;
-        if (isNetworkConnected())
+        if (isNetworkConnected(this))
             RetrofitClient.getRetrofitInstance().callGetProfiles(this, mFilter, RetrofitClient.GET_PROFILE_RESPONSE);
         else
             showAppDialog(AppDialogFragment.ALERT_INTERNET_FAILURE_DIALOG, null);
     }
 
     private void getUpcomingEvents() {
-        int status = 2;
+        int status = AppConstants.EVENT_STATUS;
         String mDateFilter = "(( Date >= " + getCurrentDate() + " ) OR ( Finish >= " + getCurrentDate() + " )) AND ( EventStatus = " + status + ")";
         RetrofitClient.getRetrofitInstance().callGetEvents(this, mDateFilter, RetrofitClient.GET_EVENTS_RESPONSE);
     }
@@ -125,15 +134,18 @@ public class EventsHomeActivity extends BaseActivity {
                 finish();
                 break;
             case R.id.find_event_box:
-                if (isNetworkConnected()) {
-                    startActivityForResult(new Intent(this, EventsFindActivity.class)
-                            .putExtra(ProfileModel.MY_PROFILE_RES_MODEL, mMyProfileResModel), AppConstants.FOLLOWERS_FOLLOWING_RESULT);
+                if (isNetworkConnected(this)) {
+                    if (mMyProfileResModel != null) {
+                        //MotoHub.getApplicationInstance().setmProfileResModel(mMyProfileResModel);
+                        EventBus.getDefault().postSticky(mMyProfileResModel);
+                        startActivityForResult(new Intent(this, EventsFindActivity.class), AppConstants.FOLLOWERS_FOLLOWING_RESULT);
+                    }
                 } else {
                     showToast(EventsHomeActivity.this, getResources().getString(R.string.internet_err));
                 }
                 break;
             case R.id.event_results_box:
-                if (isNetworkConnected())
+                if (isNetworkConnected(this))
                     startActivity(new Intent(this, ComingSoonActivity.class));
                 else
                     showToast(EventsHomeActivity.this, getResources().getString(R.string.internet_err));

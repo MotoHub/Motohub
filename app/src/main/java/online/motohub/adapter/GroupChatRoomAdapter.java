@@ -10,16 +10,18 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import online.motohub.R;
 import online.motohub.activity.BaseActivity;
 import online.motohub.activity.ChatBoxGroupActivity;
+import online.motohub.application.MotoHub;
 import online.motohub.fcm.MyFireBaseMessagingService;
 import online.motohub.model.GroupChatRoomModel;
 import online.motohub.model.GroupChatRoomResModel;
-import online.motohub.model.ProfileModel;
 import online.motohub.model.ProfileResModel;
 
 public class GroupChatRoomAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -44,16 +46,12 @@ public class GroupChatRoomAdapter extends RecyclerView.Adapter<RecyclerView.View
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
 
-        final ViewHolderGroupChatRoom mViewHolderGroupChatRoom = (ViewHolderGroupChatRoom) holder;
-
-        GroupChatRoomResModel mGroupChatRoomResModel = mGroupChatRoomList.get(position);
-
+            final ViewHolderGroupChatRoom mViewHolderGroupChatRoom = (ViewHolderGroupChatRoom) holder;
+            GroupChatRoomResModel mGroupChatRoomResModel = mGroupChatRoomList.get(position);
         /*((BaseActivity) mContext).setImageWithGlide(mViewHolderGroupChatRoom.mGroupImgView, mGroupChatRoomResModel.getGroupPicture(), R.drawable.default_group_icon);
-
         mViewHolderGroupChatRoom.mGroupNameTv.setText(mGroupChatRoomResModel.getGroupName());*/
-
-        ((BaseActivity) mContext).setImageWithGlide(mViewHolderGroupChatRoom.img_profile, mGroupChatRoomResModel.getGroupPicture(), R.drawable.default_group_icon);
-        mViewHolderGroupChatRoom.name.setText(mGroupChatRoomResModel.getGroupName());
+            ((BaseActivity) mContext).setImageWithGlide(mViewHolderGroupChatRoom.img_profile, mGroupChatRoomResModel.getGroupPicture(), R.drawable.default_group_icon);
+            mViewHolderGroupChatRoom.name.setText(mGroupChatRoomResModel.getGroupName());
 
     }
 
@@ -87,11 +85,19 @@ public class GroupChatRoomAdapter extends RecyclerView.Adapter<RecyclerView.View
         @Override
         public void onClick(View view) {
 
-            Bundle mBundle = new Bundle();
+            /*Bundle mBundle = new Bundle();
             mBundle.putSerializable(GroupChatRoomModel.GRP_CHAT_ROOM_RES_MODEL, mGroupChatRoomList.get(getLayoutPosition()));
             mBundle.putBoolean(MyFireBaseMessagingService.IS_FROM_NOTIFICATION_TRAY, false);
             mBundle.putSerializable(ProfileModel.MY_PROFILE_RES_MODEL, mMyProfileResModel);
 
+            mContext.startActivity(new Intent(mContext, ChatBoxGroupActivity.class)
+                    .putExtras(mBundle));*/
+
+            //MotoHub.getApplicationInstance().setmProfileResModel(mMyProfileResModel);
+            EventBus.getDefault().postSticky(mMyProfileResModel);
+            Bundle mBundle = new Bundle();
+            mBundle.putSerializable(GroupChatRoomModel.GRP_CHAT_ROOM_RES_MODEL, mGroupChatRoomList.get(getLayoutPosition()));
+            mBundle.putBoolean(MyFireBaseMessagingService.IS_FROM_NOTIFICATION_TRAY, false);
             mContext.startActivity(new Intent(mContext, ChatBoxGroupActivity.class)
                     .putExtras(mBundle));
 

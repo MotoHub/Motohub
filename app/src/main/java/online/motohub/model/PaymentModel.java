@@ -38,6 +38,9 @@ public class PaymentModel implements Serializable{
     @SerializedName("amount")
     private int mAmount;
 
+    @SerializedName("customer")
+    private String customer;
+
     @SerializedName("status")
     private String mStatus;
 
@@ -46,6 +49,14 @@ public class PaymentModel implements Serializable{
 
     @SerializedName("currency")
     private String mCurrency;
+
+    public String getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(String customer) {
+        this.customer = customer;
+    }
 
     @SerializedName("destination")
     private String mDestination;

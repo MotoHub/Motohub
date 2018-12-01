@@ -1,10 +1,10 @@
 package online.motohub.activity;
 
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -24,6 +24,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
+import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -37,8 +38,10 @@ import butterknife.OnClick;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
+import online.motohub.BuildConfig;
 import online.motohub.R;
 import online.motohub.adapter.VehicleInfoLikeAdapter;
+import online.motohub.application.MotoHub;
 import online.motohub.fcm.MyFireBaseMessagingService;
 import online.motohub.fragment.dialog.AppDialogFragment;
 import online.motohub.model.ImageModel;
@@ -48,6 +51,7 @@ import online.motohub.model.SessionModel;
 import online.motohub.model.VehicleInfoLikeModel;
 import online.motohub.retrofit.RetrofitClient;
 import online.motohub.util.AppConstants;
+import online.motohub.util.DialogManager;
 import online.motohub.util.PreferenceUtils;
 import online.motohub.util.Utility;
 
@@ -320,6 +324,8 @@ public class UpdateProfileActivity extends BaseActivity {
     LinearLayout mChestProtectionbox;
     @BindView(R.id.coverImage)
     ImageView mCoverImgView;
+    @BindView(R.id.txt_version)
+    TextView txtVersion;
     @BindString(R.string.update_your_profile)
     String mToolbarTitle;
     @BindString(R.string.name)
@@ -399,10 +405,18 @@ public class UpdateProfileActivity extends BaseActivity {
         initView();
     }
 
+
     @Override
+    protected void onDestroy() {
+        DialogManager.hideProgress();
+        super.onDestroy();
+    }
+
+    /*@Override
     protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
-        mMyProfileResModel = (ProfileResModel) savedInstanceState
-                .getSerializable(ProfileModel.MY_PROFILE_RES_MODEL);
+        *//*mMyProfileResModel = (ProfileResModel) savedInstanceState
+                .getSerializable(ProfileModel.MY_PROFILE_RES_MODEL);*//*
+        mMyProfileResModel = MotoHub.getApplicationInstance().getmProfileResModel();
         isCoverPicture = savedInstanceState.getBoolean(ProfileModel.IS_COVER_PICTURE);
         mCoverImgUri = savedInstanceState.getString(ProfileModel.COVER_PICTURE);
         mProfilePicImgUri = savedInstanceState.getString(ProfileModel.PROFILE_PICTURE);
@@ -419,7 +433,7 @@ public class UpdateProfileActivity extends BaseActivity {
                     R.drawable.default_profile_icon);
         }
         super.onRestoreInstanceState(savedInstanceState);
-    }
+    }*/
 
     @Override
     protected void onResume() {
@@ -431,14 +445,14 @@ public class UpdateProfileActivity extends BaseActivity {
         super.onPause();
     }
 
-    @Override
+    /*@Override
     protected void onSaveInstanceState(Bundle outState) {
         outState.putSerializable(ProfileModel.MY_PROFILE_RES_MODEL, mMyProfileResModel);
         outState.putBoolean(ProfileModel.IS_COVER_PICTURE, isCoverPicture);
         outState.putString(ProfileModel.COVER_PICTURE, mCoverImgUri);
         outState.putString(ProfileModel.PROFILE_PICTURE, mProfilePicImgUri);
         super.onSaveInstanceState(outState);
-    }
+    }*/
 
     private void initView() {
         setupUI(mCoordinatorLayout);
@@ -453,14 +467,16 @@ public class UpdateProfileActivity extends BaseActivity {
                 e.printStackTrace();
             }
             return;
-        }
-        if (getIntent().getExtras() != null) {
+        } else {
+            //if (getIntent().getExtras() != null) {
             if (getIntent().hasExtra(AppConstants.IS_FROM_VEHICLE_INFO))
                 setToolbar(mToolbar, mToolbarVehicleInfoTitle);
             else
                 setToolbar(mToolbar, mToolbarTitle);
-            mMyProfileResModel = (ProfileResModel) getIntent().getExtras()
-                    .getSerializable(ProfileModel.MY_PROFILE_RES_MODEL);
+            /*mMyProfileResModel = (ProfileResModel) getIntent().getExtras()
+                    .getSerializable(ProfileModel.MY_PROFILE_RES_MODEL);*/
+            //mMyProfileResModel = MotoHub.getApplicationInstance().getmProfileResModel();
+            mMyProfileResModel = EventBus.getDefault().getStickyEvent(ProfileResModel.class);
             mUpdatedProfileResModel = mMyProfileResModel;
         }
         setProfileReady();
@@ -472,7 +488,6 @@ public class UpdateProfileActivity extends BaseActivity {
     }
 
     private void setLikes() {
-
         ArrayList<VehicleInfoLikeModel> mFeedLikes = mMyProfileResModel.getVehicleInfoLikesByID();
         if (mFeedLikes.size() > 0) {
             for (final VehicleInfoLikeModel likesEntity : mFeedLikes) {
@@ -496,60 +511,66 @@ public class UpdateProfileActivity extends BaseActivity {
         else if (mLikeCount > 1)
             mLikes = mLikeCount + " likes";
         mLikeCountTxt.setText(mLikes);
+
+        showToast(this, getString(R.string.field_alert_msg));
     }
 
     private void setProfileReady() {
-        String mProfileTitleStr = getProfileTypeStr(String.valueOf(mMyProfileResModel.getProfileType())) + " Profile";
-        mProfileTitleTv.setText(mProfileTitleStr);
-        String mNameOfMotoStr = getString(R.string.name_of) + " " + getProfileTypeStr(String.valueOf(mMyProfileResModel.getProfileType()));
-        mNameOfMotoTv.setText(mNameOfMotoStr);
-        if (mMyProfileResModel.getProfilePicture() != null && !TextUtils.isEmpty(mMyProfileResModel.getProfilePicture())) {
-            setImageWithGlide(mCirProfileImgView, mMyProfileResModel.getProfilePicture(), R
-                    .drawable.default_profile_icon);
+        try {
+            String mProfileTitleStr = getProfileTypeStr(String.valueOf(mMyProfileResModel.getProfileType())) + " Profile";
+            mProfileTitleTv.setText(mProfileTitleStr);
+            String mNameOfMotoStr = getString(R.string.name_of) + " " + getProfileTypeStr(String.valueOf(mMyProfileResModel.getProfileType()));
+            mNameOfMotoTv.setText(mNameOfMotoStr);
+            if (mMyProfileResModel.getProfilePicture() != null && !TextUtils.isEmpty(mMyProfileResModel.getProfilePicture())) {
+                setImageWithGlide(mCirProfileImgView, mMyProfileResModel.getProfilePicture(), R.drawable.default_profile_icon);
+            }
+            if (mMyProfileResModel.getCoverPicture() != null && !TextUtils.isEmpty(mMyProfileResModel.getCoverPicture())) {
+                setImageWithGlide(mCoverImgView, mMyProfileResModel.getCoverPicture(), R.drawable.app_logo);
+            }
+            if (String.valueOf(mMyProfileResModel.getProfileType()).equals(BOAT)) {
+                showHideBikeProperties(View.GONE);
+                showHideCarProperties(View.GONE);
+                showHideCarAndBikeProperties(View.GONE);
+                showHideWidgets(View.VISIBLE);
+                mWheelsAndTyresBox.setVisibility(View.GONE);
+                mWheelsAndTyresLine.setVisibility(View.GONE);
+                setMotoProfileVal();
+            } else if (String.valueOf(mMyProfileResModel.getProfileType()).equals(SPECTATOR)) {
+                mUpgradeBox.setVisibility(View.VISIBLE);
+                showHideWidgets(View.GONE);
+                showHideBikeProperties(View.GONE);
+                showHideCarProperties(View.GONE);
+                showHideCarAndBikeProperties(View.GONE);
+                mDriverOrNameEt.setText(mMyProfileResModel.getSpectatorName());
+                mDriverOrNameLine.setVisibility(View.VISIBLE);
+                mPhoneEt.setText(mMyProfileResModel.getPhone());
+            } else if (String.valueOf(mMyProfileResModel.getProfileType()).equals(CAR)) {
+                showHideCarProperties(View.VISIBLE);
+                showHideWidgets(View.VISIBLE);
+                showHideCarAndBikeProperties(View.VISIBLE);
+                showHideBikeProperties(View.GONE);
+                setMotoProfileVal();
+            } else if (String.valueOf(mMyProfileResModel.getProfileType()).equals(BIKE)) {
+                showHideCarProperties(View.GONE);
+                showHideWidgets(View.VISIBLE);
+                showHideBikeProperties(View.VISIBLE);
+                showHideCarAndBikeProperties(View.VISIBLE);
+                setMotoProfileVal();
+            } else {
+                showHideBikeProperties(View.GONE);
+                showHideCarProperties(View.GONE);
+                showHideCarAndBikeProperties(View.GONE);
+                showHideWidgets(View.VISIBLE);
+                setMotoProfileVal();
+            }
+            mSubmitBtn.setText(mUpdateStr);
+            setLikes();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        if (mMyProfileResModel.getCoverPicture() != null && !TextUtils.isEmpty(mMyProfileResModel.getCoverPicture())) {
-            setImageWithGlide(mCoverImgView, mMyProfileResModel.getCoverPicture(), R.drawable.app_logo);
-        }
-        if (String.valueOf(mMyProfileResModel.getProfileType()).equals(BOAT)) {
-            showHideBikeProperties(View.GONE);
-            showHideCarProperties(View.GONE);
-            showHideCarAndBikeProperties(View.GONE);
-            showHideWidgets(View.VISIBLE);
-            mWheelsAndTyresBox.setVisibility(View.GONE);
-            mWheelsAndTyresLine.setVisibility(View.GONE);
-            setMotoProfileVal();
-        } else if (String.valueOf(mMyProfileResModel.getProfileType()).equals(SPECTATOR)) {
-            mUpgradeBox.setVisibility(View.VISIBLE);
-            showHideWidgets(View.GONE);
-            showHideBikeProperties(View.GONE);
-            showHideCarProperties(View.GONE);
-            showHideCarAndBikeProperties(View.GONE);
-            mDriverOrNameEt.setText(mMyProfileResModel.getSpectatorName());
-            mDriverOrNameLine.setVisibility(View.VISIBLE);
-            mPhoneEt.setText(mMyProfileResModel.getPhone());
-        } else if (String.valueOf(mMyProfileResModel.getProfileType()).equals(CAR)) {
-            showHideCarProperties(View.VISIBLE);
-            showHideWidgets(View.VISIBLE);
-            showHideCarAndBikeProperties(View.VISIBLE);
-            showHideBikeProperties(View.GONE);
-            setMotoProfileVal();
-        } else if (String.valueOf(mMyProfileResModel.getProfileType()).equals(BIKE)) {
-            showHideCarProperties(View.GONE);
-            showHideWidgets(View.VISIBLE);
-            showHideBikeProperties(View.VISIBLE);
-            showHideCarAndBikeProperties(View.VISIBLE);
-            setMotoProfileVal();
-        } else {
-            showHideBikeProperties(View.GONE);
-            showHideCarProperties(View.GONE);
-            showHideCarAndBikeProperties(View.GONE);
-            showHideWidgets(View.VISIBLE);
-            setMotoProfileVal();
-        }
-        mSubmitBtn.setText(mUpdateStr);
-        setLikes();
     }
 
+    @SuppressLint("SetTextI18n")
     private void setMotoProfileVal() {
 
         mDriverOrNameEt.setText(mMyProfileResModel.getDriver());
@@ -561,6 +582,8 @@ public class UpdateProfileActivity extends BaseActivity {
         mEngineSpecsEt.setText(mMyProfileResModel.getEngineSpecs());
 
         mPanelAndPaintEt.setText(mMyProfileResModel.getPanelPaint());
+        //show version
+        txtVersion.setText("version  : " + BuildConfig.VERSION_NAME);
 
         if (!String.valueOf(mMyProfileResModel.getProfileType()).equals(BOAT)) {
             mWheelsAndTiresEt.setText(mMyProfileResModel.getWheelsTyres());
@@ -637,8 +660,8 @@ public class UpdateProfileActivity extends BaseActivity {
         mSuitbox.setVisibility(visibility);
         mGlovebox.setVisibility(visibility);
         mBackProtectionbox.setVisibility(visibility);
-        if(String.valueOf(mMyProfileResModel.getProfileType()).equals(CAR)){
-                mChestProtectionbox.setVisibility(View.GONE);
+        if (String.valueOf(mMyProfileResModel.getProfileType()).equals(CAR)) {
+            mChestProtectionbox.setVisibility(View.GONE);
         }
         mChestProtectionbox.setVisibility(visibility);
         mTrailerBox.setVisibility(visibility);
@@ -1203,7 +1226,9 @@ public class UpdateProfileActivity extends BaseActivity {
                     if (mProfileModel.getResource() != null && mProfileModel.getResource().size() > 0) {
                         showToast(this, mUpdateProfileSuccessStr);
                         mUpdatedProfileResModel = mProfileModel.getResource().get(0);
-                        setResult(RESULT_OK, new Intent().putExtra(ProfileModel.MY_PROFILE_RES_MODEL, mUpdatedProfileResModel));
+                        //MotoHub.getApplicationInstance().setmProfileResModel(mUpdatedProfileResModel);
+                        EventBus.getDefault().postSticky(mUpdatedProfileResModel);
+                        setResult(RESULT_OK, new Intent()/*.putExtra(ProfileModel.MY_PROFILE_RES_MODEL, mUpdatedProfileResModel)*/);
                         onBackPressed();
                     }
                     break;
@@ -1293,8 +1318,9 @@ public class UpdateProfileActivity extends BaseActivity {
             mLikesStr = mVehicleInfoLikeList.size() + " likes";
         }
         mLikeCountTxt.setText(mLikesStr);
-
-        setResult(RESULT_OK, new Intent().putExtra(ProfileModel.MY_PROFILE_RES_MODEL, mUpdatedProfileResModel));
+        //MotoHub.getApplicationInstance().setmProfileResModel(mUpdatedProfileResModel);
+        EventBus.getDefault().postSticky(mUpdatedProfileResModel);
+        setResult(RESULT_OK, new Intent()/*.putExtra(ProfileModel.MY_PROFILE_RES_MODEL, mUpdatedProfileResModel)*/);
 
     }
 
@@ -1320,8 +1346,9 @@ public class UpdateProfileActivity extends BaseActivity {
             mLikesStr = mVehicleInfoLikeList.size() + " likes";
         }
         mLikeCountTxt.setText(mLikesStr);
-
-        setResult(RESULT_OK, new Intent().putExtra(ProfileModel.MY_PROFILE_RES_MODEL, mUpdatedProfileResModel));
+        //MotoHub.getApplicationInstance().setmProfileResModel(mUpdatedProfileResModel);
+        EventBus.getDefault().postSticky(mUpdatedProfileResModel);
+        setResult(RESULT_OK, new Intent()/*.putExtra(ProfileModel.MY_PROFILE_RES_MODEL, mUpdatedProfileResModel)*/);
     }
 
 

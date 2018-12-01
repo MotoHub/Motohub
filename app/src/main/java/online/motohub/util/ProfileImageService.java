@@ -79,8 +79,6 @@ public class ProfileImageService extends IntentService implements ProgressReques
                         //      activity.retrofitOnFailure();
                     }
                 });
-
-
     }
 
 
@@ -113,8 +111,12 @@ public class ProfileImageService extends IntentService implements ProgressReques
                         String path = mImageModel.getmModels().get(0).getPath();
                         String[] splited_text = path.split("/");
                         VideoUploadModel post = databaseHandler.getImage(splited_text[2]);
-                        uploadPicture(post.getProfileID(), path);
-                        onDownloadComplete("File Uploaded", post.getNotificationflag());
+                        if (post.getProfileID() != null) {
+                            uploadPicture(post.getProfileID(), path);
+                            onDownloadComplete("File Uploaded", post.getNotificationflag());
+                        } else {
+                            onDownloadComplete("Something Went Wrong", 0);
+                        }
                     }
                 }
             }
@@ -137,29 +139,33 @@ public class ProfileImageService extends IntentService implements ProgressReques
     }
 
     private void onDownloadComplete(String value, int mNotificationID) {
-        DatabaseHandler databaseHandler = new DatabaseHandler(this);
-        int checkCount = databaseHandler.getPendingCount();
-        stopForeground(true);
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-            if (mNotificationManager != null) {
-                mNotificationManager.createNotificationChannel(NotificationUtils.getInstance().getNotificationChannel(mNotificationID));
+        try {
+            DatabaseHandler databaseHandler = new DatabaseHandler(this);
+            int checkCount = databaseHandler.getPendingCount();
+            stopForeground(true);
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                if (mNotificationManager != null) {
+                    mNotificationManager.createNotificationChannel(NotificationUtils.getInstance().getNotificationChannel(mNotificationID));
+                }
+                mNotificationBuilder = NotificationUtils.getInstance().getNotificationBuilder(this, false, value, mNotificationID, 0, 0);
+                mNotification = mNotificationBuilder.build();
+            } else {
+                mNotificationCompatBuilder = NotificationUtils.getInstance().getNotificationCompatBuilder(this, false, value, mNotificationID, 0, 0);
+                mNotification = mNotificationCompatBuilder.build();
             }
-            mNotificationBuilder = NotificationUtils.getInstance().getNotificationBuilder(this, false, value, mNotificationID, 0, 0);
-            mNotification = mNotificationBuilder.build();
-        } else {
-            mNotificationCompatBuilder = NotificationUtils.getInstance().getNotificationCompatBuilder(this, false, value, mNotificationID, 0, 0);
-            mNotification = mNotificationCompatBuilder.build();
-        }
-        if (checkCount == 0 || mNotificationID == 0) {
-            count = count + 1;
+            if (checkCount == 0 || mNotificationID == 0) {
+                count = count + 1;
+                mNotificationManager.cancelAll();
+                mNotificationManager.notify(count, mNotification);
+            } else if (mNotificationID > 0) {
+                databaseHandler.deletepost(mNotificationID);
+                mNotificationManager.notify(mNotificationID, mNotification);
+            }
+            sendBroadcast(new Intent().setAction("UPLOAD_IMAGE_STATUS").putExtra("status", value));
             mNotificationManager.cancelAll();
-            mNotificationManager.notify(count, mNotification);
-        } else if (mNotificationID > 0) {
-            databaseHandler.deletepost(mNotificationID);
-            mNotificationManager.notify(mNotificationID, mNotification);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        sendBroadcast(new Intent().setAction("UPLOAD_IMAGE_STATUS").putExtra("status", value));
-        mNotificationManager.cancelAll();
     }
 
 

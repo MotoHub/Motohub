@@ -18,13 +18,14 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import online.motohub.R;
-import online.motohub.adapter.OnDemandNewAdapter;
+import online.motohub.adapter.OnDemandEventsAdapter;
 import online.motohub.fragment.dialog.AppDialogFragment;
 import online.motohub.model.OndemandNewResponse;
 import online.motohub.model.ProfileModel;
 import online.motohub.model.ProfileResModel;
 import online.motohub.retrofit.RetrofitClient;
 import online.motohub.util.AppConstants;
+import online.motohub.util.DialogManager;
 
 /**
  * Created by Prithiv on 5/14/2018.
@@ -32,7 +33,7 @@ import online.motohub.util.AppConstants;
 
 public class ViewOndemandActivity extends BaseActivity implements SwipeRefreshLayout.OnRefreshListener {
 
-    public OnDemandNewAdapter adapter;
+    public OnDemandEventsAdapter adapter;
     @BindView(R.id.list_view_co_layout)
     CoordinatorLayout mCoordinatorLayout;
     @BindView(R.id.toolbar)
@@ -54,6 +55,12 @@ public class ViewOndemandActivity extends BaseActivity implements SwipeRefreshLa
         setContentView(R.layout.activity_ondemandnewdesign);
         ButterKnife.bind(this);
         initView();
+    }
+
+    @Override
+    protected void onDestroy() {
+        DialogManager.hideProgress();
+        super.onDestroy();
     }
 
     private void initView() {
@@ -104,7 +111,7 @@ public class ViewOndemandActivity extends BaseActivity implements SwipeRefreshLa
 
     private void getMyProfiles() {
         String mFilter = "ID=" + mCurrentProfileID;
-        if (isNetworkConnected())
+        if (isNetworkConnected(this))
             RetrofitClient.getRetrofitInstance().callGetProfiles(this, mFilter, RetrofitClient.GET_PROFILE_RESPONSE);
         else
             showAppDialog(AppDialogFragment.ALERT_INTERNET_FAILURE_DIALOG, null);
@@ -112,7 +119,7 @@ public class ViewOndemandActivity extends BaseActivity implements SwipeRefreshLa
 
     private void setAdapter() {
         if (adapter == null) {
-            adapter = new OnDemandNewAdapter(this, mListOndemand, mCurrentProfileID, mMyProfileResModel);
+            adapter = new OnDemandEventsAdapter(this, mListOndemand, mCurrentProfileID, mMyProfileResModel);
             mNotificationRecyclerView.setAdapter(adapter);
         } else {
             adapter.notifyDataSetChanged();

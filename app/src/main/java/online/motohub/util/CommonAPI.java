@@ -43,6 +43,22 @@ public class CommonAPI {
         RetrofitClient.getRetrofitInstance().callUnFollowProfile(mContext, mRetrofitResInterface, mFilter, RetrofitClient.UN_FOLLOW_PROFILE_RESPONSE);
     }
 
+    public void callFollowProfile(Context mContext, int mMyProfileID, int mFollowProfileID) {
+        JsonObject mInputObj = new JsonObject();
+        String mFollowRelation = mFollowProfileID + "_" + mMyProfileID;
+        mInputObj.addProperty(APIConstants.ProfileID, mMyProfileID);
+        mInputObj.addProperty(APIConstants.FollowProfileID, mFollowProfileID);
+        mInputObj.addProperty(APIConstants.FollowRelation, mFollowRelation);
+        JsonArray mInputArray = new JsonArray();
+        mInputArray.add(mInputObj);
+        RetrofitClient.getRetrofitInstance().callFollowProfile(mContext,  mInputArray, RetrofitClient.FOLLOW_PROFILE_RESPONSE);
+    }
+
+    public void callUnFollowProfile(Context mContext,int mFollowRowID) {
+        String mFilter = APIConstants.ID + "=" + mFollowRowID;
+        RetrofitClient.getRetrofitInstance().callUnFollowProfile(mContext,  mFilter, RetrofitClient.UN_FOLLOW_PROFILE_RESPONSE);
+    }
+
     public void callUnFollowMyProfile(Context mContext, RetrofitResInterface mRetrofitResInterface, int mMyProfileID, int mOtherProfileID) {
         String mFilter = "(" + APIConstants.ProfileID + "=" + mOtherProfileID + ") AND (" + APIConstants.FollowProfileID + "=" + mMyProfileID + ")";
         RetrofitClient.getRetrofitInstance().callUnFollowProfile(mContext, mRetrofitResInterface, mFilter, RetrofitClient.UN_FOLLOW_MY_PROFILE_RESPONSE);
@@ -73,7 +89,7 @@ public class CommonAPI {
         RetrofitClient.getRetrofitInstance().callUnBlockProfile(mContext, mRetrofitResInterface, mFilter, RetrofitClient.CALL_UN_BLOCK_USER_PROFILE);
     }
 
-    public void callAddSharedPost(Context context, PostsResModel mPostResModel, ProfileResModel mMyProfileResModel) {
+    public void callAddSharedPost(Context context, PostsResModel mPostResModel, ProfileResModel mMyProfileResModel, String mShareTxt) {
 
         String mNewSharedID = mPostResModel.getID() + "_" + mMyProfileResModel.getID();
         JsonObject mJsonObject = new JsonObject();
@@ -91,13 +107,16 @@ public class CommonAPI {
         mJsonObject.addProperty(PostsModel.IS_NEWS_FEED_POST, false);
         mJsonObject.addProperty(PostsModel.PostVideoThumbnailurl, mPostResModel.getPostVideoThumbnailURL());
         mJsonObject.addProperty(PostsModel.PostVideoURL, mPostResModel.getPostVideoURL());
+        try {
+            mJsonObject.addProperty(PostsModel.SHARED_TEXT, URLEncoder.encode(mShareTxt,"UTF-8"));
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
 
         if (mPostResModel.getUserType().trim().equals(AppConstants.PROMOTER) || mPostResModel.getUserType().trim().equals(AppConstants.CLUB) ||
                 mPostResModel.getUserType().trim().equals(AppConstants.NEWS_MEDIA) ||
                 mPostResModel.getUserType().trim().equals(AppConstants.TRACK) || mPostResModel.getUserType().trim().equals(AppConstants.SHOP)) {
             mJsonObject.addProperty(PostsModel.USER_TYPE, AppConstants.SHARED_POST);
-        } else if (mPostResModel.getUserType().trim().equals(AppConstants.VIDEO_SHARED_POST) || mPostResModel.getUserType().trim().equals(AppConstants.SHARED_VIDEO)) {
-            mJsonObject.addProperty(PostsModel.USER_TYPE, AppConstants.SHARED_VIDEO);
         }
         final JsonArray mJsonArray = new JsonArray();
         mJsonArray.add(mJsonObject);
@@ -150,7 +169,8 @@ public class CommonAPI {
                 mJsonArray, RetrofitClient.GET_PROMOTER_FOLLOW_RESPONSE);
     }
 
-    public void callSendSingleChatMsg(Context context, int fromProfileId, int fromUserID, int toProfileID, int toUserID, String msg, String media, String imageUrl) {
+    public void callSendSingleChatMsg(Context context,int fromProfileId,int fromUserID,int toProfileID,
+                                      int toUserID,String msg,String chatrelation,String media, String imageUrl) {
 
         JsonArray mJsonArray = new JsonArray();
         JsonObject mJsonObject = new JsonObject();
@@ -158,17 +178,15 @@ public class CommonAPI {
         mJsonObject.addProperty(APIConstants.ToProfileID, toProfileID);
         mJsonObject.addProperty(APIConstants.FromUserID, fromUserID);
         mJsonObject.addProperty(APIConstants.ToUserID, toUserID);
+        mJsonObject.addProperty(APIConstants.ChatRelation,chatrelation);
         mJsonObject.addProperty(APIConstants.Message, msg);
         mJsonObject.addProperty(APIConstants.Message_Type, media);
         mJsonObject.addProperty(APIConstants.Image_Url, imageUrl);
-
         mJsonArray.add(mJsonObject);
 
-        RetrofitClient.getRetrofitInstance().callSendSingleChatMsg(context,
-                mJsonArray, RetrofitClient.SEND_SINGLE_CHAT_MSG);
+        RetrofitClient.getRetrofitInstance().callSendSingleChatMsg(context,mJsonArray,RetrofitClient.SEND_SINGLE_CHAT_MSG);
 
     }
-
 
     public void callPostReportpost(Context mContext, int mUserID, int mProfileID, int mPostID, String mReportString, String mStatus) {
         JsonObject mInputObj = new JsonObject();
@@ -187,6 +205,4 @@ public class CommonAPI {
         RetrofitClient.getRetrofitInstance().callPostReportpost((BaseActivity)mContext,  mInputArray,
                 RetrofitClient.REPORT_POST_RESPONSE);
     }
-
-
 }

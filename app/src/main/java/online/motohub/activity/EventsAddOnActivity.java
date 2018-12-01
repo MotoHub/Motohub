@@ -25,6 +25,8 @@ import online.motohub.application.MotoHub;
 import online.motohub.model.EventAddOnModel;
 import online.motohub.model.EventsModel;
 import online.motohub.retrofit.RetrofitClient;
+import online.motohub.util.AppConstants;
+import online.motohub.util.DialogManager;
 
 public class EventsAddOnActivity extends BaseActivity{
 
@@ -48,7 +50,7 @@ public class EventsAddOnActivity extends BaseActivity{
 
     private ArrayList<EventAddOnModel> mEventAddOnList = new ArrayList<>();
     private EventAddOnAdapter mEventAddOnAdapter;
-    private int mEventID,mTotalAmount;
+    private int mEventID,mTotalAmount, mProfileID;
 
 
     @Override
@@ -57,6 +59,12 @@ public class EventsAddOnActivity extends BaseActivity{
         setContentView(R.layout.activity_events_add_on);
         ButterKnife.bind(this);
         initView();
+    }
+
+    @Override
+    protected void onDestroy() {
+        DialogManager.hideProgress();
+        super.onDestroy();
     }
 
     @OnClick({R.id.doneBtn, R.id.toolbar_back_img_btn})
@@ -69,7 +77,7 @@ public class EventsAddOnActivity extends BaseActivity{
             case R.id.doneBtn:
                 MotoHub.getApplicationInstance().setPurchasedAddOn(mEventAddOnAdapter.getSelectedEventAddOn());
                 Intent paymentActivity = new Intent(this, PaymentActivity.class);
-                paymentActivity.putExtra(EventsModel.EVENT_AMOUNT, mTotalAmount);
+                paymentActivity.putExtra(EventsModel.EVENT_AMOUNT, mTotalAmount).putExtra(AppConstants.PROFILE_ID, mProfileID);
                 startActivityForResult(paymentActivity, EventsFindAdapter.EVENT_PAYMENT_REQ_CODE);
                 break;
         }
@@ -91,6 +99,7 @@ public class EventsAddOnActivity extends BaseActivity{
 
         mEventID = getIntent().getIntExtra(EventsModel.EVENT_ID,0);
         mTotalAmount = getIntent().getIntExtra(EventsModel.EVENT_AMOUNT, 0);
+        mProfileID = getIntent().getIntExtra(AppConstants.PROFILE_ID, 0);
 
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
         mRvAddOn.setLayoutManager(mLayoutManager);
@@ -184,6 +193,7 @@ public class EventsAddOnActivity extends BaseActivity{
                     Intent resultIntent = new Intent();
                     setResult(Activity.RESULT_OK, resultIntent);
                     resultIntent.putExtra("TOKEN", data.getStringExtra("TOKEN"));
+                    resultIntent.putExtra(EventsModel.EVENT_AMOUNT, mTotalAmount);
                     this.finish();
                 } else if(resultCode == RESULT_CANCELED){
                     Intent resultIntent = new Intent();

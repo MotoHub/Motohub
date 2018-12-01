@@ -8,6 +8,8 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,12 +21,13 @@ import online.motohub.R;
 import online.motohub.activity.BaseActivity;
 import online.motohub.activity.promoter.PromotersListActivity;
 import online.motohub.adapter.club.ClubsListAdapter;
-import online.motohub.model.ProfileModel;
+import online.motohub.application.MotoHub;
 import online.motohub.model.ProfileResModel;
 import online.motohub.model.SessionModel;
 import online.motohub.model.promoter_club_news_media.PromotersModel;
 import online.motohub.model.promoter_club_news_media.PromotersResModel;
 import online.motohub.retrofit.RetrofitClient;
+import online.motohub.util.DialogManager;
 import online.motohub.util.PreferenceUtils;
 
 public class ClubsListActivity extends BaseActivity {
@@ -62,6 +65,12 @@ public class ClubsListActivity extends BaseActivity {
 
     }
 
+    @Override
+    protected void onDestroy() {
+        DialogManager.hideProgress();
+        super.onDestroy();
+    }
+
     private void initView() {
 
         setToolbar(mToolbar, mToolbarTitle);
@@ -73,9 +82,11 @@ public class ClubsListActivity extends BaseActivity {
 
         mClubsRv.setLayoutManager(mLinearLayoutManager);
 
-        assert getIntent().getExtras() != null;
-        ProfileResModel mProfileResModel = (ProfileResModel) getIntent().getExtras().getSerializable(ProfileModel.MY_PROFILE_RES_MODEL);
+        //assert getIntent().getExtras() != null;
+        //ProfileResModel mProfileResModel = (ProfileResModel) getIntent().getExtras().getSerializable(ProfileModel.MY_PROFILE_RES_MODEL);
 
+        //ProfileResModel mProfileResModel = MotoHub.getApplicationInstance().getmProfileResModel();
+        ProfileResModel mProfileResModel = EventBus.getDefault().getStickyEvent(ProfileResModel.class);
         mClubsList = new ArrayList<>();
         mClubsListAdapter = new ClubsListAdapter(mClubsList, this, mProfileResModel);
         mClubsRv.setAdapter(mClubsListAdapter);
@@ -104,18 +115,28 @@ public class ClubsListActivity extends BaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(resultCode == RESULT_OK) {
+        if (resultCode == RESULT_OK) {
             switch (requestCode) {
                 case PromotersListActivity.PROMOTER_FOLLOW_RESPONSE:
                     assert data.getExtras() != null;
-                    PromotersResModel mPromotersResModel = (PromotersResModel) data.getExtras()
-                            .getSerializable(PromotersModel.PROMOTERS_RES_MODEL);
+                    /*PromotersResModel mPromotersResModel = (PromotersResModel) data.getExtras().getSerializable(PromotersModel.PROMOTERS_RES_MODEL);
                     mClubsListAdapter.updatePromoterFollowResponse(mPromotersResModel);
-                    ProfileResModel mMyProfileResModel = (ProfileResModel) data.getExtras()
-                            .getSerializable(ProfileModel.MY_PROFILE_RES_MODEL);
+                    ProfileResModel mMyProfileResModel = (ProfileResModel) data.getExtras().getSerializable(ProfileModel.MY_PROFILE_RES_MODEL);*/
+                    /*PromotersResModel mPromotersResModel = MotoHub.getApplicationInstance().getmPromoterResModel();
+                    ProfileResModel mMyProfileResModel = MotoHub.getApplicationInstance().getmProfileResModel();*/
+                    PromotersResModel mPromotersResModel = EventBus.getDefault().getStickyEvent(PromotersResModel.class);
+                    ProfileResModel mMyProfileResModel = EventBus.getDefault().getStickyEvent(ProfileResModel.class);
+                    mClubsListAdapter.updatePromoterFollowResponse(mPromotersResModel);
+
+                    /*MotoHub.getApplicationInstance().setmProfileResModel(mMyProfileResModel);
+                    MotoHub.getApplicationInstance().setmPromoterResModel(mPromotersResModel);*/
+
+                    EventBus.getDefault().postSticky(mMyProfileResModel);
+                    EventBus.getDefault().postSticky(mPromotersResModel);
+
                     setResult(RESULT_OK, new Intent()
-                            .putExtra(ProfileModel.MY_PROFILE_RES_MODEL, mMyProfileResModel)
-                            .putExtra(PromotersModel.PROMOTERS_RES_MODEL, mPromotersResModel));
+                            /*.putExtra(ProfileModel.MY_PROFILE_RES_MODEL, mMyProfileResModel)
+                            .putExtra(PromotersModel.PROMOTERS_RES_MODEL, mPromotersResModel)*/);
                     break;
             }
         }

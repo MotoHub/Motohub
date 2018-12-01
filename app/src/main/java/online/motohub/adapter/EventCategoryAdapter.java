@@ -53,19 +53,23 @@ public class EventCategoryAdapter extends RecyclerView.Adapter<EventCategoryAdap
 
     @Override
     public void onBindViewHolder(EventCategoryAdapter.Holder mHolder, final int pos) {
-        mHolder.mCkEventCategory.setText(mEventCategoryList.get(pos).getGroupName());
-        mHolder.mCkEventCategory.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked){
-                    mSelectedEventCategory.add(mEventCategoryList.get(pos));
-                } else{
-                    if(mSelectedEventCategory.contains(mEventCategoryList.get(pos))){
-                        mSelectedEventCategory.remove(mEventCategoryList.get(pos));
+        try {
+            mHolder.mCkEventCategory.setText(mEventCategoryList.get(pos).getGroupName());
+            mHolder.mCkEventCategory.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    if (isChecked) {
+                        mSelectedEventCategory.add(mEventCategoryList.get(pos));
+                    } else {
+                        if (mSelectedEventCategory.contains(mEventCategoryList.get(pos))) {
+                            mSelectedEventCategory.remove(mEventCategoryList.get(pos));
+                        }
                     }
                 }
-            }
-        });
+            });
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     public ArrayList<EventCategoryModel> getSelectedEventCategory(){

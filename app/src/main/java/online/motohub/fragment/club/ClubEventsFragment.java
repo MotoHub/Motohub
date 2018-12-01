@@ -5,16 +5,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.AppBarLayout;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
-import android.widget.RelativeLayout;
-import android.widget.Spinner;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,12 +34,10 @@ import online.motohub.model.EventsModel;
 import online.motohub.model.EventsResModel;
 import online.motohub.model.EventsWhoIsGoingModel;
 import online.motohub.model.PaymentModel;
-import online.motohub.model.ProfileModel;
 import online.motohub.model.ProfileResModel;
 import online.motohub.model.PurchasedAddOnModel;
 import online.motohub.model.RacingModel;
 import online.motohub.model.SessionModel;
-import online.motohub.model.promoter_club_news_media.PromotersModel;
 import online.motohub.model.promoter_club_news_media.PromotersResModel;
 import online.motohub.retrofit.RetrofitClient;
 import online.motohub.util.AppConstants;
@@ -52,23 +47,20 @@ import static android.app.Activity.RESULT_OK;
 
 public class ClubEventsFragment extends BaseFragment {
 
+    private static final String TAG = ClubEventsFragment.class.getName();
     @BindView(R.id.events_list_view)
     RecyclerView mEventsFindListView;
-
     @BindString(R.string.no_events_err)
     String mNoEventsErr;
-
+    ProfileResModel mMyProfileResModel;
+    PromotersResModel mPromotersResModel;
     private Activity mActivity;
     private Unbinder mUnBinder;
     private List<EventsResModel> mClubEventsListData;
     private EventsFindAdapter mClubEventsAdapter;
-    ProfileResModel mMyProfileResModel;
-    PromotersResModel mPromotersResModel;
     private boolean mRefresh = true;
     private PaymentModel mTempPaymentModel;
     private int mFailureResponseType;
-
-    private static final String TAG = ClubEventsFragment.class.getName();
 
     @Override
     public void onAttach(Context context) {
@@ -97,12 +89,19 @@ public class ClubEventsFragment extends BaseFragment {
 
     private void initView() {
 
-        mMyProfileResModel = (ProfileResModel) getArguments().getSerializable(ProfileModel.MY_PROFILE_RES_MODEL);
-        mPromotersResModel = (PromotersResModel) getArguments().getSerializable(PromotersModel.PROMOTERS_RES_MODEL);
+        /*mMyProfileResModel = (ProfileResModel) getArguments().getSerializable(ProfileModel.MY_PROFILE_RES_MODEL);
+        mPromotersResModel = (PromotersResModel) getArguments().getSerializable(PromotersModel.PROMOTERS_RES_MODEL);*/
+        /*mMyProfileResModel = MotoHub.getApplicationInstance().getmProfileResModel();
+        mPromotersResModel = MotoHub.getApplicationInstance().getmPromoterResModel();*/
+        mMyProfileResModel = EventBus.getDefault().getStickyEvent(ProfileResModel.class);
+        mPromotersResModel = EventBus.getDefault().getStickyEvent(PromotersResModel.class);
         mClubEventsListData = new ArrayList<>();
-        mClubEventsAdapter = new EventsFindAdapter(mActivity, mClubEventsListData, mMyProfileResModel, false);
-        mEventsFindListView.setLayoutManager(new LinearLayoutManager(getContext()));
-        mEventsFindListView.setAdapter(mClubEventsAdapter);
+        if (mMyProfileResModel != null && mMyProfileResModel.getID() != 0) {
+            mClubEventsAdapter = new EventsFindAdapter(mActivity, mClubEventsListData, mMyProfileResModel, null, false);
+            mEventsFindListView.setLayoutManager(new LinearLayoutManager(getContext()));
+            mEventsFindListView.setAdapter(mClubEventsAdapter);
+        }
+        ((BaseActivity) getActivity()).setUpPurchseSuccessUI();
     }
 
     @Override
@@ -114,10 +113,12 @@ public class ClubEventsFragment extends BaseFragment {
     }
 
     private void getUpcomingEvents() {
-        int status = 2;
-        String mDateFilter = "((( Date >= " + ((BaseActivity) mActivity).getCurrentDate() + " ) OR ( Finish >= " + ((BaseActivity) mActivity).getCurrentDate()
-                + " )) AND (UserID=" + mPromotersResModel.getUserId() + ")) AND ( EventStatus =" + status + ")";
-        RetrofitClient.getRetrofitInstance().callGetEvents((BaseActivity) mActivity, mDateFilter, RetrofitClient.GET_EVENTS_RESPONSE);
+        int status = AppConstants.EVENT_STATUS;
+        if (mPromotersResModel != null && mPromotersResModel.getUserId() != 0) {
+            String mDateFilter = "((( Date >= " + ((BaseActivity) mActivity).getCurrentDate() + " ) OR ( Finish >= " + ((BaseActivity) mActivity).getCurrentDate()
+                    + " )) AND (UserID=" + mPromotersResModel.getUserId() + ")) AND ( EventStatus =" + status + ")";
+            RetrofitClient.getRetrofitInstance().callGetEvents((BaseActivity) mActivity, mDateFilter, RetrofitClient.GET_EVENTS_RESPONSE);
+        }
     }
 
     @Override
@@ -205,11 +206,24 @@ public class ClubEventsFragment extends BaseFragment {
             ArrayList<EventAddOnModel> mSelectedEventAddOn = MotoHub.getApplicationInstance().getPurchasedAddOn();
             if (mSelectedEventAddOn.size() > 0)
                 mClubEventsAdapter.callPostSelectedAddOns(mSelectedEventAddOn);
-            else
-                ((BaseActivity) getActivity()).showToast(getActivity(), getString(R.string.event_booked_successfully));
+            else {
+                if (mClubEventsAdapter.mEventType != null) {
+                    if (mClubEventsAdapter.mEventType.equals(AppConstants.FREE_EVENT)) {
+                        showToast(getActivity(), "Successfully booked an event.");
+                    } else {
+                        if (((BaseActivity) getActivity()).mPurchaseSuccessDialog != null)
+                            ((BaseActivity) getActivity()).mPurchaseSuccessDialog.show();
+                    }
+                }
+            }
 
         } else if (responseObj instanceof PurchasedAddOnModel) {
-            ((BaseActivity) getActivity()).showToast(getActivity(), getString(R.string.event_booked_successfully));
+            if (mClubEventsAdapter.mEventType.equals(AppConstants.FREE_EVENT)) {
+                showToast(getActivity(), "Successfully booked an event.");
+            } else {
+                if (((BaseActivity) getActivity()).mPurchaseSuccessDialog != null)
+                    ((BaseActivity) getActivity()).mPurchaseSuccessDialog.show();
+            }
 
         } else if (responseObj instanceof EventAnswersModel) {
             EventAnswersModel mEventAnswerList = (EventAnswersModel) responseObj;

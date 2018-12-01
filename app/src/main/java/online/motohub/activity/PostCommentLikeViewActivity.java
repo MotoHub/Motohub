@@ -22,7 +22,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
-import java.io.IOException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 
@@ -39,6 +38,7 @@ import online.motohub.adapter.FeedCommentsAdapter;
 import online.motohub.adapter.promoter.PostCommentLikeViewAdapter;
 import online.motohub.fcm.MyFireBaseMessagingService;
 import online.motohub.fragment.dialog.AppDialogFragment;
+import online.motohub.interfaces.SharePostInterface;
 import online.motohub.model.FeedCommentLikeModel;
 import online.motohub.model.FeedCommentModel;
 import online.motohub.model.FeedCommentReplyModel;
@@ -53,6 +53,7 @@ import online.motohub.model.SessionModel;
 import online.motohub.retrofit.RetrofitClient;
 import online.motohub.util.AppConstants;
 import online.motohub.util.CommonAPI;
+import online.motohub.util.DialogManager;
 import online.motohub.util.PreferenceUtils;
 import online.motohub.util.Utility;
 
@@ -100,6 +101,8 @@ public class PostCommentLikeViewActivity extends BaseActivity implements PostCom
 
     private int mCurrentPostPosition;
 
+    private String mShareTxt = "";
+
     private FeedShareModel mSharedFeed;
     private String mFilter;
     private FeedCommentsAdapter mFeedCommentsAdapter;
@@ -112,18 +115,24 @@ public class PostCommentLikeViewActivity extends BaseActivity implements PostCom
     private int mPostID;
     private String imgUrl = "";
 
+    SharePostInterface mShareTextWithPostInterface = new SharePostInterface() {
+        @Override
+        public void onSuccess (String shareMessage) {
+            mShareTxt = shareMessage;
+            CommonAPI.getInstance().callPostShare(PostCommentLikeViewActivity.this, mPostList.get(mCurrentPostPosition), mMyProfileResModel.getID());
+        }
+    };
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.notification_comment_like);
-
         ButterKnife.bind(this);
 
         initView();
 
     }
-
-    @Override
+    /*@Override
     protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
         mMyProfileResModel = (ProfileResModel) savedInstanceState
                 .getSerializable(ProfileModel.MY_PROFILE_RES_MODEL);
@@ -168,7 +177,7 @@ public class PostCommentLikeViewActivity extends BaseActivity implements PostCom
         outState.putSerializable(FeedCommentModel.COMMENT_LIST, mFeedCommentsList);
         outState.putSerializable(PostsModel.POST_LIST, mPostList);
         super.onSaveInstanceState(outState);
-    }
+    }*/
 
     private void initView() {
 
@@ -265,7 +274,8 @@ public class PostCommentLikeViewActivity extends BaseActivity implements PostCom
 
             case AppDialogFragment.BOTTOM_SHARE_DIALOG:
                 mCurrentPostPosition = position;
-                CommonAPI.getInstance().callPostShare(this, mPostList.get(getProfileCurrentPos()), mMyProfileResModel.getID());
+                DialogManager.showShareDialogWithCallback(this, mShareTextWithPostInterface);
+               // CommonAPI.getInstance().callPostShare(this, mPostList.get(getProfileCurrentPos()), mMyProfileResModel.getID());
                 break;
 
         }
@@ -411,7 +421,7 @@ public class PostCommentLikeViewActivity extends BaseActivity implements PostCom
             switch (responseType) {
                 case RetrofitClient.POST_SHARES:
                     mSharedFeed = mNewFeedShare.get(0);
-                    CommonAPI.getInstance().callAddSharedPost(this, mPostList.get(mCurrentPostPosition), mMyProfileResModel);
+                    CommonAPI.getInstance().callAddSharedPost(this, mPostList.get(mCurrentPostPosition), mMyProfileResModel, mShareTxt);
                     break;
 
             }
@@ -526,6 +536,7 @@ public class PostCommentLikeViewActivity extends BaseActivity implements PostCom
 
     @Override
     protected void onDestroy() {
+        DialogManager.hideProgress();
         super.onDestroy();
     }
 

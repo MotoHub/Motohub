@@ -65,26 +65,29 @@ public class VideoReplyLikeAdapter extends RecyclerView.Adapter<VideoReplyLikeAd
 
     @Override
     public void onBindViewHolder(final Holder mHolder, final int pos) {
-        VideoReplyLikeModel mEntity = mReplyLikesList.get(pos);
-        String imgStr = mEntity.getProfilesByProfileID().getProfilePicture();
-        if (!imgStr.isEmpty()) {
-            ((BaseActivity)mContext).setImageWithGlide(mHolder.mUserImg,imgStr, R.drawable.default_profile_icon);
-        } else {
-            mHolder.mUserImg.setImageResource(R.drawable.default_profile_icon);
-        }
-        mHolder.mCommentImgLay.setTag(pos);
-        mHolder.mCommentImgLay.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                profileClick(mReplyLikesList.get(pos));
+        try {
+            VideoReplyLikeModel mEntity = mReplyLikesList.get(pos);
+            String imgStr = mEntity.getProfilesByProfileID().getProfilePicture();
+            if (!imgStr.isEmpty()) {
+                ((BaseActivity) mContext).setImageWithGlide(mHolder.mUserImg, imgStr, R.drawable.default_profile_icon);
+            } else {
+                mHolder.mUserImg.setImageResource(R.drawable.default_profile_icon);
             }
-        });
+            mHolder.mCommentImgLay.setTag(pos);
+            mHolder.mCommentImgLay.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    profileClick(mReplyLikesList.get(pos));
+                }
+            });
 
-        if (mEntity.getProfilesByProfileID().getProfileType() == Integer.parseInt(SPECTATOR)) {
-            mHolder.mUserNameTxt.setText(mEntity.getProfilesByProfileID().getSpectatorName());
-        }
-        else {
-            mHolder.mUserNameTxt.setText(mEntity.getProfilesByProfileID().getDriver());
+            if (mEntity.getProfilesByProfileID().getProfileType() == Integer.parseInt(SPECTATOR)) {
+                mHolder.mUserNameTxt.setText(mEntity.getProfilesByProfileID().getSpectatorName());
+            } else {
+                mHolder.mUserNameTxt.setText(mEntity.getProfilesByProfileID().getDriver());
+            }
+        }catch (Exception e){
+            e.printStackTrace();
         }
     }
 

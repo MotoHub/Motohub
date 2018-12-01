@@ -20,7 +20,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
@@ -100,6 +99,12 @@ public class PickerImageActivity extends BaseActivity {
         mImgUriList = new ArrayList<>();
         mFolderList = new ArrayList<>();
         new GetImageFolders().execute();
+    }
+
+    @Override
+    protected void onDestroy() {
+        DialogManager.hideProgress();
+        super.onDestroy();
     }
 
     @OnClick({R.id.cancel_btn, R.id.select_btn, R.id.toolbar_back_img_btn})
@@ -211,6 +216,7 @@ public class PickerImageActivity extends BaseActivity {
                 mAdapter.setGalleryType(GalleryPickerAdapter.IMAGE_FOLDER_TYPE);
                 mAdapter.setOnItemClickListener(mImageFileCallback);
                 mImgListView.setAdapter(mAdapter);
+                mAdapter.notifyDataSetChanged();
             } else {
                 mLayoutManager.setSpanCount(3);
                 mAdapter.setImgList(mImgUriList);
@@ -415,7 +421,7 @@ public class PickerImageActivity extends BaseActivity {
 
     }
 
-    private boolean isPermissionAdded() {
+    public boolean isPermissionAdded() {
         boolean addPermission = true;
         if (android.os.Build.VERSION.SDK_INT >= 23) {
             int readStoragePermission = ContextCompat.checkSelfPermission(this, android.Manifest.permission.READ_EXTERNAL_STORAGE);

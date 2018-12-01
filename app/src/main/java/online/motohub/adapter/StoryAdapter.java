@@ -17,7 +17,6 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import online.motohub.R;
 import online.motohub.activity.BaseActivity;
 import online.motohub.activity.StorySettingActivity;
-import online.motohub.model.ProfileModel;
 import online.motohub.model.ProfileResModel;
 import online.motohub.util.Utility;
 
@@ -44,13 +43,17 @@ public class StoryAdapter extends RecyclerView.Adapter<StoryAdapter.StoryHolder>
 
     @Override
     public void onBindViewHolder(StoryAdapter.StoryHolder holder, int position) {
-        ProfileResModel mModel = mProfileList.get(position);
-        ((BaseActivity) mContext).setImageWithGlide(holder.mUserImage, mModel.getProfilePicture(), R.drawable.default_profile_icon);
-        holder.mUserName.setText(Utility.getInstance().getUserName(mModel));
-        if (mModel.isSelected())
-            ((BaseActivity) mContext).setImageWithGlide(holder.mCheckBox, android.R.drawable.checkbox_on_background);
-        else
-            ((BaseActivity) mContext).setImageWithGlide(holder.mCheckBox, android.R.drawable.checkbox_off_background);
+        try {
+            ProfileResModel mModel = mProfileList.get(position);
+            ((BaseActivity) mContext).setImageWithGlide(holder.mUserImage, mModel.getProfilePicture(), R.drawable.default_profile_icon);
+            holder.mUserName.setText(Utility.getInstance().getUserName(mModel));
+            if (mModel.isSelected())
+                ((BaseActivity) mContext).setImageWithGlide(holder.mCheckBox, android.R.drawable.checkbox_on_background);
+            else
+                ((BaseActivity) mContext).setImageWithGlide(holder.mCheckBox, android.R.drawable.checkbox_off_background);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     @Override

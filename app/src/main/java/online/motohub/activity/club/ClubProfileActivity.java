@@ -1,74 +1,46 @@
 package online.motohub.activity.club;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
-import android.media.ThumbnailUtils;
-import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Environment;
-import android.provider.MediaStore;
-
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.view.ViewPager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.text.TextUtils;
-
 import android.view.View;
-import android.widget.EditText;
-import android.widget.FrameLayout;
-import android.widget.ImageButton;
+import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.model.GlideUrl;
 import com.bumptech.glide.load.model.LazyHeaders;
 import com.bumptech.glide.request.RequestOptions;
-import com.google.android.flexbox.FlexDirection;
-import com.google.android.flexbox.FlexWrap;
-import com.google.android.flexbox.FlexboxLayoutManager;
-import com.google.android.flexbox.JustifyContent;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.yovenny.videocompress.MediaController;
 
-import java.io.File;
+import org.greenrobot.eventbus.EventBus;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.ArrayList;
-
-import java.util.List;
 
 import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import de.hdodenhof.circleimageview.CircleImageView;
-import okhttp3.MediaType;
-import okhttp3.MultipartBody;
-import okhttp3.RequestBody;
 import online.motohub.R;
 import online.motohub.activity.BaseActivity;
-import online.motohub.activity.PickerImageActivity;
 import online.motohub.activity.UpgradeProfileActivity;
+import online.motohub.activity.WritePostActivity;
 import online.motohub.adapter.EventsFindAdapter;
-import online.motohub.adapter.TaggedProfilesAdapter;
 import online.motohub.adapter.club.ClubPostsAdapter;
 import online.motohub.adapter.club.ClubViewPagerAdapter;
-import online.motohub.database.DatabaseHandler;
+import online.motohub.application.MotoHub;
 import online.motohub.fragment.BaseFragment;
 import online.motohub.fragment.club.ClubHomeFragment;
+import online.motohub.fragment.club.ClubSubscribedUsersFragment;
+import online.motohub.fragment.club.ClubVideosFragment;
 import online.motohub.fragment.dialog.AppDialogFragment;
-import online.motohub.model.ClubGroupModel;
 import online.motohub.model.EventAnswersModel;
 import online.motohub.model.EventsModel;
 import online.motohub.model.EventsWhoIsGoingModel;
@@ -76,7 +48,7 @@ import online.motohub.model.FeedLikesModel;
 import online.motohub.model.FeedShareModel;
 import online.motohub.model.GalleryImgModel;
 import online.motohub.model.GalleryVideoModel;
-import online.motohub.model.ImageModel;
+import online.motohub.model.NotificationBlockedUsersModel;
 import online.motohub.model.PaymentModel;
 import online.motohub.model.PostsModel;
 import online.motohub.model.ProfileModel;
@@ -89,22 +61,19 @@ import online.motohub.model.SessionModel;
 import online.motohub.model.promoter_club_news_media.PromoterFollowerModel;
 import online.motohub.model.promoter_club_news_media.PromoterFollowerResModel;
 import online.motohub.model.promoter_club_news_media.PromoterSubs;
-import online.motohub.model.promoter_club_news_media.PromotersModel;
 import online.motohub.model.promoter_club_news_media.PromotersResModel;
 import online.motohub.retrofit.RetrofitClient;
 import online.motohub.util.AppConstants;
 import online.motohub.util.CommonAPI;
 import online.motohub.util.DialogManager;
 import online.motohub.util.PreferenceUtils;
-import online.motohub.util.UploadFileService;
 import online.motohub.util.UrlUtils;
-import online.motohub.util.Utility;
 
-public class ClubProfileActivity extends BaseActivity implements TabLayout.OnTabSelectedListener, ClubPostsAdapter.TotalRetrofitPostsResultCount, TaggedProfilesAdapter.TaggedProfilesSizeInterface {
+public class ClubProfileActivity extends BaseActivity implements TabLayout.OnTabSelectedListener, ClubPostsAdapter.TotalRetrofitPostsResultCount {
 
     public static final String EXTRA_RESULT_DATA = "activity_video_picker_uri";
-    private final int SUBSCRIPTION_EXPIRED = 0;
     private final int SUBSCRIPTION_PURCHASED = 1;
+    private final int UNSUBSCRIPTION_STATUS = 0;
     @BindView(R.id.promoterCoLayout)
     CoordinatorLayout mCoordinatorLayout;
     @BindView(R.id.view_pager)
@@ -123,30 +92,16 @@ public class ClubProfileActivity extends BaseActivity implements TabLayout.OnTab
     TextView mFollowersCountTv;
     @BindView(R.id.view_pager_tab_layout)
     TabLayout mViewPagerTabLayout;
-    @BindView(R.id.write_post_et)
-    EditText mWritePostEt;
-    @BindView(R.id.close_layout)
-    FrameLayout mPostImgVideoCloseBtnLayout;
-    @BindView(R.id.post_picture_img_view)
-    ImageView mPostPicImgView;
-    @BindView(R.id.play)
-    ImageView mPlayIconImgView;
-    @BindView(R.id.imageframe)
-    RelativeLayout mPostImgVideoLayout;
-    @BindView(R.id.tag_profiles_recycler_view)
-    RecyclerView mTagProfilesRecyclerView;
     @BindString(R.string.internet_failure)
     String mInternetFailed;
     @BindString(R.string.no_clubs_err)
     String mNoClubsFoundErr;
-    @BindView(R.id.write_post_card)
-    RelativeLayout mWritePostCard;
-    @BindView(R.id.writePostSeparator)
-    View mWritePostSeparator;
-    @BindView(R.id.tag_profile_img)
-    ImageButton mTagFollowersImgBtn;
     @BindView(R.id.subscribeBtn)
     TextView mSubscribeBtn;
+    @BindView(R.id.writePostBtn)
+    Button mWritePostBtn;
+    @BindView(R.id.writePostSeparator)
+    View mWritePostSeparator;
     @BindString(R.string.post_success)
     String mPostSuccess;
     @BindString(R.string.tag_err)
@@ -154,16 +109,16 @@ public class ClubProfileActivity extends BaseActivity implements TabLayout.OnTab
     private ClubViewPagerAdapter mViewPagerAdapter;
     private PromotersResModel mPromotersResModel;
     private ProfileResModel mMyProfileResModel;
-    private String mVideoPathUri, mPostImgUri;
-    private int mClubGroupID;
-    private ArrayList<ProfileResModel> mFollowingListData = new ArrayList<>();
-    private ArrayList<ProfileResModel> mTaggedProfilesList = new ArrayList<>();
-    private TaggedProfilesAdapter mTaggedProfilesAdapter;
-    private boolean isSubscribed;
     private String mSubscriptionId = "";
-    private PromotersFollowers1.Resource mPromoterFollowers1;
-    private PromotersFollowers1.Meta meta;
+    private boolean isUpgradeToSubscription = false;
+
+    private PromotersFollowers1.Meta meta = new PromotersFollowers1.Meta();
+    private int mDeleteSubscribeID;
+
+    private String mSubscriptionType = "";
     private int followCount;
+    private int pagerPosition;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -173,29 +128,32 @@ public class ClubProfileActivity extends BaseActivity implements TabLayout.OnTab
         initView();
     }
 
+
     @Override
     protected void onResume() {
         super.onResume();
-        //callGetClubSubscription();
     }
 
     private void initView() {
         Bundle mBundle = getIntent().getExtras();
-        FlexboxLayoutManager mFlexBoxLayoutManager = new FlexboxLayoutManager(this);
-        mFlexBoxLayoutManager.setFlexWrap(FlexWrap.WRAP);
-        mFlexBoxLayoutManager.setFlexDirection(FlexDirection.ROW);
-        mFlexBoxLayoutManager.setJustifyContent(JustifyContent.FLEX_START);
-        mTagProfilesRecyclerView.setLayoutManager(mFlexBoxLayoutManager);
 
-        mTaggedProfilesAdapter = new TaggedProfilesAdapter(mTaggedProfilesList, this);
-        mTagProfilesRecyclerView.setAdapter(mTaggedProfilesAdapter);
+        mSubscribeBtn.setVisibility(View.VISIBLE);
 
-        if (mBundle != null) {
+
+        /*if (mBundle != null) {
             mMyProfileResModel = (ProfileResModel) getIntent().getSerializableExtra(ProfileModel.MY_PROFILE_RES_MODEL);
             mPromotersResModel = (PromotersResModel) mBundle.get(PromotersModel.PROMOTERS_RES_MODEL);
             callGetClubsPromoters();
-        }
-        setUpPurchseUI(mPromotersResModel.getSubscription_fee());
+        }*/
+        /*mMyProfileResModel = MotoHub.getApplicationInstance().getmProfileResModel();
+        mPromotersResModel = MotoHub.getApplicationInstance().getmPromoterResModel();*/
+        mMyProfileResModel = EventBus.getDefault().getStickyEvent(ProfileResModel.class);
+        mPromotersResModel = EventBus.getDefault().getStickyEvent(PromotersResModel.class);
+        callGetClubsPromoters();
+
+        //if(mPromotersResModel.getSubscription_fee() > 0)
+        setUpPurchseUI(mPromotersResModel.getSubscription_fee(), mMyProfileResModel.getID());
+        setUpPurchseSuccessUI();
     }
 
     private void callCheckFollow() {
@@ -205,22 +163,21 @@ public class ClubProfileActivity extends BaseActivity implements TabLayout.OnTab
 
     private void callGetClubSubscription() {
         String mFilter = "(PromoterID=" + mPromotersResModel.getUserId() + ") AND (" + "ProfileID=" + mMyProfileResModel.getID() + ")";
-        RetrofitClient.getRetrofitInstance().callGetPromoterSubs(this, mFilter, RetrofitClient.CALL_GET_PROMOTER_SUBS);
+        RetrofitClient.getRetrofitInstance().GetPromoterSubs(this, mFilter, RetrofitClient.CALL_GET_PROMOTER_SUBS);
     }
 
     private void callGetClubsPromoters() {
-        /*String mFilter = "id=" + mPromotersResModel.getID();
-        RetrofitClient.getRetrofitInstance().callGetPromoters(this, mFilter, RetrofitClient.GET_PROMOTERS_RESPONSE);*/
         String mFilter = "PromoterUserID=" + mPromotersResModel.getUserId();
         RetrofitClient.getRetrofitInstance().callGetPromotersFollowers(this, mFilter, RetrofitClient.GET_PROMOTERS_RESPONSE);
     }
+
 
     private void setProfile() {
         try {
             mViewPagerAdapter = new ClubViewPagerAdapter(getSupportFragmentManager(), this, mPromotersResModel, mMyProfileResModel);
             mViewPager.setAdapter(mViewPagerAdapter);
             mViewPagerTabLayout.setupWithViewPager(mViewPager);
-            mViewPager.setOffscreenPageLimit(4);
+            mViewPager.setOffscreenPageLimit(5);
             mViewPagerTabLayout.addOnTabSelectedListener(this);
             if (mPromotersResModel != null) {
                 setToolbar(mToolbar, mPromotersResModel.getName());
@@ -242,52 +199,18 @@ public class ClubProfileActivity extends BaseActivity implements TabLayout.OnTab
                 }
                 setToolbar(mToolbar, mPromotersResModel.getName());
                 mClubNameTv.setText(mPromotersResModel.getName());
-                List<PromoterFollowerResModel> mPromoterFollowerResModelList =
-                        mPromotersResModel.getPromoterFollowerByPromoterUserID();
                 PromoterFollowerResModel mPromoterFollowerResModel = new PromoterFollowerResModel();
                 mPromoterFollowerResModel.setProfileID(mMyProfileResModel.getID());
 
-               /* if (isAlreadyFollowed()) {
-                    mPromotersResModel.setIsFollowing(true);
-                }
-                if (mPromotersResModel.getIsFollowing()) {
-                    mFollowBtn.setBackgroundResource(R.drawable.black_orange_btn_bg);
-                    mFollowBtn.setText(R.string.following);
-                }
-                mFollowersCountTv.setText(String.valueOf(mPromoterFollowerResModelList.size()));*/
+                isAlreadyFollowed();
+
+                callGetClubSubscription();
 
                 if (meta != null) {
                     followCount = meta.getCount();
                     mFollowersCountTv.setText(String.valueOf(followCount));
                 }
 
-                ArrayList<ClubGroupModel> mClubGroupList = mPromotersResModel.getClubGroupByClubUserID();
-
-                for (int i = 0; i < mClubGroupList.size(); i++) {
-                    if (String.valueOf(mClubGroupList.get(i).getMemberProfileID()).trim().equals(String.valueOf(mMyProfileResModel.getID()).trim())) {
-                        mClubGroupID = mClubGroupList.get(i).getID();
-                        if (mClubGroupList.get(i).getStatus() == 1) {
-                            isSubscribed = false;
-                            mSubscribeBtn.setText(getString(R.string.pending));
-                            mSubscribeBtn.setEnabled(false);
-                            mWritePostCard.setVisibility(View.GONE);
-                        } else if (mClubGroupList.get(i).getStatus() == 2) {
-                            isSubscribed = true;
-                            mSubscribeBtn.setText(getString(R.string.un_subscribe));
-                            mWritePostCard.setVisibility(View.VISIBLE);
-                        } else if (mClubGroupList.get(i).getStatus() == 3) {
-                            isSubscribed = false;
-                            mSubscribeBtn.setText(getString(R.string.Subscribe));
-                            mWritePostCard.setVisibility(View.GONE);
-                        }
-                        break;
-                    } else {
-                        isSubscribed = false;
-                        mSubscribeBtn.setText(getString(R.string.Subscribe));
-                        mWritePostCard.setVisibility(View.GONE);
-                    }
-                }
-                // QueryItemDetails();
             }
             callCheckFollow();
         } catch (Exception e) {
@@ -296,252 +219,70 @@ public class ClubProfileActivity extends BaseActivity implements TabLayout.OnTab
     }
 
 
-    private boolean isAlreadyFollowed() {
+    private void isAlreadyFollowed() {
         String mFollowRelation = mMyProfileResModel.getID() + "_" + mPromotersResModel.getUserId();
-        ArrayList<PromoterFollowerResModel> mPromoterFollowerResModelList = mPromotersResModel.getPromoterFollowerByPromoterUserID();
-        for (int i = 0; i < mPromoterFollowerResModelList.size(); i++) {
-            if (mPromoterFollowerResModelList.get(i).getFollowRelation().trim().equals(mFollowRelation)) {
-                return true;
-            }
-        }
-        return false;
+        RetrofitClient.getRetrofitInstance().callGetIsAlreadyFollowedPromoter(this, mFollowRelation, RetrofitClient.PROMOTER_IS_ALREADY_FOLLOWED);
     }
 
-
-    @OnClick({R.id.toolbar_back_img_btn, R.id.followBtn, R.id.subscribeBtn, R.id.post_btn, R.id.add_post_img, R.id.add_post_video, R.id.remove_post_img_btn, R.id.imageframe, R.id.tag_profile_img, R.id.cover_photo_img_view})
+    @OnClick({R.id.toolbar_back_img_btn, R.id.followBtn, R.id.subscribeBtn, R.id.cover_photo_img_view, R.id.writePostBtn})
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.toolbar_back_img_btn:
+                hideSoftKeyboard(this);
                 finish();
                 break;
             case R.id.subscribeBtn:
                 String mSubsStr = mSubscribeBtn.getText().toString();
-                if (mPurchaseDialog != null && mSubsStr.equals(getString(R.string.Subscribe)))
-                    mPurchaseDialog.show();
-                else
+                if (mPurchaseDialog != null && mSubsStr.equals(getString(R.string.Subscribe))) {
+                    if (mPromotersResModel.getSubscriptionStatus() == 0 || mPromotersResModel.getSubscription_planID().isEmpty())
+                        showToast(this, getString(R.string.subscribe_err));
+                    else if (mPromotersResModel.getSubscriptionStatus() == 1 && mPromotersResModel.getSubscription_fee() == 0) {
+                        mSubscriptionType = AppConstants.FREE_SUBSCRIPTION;
+                        apiCallForSubscription("");
+                    } else {
+                        mPurchaseDialog.show();
+                    }
+                } else if (mSubsStr.equals(getString(R.string.un_subscribe))) {
                     apiCallForUnSubscription();
-                break;
-            case R.id.followBtn:
-                if (!mPromotersResModel.getIsFollowing()) {
-                    CommonAPI.getInstance().callFollowPromoter(this, mPromotersResModel.getUserId(), mMyProfileResModel.getID());
-                } else {
-                    showProfileViewDialog();
+                } else if (mSubsStr.equals(getString(R.string.upgrade))) {
+                    mPurchaseDialog.show();
                 }
                 break;
-            case R.id.post_btn:
-                /*try {
-                    if (mVideoPathUri != null) {
-                        File videoFile = copiedVideoFile(Uri.fromFile(new File(mVideoPathUri)),
-                                GALLERY_VIDEO_NAME_TYPE);
-                        String mPath = String.valueOf(videoFile);
-                        new VideoCompressor().execute(mPath, getCompressedVideoPath());
-                    } else if (mPostImgUri != null) {
-                        uploadPicture(mPostImgUri);
+            case R.id.followBtn:
+                try {
+                    if (!mPromotersResModel.getIsFollowing()) {
+                        CommonAPI.getInstance().callFollowPromoter(this, mPromotersResModel.getUserId(), mMyProfileResModel.getID());
                     } else {
-                        profilePostContent("");
+                        showProfileViewDialog();
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
-                }*/
-                break;
-            case R.id.add_post_img:
-                // showAppDialog(AppDialogFragment.BOTTOM_ADD_IMG_DIALOG, null);
-                break;
-            case R.id.add_post_video:
-                //showAppDialog(AppDialogFragment.BOTTOM_ADD_VIDEO_DIALOG, null);
-                break;
-            case R.id.remove_post_img_btn:
-                mPostImgUri = null;
-                mVideoPathUri = null;
-                mPostPicImgView.setImageDrawable(null);
-                mPostImgVideoCloseBtnLayout.setVisibility(View.GONE);
-                mPostImgVideoLayout.setVisibility(View.GONE);
-                mPostPicImgView.setVisibility(View.GONE);
-                break;
-            case R.id.imageframe:
-                if (mVideoPathUri != null) {
-                    moveLoadVideoPreviewScreen(this, mVideoPathUri);
                 }
                 break;
-            case R.id.tag_profile_img:
-               /* if (mFollowingListData.size() > 0) {
-                    launchTagFollowersProfileDialog();
-                } else {
-                    getFollowingProfileList();
-                }*/
-                break;
-
             case R.id.cover_photo_img_view:
                 if (!mPromotersResModel.getCoverImage().trim().isEmpty()) {
-                    moveLoadImageScreen(this, mPromotersResModel.getCoverImage().trim());
+                    moveLoadImageScreen(this, UrlUtils.FILE_URL + mPromotersResModel.getCoverImage().trim());
                 }
+                break;
+            case R.id.writePostBtn:
+                /*Gson mGson = new Gson();
+                String mProfile = mGson.toJson(mMyProfileResModel);*/
+                //MotoHub.getApplicationInstance().setmProfileResModel(mMyProfileResModel);
+                EventBus.getDefault().postSticky(mMyProfileResModel);
+                startActivityForResult(new Intent(ClubProfileActivity.this, WritePostActivity.class)
+                        /*.putExtra(AppConstants.MY_PROFILE_OBJ, mProfile)*/
+                        .putExtra(AppConstants.IS_NEWSFEED_POST, false)
+                        .putExtra(AppConstants.USER_TYPE, "club_user").putExtra(AppConstants.TO_SUBSCRIBED_USER_ID, mPromotersResModel.getUserId()), AppConstants.WRITE_POST_REQUEST);
                 break;
         }
     }
 
-    private void showUnSubsAlert() {
-        showToast(this, "You have to go playstore for unsubscribtion");
-    }
-
-    private void startUploadVideoService() {
-        try {
-            Bitmap thumb = ThumbnailUtils.createVideoThumbnail(mVideoPathUri,
-                    MediaStore.Images.Thumbnails.MINI_KIND);
-            File imageFile = compressedImgFromBitmap(thumb);
-            String postText;
-            if (mWritePostEt.getText().toString().isEmpty() || mWritePostEt.getText().toString().equals("")) {
-                postText = "";
-            } else {
-                postText = mWritePostEt.getText().toString();
-            }
-            DatabaseHandler databaseHandler = new DatabaseHandler(this);
-            int count = databaseHandler.getPendingCount();
-            String destFilePath = Environment.getExternalStorageDirectory().getPath()
-                    + getString(R.string.util_app_folder_root_path);
-            Intent service_intent = new Intent(this, UploadFileService.class);
-            service_intent.putExtra("videofile", mCompressedVideoPath);
-            service_intent.putExtra("imagefile", String.valueOf(imageFile));
-            service_intent.putExtra("posttext", postText);
-            service_intent.putExtra("profileid", mMyProfileResModel.getID());
-            service_intent.putExtra("dest_file", destFilePath);
-            service_intent.putExtra("running", count + 1);
-            service_intent.putExtra("flag", 1);
-            service_intent.putExtra("usertype", "club_user");
-            service_intent.setAction("UploadService");
-
-            if (mTaggedProfilesList.size() == 0) {
-                service_intent.putExtra(PostsModel.TAGGED_PROFILE_ID, "");
-            } else {
-                StringBuilder mTaggedProfileID = new StringBuilder();
-                for (ProfileResModel mProfileResModel : mTaggedProfilesList) {
-                    mTaggedProfileID.append(mProfileResModel.getID()).append(",");
-                }
-                mTaggedProfileID.deleteCharAt(mTaggedProfileID.length() - 1);
-                service_intent.putExtra(PostsModel.TAGGED_PROFILE_ID, mTaggedProfileID.toString());
-            }
-
-            startService(service_intent);
-            mCompressedVideoPath = "";
-            mVideoPathUri = null;
-            mPostImgUri = null;
-            mWritePostEt.setText("");
-            mPostPicImgView.setImageDrawable(null);
-            mPostPicImgView.setVisibility(View.GONE);
-            mPostImgVideoLayout.setVisibility(View.GONE);
-            mPostImgVideoCloseBtnLayout.setVisibility(View.GONE);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void launchTagFollowersProfileDialog() {
-
-        DialogFragment mDialogFragment = (DialogFragment) getSupportFragmentManager().findFragmentByTag(AppDialogFragment.TAG);
-        if (mDialogFragment != null && mDialogFragment.isAdded()) {
-            getSupportFragmentManager().beginTransaction().remove(mDialogFragment).commit();
-        }
-
-        AppDialogFragment.newInstance(AppDialogFragment.TAG_FOLLOWING_PROFILE_DIALOG, mFollowingListData, null)
-                .show(getSupportFragmentManager(), AppDialogFragment.TAG);
-
-    }
-
-    private void getFollowingProfileList() {
-        String mMyFollowingsID = Utility.getInstance().getMyFollowersFollowingsID(mMyProfileResModel.getFollowprofile_by_ProfileID(), false);
-        if (mMyFollowingsID.isEmpty()) {
-            showSnackBar(mCoordinatorLayout, mTagErr);
-            return;
-        }
-        ArrayList<ClubGroupModel> mClubGroupList = mPromotersResModel.getClubGroupByClubUserID();
-        StringBuilder mClubMembersID = new StringBuilder();
-        String mClubGroupMembers = "";
-        if (mClubGroupList != null && !mClubGroupList.isEmpty()) {
-            for (int i = 0; i < mClubGroupList.size(); i++) {
-                if (mClubGroupList.get(i).getMemberProfileID() == mMyProfileResModel.getID())
-                    continue;
-                mClubMembersID.append(mClubGroupList.get(i).getMemberProfileID()).append(",");
-            }
-            mClubMembersID.deleteCharAt(mClubMembersID.length() - 1);
-            mClubGroupMembers = String.valueOf(mClubMembersID);
-        }
-
-        String mBlockedUsers = Utility.getInstance().getMyBlockedUsersID(mMyProfileResModel.getBlockedUserProfilesByProfileID(),
-                mMyProfileResModel.getBlockeduserprofiles_by_BlockedProfileID());
-
-        String mFilter = "id IN (" + mMyFollowingsID + ")";
-        if (!mBlockedUsers.trim().isEmpty()) {
-            mFilter = "(" + mFilter + ") AND ( id NOT IN (" + mBlockedUsers + "))";
-        }
-        if (!mClubGroupMembers.trim().isEmpty()) {
-            mFilter = "(" + mFilter + ") OR ( id IN (" + mClubGroupMembers + "))";
-        }
-        RetrofitClient.getRetrofitInstance().callGetProfiles(this, mFilter, RetrofitClient.GET_FOLLOWING_PROFILE_RESPONSE);
-    }
-
-
-   /* private void postUnSubscribeRequestToClub() {
-        String mFilter = "(" + ClubGroupModel.MEMBER_PROFILE_ID + "=" + mMyProfileResModel.getID() + ") AND (" + ClubGroupModel.CLUB_USER_ID + "=" + mPromotersResModel.getUserId() + ")";
-        RetrofitClient.getRetrofitInstance().callUnSubScribeClub(this, mFilter, RetrofitClient.DELETE_UNSUBSCRIBE_CLUB);
-    }*/
 
     private void callUnFollowPromoterRequest() {
         String mFilter =
                 "FollowRelation=" + mMyProfileResModel.getID() + "_" + mPromotersResModel.getUserId();
         RetrofitClient.getRetrofitInstance().callUnFollowPromoter(this,
                 mFilter, RetrofitClient.GET_PROMOTER_UN_FOLLOW_RESPONSE);
-    }
-
-    private void uploadPicture(String imgUri) {
-        File mFile = new File(Uri.parse(imgUri).getPath());
-        RequestBody requestBody = RequestBody.create(MediaType.parse("*/*"), mFile);
-        MultipartBody.Part filePart = MultipartBody.Part.createFormData("files", mFile.getName(), requestBody);
-        RetrofitClient.getRetrofitInstance().callUploadProfilePostImg(this, filePart, RetrofitClient.UPLOAD_IMAGE_FILE_RESPONSE);
-    }
-
-    private void profilePostContent(String postImgFilePath) {
-
-        try {
-
-            String mWritePostStr = mWritePostEt.getText().toString().trim();
-
-            if (TextUtils.isEmpty(postImgFilePath) && TextUtils.isEmpty(mWritePostStr)) {
-                return;
-            }
-
-            int mUserId = PreferenceUtils.getInstance(this).getIntData(PreferenceUtils.USER_ID);
-
-            JsonObject mJsonObject = new JsonObject();
-            mJsonObject.addProperty(PostsModel.POST_TEXT, URLEncoder.encode(mWritePostStr, "UTF-8"));
-
-            String mPostPic = "[\"" + postImgFilePath + "\"]";
-
-            mJsonObject.addProperty(PostsModel.POST_PICTURE, mPostPic);
-            mJsonObject.addProperty(PostsModel.PROFILE_ID, mMyProfileResModel.getID());
-            // mJsonObject.addProperty(PostsModel.WHO_POSTED_PROFILE_ID, mMyProfileResModel.getID());
-            mJsonObject.addProperty(PostsModel.WHO_POSTED_PROFILE_ID, mUserId);
-            mJsonObject.addProperty(PostsModel.WHO_POSTED_USER_ID, mUserId);
-            mJsonObject.addProperty(PostsModel.IS_NEWS_FEED_POST, false);
-            mJsonObject.addProperty(PostsModel.USER_TYPE, mPromotersResModel.getUserType());
-            if (mTaggedProfilesList.size() == 0) {
-                mJsonObject.addProperty(PostsModel.TAGGED_PROFILE_ID, "");
-            } else {
-                StringBuilder mTaggedProfileID = new StringBuilder();
-                for (ProfileResModel mProfileResModel : mTaggedProfilesList) {
-                    mTaggedProfileID.append(mProfileResModel.getID()).append(",");
-                }
-                mTaggedProfileID.deleteCharAt(mTaggedProfileID.length() - 1);
-                mJsonObject.addProperty(PostsModel.TAGGED_PROFILE_ID, mTaggedProfileID.toString());
-            }
-
-            JsonArray mJsonArray = new JsonArray();
-            mJsonArray.add(mJsonObject);
-
-            RetrofitClient.getRetrofitInstance().callCreateProfilePosts(this, mJsonArray, RetrofitClient.CREATE_PROFILE_POSTS_RESPONSE);
-
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
     }
 
     private void showProfileViewDialog() {
@@ -565,7 +306,6 @@ public class ClubProfileActivity extends BaseActivity implements TabLayout.OnTab
 
     @Override
     public void onTabReselected(TabLayout.Tab tab) {
-
     }
 
     @Override
@@ -576,86 +316,46 @@ public class ClubProfileActivity extends BaseActivity implements TabLayout.OnTab
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        (mViewPagerAdapter.getItem(mViewPagerTabLayout.getSelectedTabPosition()))
-                .onActivityResult(requestCode, resultCode, data);
+        //super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
                 case AppConstants.FOLLOWERS_FOLLOWING_RESULT:
-                    ProfileResModel mMyProfileResModel = (ProfileResModel) data.getExtras()
-                            .get(ProfileModel.MY_PROFILE_RES_MODEL);
+                    //ProfileResModel mMyProfileResModel = (ProfileResModel) Objects.requireNonNull(data.getExtras()).get(ProfileModel.MY_PROFILE_RES_MODEL);
+                    //ProfileResModel mMyProfileResModel = MotoHub.getApplicationInstance().getmProfileResModel();
+                    ProfileResModel mMyProfileResModel = EventBus.getDefault().getStickyEvent(ProfileResModel.class);
                     assert mMyProfileResModel != null;
                     this.mMyProfileResModel = mMyProfileResModel;
+                    /*MotoHub.getApplicationInstance().setmProfileResModel(this.mMyProfileResModel);
+                    MotoHub.getApplicationInstance().setmPromoterResModel(mPromotersResModel);*/
+                    EventBus.getDefault().postSticky(this.mMyProfileResModel);
+                    EventBus.getDefault().postSticky(mPromotersResModel);
                     setResult(RESULT_OK, new Intent()
-                            .putExtra(ProfileModel.MY_PROFILE_RES_MODEL, this.mMyProfileResModel)
-                            .putExtra(PromotersModel.PROMOTERS_RES_MODEL, mPromotersResModel));
-                    break;
-                case CAMERA_CAPTURE_REQ:
-                    Uri mCameraPicUri = getImgResultUri(data);
-                    if (mCameraPicUri != null) {
-                        try {
-                            File mPostImgFile = compressedImgFile(mCameraPicUri,
-                                    POST_IMAGE_NAME_TYPE, "");
-                            mPostImgUri = Uri.fromFile(mPostImgFile).toString();
-                            setImageWithGlide(mPostPicImgView, Uri.parse(mPostImgUri));
-                            mPostImgVideoCloseBtnLayout.setVisibility(View.VISIBLE);
-                            mPlayIconImgView.setVisibility(View.GONE);
-                            mPostPicImgView.setVisibility(View.VISIBLE);
-                            mPostImgVideoLayout.setVisibility(View.VISIBLE);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                            showSnackBar(mCoordinatorLayout, e.getMessage());
-                        }
-                    } else {
-                        showSnackBar(mCoordinatorLayout, getString(R.string.file_not_found));
-                    }
-                    break;
-                case GALLERY_PIC_REQ:
-                    assert data.getExtras() != null;
-                    Uri mSelectedImgFileUri = (Uri) data.getExtras()
-                            .get(PickerImageActivity.EXTRA_RESULT_DATA);
-                    if (mSelectedImgFileUri != null) {
-                        try {
-                            File mPostImgFile = compressedImgFile(mSelectedImgFileUri,
-                                    POST_IMAGE_NAME_TYPE, "");
-                            mPostImgUri = Uri.fromFile(mPostImgFile).toString();
-                            setImageWithGlide(mPostPicImgView, Uri.parse(mPostImgUri));
-                            mPostImgVideoCloseBtnLayout.setVisibility(View.VISIBLE);
-                            mPlayIconImgView.setVisibility(View.GONE);
-                            mPostPicImgView.setVisibility(View.VISIBLE);
-                            mPostImgVideoLayout.setVisibility(View.VISIBLE);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                            showSnackBar(mCoordinatorLayout, e.getMessage());
-                        }
-                    } else {
-                        showSnackBar(mCoordinatorLayout, getString(R.string.file_not_found));
-                    }
-                    break;
-                case ACTION_TAKE_VIDEO:
-                    Uri videoUri = data.getData();
-                    if (videoUri != null) {
-                        mVideoPathUri = getRealPathFromURI(videoUri);
-                        setVideoPost();
-                    } else {
-                        showSnackBar(mCoordinatorLayout, getString(R.string.file_not_found));
-                    }
-                    break;
-                case GALLERY_VIDEO_REQ:
-                    mVideoPathUri = data.getStringExtra(EXTRA_RESULT_DATA);
-                    if (mVideoPathUri != null) {
-                        setVideoPost();
-                    } else {
-                        showSnackBar(mCoordinatorLayout, getString(R.string.file_not_found));
-                    }
-                    break;
-                case AppConstants.POST_COMMENT_REQUEST:
-                    mViewPagerAdapter.getItem(mViewPagerTabLayout.getSelectedTabPosition()).onActivityResult(requestCode, resultCode, data);
+                            /*.putExtra(ProfileModel.MY_PROFILE_RES_MODEL, this.mMyProfileResModel)
+                            .putExtra(PromotersModel.PROMOTERS_RES_MODEL, mPromotersResModel)*/);
                     break;
                 case EventsFindAdapter.EVENT_PAYMENT_REQ_CODE:
                     String mToken = data.getStringExtra("TOKEN");
                     apiCallForSubscription(mToken);
                     break;
+                case RetrofitClient.UPDATE_FEED_COUNT:
+                    mViewPagerAdapter.getItem(mViewPagerTabLayout.getSelectedTabPosition()).onActivityResult(requestCode, resultCode, data);
+                    break;
+                case AppConstants.POST_COMMENT_REQUEST:
+                case AppConstants.REPORT_POST_SUCCESS:
+                case AppConstants.POST_UPDATE_SUCCESS:
+                case AppConstants.WRITE_POST_REQUEST:
+                    try {
+                        mViewPagerAdapter.getItem(mViewPagerTabLayout.getSelectedTabPosition()).onActivityResult(requestCode, resultCode, data);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    break;
+                default:
+                    try {
+                        mViewPagerAdapter.getItem(mViewPagerTabLayout.getSelectedTabPosition()).onActivityResult(requestCode, resultCode, data);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
             }
         }
     }
@@ -663,88 +363,76 @@ public class ClubProfileActivity extends BaseActivity implements TabLayout.OnTab
     private void apiCallForSubscription(String token) {
         RetrofitClient.getRetrofitInstance().postSubScribeRequestToClub(this, mPromotersResModel.getSubscription_planID(),
                 PreferenceUtils.getInstance(this).getStrData(PreferenceUtils.USER_EMAIL), token,
-                "SUBSCRIBE", mPromotersResModel.getStripeUserId(), RetrofitClient.POST_DATA_FOR_PAYMENT);
+                "SUBSCRIBE", mPromotersResModel.getStripeUserId(), mPromotersResModel.getSubscription_fee(), RetrofitClient.PROMOTER_PAYMENT_SUBSCRIPTION);
     }
 
     private void apiCallForUnSubscription() {
-        RetrofitClient.getRetrofitInstance().postUnSubScribeRequestToClub(this, mSubscriptionId, "UNSUBSCRIBE", mPromotersResModel.getAccessToken(), RetrofitClient.PROMOTER_PAYMENT_UNSUBSCRIPTION);
+        RetrofitClient.getRetrofitInstance()
+                .postUnSubScribeRequestToClub(this, mSubscriptionId, "UNSUBSCRIBE", mPromotersResModel.getAccessToken(), RetrofitClient.PROMOTER_PAYMENT_UNSUBSCRIPTION);
     }
 
-
-    private void setVideoPost() {
-        Bitmap thumb = ThumbnailUtils.createVideoThumbnail(this.mVideoPathUri,
-                MediaStore.Images.Thumbnails.MINI_KIND);
-        Drawable drawable = new BitmapDrawable(getResources(), thumb);
-        mPostImgVideoCloseBtnLayout.setVisibility(View.VISIBLE);
-        mPostPicImgView.setVisibility(View.VISIBLE);
-        mPlayIconImgView.setVisibility(View.VISIBLE);
-        mPostImgVideoLayout.setVisibility(View.VISIBLE);
-        mPostPicImgView.setImageDrawable(drawable);
-    }
 
     @Override
     public void retrofitOnResponse(Object responseObj, int responseType) {
-        super.retrofitOnResponse(responseObj, responseType);
-        if (responseObj instanceof PromotersModel) {
-            PromotersModel mPromotersModel = (PromotersModel) responseObj;
-            switch (responseType) {
-                case RetrofitClient.GET_PROMOTERS_RESPONSE:
-                    if (mPromotersModel.getResource() != null && mPromotersModel.getResource().size() > 0) {
-                        mPromotersResModel = mPromotersModel.getResource().get(0);
-                        setProfile();
-                    } else {
-                        showSnackBar(mCoordinatorLayout, mNoClubsFoundErr);
-                    }
-                    break;
-            }
-        } else if (responseObj instanceof PromoterFollowerModel) {
+        //   super.retrofitOnResponse(responseObj, responseType);
+
+        if (responseObj instanceof PromoterFollowerModel) {
             PromoterFollowerModel mPromoterFollowerModel = (PromoterFollowerModel) responseObj;
             switch (responseType) {
                 case RetrofitClient.GET_PROMOTER_FOLLOW_RESPONSE:
                     if (mPromoterFollowerModel.getResource() != null
                             && mPromoterFollowerModel.getResource().size() > 0) {
                         mPromotersResModel.setIsFollowing(true);
-                        ArrayList<PromoterFollowerResModel> mPromoterFollowerResModelList =
-                                mPromotersResModel.getPromoterFollowerByPromoterUserID();
-                        mPromoterFollowerResModelList
-                                .add(mPromoterFollowerModel.getResource().get(0));
-                        mPromotersResModel
-                                .setPromoterFollowerByPromoterUserID(mPromoterFollowerResModelList);
                         mFollowBtn.setBackgroundResource(R.drawable.black_orange_btn_bg);
                         mFollowBtn.setText(R.string.following);
                         followCount = followCount + 1;
                         mFollowersCountTv.setText(String.valueOf(followCount));
                         showSnackBar(mCoordinatorLayout, getString(R.string.follow_success));
                         mPromotersResModel.setIsFollowing(true);
+                        Intent mIntent = new Intent();
+                        /*mIntent.putExtra(ProfileModel.MY_PROFILE_RES_MODEL, mMyProfileResModel);
+                        mIntent.putExtra(PromotersModel.PROMOTERS_RES_MODEL, mPromotersResModel);*/
+                        /*MotoHub.getApplicationInstance().setmProfileResModel(mMyProfileResModel);
+                        MotoHub.getApplicationInstance().setmPromoterResModel(mPromotersResModel);*/
+                        EventBus.getDefault().postSticky(mMyProfileResModel);
+                        EventBus.getDefault().postSticky(mPromotersResModel);
+                        setResult(RESULT_OK, mIntent);
                     }
+
                     break;
                 case RetrofitClient.GET_PROMOTER_UN_FOLLOW_RESPONSE:
                     if (mPromoterFollowerModel.getResource() != null
                             && mPromoterFollowerModel.getResource().size() > 0) {
                         mPromotersResModel.setIsFollowing(false);
-                        ArrayList<PromoterFollowerResModel> mPromoterFollowerResModelList =
-                                mPromotersResModel.getPromoterFollowerByPromoterUserID();
-
-                        for (int i = 0; i < mPromoterFollowerResModelList.size(); i++) {
-                            if (mPromoterFollowerResModelList.get(i).getFollowRelation().trim().equals(mPromoterFollowerModel.getResource().get(0).getFollowRelation().trim())) {
-                                mPromoterFollowerResModelList.remove(i);
-                            }
-                        }
-                        mPromotersResModel
-                                .setPromoterFollowerByPromoterUserID(mPromoterFollowerResModelList);
                         mFollowBtn.setBackgroundResource(R.drawable.black_orange_btn_bg);
                         mFollowBtn.setText(R.string.follow);
                         followCount = followCount - 1;
                         mFollowersCountTv.setText(String.valueOf(followCount));
                         showSnackBar(mCoordinatorLayout, getString(R.string.un_follow_success));
                         mPromotersResModel.setIsFollowing(false);
+                        Intent mIntent1 = new Intent();
+                        /*mIntent1.putExtra(ProfileModel.MY_PROFILE_RES_MODEL, mMyProfileResModel);
+                        mIntent1.putExtra(PromotersModel.PROMOTERS_RES_MODEL, mPromotersResModel);*/
+                        /*MotoHub.getApplicationInstance().setmProfileResModel(mMyProfileResModel);
+                        MotoHub.getApplicationInstance().setmPromoterResModel(mPromotersResModel);*/
+                        EventBus.getDefault().postSticky(mMyProfileResModel);
+                        EventBus.getDefault().postSticky(mPromotersResModel);
+                        setResult(RESULT_OK, mIntent1);
+                    }
+                    break;
+                case RetrofitClient.PROMOTER_IS_ALREADY_FOLLOWED:
+                    if (mPromoterFollowerModel.getResource() != null && mPromoterFollowerModel.getResource().size() > 0) {
+                        mPromotersResModel.setIsFollowing(true);
+                        mFollowBtn.setBackgroundResource(R.drawable.black_orange_btn_bg);
+                        mFollowBtn.setText(R.string.following);
+                    } else {
+                        mPromotersResModel.setIsFollowing(false);
+                        mFollowBtn.setBackgroundResource(R.drawable.black_orange_btn_bg);
+                        mFollowBtn.setText(R.string.follow);
                     }
                     break;
             }
-            Intent mIntent = new Intent();
-            mIntent.putExtra(ProfileModel.MY_PROFILE_RES_MODEL, mMyProfileResModel);
-            mIntent.putExtra(PromotersModel.PROMOTERS_RES_MODEL, mPromotersResModel);
-            setResult(RESULT_OK, mIntent);
+
         } else if (responseObj instanceof PostsModel) {
             PostsModel mPostsModel = (PostsModel) responseObj;
             switch (responseType) {
@@ -755,47 +443,29 @@ public class ClubProfileActivity extends BaseActivity implements TabLayout.OnTab
                     break;
                 case RetrofitClient.SHARED_POST_RESPONSE:
                     if (mPostsModel.getResource() != null && mPostsModel.getResource().size() > 0) {
-                        ((BaseFragment) mViewPagerAdapter.getItem(mViewPagerTabLayout.getSelectedTabPosition())).retrofitOnResponse(responseObj, responseType);
+                        ((BaseFragment) mViewPagerAdapter
+                                .getItem(mViewPagerTabLayout.getSelectedTabPosition())).retrofitOnResponse(responseObj, responseType);
                         showSnackBar(mCoordinatorLayout, getResources().getString(R.string.post_shared));
                     }
                     break;
-                case RetrofitClient.CREATE_PROFILE_POSTS_RESPONSE:
-
+                case RetrofitClient.FEED_VIDEO_COUNT:
                     if (mPostsModel.getResource() != null && mPostsModel.getResource().size() > 0) {
-
-                        mWritePostEt.setText("");
-                        mPostImgUri = null;
-                        mPostPicImgView.setImageResource(R.drawable.photos_icon);
-                        mPostPicImgView.setVisibility(View.GONE);
-                        mPostImgVideoCloseBtnLayout.setVisibility(View.GONE);
-                        mPostImgVideoLayout.setVisibility(View.GONE);
-                        mVideoPathUri = null;
-
-                        mTaggedProfilesList.clear();
-                        mTaggedProfilesAdapter.notifyDataSetChanged();
-
-                        if (mTaggedProfilesList.size() > 0) {
-                            mTagProfilesRecyclerView.setVisibility(View.VISIBLE);
-                        } else {
-                            mTagProfilesRecyclerView.setVisibility(View.GONE);
-                        }
-
-                        showSnackBar(mCoordinatorLayout, mPostSuccess);
-                        ((BaseFragment) mViewPagerAdapter.getItem(mViewPagerTabLayout.getSelectedTabPosition())).retrofitOnResponse(responseObj, responseType);
-
+                        ((BaseFragment) mViewPagerAdapter
+                                .getItem(mViewPagerTabLayout.getSelectedTabPosition())).retrofitOnResponse(responseObj, responseType);
                     }
-
                     break;
-
-                case RetrofitClient.DELETE_PROFILE_POSTS_RESPONSE:
-
+                case RetrofitClient.ADD_FEED_COUNT:
                     if (mPostsModel.getResource() != null && mPostsModel.getResource().size() > 0) {
-
-                        ((BaseFragment) mViewPagerAdapter.getItem(mViewPagerTabLayout.getSelectedTabPosition())).retrofitOnResponse(responseObj, responseType);
-
+                        ((BaseFragment) mViewPagerAdapter
+                                .getItem(mViewPagerTabLayout.getSelectedTabPosition())).retrofitOnResponse(responseObj, responseType);
+                    }
+                    break;
+                case RetrofitClient.DELETE_PROFILE_POSTS_RESPONSE:
+                    if (mPostsModel.getResource() != null && mPostsModel.getResource().size() > 0) {
+                        ((BaseFragment) mViewPagerAdapter
+                                .getItem(mViewPagerTabLayout.getSelectedTabPosition())).retrofitOnResponse(responseObj, responseType);
                         showSnackBar(mCoordinatorLayout, getResources().getString(R.string.post_delete));
                     }
-
                     break;
             }
         } else if (responseObj instanceof EventsModel) {
@@ -809,8 +479,21 @@ public class ClubProfileActivity extends BaseActivity implements TabLayout.OnTab
         } else if (responseObj instanceof PaymentModel) {
             if (responseType == RetrofitClient.PROMOTER_PAYMENT_SUBSCRIPTION)
                 subscriptionCall(responseObj);
-            else
-                unSubscribeCall(responseObj);
+            else {
+                PaymentModel mResponse = (PaymentModel) responseObj;
+                if (mResponse.getStatus() != null && mResponse.getStatus().equals("succeeded")) {
+                    if ((mViewPagerAdapter.getItem(mViewPagerTabLayout.getSelectedTabPosition())).isVisible()) {
+                        ((BaseFragment) mViewPagerAdapter.getItem(mViewPagerTabLayout.getSelectedTabPosition())).retrofitOnResponse(responseObj, responseType);
+                    }
+                } else {
+                    String mErrorMsg = "Your card was declined.";
+                    if (mResponse.getMessage() != null) {
+                        mErrorMsg = mResponse.getMessage();
+                    }
+                    mErrorMsg = mErrorMsg + " " + getString(R.string.try_again);
+                    showToast(this, mErrorMsg);
+                }
+            }
         } else if (responseObj instanceof RacingModel) {
             if ((mViewPagerAdapter.getItem(mViewPagerTabLayout.getSelectedTabPosition())).isVisible()) {
                 ((BaseFragment) mViewPagerAdapter.getItem(mViewPagerTabLayout.getSelectedTabPosition())).retrofitOnResponse(responseObj, responseType);
@@ -834,100 +517,80 @@ public class ClubProfileActivity extends BaseActivity implements TabLayout.OnTab
             if ((mViewPagerAdapter.getItem(mViewPagerTabLayout.getSelectedTabPosition())).isVisible()) {
                 ((BaseFragment) mViewPagerAdapter.getItem(mViewPagerTabLayout.getSelectedTabPosition())).retrofitOnResponse(responseObj, responseType);
             }
+        } else if (responseObj instanceof NotificationBlockedUsersModel) {
+
+            ((BaseFragment) mViewPagerAdapter
+                    .getItem(mViewPagerTabLayout.getSelectedTabPosition())).retrofitOnResponse(responseObj, responseType);
+
         } else if (responseObj instanceof FeedShareModel) {
 
-            ((BaseFragment) mViewPagerAdapter.getItem(mViewPagerTabLayout.getSelectedTabPosition())).retrofitOnResponse(responseObj, responseType);
+            ((BaseFragment) mViewPagerAdapter
+                    .getItem(mViewPagerTabLayout.getSelectedTabPosition())).retrofitOnResponse(responseObj, responseType);
 
         } else if (responseObj instanceof FeedLikesModel) {
 
-            ((BaseFragment) mViewPagerAdapter.getItem(mViewPagerTabLayout.getSelectedTabPosition())).retrofitOnResponse(responseObj, responseType);
+            ((BaseFragment) mViewPagerAdapter
+                    .getItem(mViewPagerTabLayout.getSelectedTabPosition())).retrofitOnResponse(responseObj, responseType);
 
-        } else if (responseObj instanceof ClubGroupModel) {
-            ClubGroupModel mClubGroupModel = (ClubGroupModel) responseObj;
-            switch (responseType) {
-                case RetrofitClient.POST_SUBSCRIBE_CLUB:
-                   /* isSubscribed = true;
-                    mSubscribeBtn.setText(getString(R.string.pending));
-                    mSubscribeBtn.setEnabled(false);
-                    ArrayList<ClubGroupModel> mClubGroupList = mPromotersResModel.getClubGroupByClubUserID();
-                    mClubGroupList.add(mClubGroupModel);
-                    mPromotersResModel.setClubGroupByClubUserID(mClubGroupList);
-                    if ((mViewPagerAdapter.getItem(0)).isVisible()) {
-                        ((ClubHomeFragment) mViewPagerAdapter.getItem(0)).mRefresh = true;
-                        ((BaseFragment) mViewPagerAdapter.getItem(0)).callGetEvents();
-                    }*/
-                    showSnackBar(mCoordinatorLayout, getString(R.string.subscribe_success));
-                    break;
-                case RetrofitClient.POST_UNSUBSCRIBE_CLUB:
-                    mSubscribeBtn.setText(getString(R.string.Subscribe));
-                    mWritePostCard.setVisibility(View.GONE);
-
-                    showSnackBar(mCoordinatorLayout, getString(R.string.un_subscribe_success));
-                    break;
-                case RetrofitClient.DELETE_UNSUBSCRIBE_CLUB:
-                    isSubscribed = false;
-                    mSubscribeBtn.setText(getString(R.string.Subscribe));
-                    ArrayList<ClubGroupModel> mNewClubGroupList = mPromotersResModel.getClubGroupByClubUserID();
-                    for (int i = 0; i < mNewClubGroupList.size(); i++) {
-                        if (mNewClubGroupList.get(i).getID() == mClubGroupID) {
-                            mNewClubGroupList.remove(i);
-                        }
-                    }
-                    mPromotersResModel.setClubGroupByClubUserID(mNewClubGroupList);
-                    if ((mViewPagerAdapter.getItem(0)).isVisible()) {
-                        ((ClubHomeFragment) mViewPagerAdapter.getItem(0)).mRefresh = true;
-                        ((ClubHomeFragment) mViewPagerAdapter.getItem(0)).callGetUnSubscribeFeed();
-                    }
-                    showSnackBar(mCoordinatorLayout, getString(R.string.un_subscribe_success));
-                    break;
-            }
-        } else if (responseObj instanceof ImageModel) {
-            ImageModel mImageModel = (ImageModel) responseObj;
-            switch (responseType) {
-                case RetrofitClient.UPLOAD_IMAGE_FILE_RESPONSE:
-                    //update the record in database/tablet
-                    String imgUrl = getHttpFilePath(mImageModel.getmModels().get(0).getPath());
-                    profilePostContent(imgUrl);
-                    break;
-            }
         } else if (responseObj instanceof GalleryImgModel) {
-            ((BaseFragment) mViewPagerAdapter.getItem(2)).retrofitOnResponse(responseObj, responseType);
-        } else if (responseObj instanceof GalleryVideoModel) {
-            ((BaseFragment) mViewPagerAdapter.getItem(3)).retrofitOnResponse(responseObj, responseType);
-        } else if (responseObj instanceof ProfileModel) {
 
-            ProfileModel mProfileModel = (ProfileModel) responseObj;
-            switch (responseType) {
-                case RetrofitClient.GET_FOLLOWING_PROFILE_RESPONSE:
-                    if (mProfileModel.getResource() != null && mProfileModel.getResource().size() > 0) {
-                        mFollowingListData.clear();
-                        mFollowingListData.addAll(mProfileModel.getResource());
-                        launchTagFollowersProfileDialog();
-                    } else {
-                        showSnackBar(mCoordinatorLayout, mTagErr);
-                    }
-                    break;
-            }
+            ((BaseFragment) mViewPagerAdapter
+                    .getItem(2)).retrofitOnResponse(responseObj, responseType);
+
+        } else if (responseObj instanceof GalleryVideoModel) {
+
+            ((BaseFragment) mViewPagerAdapter
+                    .getItem(3)).retrofitOnResponse(responseObj, responseType);
+
         } else if (responseObj instanceof PromoterSubsResModel) {
             PromoterSubsResModel mPromoterSub = (PromoterSubsResModel) responseObj;
-            if (mPromoterSub.getResource().size() != 0) {
-                mSubscriptionId = mPromoterSub.getResource().get(0).getSubscriptionID();
-                manageSubscription(true);
-            } else {
-                manageSubscription(false);
+            switch (responseType) {
+                case RetrofitClient.CALL_GET_PROMOTER_SUBS:
+                    if (mPromoterSub.getResource().size() > 0) {
+                        mSubscriptionId = mPromoterSub.getResource().get(0).getSubscriptionID();
+                        mDeleteSubscribeID = mPromoterSub.getResource().get(0).getID();
+                        if (mPromoterSub.getResource().get(0).getFailedSubscription_by_CustomerID() != null) {
+                            if (getCurrentDate().equals(mPromoterSub.getResource().get(0).getFailedSubscription_by_CustomerID().getSubscriptionExpiry()))
+                                isUpgradeToSubscription = mPromoterSub.getResource().get(0).getFailedSubscription_by_CustomerID().getStatus() == AppConstants.FAILED_SUBSCRIPTION_STATUS;
+                        }
+                        manageSubscription(true);
+                    } else {
+                        manageSubscription(false);
+                    }
+                    break;
+                case RetrofitClient.UPDATE_SUBSCRIPTION:
+                    if (mPromoterSub.getResource().size() > 0) {
+                        mSubscriptionId = mPromoterSub.getResource().get(0).getSubscriptionID();
+                        mDeleteSubscribeID = mPromoterSub.getResource().get(0).getID();
+                        manageSubscription(true);
+                        ((ClubSubscribedUsersFragment) mViewPagerAdapter.getItem(4)).updateMembers();
+                        if (mSubscriptionType.equals(AppConstants.FREE_SUBSCRIPTION))
+                            showToast(this, "Success");
+                        else {
+                            if (mPurchaseSuccessDialog != null)
+                                mPurchaseSuccessDialog.show();
+                        }
+                    }
+                    break;
+                case RetrofitClient.CALL_REMOVE_PROMOTER_SUBS:
+                    ((ClubSubscribedUsersFragment) mViewPagerAdapter.getItem(4)).updateMembers();
+                    manageSubscription(false);
+                    showToast(this, getString(R.string.un_subscribe_success));
+                    break;
+                case RetrofitClient.GET_CLUB_USERS:
+                    ((BaseFragment) mViewPagerAdapter.getItem(4)).retrofitOnResponse(responseObj, responseType);
+                    break;
             }
-
         } else if (responseObj instanceof PromotersFollowers1) {
             PromotersFollowers1 promotersFollowers1 = (PromotersFollowers1) responseObj;
             switch (responseType) {
                 case RetrofitClient.GET_PROMOTERS_RESPONSE:
                     if (promotersFollowers1.getResource() != null && promotersFollowers1.getResource().size() > 0) {
-                        mPromoterFollowers1 = promotersFollowers1.getResource().get(0);
                         meta = promotersFollowers1.getMeta();
-                        setProfile();
                     } else {
-                        showSnackBar(mCoordinatorLayout, getResources().getString(R.string.no_news_media_err));
+                        meta.setCount(0);
                     }
+                    setProfile();
                     break;
                 case RetrofitClient.CHECK_FOLLOWER_STATUS:
                     if (promotersFollowers1.getResource() != null && promotersFollowers1.getResource().size() > 0) {
@@ -941,26 +604,35 @@ public class ClubProfileActivity extends BaseActivity implements TabLayout.OnTab
                     }
                     break;
             }
+        } else if (responseType == RetrofitClient.PROMOTER_PAYMENT_UNSUBSCRIPTION) {
+            deleteSubsDataInTable();
         }
     }
 
     private void manageSubscription(boolean isSubscribed) {
         if (isSubscribed) {
-            mSubscribeBtn.setText(getString(R.string.un_subscribe));
-            mWritePostCard.setVisibility(View.VISIBLE);
+            if (!isUpgradeToSubscription) {
+                mSubscribeBtn.setText(getString(R.string.un_subscribe));
+            } else {
+                mSubscribeBtn.setText(getString(R.string.upgrade));
+            }
+            mWritePostBtn.setVisibility(View.VISIBLE);
             mWritePostSeparator.setVisibility(View.VISIBLE);
         } else {
             mSubscribeBtn.setText(getString(R.string.Subscribe));
-            mWritePostCard.setVisibility(View.GONE);
+            mWritePostBtn.setVisibility(View.GONE);
             mWritePostSeparator.setVisibility(View.GONE);
         }
     }
 
-    private void apiCallToUpdatePromoterSubs(String subs_id) {
+
+    private void apiCallToUpdatePromoterSubs(String subs_id, String customer_id, int subStatus) {
         JsonObject mInputObj = new JsonObject();
         mInputObj.addProperty(PromoterSubs.PROMOTER_ID, mPromotersResModel.getUserId());
-        mInputObj.addProperty(PromoterSubs.SUBS_STATUS, SUBSCRIPTION_PURCHASED);
+        mInputObj.addProperty(PromoterSubs.SUBS_STATUS, subStatus);
         mInputObj.addProperty(PromoterSubs.SUBS_ID, subs_id);
+        mInputObj.addProperty(PromoterSubs.USER_ID, mMyProfileResModel.getUserID());
+        mInputObj.addProperty(PromoterSubs.CUSTOMER_ID, customer_id);
         mInputObj.addProperty(PromoterSubs.PROFILE_ID, mMyProfileResModel.getID());
         mInputObj.addProperty(PromoterSubs.PLAN_ID, mPromotersResModel.getSubscription_planID());
         mInputObj.addProperty(PromoterSubs.PROMOTER_TYPE, mPromotersResModel.getUserType());
@@ -977,6 +649,10 @@ public class ClubProfileActivity extends BaseActivity implements TabLayout.OnTab
             RetrofitClient.getRetrofitInstance().callUpdateSession(this, RetrofitClient.UPDATE_SESSION_RESPONSE);
         } else if (code == RetrofitClient.GET_FEED_POSTS_RESPONSE) {
             ((ClubHomeFragment) mViewPagerAdapter.getItem(0)).retrofitOnError(code, message);
+        } else if (code == RetrofitClient.GET_VIDEO_FILE_RESPONSE) {
+            ((ClubVideosFragment) mViewPagerAdapter.getItem(3)).retrofitOnError(code, message);
+        } else if (code == RetrofitClient.GET_CLUB_USERS) {
+            ((ClubSubscribedUsersFragment) mViewPagerAdapter.getItem(4)).retrofitOnError(code, message);
         } else {
             String mErrorMsg = code + " - " + message;
             showSnackBar(mCoordinatorLayout, mErrorMsg);
@@ -1036,32 +712,11 @@ public class ClubProfileActivity extends BaseActivity implements TabLayout.OnTab
                 startActivity(new Intent(this, UpgradeProfileActivity.class).putExtra(AppConstants.MY_PROFILE_OBJ, myProfileObj));
                 dismissAppDialog();
                 break;
-            case AppDialogFragment.TAG_FOLLOWING_PROFILE_DIALOG:
-
-                mTaggedProfilesList.clear();
-                mTaggedProfilesAdapter.notifyDataSetChanged();
-
-                for (ProfileResModel mFollowerModel : mFollowingListData) {
-                    if (mFollowerModel.getIsProfileTagged()) {
-                        mTaggedProfilesList.add(mFollowerModel);
-                        mTaggedProfilesAdapter.notifyDataSetChanged();
-                    }
-                }
-
-                if (mTaggedProfilesList.size() > 0) {
-                    mTagProfilesRecyclerView.setVisibility(View.VISIBLE);
-                    AppDialogFragment.getInstance().dismiss();
-                } else {
-                    mTagProfilesRecyclerView.setVisibility(View.GONE);
-                    showToast(getApplicationContext(), "Please select at least one profile");
-                }
-                break;
             default:
                 ((BaseFragment) mViewPagerAdapter.getItem(mViewPagerTabLayout.getSelectedTabPosition())).alertDialogPositiveBtnClick(dialogType, position);
                 break;
         }
     }
-
 
     @Override
     public void retrofitOnFailure(int responseType, String message) {
@@ -1074,8 +729,11 @@ public class ClubProfileActivity extends BaseActivity implements TabLayout.OnTab
 
     private void subscriptionCall(Object responseObj) {
         PaymentModel mResponse = (PaymentModel) responseObj;
-        if (mResponse.getStatus() != null && mResponse.getStatus().equals("active")) {
-            apiCallToUpdatePromoterSubs(mResponse.getID());
+        if (mResponse.getStatus() != null) {
+            /*if (mPromotersResModel.getSubscription_fee() == 0)
+                apiCallToUpdatePromoterSubs(mResponse.getID(), mResponse.getCustomer(), UNSUBSCRIPTION_STATUS);
+            else*/
+            apiCallToUpdatePromoterSubs(mResponse.getID(), mResponse.getCustomer(), SUBSCRIPTION_PURCHASED);
         } else {
             String mErrorMsg = "Your card was declined.";
             if (mResponse.getMessage() != null) {
@@ -1086,7 +744,7 @@ public class ClubProfileActivity extends BaseActivity implements TabLayout.OnTab
         }
     }
 
-    private void unSubscribeCall(Object responseObj) {
+  /*  private void unSubscribeCall(Object responseObj) {
         PaymentModel mResponse = (PaymentModel) responseObj;
         if (mResponse.getStatus() != null) {
             deleteSubsDataInTable();
@@ -1098,19 +756,25 @@ public class ClubProfileActivity extends BaseActivity implements TabLayout.OnTab
             mErrorMsg = mErrorMsg + " " + getString(R.string.try_again);
             showToast(this, mErrorMsg);
         }
-    }
+    }*/
 
     private void deleteSubsDataInTable() {
-        String mFilter = "(PromoterID=" + mPromotersResModel.getUserId() + ") AND (" + "ProfileID=" + mMyProfileResModel.getID() + ")";
-        RetrofitClient.getRetrofitInstance().callRemovePromoterSubs(this, mFilter, RetrofitClient.CALL_REMOVE_PROMOTER_SUBS);
+        JsonObject mInputObj = new JsonObject();
+
+        mInputObj.addProperty(PromoterSubs.SUBS_STATUS, UNSUBSCRIPTION_STATUS);
+        mInputObj.addProperty(PromoterSubs.ID_, mDeleteSubscribeID);
+        JsonArray mArray = new JsonArray();
+        mArray.add(mInputObj);
+        RetrofitClient.getRetrofitInstance().callUpdateUnSubscription(this, mArray, RetrofitClient.CALL_REMOVE_PROMOTER_SUBS);
     }
 
     @Override
     protected void onDestroy() {
+        DialogManager.hideProgress();
         super.onDestroy();
     }
 
-    @Override
+   /* @Override
     public void notifyEmptyTaggedProfilesList(ArrayList<ProfileResModel> mTaggedProfilesList) {
         if (mTaggedProfilesList.size() > 0) {
             mTagProfilesRecyclerView.setVisibility(View.VISIBLE);
@@ -1118,20 +782,17 @@ public class ClubProfileActivity extends BaseActivity implements TabLayout.OnTab
             mTagProfilesRecyclerView.setVisibility(View.GONE);
         }
     }
-
-    class VideoCompressor extends AsyncTask<String, Void, Boolean> {
-
+*/
+  /*  class VideoCompressor extends AsyncTask<String, Void, Boolean> {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
             DialogManager.showProgress(ClubProfileActivity.this);
         }
-
         @Override
         protected Boolean doInBackground(String... params) {
             return MediaController.getInstance().convertVideo(params[0], params[1]);
         }
-
         @Override
         protected void onPostExecute(Boolean compressed) {
             super.onPostExecute(compressed);
@@ -1141,5 +802,5 @@ public class ClubProfileActivity extends BaseActivity implements TabLayout.OnTab
                 startUploadVideoService();
             }
         }
-    }
+    }*/
 }

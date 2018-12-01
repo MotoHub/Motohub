@@ -20,6 +20,7 @@ import online.motohub.model.ProfileModel;
 import online.motohub.retrofit.RetrofitClient;
 import online.motohub.util.AppConstants;
 import online.motohub.util.CommonAPI;
+import online.motohub.util.DialogManager;
 
 public class ReportActivity extends BaseActivity {
 
@@ -32,6 +33,8 @@ public class ReportActivity extends BaseActivity {
     private int mPostID;
     private String mReportString = "";
     private String mStatus = "";
+    private String REPORT_STRING = "";
+    private ReportAdapter reportAdapter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -40,6 +43,12 @@ public class ReportActivity extends BaseActivity {
         ButterKnife.bind(this);
         initViews();
         getDataFromBundle();
+    }
+
+    @Override
+    protected void onDestroy() {
+        DialogManager.hideProgress();
+        super.onDestroy();
     }
 
     private void getDataFromBundle() {
@@ -53,6 +62,9 @@ public class ReportActivity extends BaseActivity {
         if(getIntent().hasExtra(PostsModel.POST_ID))
             mPostID = getIntent().getIntExtra(PostsModel.POST_ID,0);
 
+        if(getIntent().hasExtra(AppConstants.REPORT))
+            REPORT_STRING = getIntent().getStringExtra(AppConstants.REPORT);
+
     }
 
     private void initViews() {
@@ -62,7 +74,6 @@ public class ReportActivity extends BaseActivity {
         mLinearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mReportRecyclerView.setLayoutManager(mLinearLayoutManager);
 
-        ReportAdapter reportAdapter;
         reportAdapter = new ReportAdapter(this);
         mReportRecyclerView.setAdapter(reportAdapter);
     }
@@ -84,17 +95,38 @@ public class ReportActivity extends BaseActivity {
     }
 
     private void reportPost() {
-        CommonAPI.getInstance().callPostReportpost(this, mUserID, mProfileID, mPostID, mReportString, mStatus);
+        if(mReportString.trim().isEmpty())
+            showToast(this,getString(R.string.report_err));
+        else
+            CommonAPI.getInstance().callPostReportpost(this, mUserID, mProfileID, mPostID, mReportString, mStatus);
     }
 
     @Override
     public void retrofitOnResponse(Object responseObj, int responseType) {
         super.retrofitOnResponse(responseObj, responseType);
         if(responseObj instanceof PostReportModel){
-            updatePost();
+            if(REPORT_STRING.trim().equals(AppConstants.REPORT_POST))
+                updatePost();
+            else if(REPORT_STRING.trim().equals(AppConstants.REPORT_VIDEO))
+                updateVideoPost();
         } else if(responseObj instanceof PostsModel){
+            setResult(RESULT_OK);
+            finish();
+        } else if(responseType == RetrofitClient.UPDATE_VIDEO_POST_RESPONSE){
+            setResult(RESULT_OK);
             finish();
         }
+    }
+
+    private void updateVideoPost() {
+        JsonObject mJsonObject = new JsonObject();
+
+        mJsonObject.addProperty(PostsModel.REPORT_STATUS, true);
+        mJsonObject.addProperty(PostsModel.POST_ID, mPostID);
+
+        JsonArray mJsonArray = new JsonArray();
+        mJsonArray.add(mJsonObject);
+        RetrofitClient.getRetrofitInstance().callUpdateOnDemandProfilePosts(this, mJsonArray,RetrofitClient.UPDATE_VIDEO_POST_RESPONSE);
     }
 
     private void updatePost() {
@@ -129,13 +161,9 @@ public class ReportActivity extends BaseActivity {
         if(resultCode == RESULT_OK){
             assert data.getExtras() != null;
             if(data.hasExtra(AppConstants.REPORT_STRING)){
-                Intent resultIntent = new Intent();
-                resultIntent.putExtra(AppConstants.REPORT_STRING,data.getStringExtra(AppConstants.REPORT_STRING));
-                setResult(RESULT_OK, resultIntent);
                 setReportString(data.getStringExtra(AppConstants.REPORT_STRING));
                 reportPost();
             }
-
         }
     }
 }

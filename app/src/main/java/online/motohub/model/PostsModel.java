@@ -4,7 +4,6 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class PostsModel {
 
@@ -37,6 +36,9 @@ public class PostsModel {
     public static final String VIDEO_SHARES_BY_NEW_SHARED_POST_ID ="videoshares_by_NewSharedPostID";
     public static final String PROFILES_BY_PROFILE_ID = "profiles_by_ProfileID";
     public static final String REPORT_STATUS = "ReportStatus";
+    public static final String TO_SUBSCRIBED_USER_ID = "to_subscribedUserID";
+    public static final String SHARED_TEXT = "SharedText";
+    public static final String viewCount = "ViewCount";
 
 
     @SerializedName("resource")

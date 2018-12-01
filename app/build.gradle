@@ -11,13 +11,13 @@ apply plugin: 'com.android.application'
 apply plugin: 'io.fabric'
 android {
     compileSdkVersion 27
-    buildToolsVersion '28.0.2'
+    buildToolsVersion '27.0.3'
     defaultConfig {
         applicationId "online.motohub"
         minSdkVersion 19
         targetSdkVersion 27
-        versionCode 45
-        versionName "1.16.25"
+        versionCode 72
+        versionName "1.19.02"
         multiDexEnabled true
         vectorDrawables.useSupportLibrary = true
         ndk {
@@ -26,12 +26,6 @@ android {
         }
     }
     buildTypes {
-        debug {
-            minifyEnabled false
-            shrinkResources false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-
-        }
         release {
             minifyEnabled false
             shrinkResources false
@@ -53,6 +47,10 @@ android {
     dataBinding {
         enabled = true
     }
+
+    lintOptions {
+        abortOnError false
+    }
 }
 configurations.all {
     exclude group: 'com.android.support', module: 'support-v13'
@@ -67,13 +65,14 @@ repositories {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation 'com.android.support:appcompat-v7:27.1.1'
+    //noinspection GradleCompatible
+    implementation 'com.android.support:appcompat-v7:27.1.0'
     implementation 'com.android.support:cardview-v7:27.1.1'
-    implementation 'com.android.support:design:27.1.1'
-    implementation 'com.android.support:animated-vector-drawable:27.1.1'
-    implementation 'com.android.support:customtabs:27.1.1'
-    implementation 'com.android.support:recyclerview-v7:27.1.1'
-    implementation 'com.android.support.constraint:constraint-layout:1.1.3'
+    implementation 'com.android.support:design:27.1.0'
+    implementation 'com.android.support:animated-vector-drawable:27.1.0'
+    implementation 'com.android.support:customtabs:27.1.0'
+    implementation 'com.android.support:recyclerview-v7:27.1.0'
+    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
     implementation 'de.hdodenhof:circleimageview:2.1.0'
     implementation 'com.google.android:flexbox:0.3.0'
     implementation 'com.github.chrisbanes:PhotoView:1.2.6'
@@ -83,32 +82,36 @@ dependencies {
     implementation 'com.facebook.android:facebook-android-sdk:4.30.0'
     implementation 'com.jakewharton:butterknife:8.8.1'
     implementation 'com.android.support:multidex:1.0.3'
-    implementation 'com.google.firebase:firebase-messaging:17.3.0'
-    implementation 'com.google.firebase:firebase-crash:16.2.0'
+    implementation 'com.google.firebase:firebase-messaging:12.0.0'
+    implementation 'com.google.firebase:firebase-crash:12.0.0'
     implementation 'com.stripe:stripe-android:4.1.6'
-    implementation 'com.google.android.gms:play-services-maps:15.0.1'
+    implementation 'com.google.android.gms:play-services-maps:12.0.0'
     implementation 'com.wowza.gocoder.sdk.android:com.wowza.gocoder.sdk:2.0@aar'
     implementation 'com.google.android.exoplayer:exoplayer:r2.4.0'
     implementation 'me.dm7.barcodescanner:zxing:1.9'
     implementation 'com.github.ybq:Android-SpinKit:1.1.0'
-    // RxJava
     implementation 'io.reactivex.rxjava2:rxjava:2.1.9'
     implementation 'io.reactivex.rxjava2:rxandroid:2.0.1'
-    implementation "com.jakewharton.retrofit:retrofit2-rxjava2-adapter:1.0.0"
-
+    implementation 'com.jakewharton.rxbinding:rxbinding:0.4.0'
+    implementation 'com.github.pavlospt:rxfile:1.8'
+    implementation 'com.jakewharton.retrofit:retrofit2-rxjava2-adapter:1.0.0'
+    implementation 'com.tbruyelle.rxpermissions2:rxpermissions:0.9.5@aar'
+    implementation 'com.squareup.picasso:picasso:2.5.2'
+    implementation 'com.plattysoft.leonids:LeonidsLib:1.3.2'
+    implementation 'com.amazonaws:aws-android-sdk-s3:2.6.+'
+    implementation 'com.facebook.shimmer:shimmer:0.1.0@aar'
+    implementation 'org.greenrobot:eventbus:3.1.1'
     implementation project(':pedrovlc')
     implementation project(':libvlc')
     implementation project(':videocompress')
-
+    implementation project(':matisse')
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.3.1'
-
     implementation 'com.otaliastudios:cameraview:1.5.0'
+    implementation 'com.github.Yalantis:Context-Menu.Android:1.0.8'
     implementation('com.crashlytics.sdk.android:crashlytics:2.9.2@aar') {
-        transitive = true;
+        transitive = true
     }
-
 }
-
 
 apply plugin: 'com.google.gms.google-services'

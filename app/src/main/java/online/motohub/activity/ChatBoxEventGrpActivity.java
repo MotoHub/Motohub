@@ -16,13 +16,13 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
@@ -50,6 +50,7 @@ import online.motohub.model.SessionModel;
 import online.motohub.model.promoter_club_news_media.PromotersResModel;
 import online.motohub.retrofit.RetrofitClient;
 import online.motohub.util.AppConstants;
+import online.motohub.util.DialogManager;
 import online.motohub.util.PreferenceUtils;
 import online.motohub.util.Utility;
 
@@ -102,8 +103,8 @@ public class ChatBoxEventGrpActivity extends BaseActivity implements ChatBoxEven
     BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if(!getIntent().getExtras().getBoolean(AppConstants.IS_FROM_LIVE_EVENT_CHAT))
-                 updatePushMsg(intent);
+            if (!getIntent().getExtras().getBoolean(AppConstants.IS_FROM_LIVE_EVENT_CHAT))
+                updatePushMsg(intent);
         }
     };
 
@@ -112,7 +113,7 @@ public class ChatBoxEventGrpActivity extends BaseActivity implements ChatBoxEven
     private boolean mIsMsgRvLoading = true;
 
     private String mPostImgUri = null;
-    private String imgUrl = "";
+    private String imgUrl = null;
     private boolean isRepliedMsg = false;
     private int mReplyMsgID;
     private String mReplyMsg = "", mReplyUserName, mReplyImg = "";
@@ -122,11 +123,15 @@ public class ChatBoxEventGrpActivity extends BaseActivity implements ChatBoxEven
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat_room);
-
         ButterKnife.bind(this);
-
         initViews();
+        setupUI(mCoordinatorLayout);
+    }
 
+    @Override
+    protected void onDestroy() {
+        DialogManager.hideProgress();
+        super.onDestroy();
     }
 
     @SuppressWarnings("unchecked")
@@ -137,8 +142,8 @@ public class ChatBoxEventGrpActivity extends BaseActivity implements ChatBoxEven
                 assert getIntent().getExtras() != null;
                 JSONObject mJsonObject = new JSONObject(getIntent().getExtras().getString(MyFireBaseMessagingService.ENTRY_JSON_OBJ));
 
-                    mEventID = Integer.parseInt(mJsonObject.getJSONObject("Details").get(EventsModel.EVENT_ID).toString());
-                    mEventName = (mJsonObject.getJSONObject("Details").get(MyFireBaseMessagingService.EVENT_GRP_CHAT_EVENT_NAME).toString());
+                mEventID = Integer.parseInt(mJsonObject.getJSONObject("Details").get(EventsModel.EVENT_ID).toString());
+                mEventName = (mJsonObject.getJSONObject("Details").get(MyFireBaseMessagingService.EVENT_GRP_CHAT_EVENT_NAME).toString());
 
                 getMotoProfiles();
 
@@ -151,12 +156,15 @@ public class ChatBoxEventGrpActivity extends BaseActivity implements ChatBoxEven
 
         } else {
 
-            mMyProfileResModel = (ProfileResModel) getIntent().getExtras().getSerializable(ProfileModel.MY_PROFILE_RES_MODEL);
+            //mMyProfileResModel = (ProfileResModel) getIntent().getExtras().getSerializable(ProfileModel.MY_PROFILE_RES_MODEL);
+            //mMyProfileResModel = MotoHub.getApplicationInstance().getmProfileResModel();
+            mMyProfileResModel = EventBus.getDefault().getStickyEvent(ProfileResModel.class);
 
             mEventID = getIntent().getExtras().getInt(EventsModel.EVENT_ID);
 
-            mSenderProfileID = mMyProfileResModel.getID();
-
+            if (mMyProfileResModel != null && mMyProfileResModel.getID() != 0) {
+                mSenderProfileID = mMyProfileResModel.getID();
+            }
             getEvent();
 
         }
@@ -164,7 +172,7 @@ public class ChatBoxEventGrpActivity extends BaseActivity implements ChatBoxEven
     }
 
 
-    private void setView(){
+    private void setView() {
         setToolbar(mToolbar, mEventName);
 
         showToolbarBtn(mToolbar, R.id.toolbar_back_img_btn);
@@ -197,12 +205,13 @@ public class ChatBoxEventGrpActivity extends BaseActivity implements ChatBoxEven
         });
 
         mEventGrpChatMsgList = new ArrayList<>();
-        mChatBoxEventGrpAdapter = new ChatBoxEventGrpAdapter(mEventGrpChatMsgList, this);
+        mChatBoxEventGrpAdapter = new ChatBoxEventGrpAdapter(mMyProfileResModel, mEventGrpChatMsgList, this);
         mEventGrpChatMsgRv.setAdapter(mChatBoxEventGrpAdapter);
     }
+
     private void getEvent() {
         String mFilter = "ID=" + mEventID;
-        RetrofitClient.getRetrofitInstance().callGetEvents(this,mFilter,RetrofitClient.GET_EVENTS_RESPONSE);
+        RetrofitClient.getRetrofitInstance().callGetEvents(this, mFilter, RetrofitClient.GET_EVENTS_RESPONSE);
     }
 
     @Override
@@ -271,7 +280,7 @@ public class ChatBoxEventGrpActivity extends BaseActivity implements ChatBoxEven
                 if (Integer.parseInt(mDetailsObj.getString(MyFireBaseMessagingService.GRP_CHAT_SENDER_USER_ID)) == PreferenceUtils.getInstance(this).getIntData(PreferenceUtils.USER_ID)) {
                     mMessageEt.setText("");
                 }
-            } catch(JSONException e){
+            } catch (JSONException e) {
                 e.printStackTrace();
             }
 
@@ -283,11 +292,11 @@ public class ChatBoxEventGrpActivity extends BaseActivity implements ChatBoxEven
                 JSONObject mJsonObject = new JSONObject(intent.getStringExtra(MyFireBaseMessagingService.ENTRY_JSON_OBJ));
                 mNotificationJsonObject.put(MyFireBaseMessagingService.ENTRY_JSON_OBJ, mJsonObject);
                 JSONObject mDetailsObj = mJsonObject.getJSONObject("Details");
-                String mEventChatID = "EVENT_CHAT"+(mDetailsObj.get("EventID").toString());
+                String mEventChatID = "EVENT_CHAT" + (mDetailsObj.get("EventID").toString());
                 int mNotificationID = Integer.parseInt((mDetailsObj.get("EventID").toString()));
                 String mContentTitle = "EVENT :" + (mDetailsObj.get(MyFireBaseMessagingService.EVENT_GRP_CHAT_EVENT_NAME).toString());
                 MyFireBaseMessagingService.composeChatNotification(mNotificationJsonObject, this, mNotificationID,
-                        mEventChatID,mContentTitle,ChatBoxEventGrpActivity.class);
+                        mEventChatID, mContentTitle, ChatBoxEventGrpActivity.class);
 
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -310,7 +319,7 @@ public class ChatBoxEventGrpActivity extends BaseActivity implements ChatBoxEven
         mMessageEt.setText("");
         mfileAttachImgBtn.setVisibility(View.VISIBLE);
         mPostImgUri = null;
-        imgUrl = "";
+        imgUrl = null;
     }
 
     private void getEventGrpChatMsg() {
@@ -321,7 +330,7 @@ public class ChatBoxEventGrpActivity extends BaseActivity implements ChatBoxEven
 
     }
 
-    @OnClick({R.id.toolbar_back_img_btn, R.id.toolbar_title, R.id.send_btn,R.id.fileAttachImgBtn,R.id.iv_remove_image,R.id.replyChatCloseIv})
+    @OnClick({R.id.toolbar_back_img_btn, R.id.toolbar_title, R.id.send_btn, R.id.fileAttachImgBtn, R.id.iv_remove_image, R.id.replyChatCloseIv})
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.toolbar_back_img_btn:
@@ -333,8 +342,10 @@ public class ChatBoxEventGrpActivity extends BaseActivity implements ChatBoxEven
                     return;
                 }
 
+                //MotoHub.getApplicationInstance().setmProfileResModel(mMyProfileResModel);
+                EventBus.getDefault().postSticky(mMyProfileResModel);
                 Bundle mBundle = new Bundle();
-                mBundle.putSerializable(ProfileModel.MY_PROFILE_RES_MODEL, mMyProfileResModel);
+                //mBundle.putSerializable(ProfileModel.MY_PROFILE_RES_MODEL, mMyProfileResModel);
                 mBundle.putString(EventsWhoIsGoingActivity.TOOLBAR_TITLE, mEventName + " Member(s)");
 
                 if (mEventsWhoIsGoingResModels == null) {
@@ -387,7 +398,7 @@ public class ChatBoxEventGrpActivity extends BaseActivity implements ChatBoxEven
                 mEventGrpChatMsgResModel.setEventID(mEventID);
                 mEventGrpChatMsgResModel.setSenderName(Utility.getInstance().getUserName(mMyProfileResModel));
 
-                mEventGrpChatMsgResModel.setMessage(URLEncoder.encode(mMessage, "UTF-8"));
+                mEventGrpChatMsgResModel.setMessage(URLEncoder.encode(mMessageEt.getText().toString(), "UTF-8"));
                 mEventGrpChatMsgResModel.setMsgType(imgUrl != null ? "media" : "text");
                 mEventGrpChatMsgResModel.setPhotoMessage(imgUrl != null ? imgUrl : "");
 
@@ -432,9 +443,10 @@ public class ChatBoxEventGrpActivity extends BaseActivity implements ChatBoxEven
                         mFullMPList.addAll(mProfileModel.getResource());
 
                         mMyProfileResModel = mFullMPList.get(PreferenceUtils.getInstance(this).getIntData(PreferenceUtils.CURRENT_PROFILE_POS));
-
-                        mSenderProfileID = mMyProfileResModel.getID();
-
+                        //MotoHub.getApplicationInstance().setmProfileResModel(mMyProfileResModel);
+                        EventBus.getDefault().postSticky(mMyProfileResModel);
+                        if (mMyProfileResModel != null && mMyProfileResModel.getID() != 0)
+                            mSenderProfileID = mMyProfileResModel.getID();
                         getEventGrpChatMsg();
 
                     }
@@ -493,9 +505,9 @@ public class ChatBoxEventGrpActivity extends BaseActivity implements ChatBoxEven
 
             getEventGrpChatMsg();
 
-        } else if ( responseObj instanceof EventsModel){
+        } else if (responseObj instanceof EventsModel) {
 
-            EventsModel mEventModel = (EventsModel)responseObj;
+            EventsModel mEventModel = (EventsModel) responseObj;
 
             mEventName = mEventModel.getResource().get(0).getName();
 
@@ -515,14 +527,14 @@ public class ChatBoxEventGrpActivity extends BaseActivity implements ChatBoxEven
                     //update the record in database/tablet
                     imgUrl = getHttpFilePath(mImageModel.getmModels().get(0).getPath());
                     try {
-                        //String mMessage = mMessageEt.getText().toString().trim();
+                        String mMessage = mMessageEt.getText().toString().trim();
                         EventGrpChatMsgModel mEventGrpChatMsgModel = new EventGrpChatMsgModel();
 
                         EventGrpChatMsgResModel mEventGrpChatMsgResModel = new EventGrpChatMsgResModel();
                         mEventGrpChatMsgResModel.setEventID(mEventID);
                         mEventGrpChatMsgResModel.setSenderName(Utility.getInstance().getUserName(mMyProfileResModel));
 
-                        mEventGrpChatMsgResModel.setMessage("");
+                        mEventGrpChatMsgResModel.setMessage(URLEncoder.encode(mMessage, "UTF-8"));
                         mEventGrpChatMsgResModel.setMsgType(imgUrl != null ? "media" : "text");
                         mEventGrpChatMsgResModel.setPhotoMessage(imgUrl != null ? imgUrl : "");
 
@@ -545,6 +557,12 @@ public class ChatBoxEventGrpActivity extends BaseActivity implements ChatBoxEven
 
         }
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
     }
 
     @Override
@@ -627,9 +645,9 @@ public class ChatBoxEventGrpActivity extends BaseActivity implements ChatBoxEven
         }
     }
 
-    public void setReplyChatMsg(String replyMsg, int replyMsgID, int replyUserProfileID, String replyMsgUserName, String mImgUrl){
+    public void setReplyChatMsg(String replyMsg, int replyMsgID, int replyUserProfileID, String replyMsgUserName, String mImgUrl) {
         isRepliedMsg = true;
-        mReplyUserProfileID  = replyUserProfileID;
+        mReplyUserProfileID = replyUserProfileID;
         mReplyMsgID = replyMsgID;
         mReplyMsg = replyMsg;
         mReplyImg = mImgUrl;
@@ -637,14 +655,14 @@ public class ChatBoxEventGrpActivity extends BaseActivity implements ChatBoxEven
         mReplyChatUserNameTv.setText(replyMsgUserName);
         mReplyChatLayout.setVisibility(View.VISIBLE);
         mReplyChatCloseIv.setVisibility(View.VISIBLE);
-        mReplyChatView.setLayoutParams(new RelativeLayout.LayoutParams(3,mReplyChatLayout.getHeight()));
-        if(replyMsg.trim().isEmpty()){
+        mReplyChatView.setLayoutParams(new RelativeLayout.LayoutParams(3, mReplyChatLayout.getHeight()));
+        if (replyMsg.trim().isEmpty()) {
             mReplyChatMsgTv.setVisibility(GONE);
         } else {
             mReplyChatMsgTv.setVisibility(View.VISIBLE);
             mReplyChatMsgTv.setText(replyMsg);
         }
-        if(mImgUrl.trim().isEmpty()){
+        if (mImgUrl.trim().isEmpty()) {
             mReplyChatImageIv.setVisibility(GONE);
         } else {
             mReplyChatImageIv.setVisibility(View.VISIBLE);

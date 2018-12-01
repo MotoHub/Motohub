@@ -187,21 +187,25 @@ public class GalleryPickerAdapter extends RecyclerView.Adapter<RecyclerView.View
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        if (holder instanceof ImageHolder) {
+        try {
+            if (holder instanceof ImageHolder) {
 
-            ImageHolder imageHolder = (ImageHolder) holder;
-            fillImageHolder(imageHolder, position);
+                ImageHolder imageHolder = (ImageHolder) holder;
+                fillImageHolder(imageHolder, position);
 
-        } else if (holder instanceof VideoHolder) {
+            } else if (holder instanceof VideoHolder) {
 
-            VideoHolder videoHolder = (VideoHolder) holder;
-            fillVideoHolder(videoHolder, position);
+                VideoHolder videoHolder = (VideoHolder) holder;
+                fillVideoHolder(videoHolder, position);
 
-        } else if (holder instanceof ImageFolderHolder) {
-            ImageFolderHolder imageFolderHolder = (ImageFolderHolder) holder;
-            fillImageFolderHolder(imageFolderHolder, position);
-        } else {
-            ((ProgressViewHolder) holder).progressBar.setIndeterminate(true);
+            } else if (holder instanceof ImageFolderHolder) {
+                ImageFolderHolder imageFolderHolder = (ImageFolderHolder) holder;
+                fillImageFolderHolder(imageFolderHolder, position);
+            } else {
+                ((ProgressViewHolder) holder).progressBar.setIndeterminate(true);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
         }
     }
 

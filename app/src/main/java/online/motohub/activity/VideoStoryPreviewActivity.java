@@ -1,13 +1,24 @@
 package online.motohub.activity;
 
+import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
+import android.app.job.JobInfo;
+import android.app.job.JobScheduler;
+import android.content.ComponentName;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.media.MediaPlayer;
 import android.media.ThumbnailUtils;
 import android.net.Uri;
+import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,31 +26,47 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.MediaController;
+import android.widget.Toast;
 import android.widget.VideoView;
 
-import com.bumptech.glide.Glide;
+import com.amazonaws.ClientConfiguration;
+import com.amazonaws.Protocol;
+import com.amazonaws.auth.BasicAWSCredentials;
+import com.amazonaws.mobileconnectors.s3.transferutility.TransferListener;
+import com.amazonaws.mobileconnectors.s3.transferutility.TransferObserver;
+import com.amazonaws.mobileconnectors.s3.transferutility.TransferState;
+import com.amazonaws.mobileconnectors.s3.transferutility.TransferUtility;
+import com.amazonaws.regions.Region;
+import com.amazonaws.regions.Regions;
+import com.amazonaws.services.s3.AmazonS3Client;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.io.File;
-import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import okhttp3.MediaType;
-import okhttp3.MultipartBody;
-import okhttp3.RequestBody;
 import online.motohub.R;
+import online.motohub.application.MotoHub;
+import online.motohub.database.DatabaseHandler;
 import online.motohub.model.EventsModel;
 import online.motohub.model.EventsResModel;
 import online.motohub.model.ImageModel;
-import online.motohub.model.ProfileModel;
 import online.motohub.model.ProfileResModel;
+import online.motohub.model.SpectatorLiveEntity;
 import online.motohub.model.SpectatorLiveModel;
 import online.motohub.model.promoter_club_news_media.PromotersResModel;
 import online.motohub.retrofit.RetrofitClient;
 import online.motohub.util.AppConstants;
+import online.motohub.util.DialogManager;
+import online.motohub.util.PreferenceUtils;
+import online.motohub.util.UploadJobService;
+import online.motohub.util.UrlUtils;
 
 
 public class VideoStoryPreviewActivity extends BaseActivity implements MediaPlayer.OnPreparedListener, MediaPlayer.OnCompletionListener {
@@ -58,11 +85,19 @@ public class VideoStoryPreviewActivity extends BaseActivity implements MediaPlay
 
     @BindView(R.id.toolbar_back_img_btn)
     ImageButton mBackBtn;
-
+    AmazonS3Client s3;
+    BasicAWSCredentials credentials;
+    TransferUtility transferUtility;
+    TransferObserver observerVideo, observerImage;
     private Uri videoUri;
-
     private EventsResModel mEventResModel;
     private ProfileResModel mMyProfileResModel;
+    private ProgressDialog pDialog;
+    private static final String TAG = "SpectorLive";
+    private String COMPRESSED_VIDEO_FOLDER = "MotoHUB";
+    private String mCompressedVideoPath;
+    private DatabaseHandler databaseHandler = new DatabaseHandler(this);
+    private String data = "Do you want upload this video later ?";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -74,11 +109,20 @@ public class VideoStoryPreviewActivity extends BaseActivity implements MediaPlay
         setImageWithGlide(mImageView, videoUri);
     }
 
+    @Override
+    protected void onDestroy() {
+        DialogManager.hideProgress();
+        hideDialog();
+        super.onDestroy();
+    }
+
     private void initialise() {
         mBackBtn.setVisibility(View.VISIBLE);
         videoUri = getIntent().getParcelableExtra("file_uri");
         mEventResModel = (EventsResModel) getIntent().getBundleExtra("bundle_data").getSerializable(EventsModel.EVENTS_RES_MODEL);
-        mMyProfileResModel = (ProfileResModel) getIntent().getBundleExtra("bundle_data").getSerializable(ProfileModel.MY_PROFILE_RES_MODEL);
+        //mMyProfileResModel = (ProfileResModel) getIntent().getBundleExtra("bundle_data").getSerializable(ProfileModel.MY_PROFILE_RES_MODEL);
+        //mMyProfileResModel = MotoHub.getApplicationInstance().getmProfileResModel();
+        mMyProfileResModel = EventBus.getDefault().getStickyEvent(ProfileResModel.class);
     }
 
     private void setUpVideoView() {
@@ -89,8 +133,12 @@ public class VideoStoryPreviewActivity extends BaseActivity implements MediaPlay
         mVideoView.setVideoURI(videoUri);
         mVideoView.setOnPreparedListener(this);
         mVideoView.setOnCompletionListener(this);
+
+        pDialog = new ProgressDialog(this, R.style.MyAlertDialogStyle);
+        pDialog.setCancelable(false);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @OnClick({R.id.iv_video, R.id.iv_video_play, R.id.btn_cancel, R.id.btn_next, R.id.toolbar_back_img_btn})
     public void onClick(View view) {
         switch (view.getId()) {
@@ -98,8 +146,8 @@ public class VideoStoryPreviewActivity extends BaseActivity implements MediaPlay
                 finish();
                 break;
             case R.id.btn_next:
-                /*nextScreen();*/
-                uploadSpecLiveVideo();
+                //uploadSpecLiveVideo();
+                showAlertDialog(data);
                 break;
             case R.id.toolbar_back_img_btn:
                 super.onBackPressed();
@@ -112,42 +160,133 @@ public class VideoStoryPreviewActivity extends BaseActivity implements MediaPlay
         }
     }
 
+    private void showAlertDialog(final String data) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                final AlertDialog.Builder builder = new AlertDialog.Builder(VideoStoryPreviewActivity.this, R.style.MyAlertDialogStyle);
+                builder.setTitle(data);
+                builder.setCancelable(false);
+                builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+                    @Override
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        jobScheduler();
+                        dialog.dismiss();
+                    }
+                });
+                builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        uploadSpecLiveVideo();
+                        dialog.dismiss();
+                    }
+                });
+                builder.show();
+            }
+        });
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    private void jobScheduler() {
+        File mFile = new File(videoUri.getPath());
+        Bitmap bitmap = ThumbnailUtils.createVideoThumbnail(mFile.getPath(), MediaStore.Images.Thumbnails.MINI_KIND);
+        File mThumb = getThumbPath(bitmap);
+
+        PromotersResModel mPromoter = mEventResModel.getPromoterByUserID();
+        String text = null;
+        try {
+            text = URLEncoder.encode(mEditStory.getText().toString(), "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+
+        SpectatorLiveEntity entity = new SpectatorLiveEntity();
+        entity.setProfileID(String.valueOf(mMyProfileResModel.getID()));
+        entity.setUserID(String.valueOf(mPromoter.getUserId()));
+        entity.setUserType(AppConstants.USER_EVENT_VIDEOS);
+        entity.setCaption(text);
+        entity.setVideoUrl(videoUri.getPath());
+        assert mThumb != null;
+        entity.setThumbnail(mThumb.getAbsolutePath());
+        entity.setEventID(String.valueOf(mEventResModel.getID()));
+        entity.setEventFinishDate(mEventResModel.getFinish());
+        entity.setLivePostProfileID(String.valueOf(mMyProfileResModel.getID()));
+        databaseHandler.insertSpectatorLiveVideo(entity);
+        //scheduleJob();
+        boolean mIsJobSchedule = PreferenceUtils.getInstance(this).getBooleanData(PreferenceUtils.IS_JOB_SCHEDULER);
+        if (!mIsJobSchedule) {
+            scheduleJob();
+            PreferenceUtils.getInstance(this).saveBooleanData(PreferenceUtils.IS_JOB_SCHEDULER, true);
+        }
+        finish();
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private void uploadSpecLiveVideo() {
         File mFile = new File(videoUri.getPath());
-        Bitmap bitmap = ThumbnailUtils.createVideoThumbnail(mFile.getPath(),
-                MediaStore.Images.Thumbnails.MINI_KIND);
+        Bitmap bitmap = ThumbnailUtils.createVideoThumbnail(mFile.getPath(), MediaStore.Images.Thumbnails.MINI_KIND);
         File mThumb = getThumbPath(bitmap);
-        RequestBody videoBody = RequestBody.create(MediaType.parse("*/*"), mFile);
-        RequestBody imageBody = RequestBody.create(MediaType.parse("*/*"), mThumb);
-        MultipartBody.Part videoPart =
-                MultipartBody.Part.createFormData("files[]", mFile.getName(), videoBody);
-        MultipartBody.Part imagePart =
-                MultipartBody.Part.createFormData("files[]", mThumb.getName(), imageBody);
-        RetrofitClient.getRetrofitInstance().callUploadSpectatorLive(
-                this,
-                videoPart, imagePart,
-                RetrofitClient.UPLOAD_PROFILE_IMAGE_FILE_RESPONSE);
+        if (isNetworkConnected(this)) {
+            amazoneUpload(mFile, mThumb);
+        } else {
+            showToast(this, "it will be upload automatically after network available");
+            jobScheduler();
+        }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    public void scheduleJob() {
+        ComponentName componentName = new ComponentName(this, UploadJobService.class);
+        JobInfo info = new JobInfo.Builder(123, componentName)
+                .setRequiresCharging(false)
+                .setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)
+                .setPersisted(true)
+                .setPeriodic(15 * 60 * 10000)
+                .build();
+
+        JobScheduler scheduler = (JobScheduler) getSystemService(JOB_SCHEDULER_SERVICE);
+        assert scheduler != null;
+        int resultCode = scheduler.schedule(info);
+        if (resultCode == JobScheduler.RESULT_SUCCESS) {
+            Log.d(TAG, "Job scheduled");
+        } else {
+            Log.d(TAG, "Job scheduling failed");
+        }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    public void cancelJob(View v) {
+        JobScheduler scheduler = (JobScheduler) getSystemService(JOB_SCHEDULER_SERVICE);
+        assert scheduler != null;
+        scheduler.cancel(123);
+        Log.d(TAG, "Job cancelled");
     }
 
     private void apiCallToUploadSpecLiveStreamVideo(String mVideoPath, String mThumb) {
+        try {
+            PromotersResModel mPromoter = mEventResModel.getPromoterByUserID();
+            String text = URLEncoder.encode(mEditStory.getText().toString(), "UTF-8");
 
-        PromotersResModel mPromoter = mEventResModel.getPromoterByUserID();
+            JsonObject mObject = new JsonObject();
+            mObject.addProperty(SpectatorLiveModel.PROFILE_ID, mMyProfileResModel.getID());
+            mObject.addProperty(SpectatorLiveModel.USERID, mPromoter.getUserId());
+            mObject.addProperty(SpectatorLiveModel.USERTYPE, AppConstants.USER_EVENT_VIDEOS);
+            mObject.addProperty(SpectatorLiveModel.CAPTION, text);
+            mObject.addProperty(SpectatorLiveModel.FILEURL, mVideoPath);
+            mObject.addProperty(SpectatorLiveModel.THUMBNAIL, mThumb);
+            mObject.addProperty(SpectatorLiveModel.EVENTID, mEventResModel.getID());
+            mObject.addProperty(SpectatorLiveModel.EVENT_FINISH_DATE, mEventResModel.getFinish());
+            mObject.addProperty(SpectatorLiveModel.LIVE_POST_PROFILE_ID, mMyProfileResModel.getID());
 
-        JsonObject mObject = new JsonObject();
-        mObject.addProperty(SpectatorLiveModel.PROFILE_ID, mPromoter.getUserId());
-        mObject.addProperty(SpectatorLiveModel.USERID, mPromoter.getUserId());
-        mObject.addProperty(SpectatorLiveModel.USERTYPE, mPromoter.getUserType());
-        mObject.addProperty(SpectatorLiveModel.CAPTION, mEditStory.getText().toString());
-        mObject.addProperty(SpectatorLiveModel.FILEURL, mVideoPath);
-        mObject.addProperty(SpectatorLiveModel.THUMBNAIL, mThumb);
-        mObject.addProperty(SpectatorLiveModel.EVENTID, mEventResModel.getID());
-        mObject.addProperty(SpectatorLiveModel.EVENT_FINISH_DATE, mEventResModel.getFinish());
-        mObject.addProperty(SpectatorLiveModel.LIVE_POST_PROFILE_ID, mMyProfileResModel.getID());
+            JsonArray mJsonArray = new JsonArray();
+            mJsonArray.add(mObject);
 
-        JsonArray mJsonArray = new JsonArray();
-        mJsonArray.add(mObject);
-
-        RetrofitClient.getRetrofitInstance().callToPostSpectatorData(VideoStoryPreviewActivity.this, mJsonArray, RetrofitClient.SPECTATOR_LIVE_RESPONSE);
+            RetrofitClient.getRetrofitInstance().callToPostSpectatorData(VideoStoryPreviewActivity.this, mJsonArray, RetrofitClient.SPECTATOR_LIVE_RESPONSE);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private File getThumbPath(Bitmap bitmap) {
@@ -208,4 +347,139 @@ public class VideoStoryPreviewActivity extends BaseActivity implements MediaPlay
                 break;
         }
     }
+
+
+    private void amazoneUpload(final File video, final File image) {
+
+        pDialog.setMessage("Please wait video is uploading...");
+        showDialog();
+
+        ClientConfiguration configuration = new ClientConfiguration();
+        configuration.setMaxErrorRetry(3);
+        configuration.setConnectionTimeout(501000);
+        configuration.setSocketTimeout(501000);
+        configuration.setProtocol(Protocol.HTTP);
+
+        credentials = new BasicAWSCredentials(AppConstants.KEY, AppConstants.SECRET);
+        s3 = new AmazonS3Client(credentials, configuration);
+        s3.setRegion(Region.getRegion(Regions.AP_SOUTHEAST_2));
+        transferUtility = new TransferUtility(s3, VideoStoryPreviewActivity.this);
+
+        if (!video.exists()) {
+            Toast.makeText(VideoStoryPreviewActivity.this, "File Not Found!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        final String videoFileName = video.getName();
+        final String imageFileName = image.getName();
+
+        observerVideo = transferUtility.upload(AppConstants.BUCKET_NAME, UrlUtils.FILE_UPLOAD_SPECTOCTORLIVE + videoFileName, video);
+
+        observerImage = transferUtility.upload(AppConstants.BUCKET_NAME, UrlUtils.FILE_UPLOAD_SPECTOCTORLIVE + imageFileName, image);
+
+        observerVideo.setTransferListener(new TransferListener() {
+            @Override
+            public void onStateChanged(int id, TransferState state) {
+
+                if (TransferState.COMPLETED.equals(observerVideo.getState())) {
+                    hideDialog();
+                    apiCallToUploadSpecLiveStreamVideo(UrlUtils.FILE_UPLOAD_SPECTOCTORLIVE + videoFileName, UrlUtils.FILE_UPLOAD_SPECTOCTORLIVE + imageFileName);
+                }
+            }
+
+            @SuppressLint("SetTextI18n")
+            @Override
+            public void onProgressChanged(int id, long bytesCurrent, long bytesTotal) {
+
+                long _bytesCurrent = bytesCurrent;
+                long _bytesTotal = bytesTotal;
+
+                float percentage = ((float) _bytesCurrent / (float) _bytesTotal * 100);
+                Log.d("percentage", "" + percentage);
+                //pDialog.setProgress((int) percentage);
+
+            }
+
+            @Override
+            public void onError(int id, Exception ex) {
+                hideDialog();
+                //Toast.makeText(VideoStoryPreviewActivity.this, "" + ex.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
+        observerImage.setTransferListener(new TransferListener() {
+            @Override
+            public void onStateChanged(int id, TransferState state) {
+
+                if (TransferState.COMPLETED.equals(observerImage.getState())) {
+                }
+            }
+
+            @SuppressLint("SetTextI18n")
+            @Override
+            public void onProgressChanged(int id, long bytesCurrent, long bytesTotal) {
+
+                long _bytesCurrent = bytesCurrent;
+                long _bytesTotal = bytesTotal;
+
+                float percentage = ((float) _bytesCurrent / (float) _bytesTotal * 100);
+                Log.d("percentage", "" + percentage);
+                /*pb.setProgress((int) percentage);*/
+            }
+
+            @Override
+            public void onError(int id, Exception ex) {
+                //Toast.makeText(VideoStoryPreviewActivity.this, "" + ex.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void showDialog() {
+        if (!pDialog.isShowing())
+            pDialog.show();
+    }
+
+    private void hideDialog() {
+        if (pDialog.isShowing())
+            pDialog.dismiss();
+    }
+
+    public String getCompressedVideoPath() {
+        CreateCompressedVideoPath();
+        mCompressedVideoPath = Environment.getExternalStorageDirectory()
+                + File.separator
+                + COMPRESSED_VIDEO_FOLDER + System.currentTimeMillis() + "COMPRESSED_VIDEO.mp4";
+        return mCompressedVideoPath;
+
+    }
+
+    @SuppressLint("StaticFieldLeak")
+    class VideoCompressor extends AsyncTask<String, Void, Boolean> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            pDialog.setMessage("Please wait ...");
+            showDialog();
+        }
+
+        @Override
+        protected Boolean doInBackground(String... params) {
+            return com.yovenny.videocompress.MediaController.getInstance().convertVideo(params[0], params[1]);
+        }
+
+        @Override
+        protected void onPostExecute(Boolean compressed) {
+            super.onPostExecute(compressed);
+            hideDialog();
+            if (compressed) {
+                //showToast(PromoterVideoGalleryActivity.this, getString(R.string.uploading_video));
+                //uploadVideoToServer(mCompressedVideoPath);
+
+            }
+        }
+    }
+
+
 }

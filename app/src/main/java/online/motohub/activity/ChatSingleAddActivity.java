@@ -8,6 +8,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ListView;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,11 +20,13 @@ import butterknife.OnClick;
 import butterknife.OnItemClick;
 import online.motohub.R;
 import online.motohub.adapter.ChatSingleAddAdapter;
+import online.motohub.application.MotoHub;
 import online.motohub.model.ProfileModel;
 import online.motohub.model.ProfileResModel;
 import online.motohub.model.SessionModel;
 import online.motohub.model.SingleChatRoomModel;
 import online.motohub.retrofit.RetrofitClient;
+import online.motohub.util.DialogManager;
 import online.motohub.util.PreferenceUtils;
 import online.motohub.util.Utility;
 
@@ -63,13 +67,21 @@ public class ChatSingleAddActivity extends BaseActivity {
 
     }
 
+    @Override
+    protected void onDestroy() {
+        DialogManager.hideProgress();
+        super.onDestroy();
+    }
+
     private void initViews() {
 
         setToolbar(mToolbar, mToolbarTitle);
 
         showToolbarBtn(mToolbar, R.id.toolbar_back_img_btn);
 
-        mMyProfileModel = (ProfileResModel) getIntent().getSerializableExtra(ProfileModel.MY_PROFILE_RES_MODEL);
+        //mMyProfileModel = (ProfileResModel) getIntent().getSerializableExtra(ProfileModel.MY_PROFILE_RES_MODEL);
+        //mMyProfileModel = MotoHub.getApplicationInstance().getmProfileResModel();
+        mMyProfileModel = EventBus.getDefault().getStickyEvent(ProfileResModel.class);
 
         mFloatingActionBtn.setVisibility(View.VISIBLE);
 
@@ -107,7 +119,9 @@ public class ChatSingleAddActivity extends BaseActivity {
                 break;
             case R.id.done_floating_btn:
                 if (mCurrentAdapterPos != -1) {
-                    setResult(RESULT_OK, new Intent().putExtra(ProfileModel.OTHERS_PROFILE_RES_MODEL, mFollowingListData.get(mCurrentAdapterPos)));
+                    //MotoHub.getApplicationInstance().setmOthersProfileResModel(mFollowingListData.get(mCurrentAdapterPos));
+                    EventBus.getDefault().postSticky(mFollowingListData.get(mCurrentAdapterPos));
+                    setResult(RESULT_OK, new Intent()/*.putExtra(ProfileModel.OTHERS_PROFILE_RES_MODEL, mFollowingListData.get(mCurrentAdapterPos))*/);
                 }
                 finish();
                 break;
@@ -118,7 +132,7 @@ public class ChatSingleAddActivity extends BaseActivity {
     void onItemClick(int position) {
         boolean isSelectedProfile = mFollowingListData.get(position).getIsSelected();
         mFollowingListData.get(position).setIsSelected(!isSelectedProfile);
-        if (mCurrentAdapterPos != -1 && mCurrentAdapterPos!=position) {
+        if (mCurrentAdapterPos != -1 && mCurrentAdapterPos != position) {
             mFollowingListData.get(mCurrentAdapterPos).setIsSelected(false);
         }
         mChatSingleAddAdapter.notifyDataSetChanged();

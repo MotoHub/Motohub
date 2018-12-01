@@ -67,13 +67,17 @@ public class EventRegistrationQuestionAdapter extends RecyclerView.Adapter<Event
 
     @Override
     public void onBindViewHolder(EventRegistrationQuestionAdapter.Holder mHolder, final int pos) {
-        String mQtnNo = String.valueOf(pos+1)+".";
-        mHolder.mQuestionNoTv.setText(mQtnNo);
+        try {
+            String mQtnNo = String.valueOf(pos + 1) + ".";
+            mHolder.mQuestionNoTv.setText(mQtnNo);
 
-        mHolder.myCustomEditTextListener.updatePosition(mHolder.getLayoutPosition());
-        mHolder.mQuestionTv.setText(mEventQuestionList.get(pos).getQuestion());
-        if(mEventAnswerList!=null && !mEventAnswerList.isEmpty())
-        mHolder.mAnswerEt.setText(mEventAnswerList.get(pos).getAnswer());
+            mHolder.myCustomEditTextListener.updatePosition(mHolder.getLayoutPosition());
+            mHolder.mQuestionTv.setText(mEventQuestionList.get(pos).getQuestion());
+            if (mEventAnswerList != null && !mEventAnswerList.isEmpty())
+                mHolder.mAnswerEt.setText(mEventAnswerList.get(pos).getAnswer());
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     public String[] getAnswers(){

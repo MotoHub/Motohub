@@ -108,6 +108,15 @@
 
         </RelativeLayout>
         </ScrollView>
+        <android.support.v7.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/rvTagList"
+            android:padding="@dimen/size10"
+            android:layout_above="@+id/footer_lay"
+            android:visibility="gone"
+            />
+
         <RelativeLayout
             android:id="@+id/footer_lay"
             style="@style/LayoutMatchWrap"

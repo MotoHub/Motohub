@@ -1,23 +1,23 @@
 package online.motohub.adapter;
 
 import android.content.Context;
-import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import online.motohub.R;
+import online.motohub.application.MotoHub;
 import online.motohub.fragment.track.TrackContactFragment;
 import online.motohub.fragment.track.TrackEventFragment;
 import online.motohub.fragment.track.TrackNewsFeedFragment;
 import online.motohub.fragment.track.TrackPhotosFragment;
 import online.motohub.fragment.track.TrackVideosFragment;
-import online.motohub.model.ProfileModel;
 import online.motohub.model.ProfileResModel;
-import online.motohub.model.promoter_club_news_media.PromotersModel;
 import online.motohub.model.promoter_club_news_media.PromotersResModel;
 
 public class TrackProfileTabPagerAdapter extends FragmentStatePagerAdapter {
@@ -29,24 +29,28 @@ public class TrackProfileTabPagerAdapter extends FragmentStatePagerAdapter {
         super(fm);
         this.ctx = ctx;
 
-        Bundle mTrackBundle = new Bundle();
-        mTrackBundle.putSerializable(ProfileModel.MY_PROFILE_RES_MODEL, mProfileResModel);
-        mTrackBundle.putSerializable(PromotersModel.PROMOTERS_RES_MODEL, mPromoterResModel);
+        //Bundle mTrackBundle = new Bundle();
+        /*mTrackBundle.putSerializable(ProfileModel.MY_PROFILE_RES_MODEL, mProfileResModel);
+        mTrackBundle.putSerializable(PromotersModel.PROMOTERS_RES_MODEL, mPromoterResModel);*/
+        /*MotoHub.getApplicationInstance().setmProfileResModel(mProfileResModel);
+        MotoHub.getApplicationInstance().setmPromoterResModel(mPromoterResModel);*/
+        EventBus.getDefault().postSticky(mProfileResModel);
+        EventBus.getDefault().postSticky(mPromoterResModel);
 
         TrackEventFragment mTrackEventFragment = new TrackEventFragment();
-        mTrackEventFragment.setArguments(mTrackBundle);
+        //mTrackEventFragment.setArguments(mTrackBundle);
 
         TrackContactFragment mTrackContactFragment = new TrackContactFragment();
-        mTrackContactFragment.setArguments(mTrackBundle);
+        //mTrackContactFragment.setArguments(mTrackBundle);
 
         TrackNewsFeedFragment mTrackNewsFeedFragment = new TrackNewsFeedFragment();
-        mTrackNewsFeedFragment.setArguments(mTrackBundle);
+        //mTrackNewsFeedFragment.setArguments(mTrackBundle);
 
         TrackPhotosFragment mTrackPhotosFragment = new TrackPhotosFragment();
-        mTrackPhotosFragment.setArguments(mTrackBundle);
+        //mTrackPhotosFragment.setArguments(mTrackBundle);
 
         TrackVideosFragment mTrackVideosFragment = new TrackVideosFragment();
-        mTrackVideosFragment.setArguments(mTrackBundle);
+        //mTrackVideosFragment.setArguments(mTrackBundle);
 
         mFragmentList.add(mTrackNewsFeedFragment);
         mFragmentList.add(mTrackEventFragment);

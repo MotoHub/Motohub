@@ -46,6 +46,34 @@ public class VideoCommentReplyModel implements Serializable {
     @Expose
     private PromotersResModel mPromoterByProfileID;
 
+
+    @SerializedName("ReplyTaggedUserNames")
+    @Expose
+    private String mReplyTaggedUserNames;
+
+
+    public String getReplyTaggedUserNames() {
+        if(mReplyTaggedUserNames == null)
+            mReplyTaggedUserNames = "";
+        return mReplyTaggedUserNames;
+    }
+
+    public void setReplyTaggedUserNames(String mReplyTaggedUserNames) {
+        this.mReplyTaggedUserNames = mReplyTaggedUserNames;
+    }
+
+    public String getReplyTaggedUserIDs() {
+        return mReplyTaggedUserIDs;
+    }
+
+    public void setReplyTaggedUserIDs(String mReplyTaggedUserIDs) {
+        this.mReplyTaggedUserIDs = mReplyTaggedUserIDs;
+    }
+
+    @SerializedName("ReplyTaggedUserID")
+    @Expose
+    private String mReplyTaggedUserIDs;
+
     @SerializedName("resource")
     @Expose
     private ArrayList<VideoCommentReplyModel> mResource;

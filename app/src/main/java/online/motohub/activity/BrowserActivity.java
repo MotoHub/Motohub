@@ -38,7 +38,11 @@ public class BrowserActivity extends BaseActivity {
         initView();
 
     }
-
+    @Override
+    protected void onDestroy() {
+        DialogManager.hideProgress();
+        super.onDestroy();
+    }
     private void initView() {
 
         setToolbar(mToolbar, mToolbarTitle);
@@ -50,16 +54,16 @@ public class BrowserActivity extends BaseActivity {
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
-                 DialogManager.hideProgress();
+                DialogManager.hideProgress();
             }
 
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
                 Intent intent;
                 Uri data = Uri.parse(url);
-                String service=data.getQueryParameter("service");
-                if (service!=null&&service.equals("facebook")) {
-                    intent = new Intent(BrowserActivity.this,LoginActivity.class);
+                String service = data.getQueryParameter("service");
+                if (service != null && service.equals("facebook")) {
+                    intent = new Intent(BrowserActivity.this, LoginActivity.class);
                     intent.setAction(Intent.ACTION_VIEW);
                     intent.setData(Uri.parse(url));
                     startActivity(intent);
@@ -77,7 +81,7 @@ public class BrowserActivity extends BaseActivity {
     }
 
     @OnClick(R.id.toolbar_back_img_btn)
-    public void onClick(View v){
+    public void onClick(View v) {
         switch (v.getId()) {
             case R.id.toolbar_back_img_btn:
                 finish();

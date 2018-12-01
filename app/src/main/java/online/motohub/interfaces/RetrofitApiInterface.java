@@ -5,9 +5,9 @@ import com.google.gson.JsonObject;
 
 import java.util.ArrayList;
 
-import io.reactivex.Flowable;
 import io.reactivex.Single;
 import okhttp3.MultipartBody;
+import okhttp3.ResponseBody;
 import online.motohub.model.BlockedUserModel;
 import online.motohub.model.ClubGroupModel;
 import online.motohub.model.CommonResponse;
@@ -25,6 +25,7 @@ import online.motohub.model.FeedCommentReplyModel;
 import online.motohub.model.FeedLikesModel;
 import online.motohub.model.FeedShareModel;
 import online.motohub.model.FollowProfileModel;
+import online.motohub.model.FollowProfileModel1;
 import online.motohub.model.GalleryImgModel;
 import online.motohub.model.GalleryVideoModel;
 import online.motohub.model.GroupChatMsgModel;
@@ -34,13 +35,15 @@ import online.motohub.model.LiveStreamPaymentResponse;
 import online.motohub.model.LiveStreamRequestResponse;
 import online.motohub.model.LiveStreamResponse;
 import online.motohub.model.LoginModel;
+import online.motohub.model.NotificationBlockedUsersModel;
 import online.motohub.model.NotificationModel;
-import online.motohub.model.OnDemandLoadVideosWhilePlaying;
 import online.motohub.model.OnDemandVideoUploadedResponse;
 import online.motohub.model.OndemandNewResponse;
+import online.motohub.model.PaymentCardDetailsModel;
 import online.motohub.model.PaymentModel;
 import online.motohub.model.PostReportModel;
 import online.motohub.model.PostsModel;
+import online.motohub.model.PostsResModel;
 import online.motohub.model.ProfileModel;
 import online.motohub.model.PromoterSubsResModel;
 import online.motohub.model.PromoterVideoModel;
@@ -51,8 +54,10 @@ import online.motohub.model.RacingModel;
 import online.motohub.model.ReplyLikeModel;
 import online.motohub.model.SessionModel;
 import online.motohub.model.SignUpResModel;
+import online.motohub.model.SingleChatCountModel;
 import online.motohub.model.SingleChatMsgModel;
 import online.motohub.model.SingleChatRoomModel;
+import online.motohub.model.SingleChatUnreadMsgModel;
 import online.motohub.model.SpectatorLiveModel;
 import online.motohub.model.VehicleInfoLikeModel;
 import online.motohub.model.VideoCommentLikeModel;
@@ -98,8 +103,16 @@ public interface RetrofitApiInterface {
     Call<SessionModel> callUpdateSession();
 
     @Headers("Content-Type: application/json")
+    @GET(UrlUtils.FOLLOW_PROFILE)
+    Call<FollowProfileModel1> callFollowingfollowerscount(@Query("filter") String filter, @Query("include_count") boolean include_count);
+
+    @Headers("Content-Type: application/json")
     @POST(UrlUtils.PROFILES)
     Call<ProfileModel> callCreateProfile(@Body JsonObject jsonArray);
+
+    @Headers("Content-Type: application/json")
+    @PATCH(UrlUtils.PROFILES)
+    Call<ProfileModel> setAvticeUsersCount(@Body JsonArray jsonArray);
 
     @Headers("Content-Type: application/json")
     @PATCH(UrlUtils.PROFILES)
@@ -111,13 +124,8 @@ public interface RetrofitApiInterface {
 
     @Headers("Content-Type: application/json")
     @GET(UrlUtils.PROFILES)
-    Single<ProfileModel> callGetProfilesRxjava(@Query("filter") String filter, @Query("related") String related);
-
-    @Headers("Content-Type: application/json")
-    @GET(UrlUtils.PROFILES)
     Call<ProfileModel> callAllOtherProfiles(@Query("filter") String filter, @Query("related") String related, @Query("limit") int limit,
-                                            @Query("offset") int offset, @Query("include_count") boolean include_count,
-                                            @Query("order") String mOrder);
+                                            @Query("offset") int offset, @Query("order") String order, @Query("include_count") boolean include_count);
 
     @Headers("Content-Type: application/json")
     @POST("user/password?reset=true")
@@ -197,6 +205,20 @@ public interface RetrofitApiInterface {
                                                   @Query("include_count") boolean include_count);
 
     @Headers("Content-Type: application/json")
+    @PATCH(UrlUtils.SINGLE_CHAT_MESSAGES)
+    Call<SingleChatMsgModel> callSetMsgStatus(@Query("filter") String filter, @Body JsonArray jsonArray);
+
+    @Headers("Content-Type: application/json")
+    @GET(UrlUtils.SINGLE_CHAT_MESSAGES)
+    Call<SingleChatCountModel> callGetSingleChatUnreadCount(@Query("filter") String filter, @Query("group") String group,
+                                                            @Query("fields") String fields);
+
+    @Headers("Content-Type: application/json")
+    @GET(UrlUtils.SINGLE_CHAT_MESSAGES)
+    Call<SingleChatUnreadMsgModel> callGetSingleChatUnreadMsg(@Query("filter") String filter, @Query("related") String related,
+                                                              @Query("group") String group, @Query("fields") String fields);
+
+    @Headers("Content-Type: application/json")
     @POST(UrlUtils.EVENTS_GRP_CHAT_MESSAGES)
     Call<EventGrpChatMsgModel> callSendEventGrpChatMsg(@Query("fields") String fields, @Body EventGrpChatMsgModel eventGrpChatMsgModel);
 
@@ -226,7 +248,6 @@ public interface RetrofitApiInterface {
     @POST(UrlUtils.GALLERY_VIDEO)
     Call<GalleryImgModel> postGalleryVideo(@Body JsonArray jsonArray);
 
-
     @Headers("Content-Type: application/json")
     @POST(UrlUtils.GALLERY_VIDEO)
     Call<OnDemandVideoUploadedResponse> postGalleryVideo1(@Body JsonArray jsonArray);
@@ -234,6 +255,12 @@ public interface RetrofitApiInterface {
     @Headers("Content-Type: application/json")
     @GET(UrlUtils.GALLERY_VIDEO)
     Call<GalleryVideoModel> callGetVideoGallery(@Query("filter") String filter, @Query("order") String order);
+
+    @Headers("Content-Type: application/json")
+    @GET(UrlUtils.GALLERY_VIDEO)
+    Call<GalleryVideoModel> callGetVideoGallery1(@Query("filter") String filter, @Query("order") String order,
+                                                 @Query("limit") int limit, @Query("offset") int offset,
+                                                 @Query("include_count") boolean count);
 
     @Headers("Content-Type: application/json")
     @GET(UrlUtils.EVENT_GROUPS)
@@ -259,7 +286,7 @@ public interface RetrofitApiInterface {
 
     @Headers("Content-Type: application/json")
     @GET(UrlUtils.PROMOTERS)
-    Call<PromotersModel> callGetPromotersList(@Query("filter") String filter, @Query("related") String related);
+    Call<PromotersModel> callGetPromotersList(@Query("filter") String filter, @Query("order") String order, @Query("related") String related);
 
     @Headers("Content-Type: application/json")
     @GET(UrlUtils.PROMOTERS)
@@ -310,6 +337,10 @@ public interface RetrofitApiInterface {
     @Multipart
     @POST(UrlUtils.FILE_POST_IMG)
     Call<ImageModel> postProfilePostImgFile(@Part MultipartBody.Part imagePart);
+
+    @Multipart
+    @POST(UrlUtils.FILE_POST_IMG)
+    Single<ImageModel> postProfilePostImgFileRxjava(@Part MultipartBody.Part imagePart);
 
     @Multipart
     @POST(UrlUtils.FILE_COVER_IMG)
@@ -444,16 +475,16 @@ public interface RetrofitApiInterface {
     @FormUrlEncoded
     @POST("payment.php")
     Call<PaymentModel> postSubscribeRequestToClub(@Field("plan") String plan, @Field("email") String email,
-                                                  @Field("token") String token, @Field("type") String type, @Field("account_no") String account);
+                                                  @Field("token") String token, @Field("type") String type, @Field("account_no") String account, @Field("amount")int subscription_fee);
 
     @Headers({"Content-Type: application/x-www-form-urlencoded"})
     @FormUrlEncoded
     @POST("payment.php")
-    Call<PaymentModel> postUnSubscribeRequestToClub(@Field("subscription_id") String subsId, @Field("type") String type, @Field("access_token") String accessToken);
+    Call<ResponseBody> postUnSubscribeRequestToClub(@Field("subscription_id") String subsId, @Field("type") String type, @Field("access_token") String accessToken);
 
     @Headers("Content-Type: application/json")
     @DELETE(UrlUtils.PROMOTER_SUBSCRIPTION)
-    Call<PromoterSubsResModel> callDltPromoterSubs(@Query("filter") String filter);
+    Call<PromoterSubsResModel> callDltPromoterSubs(@Query("fields") String fields, @Query("filter") String filter);
 
     @Headers("Content-Type: application/json")
     @POST(UrlUtils.PROMOTER_SUBSCRIPTION)
@@ -535,23 +566,22 @@ public interface RetrofitApiInterface {
 
     @Headers("Content-Type: application/json")
     @GET(UrlUtils.GALLERY_VIDEO)
-    Flowable<PromoterVideoModel> callGetPromotersVideosRxJava(@Query("fields") String fields, @Query("filter") String mFilter,
+    Call<PromoterVideoModel> callGetPromotersVideosNotifyTray(@Query("fields") String fields, @Query("filter") String mFilter,
+                                                              @Query("related") String related, @Query("order") String order,
+                                                              @Query("include_count") boolean isIncludeCount);
+
+    @Headers("Content-Type: application/json")
+    @GET(UrlUtils.GALLERY_VIDEO)
+    Call<PromoterVideoModel> callGetPromotersVideosForAdapter(@Query("fields") String fields, @Query("filter") String mFilter,
                                                               @Query("related") String related, @Query("order") String order,
                                                               @Query("limit") int mLimit, @Query("offset") int mOffset, @Query("include_count") boolean isIncludeCount);
 
     @Headers("Content-Type: application/json")
     @GET(UrlUtils.GALLERY_VIDEO)
-    Single<PromoterVideoModel> callGetPromotersVideosSearchRxJava(@Query("fields") String fields, @Query("filter") String mFilter,
-                                                              @Query("related") String related, @Query("order") String order,
-                                                              @Query("limit") int mLimit, @Query("include_count") boolean isIncludeCount);
-
-
-    @Headers("Content-Type: application/json")
-    @GET(UrlUtils.GALLERY_VIDEO)
-    Call<OnDemandLoadVideosWhilePlaying> callGetPromotersVideosWhilePlaying(@Query("fields") String fields, @Query("filter") String mFilter,
-                                                                            @Query("order") String order,
-                                                                            @Query("limit") int mLimit, @Query("offset") int mOffset, @Query("include_count") boolean isIncludeCount);
-
+    Call<PromoterVideoModel> callGetPromotersVideosWhilePlaying(@Query("fields") String fields, @Query("filter") String mFilter,
+                                                                @Query("related") String related,
+                                                                @Query("order") String order,
+                                                                @Query("limit") int mLimit, @Query("offset") int mOffset, @Query("include_count") boolean isIncludeCount);
 
     @Headers("Content-Type: application/json")
     @POST(UrlUtils.EVENT_LIVE_GROUP_CHAT)
@@ -626,7 +656,7 @@ public interface RetrofitApiInterface {
     @Headers("Content-Type: application/json")
     @POST(UrlUtils.REPORT_POST)
     Call<PostReportModel> callPostReportpost(@Query("fields") String mFields, @Body JsonArray mJsonObject);
-	
+
     @Multipart
     @POST(UrlUtils.FILE_SINGLE_CHAT)
     Call<ImageModel> postSingleChatImgFile(@Part MultipartBody.Part imagePart);
@@ -643,16 +673,98 @@ public interface RetrofitApiInterface {
     @GET(UrlUtils.FOLLOW_PROFILE)
     Call<FollowProfileModel> callGetIsAlreadyFollowedProfile(@Query("filter") String mFilter);
 
+    @Headers("Content-Type: application/json")
+    @GET(UrlUtils.PROMOTER_SUBSCRIPTION)
+    Call<PromoterSubsResModel> callGetClubUsers(@Query("filter") String mFilter);
+
+    @Headers("Content-Type: application/json")
+    @DELETE(UrlUtils.VIDEO_SHARES)
+    Call<VideoShareModel> callDeleteVideoSharedPost(@Query("filter") String mFilter);
+
+    @Headers("Content-Type: application/json")
+    @PATCH(UrlUtils.GALLERY_VIDEO)
+    Call<PromoterVideoModel> callUpdateOnDemandProfilePosts(@Query("fields") String mFields, @Body JsonArray mJsonObject);
+
+    @Headers("Content-Type: application/json")
+    @GET(UrlUtils.PAYMENT_CARD_DETAILS)
+    Call<PaymentCardDetailsModel> callGetPaymentCardDetails(@Query("filter") String mFilter);
+
+    @Headers("Content-Type: application/json")
+    @POST(UrlUtils.PAYMENT_CARD_DETAILS)
+    Call<PaymentCardDetailsModel> callAddPaymentCardDetails(@Query("fields") String mFields, @Body JsonArray mJsonArray);
+
+    @Headers("Content-Type: application/json")
+    @DELETE(UrlUtils.PAYMENT_CARD_DETAILS)
+    Call<PaymentCardDetailsModel> callDeletePaymentCardDetails(@Query("fields") String fields, @Query("filter") String filter);
+
+    @Headers("Content-Type: application/json")
+    @POST(UrlUtils.Block_Unblock_Post_Notifications)
+    Call<NotificationBlockedUsersModel> blockNotifications(@Query("fields") String fields, @Body JsonObject jsonobj);
+
+    @Headers("Content-Type: application/json")
+    @DELETE(UrlUtils.Block_Unblock_Post_Notifications)
+    Call<NotificationBlockedUsersModel> unBlockNotifications(@Query("fields") String fields, @Query("filter") String filter);
+
+    @Headers("Content-Type: application/json")
+    @GET(UrlUtils.PROMOTER_SUBSCRIPTION)
+    Call<PromoterSubsResModel> callGetClubSubs(@Query("related") String related, @Query("filter") String filter,
+                                               @Query("limit") int limit, @Query("offset") int offset,
+                                               @Query("include_count") boolean count);
+
+    @Headers("Content-Type: application/json")
+    @GET(UrlUtils.FOLLOW_PROFILE)
+    Call<FollowProfileModel> callGetFollowings(@Query("related") String related, @Query("filter") String filter,
+                                               @Query("limit") int limit, @Query("offset") int offset,
+                                               @Query("include_count") boolean count);
+
+    @Headers("Content-Type: application/json")
+    @GET(UrlUtils.PROFILES)
+    Call<ProfileModel> callAllOtherSearchProfiles(@Query("filter") String filter, @Query("related") String related, @Query("limit") int limit,
+                                                  @Query("offset") int offset, @Query("include_count") boolean include_count);
+
+    @POST(UrlUtils.PHONE_NUMBERS)
+    Call<ProfileModel> callGetPhoneEmailProfiles(@Query("fields") String mFields, @Body JsonObject mJsonObject);
+
+    @Headers("Content-Type: application/json")
+    @GET(UrlUtils.USER_TYPE)
+    Call<LoginModel> callGetProfileUserType(@Query("fields") String mFields);
+
+    @Headers("Content-Type: application/json")
+    @GET(UrlUtils.PROMOTERS)
+    Call<PromotersModel> callGetPromoterWithPushToken(@Query("filter") String mFilter);
+
+    @Headers("Content-Type: application/json")
+    @GET(UrlUtils.POSTS)
+    Call<PostsModel> callGetViewCount(@Query("filter") String filter);
+
+    @Headers("Content-Type: application/json")
+    @GET(UrlUtils.GALLERY_VIDEO)
+    Call<PromoterVideoModel> callGetViewCountOnDemand(@Query("filter") String filter);
+
+    @Headers("Content-Type: application/json")
+    @PATCH(UrlUtils.POSTS)
+    Call<PostsModel> callsetViewCount(@Query("fields") String fields, @Body JsonObject mJsonArray);
+
+    @Headers("Content-Type: application/json")
+    @PATCH(UrlUtils.GALLERY_VIDEO)
+    Call<PromoterVideoModel> callsetViewCountOnDemand(@Query("fields") String fields, @Body JsonObject mJsonArray);
+
+    @GET(UrlUtils.ALL_POST)
+    Call<PostsModel> callGetAllPosts(@Query("userid") int filter, @Query("related") String related,
+                                     @Query("limit") int limit, @Query("offset") int offset, @Query("include_count") boolean count);
+
+    @Headers("Content-Type: application/json")
+    @PATCH(UrlUtils.PROMOTER_SUBSCRIPTION)
+    Call<PromoterSubsResModel> callUpdateUnSubscription(@Body JsonArray mArray, @Query("fields") String fields);
+
+
     /**
      * Don't Delete
      */
-
 //    @GET("http://18.221.84.245:10000/api/v1/startdevicestream")
 //    Call<DeviceStreamModel> callStartDeviceStream(@Query("device") String device, @Query("channel") int channel, @Query("reserve") int reserve);
-//
 //    @GET("http://18.221.84.245:10000/api/v1/getdeviceinfo")
 //    Call<DeviceInfoModel> callGetDeviceInfo(@Query("device") String device);
-//
 //    @GET("http://18.221.84.245:10088/api/v1/getdevicestream?device=1234567890123&channel=1&protocol=rtmp&reserve=1")
 //    Call<GetDeviceStreamModel> callGetDeviceStream();
 

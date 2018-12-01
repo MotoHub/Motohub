@@ -16,6 +16,10 @@ public class PostsResModel implements Serializable {
     @Expose
     private int mID;
 
+    @SerializedName("ViewCount")
+    @Expose
+    private int mViewCount;
+
     @SerializedName("PostVideoThumbnailUrl")
     @Expose
     private String PostVideoThumbnailURL;
@@ -80,9 +84,23 @@ public class PostsResModel implements Serializable {
     @Expose
     private boolean mReportStatus;
 
+    @SerializedName("SharedText")
+    @Expose
+    private String mSharedTxt;
+
     @SerializedName("profiles_by_WhoPostedProfileID")
     @Expose
     private ProfileResModel mProfilesByWhoPostedProfileID;
+
+    public String getSharedTxt() {
+        if(mSharedTxt == null)
+            mSharedTxt = "";
+        return mSharedTxt;
+    }
+
+    public void setSharedTxt(String mSharedTxt) {
+        this.mSharedTxt = mSharedTxt;
+    }
 
     @SerializedName("profiles_by_ProfileID")
     @Expose
@@ -117,6 +135,27 @@ public class PostsResModel implements Serializable {
     @Expose
     private VideoShareModel mVideoSharesByNewSharedPostID;
 
+    @SerializedName("postnotificationblockedusers_by_PostID")
+    @Expose
+    private ArrayList<NotificationBlockedUsersModel> mNotificationBlockedUsersID;
+
+    public ArrayList<NotificationBlockedUsersModel> getmNotificationBlockedUsersID() {
+        if(mNotificationBlockedUsersID == null)
+            mNotificationBlockedUsersID = new ArrayList<>();
+        return mNotificationBlockedUsersID;
+    }
+
+    public void setmNotificationBlockedUsersID(ArrayList<NotificationBlockedUsersModel> mNotificationBlockedUsersID) {
+        this.mNotificationBlockedUsersID = mNotificationBlockedUsersID;
+    }
+
+    public int getmViewCount() {
+        return mViewCount;
+    }
+
+    public void setmViewCount(int mViewCount) {
+        this.mViewCount = mViewCount;
+    }
 
     public Integer getID() {
         return mID;

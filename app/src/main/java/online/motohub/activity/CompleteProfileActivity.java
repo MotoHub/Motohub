@@ -3,7 +3,6 @@ package online.motohub.activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-
 import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.widget.Toolbar;
@@ -44,6 +43,7 @@ import online.motohub.model.promoter_club_news_media.PromotersModel;
 import online.motohub.model.promoter_club_news_media.PromotersResModel;
 import online.motohub.retrofit.RetrofitClient;
 import online.motohub.util.AppConstants;
+import online.motohub.util.DialogManager;
 import online.motohub.util.PreferenceUtils;
 
 public class CompleteProfileActivity extends BaseActivity {
@@ -172,7 +172,7 @@ public class CompleteProfileActivity extends BaseActivity {
 
     @Override
     protected void onDestroy() {
-
+        DialogManager.hideProgress();
         super.onDestroy();
     }
 
@@ -200,6 +200,8 @@ public class CompleteProfileActivity extends BaseActivity {
             showHideWidgets(View.GONE);
         }
     }
+
+
 
     private void showHideWidgets(int visibility) {
         if (visibility == View.GONE) {
@@ -573,6 +575,8 @@ public class CompleteProfileActivity extends BaseActivity {
             submitMotoProfileData(mProfilePicImgUri, mCoverImgUri);
         }
     }*/
+
+
 
     @Override
     public void retrofitOnResponse(Object responseObj, int responseType) {

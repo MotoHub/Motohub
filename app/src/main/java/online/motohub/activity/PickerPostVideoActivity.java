@@ -37,9 +37,7 @@ import online.motohub.adapter.GalleryPickerAdapter;
 import online.motohub.interfaces.PermissionCallback;
 import online.motohub.model.LocalFolderModel;
 import online.motohub.model.LocalImgModel;
-import online.motohub.util.AppConstants;
 import online.motohub.util.DialogManager;
-import online.motohub.util.ZoomImageView;
 
 
 public class PickerPostVideoActivity extends BaseActivity {
@@ -79,6 +77,12 @@ public class PickerPostVideoActivity extends BaseActivity {
         ButterKnife.bind(this);
         if (isPermissionAdded())
             initView();
+    }
+
+    @Override
+    protected void onDestroy() {
+        DialogManager.hideProgress();
+        super.onDestroy();
     }
 
     private void initView() {
@@ -456,7 +460,7 @@ public class PickerPostVideoActivity extends BaseActivity {
         }
     }
 
-    private boolean isPermissionAdded() {
+    public boolean isPermissionAdded() {
         boolean addPermission = true;
         if (android.os.Build.VERSION.SDK_INT >= 23) {
             int readStoragePermission = ContextCompat.checkSelfPermission(this, android.Manifest.permission.READ_EXTERNAL_STORAGE);

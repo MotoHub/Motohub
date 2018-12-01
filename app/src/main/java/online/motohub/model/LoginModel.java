@@ -34,6 +34,10 @@ public class LoginModel implements Serializable {
     @Expose
     private String mLastName;
 
+    @SerializedName("phone")
+    @Expose
+    private String mPhone;
+
     @SerializedName("email")
     @Expose
     private String mEmail;
@@ -49,6 +53,18 @@ public class LoginModel implements Serializable {
     @SerializedName("host")
     @Expose
     private String mHost;
+
+    public String getPhone() {
+        if(mPhone == null)
+            mPhone = "";
+        return mPhone;
+    }
+
+    public void setPhone(String mPhone) {
+        this.mPhone = mPhone;
+    }
+
+
 
     public String getSessionToken() {
         return mSessionToken;

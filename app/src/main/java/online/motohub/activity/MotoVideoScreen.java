@@ -43,6 +43,8 @@ public class MotoVideoScreen extends BaseActivity {
     }
 
 
+
+
     private void initVideoView() {
         mVideoFilePath = "android.resource://" + getPackageName() + "/" + R.raw.motohub_video;
         mVideoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
@@ -108,6 +110,7 @@ public class MotoVideoScreen extends BaseActivity {
 
     @Override
     protected void onDestroy() {
+        DialogManager.hideProgress();
         super.onDestroy();
         releasePlayer();
     }

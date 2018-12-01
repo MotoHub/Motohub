@@ -35,6 +35,7 @@ import online.motohub.model.SessionModel;
 import online.motohub.retrofit.APIConstants;
 import online.motohub.retrofit.RetrofitClient;
 import online.motohub.util.AppConstants;
+import online.motohub.util.DialogManager;
 import online.motohub.util.PreferenceUtils;
 import online.motohub.util.StringUtils;
 
@@ -71,6 +72,12 @@ public class ViewStreamAcceptedUsersActivity extends BaseActivity implements Com
         setContentView(R.layout.activity_stream_accpeted_users);
         ButterKnife.bind(this);
         initView();
+    }
+
+    @Override
+    protected void onDestroy() {
+        DialogManager.hideProgress();
+        super.onDestroy();
     }
 
     private void initView() {

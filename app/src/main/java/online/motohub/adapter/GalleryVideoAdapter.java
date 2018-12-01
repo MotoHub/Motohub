@@ -21,8 +21,8 @@ import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
 
+import java.net.URLDecoder;
 import java.util.ArrayList;
-import java.util.List;
 
 import online.motohub.R;
 import online.motohub.model.GalleryVideoResModel;
@@ -32,18 +32,19 @@ import online.motohub.util.UrlUtils;
 public class GalleryVideoAdapter extends RecyclerView.Adapter<GalleryVideoAdapter.Holder> {
 
     private Context mContext;
-    private List<GalleryVideoResModel> videoResModels;
+    private ArrayList<GalleryVideoResModel> videoResModels;
     private SparseBooleanArray mSelectedItemsIds;
 
-    public GalleryVideoAdapter(Context mContext, List<GalleryVideoResModel> videoResModels) {
+    /*public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
+        this.onItemClickListener = onItemClickListener;
+    }*/
+
+    public GalleryVideoAdapter(Context mContext, ArrayList<GalleryVideoResModel> videoResModels) {
         this.mContext = mContext;
         this.videoResModels = videoResModels;
         mSelectedItemsIds = new SparseBooleanArray();
     }
 
-    /*public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
-        this.onItemClickListener = onItemClickListener;
-    }*/
 
     @Override
     public Holder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -56,36 +57,40 @@ public class GalleryVideoAdapter extends RecyclerView.Adapter<GalleryVideoAdapte
     @Override
     public void onBindViewHolder(final Holder holder, int position) {
         final GalleryVideoResModel model = videoResModels.get(position);
+        try {
 
-        GlideUrl glideUrl = new GlideUrl(UrlUtils.FILE_URL + model.getThumbnail(), new LazyHeaders.Builder()
-                .addHeader("X-DreamFactory-Api-Key", mContext.getString(R.string.dream_factory_api_key))
-                .build());
+            /*GlideUrl glideUrl = new GlideUrl(UrlUtils.FILE_URL + model.getThumbnail(), new LazyHeaders.Builder()
+                    .addHeader("X-DreamFactory-Api-Key", mContext.getString(R.string.dream_factory_api_key))
+                    .build());*/
 
-        Glide.with(mContext)
-                .load(glideUrl)
-                .apply(new RequestOptions()
-                        .dontAnimate()
-                        .error(R.drawable.video_place_holder))
-                .listener(new RequestListener<Drawable>() {
-                    @Override
-                    public boolean onLoadFailed(@Nullable GlideException e,
-                                                Object model,
-                                                Target<Drawable> target,
-                                                boolean isFirstResource) {
-                        holder.mPlayBtn.setVisibility(View.GONE);
-                        return false;
-                    }
+            GlideUrl glideUrl = new GlideUrl(UrlUtils.AWS_FILE_URL + model.getThumbnail(), new LazyHeaders.Builder()
+                    .addHeader("X-DreamFactory-Api-Key", mContext.getString(R.string.dream_factory_api_key))
+                    .build());
 
-                    @Override
-                    public boolean onResourceReady(Drawable resource,
-                                                   Object model,
-                                                   Target<Drawable> target,
-                                                   DataSource dataSource,
-                                                   boolean isFirstResource) {
-                        return false;
-                    }
-                })
-                .into(holder.mImageView);
+            Glide.with(mContext)
+                    .load(UrlUtils.AWS_S3_BASE_URL + model.getThumbnail())
+                    .apply(new RequestOptions()
+                            .dontAnimate()
+                            .error(R.drawable.video_place_holder))
+                    .listener(new RequestListener<Drawable>() {
+                        @Override
+                        public boolean onLoadFailed(@Nullable GlideException e,
+                                                    Object model,
+                                                    Target<Drawable> target,
+                                                    boolean isFirstResource) {
+                            return false;
+                        }
+
+                        @Override
+                        public boolean onResourceReady(Drawable resource,
+                                                       Object model,
+                                                       Target<Drawable> target,
+                                                       DataSource dataSource,
+                                                       boolean isFirstResource) {
+                            return false;
+                        }
+                    })
+                    .into(holder.mImageView);
 
         /*holder.mImageView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -95,40 +100,25 @@ public class GalleryVideoAdapter extends RecyclerView.Adapter<GalleryVideoAdapte
                 }
             }
         });*/
-        if (model.getCaption() != null && !model.getCaption().equals("null")) {
-            holder.titleTv.setVisibility(View.VISIBLE);
-            holder.titleTv.setText("" + model.getCaption());
-        } else {
-            holder.titleTv.setVisibility(View.GONE);
-        }
+            if (model.getCaption() != null && !model.getCaption().equals("null")) {
+                holder.titleTv.setVisibility(View.VISIBLE);
+                if (model.getCaption().contains(" "))
+                    holder.titleTv.setText(model.getCaption());
+                else
+                    holder.titleTv.setText(URLDecoder.decode(model.getCaption(), "UTF-8"));
+            } else {
+                holder.titleTv.setVisibility(View.GONE);
+            }
 
-        holder.iv_check.setVisibility(mSelectedItemsIds.get(position) ? View.VISIBLE : View.GONE);
+            holder.iv_check.setVisibility(mSelectedItemsIds.get(position) ? View.VISIBLE : View.GONE);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public int getItemCount() {
         return videoResModels.size();
-    }
-
-    class Holder extends RecyclerView.ViewHolder {
-        ImageView mPlayBtn, iv_check;
-        AppCompatImageView mImageView;
-        TextView titleTv;
-
-        Holder(View v) {
-            super(v);
-            mImageView = v.findViewById(R.id.photoACImgV);
-            mPlayBtn = v.findViewById(R.id.playBtn);
-            iv_check = v.findViewById(R.id.iv_check);
-            titleTv = v.findViewById(R.id.titleTv);
-            ViewGroup.LayoutParams parem = mImageView.getLayoutParams();
-            parem.height = ScreenSize.getWidth(50);
-            mImageView.setLayoutParams(parem);
-        }
-    }
-
-    public interface OnItemClickListener {
-        void onItemClick(GalleryVideoResModel model, int position);
     }
 
     public void filterList(ArrayList<GalleryVideoResModel> videoResModels) {
@@ -141,13 +131,11 @@ public class GalleryVideoAdapter extends RecyclerView.Adapter<GalleryVideoAdapte
         selectView(position, !mSelectedItemsIds.get(position));
     }
 
-
     //Remove selected selections
     public void removeSelection() {
         mSelectedItemsIds = new SparseBooleanArray();
         notifyDataSetChanged();
     }
-
 
     //Put or delete selected position into SparseBooleanArray
     public void selectView(int position, boolean value) {
@@ -167,6 +155,27 @@ public class GalleryVideoAdapter extends RecyclerView.Adapter<GalleryVideoAdapte
     //Return all selected ids
     public SparseBooleanArray getSelectedIds() {
         return mSelectedItemsIds;
+    }
+
+    public interface OnItemClickListener {
+        void onItemClick(GalleryVideoResModel model, int position);
+    }
+
+    class Holder extends RecyclerView.ViewHolder {
+        ImageView mPlayBtn, iv_check;
+        AppCompatImageView mImageView;
+        TextView titleTv;
+
+        Holder(View v) {
+            super(v);
+            mImageView = v.findViewById(R.id.photoACImgV);
+            mPlayBtn = v.findViewById(R.id.playBtn);
+            iv_check = v.findViewById(R.id.iv_check);
+            titleTv = v.findViewById(R.id.titleTv);
+            ViewGroup.LayoutParams parem = mImageView.getLayoutParams();
+            parem.height = ScreenSize.getWidth(50);
+            mImageView.setLayoutParams(parem);
+        }
     }
 
 }

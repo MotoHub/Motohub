@@ -33,15 +33,20 @@ public class CreateGrpSelectedProfilesAdapter extends RecyclerView.Adapter<Recyc
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+        try {
 
-        final ViewHolderUserProfile mViewHolderUserProfile = (ViewHolderUserProfile) holder;
+            final ViewHolderUserProfile mViewHolderUserProfile = (ViewHolderUserProfile) holder;
 
-        mViewHolderUserProfile.mProfileImg.setTag(mViewHolderUserProfile.getLayoutPosition());
-        mViewHolderUserProfile.mUsername.setTag(mViewHolderUserProfile.getLayoutPosition());
+            mViewHolderUserProfile.mProfileImg.setTag(mViewHolderUserProfile.getLayoutPosition());
+            mViewHolderUserProfile.mUsername.setTag(mViewHolderUserProfile.getLayoutPosition());
 
-        ((BaseActivity) mContext).setImageWithGlide(mViewHolderUserProfile.mProfileImg, mGrpSelectedProfilesList.get(position).getProfilePicture(), R.drawable.default_profile_icon);
+            ((BaseActivity) mContext).setImageWithGlide(mViewHolderUserProfile.mProfileImg, mGrpSelectedProfilesList.get(position).getProfilePicture(), R.drawable.default_profile_icon);
 
-        mViewHolderUserProfile.mUsername.setText(Utility.getInstance().getUserName(mGrpSelectedProfilesList.get(position)));
+
+            mViewHolderUserProfile.mUsername.setText(Utility.getInstance().getUserName(mGrpSelectedProfilesList.get(position)));
+        }catch (Exception e){
+            e.printStackTrace();
+        }
 
     }
 

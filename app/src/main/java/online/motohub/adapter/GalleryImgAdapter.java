@@ -1,7 +1,6 @@
 package online.motohub.adapter;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
@@ -47,21 +46,27 @@ public class GalleryImgAdapter extends RecyclerView.Adapter<GalleryImgAdapter.Ho
 
     @Override
     public void onBindViewHolder(final Holder holder, int position) {
+        try {
 
-        GalleryImgResModel model = models.get(position);
+            GalleryImgResModel model = models.get(position);
 
-        GlideUrl glideUrl = new GlideUrl(UrlUtils.FILE_URL + model.getGalleryImage(),
+      /*  GlideUrl glideUrl = new GlideUrl(UrlUtils.FILE_URL + model.getGalleryImage(),
                 new LazyHeaders.Builder()
                         .addHeader("X-DreamFactory-Api-Key", mContext.getString(R.string.dream_factory_api_key))
-                        .build());
+                        .build());*/
 
-        Glide.with(mContext)
-                .load(glideUrl)
-                .apply(new RequestOptions()
-                        .dontAnimate().error(R.drawable.img_place_holder))
-                .into(holder.mImgView);
+            GlideUrl glideUrl = new GlideUrl(UrlUtils.AWS_FILE_URL + model.getGalleryImage(),
+                    new LazyHeaders.Builder()
+                            .addHeader("X-DreamFactory-Api-Key", mContext.getString(R.string.dream_factory_api_key))
+                            .build());
 
-        holder.iv_check.setVisibility(mSelectedItemsIds.get(position) ? View.VISIBLE : View.GONE);
+            Glide.with(mContext)
+                    .load(UrlUtils.AWS_S3_BASE_URL + model.getGalleryImage())
+                    .apply(new RequestOptions()
+                            .dontAnimate().error(R.drawable.img_place_holder))
+                    .into(holder.mImgView);
+
+            holder.iv_check.setVisibility(mSelectedItemsIds.get(position) ? View.VISIBLE : View.GONE);
 
         /*holder.mImgView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -71,6 +76,9 @@ public class GalleryImgAdapter extends RecyclerView.Adapter<GalleryImgAdapter.Ho
                 }
             }
         });*/
+        }catch (Exception e){
+            e.printStackTrace();
+        }
 
     }
 

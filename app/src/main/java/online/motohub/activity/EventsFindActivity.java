@@ -13,6 +13,8 @@ import android.widget.Spinner;
 
 import com.google.gson.Gson;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,13 +33,13 @@ import online.motohub.model.EventsModel;
 import online.motohub.model.EventsResModel;
 import online.motohub.model.EventsWhoIsGoingModel;
 import online.motohub.model.PaymentModel;
-import online.motohub.model.ProfileModel;
 import online.motohub.model.ProfileResModel;
 import online.motohub.model.PurchasedAddOnModel;
 import online.motohub.model.RacingModel;
 import online.motohub.model.SessionModel;
 import online.motohub.retrofit.RetrofitClient;
 import online.motohub.util.AppConstants;
+import online.motohub.util.DialogManager;
 import online.motohub.util.PreferenceUtils;
 
 import static butterknife.OnItemSelected.Callback.NOTHING_SELECTED;
@@ -61,14 +63,13 @@ public class EventsFindActivity extends BaseActivity {
 
     @BindString(R.string.no_events_err)
     String mNoEventsErr;
-
+    ProfileResModel mMyProfileResModel;
     private List<EventsResModel> mEventsFindListData;
     private EventsFindAdapter mEventsFindAdapter;
     private boolean mEventsLoaded = false;
-    ProfileResModel mMyProfileResModel;
     private PaymentModel mTempPaymentModel;
     private int mFailureResponseType;
-    
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,15 +78,24 @@ public class EventsFindActivity extends BaseActivity {
         initView();
     }
 
+    @Override
+    protected void onDestroy() {
+        DialogManager.hideProgress();
+        super.onDestroy();
+    }
+
     private void initView() {
 
         setToolbar(mToolbar, mToolbarTitle);
 
         showToolbarBtn(mToolbar, R.id.toolbar_back_img_btn);
+        setUpPurchseSuccessUI();
 
         assert getIntent().getExtras() != null;
 
-        mMyProfileResModel = (ProfileResModel) getIntent().getExtras().get(ProfileModel.MY_PROFILE_RES_MODEL);
+        //mMyProfileResModel = (ProfileResModel) getIntent().getExtras().get(ProfileModel.MY_PROFILE_RES_MODEL);
+        //mMyProfileResModel = MotoHub.getApplicationInstance().getmProfileResModel();
+        mMyProfileResModel = EventBus.getDefault().getStickyEvent(ProfileResModel.class);
 
         ArrayAdapter<CharSequence> mMPSpinnerAdapter = new ArrayAdapter<CharSequence>(this, R.layout.widget_spinner_item, getResources().getStringArray(R.array.moto_type));
         mMPSpinnerAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
@@ -93,16 +103,18 @@ public class EventsFindActivity extends BaseActivity {
 
 
         mEventsFindListData = new ArrayList<>();
-        mEventsFindAdapter = new EventsFindAdapter(this, mEventsFindListData, mMyProfileResModel,true);
-        mEventsFindListView.setLayoutManager(new LinearLayoutManager(this));
-        mEventsFindListView.setAdapter(mEventsFindAdapter);
+        if (mMyProfileResModel != null && mMyProfileResModel.getID() != 0) {
+            mEventsFindAdapter = new EventsFindAdapter(this, mEventsFindListData, mMyProfileResModel, null, true);
+            mEventsFindListView.setLayoutManager(new LinearLayoutManager(this));
+            mEventsFindListView.setAdapter(mEventsFindAdapter);
+        }
 
         getUpcomingEvents();
 
     }
 
     private void getUpcomingEvents() {
-        int status = 2;
+        int status = AppConstants.EVENT_STATUS;
         String mDateFilter = "(( Date >= " + getCurrentDate() + " ) OR ( Finish >= " + getCurrentDate() + " )) AND ( EventStatus=" + status + ")";
         RetrofitClient.getRetrofitInstance().callGetEvents(this, mDateFilter, RetrofitClient.GET_EVENTS_RESPONSE);
     }
@@ -151,9 +163,11 @@ public class EventsFindActivity extends BaseActivity {
                 }
                 break;
             case AppDialogFragment.ALERT_SPECTATOR_UPDATE_DIALOG:
-                String myProfileObj=new Gson().toJson(mMyProfileResModel);
-                startActivity(new Intent(this, UpgradeProfileActivity.class).putExtra(AppConstants.MY_PROFILE_OBJ, myProfileObj));
-                dismissAppDialog();
+                if (mMyProfileResModel != null) {
+                    String myProfileObj = new Gson().toJson(mMyProfileResModel);
+                    startActivity(new Intent(this, UpgradeProfileActivity.class).putExtra(AppConstants.MY_PROFILE_OBJ, myProfileObj));
+                    dismissAppDialog();
+                }
                 break;
             case AppDialogFragment.EVENT_CATEGORY_DIALOG:
                 mEventsFindAdapter.alertDialogPositiveBtnClick(dialogType);
@@ -240,19 +254,36 @@ public class EventsFindActivity extends BaseActivity {
         } else if (responseObj instanceof RacingModel) {
 
             ArrayList<EventAddOnModel> mSelectedEventAddOn = MotoHub.getApplicationInstance().getPurchasedAddOn();
-            if(mSelectedEventAddOn.size()>0)
+            if (mSelectedEventAddOn.size() > 0)
                 mEventsFindAdapter.callPostSelectedAddOns(mSelectedEventAddOn);
-            else
-                showSnackBar(mCoordinatorLayout, "Successfully booked an event.");
+            else {
 
-        } else if(responseObj instanceof EventAnswersModel){
-            EventAnswersModel mEventAnswerList = (EventAnswersModel)responseObj;
+
+                if (mEventsFindAdapter.mEventType.equals(AppConstants.FREE_EVENT)) {
+                    showSnackBar(mCoordinatorLayout, "Successfully booked an event.");
+                } else {
+                    if (((BaseActivity) this).mPurchaseSuccessDialog != null)
+                        ((BaseActivity) this).mPurchaseSuccessDialog.show();
+                }
+            }
+
+        } else if (responseObj instanceof EventAnswersModel) {
+            EventAnswersModel mEventAnswerList = (EventAnswersModel) responseObj;
             ArrayList<EventAnswersModel> mResEventAnswerModel = mEventAnswerList.getResource();
             mEventsFindAdapter.callUpdateEventAnswerScreen(mResEventAnswerModel);
 
-        } else if(responseObj instanceof PurchasedAddOnModel){
-            showSnackBar(mCoordinatorLayout, "Successfully booked an event.");
+        } else if (responseObj instanceof PurchasedAddOnModel) {
+            if (mEventsFindAdapter.mEventType.equals(AppConstants.FREE_EVENT)) {
+                showSnackBar(mCoordinatorLayout, "Successfully booked an event.");
+            } else {
+                if (((BaseActivity) this).mPurchaseSuccessDialog != null)
+                    ((BaseActivity) this).mPurchaseSuccessDialog.show();
+            }
+        } else {
+            if (((BaseActivity) this).mPurchaseSuccessDialog != null)
+                ((BaseActivity) this).mPurchaseSuccessDialog.show();
         }
+
 
     }
 
@@ -277,16 +308,16 @@ public class EventsFindActivity extends BaseActivity {
     @Override
     public void retrofitOnFailure(final int responseType) {
         super.retrofitOnFailure(responseType);
-            mFailureResponseType = responseType;
-            showAppDialog(AppDialogFragment.ALERT_API_FAILURE_DIALOG, null);
+        mFailureResponseType = responseType;
+        showAppDialog(AppDialogFragment.ALERT_API_FAILURE_DIALOG, null);
 
     }
 
     @Override
     public void retrofitOnFailure(int responseType, String message) {
         super.retrofitOnFailure(responseType, message);
-        if(responseType==RetrofitClient.POST_DATA_FOR_PAYMENT){
-            showSnackBar(mCoordinatorLayout,message);
+        if (responseType == RetrofitClient.POST_DATA_FOR_PAYMENT) {
+            showSnackBar(mCoordinatorLayout, message);
         }
     }
 }

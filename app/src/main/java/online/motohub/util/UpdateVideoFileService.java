@@ -201,26 +201,30 @@ public class UpdateVideoFileService extends IntentService implements ProgressReq
     }
 
     private void onDownloadComplete(String value, int mNotificationID) {
-        DatabaseHandler databaseHandler = new DatabaseHandler(this);
-        int checkCount = databaseHandler.getPendingCount();
-        stopForeground(true);
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-            if (mNotificationManager != null) {
-                mNotificationManager.createNotificationChannel(NotificationUtils.getInstance().getNotificationChannel(mNotificationID));
+        try {
+            DatabaseHandler databaseHandler = new DatabaseHandler(this);
+            int checkCount = databaseHandler.getPendingCount();
+            stopForeground(true);
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                if (mNotificationManager != null) {
+                    mNotificationManager.createNotificationChannel(NotificationUtils.getInstance().getNotificationChannel(mNotificationID));
+                }
+                mNotificationBuilder = NotificationUtils.getInstance().getNotificationBuilder(this, false, value, mNotificationID, 0, 0);
+                mNotification = mNotificationBuilder.build();
+            } else {
+                mNotificationCompatBuilder = NotificationUtils.getInstance().getNotificationCompatBuilder(this, false, value, mNotificationID, 0, 0);
+                mNotification = mNotificationCompatBuilder.build();
             }
-            mNotificationBuilder = NotificationUtils.getInstance().getNotificationBuilder(this, false, value, mNotificationID, 0, 0);
-            mNotification = mNotificationBuilder.build();
-        } else {
-            mNotificationCompatBuilder = NotificationUtils.getInstance().getNotificationCompatBuilder(this, false, value, mNotificationID, 0, 0);
-            mNotification = mNotificationCompatBuilder.build();
-        }
-        if (checkCount == 0 || mNotificationID == 0) {
-            count = count + 1;
-            mNotificationManager.cancelAll();
-            mNotificationManager.notify(count, mNotification);
-        } else if (mNotificationID > 0) {
-            databaseHandler.deletepost(mNotificationID);
-            mNotificationManager.notify(mNotificationID, mNotification);
+            if (checkCount == 0 || mNotificationID == 0) {
+                count = count + 1;
+                mNotificationManager.cancelAll();
+                mNotificationManager.notify(count, mNotification);
+            } else if (mNotificationID > 0) {
+                databaseHandler.deletepost(mNotificationID);
+                mNotificationManager.notify(mNotificationID, mNotification);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
     }

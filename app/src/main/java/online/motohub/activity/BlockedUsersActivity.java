@@ -12,6 +12,8 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.ArrayList;
 
 import butterknife.BindString;
@@ -20,6 +22,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import online.motohub.R;
 import online.motohub.adapter.BlockedProfilesAdapter;
+import online.motohub.application.MotoHub;
 import online.motohub.fragment.dialog.AppDialogFragment;
 import online.motohub.model.BlockedUserResModel;
 import online.motohub.model.ProfileModel;
@@ -27,6 +30,7 @@ import online.motohub.model.ProfileResModel;
 import online.motohub.model.SessionModel;
 import online.motohub.retrofit.RetrofitClient;
 import online.motohub.util.AppConstants;
+import online.motohub.util.DialogManager;
 import online.motohub.util.PreferenceUtils;
 import online.motohub.util.Utility;
 
@@ -68,13 +72,20 @@ public class BlockedUsersActivity extends BaseActivity {
 
     }
 
+    @Override
+    protected void onDestroy() {
+        DialogManager.hideProgress();
+        super.onDestroy();
+    }
 
     private void initView() {
         setupUI(mCoordinatorLayout);
         setToolbar(mToolbar, mToolbarTitle);
         showToolbarBtn(mToolbar, R.id.toolbar_back_img_btn);
 
-        mMyProfileResModel = (ProfileResModel) getIntent().getSerializableExtra(ProfileModel.MY_PROFILE_RES_MODEL);
+        //mMyProfileResModel = (ProfileResModel) getIntent().getSerializableExtra(ProfileModel.MY_PROFILE_RES_MODEL);
+        //mMyProfileResModel = MotoHub.getApplicationInstance().getmProfileResModel();
+        mMyProfileResModel = EventBus.getDefault().getStickyEvent(ProfileResModel.class);
 
         mBlockedUserListView.setLayoutManager(new LinearLayoutManager(this));
 
@@ -101,9 +112,9 @@ public class BlockedUsersActivity extends BaseActivity {
 
     private void getBlockedProfileList() {
         if (mMyProfileResModel.getBlockedUserProfilesByProfileID().size() > 0) {
-            String mBlockedUsersID = Utility.getInstance().getMyBlockedUsersID(mMyProfileResModel.getBlockedUserProfilesByProfileID(),new ArrayList<BlockedUserResModel>());
+            String mBlockedUsersID = Utility.getInstance().getMyBlockedUsersID(mMyProfileResModel.getBlockedUserProfilesByProfileID(), new ArrayList<BlockedUserResModel>());
             String mFilter = "(ID  IN (" + mBlockedUsersID + "))";
-            if (isNetworkConnected())
+            if (isNetworkConnected(this))
                 RetrofitClient.getRetrofitInstance().callGetProfilesWithFollowBlock(this, mFilter, RetrofitClient.GET_PROFILE_RESPONSE);
             else
                 showAppDialog(AppDialogFragment.ALERT_INTERNET_FAILURE_DIALOG, null);

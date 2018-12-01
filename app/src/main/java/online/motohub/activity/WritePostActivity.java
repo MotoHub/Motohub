@@ -28,17 +28,17 @@ import com.google.android.flexbox.FlexDirection;
 import com.google.android.flexbox.FlexWrap;
 import com.google.android.flexbox.FlexboxLayoutManager;
 import com.google.android.flexbox.JustifyContent;
-import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.google.gson.reflect.TypeToken;
 import com.yovenny.videocompress.MediaController;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.io.File;
 import java.io.UnsupportedEncodingException;
-import java.lang.reflect.Type;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+
 import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -49,6 +49,7 @@ import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import online.motohub.R;
 import online.motohub.adapter.TaggedProfilesAdapter;
+import online.motohub.application.MotoHub;
 import online.motohub.database.DatabaseHandler;
 import online.motohub.fragment.dialog.AppDialogFragment;
 import online.motohub.model.GalleryImgModel;
@@ -97,7 +98,6 @@ public class WritePostActivity extends BaseActivity implements TaggedProfilesAda
     String mToolbarTitle;
     @BindString(R.string.tag_err)
     String mTagErr;
-    private ArrayList<ProfileResModel> mFullMPList = new ArrayList<>();
     private ArrayList<ProfileResModel> mTaggedProfilesList = new ArrayList<>();
     private ArrayList<ProfileResModel> mFollowingListData = new ArrayList<>();
     private String mVideoPathUri, mPostImgUri;
@@ -105,14 +105,9 @@ public class WritePostActivity extends BaseActivity implements TaggedProfilesAda
     private int mPostsRvTotalCount = 0;
     private ProfileResModel mCurrentProfile;
     private boolean isNewsFeedPost;
-
+    private String usertype;
     private ImageResModel mImageResModel = null;
-
-    private enum UpdateTask {
-        NONE, FILE_UPLOAD, DATA_ENTRY_UPLOAD
-    }
-
-    private UpdateTask mUpdateTask = UpdateTask.NONE;
+    private int mSubscribedID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -123,24 +118,25 @@ public class WritePostActivity extends BaseActivity implements TaggedProfilesAda
         initView();
     }
 
-
     @Override
+    protected void onDestroy() {
+        DialogManager.hideProgress();
+        super.onDestroy();
+    }
+
+    /*@Override
     protected void onSaveInstanceState(Bundle outState) {
-        outState.putSerializable(ProfileModel.MY_PROFILE_RES_MODEL, mFullMPList);
+        outState.putSerializable(ProfileModel.MY_PROFILE_RES_MODEL, mCurrentProfile);
         outState.putSerializable(ProfileModel.FOLLOWING, mTaggedProfilesList);
         outState.putString(PostsModel.POST_PICTURE, mPostImgUri);
         outState.putString(PostsModel.PostVideoURL, mVideoPathUri);
         outState.putString(PostsModel.PostVideoURL, mVideoPathUri);
         super.onSaveInstanceState(outState);
-    }
+    }*/
 
-
-    @Override
+    /*@Override
     @SuppressWarnings("unchecked")
     protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
-        mFullMPList.clear();
-        mFullMPList.addAll((ArrayList<ProfileResModel>)
-                savedInstanceState.getSerializable(ProfileModel.MY_PROFILE_RES_MODEL));
         mPostImgUri = savedInstanceState.getString(PostsModel.POST_PICTURE);
         if (mPostImgUri != null) {
             setImageWithGlide(mPostPicImgView, Uri.parse(mPostImgUri));
@@ -162,20 +158,27 @@ public class WritePostActivity extends BaseActivity implements TaggedProfilesAda
         } else {
             mTagProfilesRecyclerView.setVisibility(View.GONE);
         }
-    }
+    }*/
+
     private void initView() {
 
         setupUI(mParent);
         toolBack.setVisibility(View.VISIBLE);
+        String mProfiles = "";
 
         if (getIntent().getExtras() != null) {
-            Gson gson = new Gson();
-            String mProfiles = getIntent().getStringExtra(AppConstants.MY_PROFILE_OBJ);
-            isNewsFeedPost = getIntent().getBooleanExtra(AppConstants.IS_NEWSFEED_POST, false);
-            Type mPrflMdlLst = new TypeToken<ArrayList<ProfileResModel>>() {
-            }.getType();
-            mFullMPList = gson.fromJson(mProfiles, mPrflMdlLst);
-            mCurrentProfile = mFullMPList.get(PreferenceUtils.getInstance(this).getIntData(PreferenceUtils.CURRENT_PROFILE_POS));
+            //Gson gson = new Gson();
+            /*if (getIntent().hasExtra(AppConstants.MY_PROFILE_OBJ))
+                mProfiles = getIntent().getStringExtra(AppConstants.MY_PROFILE_OBJ);*/
+
+            usertype = getIntent().getStringExtra(AppConstants.USER_TYPE);
+            boolean isNewsFeedPost = getIntent().getBooleanExtra(AppConstants.IS_NEWSFEED_POST, false);
+            //mCurrentProfile = gson.fromJson(mProfiles, ProfileResModel.class);
+            //mCurrentProfile = MotoHub.getApplicationInstance().getmProfileResModel();
+            mCurrentProfile = EventBus.getDefault().getStickyEvent(ProfileResModel.class);
+            if (getIntent().hasExtra(AppConstants.TO_SUBSCRIBED_USER_ID)) {
+                mSubscribedID = getIntent().getIntExtra(AppConstants.TO_SUBSCRIBED_USER_ID, 0);
+            }
         }
 
         FlexboxLayoutManager mFlexBoxLayoutManager = new FlexboxLayoutManager(this);
@@ -193,25 +196,13 @@ public class WritePostActivity extends BaseActivity implements TaggedProfilesAda
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.post_btn:
-                try {
-                    if (mFullMPList.size() > 0) {
-                        setResult(RESULT_OK);
-                        if (mVideoPathUri != null) {
-                            File videoFile = copiedVideoFile(Uri.fromFile(new File(mVideoPathUri)),
-                                    GALLERY_VIDEO_NAME_TYPE);
-                            String mPath = String.valueOf(videoFile);
-                            new VideoCompressor().execute(mPath, getCompressedVideoPath());
-                        } else if (mPostImgUri != null) {
-                            uploadPicture(mPostImgUri);
-                        } else {
-                            profilePostContent("");
-                        }
-
-                    } else {
-                        showAppDialog(AppDialogFragment.ALERT_INTERNET_FAILURE_DIALOG, null);
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
+                setResult(RESULT_OK);
+                if (mVideoPathUri != null) {
+                    startUploadVideoService();
+                } else if (mPostImgUri != null) {
+                    uploadPicture(mPostImgUri);
+                } else {
+                    profilePostContent("");
                 }
                 break;
             case R.id.add_post_img:
@@ -221,11 +212,7 @@ public class WritePostActivity extends BaseActivity implements TaggedProfilesAda
                 showAppDialog(AppDialogFragment.BOTTOM_ADD_VIDEO_DIALOG, null);
                 break;
             case R.id.tag_profile_img:
-                if (mFullMPList.size() > 0) {
-                    getTagProfileList();
-                } else {
-                    showAppDialog(AppDialogFragment.ALERT_INTERNET_FAILURE_DIALOG, null);
-                }
+                getTagProfileList();
                 break;
             case R.id.remove_post_img_btn:
                 mPostImgUri = null;
@@ -243,17 +230,12 @@ public class WritePostActivity extends BaseActivity implements TaggedProfilesAda
             case R.id.profile_img:
             case R.id.name_of_moto_tv:
             case R.id.name_of_driver_tv:
-                if (mFullMPList.size() > 0) {
-                    Bundle mBundle = new Bundle();
-                    mBundle.putSerializable(ProfileModel.MY_PROFILE_RES_MODEL, mFullMPList.get(PreferenceUtils
-                            .getInstance
-                                    (this).getIntData(PreferenceUtils.CURRENT_PROFILE_POS)));
-                    startActivityForResult(new Intent(this, UpdateProfileActivity.class).putExtras(mBundle),
-                            AppConstants.FOLLOWERS_FOLLOWING_RESULT);
-
-                } else {
-                    showAppDialog(AppDialogFragment.ALERT_INTERNET_FAILURE_DIALOG, null);
-                }
+                Bundle mBundle = new Bundle();
+                //mBundle.putSerializable(ProfileModel.MY_PROFILE_RES_MODEL, mCurrentProfile);
+                //MotoHub.getApplicationInstance().setmProfileResModel(mCurrentProfile);
+                EventBus.getDefault().postSticky(mCurrentProfile);
+                startActivityForResult(new Intent(this, UpdateProfileActivity.class),
+                        AppConstants.FOLLOWERS_FOLLOWING_RESULT);
                 break;
             case R.id.toolbar_back_img_btn:
                 finish();
@@ -269,8 +251,7 @@ public class WritePostActivity extends BaseActivity implements TaggedProfilesAda
     }
 
     private void getTagProfileList() {
-        ProfileResModel mMyProfileResModel = mFullMPList.get(PreferenceUtils.getInstance(this)
-                .getIntData(PreferenceUtils.CURRENT_PROFILE_POS));
+        ProfileResModel mMyProfileResModel = mCurrentProfile;
         String mBlockedUsersID = Utility.getInstance().getMyBlockedUsersID(mMyProfileResModel.getBlockedUserProfilesByProfileID(),
                 mMyProfileResModel.getBlockeduserprofiles_by_BlockedProfileID());
         String mFollowingsID = Utility.getInstance().getMyFollowersFollowingsID(mMyProfileResModel.getFollowprofile_by_ProfileID(), false);
@@ -284,18 +265,15 @@ public class WritePostActivity extends BaseActivity implements TaggedProfilesAda
         } else {
             mFilter = "id IN (" + mFollowingsID + ") AND ( id NOT IN (" + mBlockedUsersID + "))";
         }
-        if (isNetworkConnected())
+        if (isNetworkConnected(this))
             RetrofitClient.getRetrofitInstance().callGetProfiles(this, mFilter, RetrofitClient.GET_FOLLOWING_PROFILE_RESPONSE);
         else
             showAppDialog(AppDialogFragment.ALERT_INTERNET_FAILURE_DIALOG, null);
     }
 
     private void callAddGalleryPhoto() {
-
-
         if (mImageResModel != null) {
 
-            mUpdateTask = UpdateTask.DATA_ENTRY_UPLOAD;
             JsonObject obj = new JsonObject();
             obj.addProperty(GalleryImgModel.USER_ID, getUserId());
             obj.addProperty(GalleryImgModel.MOTO_ID, getCurrentProfile().getID());
@@ -310,15 +288,11 @@ public class WritePostActivity extends BaseActivity implements TaggedProfilesAda
             mImageResModel = null;
 
         } else {
-
             showSnackBar(mParent, getString(R.string.select_file_to_upload));
-
         }
-
     }
 
     public int getProfileCurrentPos() {
-
         return PreferenceUtils.getInstance(this).getIntData(PreferenceUtils.CURRENT_PROFILE_POS);
     }
 
@@ -353,13 +327,13 @@ public class WritePostActivity extends BaseActivity implements TaggedProfilesAda
         } else if (responseObj instanceof PostsModel) {
             PostsModel mPostsModel = (PostsModel) responseObj;
             if (mPostsModel.getResource() != null && mPostsModel.getResource().size() > 0) {
-                if(!mPostsModel.getResource().get(0).getPostPicture().trim().isEmpty()) {
+                if (!mPostsModel.getResource().get(0).getPostPicture().trim().isEmpty()) {
                     callAddGalleryPhoto();
-                } else{
+                } else {
                     finish();
                 }
             }
-        } else if(responseObj instanceof GalleryImgModel){
+        } else if (responseObj instanceof GalleryImgModel) {
             finish();
         }
     }
@@ -369,14 +343,10 @@ public class WritePostActivity extends BaseActivity implements TaggedProfilesAda
         super.retrofitOnError(code, message);
 
         if (message.equals("Unauthorized") || code == 401) {
-            if (isNetworkConnected())
+            if (isNetworkConnected(this))
                 RetrofitClient.getRetrofitInstance().callUpdateSession(this, RetrofitClient.UPDATE_SESSION_RESPONSE);
             else
                 showAppDialog(AppDialogFragment.ALERT_INTERNET_FAILURE_DIALOG, null);
-        } else if (code == RetrofitClient.GET_FEED_POSTS_RESPONSE) {
-            //((BaseFragment) mNewsFeedFragment).retrofitOnError(code, message);
-            if (code == RetrofitClient.GET_FEED_POSTS_RESPONSE)
-                mPostsRvTotalCount = 0;
         } else {
             String mErrorMsg = code + " - " + message;
             showSnackBar(mParent, mErrorMsg);
@@ -388,7 +358,7 @@ public class WritePostActivity extends BaseActivity implements TaggedProfilesAda
     public void retrofitOnError(int code, String message, int responseType) {
         super.retrofitOnError(code, message, responseType);
         if (message.equals("Unauthorized") || code == 401) {
-            if (isNetworkConnected())
+            if (isNetworkConnected(this))
                 RetrofitClient.getRetrofitInstance().callUpdateSession(this, RetrofitClient.UPDATE_SESSION_RESPONSE);
             else
                 showAppDialog(AppDialogFragment.ALERT_INTERNET_FAILURE_DIALOG, null);
@@ -426,7 +396,7 @@ public class WritePostActivity extends BaseActivity implements TaggedProfilesAda
             JsonObject mJsonObject = new JsonObject();
             mJsonObject.addProperty(PostsModel.POST_TEXT, URLEncoder.encode(mWritePostStr, "UTF-8"));
 
-            if(!postImgFilePath.trim().isEmpty())
+            if (!postImgFilePath.trim().isEmpty())
                 mPostPic = "[\"" + postImgFilePath + "\"]";
             else
                 mPostPic = "";
@@ -436,6 +406,10 @@ public class WritePostActivity extends BaseActivity implements TaggedProfilesAda
             mJsonObject.addProperty(PostsModel.WHO_POSTED_PROFILE_ID, getCurrentProfile().getID());
             mJsonObject.addProperty(PostsModel.WHO_POSTED_USER_ID, mUserId);
             mJsonObject.addProperty(PostsModel.IS_NEWS_FEED_POST, true);
+            mJsonObject.addProperty(PostsModel.USER_TYPE, usertype);
+
+            if (usertype.equals(AppConstants.CLUB_USER) || usertype.equals(AppConstants.SHOP_USER))
+                mJsonObject.addProperty(PostsModel.TO_SUBSCRIBED_USER_ID, mSubscribedID);
 
             if (mTaggedProfilesList.size() == 0) {
                 mJsonObject.addProperty(PostsModel.TAGGED_PROFILE_ID, "");
@@ -468,11 +442,8 @@ public class WritePostActivity extends BaseActivity implements TaggedProfilesAda
     }
 
     @Override
-    public void alertDialogPositiveBtnClick(BaseActivity activity,
-                                            String dialogType,
-                                            StringBuilder profileTypesStr,
-                                            ArrayList<String> profileTypes,
-                                            int position) {
+    public void alertDialogPositiveBtnClick(BaseActivity activity, String dialogType, StringBuilder profileTypesStr,
+                                            ArrayList<String> profileTypes, int position) {
         super.alertDialogPositiveBtnClick(activity, dialogType, profileTypesStr, profileTypes, position);
         switch (dialogType) {
             case AppDialogFragment.TAG_FOLLOWING_PROFILE_DIALOG:
@@ -510,13 +481,15 @@ public class WritePostActivity extends BaseActivity implements TaggedProfilesAda
             String destFilePath = Environment.getExternalStorageDirectory().getPath()
                     + getString(R.string.util_app_folder_root_path);
             Intent service_intent = new Intent(this, UploadFileService.class);
-            service_intent.putExtra("videofile", mCompressedVideoPath);
+            service_intent.putExtra("videofile", mVideoPathUri);
             service_intent.putExtra("imagefile", String.valueOf(imageFile));
             service_intent.putExtra("posttext", postText);
             service_intent.putExtra("profileid", getCurrentProfile().getID());
             service_intent.putExtra("dest_file", destFilePath);
+            service_intent.putExtra("usertype", usertype);
             service_intent.putExtra("running", count + 1);
             service_intent.putExtra("flag", 1);
+            service_intent.putExtra(AppConstants.TO_SUBSCRIBED_USER_ID, mSubscribedID);
             service_intent.setAction("UploadService");
             if (mTaggedProfilesList.size() == 0) {
                 service_intent.putExtra(PostsModel.TAGGED_PROFILE_ID, "");
@@ -531,7 +504,6 @@ public class WritePostActivity extends BaseActivity implements TaggedProfilesAda
             startService(service_intent);
             mVideoPathUri = null;
             mPostImgUri = null;
-            mCompressedVideoPath = "";
             mWritePostEt.setText("");
             mPostPicImgView.setImageDrawable(null);
             mPostPicImgView.setVisibility(View.GONE);
@@ -544,8 +516,6 @@ public class WritePostActivity extends BaseActivity implements TaggedProfilesAda
             } else {
                 mTagProfilesRecyclerView.setVisibility(View.GONE);
             }
-           /* Intent intent=new Intent(WritePostActivity.this,ViewProfileActivity.class);
-            startActivity(intent);*/
             finish();
         } catch (Exception e) {
             e.printStackTrace();
@@ -553,7 +523,7 @@ public class WritePostActivity extends BaseActivity implements TaggedProfilesAda
     }
 
     private ProfileResModel getCurrentProfile() {
-        return mFullMPList.get(getProfileCurrentPos());
+        return mCurrentProfile;
     }
 
     @Override

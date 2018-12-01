@@ -3,7 +3,9 @@ package online.motohub.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
+import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.ToggleButton;
@@ -17,7 +19,11 @@ import butterknife.OnCheckedChanged;
 import butterknife.OnClick;
 import online.motohub.R;
 import online.motohub.fragment.dialog.AppDialogFragment;
+import online.motohub.model.PushTokenModel;
+import online.motohub.retrofit.RetrofitClient;
 import online.motohub.util.AppConstants;
+import online.motohub.util.DialogManager;
+import online.motohub.util.PreferenceUtils;
 
 /**
  * Create Profile Activity.
@@ -25,7 +31,7 @@ import online.motohub.util.AppConstants;
  * @version 1.0, 27/04/2017
  * @since 1.0
  */
-public class CreateProfileActivity extends BaseActivity {
+public class CreateProfileActivity extends BaseActivity implements  PopupMenu.OnMenuItemClickListener{
 
     @BindView(R.id.create_profile_co_layout)
     CoordinatorLayout mCoordinatorLayout;
@@ -35,6 +41,19 @@ public class CreateProfileActivity extends BaseActivity {
     ToggleButton mBikeToggleBtn;
     @BindView(R.id.boat_toggle_btn)
     ToggleButton mBoatToggleBtn;
+
+    @Override
+    public void retrofitOnResponse(Object responseObj, int responseType) {
+        super.retrofitOnResponse(responseObj, responseType);
+        if (responseObj instanceof PushTokenModel) {
+            clearBeforeLogout();
+            Intent loginActivity = new Intent(this, LoginActivity.class);
+            loginActivity.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(loginActivity);
+            finish();
+        }
+    }
+
     @BindView(R.id.car_toggle_btn)
     ToggleButton mCarToggleBtn;
     @BindView(R.id.kart_toggle_btn)
@@ -64,6 +83,7 @@ public class CreateProfileActivity extends BaseActivity {
 
     private void initView() {
         setToolbar(mToolbar, mToolbarTitle);
+        showToolbarBtn(mToolbar,  R.id.toolbar_settings_img_btn);
         mCreateProfAfterReg = getIntent().getBooleanExtra(CREATE_PROF_AFTER_REG, false);
         if (mCreateProfAfterReg) {
             clearProfileTypePreferences();
@@ -71,7 +91,13 @@ public class CreateProfileActivity extends BaseActivity {
         }
     }
 
-    @OnClick({R.id.toolbar_back_img_btn, R.id.enter_btn})
+    @Override
+    protected void onDestroy() {
+        DialogManager.hideProgress();
+        super.onDestroy();
+    }
+
+    @OnClick({R.id.toolbar_back_img_btn, R.id.enter_btn,  R.id.toolbar_settings_img_btn})
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.toolbar_back_img_btn:
@@ -91,6 +117,9 @@ public class CreateProfileActivity extends BaseActivity {
                 } else {
                     showSnackBar(mCoordinatorLayout, mSelectProfileErr);
                 }
+                break;
+            case R.id.toolbar_settings_img_btn:
+                showLogoutMenu(v);
                 break;
         }
     }
@@ -196,6 +225,13 @@ public class CreateProfileActivity extends BaseActivity {
         }
     }
 
+    private void logout() {
+        int mUserID = PreferenceUtils.getInstance(this).getIntData(PreferenceUtils.USER_ID);
+        String mFilter = "UserID=" + mUserID;
+        RetrofitClient.getRetrofitInstance().callDeletePushToken(this, mFilter, RetrofitClient.FACEBOOK_LOGOUT);
+
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK) {
@@ -207,6 +243,12 @@ public class CreateProfileActivity extends BaseActivity {
                     break;
             }
         }
+    }
+
+    @Override
+    public boolean onMenuItemClick(MenuItem item) {
+         logout();
+        return true;
     }
 
 }

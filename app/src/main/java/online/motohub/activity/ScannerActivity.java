@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.google.zxing.Result;
@@ -39,6 +38,8 @@ public class ScannerActivity extends BaseActivity implements ZXingScannerView.Re
             }
         }
     }
+
+
 
     private boolean checkPermission() {
         return (ContextCompat.checkSelfPermission(getApplicationContext(), CAMERA) == PackageManager.PERMISSION_GRANTED);
@@ -109,6 +110,7 @@ public class ScannerActivity extends BaseActivity implements ZXingScannerView.Re
 
     @Override
     public void onDestroy() {
+        DialogManager.hideProgress();
         super.onDestroy();
         mScannerView.stopCamera();
         mScannerView = null;

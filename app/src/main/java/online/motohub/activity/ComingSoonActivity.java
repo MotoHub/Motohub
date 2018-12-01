@@ -9,6 +9,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import online.motohub.R;
+import online.motohub.util.DialogManager;
 
 public class ComingSoonActivity extends BaseActivity {
 
@@ -26,6 +27,12 @@ public class ComingSoonActivity extends BaseActivity {
 
         initViews();
 
+    }
+
+    @Override
+    protected void onDestroy() {
+        DialogManager.hideProgress();
+        super.onDestroy();
     }
 
     private void initViews() {

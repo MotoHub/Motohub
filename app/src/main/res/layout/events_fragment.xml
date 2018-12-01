@@ -1,30 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
     android:id="@+id/parent"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:focusable="true"
     android:orientation="vertical">
 
-    <EditText
+    <!--<EditText
         android:id="@+id/search_edt"
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:layout_below="@+id/parent"
-        android:layout_marginTop="110dp"
+        android:layout_marginBottom="@dimen/size5"
+        android:layout_marginTop="@dimen/size110"
         android:background="@drawable/edittext_roundradious"
         android:hint="@string/search_here"
-        android:focusable="false"
-        android:visibility="gone"
         android:padding="5dp"
         android:textColor="@color/colorBlack"
-        android:textColorHint="@color/colorGrey" />
+        android:textColorHint="@color/colorGrey"
+        android:visibility="visible" />-->
+    <EditText
+        android:id="@+id/search_edt"
+        style="@style/LayoutMatchWrap"
+        android:layout_marginBottom="@dimen/size5"
+        android:layout_marginTop="@dimen/size110"
+        android:layout_marginLeft="@dimen/size5"
+        android:layout_marginRight="@dimen/size5"
+        android:background="@drawable/orange_border_bg"
+        android:hint="@string/search_here"
+        android:padding="5dp"
+        android:textColor="@color/colorBlack"
+        android:textColorHint="@color/colorGrey"
+        android:visibility="visible" />
 
     <android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/swipe_container"
         android:layout_width="match_parent"
-        android:layout_below="@+id/search_edt"
-        android:layout_marginTop="110dp"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_below="@+id/search_edt">
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recycler_view"

@@ -1,5 +1,7 @@
 package online.motohub.fragment.promoter;
 
+import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
@@ -9,6 +11,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,15 +21,16 @@ import butterknife.ButterKnife;
 import online.motohub.R;
 import online.motohub.activity.BaseActivity;
 import online.motohub.adapter.GalleryImgAdapter;
+import online.motohub.application.MotoHub;
 import online.motohub.fragment.BaseFragment;
 import online.motohub.model.GalleryImgModel;
 import online.motohub.model.GalleryImgResModel;
-import online.motohub.model.promoter_club_news_media.PromotersModel;
 import online.motohub.model.promoter_club_news_media.PromotersResModel;
 import online.motohub.retrofit.APIConstants;
 import online.motohub.retrofit.RetrofitClient;
 import online.motohub.util.RecyclerClick_Listener;
 import online.motohub.util.RecyclerTouchListener;
+import online.motohub.util.UrlUtils;
 
 public class PromoterPhotosFragment extends BaseFragment {
 
@@ -39,6 +44,7 @@ public class PromoterPhotosFragment extends BaseFragment {
     private List<GalleryImgResModel> mGalleryResModels;
 
     private PromotersResModel mPromotersResModel;
+    private Activity mActivity;
 
     @Nullable
     @Override
@@ -53,10 +59,18 @@ public class PromoterPhotosFragment extends BaseFragment {
         initRV();
     }
 
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        mActivity = (Activity) context;
+    }
     private void initRV() {
 
         try {
-            mPromotersResModel = (PromotersResModel) getArguments().getSerializable(PromotersModel.PROMOTERS_RES_MODEL);
+            assert getArguments() != null;
+            //mPromotersResModel = (PromotersResModel) getArguments().getSerializable(PromotersModel.PROMOTERS_RES_MODEL);
+            //mPromotersResModel = MotoHub.getApplicationInstance().getmPromoterResModel();
+            mPromotersResModel = EventBus.getDefault().getStickyEvent(PromotersResModel.class);
         } catch (NullPointerException e) {
             e.printStackTrace();
             mPromotersResModel = null;
@@ -72,7 +86,7 @@ public class PromoterPhotosFragment extends BaseFragment {
         mGalleryRv.addOnItemTouchListener(new RecyclerTouchListener(getActivity(), mGalleryRv, new RecyclerClick_Listener() {
             @Override
             public void onClick(View view, int position) {
-                ((BaseActivity) getActivity()).moveLoadImageScreen(getActivity(), mGalleryResModels.get(position).getGalleryImage());
+                ((BaseActivity)mActivity).moveLoadImageScreen(getActivity(), UrlUtils.AWS_S3_BASE_URL+mGalleryResModels.get(position).getGalleryImage());
             }
 
             @Override
@@ -83,12 +97,6 @@ public class PromoterPhotosFragment extends BaseFragment {
 
     }
 
-    /*private final GalleryImgAdapter.OnItemClickListener mOnItemClickListener = new GalleryImgAdapter.OnItemClickListener() {
-        @Override
-        public void onItemClick(int position) {
-            ((BaseActivity) getActivity()).moveLoadImageScreen(getActivity(), mGalleryResModels.get(position).getGalleryImage());
-        }
-    };*/
 
     private void getGalleryImages() {
         String mFilter = "(UserID=" + mPromotersResModel.getUserId() + ") AND (" + APIConstants.UserType + "=promoter)";
@@ -107,7 +115,7 @@ public class PromoterPhotosFragment extends BaseFragment {
                     mGalleryResModels.addAll(model.getGalleryResModelList());
                     mAdapter.notifyDataSetChanged();
                 } else {
-                    ((BaseActivity) getActivity()).showToast(getActivity(), getString(R.string.picture_not_found));
+                    ((BaseActivity) mActivity).showToast(getActivity(), getString(R.string.picture_not_found));
                     mGalleryRv.setVisibility(View.GONE);
                     txtNoData.setVisibility(View.VISIBLE);
                 }

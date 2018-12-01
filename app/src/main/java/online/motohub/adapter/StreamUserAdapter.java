@@ -14,6 +14,8 @@ import android.widget.TextView;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.ArrayList;
 
 import butterknife.BindView;
@@ -108,51 +110,58 @@ public class StreamUserAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int pos) {
         switch (getItemViewType(pos)) {
             case VIEW_TYPE_ITEM:
-                final Holder mHolder = (Holder) holder;
-                ProfileResModel mProfileEntity = mStreamUserList.get(pos);
-                String imgStr = mProfileEntity.getProfilePicture();
-                if (!imgStr.isEmpty()) {
-                    ((BaseActivity) mContext).setImageWithGlide(mHolder.mUserImg, imgStr, R.drawable.default_profile_icon);
-                } else {
-                    mHolder.mUserImg.setImageResource(R.drawable.default_profile_icon);
-                }
-                setRequestStatus(mHolder.mSendRequestBtn, mProfileEntity.getLivestreamrequest_by_ReceiverProfileID());
-
-                mHolder.mUserImg.setTag(pos);
-                mHolder.mUserImg.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        int selPos = (int) v.getTag();
-                        Bundle mBundle = new Bundle();
-                        ProfileResModel mOthersProfileModel = new ProfileResModel();
-                        mOthersProfileModel.setID(mStreamUserList.get(selPos).getID());
-                        mBundle.putSerializable(ProfileModel.OTHERS_PROFILE_RES_MODEL, mOthersProfileModel);
-                        ProfileResModel mMyProfileModel = new ProfileResModel();
-                        mMyProfileModel.setID(mCurrentProfileID);
-                        mBundle.putSerializable(ProfileModel.MY_PROFILE_RES_MODEL, mMyProfileModel);
+                try {
+                    final Holder mHolder = (Holder) holder;
+                    ProfileResModel mProfileEntity = mStreamUserList.get(pos);
+                    String imgStr = mProfileEntity.getProfilePicture();
+                    if (!imgStr.isEmpty()) {
+                        ((BaseActivity) mContext).setImageWithGlide(mHolder.mUserImg, imgStr, R.drawable.default_profile_icon);
+                    } else {
+                        mHolder.mUserImg.setImageResource(R.drawable.default_profile_icon);
                     }
-                });
-                mHolder.mSendRequestBtn.setTag(pos);
-                mHolder.mSendRequestBtn.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        selPos = (int) v.getTag();
-                        int receiverProfileID = mStreamUserList.get(selPos).getID();
-                        if (mHolder.mSendRequestBtn.getText().toString().equals(mContext.getString(R.string.send_stream_request))) {
-                            callSendRequestAPI(receiverProfileID);
-                        } else if (mHolder.mSendRequestBtn.getText().toString().equals(mContext.getString(R.string.cancel_request))) {
-                           callDeclineRequestAPI();
-                        } else {
-                            ((BaseActivity) mContext).showToast(mContext, mContext.getString(R.string.accepted));
+                    setRequestStatus(mHolder.mSendRequestBtn, mProfileEntity.getLivestreamrequest_by_ReceiverProfileID());
+
+                    mHolder.mUserImg.setTag(pos);
+                    mHolder.mUserImg.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            int selPos = (int) v.getTag();
+                            Bundle mBundle = new Bundle();
+                            ProfileResModel mOthersProfileModel = new ProfileResModel();
+                            mOthersProfileModel.setID(mStreamUserList.get(selPos).getID());
+                            //mBundle.putSerializable(ProfileModel.OTHERS_PROFILE_RES_MODEL, mOthersProfileModel);
+                            MotoHub.getApplicationInstance().setmOthersProfileResModel(mOthersProfileModel);
+                            ProfileResModel mMyProfileModel = new ProfileResModel();
+                            mMyProfileModel.setID(mCurrentProfileID);
+                            //mBundle.putSerializable(ProfileModel.MY_PROFILE_RES_MODEL, mMyProfileModel);
+                            //MotoHub.getApplicationInstance().setmProfileResModel(mMyProfileModel);
+                            EventBus.getDefault().postSticky(mMyProfileModel);
                         }
+                    });
+                    mHolder.mSendRequestBtn.setTag(pos);
+                    mHolder.mSendRequestBtn.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            selPos = (int) v.getTag();
+                            int receiverProfileID = mStreamUserList.get(selPos).getID();
+                            if (mHolder.mSendRequestBtn.getText().toString().equals(mContext.getString(R.string.send_stream_request))) {
+                                callSendRequestAPI(receiverProfileID);
+                            } else if (mHolder.mSendRequestBtn.getText().toString().equals(mContext.getString(R.string.cancel_request))) {
+                                callDeclineRequestAPI();
+                            } else {
+                                ((BaseActivity) mContext).showToast(mContext, mContext.getString(R.string.accepted));
+                            }
+                        }
+                    });
+                    if (mProfileEntity.getProfileType() == 5) {
+                        mHolder.mUserNameTxt.setText(mProfileEntity.getSpectatorName());
+                    } else {
+                        mHolder.mUserNameTxt.setText(mProfileEntity.getDriver());
                     }
-                });
-                if (mProfileEntity.getProfileType() == 5) {
-                    mHolder.mUserNameTxt.setText(mProfileEntity.getSpectatorName());
-                } else {
-                    mHolder.mUserNameTxt.setText(mProfileEntity.getDriver());
-                }
 
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
                 break;
             case VIEW_TYPE_LOADING:
                 ViewHolderLoader mViewHolderLoader = (ViewHolderLoader) holder;

@@ -8,6 +8,12 @@
     <dimen name="text20">20sp</dimen>
     <dimen name="text25">25sp</dimen>
 
+    <dimen name="activity_padding">18dp</dimen>
+    <dimen name="placeholder_image">50dp</dimen>
+    <dimen name="placeholder_text_height">8dp</dimen>
+
+    <dimen name="tool_bar_height">56dp</dimen>
+
     <dimen name="size0">0dp</dimen>
     <dimen name="size1">1dp</dimen>
     <dimen name="size2">2dp</dimen>
@@ -24,7 +30,6 @@
     <dimen name="size20">20dp</dimen>
     <dimen name="size24">24dp</dimen>
     <dimen name="size25">25dp</dimen>
-    <dimen name="size28">27dp</dimen>
 
     <dimen name="size30">30dp</dimen>
     <dimen name="size32">32dp</dimen>
@@ -41,24 +46,20 @@
     <dimen name="size90">90dp</dimen>
     <dimen name="size100">100dp</dimen>
     <dimen name="size150">150dp</dimen>
-    <dimen name="size170">170dp</dimen>
-    <dimen name="size190">190dp</dimen>
     <dimen name="size200">200dp</dimen>
 
     <dimen name="sizeMinus9">-9dp</dimen>
     <dimen name="sizeMinus10">-10dp</dimen>
     <dimen name="sizeMinus20">-20dp</dimen>
     <dimen name="sizeMinus30">-30dp</dimen>
-    <dimen name="size300">300dp</dimen>
     <dimen name="size330">330dp</dimen>
     <dimen name="size350">350dp</dimen>
-    <dimen name="size400">400dp</dimen>
-    <dimen name="size500">500dp</dimen>
     <dimen name="size120">120dp</dimen>
     <dimen name="size110">110dp</dimen>
-    <dimen name="size45">45dp</dimen>
     <dimen name="size8">8dp</dimen>
     <dimen name="size14">14dp</dimen>
-    <dimen name="size140">140dp</dimen>
 
+    <dimen name="grid_expected_size">120dp</dimen>
+    <dimen name="item_margin_horizontal">24dp</dimen>
+    <dimen name="item_margin_vertical">8dp</dimen>
 </resources>

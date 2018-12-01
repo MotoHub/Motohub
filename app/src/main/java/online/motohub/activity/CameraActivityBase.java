@@ -40,6 +40,7 @@ import java.util.Arrays;
 import online.motohub.R;
 import online.motohub.application.MotoHub;
 import online.motohub.config.GoCoderSDKPrefs;
+import online.motohub.util.DialogManager;
 import online.motohub.util.MultiStateButton;
 import online.motohub.util.StatusView;
 
@@ -74,6 +75,11 @@ abstract public class CameraActivityBase extends GoCoderSDKActivityBase
         void onPermissionResult(boolean result);
     }
 
+    @Override
+    protected void onDestroy() {
+        DialogManager.hideProgress();
+        super.onDestroy();
+    }
     /**
      * Android Activity lifecycle methods
      */

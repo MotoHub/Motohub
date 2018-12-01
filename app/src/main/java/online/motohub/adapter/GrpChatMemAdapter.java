@@ -1,7 +1,6 @@
 package online.motohub.adapter;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,7 +12,6 @@ import java.util.List;
 import de.hdodenhof.circleimageview.CircleImageView;
 import online.motohub.R;
 import online.motohub.activity.BaseActivity;
-import online.motohub.activity.MyMotoFileActivity;
 import online.motohub.model.ProfileResModel;
 import online.motohub.util.Utility;
 
@@ -66,17 +64,21 @@ public class GrpChatMemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+        try {
 
-        final ViewHolderGrpChatProfiles mViewHolderGrpChatProfiles = (ViewHolderGrpChatProfiles) holder;
+            final ViewHolderGrpChatProfiles mViewHolderGrpChatProfiles = (ViewHolderGrpChatProfiles) holder;
 
-        ProfileResModel mProfileResModel = mGrpChatMemListData.get(position);
+            ProfileResModel mProfileResModel = mGrpChatMemListData.get(position);
 
-        String mUsernameStr;
-        mUsernameStr = Utility.getInstance().getUserName(mProfileResModel);
+            String mUsernameStr;
+            mUsernameStr = Utility.getInstance().getUserName(mProfileResModel);
 
-        ((BaseActivity) mContext).setImageWithGlide(mViewHolderGrpChatProfiles.mUserImgView, mProfileResModel.getProfilePicture(), R.drawable.default_profile_icon);
+            ((BaseActivity) mContext).setImageWithGlide(mViewHolderGrpChatProfiles.mUserImgView, mProfileResModel.getProfilePicture(), R.drawable.default_profile_icon);
 
-        mViewHolderGrpChatProfiles.mUsernameTv.setText(mUsernameStr);
+            mViewHolderGrpChatProfiles.mUsernameTv.setText(mUsernameStr);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
 
     }
 

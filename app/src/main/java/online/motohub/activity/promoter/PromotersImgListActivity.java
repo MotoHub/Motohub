@@ -13,6 +13,7 @@ import butterknife.OnClick;
 import online.motohub.R;
 import online.motohub.activity.BaseActivity;
 import online.motohub.adapter.promoter.PromoterImgListAdapter;
+import online.motohub.util.DialogManager;
 
 public class PromotersImgListActivity extends BaseActivity {
     @BindView(R.id.toolbar)
@@ -28,6 +29,13 @@ public class PromotersImgListActivity extends BaseActivity {
         setContentView(R.layout.activity_promoters_img_list);
         ButterKnife.bind(this);
         initView();
+    }
+
+
+    @Override
+    protected void onDestroy() {
+        DialogManager.hideProgress();
+        super.onDestroy();
     }
 
     private void initView() {

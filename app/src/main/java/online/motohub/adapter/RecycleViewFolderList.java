@@ -51,11 +51,15 @@ public class RecycleViewFolderList extends RecyclerView.Adapter<RecycleViewFolde
 
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int i) {
-        FolderNameVideo current = data.get(i);
-        VideoListInFolder currentVideoImg = videoImg.get(i);
-        new ImageLoader().execute(currentVideoImg.getVideo_ID(), viewHolder.videoView);
-        viewHolder.textNameFolder.setText(current.getFolderName());
-        viewHolder.textNumberVideo.setText("Number of Videos" + ": " + current.getNumberofFiles());
+        try {
+            FolderNameVideo current = data.get(i);
+            VideoListInFolder currentVideoImg = videoImg.get(i);
+            new ImageLoader().execute(currentVideoImg.getVideo_ID(), viewHolder.videoView);
+            viewHolder.textNameFolder.setText(current.getFolderName());
+            viewHolder.textNumberVideo.setText("Number of Videos" + ": " + current.getNumberofFiles());
+        }catch (Exception e){
+            e.printStackTrace();
+        }
 
     }
 

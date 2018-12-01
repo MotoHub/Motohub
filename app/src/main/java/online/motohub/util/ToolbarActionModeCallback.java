@@ -2,22 +2,16 @@ package online.motohub.util;
 
 import android.content.Context;
 import android.os.Build;
-import android.support.v4.app.Fragment;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.view.ActionMode;
-import android.util.Log;
-import android.util.SparseBooleanArray;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import online.motohub.R;
 import online.motohub.activity.ProfileImgGalleryActivity;
 import online.motohub.adapter.GalleryImgAdapter;
-import online.motohub.model.GalleryImgModel;
 import online.motohub.model.GalleryImgResModel;
 
 /**

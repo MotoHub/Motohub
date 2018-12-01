@@ -1,22 +1,22 @@
 package online.motohub.adapter.promoter;
 
 import android.content.Context;
-import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import online.motohub.R;
+import online.motohub.application.MotoHub;
 import online.motohub.fragment.promoter.PromoterEventsFragment;
 import online.motohub.fragment.promoter.PromoterHomeFragment;
 import online.motohub.fragment.promoter.PromoterPhotosFragment;
 import online.motohub.fragment.promoter.PromoterVideosFragment;
-import online.motohub.model.ProfileModel;
 import online.motohub.model.ProfileResModel;
-import online.motohub.model.promoter_club_news_media.PromotersModel;
 import online.motohub.model.promoter_club_news_media.PromotersResModel;
 
 public class PromoterViewPagerAdapter extends FragmentStatePagerAdapter {
@@ -27,20 +27,24 @@ public class PromoterViewPagerAdapter extends FragmentStatePagerAdapter {
     public PromoterViewPagerAdapter(FragmentManager fm, Context ctx, PromotersResModel promotersResModel, ProfileResModel profileResModel) {
         super(fm);
         this.ctx = ctx;
-        Bundle mBundle = new Bundle();
+        /*Bundle mBundle = new Bundle();
         mBundle.putSerializable(PromotersModel.PROMOTERS_RES_MODEL, promotersResModel);
-        mBundle.putSerializable(ProfileModel.MY_PROFILE_RES_MODEL, profileResModel);
+        mBundle.putSerializable(ProfileModel.MY_PROFILE_RES_MODEL, profileResModel);*/
+        /*MotoHub.getApplicationInstance().setmProfileResModel(profileResModel);
+        MotoHub.getApplicationInstance().setmPromoterResModel(promotersResModel);*/
+        EventBus.getDefault().postSticky(profileResModel);
+        EventBus.getDefault().postSticky(promotersResModel);
         PromoterHomeFragment mPromoterHomeFragment = new PromoterHomeFragment();
-        mPromoterHomeFragment.setArguments(mBundle);
+        //mPromoterHomeFragment.setArguments(mBundle);
         this.mFragments.add(mPromoterHomeFragment);
         PromoterEventsFragment mPromoterEventsFragment = new PromoterEventsFragment();
-        mPromoterEventsFragment.setArguments(mBundle);
+        //mPromoterEventsFragment.setArguments(mBundle);
         this.mFragments.add(mPromoterEventsFragment);
         PromoterPhotosFragment mPromoterPhotosFragment = new PromoterPhotosFragment();
-        mPromoterPhotosFragment.setArguments(mBundle);
+        //mPromoterPhotosFragment.setArguments(mBundle);
         this.mFragments.add(mPromoterPhotosFragment);
         PromoterVideosFragment mPromoterVideosFragment = new PromoterVideosFragment();
-        mPromoterVideosFragment.setArguments(mBundle);
+        //mPromoterVideosFragment.setArguments(mBundle);
         this.mFragments.add(mPromoterVideosFragment);
     }
 

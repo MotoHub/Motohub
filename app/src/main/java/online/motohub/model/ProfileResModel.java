@@ -21,6 +21,10 @@ public class ProfileResModel implements Serializable {
     @Expose
     private int mUserID;
 
+    @SerializedName("ActiveUserCount")
+    @Expose
+    private int mActiveUserCount;
+
     @SerializedName("ProfilePicture")
     @Expose
     private String mProfilePicture;
@@ -94,6 +98,20 @@ public class ProfileResModel implements Serializable {
     @SerializedName("PurchaseType")
     @Expose
     private String mPurchaseType;
+
+    public String getEmail() {
+        if(mEmail == null)
+            mEmail = "";
+        return mEmail;
+    }
+
+    public void setEmail(String mEmail) {
+        this.mEmail = mEmail;
+    }
+
+    @SerializedName("Email")
+    @Expose
+    private String mEmail;
 
     @SerializedName("blockeduserprofiles_by_ProfileID")
     @Expose
@@ -686,6 +704,14 @@ public class ProfileResModel implements Serializable {
 
     public void setIsProfileTagged(boolean isProfileTagged) {
         this.mIsProfileTagged = isProfileTagged;
+    }
+
+    public int getmActiveUserCount() {
+        return mActiveUserCount;
+    }
+
+    public void setmActiveUserCount(int mActiveUserCount) {
+        this.mActiveUserCount = mActiveUserCount;
     }
 
     public boolean getIsSelected() {

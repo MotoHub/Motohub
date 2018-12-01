@@ -129,6 +129,8 @@ public class ViewLiveVideoViewScreen extends BaseActivity implements LiveCameras
     }
 
 
+
+
     private void playVideo(String url) {
         url = "http://temp1.pickzy.com/corners/uploads/message/183/video/1505910757248.mp4";
         releasePlayer();
@@ -312,6 +314,7 @@ public class ViewLiveVideoViewScreen extends BaseActivity implements LiveCameras
 
     @Override
     protected void onDestroy() {
+        DialogManager.hideProgress();
         super.onDestroy();
         releasePlayer();
     }

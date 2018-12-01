@@ -136,139 +136,143 @@ public class VideoCommentsReplyAdapter extends RecyclerView.Adapter<VideoComment
 
     @Override
     public void onBindViewHolder(final Holder mHolder, final int pos) {
-        final VideoCommentReplyModel mEntity = mFeedReplyList.get(pos);
+        try {
+            final VideoCommentReplyModel mEntity = mFeedReplyList.get(pos);
 
-        mHolder.mCommentReplyImgLay.setTag(pos);
+            mHolder.mCommentReplyImgLay.setTag(pos);
 
-        mHolder.mReplyPostTime.setText(((BaseActivity) mContext).findTime(mEntity.getCreateTime()));
-        if (mFeedReplyList.get(pos).getReplyLikeByReplyID().size()>0) {
-            setLikeUnLikeForPost(mHolder, pos);
-        } else {
-            mHolder.mLikeBtn.setImageResource(R.drawable.like_to_like_click_bg);
-            mHolder.mLikeBtn.setTag("like");
-            mHolder.mLikeCountTxt.setText("like");
-        }
-
-        mHolder.mCommentReplyImgLay.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //int selPos = (int) v.getTag();
-                //TODO View Profile Screen
-                profileClick(mFeedReplyList.get(pos));
-            }
-        });
-
-        if(mEntity.getUserType().isEmpty() || mEntity.getUserType().trim().equals(AppConstants.USER)) {
-            String imgStr = mEntity.getProfilesByProfileID().getProfilePicture();
-
-            ((BaseActivity) mContext).setImageWithGlide(mHolder.mUserImg, imgStr, R.drawable.default_profile_icon);
-
-            if (mEntity.getProfilesByProfileID().getProfileType() == Integer.parseInt(BaseActivity.SPECTATOR)) {
-                mHolder.mUserNameTxt.setText(mEntity.getProfilesByProfileID().getSpectatorName());
+            mHolder.mReplyPostTime.setText(((BaseActivity) mContext).findTime(mEntity.getCreateTime()));
+            if (mFeedReplyList.get(pos).getReplyLikeByReplyID().size() > 0) {
+                setLikeUnLikeForPost(mHolder, pos);
             } else {
-                mHolder.mUserNameTxt.setText(mEntity.getProfilesByProfileID().getDriver());
+                mHolder.mLikeBtn.setImageResource(R.drawable.like_to_like_click_bg);
+                mHolder.mLikeBtn.setTag("like");
+                mHolder.mLikeCountTxt.setText("like");
             }
-        } else{
-            String imgStr = mEntity.getPromoterByProfileID().getProfileImage();
 
-            ((BaseActivity) mContext).setImageWithGlide(mHolder.mUserImg, imgStr, R.drawable.default_profile_icon);
+            mHolder.mCommentReplyImgLay.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //int selPos = (int) v.getTag();
+                    //TODO View Profile Screen
+                    profileClick(mFeedReplyList.get(pos));
+                }
+            });
 
-            mHolder.mUserNameTxt.setText(mEntity.getPromoterByProfileID().getName());
+            if (mEntity.getUserType().isEmpty() || mEntity.getUserType().trim().equals(AppConstants.USER)) {
+                String imgStr = mEntity.getProfilesByProfileID().getProfilePicture();
 
-        }
-        if (!mEntity.getReplyText().trim().isEmpty()) {
-            try {
-                mHolder.mCommentReplyTxt.setVisibility(View.VISIBLE);
-                mHolder.mCommentReplyTxt.setText(URLDecoder.decode(mEntity.getReplyText(), "UTF-8"));
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
+                ((BaseActivity) mContext).setImageWithGlide(mHolder.mUserImg, imgStr, R.drawable.default_profile_icon);
+
+                if (mEntity.getProfilesByProfileID().getProfileType() == Integer.parseInt(BaseActivity.SPECTATOR)) {
+                    mHolder.mUserNameTxt.setText(mEntity.getProfilesByProfileID().getSpectatorName());
+                } else {
+                    mHolder.mUserNameTxt.setText(mEntity.getProfilesByProfileID().getDriver());
+                }
+            } else {
+                String imgStr = mEntity.getPromoterByProfileID().getProfileImage();
+
+                ((BaseActivity) mContext).setImageWithGlide(mHolder.mUserImg, imgStr, R.drawable.default_profile_icon);
+
+                mHolder.mUserNameTxt.setText(mEntity.getPromoterByProfileID().getName());
+
             }
-        } else {
-            mHolder.mCommentReplyTxt.setVisibility(View.GONE);
-        }
-        if (!mEntity.getReplyImages().trim().isEmpty()) {
-            mHolder.mIvCommentImg.setVisibility(View.VISIBLE);
-            mHolder.mPostPicProgressBar.setVisibility(View.VISIBLE);
-            // ((BaseActivity)mContext).setImageWithGlide(mHolder.mIvCommentImg,mEntity.getReplyImages(),R.drawable.default_cover_img);
-            GlideUrl glideUrl = new GlideUrl(UrlUtils.FILE_URL + mEntity.getReplyImages().trim(), new LazyHeaders.Builder()
-                    .addHeader("X-DreamFactory-Api-Key", mContext.getString(R.string.dream_factory_api_key))
-                    .build());
-
-            Glide.with(mContext)
-                    .load(glideUrl)
-                    .listener(new RequestListener<Drawable>() {
-                        @Override
-                        public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
-                            mHolder.mPostPicProgressBar.setVisibility(View.GONE);
-                            return false;
-                        }
-
-                        @Override
-                        public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-                            mHolder.mPostPicProgressBar.setVisibility(View.GONE);
-                            return false;
-                        }
-                    })
-                    .apply(new RequestOptions()
-                            .dontAnimate()
-                    )
-                    .into(mHolder.mIvCommentImg);
-        } else {
-            mHolder.mIvCommentImg.setVisibility(View.GONE);
-        }
-
-        mHolder.mIvCommentImg.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ((BaseActivity) mContext).moveLoadImageScreen(mContext, mEntity.getReplyImages());
+            if (!mEntity.getReplyText().trim().isEmpty()) {
+                try {
+                    mHolder.mCommentReplyTxt.setVisibility(View.VISIBLE);
+                    mHolder.mCommentReplyTxt.setText(((BaseActivity) mContext).setTextEdt(mContext,URLDecoder.decode(mEntity.getReplyText(), "UTF-8"),mEntity.getReplyTaggedUserNames(), mEntity.getReplyTaggedUserIDs(), mMyProfileResModel.getID()));
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                mHolder.mCommentReplyTxt.setVisibility(View.GONE);
             }
-        });
-        mHolder.mLikeBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mTempPosition = pos;
+            if (!mEntity.getReplyImages().trim().isEmpty()) {
+                mHolder.mIvCommentImg.setVisibility(View.VISIBLE);
+                mHolder.mPostPicProgressBar.setVisibility(View.VISIBLE);
+                // ((BaseActivity)mContext).setImageWithGlide(mHolder.mIvCommentImg,mEntity.getReplyImages(),R.drawable.default_cover_img);
+                GlideUrl glideUrl = new GlideUrl(UrlUtils.FILE_URL + mEntity.getReplyImages().trim(), new LazyHeaders.Builder()
+                        .addHeader("X-DreamFactory-Api-Key", mContext.getString(R.string.dream_factory_api_key))
+                        .build());
 
-                if(!((BaseActivity)mContext).isMultiClicked()){
+                Glide.with(mContext)
+                        .load(glideUrl)
+                        .listener(new RequestListener<Drawable>() {
+                            @Override
+                            public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                                mHolder.mPostPicProgressBar.setVisibility(View.GONE);
+                                return false;
+                            }
 
-                switch (v.getTag().toString()) {
-                    case "unlike":
+                            @Override
+                            public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                                mHolder.mPostPicProgressBar.setVisibility(View.GONE);
+                                return false;
+                            }
+                        })
+                        .apply(new RequestOptions()
+                                .dontAnimate()
+                        )
+                        .into(mHolder.mIvCommentImg);
+            } else {
+                mHolder.mIvCommentImg.setVisibility(View.GONE);
+            }
 
-                        ArrayList<VideoReplyLikeModel> mReplyLikeList = mFeedReplyList.get(mTempPosition).getReplyLikeByReplyID();
+            mHolder.mIvCommentImg.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ((BaseActivity) mContext).moveLoadImageScreen(mContext, UrlUtils.FILE_URL + mEntity.getReplyImages());
+                }
+            });
+            mHolder.mLikeBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mTempPosition = pos;
 
-                        if (mReplyLikeList.size() > 0) {
+                    if (!((BaseActivity) mContext).isMultiClicked()) {
 
-                            for (VideoReplyLikeModel likesEntity : mReplyLikeList) {
-                                if (likesEntity.getProfileID() == mMyProfileResModel.getID() && likesEntity.getReplyID() == mFeedReplyList.get(mTempPosition).getID()) {
-                                    mDeleteLikeID = likesEntity.getID();
-                                    break;
+                        switch (v.getTag().toString()) {
+                            case "unlike":
+
+                                ArrayList<VideoReplyLikeModel> mReplyLikeList = mFeedReplyList.get(mTempPosition).getReplyLikeByReplyID();
+
+                                if (mReplyLikeList.size() > 0) {
+
+                                    for (VideoReplyLikeModel likesEntity : mReplyLikeList) {
+                                        if (likesEntity.getProfileID() == mMyProfileResModel.getID() && likesEntity.getReplyID() == mFeedReplyList.get(mTempPosition).getID()) {
+                                            mDeleteLikeID = likesEntity.getID();
+                                            break;
+                                        }
+
+                                    }
+                                    callUnLikeReply(mDeleteLikeID);
                                 }
 
-                            }
-                            callUnLikeReply(mDeleteLikeID);
+                                break;
+
+                            case "like":
+
+                                callLikeReply(mFeedCommentModel.getId(), mFeedReplyList.get(mTempPosition).getID(), mMyProfileResModel.getID());
+
+                                break;
                         }
-
-                        break;
-
-                    case "like":
-
-                        callLikeReply(mFeedCommentModel.getId(), mFeedReplyList.get(mTempPosition).getID(), mMyProfileResModel.getID());
-
-                        break;
+                    }
                 }
+            });
+            mHolder.mLikeCountTxt.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mTempPosition = pos;
+                    ArrayList<VideoReplyLikeModel> mReplyLikeList = mFeedReplyList.get(mTempPosition).getReplyLikeByReplyID();
+                    if (mReplyLikeList.size() > 0) {
+                        showCommentReplyListPopup(mContext.getString(R.string.reply_likes));
+                        setFeedReplyLikeAdapter(mReplyLikeList);
+                    }
                 }
-            }
-        });
-        mHolder.mLikeCountTxt.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mTempPosition = pos;
-                ArrayList<VideoReplyLikeModel> mReplyLikeList = mFeedReplyList.get(mTempPosition).getReplyLikeByReplyID();
-                if (mReplyLikeList.size() > 0) {
-                    showCommentReplyListPopup(mContext.getString(R.string.reply_likes));
-                    setFeedReplyLikeAdapter(mReplyLikeList);
-                }
-            }
-        });
+            });
+        } catch (Exception e){
+            e.printStackTrace();
+        }
 
     }
 

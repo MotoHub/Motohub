@@ -20,7 +20,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import com.bumptech.glide.Glide;
@@ -79,6 +78,12 @@ public class PickerPostImageActivity extends BaseActivity {
         ButterKnife.bind(this);
         if (isPermissionAdded())
             initView();
+    }
+
+    @Override
+    protected void onDestroy() {
+        DialogManager.hideProgress();
+        super.onDestroy();
     }
 
 
@@ -444,7 +449,7 @@ public class PickerPostImageActivity extends BaseActivity {
         }
     }
 
-    private boolean isPermissionAdded() {
+    public boolean isPermissionAdded() {
         boolean addPermission = true;
         if (android.os.Build.VERSION.SDK_INT >= 23) {
             int readStoragePermission = ContextCompat.checkSelfPermission(this, android.Manifest.permission.READ_EXTERNAL_STORAGE);

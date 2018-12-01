@@ -5,63 +5,48 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Environment;
+import android.os.SystemClock;
 import android.support.annotation.Nullable;
-import android.support.design.widget.BottomSheetDialog;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.Editable;
-import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
-import android.widget.Toast;
 
-import com.facebook.share.model.ShareHashtag;
-import com.facebook.share.model.ShareLinkContent;
-import com.facebook.share.model.SharePhoto;
-import com.facebook.share.model.SharePhotoContent;
-import com.facebook.share.model.ShareVideo;
-import com.facebook.share.model.ShareVideoContent;
-import com.facebook.share.widget.ShareDialog;
+import com.facebook.shimmer.ShimmerFrameLayout;
+import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.jakewharton.rxbinding.widget.RxTextView;
 
 import org.json.JSONObject;
 
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Timer;
+import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
-import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.processors.PublishProcessor;
 import online.motohub.R;
-import online.motohub.activity.PickerPostVideoForOnDemandActivity;
+import online.motohub.activity.BaseActivity;
 import online.motohub.activity.VideoPreviewOnDemandActivity;
-import online.motohub.adapter.ondemand.PromoterVideoPostAdapter1;
+import online.motohub.adapter.ondemand.PromoterOrUserAdapter;
 import online.motohub.application.MotoHub;
 import online.motohub.fcm.MyFireBaseMessagingService;
 import online.motohub.fragment.BaseFragment;
+import online.motohub.fragment.dialog.AppDialogFragment;
 import online.motohub.interfaces.OnLoadMoreListener;
 import online.motohub.model.PostsModel;
 import online.motohub.model.ProfileModel;
@@ -75,11 +60,13 @@ import online.motohub.retrofit.RetrofitClient;
 import online.motohub.util.AppConstants;
 import online.motohub.util.DialogManager;
 import online.motohub.util.PreferenceUtils;
-import online.motohub.util.UrlUtils;
 import online.motohub.util.Utility;
+import rx.Observer;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Func1;
+import rx.schedulers.Schedulers;
 
 import static android.app.Activity.RESULT_OK;
-import static com.facebook.FacebookSdk.getApplicationContext;
 
 /**
  * Created by pickzy01 on 30/05/2018.
@@ -88,9 +75,8 @@ import static com.facebook.FacebookSdk.getApplicationContext;
 public class PromoterOrUserFragment extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener {
 
     public static final String EXTRA_RESULT_DATA = "activity_video_picker_uri";
-    protected static final int GALLERY_VIDEO_REQ = 96;
-    private final int VISIBLE_THRESHOLD = 1;
-    public ShareDialog shareFBDialog;
+    // TAG for logging;
+    private static final String TAG = "PromoterOrUserFragment";
     @BindView(R.id.recycler_view)
     RecyclerView recyclerView;
     @BindView(R.id.swipe_container)
@@ -104,26 +90,26 @@ public class PromoterOrUserFragment extends BaseFragment implements SwipeRefresh
     ProgressBar progressBar;
     @BindView(R.id.search_edt)
     EditText search_edt;
-    private CompositeDisposable compositeDisposable = new CompositeDisposable();
-    //Static
+    @BindView(R.id.shimmer_ondemand_promoters)
+    ShimmerFrameLayout mShimmer_ondemand_promoters;
     private int mCurrentProfileID = 0, ProfileID = 0;
-    private String mFilterProfile = "ID = " + mCurrentProfileID;
     private String mNewSharedID;
     private VideoShareModel mSharedFeed;
     private int mCurrentPostPosition;
     private ProfileResModel mMyProfileResModel;
-    private PromoterVideoPostAdapter1 mAdapter;
+    private PromoterOrUserAdapter mAdapter;
     private ArrayList<PromoterVideoModel.Resource> mPromoterVideoList;
-    private String mVideoPathUri, mShareContent;
-    private String mFilter = "(UserType != usereventvideos) AND (UserType != user)";
-    //private String mFilter = "(EventFinishDate<" + getCurrentDate() + ") AND (UserType != user)";
-
+    private String mVideoPathUri;
+    private String mFilter = "(UserType != usereventvideos) AND (ReportStatus == 0)";
     private boolean mIsLoadMore = false;
-    private int pageNumber = 1;
     private boolean isLoading;
     private int mFeedTotalCount = 0;
     private File videoFile;
     private String mSearchStr = "";
+    private Timer timer;
+
+    private rx.Subscription subscription;
+
     private int mOffset = 0;
     BroadcastReceiver broadCastUploadStatus = new BroadcastReceiver() {
         @Override
@@ -145,12 +131,9 @@ public class PromoterOrUserFragment extends BaseFragment implements SwipeRefresh
             }
         }
     };
-    private Uri mVideoFileUri;
-    private int lastVisibleItem, totalItemCount;
+
     private LinearLayoutManager layoutManager;
-    private boolean loading = false;
-    private String[] mShareVideoUrl;
-    private PublishProcessor<Integer> paginator = PublishProcessor.create();
+
     private OnLoadMoreListener mOnLoadMoreListener = new OnLoadMoreListener() {
         @Override
         public void onLoadMore() {
@@ -188,12 +171,29 @@ public class PromoterOrUserFragment extends BaseFragment implements SwipeRefresh
         return obj;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        // Get the data from any transfer's that have already happened,
+        getActivity().registerReceiver(this.broadCastUploadStatus, new IntentFilter("UPLOAD_STATUS"));
+
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        getActivity().unregisterReceiver(this.broadCastUploadStatus);
+    }
+
     private void initView() {
 
         recyclerView.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);
+
+        mShimmer_ondemand_promoters.startShimmerAnimation();
+
         mCurrentProfileID = MotoHub.getApplicationInstance().getProfileId();
         swipeContainer.setOnRefreshListener(this);
         swipeContainer.setColorSchemeResources(R.color.colorOrange,
@@ -216,7 +216,7 @@ public class PromoterOrUserFragment extends BaseFragment implements SwipeRefresh
                 int mFirstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition();
 
                 if (!isLoading && (mOffset < mFeedTotalCount)) {
-                    if ((mVisibleItemCount + mFirstVisibleItemPosition) >= mTotalItemCount
+                    if ((mVisibleItemCount + mFirstVisibleItemPosition) >= mTotalItemCount - 2
                             && mFirstVisibleItemPosition >= 0) {
                         isLoading = true;
                         if (mOnLoadMoreListener != null) {
@@ -231,73 +231,77 @@ public class PromoterOrUserFragment extends BaseFragment implements SwipeRefresh
             try {
                 JSONObject mJsonObjectEntry = new JSONObject(getActivity().getIntent().getExtras().getString(MyFireBaseMessagingService.ENTRY_JSON_OBJ));
                 JSONObject mDetailsObj = mJsonObjectEntry.getJSONObject("Details");
-                mFilter = "(" + mFilter + ") AND (ID = " + mDetailsObj.getInt("VideoID") + ")";
+                mFilter = "(" + mFilter + ") AND (ID = " + mDetailsObj.getInt("VideoID") + ") AND (ReportStatus == 0)";
                 mCurrentProfileID = Integer.parseInt(mDetailsObj.getString("ProfileID"));
                 videoGalleryFab.setVisibility(View.GONE);
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        } else {
-            //mFilter = "(EventFinishDate<" + getCurrentDate() + ") AND " + "(UserType != user)" +;
-           /* try {
-                Bundle mBundle = getActivity().getIntent().getExtras();
-                if (mBundle != null) {
-                    mCurrentProfileID = mBundle.getInt(AppConstants.PROFILE_ID, 0);
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }*/
         }
+        subscription = RxTextView.textChanges(search_edt)
+                .skip(1)
+                .debounce(500, TimeUnit.MILLISECONDS)
+                .observeOn(Schedulers.computation())
+                .filter(new Func1<CharSequence, Boolean>() {
+                    @Override
+                    public Boolean call(CharSequence charSequence) {
+                        SystemClock.sleep(1000); // Simulate the heavy stuff.
+                        return true;
+                    }
+                })
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<CharSequence>() {
+                    @Override
+                    public void onCompleted() {
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.d(TAG, "Error.", e);
+                    }
+
+                    @Override
+                    public void onNext(CharSequence charSequence) {
+                        String mSearchStrTemp = charSequence.toString();
+                        searchOnDemand(mSearchStrTemp);
+                    }
+                });
+
         getMyProfiles();
-        search_edt.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                searchOnDemand(s.toString());
-            }
-        });
-
-        search_edt.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                v.setFocusable(true);
-                v.setFocusableInTouchMode(true);
-                return false;
-            }
-        });
     }
 
     private void searchOnDemand(String searchStr) {
-        mOffset = 0;
-        mFeedTotalCount = 0;
-        mIsLoadMore = false;
-        mPromoterVideoList.clear();
-        setAdapter();
-        mSearchStr = searchStr;
-        if (mSearchStr.isEmpty() || mSearchStr.length() == 0) {
-            //mFilter = "(EventFinishDate<" + getCurrentDate() + ") AND " + "(UserType != user)";
-            mFilter = "(UserType != usereventvideos) AND (UserType != user)";
-            getSearchDataFromAPi(mFilter);
-        } else {
-            mPromoterVideoList.add(null);
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    mAdapter.notifyItemInserted(mPromoterVideoList.size() - 1);
-                }
-            });
-            //mFilter = "(EventFinishDate<" + getCurrentDate() + ") AND " + "(UserType != user) AND (Caption LIKE '%" + mSearchStr + "%')";
-            mFilter = "(UserType != usereventvideos) AND (UserType != user) AND (Caption LIKE '%" + mSearchStr + "%')";
-            getSearchDataFromAPi(mFilter);
+        try {
+            mOffset = 0;
+            mFeedTotalCount = 0;
+            mIsLoadMore = false;
+            mPromoterVideoList.clear();
+            mSearchStr = searchStr;
+            setAdapter();
+            if (mSearchStr.isEmpty() || mSearchStr.length() == 0) {
+                mPromoterVideoList.add(null);
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mAdapter.notifyItemInserted(mPromoterVideoList.size() - 1);
+                    }
+                });
+                mFilter = "(UserType != usereventvideos) AND (ReportStatus == 0)";
+                getSearchDataFromAPi(mFilter);
+            } else {
+                mPromoterVideoList.add(null);
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mAdapter.notifyItemInserted(mPromoterVideoList.size() - 1);
+                    }
+                });
+                mFilter = "(UserType != usereventvideos) AND (ReportStatus == 0) AND (Caption LIKE '%" + mSearchStr + "%')";
+                getSearchDataFromAPi(mFilter);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -305,22 +309,24 @@ public class PromoterOrUserFragment extends BaseFragment implements SwipeRefresh
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
-        compositeDisposable.dispose();
     }
 
     private void getMyProfiles() {
-        String mFilter = "ID=" + mCurrentProfileID;
-        if (isNetworkConnected())
-            RetrofitClient.getRetrofitInstance().callGetProfiles(this, mFilter, RetrofitClient.GET_PROFILE_RESPONSE);
-        else {
-            showSnackBar(patent, getActivity().getResources().getString(R.string.internet_err));
+        try {
+            String mFilter = "ID=" + mCurrentProfileID;
+            if (isNetworkConnected())
+                RetrofitClient.getRetrofitInstance().callGetProfiles(this, mFilter, RetrofitClient.GET_PROFILE_RESPONSE);
+            else {
+                showSnackBar(patent, getActivity().getResources().getString(R.string.internet_err));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
     }
 
     private void getVideoDataFromAPi(String mFilter) {
-        RetrofitClient.getRetrofitInstance()
-                .callGetPromotersGallery(this, mFilter, RetrofitClient.GET_VIDEO_FILE_RESPONSE, mOffset, mIsLoadMore);
+        RetrofitClient.getRetrofitInstance().callGetPromotersGallery(this, mFilter, RetrofitClient.GET_VIDEO_FILE_RESPONSE, mOffset, mIsLoadMore);
     }
 
     private void getSearchDataFromAPi(String mFilter) {
@@ -332,7 +338,7 @@ public class PromoterOrUserFragment extends BaseFragment implements SwipeRefresh
         mOffset = 0;
         mPromoterVideoList.clear();
         recyclerView.getRecycledViewPool().clear();
-        setAdapter();
+        search_edt.setText(null);
         getMyProfiles();
     }
 
@@ -340,37 +346,34 @@ public class PromoterOrUserFragment extends BaseFragment implements SwipeRefresh
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.video_gallery_fab:
-                galleryIntentVideo1();
+                assert ((BaseActivity) getActivity()) != null;
+                ((BaseActivity) getActivity()).showAppDialog(AppDialogFragment.BOTTOM_ADD_VIDEO_DIALOG, null);
                 break;
         }
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        getActivity().registerReceiver(this.broadCastUploadStatus, new IntentFilter("UPLOAD_STATUS"));
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        getActivity().unregisterReceiver(this.broadCastUploadStatus);
-    }
 
     private void setAdapter() {
-        isLoading = false;
-        if (mAdapter == null) {
-            mAdapter = new PromoterVideoPostAdapter1(mPromoterVideoList, mMyProfileResModel, getContext(), ProfileID, PromoterOrUserFragment.this);
-            recyclerView.setAdapter(mAdapter);
-        } else {
-            mAdapter.notifyDataSetChanged();
+        if (getActivity() != null) {
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    // Do whatever you want
+                    try {
+                        isLoading = false;
+                        if (mAdapter == null && mMyProfileResModel.getID() != 0) {
+                            mAdapter = new PromoterOrUserAdapter(mPromoterVideoList, mMyProfileResModel, getActivity(), ProfileID, PromoterOrUserFragment.this);
+                            recyclerView.setAdapter(mAdapter);
+                        } else {
+                            mAdapter.notifyDataSetChanged();
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
         }
-    }
 
-    public void galleryIntentVideo1() {
-        Intent mGalleryIntent = new Intent(getActivity(), PickerPostVideoForOnDemandActivity.class);
-        startActivityForResult(mGalleryIntent, GALLERY_VIDEO_REQ);
-        getActivity().overridePendingTransition(R.anim.anim_bottom_up, R.anim.anim_bottom_down);
     }
 
     @Override
@@ -378,22 +381,56 @@ public class PromoterOrUserFragment extends BaseFragment implements SwipeRefresh
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
-                case GALLERY_VIDEO_REQ:
-                    mVideoPathUri = data.getStringExtra(EXTRA_RESULT_DATA);
-                    if (mVideoPathUri != null) {
-                        new VideoCompressor().execute(getSelectedVideoPath(), getCompressedVideoPath());
+                case BaseActivity.ACTION_TAKE_VIDEO:
+                    Uri videoUri = data.getData();
+                    // mVideoPathUri = data.getStringExtra(EXTRA_RESULT_DATA);
+                    if (videoUri != null) {
+                        assert ((BaseActivity) getActivity()) != null;
+                        mVideoPathUri = ((BaseActivity) getActivity()).getRealPathFromURI(videoUri);
+                        getSelectedVideoPath();
+                        startVideoPreviewOnDemandActivity();
                     } else {
                         showSnackBar(patent, getString(R.string.file_not_found));
                     }
                     break;
+
+                case BaseActivity.GALLERY_VIDEO_REQ:
+                    mVideoPathUri = data.getStringExtra(EXTRA_RESULT_DATA);
+                    if (mVideoPathUri != null) {
+                        //new VideoCompressor().execute(getSelectedVideoPath(), getCompressedVideoPath());
+                        getSelectedVideoPath();
+                        startVideoPreviewOnDemandActivity();
+                    } else {
+                        showSnackBar(patent, getString(R.string.file_not_found));
+                    }
+
+                    break;
                 case AppConstants.VIDEO_COMMENT_REQUEST:
                     assert data.getExtras() != null;
                     ArrayList<VideoCommentsModel> mFeedCommentModel = (ArrayList<VideoCommentsModel>) data.getExtras().getSerializable(PostsModel.COMMENTS_BY_POSTID);
-                    mAdapter.refreshCommentList(mFeedCommentModel);
+                    if (mFeedCommentModel.size() > 0)
+                        mAdapter.refreshCommentList(mFeedCommentModel);
+                    break;
+
+                case AppConstants.ONDEMAND_REQUEST:
+                    assert data.getExtras() != null;
+                    if (mPromoterVideoList != null) {
+                        mPromoterVideoList.clear();
+                        ArrayList<PromoterVideoModel.Resource> mTempPromoterVideoList = (ArrayList<PromoterVideoModel.Resource>) data.getExtras().getSerializable(AppConstants.VIDEO_LIST);
+                        if (mTempPromoterVideoList.size() > 0) {
+                            mPromoterVideoList.addAll(mTempPromoterVideoList);
+                            mAdapter.notifyDataSetChanged();
+                        }
+                    }
+                    break;
+                case AppConstants.REPORT_POST_SUCCESS:
+                    //TODO remove the reported post
+                    getMyProfiles();
                     break;
             }
         }
     }
+
 
     private String getSelectedVideoPath() {
 
@@ -419,7 +456,8 @@ public class PromoterOrUserFragment extends BaseFragment implements SwipeRefresh
                     ProfileModel mProfileModel = (ProfileModel) responseObj;
                     if (mProfileModel.getResource().size() > 0) {
                         mMyProfileResModel = mProfileModel.getResource().get(0);
-                        getVideoDataFromAPi(mFilter);
+                        if (mMyProfileResModel.getID() != 0)
+                            getVideoDataFromAPi(mFilter);
                     } else {
                         showSnackBar(patent, getActivity().getResources().getString(R.string.no_profile_found_err));
                     }
@@ -435,23 +473,39 @@ public class PromoterOrUserFragment extends BaseFragment implements SwipeRefresh
                 getMyProfiles();
                 break;
             case RetrofitClient.GET_VIDEO_FILE_RESPONSE:
-                PromoterVideoModel mResponse = (PromoterVideoModel) responseObj;
-                if (mIsLoadMore) {
-                    hideLoading();
-                    if (mResponse != null && mResponse.getResource().size() > 0) {
-                        mPromoterVideoList.addAll(mResponse.getResource());
-                    }
-                } else {
-                    mPromoterVideoList.clear();
-                    mFeedTotalCount = mResponse.getMeta().getCount();
-                    if (mResponse != null && mResponse.getResource().size() > 0) {
-                        mPromoterVideoList.addAll(mResponse.getResource());
+                try {
+                    PromoterVideoModel mResponse = (PromoterVideoModel) responseObj;
+                    String data = new Gson().toJson(mResponse);
+                    if (mIsLoadMore) {
+                        hideLoading();
+                        if (mResponse != null && mResponse.getResource().size() > 0) {
+                            mPromoterVideoList.addAll(mResponse.getResource());
+                            mOffset = mPromoterVideoList.size();
+                            setAdapter();
+                            mOffset = mPromoterVideoList.size();
+                            mShimmer_ondemand_promoters.stopShimmerAnimation();
+                            mShimmer_ondemand_promoters.setVisibility(View.GONE);
+                        }
                     } else {
-                        showSnackBar(patent, getString(R.string.video_not_found));
+                        mPromoterVideoList.clear();
+                        mFeedTotalCount = mResponse.getMeta().getCount();
+                        if (mResponse.getResource().size() > 0) {
+                            mPromoterVideoList.addAll(mResponse.getResource());
+                        } else {
+                            showSnackBar(patent, getString(R.string.video_not_found));
+                        }
+                        mOffset = mPromoterVideoList.size();
+                        try {
+                            mShimmer_ondemand_promoters.stopShimmerAnimation();
+                            mShimmer_ondemand_promoters.setVisibility(View.GONE);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        setAdapter();
                     }
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-                mOffset = mPromoterVideoList.size();
-                setAdapter();
                 break;
             case RetrofitClient.GET_SEARCH_VIDEO_FILE_RESPONSE:
                 PromoterVideoModel mResponse1 = (PromoterVideoModel) responseObj;
@@ -459,12 +513,17 @@ public class PromoterOrUserFragment extends BaseFragment implements SwipeRefresh
                     hideLoading();
                     if (mResponse1 != null && mResponse1.getResource().size() > 0) {
                         mPromoterVideoList.addAll(mResponse1.getResource());
+                        mOffset = mPromoterVideoList.size();
+                        setAdapter();
                     }
                 } else {
                     mPromoterVideoList.clear();
+                    //recyclerView.getRecycledViewPool().clear();
                     mFeedTotalCount = mResponse1.getMeta().getCount();
                     if (mResponse1 != null && mResponse1.getResource().size() > 0) {
                         mPromoterVideoList.addAll(mResponse1.getResource());
+                        mOffset = mPromoterVideoList.size();
+                        setAdapter();
                     } else {
                         showSnackBar(patent, getString(R.string.video_not_found));
                     }
@@ -487,8 +546,10 @@ public class PromoterOrUserFragment extends BaseFragment implements SwipeRefresh
             case RetrofitClient.VIDEO_SHARES:
                 VideoShareModel mFeedShareList = (VideoShareModel) responseObj;
                 ArrayList<VideoShareModel> mNewFeedShare = mFeedShareList.getResource();
-                mSharedFeed = mNewFeedShare.get(0);
-                callAddVideoSharedPost();
+                if (mNewFeedShare.size() > 0) {
+                    mSharedFeed = mNewFeedShare.get(0);
+                    callAddVideoSharedPost();
+                }
                 break;
             case RetrofitClient.DELETE_SHARED_POST_RESPONSE:
                 break;
@@ -504,15 +565,19 @@ public class PromoterOrUserFragment extends BaseFragment implements SwipeRefresh
     }
 
     private void hideLoading() {
-        mIsLoadMore = false;
-        mPromoterVideoList.remove(mPromoterVideoList.size() - 1);
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                mAdapter.notifyItemRemoved(mPromoterVideoList.size());
-            }
-        });
-        isLoading = false;
+        try {
+            mIsLoadMore = false;
+            mPromoterVideoList.remove(mPromoterVideoList.size() - 1);
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    mAdapter.notifyItemRemoved(mPromoterVideoList.size());
+                }
+            });
+            isLoading = false;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void callAddVideoSharedPost() {
@@ -520,7 +585,7 @@ public class PromoterOrUserFragment extends BaseFragment implements SwipeRefresh
 
         mJsonObject.addProperty(PostsModel.PROFILE_ID, String.valueOf(mMyProfileResModel.getID()));
         mJsonObject.addProperty(PostsModel.OLD_POST_ID, mPromoterVideoList.get(mCurrentPostPosition).getID());
-        mJsonObject.addProperty(PostsModel.WHO_POSTED_PROFILE_ID, mPromoterVideoList.get(mCurrentPostPosition).getUserID());
+        mJsonObject.addProperty(PostsModel.WHO_POSTED_PROFILE_ID, mPromoterVideoList.get(mCurrentPostPosition).getProfileID());
         mJsonObject.addProperty(PostsModel.WHO_POSTED_USER_ID, mPromoterVideoList.get(mCurrentPostPosition).getUserID());
         mJsonObject.addProperty(PostsModel.POST_TEXT, mPromoterVideoList.get(mCurrentPostPosition).getCaption());
         mJsonObject.addProperty(PostsModel.CREATED_AT, mPromoterVideoList.get(mCurrentPostPosition).getCreatedAt());
@@ -531,78 +596,34 @@ public class PromoterOrUserFragment extends BaseFragment implements SwipeRefresh
         mJsonObject.addProperty(PostsModel.NEW_SHARED_POST_ID, mNewSharedID);
         mJsonObject.addProperty(PostsModel.PostVideoThumbnailurl, mPromoterVideoList.get(mCurrentPostPosition).getThumbnail());
         mJsonObject.addProperty(PostsModel.PostVideoURL, mPromoterVideoList.get(mCurrentPostPosition).getVideoUrl());
-        if (mPromoterVideoList.get(mCurrentPostPosition).getUserType().trim().equals(AppConstants.ONDEMAND))
+        if (mPromoterVideoList.get(mCurrentPostPosition).getUserType().trim().equals(AppConstants.ONDEMAND) || mPromoterVideoList.get(mCurrentPostPosition).getUserType().trim().equals(AppConstants.USER_EVENT_VIDEOS) || mPromoterVideoList.get(mCurrentPostPosition).getUserType().trim().equals(AppConstants.USER))
             mJsonObject.addProperty(PostsModel.USER_TYPE, AppConstants.USER_VIDEO_SHARED_POST);
         else
             mJsonObject.addProperty(PostsModel.USER_TYPE, AppConstants.VIDEO_SHARED_POST);
-        mJsonObject.addProperty(PostsModel.USER_TYPE, AppConstants.VIDEO_SHARED_POST);
-
         final JsonArray mJsonArray = new JsonArray();
         mJsonArray.add(mJsonObject);
 
         RetrofitClient.getRetrofitInstance().callCreateProfilePosts(this, mJsonArray, RetrofitClient.SHARED_POST_RESPONSE);
-
-
     }
 
-    /*@Override
-    public void alertDialogPositiveBtnClick(BaseFragment activity, String dialogType, StringBuilder profileTypesStr, ArrayList<String> profileTypes, int position) {
-        super.alertDialogPositiveBtnClick(activity, dialogType, profileTypesStr, profileTypes, position);
+    @Override
+    public void alertDialogPositiveBtnClick(String dialogType, int position) {
+        super.alertDialogPositiveBtnClick(dialogType, position);
         switch (dialogType) {
-
             case AppDialogFragment.BOTTOM_SHARE_DIALOG:
                 mCurrentPostPosition = position;
                 callPostShare(position);
                 break;
-
         }
-    }*/
-
-    public void showBottomSheetDialog(final String shareContent, final ArrayList<Bitmap> shareImg, final String[] videoUrl, final int mPos, final boolean mIsFromOtherMotoProfile) {
-        //LayoutInflater li = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View view = getLayoutInflater().inflate(R.layout.share_layout, null);
-        LinearLayout lFriends = view.findViewById(R.id.Friends_lay);
-        LinearLayout lFacebook = view.findViewById(R.id.facebook_lay);
-        TextView txtvwCancel = view.findViewById(R.id.txtvwCancel);
-        final BottomSheetDialog dialog = new BottomSheetDialog(getActivity());
-        dialog.setContentView(view);
-        dialog.show();
-        lFriends.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                callPostShare(mPos);
-                dialog.dismiss();
-            }
-        });
-
-        lFacebook.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showFBShareDialog1(shareContent, shareImg, videoUrl);
-                dialog.dismiss();
-            }
-        });
-
-        txtvwCancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
     }
 
     private void callPostShare(int position) {
 
         mCurrentPostPosition = position;
-
         JsonObject mJsonObject = new JsonObject();
         mNewSharedID = mPromoterVideoList.get(position).getID() + "_" + mMyProfileResModel.getID();
         mJsonObject.addProperty("VideoID", mNewSharedID);
         mJsonObject.addProperty("ProfileID", (mMyProfileResModel.getID()));
-        if (mPromoterVideoList.get(mCurrentPostPosition).getUserType().trim().equals(AppConstants.ONDEMAND))
-            mJsonObject.addProperty(PostsModel.USER_TYPE, AppConstants.USER_VIDEO_SHARED_POST);
-        else
-            mJsonObject.addProperty(PostsModel.USER_TYPE, AppConstants.VIDEO_SHARED_POST);
         mJsonObject.addProperty("VideoOwnerID", String.valueOf(mPromoterVideoList.get(position).getProfileID()));
         mJsonObject.addProperty("SharedAt", mPromoterVideoList.get(position).getCreatedAt());
         mJsonObject.addProperty("OriginalVideoID", mPromoterVideoList.get(position).getID());
@@ -647,210 +668,15 @@ public class PromoterOrUserFragment extends BaseFragment implements SwipeRefresh
         showSnackBar(patent, message);
     }
 
-    private void showFBShareDialog1(String content, final ArrayList<Bitmap> mShareImage, final String[] mVideoUrl) {
-
-        shareFBDialog = new ShareDialog(this);
-
-        mShareContent = content;
-
-        if (mVideoUrl != null) {
-
-            if (ShareDialog.canShow(ShareVideoContent.class)) {
-
-                getUriVideo(mVideoUrl);
-                //getUriVideo(mVideoUrl);
-            } else {
-                Toast.makeText(getContext(), "Please install the Facebook app for sharing photos.", Toast.LENGTH_SHORT).show();
-            }
-
-        } else if (mShareImage != null) {
-
-            if (ShareDialog.canShow(SharePhotoContent.class)) {
-                SharePhoto[] photo = new SharePhoto[mShareImage.size()];
-                ArrayList<SharePhoto> mSharePhotoList = new ArrayList<>();
-                SharePhotoContent shareContent;
-
-                for (int i = 0; i < mShareImage.size(); i++) {
-                    photo[i] = new SharePhoto.Builder()
-                            .setBitmap(mShareImage.get(i))
-                            .build();
-                }
-
-                mSharePhotoList.addAll(Arrays.asList(photo).subList(0, mShareImage.size()));
-                if (content != null) {
-                    content = content.replace(" ", "#");
-                    String mShareTxt = "#" + content;
-                    shareContent = new SharePhotoContent.Builder()
-                            .addPhotos(mSharePhotoList)
-                            .setShareHashtag(new ShareHashtag.Builder()
-                                    .setHashtag(mShareTxt)
-                                    .build())
-                            .build();
-                } else {
-                    shareContent = new SharePhotoContent.Builder()
-                            .addPhotos(mSharePhotoList)
-                            .build();
-                }
-
-                shareFBDialog.show(shareContent, ShareDialog.Mode.AUTOMATIC);
-
-
-            } else {
-                Toast.makeText(getContext(), "Please install the Facebook app for sharing photos.", Toast.LENGTH_SHORT).show();
-            }
-
-        } else {
-
-            ShareLinkContent linkContent = new ShareLinkContent.Builder()
-                    .setQuote(content)
-                    .setContentUrl(Uri.parse("www.pickzy.com"))
-                    .build();
-            shareFBDialog.show(linkContent);
-
-        }
-
+    void startVideoPreviewOnDemandActivity() {
+        Intent intent = new Intent(getActivity(), VideoPreviewOnDemandActivity.class);
+        intent.putExtra("file_uri", Uri.fromFile(videoFile));
+        intent.putExtra("mVideoPathUri", mVideoPathUri);
+        intent.putExtra("bundle_data", mMyProfileResModel);
+        startActivity(intent);
     }
 
-    @SuppressLint("StaticFieldLeak")
-    public void getUriVideo(final String[] videoUrl) {
-        mShareVideoUrl = videoUrl;
-
-
-        final String uri = (UrlUtils.FILE_URL + videoUrl[0] + "?api_key="
-                + getResources().getString(R.string.dream_factory_api_key)
-                + "&session_token="
-                + PreferenceUtils.getInstance(getActivity()).getStrData(PreferenceUtils
-                .SESSION_TOKEN) + "&download=" + true);
-
-
-        new AsyncTask<Void, Void, Void>() {
-            File apkStorage = null;
-            File outputFile = null;
-
-            @Override
-            protected void onPreExecute() {
-                DialogManager.showProgress(getActivity());
-                super.onPreExecute();
-            }
-
-            @Override
-            protected Void doInBackground(Void... Void) {
-                String[] mUrl = videoUrl[0].split("/");
-
-                try {
-                    URL url = new URL(uri);//Create Download URl
-                    HttpURLConnection c = (HttpURLConnection) url.openConnection();//Open Url Connection
-                    c.setRequestMethod("GET");//Set Request Method to "GET" since we are getting data
-                    c.connect();//connect the URL Connection
-
-                    //If Connection response is not OK then show Logs
-                    if (c.getResponseCode() != HttpURLConnection.HTTP_OK) {
-                    }
-
-                    //Get File if SD card is present
-                    if (isSDCardPresent()) {
-
-                        apkStorage = new File(
-                                Environment.getExternalStoragePublicDirectory(
-                                        Environment.DIRECTORY_PICTURES)
-                                        + getString(R.string.util_app_folder_root_path));
-                    } else
-                        Toast.makeText(getActivity(), "Oops!! There is no SD Card.", Toast.LENGTH_SHORT).show();
-
-                    //If File is not present create directory
-                    if (!apkStorage.exists()) {
-                        apkStorage.mkdir();
-                    }
-
-                    outputFile = new File(apkStorage, mUrl[1]);//Create Output file in Main File
-
-                    //Create New File if not present
-                    if (!outputFile.exists()) {
-                        outputFile.createNewFile();
-                    } else {
-                        return null;
-                    }
-
-                    FileOutputStream fos = new FileOutputStream(outputFile);//Get OutputStream for NewFile Location
-
-                    InputStream is = c.getInputStream();//Get InputStream for connection
-
-                    byte[] buffer = new byte[1024];//Set buffer type
-                    int len1 = 0;//init length
-                    while ((len1 = is.read(buffer)) != -1) {
-                        fos.write(buffer, 0, len1);//Write new file
-                    }
-
-                    //Close all connection after doing task
-                    fos.close();
-                    is.close();
-                    mVideoFileUri = Uri.fromFile(outputFile);
-
-                } catch (Exception e) {
-                    //Read exception if something went wrong
-                    e.printStackTrace();
-                    outputFile = null;
-                }
-
-
-                return null;
-            }
-
-            @Override
-            protected void onPostExecute(Void aVoid) {
-                DialogManager.hideProgress();
-                if (outputFile != null) {
-                    mVideoFileUri = Uri.fromFile(outputFile);
-                   /* sendVideoUrl = new AppDialogFragment();
-                    sendVideoUrl.SendData(mVideoFileUri, BaseActivity.this);*/
-                    showFBVideoShareDialog(mVideoFileUri, getActivity());
-                    // AppDialogFragment.getInstance().showFBVideoShareDialog(mVideoFileUri);
-                } else {
-                    showToast(getApplicationContext(), "Something went wrong!! Video could not been shared.");
-                }
-                super.onPostExecute(aVoid);
-
-            }
-        }.execute();
-    }
-
-    public boolean isSDCardPresent() {
-        return Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED);
-    }
-
-    public void showFBVideoShareDialog(Uri mVideoUri, Context context) {
-        //Uri ur = Uri.parse(mVideoUri.toString().replace("/video","/Kiran.mp4"));
-        //if (isAdded()) {
-
-        ShareVideo video = new ShareVideo.Builder()
-                .setLocalUrl(mVideoUri)
-                .build();
-
-        ShareVideoContent videoContent;
-        shareFBDialog = new ShareDialog(getActivity());
-
-        if (mShareContent != null) {
-
-            mShareContent = mShareContent.replace(" ", "#");
-            String mShareTxt = "#" + mShareContent;
-            videoContent = new ShareVideoContent.Builder()
-                    .setVideo(video)
-                    .setShareHashtag(new ShareHashtag.Builder()
-                            .setHashtag(mShareTxt)
-                            .build())
-                    .setContentTitle(mShareContent)
-                    .build();
-        } else {
-            videoContent = new ShareVideoContent.Builder()
-                    .setVideo(video)
-                    .build();
-        }
-
-        shareFBDialog.show(videoContent, ShareDialog.Mode.AUTOMATIC);
-
-    }
-
-    @SuppressLint("StaticFieldLeak")
+    /*@SuppressLint("StaticFieldLeak")
     class VideoCompressor extends AsyncTask<String, Void, Boolean> {
 
         @Override
@@ -876,5 +702,5 @@ public class PromoterOrUserFragment extends BaseFragment implements SwipeRefresh
                 startActivity(intent);
             }
         }
-    }
+    }*/
 }

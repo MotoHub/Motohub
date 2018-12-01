@@ -12,6 +12,8 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.ArrayList;
 
 import butterknife.BindString;
@@ -20,6 +22,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import online.motohub.R;
 import online.motohub.adapter.FollowersFollowingsAdapter;
+import online.motohub.application.MotoHub;
 import online.motohub.fragment.dialog.AppDialogFragment;
 import online.motohub.model.ProfileModel;
 import online.motohub.model.ProfileResModel;
@@ -27,6 +30,7 @@ import online.motohub.model.SessionModel;
 import online.motohub.retrofit.APIConstants;
 import online.motohub.retrofit.RetrofitClient;
 import online.motohub.util.AppConstants;
+import online.motohub.util.DialogManager;
 import online.motohub.util.PreferenceUtils;
 import online.motohub.util.Utility;
 
@@ -69,11 +73,19 @@ public class FollowersFollowingActivity extends BaseActivity {
         initView();
     }
 
+    @Override
+    protected void onDestroy() {
+        DialogManager.hideProgress();
+        super.onDestroy();
+    }
+
     private void initView() {
         setupUI(mCoordinatorLayout);
         assert getIntent().getExtras() != null;
 
-        mMyProfileEntity = (ProfileResModel) getIntent().getExtras().get(AppConstants.MY_PROFILE_OBJ);
+        /*mMyProfileEntity = (ProfileResModel) getIntent().getExtras().get(AppConstants.MY_PROFILE_OBJ);*/
+        //mMyProfileEntity = MotoHub.getApplicationInstance().getmProfileResModel();
+        mMyProfileEntity = EventBus.getDefault().getStickyEvent(ProfileResModel.class);
 
         assert mMyProfileEntity != null;
         mMyProfileID = mMyProfileEntity.getID();
@@ -171,7 +183,7 @@ public class FollowersFollowingActivity extends BaseActivity {
             return;
         }
 
-        if (isNetworkConnected())
+        if (isNetworkConnected(this))
             RetrofitClient.getRetrofitInstance().callGetProfilesWithFollowBlock(this, mFilter, RetrofitClient.GET_FOLLOWERS_FOLLOWING_PROFILE_RESPONSE);
         else
             showAppDialog(AppDialogFragment.ALERT_INTERNET_FAILURE_DIALOG, null);

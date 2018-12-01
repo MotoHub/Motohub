@@ -15,7 +15,7 @@
         style="@style/LayoutMatchWrap"
         android:gravity="center"
         android:layout_marginTop="@dimen/size10"
-        android:padding="@dimen/size5"
+        android:padding="@dimen/size10"
         android:text="@string/ensure_exit"
         android:textColor="@color/colorBlack"
         android:textSize="@dimen/text16" />

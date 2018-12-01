@@ -38,8 +38,9 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.yovenny.videocompress.MediaController;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.io.File;
-import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
@@ -55,6 +56,7 @@ import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import online.motohub.R;
 import online.motohub.adapter.TaggedProfilesAdapter;
+import online.motohub.application.MotoHub;
 import online.motohub.database.DatabaseHandler;
 import online.motohub.fragment.dialog.AppDialogFragment;
 import online.motohub.model.ImageModel;
@@ -74,51 +76,37 @@ public class PostEditActivity extends BaseActivity implements
         TaggedProfilesAdapter.TaggedProfilesSizeInterface {
 
 
+    public static final String EXTRA_RESULT_DATA = "activity_video_picker_uri";
     @BindView(R.id.postEditCoLayout)
     CoordinatorLayout mCoordinatorLayout;
-
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
-
     @BindView(R.id.circular_img_view)
     CircleImageView mProfileImg;
-
     @BindView(R.id.top_tv)
     TextView mUsername;
-
     @BindView(R.id.bottom_tv)
     TextView mPostDate;
-
     @BindView(R.id.edit_post_et)
     EditText mEditPostEt;
-
     @BindView(R.id.close_layout)
     FrameLayout mRemovePostImgBtnLayout;
-
     @BindView(R.id.post_picture_img_view)
     ImageView mPostPicImgView;
-
     @BindView(R.id.tag_profiles_recycler_view)
     RecyclerView mTagProfilesRecyclerView;
-
     @BindView(R.id.playicon)
     ImageView mPlayIcon;
-
     @BindString(R.string.edit_post)
     String mToolbarTitle;
-
     @BindString(R.string.post_update_success)
     String mPostUpdateSuccess;
-
     @BindString(R.string.tag_err)
     String mTagErr;
-
     @BindString(R.string.camera_permission_denied)
     String mNoCameraPer;
-
     @BindString(R.string.storage_permission_denied)
     String mNoStoragePer;
-
     private ArrayList<ProfileResModel> mFollowingListData;
     private ArrayList<ProfileResModel> mTaggedProfilesList;
     private TaggedProfilesAdapter mTaggedProfilesAdapter;
@@ -127,9 +115,35 @@ public class PostEditActivity extends BaseActivity implements
     private String mPostImgUri;
     private String mVideoThumbnailUri;
     private String mCurrentImgPath = "", mCurrentVideoPath = "", mCurrentVideoThumbnailPath = "";
+    private StringBuffer sb = new StringBuffer();
 
-    public static final String EXTRA_RESULT_DATA = "activity_video_picker_uri";
+    public static String replacer(StringBuffer outBuffer) {
 
+        String data = outBuffer.toString();
+        try {
+            StringBuffer tempBuffer = new StringBuffer();
+            int incrementor = 0;
+            int dataLength = data.length();
+            while (incrementor < dataLength) {
+                char charecterAt = data.charAt(incrementor);
+                if (charecterAt == '%') {
+                    tempBuffer.append("<percentage>");
+                } else if (charecterAt == '+') {
+                    tempBuffer.append("<plus>");
+                } else {
+                    tempBuffer.append(charecterAt);
+                }
+                incrementor++;
+            }
+            data = tempBuffer.toString();
+            data = URLDecoder.decode(data, "utf-8");
+            data = data.replaceAll("<percentage>", "%");
+            data = data.replaceAll("<plus>", "+");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return data;
+    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -139,7 +153,7 @@ public class PostEditActivity extends BaseActivity implements
         initView();
     }
 
-    @Override
+    /*@Override
     @SuppressWarnings("unchecked")
     protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
         mPostResModel = (PostsResModel) savedInstanceState.getSerializable(PostsModel.POST_MODEL);
@@ -182,14 +196,18 @@ public class PostEditActivity extends BaseActivity implements
         outState.putString(PostsModel.POST_PICTURE, mPostImgUri);
         outState.putString(PostsModel.PostVideoThumbnailurl, mVideoThumbnailUri);
         super.onSaveInstanceState(outState);
-    }
+    }*/
 
     private void initView() {
         setToolbar(mToolbar, mToolbarTitle);
         showToolbarBtn(mToolbar, R.id.toolbar_back_img_btn);
         assert getIntent().getExtras() != null;
+        /*mPostResModel = (PostsResModel) getIntent().getExtras().getSerializable(PostsModel.POST_MODEL);
+        mMyProfileResModel = (ProfileResModel) getIntent().getExtras().getSerializable(ProfileModel.MY_PROFILE_RES_MODEL);*/
+        //mPostResModel = MotoHub.getApplicationInstance().getmPostResModel();
         mPostResModel = (PostsResModel) getIntent().getExtras().getSerializable(PostsModel.POST_MODEL);
-        mMyProfileResModel = (ProfileResModel) getIntent().getExtras().getSerializable(ProfileModel.MY_PROFILE_RES_MODEL);
+        //mMyProfileResModel = MotoHub.getApplicationInstance().getmProfileResModel();
+        mMyProfileResModel = EventBus.getDefault().getStickyEvent(ProfileResModel.class);
         mFollowingListData = new ArrayList<>();
         mTaggedProfilesList = new ArrayList<>();
         FlexboxLayoutManager mFlexBoxLayoutManager = new FlexboxLayoutManager(this);
@@ -210,8 +228,13 @@ public class PostEditActivity extends BaseActivity implements
         mPostDate.setText(findTime(mPostResModel.getDateCreatedAt()));
         if (mPostResModel.getPostText() != null && !mPostResModel.getPostText().isEmpty()) {
             try {
-                mEditPostEt.setText(URLDecoder.decode(mPostResModel.getPostText(), "UTF-8"));
-            } catch (UnsupportedEncodingException e) {
+                if (mPostResModel.getPostText().contains(" ")) {
+                    mEditPostEt.setText(mPostResModel.getPostText());
+                } else {
+                    mEditPostEt.setText(URLDecoder.decode(mPostResModel.getPostText(), "UTF-8"));
+                }
+                //mEditPostEt.setText(replacer(sb.append(mPostResModel.getPostText())));
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
@@ -227,9 +250,14 @@ public class PostEditActivity extends BaseActivity implements
             mPlayIcon.setVisibility(View.GONE);
             mRemovePostImgBtnLayout.setVisibility(View.VISIBLE);
             mPostPicImgView.setVisibility(View.VISIBLE);
-            GlideUrl glideUrl = new GlideUrl(UrlUtils.FILE_URL + mCurrentImgPath, new LazyHeaders.Builder()
+          /*  GlideUrl glideUrl = new GlideUrl(UrlUtils.FILE_URL + mCurrentImgPath, new LazyHeaders.Builder()
+                    .addHeader("X-DreamFactory-Api-Key", getString(R.string.dream_factory_api_key))
+                    .build());*/
+
+            GlideUrl glideUrl = new GlideUrl(UrlUtils.AWS_FILE_URL + mCurrentImgPath, new LazyHeaders.Builder()
                     .addHeader("X-DreamFactory-Api-Key", getString(R.string.dream_factory_api_key))
                     .build());
+
             Glide.with(this)
                     .load(glideUrl)
                     .apply(new RequestOptions()
@@ -254,6 +282,12 @@ public class PostEditActivity extends BaseActivity implements
         }
     }
 
+    @Override
+    protected void onDestroy() {
+        DialogManager.hideProgress();
+        super.onDestroy();
+    }
+
     @OnClick({R.id.toolbar_back_img_btn, R.id.add_post_video, R.id.update_post_btn, R.id.add_post_img, R.id.tag_profile_img, R.id.remove_post_img_btn})
     public void onClick(View v) {
         switch (v.getId()) {
@@ -267,8 +301,8 @@ public class PostEditActivity extends BaseActivity implements
                         File videoFile = copiedVideoFile(Uri.fromFile(new File(mVideoThumbnailUri)),
                                 GALLERY_VIDEO_NAME_TYPE);
                         String mPath = String.valueOf(videoFile);
-                        new VideoCompressor().execute(mPath, getCompressedVideoPath());
-
+                        // new VideoCompressor().execute(mPath, getCompressedVideoPath());
+                        startUploadVideoService();
 
                     } else if (mPostImgUri != null) {
                         uploadPicture(mPostImgUri);
@@ -301,31 +335,6 @@ public class PostEditActivity extends BaseActivity implements
         }
     }
 
-    class VideoCompressor extends AsyncTask<String, Void, Boolean> {
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            DialogManager.showProgress(PostEditActivity.this);
-        }
-
-        @Override
-        protected Boolean doInBackground(String... params) {
-            return MediaController.getInstance().convertVideo(params[0], params[1]);
-        }
-
-        @Override
-        protected void onPostExecute(Boolean compressed) {
-            super.onPostExecute(compressed);
-            DialogManager.hideProgress();
-            if (compressed) {
-                showToast(PostEditActivity
-                        .this, getString(R.string.uploading_video));
-                startUploadVideoService();
-            }
-        }
-    }
-
     private void startUploadVideoService() {
         try {
             Bitmap thumb = ThumbnailUtils.createVideoThumbnail(mVideoThumbnailUri,
@@ -348,7 +357,7 @@ public class PostEditActivity extends BaseActivity implements
                     + getString(R.string.util_app_folder_root_path);
             Intent service_intent = new Intent(this, UpdateVideoFileService.class);
             service_intent.putExtra("videofile",
-                    mCompressedVideoPath);
+                    mCurrentVideoPath);
             service_intent.putExtra("imagefile", String.valueOf(imageFile));
             service_intent.putExtra("posttext", postText);
             service_intent.putExtra("profileid", mPostResModel.getProfileID());
@@ -368,7 +377,7 @@ public class PostEditActivity extends BaseActivity implements
                 service_intent.putExtra(PostsModel.TAGGED_PROFILE_ID, mTaggedProfileID.toString());
             }
             startService(service_intent);
-            mCompressedVideoPath = "";
+            //mCompressedVideoPath = "";
             mVideoThumbnailUri = null;
             mPostImgUri = null;
             mEditPostEt.setText("");
@@ -403,7 +412,6 @@ public class PostEditActivity extends BaseActivity implements
         mPlayIcon.setVisibility(View.GONE);
 
     }
-
 
     @Override
     public void alertDialogPositiveBtnClick(BaseActivity activity, String mDialogType, StringBuilder profileTypesStr, ArrayList<String> profileTypes, int position) {
@@ -472,9 +480,13 @@ public class PostEditActivity extends BaseActivity implements
 
     private void showVideoFile(String videoThumbnail) {
 
-        GlideUrl glideUrl = new GlideUrl(UrlUtils.FILE_URL + videoThumbnail,
+      /*  GlideUrl glideUrl = new GlideUrl(UrlUtils.FILE_URL + videoThumbnail,
                 new LazyHeaders.Builder()
                         .addHeader("X-DreamFactory-Api-Key", getString(R.string.dream_factory_api_key))
+                        .build());*/
+
+        GlideUrl glideUrl = new GlideUrl(UrlUtils.AWS_FILE_URL + videoThumbnail,
+                new LazyHeaders.Builder()
                         .build());
 
         Glide.with(this)
@@ -497,7 +509,6 @@ public class PostEditActivity extends BaseActivity implements
                         .dontAnimate())
                 .into(mPostPicImgView);
     }
-
 
     private void profilePostContent(String mCurrentImgPath, String mCurrentVideoPath, String mCurrentVideoThumbnailPath) {
         try {
@@ -600,7 +611,6 @@ public class PostEditActivity extends BaseActivity implements
             }
         }
     }
-
 
     private void setVideoPost() {
         Bitmap thumb = ThumbnailUtils.createVideoThumbnail(this.mVideoThumbnailUri,
@@ -754,6 +764,31 @@ public class PostEditActivity extends BaseActivity implements
             mTagProfilesRecyclerView.setVisibility(View.VISIBLE);
         } else {
             mTagProfilesRecyclerView.setVisibility(View.GONE);
+        }
+    }
+
+    class VideoCompressor extends AsyncTask<String, Void, Boolean> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            DialogManager.showProgress(PostEditActivity.this);
+        }
+
+        @Override
+        protected Boolean doInBackground(String... params) {
+            return MediaController.getInstance().convertVideo(params[0], params[1]);
+        }
+
+        @Override
+        protected void onPostExecute(Boolean compressed) {
+            super.onPostExecute(compressed);
+            DialogManager.hideProgress();
+            if (compressed) {
+                showToast(PostEditActivity
+                        .this, getString(R.string.uploading_video));
+                startUploadVideoService();
+            }
         }
     }
 

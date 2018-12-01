@@ -12,15 +12,15 @@
     <color name="transparentColor">#DCDCDC</color>
     <color name="transparent">#00000000</color>
 
+    <color name="placeholder_bg">#dddddd</color>
 
-    <color name="controlButtonPressed">#80ff8400</color>
+
     <color name="multiStateButtonPressed">#80ff8400</color>
     <color name="multiStateButtonDisabled">#c1636363</color>
 
 
     <color name="dataTableRowBackground1">#00ffffff</color>
     <color name="dataTableRowBackground2">#1affffff</color>
-    <color name="dataTableHeaderBackground">#1a1a1a</color>
     <color name="dataTableSubHeaderBackground">#da212121</color>
     <color name="ash">#616161</color>
     <color name="colorRed">#ffff0000</color>

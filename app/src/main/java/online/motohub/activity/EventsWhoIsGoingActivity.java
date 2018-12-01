@@ -10,8 +10,9 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ListView;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -19,32 +20,28 @@ import butterknife.OnClick;
 import butterknife.OnItemClick;
 import online.motohub.R;
 import online.motohub.adapter.EventsWhoIsGoingAdapter;
+import online.motohub.application.MotoHub;
 import online.motohub.model.EventsModel;
 import online.motohub.model.EventsWhoIsGoingModel;
 import online.motohub.model.EventsWhoIsGoingResModel;
-import online.motohub.model.ProfileModel;
 import online.motohub.model.ProfileResModel;
 import online.motohub.model.SessionModel;
 import online.motohub.retrofit.RetrofitClient;
 import online.motohub.util.AppConstants;
+import online.motohub.util.DialogManager;
 import online.motohub.util.PreferenceUtils;
 
 public class EventsWhoIsGoingActivity extends BaseActivity {
 
+    public static final String TOOLBAR_TITLE = "ToolbarTitle";
     @BindView(R.id.list_view_co_layout)
     CoordinatorLayout mCoordinatorLayout;
-
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
-
     @BindView(R.id.searchEt)
     EditText mSearchFollowingEt;
-
     @BindView(R.id.widget_list_view)
     ListView mWhoIsGoingListView;
-
-    public static final String TOOLBAR_TITLE = "ToolbarTitle";
-
     private ProfileResModel mMyProfileResModel;
 
     private ArrayList<EventsWhoIsGoingResModel> mWhoIsGoingListData = new ArrayList<>();
@@ -63,6 +60,12 @@ public class EventsWhoIsGoingActivity extends BaseActivity {
 
         initView();
 
+    }
+
+    @Override
+    protected void onDestroy() {
+        DialogManager.hideProgress();
+        super.onDestroy();
     }
 
     @SuppressWarnings("unchecked")
@@ -93,7 +96,9 @@ public class EventsWhoIsGoingActivity extends BaseActivity {
             mWhoIsGoingListData.addAll(mEventsWhoIsGoingResModels);
         }*/
 
-        mMyProfileResModel = (ProfileResModel) getIntent().getExtras().getSerializable(ProfileModel.MY_PROFILE_RES_MODEL);
+        //mMyProfileResModel = (ProfileResModel) getIntent().getExtras().getSerializable(ProfileModel.MY_PROFILE_RES_MODEL);
+        //mMyProfileResModel = MotoHub.getApplicationInstance().getmProfileResModel();
+        mMyProfileResModel = EventBus.getDefault().getStickyEvent(ProfileResModel.class);
 
         mWhoIsGoingAdapter = new EventsWhoIsGoingAdapter(this, mWhoIsGoingListData);
         mWhoIsGoingListView.setAdapter(mWhoIsGoingAdapter);
@@ -142,11 +147,17 @@ public class EventsWhoIsGoingActivity extends BaseActivity {
 
     @OnItemClick(R.id.widget_list_view)
     public void onItemClick(int position) {
-        if (mWhoIsGoingListData.get(position).getProfileByProfileID().getID() == mMyProfileResModel.getID()) {
-            moveMyProfileScreen(this, 0);
-        } else {
-            moveOtherProfileScreenWithResult(this, mMyProfileResModel.getID(),
-                    mWhoIsGoingListData.get(position).getProfileByProfileID().getID(), AppConstants.FOLLOWERS_FOLLOWING_RESULT);
+        try {
+            if (mWhoIsGoingListData.get(position).getProfileByProfileID() != null && mWhoIsGoingListData.get(position).getProfileByProfileID().getID() != 0) {
+                if (mWhoIsGoingListData.get(position).getProfileByProfileID().getID() == mMyProfileResModel.getID()) {
+                    moveMyProfileScreen(this, 0);
+                } else {
+                    moveOtherProfileScreenWithResult(this, mMyProfileResModel.getID(),
+                            mWhoIsGoingListData.get(position).getProfileByProfileID().getID(), AppConstants.FOLLOWERS_FOLLOWING_RESULT);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

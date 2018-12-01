@@ -15,7 +15,6 @@ import com.google.firebase.messaging.RemoteMessage;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 
 import online.motohub.activity.ViewProfileActivity;
@@ -32,13 +31,9 @@ import online.motohub.util.PreferenceUtils;
 public class MyFireBaseMessagingService extends FirebaseMessagingService {
 
     public static final String TAG = MyFireBaseMessagingService.class.getSimpleName();
-
     public static final String PUSH_MSG_RECEIVER_ACTION = "online.motohub.PUSH_MSG_RECEIVER_ACTION";
-
     public static final String ENTRY_JSON_OBJ = "entry";
     public static final String SENDER_NAME = "sender_name";
-
-
     public static final String ID = "ID";
     public static final String FROM_USER_ID = "FromUserID";
     public static final String TO_USER_ID = "ToUserID";
@@ -47,7 +42,6 @@ public class MyFireBaseMessagingService extends FirebaseMessagingService {
     public static final String CREATED_AT = "CreatedAt";
     public static final String MSG_TYPE = "msg_type";
     public static final String PHOTO_MESSAGE = "photo_message";
-
     public static final String NAME = "Name";
     public static final String EVENT_GRP_CHAT_EVENT_NAME = "EventName";
     public static final String EVENT_USER_TYPE = "user_type";
@@ -56,11 +50,8 @@ public class MyFireBaseMessagingService extends FirebaseMessagingService {
     public static final String EVENT_GRP_CHAT_SENDER_NAME = "sender_name";
     public static final String MESSAGE = "Message";
     public static final String PROFILE_PICTURE = "profile_picture";
-
     public static final String GRP_CHAT = "GroupChat";
-
     public static final String GRP_NAME = "GroupName";
-
     public static final String IS_FROM_NOTIFICATION_TRAY = "isFromNotificationTray";
     public static final String GROUP_SENDER_PIC = "SenderProfilePicture";
     public static final String GROUP_SENDER_NAME = "SenderName";
@@ -70,10 +61,8 @@ public class MyFireBaseMessagingService extends FirebaseMessagingService {
     private static NotificationCompat.Builder mNotificationCompatBuilder;
     private static Notification mNotification;
 
-
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
-
         // Not getting messages here? See why this may be: https://goo.gl/39bRNJ
         // Check if message contains a data payload.
         if (remoteMessage.getData().size() > 0) {
@@ -81,18 +70,14 @@ public class MyFireBaseMessagingService extends FirebaseMessagingService {
             if (mJsonObject.optString("title") != null && mJsonObject.optString("title").equals("Notification")) {
                 try {
                     JSONObject mEntryObj = new JSONObject((String) mJsonObject.opt("message"));
-
                     int mNotificationPostID, mNotificationEventID;
-
                     String mContentTitle;
-
                     JSONObject mDetailsObj = mEntryObj.getJSONObject("Details");
                     mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
                     switch (mEntryObj.getString("Type")) {
-
                         case "LIVE_STREAM":
                             mNotificationPostID = Integer.parseInt(mDetailsObj.get(APIConstants.ID).toString());
-                            //composeStreamNotification(mEntryObj, this, mNotificationPostID, ViewLiveVideoViewScreen2.class);
+                            //composeStreamNotification(mEntryObj, t his, mNotificationPostID, ViewLiveVideoViewScreen2.class);
                             composeStreamNotification(mEntryObj, this, mNotificationPostID, ViewProfileActivity.class);
                             break;
                         case "LIVE_REQUEST":
@@ -122,15 +107,17 @@ public class MyFireBaseMessagingService extends FirebaseMessagingService {
                             composeNotification(mEntryObj, this, mNotificationPostID, ViewProfileActivity.class);
                             break;
                         case "COMMENT_REPLY_LIKE":
-                            mNotificationPostID = Integer.parseInt(mDetailsObj.get("PostcommentID").toString());
+                            mNotificationPostID = Integer.parseInt(mDetailsObj.get("ReplyID").toString());
                             //composeNotification(mEntryObj, this, mNotificationPostID, CommentReplyActivity.class);
                             composeNotification(mEntryObj, this, mNotificationPostID, ViewProfileActivity.class);
                             break;
+                        case "TAGGED_COMMENT_REPLY":
                         case "COMMENT_REPLY":
                             mNotificationPostID = Integer.parseInt(mDetailsObj.get("CommentID").toString());
                             //composeNotification(mEntryObj, this, mNotificationPostID, CommentReplyActivity.class);
                             composeNotification(mEntryObj, this, mNotificationPostID, ViewProfileActivity.class);
                             break;
+                        case "TAGGED_POST_COMMENTS":
                         case "POST_COMMENTS":
                         case "POST_LIKES":
                             mNotificationPostID = Integer.parseInt(mDetailsObj.get("PostID").toString());
@@ -138,7 +125,7 @@ public class MyFireBaseMessagingService extends FirebaseMessagingService {
                             composeNotification(mEntryObj, this, mNotificationPostID, ViewProfileActivity.class);
                             break;
                         case "VIDEO_SHARE":
-                            mNotificationPostID = Integer.parseInt(mDetailsObj.get("OriginalVideoID").toString());
+                            mNotificationPostID = Integer.parseInt(mDetailsObj.get("ID").toString());
                             //composeNotification(mEntryObj, this, mNotificationPostID, PostViewActivity.class);
                             composeNotification(mEntryObj, this, mNotificationPostID, ViewProfileActivity.class);
                             break;
@@ -163,6 +150,7 @@ public class MyFireBaseMessagingService extends FirebaseMessagingService {
                             //composeNotification(mEntryObj, this, mNotificationPostID, VideoCommentsActivity.class);
                             composeNotification(mEntryObj, this, mNotificationPostID, ViewProfileActivity.class);
                             break;
+                        case "TAGGED_VIDEO_COMMENT_REPLY":
                         case "VIDEO_COMMENT_REPLY":
                             mNotificationPostID = mDetailsObj.getInt("CommentID");
                             //composeNotification(mEntryObj, this, mNotificationPostID, VideoCommentReplyActivity.class);
@@ -173,12 +161,14 @@ public class MyFireBaseMessagingService extends FirebaseMessagingService {
                             //composeNotification(mEntryObj, this, mNotificationPostID, VideoCommentReplyActivity.class);
                             composeNotification(mEntryObj, this, mNotificationPostID, ViewProfileActivity.class);
                             break;
+                        case "TAGGED_POST_VIDEO_COMMENTS":
                         case "VIDEO_COMMENTS":
                         case "VIDEO_LIKES":
                             mNotificationPostID = mDetailsObj.getInt("VideoID");
                             //composeNotification(mEntryObj, this, mNotificationPostID, PromoterVideoGalleryActivity.class);
                             composeNotification(mEntryObj, this, mNotificationPostID, ViewProfileActivity.class);
                             break;
+
                         case "EVENT_CHAT":
                             if (MotoHub.getApplicationInstance().isEventGrpChatOnline()) {
                                 Intent mIntent = new Intent(PUSH_MSG_RECEIVER_ACTION);
@@ -269,6 +259,9 @@ public class MyFireBaseMessagingService extends FirebaseMessagingService {
 
                             }
                             break;
+                            default:
+                                composeNotification(mEntryObj, this, 1000, ViewProfileActivity.class);
+                                break;
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -296,6 +289,7 @@ public class MyFireBaseMessagingService extends FirebaseMessagingService {
                 PendingIntent mResultPendingIntent = PendingIntent.getActivity(mContext, mNotificationID,
                         mResultIntent, PendingIntent.FLAG_UPDATE_CURRENT);
                 String mMsg = URLDecoder.decode(jsonObject.getString("Msg"), "UTF-8");
+                //String mMsg = replacer(sb.append(jsonObject.getString("Msg")));
 
                 if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
                     if (mNotificationManager != null) {
@@ -321,7 +315,37 @@ public class MyFireBaseMessagingService extends FirebaseMessagingService {
             }
         }
     }
+    public static String replacer(StringBuffer outBuffer) {
 
+        String data = outBuffer.toString();
+        try {
+            StringBuffer tempBuffer = new StringBuffer();
+            int incrementor = 0;
+            int dataLength = data.length();
+            while (incrementor < dataLength) {
+                char charecterAt = data.charAt(incrementor);
+                if (charecterAt == '%') {
+                    tempBuffer.append("<percentage>");
+                } else if (charecterAt == '+') {
+                    tempBuffer.append("<plus>");
+                } else {
+                    tempBuffer.append(charecterAt);
+                }
+                incrementor++;
+            }
+            data = tempBuffer.toString();
+            data = URLDecoder.decode(data, "utf-8");
+            data = data.replaceAll("<percentage>", "%");
+            data = data.replaceAll("<plus>", "+");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return data;
+    }
+
+
+
+    private static StringBuffer sb = new StringBuffer();
     public static void composeChatNotification(JSONObject jsonObject, Context mContext, int mNotificationID,
                                                String notificationChannelName, String mContentTitle, Class className) {
         boolean allow_noticiation_status = PreferenceUtils.getInstance(mContext).getBooleanData(PreferenceUtils.ALLOW_NOTIFICATION);
@@ -336,6 +360,7 @@ public class MyFireBaseMessagingService extends FirebaseMessagingService {
                 mResultIntent.putExtra(IS_FROM_NOTIFICATION_TRAY, true);
                 PendingIntent mResultPendingIntent = PendingIntent.getActivity(mContext, mNotificationID, mResultIntent, PendingIntent.FLAG_UPDATE_CURRENT);
                 String mMsg = URLDecoder.decode(mJsonEntryObject.getString("Msg"), "UTF-8");
+                //String mMsg = replacer(sb.append(mJsonEntryObject.getString("Msg")));
                 if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
                     if (mNotificationManager != null) {
                         mNotificationManager.createNotificationChannel(NotificationUtils.getInstance().getNotificationChannel(mNotificationID));
@@ -374,6 +399,7 @@ public class MyFireBaseMessagingService extends FirebaseMessagingService {
                         mResultIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
                 String mMsg = URLDecoder.decode(jsonObject.getString("Msg"), "UTF-8");
+                //String mMsg = replacer(sb.append(jsonObject.getString("Msg")));
                 if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
                     if (mNotificationManager != null) {
                         mNotificationManager.createNotificationChannel(NotificationUtils.getInstance().getNotificationChannel(mNotificationID));
@@ -393,7 +419,7 @@ public class MyFireBaseMessagingService extends FirebaseMessagingService {
                     mNotification = mNotificationCompatBuilder.build();
                     mNotificationManager.notify(mNotificationID, mNotification);
                 }
-            } catch (JSONException | UnsupportedEncodingException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }

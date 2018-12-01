@@ -96,53 +96,57 @@ public class StreamRequestedUserAdapter extends RecyclerView.Adapter<RecyclerVie
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int pos) {
         switch (getItemViewType(pos)) {
             case VIEW_TYPE_ITEM:
-                final Holder mHolder = (Holder) holder;
-                LiveStreamRequestEntity mEntity = mStreamUserList.get(pos);
-                String imgStr = mEntity.getProfiles_by_RequestedProfileID().getProfilePicture();
-                if (!imgStr.isEmpty()) {
-                    ((BaseActivity) mContext).setImageWithGlide(mHolder.mUserImg, imgStr, R.drawable.default_profile_icon);
-                } else {
-                    mHolder.mUserImg.setImageResource(R.drawable.default_profile_icon);
-                }
-                if (mEntity.getStatus() == 1) {
-                    // Status =1 --> Accepted Start Stream Directly
-                    mHolder.mAcceptBtn.setText(mContext.getString(R.string.accepted));
-                } else {
-                    // Status =0 --> User should call accept API
-                    mHolder.mAcceptBtn.setText(mContext.getString(R.string.accept));
-                }
-                mHolder.mUserImg.setTag(pos);
-                mHolder.mUserImg.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        int selPos = (int) v.getTag();
+                try {
+                    final Holder mHolder = (Holder) holder;
+                    LiveStreamRequestEntity mEntity = mStreamUserList.get(pos);
+                    String imgStr = mEntity.getProfiles_by_RequestedProfileID().getProfilePicture();
+                    if (!imgStr.isEmpty()) {
+                        ((BaseActivity) mContext).setImageWithGlide(mHolder.mUserImg, imgStr, R.drawable.default_profile_icon);
+                    } else {
+                        mHolder.mUserImg.setImageResource(R.drawable.default_profile_icon);
+                    }
+                    if (mEntity.getStatus() == 1) {
+                        // Status =1 --> Accepted Start Stream Directly
+                        mHolder.mAcceptBtn.setText(mContext.getString(R.string.accepted));
+                    } else {
+                        // Status =0 --> User should call accept API
+                        mHolder.mAcceptBtn.setText(mContext.getString(R.string.accept));
+                    }
+                    mHolder.mUserImg.setTag(pos);
+                    mHolder.mUserImg.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            int selPos = (int) v.getTag();
 
-                    }
-                });
-                mHolder.mAcceptBtn.setTag(pos);
-                mHolder.mAcceptBtn.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        selPos = (int) v.getTag();
-                        if (mHolder.mAcceptBtn.getText().toString().equals(mContext.getString(R.string.accept))) {
-                            callAcceptRequestAPI(selPos);
-                        } else {
-                            ((BaseActivity) mContext).showToast(mContext, mContext.getString(R.string.request_accepted_already ));
                         }
+                    });
+                    mHolder.mAcceptBtn.setTag(pos);
+                    mHolder.mAcceptBtn.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            selPos = (int) v.getTag();
+                            if (mHolder.mAcceptBtn.getText().toString().equals(mContext.getString(R.string.accept))) {
+                                callAcceptRequestAPI(selPos);
+                            } else {
+                                ((BaseActivity) mContext).showToast(mContext, mContext.getString(R.string.request_accepted_already));
+                            }
+                        }
+                    });
+                    mHolder.mDeclineBtn.setTag(pos);
+                    mHolder.mDeclineBtn.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            selPos = (int) v.getTag();
+                            callDeclineRequestAPI(selPos);
+                        }
+                    });
+                    if (mEntity.getProfiles_by_RequestedProfileID().getProfileType() == 5) {
+                        mHolder.mUserNameTxt.setText(mEntity.getProfiles_by_RequestedProfileID().getSpectatorName());
+                    } else {
+                        mHolder.mUserNameTxt.setText(mEntity.getProfiles_by_RequestedProfileID().getDriver());
                     }
-                });
-                mHolder.mDeclineBtn.setTag(pos);
-                mHolder.mDeclineBtn.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        selPos = (int) v.getTag();
-                        callDeclineRequestAPI(selPos);
-                    }
-                });
-                if(mEntity.getProfiles_by_RequestedProfileID().getProfileType()==5){
-                    mHolder.mUserNameTxt.setText(mEntity.getProfiles_by_RequestedProfileID().getSpectatorName());
-                }else{
-                    mHolder.mUserNameTxt.setText(mEntity.getProfiles_by_RequestedProfileID().getDriver());
+                }catch (Exception e){
+                    e.printStackTrace();
                 }
                 break;
             case VIEW_TYPE_LOADING:

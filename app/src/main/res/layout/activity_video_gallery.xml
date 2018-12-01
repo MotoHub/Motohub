@@ -4,6 +4,7 @@
     android:id="@+id/video_gallery_parent_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:focusable="true"
     android:background="@color/colorLighterGrey">
 
     <FrameLayout
@@ -20,23 +21,42 @@
             <LinearLayout
                 android:id="@+id/search_lay"
                 style="@style/LayoutMatchWrap"
-                android:visibility="gone"
                 android:layout_margin="@dimen/size5"
                 android:background="@drawable/orange_border_bg"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:visibility="visible">
 
                 <EditText
                     android:id="@+id/search_edt"
                     style="@style/LayoutMatchWrap"
                     android:layout_height="@dimen/size30"
+                    android:layout_marginBottom="@dimen/size5"
                     android:background="@null"
                     android:hint="@string/search_here"
                     android:padding="@dimen/size5"
-                    android:visibility="gone"
-                    android:textColorHint="@color/colorGrey"
                     android:textColor="@color/colorBlack"
-                    android:textSize="@dimen/text12" />
+                    android:textColorHint="@color/colorGrey"
+                    android:textSize="@dimen/text12"
+                    android:visibility="visible" />
             </LinearLayout>
+
+            <com.facebook.shimmer.ShimmerFrameLayout
+                android:id="@+id/shimmer_ondemand_events"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <include layout="@layout/posts_placeholder_item"/>
+
+                    <include layout="@layout/posts_placeholder_item"/>
+
+                </LinearLayout>
+
+            </com.facebook.shimmer.ShimmerFrameLayout>
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/video_gallery_recycler_view"

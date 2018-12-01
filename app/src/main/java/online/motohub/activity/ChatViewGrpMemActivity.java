@@ -9,6 +9,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.TextView;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,12 +20,14 @@ import butterknife.OnClick;
 import de.hdodenhof.circleimageview.CircleImageView;
 import online.motohub.R;
 import online.motohub.adapter.GrpChatMemAdapter;
+import online.motohub.application.MotoHub;
 import online.motohub.model.GroupChatRoomModel;
 import online.motohub.model.GroupChatRoomResModel;
 import online.motohub.model.ProfileModel;
 import online.motohub.model.ProfileResModel;
 import online.motohub.model.SessionModel;
 import online.motohub.retrofit.RetrofitClient;
+import online.motohub.util.DialogManager;
 import online.motohub.util.PreferenceUtils;
 
 public class ChatViewGrpMemActivity extends BaseActivity {
@@ -60,9 +64,17 @@ public class ChatViewGrpMemActivity extends BaseActivity {
 
     }
 
+    @Override
+    protected void onDestroy() {
+        DialogManager.hideProgress();
+        super.onDestroy();
+    }
+
     private void initViews() {
 
-        ProfileResModel mMyProfileResModel = (ProfileResModel) getIntent().getExtras().getSerializable(ProfileModel.MY_PROFILE_RES_MODEL);
+        //ProfileResModel mMyProfileResModel = (ProfileResModel) getIntent().getExtras().getSerializable(ProfileModel.MY_PROFILE_RES_MODEL);
+        //ProfileResModel mMyProfileResModel = MotoHub.getApplicationInstance().getmProfileResModel();
+        ProfileResModel mMyProfileResModel = EventBus.getDefault().getStickyEvent(ProfileResModel.class);
 
         String mToolbarTitle = getIntent().getExtras().getString(EventsWhoIsGoingActivity.TOOLBAR_TITLE);
 

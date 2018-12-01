@@ -1,8 +1,6 @@
 package online.motohub.adapter;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -11,7 +9,6 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -66,39 +63,44 @@ public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.ViewHolder
 
     // Replace the contents of a view (invoked by the layout manager)
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
-        // - get element from your dataset at this position
-        // - replace the contents of the view with that element
-        holder.mContent.setText(reportContent[position]);
-        holder.mRadioButtonReport.setChecked(lastSelectedPosition == position);
+    public void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {
+        try {
+            // - get element from your dataset at this position
+            // - replace the contents of the view with that element
+            holder.mContent.setText(reportContent[position]);
+            holder.mRadioButtonReport.setChecked(lastSelectedPosition == position);
 
-        if (position == reportContent.length - 1) {
-            holder.mRowSeparator.setVisibility(View.GONE);
-        } else {
-            holder.mRowSeparator.setVisibility(View.VISIBLE);
+            if (position == reportContent.length - 1) {
+                holder.mRowSeparator.setVisibility(View.GONE);
+            } else {
+                holder.mRowSeparator.setVisibility(View.VISIBLE);
+            }
+
+            holder.mRadioButtonReport.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    lastSelectedPosition = position;
+                    setReportOption(position, holder);
+                }
+            });
+            holder.mReportRowLinearLayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    lastSelectedPosition = position;
+                    setReportOption(position, holder);
+                }
+            });
+        }catch (Exception e){
+            e.printStackTrace();
         }
-
-        holder.mRadioButtonReport.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                lastSelectedPosition = position;
-                setReportOption(position);
-            }
-        });
-        holder.mReportRowLinearLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                lastSelectedPosition = position;
-                setReportOption(position);
-            }
-        });
 
     }
 
-    private void setReportOption(int position) {
+    private void setReportOption(int position, ViewHolder holder) {
         notifyDataSetChanged();
         if(context instanceof ReportActivity) {
             if (position == (reportContent.length - 1)) {
+                holder.mRadioButtonReport.setChecked(false);
                 ((BaseActivity) context).moveToReportWritePostScreen(context);
             } else {
                 ((ReportActivity) context).setReportString(reportContent[position]);

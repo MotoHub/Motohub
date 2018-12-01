@@ -1,23 +1,15 @@
 package online.motohub.activity;
 
-
 import android.content.Intent;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
-import android.text.Html;
-import android.text.SpannableString;
-import android.text.SpannableStringBuilder;
 import android.text.TextWatcher;
-import android.text.style.ForegroundColorSpan;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -27,10 +19,16 @@ import android.widget.TextView;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import java.io.File;
 import java.net.URLEncoder;
 import java.util.ArrayList;
-import java.util.StringTokenizer;
+import java.util.HashMap;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import butterknife.BindString;
 import butterknife.BindView;
@@ -43,6 +41,8 @@ import okhttp3.RequestBody;
 import online.motohub.R;
 import online.motohub.adapter.CommentTagAdapter;
 import online.motohub.adapter.FeedCommentsAdapter;
+import online.motohub.adapter.TaggedProfilesAdapter;
+import online.motohub.application.MotoHub;
 import online.motohub.fragment.dialog.AppDialogFragment;
 import online.motohub.model.FeedCommentLikeModel;
 import online.motohub.model.FeedCommentModel;
@@ -54,44 +54,37 @@ import online.motohub.model.ProfileResModel;
 import online.motohub.model.SessionModel;
 import online.motohub.retrofit.RetrofitClient;
 import online.motohub.util.AppConstants;
+import online.motohub.util.DialogManager;
 import online.motohub.util.PreferenceUtils;
 import online.motohub.util.Utility;
-import online.motohub.adapter.TaggedProfilesAdapter;
 
 public class PostCommentsActivity extends BaseActivity implements TaggedProfilesAdapter.TaggedProfilesSizeInterface {
+    private static final int mDataLimit = 15;
+    private static String mSearchStr = "";
+    private static ArrayList<ProfileResModel> mSearchProfilesList = new ArrayList<>();
+    private final long DELAY = 800;
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
-
     @BindString(R.string.comments)
     String mToolbarTitle;
-
     @BindView(R.id.feeds_comments_list_view)
     RecyclerView mFeedCommentsListView;
-
     @BindView(R.id.user_img)
     CircleImageView mUserImg;
-
     @BindView(R.id.name_txt)
     TextView mUsernameTxt;
-
     @BindView(R.id.comment_edt)
     EditText mCommentEdt;
-
     @BindView(R.id.imageConstraintLay)
     ConstraintLayout mImageConstraintLay;
-
     @BindView(R.id.iv_post_image)
     ImageView mIvPostImage;
-
     @BindView(R.id.ivPost)
     ImageView mIvPost;
-
     @BindView(R.id.main_lay)
     RelativeLayout mParentLay;
-
     @BindView(R.id.rvTagList)
     RecyclerView mRvTagList;
-
     private String imgUrl = "";
     private String mFilter;
     private FeedCommentsAdapter mFeedCommentsAdapter;
@@ -101,18 +94,21 @@ public class PostCommentsActivity extends BaseActivity implements TaggedProfiles
     private String mPostImgUri = null;
     private ArrayList<ProfileResModel> mTaggedProfilesList = new ArrayList<>();
     private CommentTagAdapter mSearchProfileAdapter;
-    private static String mSearchStr = "";
     private LinearLayoutManager mHorLayoutManager;
-    private static ArrayList<ProfileResModel> mSearchProfilesList = new ArrayList<>();
     private int mTagRvOffset = 0, mTagRvTotalCount = 0;
-    private static final int mDataLimit = 15;
     private boolean mIsTagRvLoading;
     private int mCurrentIndexOfCommentTag;
     private boolean mSearchFriendList = false;
-
+    private ArrayList<String> mCommentTaggedUserList = new ArrayList<>();
+    private ArrayList<Integer> mCommentTaggedUserIDs = new ArrayList<Integer>();
+    private HashMap<Integer, String> mCommentTaggedUserDetails = new HashMap<>();
     private String mTagSearchString = "";
     private int mSearchTextIndex;
-    private String mCommentTaggedUserNames = "";
+    private String mCommentTaggedUserNames = "", mCommentUserIDs = "";
+    private Timer timer = new Timer();
+    private boolean isBackspaceClicked = false;
+    private ArrayList<ProfileResModel> mFullMPList = new ArrayList<>();
+    private boolean isSelected = false;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -124,9 +120,31 @@ public class PostCommentsActivity extends BaseActivity implements TaggedProfiles
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+    }
+
+    @Override
+    protected void onDestroy() {
+        DialogManager.hideProgress();
+        super.onDestroy();
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        hideSoftKeyboard(this);
+        finish();
+    }
+
+    /*@Override
     protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
-        mMyProfileResModel = (ProfileResModel) savedInstanceState
-                .getSerializable(ProfileModel.MY_PROFILE_RES_MODEL);
+        mMyProfileResModel = (ProfileResModel) savedInstanceState.getSerializable(ProfileModel.MY_PROFILE_RES_MODEL);
         mPostID = savedInstanceState.getInt(PostsModel.POST_ID, 0);
         mPostImgUri = savedInstanceState.getString(PostsModel.POST_PICTURE, null);
         mFeedCommentList.clear();
@@ -148,11 +166,7 @@ public class PostCommentsActivity extends BaseActivity implements TaggedProfiles
         }
     }
 
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        finish();
-    }
+
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
@@ -161,24 +175,19 @@ public class PostCommentsActivity extends BaseActivity implements TaggedProfiles
         outState.putString(PostsModel.POST_PICTURE, mPostImgUri);
         outState.putSerializable(FeedCommentModel.COMMENT_LIST, mFeedCommentList);
         super.onSaveInstanceState(outState);
-    }
+    }*/
 
     private void initView() {
+        setupUI(mParentLay);
         setToolbar(mToolbar, mToolbarTitle);
-
         showToolbarBtn(mToolbar, R.id.toolbar_back_img_btn);
 
-        mMyProfileResModel = (ProfileResModel) getIntent().getSerializableExtra(ProfileModel.MY_PROFILE_RES_MODEL);
+        //mMyProfileResModel = (ProfileResModel) getIntent().getSerializableExtra(ProfileModel.MY_PROFILE_RES_MODEL);
+        //mMyProfileResModel = MotoHub.getApplicationInstance().getmProfileResModel();
+        mMyProfileResModel = EventBus.getDefault().getStickyEvent(ProfileResModel.class);
         mPostID = getIntent().getIntExtra(PostsModel.POST_ID, 0);
         mFilter = "PostID=" + mPostID;
-        getComments(mFilter);
 
-        /*FlexboxLayoutManager mFlexBoxLayoutManager = new FlexboxLayoutManager(this);
-        mFlexBoxLayoutManager.setFlexWrap(FlexWrap.WRAP);
-        mFlexBoxLayoutManager.setFlexDirection(FlexDirection.ROW);
-        mFlexBoxLayoutManager.setJustifyContent(JustifyContent.FLEX_START);
-        mRvTagList.setLayoutManager(mFlexBoxLayoutManager);
-*/
         CommentTagAdapter mTaggedProfilesAdapter = new CommentTagAdapter(mTaggedProfilesList, this);
         mRvTagList.setAdapter(mTaggedProfilesAdapter);
 
@@ -201,66 +210,100 @@ public class PostCommentsActivity extends BaseActivity implements TaggedProfiles
                         mIsTagRvLoading = true;
                         getSearchProfileList(
                                 RetrofitClient.PROFILE_FIND_FRIENDS_LOAD_MORE_RESPONSE);
+
                     }
                 }
             }
         });
-      /*  mCommentEdt.addTextChangedListener(new TextWatcher() {
+        mCommentEdt.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                mSearchTextIndex = mCommentEdt.getSelectionStart();
+
+                if (after < count) {
+                    isBackspaceClicked = true;
+                } else {
+                    isBackspaceClicked = false;
+                }
 
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-                    if(count == 0){
-                        mSearchTextIndex = start - 1;
-                        if(mSearchTextIndex > 0 && mTagSearchString.length() > 0)
-                        mTagSearchString = mTagSearchString.substring(0,mTagSearchString.length()-1);
-                    } else{
-                        mSearchTextIndex = start;
-                    }
-                    if(mSearchTextIndex >= 0 ) {
-                        if ((s.toString().charAt(mSearchTextIndex)) == '@') {
-                            mSearchFriendList = true;
-                            mCurrentIndexOfCommentTag = mSearchTextIndex;
-                            mTagSearchString = "";
-                        }
-                      *//*  if (mSearchFriendList && (s.toString().charAt(mSearchTextIndex)) == ' ') {
-                            mSearchFriendList = false;
-                            mTagSearchString = "";
-                            String mReplaceTxt = mCommentEdt.getText().toString();
-                            mCommentTaggedUserNames = mCommentTaggedUserNames + ",@" + mTagSearchString;
-                            if(mReplaceTxt.contains(mTagSearchString)){
-                                mReplaceTxt.replace(mTagSearchString, "<b>"+"@"+mTagSearchString+"</b>");
+                try {
+                    if (isBackspaceClicked) {
+                        if (s.toString().length() > 0) {
+                            if ((s.toString().charAt(mSearchTextIndex - 1)) == '@') {
+                                mSearchFriendList = true;
+                                mCurrentIndexOfCommentTag = mSearchTextIndex;
+                                mTagSearchString = "";
                             }
-                            mCommentEdt.setText(Html.fromHtml(mReplaceTxt));
+                        } else {
+                            mSearchFriendList = false;
                             mRvTagList.setVisibility(View.GONE);
-                            mCommentEdt.setSelection(mSearchTextIndex);
-                        }*//*
-                        if (mSearchFriendList && (s.toString().charAt(mSearchTextIndex)) != '@') {
-                            mTagSearchString = mTagSearchString + (s.toString().charAt(mSearchTextIndex));
                         }
-                    } else{
-                        mSearchFriendList = false;
-                        mTagSearchString = "";
-                        mRvTagList.setVisibility(View.GONE);
+                    } else {
+                        if (s.toString().length() > 0) {
+                            if ((s.toString().charAt(mSearchTextIndex)) == '@' && !isSelected) {
+                                mSearchFriendList = true;
+                                mCurrentIndexOfCommentTag = mSearchTextIndex;
+                                mTagSearchString = "";
+                            } else if (isSelected) {
+                                isSelected = false;
+                            }
+                        }
                     }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
-
 
             @Override
             public void afterTextChanged(Editable editable) {
 
                 if (mSearchFriendList) {
-                    findFriendsOrVehicles(mTagSearchString);
 
+                    int length = mCommentEdt.getSelectionStart();
+                    String tagSearch = "";
 
+                    if (mCommentEdt.getText().toString().length() > 0 && length > mCurrentIndexOfCommentTag) {
+                        tagSearch = mCommentEdt.getText().toString().substring(mCurrentIndexOfCommentTag + 1, length);
+                    }
+
+                    mTagSearchString = tagSearch;
                 }
+
+                //avoid triggering event when text is too short
+                timer = new Timer();
+                timer.schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (mSearchFriendList) {
+                                    findFriendsOrVehicles(mTagSearchString);
+                                }
+                            }
+                        });
+                    }
+
+                }, DELAY);
             }
 
-        });*/
+        });
+
+        //getMotoProfiles();
+        getComments(mFilter);
+
+    }
+
+    private void getMotoProfiles() {
+        mFullMPList.clear();
+        int mUserID = PreferenceUtils.getInstance(this).getIntData(PreferenceUtils.USER_ID);
+        String mFilter = "UserID = " + mUserID;
+        RetrofitClient.getRetrofitInstance().callGetProfiles(this, mFilter, RetrofitClient.GET_PROFILE_RESPONSE);
     }
 
     private void findFriendsOrVehicles(final String searchStr) {
@@ -285,31 +328,28 @@ public class PostCommentsActivity extends BaseActivity implements TaggedProfiles
 
     private void getSearchProfileList(int requestCode) {
 
-            String mFilter;
-            int mUserID = PreferenceUtils.getInstance(this).getIntData(PreferenceUtils.USER_ID);
-            String mBlockedUsersID = Utility.getInstance().getMyBlockedUsersID(mMyProfileResModel.getBlockedUserProfilesByProfileID(),
-                    mMyProfileResModel.getBlockeduserprofiles_by_BlockedProfileID());
-            if (!mBlockedUsersID.trim().isEmpty()) {
-                mFilter = "(UserID != " + mUserID + ") AND (id NOT IN ("
-                        + mBlockedUsersID + ")) AND ((Driver LIKE '%" + mSearchStr
-                        + "%') OR (SpectatorName LIKE '%" + mSearchStr + "%') OR (MotoName LIKE '%" +
-                        mSearchStr + "%') OR (Make LIKE '%" +
-                        mSearchStr + "%') OR (Model LIKE '%" +
-                        mSearchStr + "%') OR (PhoneNumber LIKE '%" +
-                        mSearchStr + "%'))";
-            } else {
-                mFilter = "(UserID != " + mUserID + ") AND ((Driver LIKE '%" + mSearchStr
-                        + "%') OR (SpectatorName LIKE '%" + mSearchStr + "%') OR (MotoName LIKE '%" +
-                        mSearchStr + "%') OR (Make LIKE '%" +
-                        mSearchStr + "%') OR (Model LIKE '%" +
-                        mSearchStr + "%') OR (PhoneNumber LIKE '%" +
-                        mSearchStr + "%'))";
-            }
-            setSearchProfilesAdapter();
-
-            RetrofitClient.getRetrofitInstance().callGetSearchProfiles(this, mFilter, requestCode, mDataLimit, mTagRvOffset);
-
-
+        String mFilter;
+        int mUserID = PreferenceUtils.getInstance(this).getIntData(PreferenceUtils.USER_ID);
+        String mBlockedUsersID = Utility.getInstance().getMyBlockedUsersID(mMyProfileResModel.getBlockedUserProfilesByProfileID(),
+                mMyProfileResModel.getBlockeduserprofiles_by_BlockedProfileID());
+        if (!mBlockedUsersID.trim().isEmpty()) {
+            mFilter = "(UserID != " + mUserID + ") AND (id NOT IN ("
+                    + mBlockedUsersID + ")) AND ((Driver LIKE '%" + mSearchStr
+                    + "%') OR (SpectatorName LIKE '%" + mSearchStr + "%') OR (MotoName LIKE '%" +
+                    mSearchStr + "%') OR (Make LIKE '%" +
+                    mSearchStr + "%') OR (Model LIKE '%" +
+                    mSearchStr + "%') OR (PhoneNumber LIKE '%" +
+                    mSearchStr + "%'))";
+        } else {
+            mFilter = "(UserID != " + mUserID + ") AND ((Driver LIKE '%" + mSearchStr
+                    + "%') OR (SpectatorName LIKE '%" + mSearchStr + "%') OR (MotoName LIKE '%" +
+                    mSearchStr + "%') OR (Make LIKE '%" +
+                    mSearchStr + "%') OR (Model LIKE '%" +
+                    mSearchStr + "%') OR (PhoneNumber LIKE '%" +
+                    mSearchStr + "%'))";
+        }
+        setSearchProfilesAdapter();
+        RetrofitClient.getRetrofitInstance().callGetSearchProfiles(this, mFilter, requestCode, mDataLimit, mTagRvOffset);
     }
 
     @OnClick({R.id.toolbar_back_img_btn, R.id.post_btn, R.id.ivPost, R.id.iv_remove_image})
@@ -335,10 +375,27 @@ public class PostCommentsActivity extends BaseActivity implements TaggedProfiles
             case R.id.ivPost:
                 showAppDialog(AppDialogFragment.BOTTOM_ADD_IMG_DIALOG, null);
                 break;
-
             case R.id.iv_remove_image:
                 clearFields();
                 break;
+        }
+    }
+
+    private void getTaggedUserList(HashMap<Integer, String> mCommentTaggedUserDetails) {
+        mCommentTaggedUserIDs.clear();
+        mCommentTaggedUserList.clear();
+        for (HashMap.Entry<Integer, String> entry : mCommentTaggedUserDetails.entrySet()) {
+            mCommentTaggedUserIDs.add(entry.getKey());
+            mCommentTaggedUserList.add(entry.getValue());
+        }
+        for (int i = 0; i < mCommentTaggedUserIDs.size(); i++) {
+            if (i == 0) {
+                mCommentUserIDs = String.valueOf(mCommentTaggedUserIDs.get(i));
+                mCommentTaggedUserNames = mCommentTaggedUserList.get(i);
+            } else {
+                mCommentUserIDs = mCommentUserIDs + "," + String.valueOf(mCommentTaggedUserIDs.get(i));
+                mCommentTaggedUserNames = mCommentTaggedUserNames + "," + mCommentTaggedUserList.get(i);
+            }
         }
     }
 
@@ -357,7 +414,6 @@ public class PostCommentsActivity extends BaseActivity implements TaggedProfiles
         RequestBody requestBody = RequestBody.create(MediaType.parse("*/*"), mFile);
         MultipartBody.Part filePart = MultipartBody.Part.createFormData("files", "PostComments_" + mFile.getName(), requestBody);
         RetrofitClient.getRetrofitInstance().callUploadCommentReplyPostImg(this, filePart, RetrofitClient.UPLOAD_IMAGE_FILE_RESPONSE);
-
     }
 
     void clearFields() {
@@ -370,26 +426,25 @@ public class PostCommentsActivity extends BaseActivity implements TaggedProfiles
 
     private void callPostFeedComments(String imgUrl, int mPostId, int mProfileId) throws Exception {
 
+        getTaggedUserList(mCommentTaggedUserDetails);
+
         String mComment = mCommentEdt.getText().toString().trim();
 
         JsonObject mItem = new JsonObject();
         JsonObject mJsonObject = new JsonObject();
 
-
         mItem.addProperty("PostID", mPostId);
         mItem.addProperty("ProfileID", mProfileId);
         mItem.addProperty("Comment", URLEncoder.encode(mComment, "UTF-8"));
         mItem.addProperty("CommentImages", imgUrl);
-     //   mItem.addProperty("CommentTaggedUserNames", mCommentTaggedUserNames);
+        mItem.addProperty("CommentTaggedUserNames", mCommentTaggedUserNames);
+        mItem.addProperty("CommentTaggedUserID", mCommentUserIDs);
 
         JsonArray mJsonArray = new JsonArray();
         mJsonArray.add(mItem);
         mJsonObject.add("resource", mJsonArray);
-
         clearFields();
-
         RetrofitClient.getRetrofitInstance().callPostFeedComments(this, mJsonObject, RetrofitClient.POST_COMMENTS);
-
     }
 
 
@@ -476,15 +531,14 @@ public class PostCommentsActivity extends BaseActivity implements TaggedProfiles
 
             ProfileModel mProfileModel = (ProfileModel) responseObj;
             switch (responseType) {
-
                 case RetrofitClient.PROFILE_FIND_FRIENDS_LOAD_MORE_RESPONSE:
-
+                    mSearchProfilesList.clear();
                     if (mProfileModel.getResource() != null && mProfileModel.getResource().size() > 0) {
                         mRvTagList.setVisibility(View.VISIBLE);
                         mTagRvTotalCount = mProfileModel.getMeta().getCount();
                         mIsTagRvLoading = false;
                         mSearchProfilesList.addAll(mProfileModel.getResource());
-                        mTagRvOffset = mDataLimit;
+                        mTagRvOffset = mTagRvOffset + mDataLimit;
                     } else {
                         mRvTagList.setVisibility(View.GONE);
                         mSearchProfilesList.clear();
@@ -494,6 +548,21 @@ public class PostCommentsActivity extends BaseActivity implements TaggedProfiles
                         }
                     }
                     setSearchProfilesAdapter();
+                    break;
+                case RetrofitClient.GET_PROFILE_RESPONSE:
+
+                    if (mProfileModel.getResource() != null && mProfileModel.getResource().size() > 0) {
+
+                        mFullMPList.addAll(mProfileModel.getResource());
+
+                        mMyProfileResModel = mFullMPList.get(PreferenceUtils.getInstance(this).getIntData(PreferenceUtils.CURRENT_PROFILE_POS));
+
+                        getComments(mFilter);
+
+                    } else {
+                        showSnackBar(mParentLay, mNoProfileErr);
+                    }
+
                     break;
             }
 
@@ -609,42 +678,25 @@ public class PostCommentsActivity extends BaseActivity implements TaggedProfiles
         mRvTagList.setVisibility(View.GONE);
         mTagSearchString = "";
         mSearchFriendList = false;
+        isSelected = true;
 
-        String mCommentTxt, mTempCommentTxt2,mTempCommentTxt1;
+        String mCommentTxt, mTempCommentTxt2, mTempCommentTxt1;
         mCommentTxt = mCommentEdt.getText().toString();
-        mTempCommentTxt1 = mCommentTxt.substring(0,mCurrentIndexOfCommentTag);
-        if(mSearchTextIndex < mCommentTxt.length()) {
-            mTempCommentTxt2 = mCommentTxt.substring(mSearchTextIndex+1, mCommentTxt.length());
-        } else{
+        mTempCommentTxt1 = mCommentTxt.substring(0, mCurrentIndexOfCommentTag);
+        if (mSearchTextIndex < mCommentTxt.length()) {
+            mTempCommentTxt2 = mCommentTxt.substring(mSearchTextIndex + 1, mCommentTxt.length());
+        } else {
             mTempCommentTxt2 = "";
         }
-        String mResCommentTxt,mResCommentTxt1;
-        mCommentTaggedUserNames = mCommentTaggedUserNames + ",@"+ Utility.getInstance().getUserName(profileResModel);
-        String mCursorIndexString = mTempCommentTxt1 +  Utility.getInstance().getUserName(profileResModel) ;
-        mResCommentTxt = mTempCommentTxt1 + "@" + Utility.getInstance().getUserName(profileResModel);
-        mResCommentTxt1 = mResCommentTxt + mTempCommentTxt2;
-        int mCursorPosition = mCursorIndexString.length();
-        setTextEdt(mResCommentTxt1);
-        mCommentEdt.setSelection(mCursorPosition);
+        String mResCommentTxt, mResCommentTxt1;
+        mCommentTaggedUserDetails.put(profileResModel.getUserID(), "@" + Utility.getInstance().getUserName(profileResModel));
+        getTaggedUserList(mCommentTaggedUserDetails);
+        mResCommentTxt = mTempCommentTxt1 + " @" + Utility.getInstance().getUserName(profileResModel);
+        mResCommentTxt1 = mResCommentTxt + " " + mTempCommentTxt2;
+        int mCursorPosition = mResCommentTxt.length();
+        mCommentEdt.setText(setTextEdt(this, mResCommentTxt1, mCommentTaggedUserNames, mCommentUserIDs, mMyProfileResModel.getID()));
+        mCommentEdt.setSelection(mCursorPosition + 1);
+        mSearchTextIndex = mCursorPosition + 1;
     }
 
-    private void setTextEdt(String mResCommentTxt1) {
-        String mCommentTagString = mResCommentTxt1;
-        SpannableStringBuilder builder = new SpannableStringBuilder();
-        String [] mCommentTagArray = mCommentTaggedUserNames.split(",@");
-        for(int i = 1; i < mCommentTagArray.length; i++) {
-            if (mCommentTagString.contains(mCommentTagArray[i]))
-
-            {
-                SpannableString redSpannable = new SpannableString("@"+mCommentTagArray[i]);
-                redSpannable.setSpan(new ForegroundColorSpan(Color.RED), 0, mCommentTagArray[i].length()+1, 0);
-                builder.append(redSpannable);
-            } else{
-                SpannableString redSpannable = new SpannableString("@"+mCommentTagArray[i]);
-                redSpannable.setSpan(new ForegroundColorSpan(Color.BLACK), 0, mCommentTagArray[i].length()+1, 0);
-                builder.append(redSpannable);
-            }
-        }
-        mCommentEdt.setText(builder, TextView.BufferType.SPANNABLE);
-    }
 }

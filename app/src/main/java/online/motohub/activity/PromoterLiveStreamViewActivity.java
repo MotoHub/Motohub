@@ -26,6 +26,7 @@ import online.motohub.model.SessionModel;
 import online.motohub.retrofit.APIConstants;
 import online.motohub.retrofit.RetrofitClient;
 import online.motohub.util.AppConstants;
+import online.motohub.util.DialogManager;
 import online.motohub.util.PreferenceUtils;
 
 public class PromoterLiveStreamViewActivity extends BaseActivity implements VlcListener {
@@ -90,6 +91,8 @@ public class PromoterLiveStreamViewActivity extends BaseActivity implements VlcL
         super.onResume();
         initView();
     }
+
+
 
     private void callGetLiveStream() {
         String mFilter = APIConstants.EventID + "=" + mEventID;
@@ -234,6 +237,7 @@ public class PromoterLiveStreamViewActivity extends BaseActivity implements VlcL
 
     @Override
     protected void onDestroy() {
+        DialogManager.hideProgress();
         super.onDestroy();
     }
 

@@ -9,6 +9,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,6 +22,7 @@ import online.motohub.activity.BaseActivity;
 import online.motohub.activity.ChatCreateGroupActivity;
 import online.motohub.activity.ChatHomeActivity;
 import online.motohub.adapter.GroupChatRoomAdapter;
+import online.motohub.application.MotoHub;
 import online.motohub.model.GroupChatRoomModel;
 import online.motohub.model.GroupChatRoomResModel;
 import online.motohub.model.ProfileModel;
@@ -57,7 +60,9 @@ public class ChatGroupFragment extends BaseFragment {
 
     private void initView() {
 
-        this.mMyProfileResModel = (ProfileResModel) getArguments().getSerializable(ProfileModel.MY_PROFILE_RES_MODEL);
+        //this.mMyProfileResModel = (ProfileResModel) getArguments().getSerializable(ProfileModel.MY_PROFILE_RES_MODEL);
+        //mMyProfileResModel = MotoHub.getApplicationInstance().getmProfileResModel();
+        mMyProfileResModel = EventBus.getDefault().getStickyEvent(ProfileResModel.class);
 
         LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(getContext());
         mLinearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -93,9 +98,10 @@ public class ChatGroupFragment extends BaseFragment {
     @Override
     public void launchCreateGroupChatActivity() {
         super.launchCreateGroupChatActivity();
-
+        //MotoHub.getApplicationInstance().setmProfileResModel(mMyProfileResModel);
+        EventBus.getDefault().postSticky(mMyProfileResModel);
         getActivity().startActivityForResult(new Intent(getActivity(), ChatCreateGroupActivity.class)
-                .putExtra(ProfileModel.MY_PROFILE_RES_MODEL, mMyProfileResModel), ChatHomeActivity.ADD_NEW_GROUP_CHAT);
+                /*.putExtra(ProfileModel.MY_PROFILE_RES_MODEL, mMyProfileResModel)*/, ChatHomeActivity.ADD_NEW_GROUP_CHAT);
 
     }
 
@@ -152,7 +158,7 @@ public class ChatGroupFragment extends BaseFragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        if(mUnBinder != null) {
+        if (mUnBinder != null) {
             mUnBinder.unbind();
         }
     }

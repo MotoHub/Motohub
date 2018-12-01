@@ -9,13 +9,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import online.motohub.R;
 import online.motohub.activity.BaseActivity;
+import online.motohub.util.DialogManager;
+import online.motohub.util.UrlUtils;
 import online.motohub.util.ZoomImageView;
 
 
@@ -46,6 +50,12 @@ public class PromoterGalleryViewPager extends BaseActivity {
         }
     }
 
+    @Override
+    protected void onDestroy() {
+        DialogManager.hideProgress();
+        super.onDestroy();
+    }
+
     private class CustomPromoterAdapter extends PagerAdapter {
 
         private final Context mContext;
@@ -63,9 +73,23 @@ public class PromoterGalleryViewPager extends BaseActivity {
         public Object instantiateItem(ViewGroup parent, int pos) {
             View convertView = mInflater.inflate(R.layout.row_picker_img_pager_thumbnail, parent, false);
             ZoomImageView mImageView = convertView.findViewById(R.id.row_picker_img_pager_thumbnail_image_view);
-            setImageWithGlide(mImageView, mImgUriList[pos], R.drawable.img_place_holder);
+            /*if (mImgUriList.length == 1) {
+                setImageWithGlide(mImageView, mImgUriList[pos], R.drawable.img_place_holder);
+            } else {*/
+                /*GlideUrl glideUrl = new GlideUrl(UrlUtils.AWS_FILE_URL + mImgUriList[pos], new LazyHeaders.Builder()
+                        .addHeader("X-DreamFactory-Api-Key", getString(R.string.dream_factory_api_key))
+                        .build());*/
+                Glide.with(getApplicationContext())
+                        .load(UrlUtils.AWS_S3_BASE_URL + mImgUriList[pos])
+                        .apply(new RequestOptions()
+                                .error(R.drawable.img_place_holder)
+                                .dontAnimate()
+                        )
+                        .into(mImageView);
+            //}
             parent.addView(convertView);
             return convertView;
+
         }
 
         @Override
