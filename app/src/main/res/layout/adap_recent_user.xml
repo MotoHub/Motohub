@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/LayoutWrap"
+    android:padding="@dimen/size10">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/profile_img"
+        android:layout_width="@dimen/size60"
+        android:layout_height="@dimen/size60"
+        android:layout_centerHorizontal="true"
+        android:clickable="true"
+        android:focusable="true"
+        android:scaleType="centerCrop"
+        android:src="@drawable/default_profile_icon" />
+
+    <TextView
+        android:id="@+id/name_of_driver_tv"
+        android:layout_width="@dimen/size60"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/profile_img"
+        android:layout_centerHorizontal="true"
+        android:gravity="center_horizontal"
+        android:maxLines="1"
+        android:paddingTop="@dimen/size1"
+        android:text="@string/username"
+        android:textColor="@color/colorBlack"
+        android:textSize="@dimen/text12"
+        android:textStyle="bold" />
+
+
+</RelativeLayout>

@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import java.util.ArrayList;
 
+import online.motohub.model.ProfileResModel;
 import online.motohub.model.SpectatorLiveEntity;
 import online.motohub.model.SpectatorLiveModel;
 import online.motohub.model.VideoUploadModel;
@@ -16,6 +17,14 @@ import online.motohub.util.AppConstants;
 public class DatabaseHandler extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION = 1;
     private static final String DATABASE_NAME = "contactsManager";
+
+    private String LOCAL_USER_TABLE = "LOCAL_USER_TABLE";
+    private String ID = "ID";
+    private String LOGIN_TYPE = "LOGIN_TYPE";
+    private String EMAIL = "EMAIL";
+    private String PASWWORD = "PASWWORD";
+    private String USER_IMG_URL = "USER_IMG_URL";
+    private String USER_NAME = "USER_NAME";
 
     //Offline Storage
 
@@ -51,15 +60,25 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 + SpectatorLiveModel.EVENTID + " INTEGER,"
                 + SpectatorLiveModel.EVENT_FINISH_DATE + " TEXT,"
                 + SpectatorLiveModel.LIVE_POST_PROFILE_ID + " INTEGER" + ")";
+
+        String CREATE_LOCAL_USER_TABLE = "CREATE TABLE " + LOCAL_USER_TABLE + "(" + ID + " TEXT PRIMARY KEY,"
+                + LOGIN_TYPE + " TEXT,"
+                + EMAIL + " TEXT,"
+                + PASWWORD + " TEXT,"
+                + USER_IMG_URL + " TEXT,"
+                + USER_NAME + " TEXT"
+                + ")";
+
         db.execSQL(CREATE_CONTACTS_TABLE);
         db.execSQL(CREATE_VIDEO_TABLE);
+        db.execSQL(CREATE_LOCAL_USER_TABLE);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS " + VideoUploadModel.VideoUploadTable);
         db.execSQL("DROP TABLE IF EXISTS " + SpectatorLiveModel.TABLE);
-
+        db.execSQL("DROP TABLE IF EXISTS " + LOCAL_USER_TABLE);
         onCreate(db);
     }
 
@@ -199,4 +218,36 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.close();
     }
 
+    public void addLocalUser(ProfileResModel mProfileModel) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(ID, mProfileModel.getEmail());
+        values.put(LOGIN_TYPE, mProfileModel.getLoginType());
+        values.put(EMAIL, mProfileModel.getEmail());
+        values.put(PASWWORD, mProfileModel.getPassword());
+        values.put(USER_IMG_URL, mProfileModel.getProfilePicture());
+        values.put(USER_NAME, mProfileModel.getUserName());
+        db.insert(LOCAL_USER_TABLE, null, values);
+        db.close();
+    }
+
+    public ArrayList<ProfileResModel> getLocalUserList(){
+        ArrayList<ProfileResModel> mProfileList = new ArrayList<>();
+        SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
+        String queryTaxMaster = "SELECT * FROM " + LOCAL_USER_TABLE;
+        Cursor cursor = sqLiteDatabase.rawQuery(queryTaxMaster, null);
+        if (cursor.moveToFirst()) {
+            do {
+                ProfileResModel mProfileModel = new ProfileResModel();
+                mProfileModel.setDB_ID(cursor.getString(0));
+                mProfileModel.setLoginType(cursor.getString(1));
+                mProfileModel.setEmail(cursor.getString(2));
+                mProfileModel.setPassword(cursor.getString(3));
+                mProfileModel.setProfilePicture(cursor.getString(4));
+                mProfileModel.setUserName(cursor.getString(5));
+                mProfileList.add(mProfileModel);
+            } while (cursor.moveToNext());
+        }
+        return mProfileList;
+    }
 }
