@@ -217,6 +217,12 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.execSQL("DELETE FROM " + SpectatorLiveModel.TABLE); //delete all rows in a table
         db.close();
     }
+	
+	public void deleteRow(String value) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL("DELETE FROM " + SpectatorLiveModel.TABLE + " WHERE " + SpectatorLiveModel.ID + "='" + value + "'");
+        db.close();
+    }
 
     public void addLocalUser(ProfileResModel mProfileModel) {
         SQLiteDatabase db = this.getWritableDatabase();

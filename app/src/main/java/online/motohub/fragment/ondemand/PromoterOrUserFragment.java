@@ -31,7 +31,10 @@ import com.jakewharton.rxbinding.widget.RxTextView;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.Timer;
 import java.util.concurrent.TimeUnit;
 
@@ -139,7 +142,7 @@ public class PromoterOrUserFragment extends BaseFragment implements SwipeRefresh
         public void onLoadMore() {
             mIsLoadMore = true;
             mPromoterVideoList.add(null);
-            getActivity().runOnUiThread(new Runnable() {
+            Objects.requireNonNull(getActivity()).runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
                     mAdapter.notifyItemInserted(mPromoterVideoList.size() - 1);
@@ -175,14 +178,14 @@ public class PromoterOrUserFragment extends BaseFragment implements SwipeRefresh
     public void onResume() {
         super.onResume();
         // Get the data from any transfer's that have already happened,
-        getActivity().registerReceiver(this.broadCastUploadStatus, new IntentFilter("UPLOAD_STATUS"));
+        Objects.requireNonNull(getActivity()).registerReceiver(this.broadCastUploadStatus, new IntentFilter("UPLOAD_STATUS"));
 
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        getActivity().unregisterReceiver(this.broadCastUploadStatus);
+        Objects.requireNonNull(getActivity()).unregisterReceiver(this.broadCastUploadStatus);
     }
 
     private void initView() {
@@ -277,11 +280,17 @@ public class PromoterOrUserFragment extends BaseFragment implements SwipeRefresh
             mFeedTotalCount = 0;
             mIsLoadMore = false;
             mPromoterVideoList.clear();
-            mSearchStr = searchStr;
+            String text = null;
+            try {
+                text = URLEncoder.encode(searchStr, "UTF-8");
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+            mSearchStr = text;
             setAdapter();
-            if (mSearchStr.isEmpty() || mSearchStr.length() == 0) {
+            if (mSearchStr.isEmpty()) {
                 mPromoterVideoList.add(null);
-                getActivity().runOnUiThread(new Runnable() {
+                Objects.requireNonNull(getActivity()).runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         mAdapter.notifyItemInserted(mPromoterVideoList.size() - 1);
@@ -291,7 +300,7 @@ public class PromoterOrUserFragment extends BaseFragment implements SwipeRefresh
                 getSearchDataFromAPi(mFilter);
             } else {
                 mPromoterVideoList.add(null);
-                getActivity().runOnUiThread(new Runnable() {
+                Objects.requireNonNull(getActivity()).runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         mAdapter.notifyItemInserted(mPromoterVideoList.size() - 1);

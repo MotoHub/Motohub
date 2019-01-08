@@ -898,7 +898,8 @@ public class EventLiveActivity extends BaseActivity implements ChatBoxEventGrpAd
         Bundle mBundle = new Bundle();
         if (type == 1) {
             //MotoHub.getApplicationInstance().setmProfileResModel(mMyProfileResModel);
-            EventBus.getDefault().postSticky(mMyProfileResModel);
+            if (mMyProfileResModel != null)
+                EventBus.getDefault().postSticky(mMyProfileResModel);
             //mBundle.putSerializable(ProfileModel.MY_PROFILE_RES_MODEL, mMyProfileResModel);
             mBundle.putSerializable(EventsModel.EVENTS_RES_MODEL, mEventResModel);
             startActivity(new Intent(this, CameraStoryActivity.class).putExtras(mBundle));
