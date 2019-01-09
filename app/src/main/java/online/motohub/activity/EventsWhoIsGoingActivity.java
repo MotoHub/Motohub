@@ -13,6 +13,8 @@ import android.widget.ListView;
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -176,6 +178,9 @@ public class EventsWhoIsGoingActivity extends BaseActivity {
                     if (mEventsWhoIsGoingModel.getResource() != null && mEventsWhoIsGoingModel.getResource().size() > 0) {
 
                         mWhoIsGoingListData.addAll(mEventsWhoIsGoingModel.getResource());
+                        Set<EventsWhoIsGoingResModel> hs = new HashSet<>(mWhoIsGoingListData);
+                        mWhoIsGoingListData.clear();
+                        mWhoIsGoingListData.addAll(hs);
                         mWhoIsGoingAdapter.notifyDataSetChanged();
 
                     }

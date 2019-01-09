@@ -734,15 +734,22 @@
         <service
             android:name="com.amazonaws.mobileconnectors.s3.transferutility.TransferService"
             android:enabled="true" />
+
         <service
             android:name=".util.UploadJobService"
             android:exported="true"
             android:permission="android.permission.BIND_JOB_SERVICE" />
 
-        <!--<service
-            android:name=".util.SpectatorLiveOfflineUpload"
+        <service
+            android:name=".util.UploadJobScheduler"
+            android:exported="true"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
+
+        <service
+            android:name=".util.UploadOfflineVideos"
             android:enabled="true"
-            android:exported="true" />-->
+            android:exported="true" />
+
     </application>
 
 </manifest>

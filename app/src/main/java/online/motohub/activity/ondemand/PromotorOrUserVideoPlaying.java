@@ -121,7 +121,7 @@ public class PromotorOrUserVideoPlaying extends BaseActivity {
     private int ProfileID;
     private int mDeleteLikeID;
     private String mFilter;
-    private boolean mIsAlreadyBlocked, isBlockedme, mIsAlreadyFollowing, isNextVideo, isLoadedData;
+    private boolean mIsAlreadyBlocked, isBlockedme, mIsAlreadyFollowing, isNextVideo = false, isLoadedData;
     private String usertype, replaceString;
     private int mOtherProfileID, mMyProfileID, mQuotient, mTotalCount;
 
@@ -238,30 +238,19 @@ public class PromotorOrUserVideoPlaying extends BaseActivity {
     protected void onResume() {
         super.onResume();
         initializePlayer();
-        isNextVideo = true;
+        //isNextVideo = true;
         mQuotient = mPostsList.size() / 10;
         mPostsList.removeAll(Collections.singleton(null));
         if (mPostsList != null && mPostsList.size() > 0)
             playVideo();
         viewHideAfterload();
         updateVideoList();
-        /*if (!EventBus.getDefault().isRegistered(this)) {
-            EventBus.getDefault().register(this);
-        }*/
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-       // EventBus.getDefault().unregister(this);
     }
-
-    /*@Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
-    public void OnEvent(ProfileResModel profileResModel) {
-        mMyProfileResModel = profileResModel;
-        mMyProfileID = mMyProfileResModel.getID();
-        EventBus.getDefault().removeStickyEvent(profileResModel);
-    }*/
 
     @SuppressLint("ClickableViewAccessibility")
     private void setSwipeListenerForVideoView() {
@@ -589,7 +578,7 @@ public class PromotorOrUserVideoPlaying extends BaseActivity {
             @Override
             public void run() {
                 //TODO your background code
-                if (mTotalCount != mPostsList.size() && isLoadedData == false && pos > mPostsList.size() - 5) {
+                if (mTotalCount != mPostsList.size() && !isLoadedData && pos > mPostsList.size() - 5) {
                     callGetPromoterVideosWhilePlaying(PromotorOrUserVideoPlaying.this, mFilter, mPostsList.size(), true);
                 }
             }

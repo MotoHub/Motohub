@@ -15,6 +15,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.PersistableBundle;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
@@ -39,6 +40,7 @@ import com.amazonaws.mobileconnectors.s3.transferutility.TransferUtility;
 import com.amazonaws.regions.Region;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3Client;
+import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
@@ -47,6 +49,8 @@ import org.greenrobot.eventbus.EventBus;
 import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -65,7 +69,9 @@ import online.motohub.retrofit.RetrofitClient;
 import online.motohub.util.AppConstants;
 import online.motohub.util.DialogManager;
 import online.motohub.util.PreferenceUtils;
+import online.motohub.util.UploadJobScheduler;
 import online.motohub.util.UploadJobService;
+import online.motohub.util.UploadOfflineVideos;
 import online.motohub.util.UrlUtils;
 
 
@@ -146,8 +152,13 @@ public class VideoStoryPreviewActivity extends BaseActivity implements MediaPlay
                 finish();
                 break;
             case R.id.btn_next:
-                //uploadSpecLiveVideo();
-                showAlertDialog(data);
+                if (mEventResModel != null) {
+                    //if (isNetworkConnected(this)) {
+                    uploadSpecLiveVideo();
+                    /*} else {
+                        jobScheduler();
+                    }*/
+                }
                 break;
             case R.id.toolbar_back_img_btn:
                 super.onBackPressed();
@@ -160,7 +171,7 @@ public class VideoStoryPreviewActivity extends BaseActivity implements MediaPlay
         }
     }
 
-    private void showAlertDialog(final String data) {
+    /*private void showAlertDialog(final String data) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -186,9 +197,9 @@ public class VideoStoryPreviewActivity extends BaseActivity implements MediaPlay
                 builder.show();
             }
         });
-    }
+    }*/
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    /*@RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private void jobScheduler() {
         File mFile = new File(videoUri.getPath());
         Bitmap bitmap = ThumbnailUtils.createVideoThumbnail(mFile.getPath(), MediaStore.Images.Thumbnails.MINI_KIND);
@@ -214,29 +225,63 @@ public class VideoStoryPreviewActivity extends BaseActivity implements MediaPlay
         entity.setEventFinishDate(mEventResModel.getFinish());
         entity.setLivePostProfileID(String.valueOf(mMyProfileResModel.getID()));
         databaseHandler.insertSpectatorLiveVideo(entity);
-        //scheduleJob();
         boolean mIsJobSchedule = PreferenceUtils.getInstance(this).getBooleanData(PreferenceUtils.IS_JOB_SCHEDULER);
         if (!mIsJobSchedule) {
             scheduleJob();
             PreferenceUtils.getInstance(this).saveBooleanData(PreferenceUtils.IS_JOB_SCHEDULER, true);
         }
         finish();
-    }
+    }*/
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private void uploadSpecLiveVideo() {
         File mFile = new File(videoUri.getPath());
         Bitmap bitmap = ThumbnailUtils.createVideoThumbnail(mFile.getPath(), MediaStore.Images.Thumbnails.MINI_KIND);
         File mThumb = getThumbPath(bitmap);
+        PromotersResModel mPromoter = mEventResModel.getPromoterByUserID();
+        String text = null;
+        try {
+            text = URLEncoder.encode(mEditStory.getText().toString(), "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
         if (isNetworkConnected(this)) {
-            amazoneUpload(mFile, mThumb);
+            SpectatorLiveEntity entity = new SpectatorLiveEntity();
+            entity.setProfileID(String.valueOf(mMyProfileResModel.getID()));
+            entity.setUserID(String.valueOf(mPromoter.getUserId()));
+            entity.setUserType(AppConstants.USER_EVENT_VIDEOS);
+            entity.setCaption(text);
+            entity.setVideoUrl(videoUri.getPath());
+            assert mThumb != null;
+            entity.setThumbnail(mThumb.getAbsolutePath());
+            entity.setEventID(String.valueOf(mEventResModel.getID()));
+            entity.setEventFinishDate(mEventResModel.getFinish());
+            entity.setLivePostProfileID(String.valueOf(mMyProfileResModel.getID()));
+            Gson g = new Gson();
+            String json = g.toJson(entity);
+            //scheduleJob1(json);
+            Intent service_intent = new Intent(this, UploadOfflineVideos.class);
+            service_intent.putExtra("data", json);
+            startService(service_intent);
+            finish();
         } else {
-            showToast(this, "it will be upload automatically after network available");
-            jobScheduler();
+            SpectatorLiveEntity entity = new SpectatorLiveEntity();
+            entity.setProfileID(String.valueOf(mMyProfileResModel.getID()));
+            entity.setUserID(String.valueOf(mPromoter.getUserId()));
+            entity.setUserType(AppConstants.USER_EVENT_VIDEOS);
+            entity.setCaption(text);
+            entity.setVideoUrl(videoUri.getPath());
+            assert mThumb != null;
+            entity.setThumbnail(mThumb.getAbsolutePath());
+            entity.setEventID(String.valueOf(mEventResModel.getID()));
+            entity.setEventFinishDate(mEventResModel.getFinish());
+            entity.setLivePostProfileID(String.valueOf(mMyProfileResModel.getID()));
+            databaseHandler.insertSpectatorLiveVideo(entity);
+            finish();
         }
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    /*@RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public void scheduleJob() {
         ComponentName componentName = new ComponentName(this, UploadJobService.class);
         JobInfo info = new JobInfo.Builder(123, componentName)
@@ -244,6 +289,31 @@ public class VideoStoryPreviewActivity extends BaseActivity implements MediaPlay
                 .setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)
                 .setPersisted(true)
                 .setPeriodic(15 * 60 * 10000)
+                .build();
+
+        JobScheduler scheduler = (JobScheduler) getSystemService(JOB_SCHEDULER_SERVICE);
+        assert scheduler != null;
+        int resultCode = scheduler.schedule(info);
+        if (resultCode == JobScheduler.RESULT_SUCCESS) {
+            Log.d(TAG, "Job scheduled");
+        } else {
+            Log.d(TAG, "Job scheduling failed");
+        }
+    }*/
+
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    public void scheduleJob1(String data) {
+        Random ran = new Random();
+        int x = ran.nextInt(50) + 1;
+        ComponentName componentName = new ComponentName(this, UploadJobScheduler.class);
+        PersistableBundle bundle = new PersistableBundle();
+        bundle.putString("data", data);
+        JobInfo info = new JobInfo.Builder(x, componentName)
+                .setRequiresCharging(false)
+                .setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)
+                .setPersisted(true)
+                .setExtras(bundle)
+                .setPeriodic(50000)
                 .build();
 
         JobScheduler scheduler = (JobScheduler) getSystemService(JOB_SCHEDULER_SERVICE);

@@ -86,6 +86,7 @@ import online.motohub.adapter.FollowProfileAdapter;
 import online.motohub.adapter.PostsAdapter;
 import online.motohub.adapter.TaggedProfilesAdapter;
 import online.motohub.application.MotoHub;
+import online.motohub.database.DatabaseHandler;
 import online.motohub.fcm.MyFireBaseMessagingService;
 import online.motohub.fragment.dialog.AppDialogFragment;
 import online.motohub.interfaces.CommonInterface;
@@ -112,6 +113,7 @@ import online.motohub.model.PurchasedAddOnModel;
 import online.motohub.model.PushTokenModel;
 import online.motohub.model.RacingModel;
 import online.motohub.model.SessionModel;
+import online.motohub.model.SpectatorLiveEntity;
 import online.motohub.model.VideoShareModel;
 import online.motohub.retrofit.APIConstants;
 import online.motohub.retrofit.RetrofitClient;
@@ -121,6 +123,7 @@ import online.motohub.util.DialogManager;
 import online.motohub.util.PreferenceUtils;
 import online.motohub.util.StringUtils;
 import online.motohub.util.UploadFileService;
+import online.motohub.util.UploadOfflineVideos;
 import online.motohub.util.Utility;
 import rx.Observer;
 import rx.android.schedulers.AndroidSchedulers;
@@ -303,6 +306,7 @@ public class ViewProfileActivity extends BaseActivity implements
                 }
             }
         }
+        uploadOffline();
     }
 
     @Override
@@ -444,7 +448,6 @@ public class ViewProfileActivity extends BaseActivity implements
                 }
             }
         });
-
         // showAlertDialog(data);
     }
 
@@ -2220,6 +2223,24 @@ public class ViewProfileActivity extends BaseActivity implements
             } else {
                 mRelativeLayoutPhoneEmailFriends.setVisibility(View.VISIBLE);
                 getPhoneEmailProfileList();
+            }
+        }
+    }
+
+    private void uploadOffline(){
+        DatabaseHandler handler = new DatabaseHandler(this);
+        ArrayList<SpectatorLiveEntity> mList = handler.getSpectatorLiveVideos();
+        if (mList.size() > 0) {
+            if (isNetworkConnected(this)) {
+                for (int i = 0; i < mList.size(); i++) {
+                    Intent service_intent = new Intent(this, UploadOfflineVideos.class);
+                    String data = new Gson().toJson(mList.get(i));
+                    service_intent.putExtra("data", data);
+                    startService(service_intent);
+                }
+
+                /*Intent service_intent = new Intent(this, UploadOfflineVideos.class);
+                startService(service_intent);*/
             }
         }
     }

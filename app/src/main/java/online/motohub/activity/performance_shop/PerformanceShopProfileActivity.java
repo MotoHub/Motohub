@@ -140,7 +140,8 @@ public class PerformanceShopProfileActivity extends BaseActivity implements
         mPromotersResModel = EventBus.getDefault().getStickyEvent(PromotersResModel.class);
         callGetPerformanceShop();
         setUpPurchseSuccessUI();
-        setUpPurchseUI(mPromotersResModel.getSubscription_fee(), mMyProfileResModel.getID());
+        if (mPromotersResModel != null)
+            setUpPurchseUI(mPromotersResModel.getSubscription_fee(), mMyProfileResModel.getID());
     }
 
     @Override
