@@ -87,8 +87,8 @@ public class PostsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     private static final int VIEW_TYPE_LOADING = 0;
     private static final int VIEW_TYPE_POSTS = 1;
     private final ArrayList<PostsResModel> mPostsList;
-    int count_post_position = 0;
-    ArrayList<NotificationBlockedUsersModel> notifications_blocked_users = new ArrayList<>();
+    private int count_post_position = 0;
+    private ArrayList<NotificationBlockedUsersModel> notifications_blocked_users = new ArrayList<>();
     private Context mContext;
     private ProfileResModel mCurrentProfileObj;
     private Activity mActivity;
@@ -100,7 +100,6 @@ public class PostsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     private int mDeleteLikeID;
     private String[] finalArr = null;
     private boolean isFromMyProfile;
-    /*private StringBuffer sb = new StringBuffer();*/
 
     public PostsAdapter(ArrayList<PostsResModel> postsList, ProfileResModel myProfileResModel,
                         Context ctx, boolean isFromMyProfile) {
@@ -473,10 +472,10 @@ public class PostsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                             String content = null;
                             mAdapterPosition = position;
                             try {
-                                if (mPostsList.get(position).getPostText().contains(" "))
+                                /*if (mPostsList.get(position).getPostText().contains(" "))
                                     content = mPostsList.get(position).getPostText();
-                                else
-                                    content = URLDecoder.decode(mPostsList.get(position).getPostText(), "UTF-8");
+                                else*/
+                                content = URLDecoder.decode(mPostsList.get(position).getPostText(), "UTF-8");
                                 //content = replacer(sb.append(mPostsList.get(position).getPostText()));
                             } catch (Exception e) {
                                 e.printStackTrace();

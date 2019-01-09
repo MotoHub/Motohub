@@ -420,11 +420,11 @@ public class PromoterOrUserAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                         String mMyFollowingsID = Utility.getInstance().getMyFollowersFollowingsID(mCurrentProfileResModel.getFollowprofile_by_ProfileID(), false);
                         if (mMyFollowingsID != null) {
                             try {
-                                if (mPostsList.get(position).getCaption().contains(" ")) {
+                                /*if (mPostsList.get(position).getCaption().contains(" ")) {
                                     content = mPostsList.get(position).getCaption();
-                                } else {
-                                    content = URLDecoder.decode(mPostsList.get(position).getCaption(), "UTF-8");
-                                }
+                                } else {*/
+                                content = URLDecoder.decode(mPostsList.get(position).getCaption(), "UTF-8");
+                                //}
 
                                 //content = replacer(sb.append(mPostsList.get(position).getCaption()));
                             } catch (Exception e) {

@@ -124,28 +124,34 @@ public class OnDemanAudoVideoView extends BaseActivity {
     }
 
     private void initView() {
-        setSwipeListenerForVideoView();
-        checkPosition = getIntent().getIntExtra(AppConstants.POSITION, 0);
-        mPostsList = (ArrayList<PromoterVideoModel.Resource>) getIntent().getSerializableExtra(AppConstants.ONDEMAND_DATA);
-        //mMyProfileResModel = (ProfileResModel) getIntent().getSerializableExtra(AppConstants.MY_PROFILE_OBJ);
-        //mMyProfileResModel = MotoHub.getApplicationInstance().getmProfileResModel();
-        mMyProfileResModel = EventBus.getDefault().getStickyEvent(ProfileResModel.class);
-        mFilter = getIntent().getStringExtra("Filter");
+        try {
+            setSwipeListenerForVideoView();
+            checkPosition = getIntent().getIntExtra(AppConstants.POSITION, 0);
+            mPostsList = (ArrayList<PromoterVideoModel.Resource>) getIntent().getSerializableExtra(AppConstants.ONDEMAND_DATA);
+            //mMyProfileResModel = (ProfileResModel) getIntent().getSerializableExtra(AppConstants.MY_PROFILE_OBJ);
+            //mMyProfileResModel = MotoHub.getApplicationInstance().getmProfileResModel();
+            mMyProfileResModel = EventBus.getDefault().getStickyEvent(ProfileResModel.class);
+            mFilter = getIntent().getStringExtra("Filter");
 
-        mOtherProfileID = Integer.parseInt(mPostsList.get(pos).getProfileID());
-        mMyProfileID = mMyProfileResModel.getID();
-        pos = checkPosition;
+            mOtherProfileID = Integer.parseInt(mPostsList.get(pos).getProfileID());
+            if (mMyProfileResModel != null) {
+                mMyProfileID = mMyProfileResModel.getID();
+            }
+            pos = checkPosition;
 
-        if (isAlreadyLikedPost()) {
-            mLikeBtn.setBackground(ContextCompat.getDrawable(this, R.drawable.like_click_to_like_bg));
-            mLikeCountTxt.setText("unlike");
-            mLikeBtn.setTag("unlike");
-        } else {
-            mLikeBtn.setBackground(ContextCompat.getDrawable(this, R.drawable.like_to_like_click_bg));
-            mLikeBtn.setTag("like");
-            mLikeCountTxt.setText("like");
+            if (isAlreadyLikedPost()) {
+                mLikeBtn.setBackground(ContextCompat.getDrawable(this, R.drawable.like_click_to_like_bg));
+                mLikeCountTxt.setText("unlike");
+                mLikeBtn.setTag("unlike");
+            } else {
+                mLikeBtn.setBackground(ContextCompat.getDrawable(this, R.drawable.like_to_like_click_bg));
+                mLikeBtn.setTag("like");
+                mLikeCountTxt.setText("like");
+            }
+            isAlreadyFollowed();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        isAlreadyFollowed();
     }
 
     @Override
