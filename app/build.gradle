@@ -4,18 +4,18 @@ buildscript {
     }
 
     dependencies {
-        classpath 'io.fabric.tools:gradle:1.+'
+        classpath 'io.fabric.tools:gradle:1.27.0'
     }
 }
 apply plugin: 'com.android.application'
 apply plugin: 'io.fabric'
 android {
-    compileSdkVersion 27
-    buildToolsVersion '27.0.3'
+    compileSdkVersion rootProject.ext.compileSdkVersion
+    buildToolsVersion rootProject.ext.buildToolsVersion
     defaultConfig {
         applicationId "online.motohub"
-        minSdkVersion 19
-        targetSdkVersion 27
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 72
         versionName "1.19.02"
         multiDexEnabled true
@@ -66,26 +66,26 @@ repositories {
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     //noinspection GradleCompatible
-    implementation 'com.android.support:appcompat-v7:27.1.0'
-    implementation 'com.android.support:cardview-v7:27.1.1'
-    implementation 'com.android.support:design:27.1.0'
-    implementation 'com.android.support:animated-vector-drawable:27.1.0'
-    implementation 'com.android.support:customtabs:27.1.0'
-    implementation 'com.android.support:recyclerview-v7:27.1.0'
-    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
+    implementation 'com.android.support:appcompat-v7:'+rootProject.ext.supportLibVersion
+    implementation 'com.android.support:cardview-v7:'+rootProject.ext.supportLibVersion
+    implementation 'com.android.support:design:'+rootProject.ext.supportLibVersion
+    implementation 'com.android.support:animated-vector-drawable:'+rootProject.ext.supportLibVersion
+    implementation 'com.android.support:customtabs:'+rootProject.ext.supportLibVersion
+    implementation 'com.android.support:recyclerview-v7:'+rootProject.ext.supportLibVersion
+    implementation 'com.android.support.constraint:constraint-layout:1.1.3'
     implementation 'de.hdodenhof:circleimageview:2.1.0'
     implementation 'com.google.android:flexbox:0.3.0'
     implementation 'com.github.chrisbanes:PhotoView:1.2.6'
     implementation 'com.github.bumptech.glide:glide:4.3.1'
     implementation 'com.squareup.retrofit2:retrofit:2.3.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
-    implementation 'com.facebook.android:facebook-android-sdk:4.30.0'
+    implementation 'com.facebook.android:facebook-android-sdk:4.31.0'
     implementation 'com.jakewharton:butterknife:8.8.1'
     implementation 'com.android.support:multidex:1.0.3'
-    implementation 'com.google.firebase:firebase-messaging:12.0.0'
-    implementation 'com.google.firebase:firebase-crash:12.0.0'
+    implementation 'com.google.firebase:firebase-messaging:17.3.4'
+    implementation 'com.google.firebase:firebase-crash:16.2.1'
     implementation 'com.stripe:stripe-android:4.1.6'
-    implementation 'com.google.android.gms:play-services-maps:12.0.0'
+    implementation 'com.google.android.gms:play-services-maps:16.0.0'
     implementation 'com.wowza.gocoder.sdk.android:com.wowza.gocoder.sdk:2.0@aar'
     implementation 'com.google.android.exoplayer:exoplayer:r2.4.0'
     implementation 'me.dm7.barcodescanner:zxing:1.9'
@@ -98,7 +98,7 @@ dependencies {
     implementation 'com.tbruyelle.rxpermissions2:rxpermissions:0.9.5@aar'
     implementation 'com.squareup.picasso:picasso:2.5.2'
     implementation 'com.plattysoft.leonids:LeonidsLib:1.3.2'
-    implementation 'com.amazonaws:aws-android-sdk-s3:2.6.+'
+    implementation 'com.amazonaws:aws-android-sdk-s3:2.6.31'
     implementation 'com.facebook.shimmer:shimmer:0.1.0@aar'
     implementation 'org.greenrobot:eventbus:3.1.1'
     implementation project(':pedrovlc')
