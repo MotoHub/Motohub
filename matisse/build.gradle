@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 apply plugin: 'com.android.library'
-apply plugin: 'com.novoda.bintray-release'z
+apply plugin: 'com.novoda.bintray-release'
 apply plugin: 'checkstyle'
 
 android {

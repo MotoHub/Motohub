@@ -1,1 +1,1 @@
-include ':app', ':pedrovlc', ':libvlc', ':videocompress',':zmatisse'
+include ':app', ':pedrovlc', ':libvlc', ':videocompress',':matisse'
