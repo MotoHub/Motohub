@@ -57,28 +57,32 @@ public class EventAddOnAdapter extends RecyclerView.Adapter<EventAddOnAdapter.Ho
 
     @Override
     public void onBindViewHolder(final Holder mHolder, int pos) {
-        mHolder.mAddOnDescTxt.setText(mEventAddOnList.get(pos).getAddOnDescription());
+        try {
+            mHolder.mAddOnDescTxt.setText(mEventAddOnList.get(pos).getAddOnDescription());
 
-        mAmount = "+ " + "$ " + (mEventAddOnList.get(mHolder.getLayoutPosition()).getAddOnPrice()/100);
-        mHolder.mAddOnToggleBtn.setText(mAmount);
-        mHolder.mAddOnToggleBtn.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked){
-                    mSelectedEventAddOn.add(mEventAddOnList.get(mHolder.getLayoutPosition()));
-                    String mTempText = "- " +  "$ " + (mEventAddOnList.get(mHolder.getLayoutPosition()).getAddOnPrice()/100);
-                    mHolder.mAddOnToggleBtn.setTextOn(mTempText);
-                    ((EventsAddOnActivity)mContext).increaseTotalAmount(mEventAddOnList.get(mHolder.getLayoutPosition()).getAddOnPrice());
-                } else{
-                    if(mSelectedEventAddOn.contains(mEventAddOnList.get(mHolder.getLayoutPosition()))){
-                        mSelectedEventAddOn.remove(mEventAddOnList.get(mHolder.getLayoutPosition()));
+            mAmount = "+ " + "$ " + (mEventAddOnList.get(mHolder.getLayoutPosition()).getAddOnPrice() / 100);
+            mHolder.mAddOnToggleBtn.setText(mAmount);
+            mHolder.mAddOnToggleBtn.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    if (isChecked) {
+                        mSelectedEventAddOn.add(mEventAddOnList.get(mHolder.getLayoutPosition()));
+                        String mTempText = "- " + "$ " + (mEventAddOnList.get(mHolder.getLayoutPosition()).getAddOnPrice() / 100);
+                        mHolder.mAddOnToggleBtn.setTextOn(mTempText);
+                        ((EventsAddOnActivity) mContext).increaseTotalAmount(mEventAddOnList.get(mHolder.getLayoutPosition()).getAddOnPrice());
+                    } else {
+                        if (mSelectedEventAddOn.contains(mEventAddOnList.get(mHolder.getLayoutPosition()))) {
+                            mSelectedEventAddOn.remove(mEventAddOnList.get(mHolder.getLayoutPosition()));
+                        }
+                        String mTempText = "+ " + "$ " + (mEventAddOnList.get(mHolder.getLayoutPosition()).getAddOnPrice() / 100);
+                        mHolder.mAddOnToggleBtn.setTextOff(mTempText);
+                        ((EventsAddOnActivity) mContext).decreaseTotalAmount(mEventAddOnList.get(mHolder.getLayoutPosition()).getAddOnPrice());
                     }
-                    String mTempText = "+ " +  "$ " + (mEventAddOnList.get(mHolder.getLayoutPosition()).getAddOnPrice()/100);
-                    mHolder.mAddOnToggleBtn.setTextOff(mTempText);
-                    ((EventsAddOnActivity)mContext).decreaseTotalAmount(mEventAddOnList.get(mHolder.getLayoutPosition()).getAddOnPrice());
                 }
-            }
-        });
+            });
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     public ArrayList<EventAddOnModel> getSelectedEventAddOn(){

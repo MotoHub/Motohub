@@ -1,48 +1,55 @@
 package online.motohub.fragment.promoter;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.jakewharton.rxbinding.widget.RxTextView;
+
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 import online.motohub.R;
 import online.motohub.activity.BaseActivity;
 import online.motohub.activity.ViewSpecLiveActivity;
 import online.motohub.adapter.GalleryVideoAdapter;
+import online.motohub.application.MotoHub;
 import online.motohub.fragment.BaseFragment;
 import online.motohub.model.GalleryVideoModel;
 import online.motohub.model.GalleryVideoResModel;
-import online.motohub.model.promoter_club_news_media.PromotersModel;
 import online.motohub.model.promoter_club_news_media.PromotersResModel;
 import online.motohub.retrofit.APIConstants;
 import online.motohub.retrofit.RetrofitClient;
 import online.motohub.util.AppConstants;
 import online.motohub.util.RecyclerClick_Listener;
 import online.motohub.util.RecyclerTouchListener;
-
-import static android.content.Context.INPUT_METHOD_SERVICE;
+import rx.Observer;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Func1;
+import rx.schedulers.Schedulers;
 
 public class PromoterVideosFragment extends BaseFragment {
 
     public static final String TAG = PromoterVideosFragment.class.getSimpleName();
+    private static String mSearchStr = "";
+    public boolean mRefresh = true;
     @BindView(R.id.rv_videos)
     RecyclerView mRv;
     @BindView(R.id.search_edt)
@@ -51,6 +58,7 @@ public class PromoterVideosFragment extends BaseFragment {
     TextView txtNoData;
     @BindView(R.id.parent)
     LinearLayout parent;
+    GridLayoutManager layoutManager;
     private ArrayList<GalleryVideoResModel> videoResModels;
     /*final GalleryVideoAdapter.OnItemClickListener onItemClickListener = new GalleryVideoAdapter.OnItemClickListener() {
         @Override
@@ -64,8 +72,24 @@ public class PromoterVideosFragment extends BaseFragment {
             }
         }
     };*/
+    private rx.Subscription subscription;
     private GalleryVideoAdapter mAdapter;
     private PromotersResModel mPromotersResModel;
+    private Unbinder mUnBinder;
+    private Activity mActivity;
+    private boolean Isvisible = false;
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        mActivity = (Activity) context;
+    }
+
+    @Override
+    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
+        mRefresh = true;
+    }
 
     @Nullable
     @Override
@@ -76,49 +100,65 @@ public class PromoterVideosFragment extends BaseFragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        ButterKnife.bind(this, view);
+        mUnBinder = ButterKnife.bind(this, view);
+        setupUI(parent);
         initView();
     }
 
-
-
     private void initView() {
-        setupUI(parent);
-        mPromotersResModel = (PromotersResModel) getArguments().getSerializable(PromotersModel.PROMOTERS_RES_MODEL);
-
-        GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), 1);
+        //mPromotersResModel = (PromotersResModel) getArguments().getSerializable(PromotersModel.PROMOTERS_RES_MODEL);
+        //mPromotersResModel = MotoHub.getApplicationInstance().getmPromoterResModel();
+        mPromotersResModel = EventBus.getDefault().getStickyEvent(PromotersResModel.class);
+        layoutManager = new GridLayoutManager(getActivity(), 2);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mRv.setLayoutManager(layoutManager);
-
         videoResModels = new ArrayList<>();
         mAdapter = new GalleryVideoAdapter(getActivity(), videoResModels);
         mRv.setAdapter(mAdapter);
-
         //mAdapter.setOnItemClickListener(onItemClickListener);
-
-       /* if (videoResModels.size() == 0)
-            searchEdt.setVisibility(View.GONE);*/
-
-        searchEdt.addTextChangedListener(new TextWatcher() {
+/*        searchEdt.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
             }
-
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-
             }
-
             @Override
             public void afterTextChanged(Editable s) {
                 if (s.length() != 0) {
                     filter(s.toString());
+                } else {
+                    mAdapter.filterList(videoResModels);
                 }
-
             }
-        });
+        });*/
+        subscription = RxTextView.textChanges(searchEdt)
+                .debounce(500, TimeUnit.MILLISECONDS)
+                .observeOn(Schedulers.computation())
+                .filter(new Func1<CharSequence, Boolean>() {
+                    @Override
+                    public Boolean call(CharSequence charSequence) {
+                        SystemClock.sleep(1000); // Simulate the heavy stuff.
+                        return true;
+                    }
+                })
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<CharSequence>() {
+                    @Override
+                    public void onCompleted() {
+                    }
 
+                    @Override
+                    public void onError(Throwable e) {
+                    }
+
+                    @Override
+                    public void onNext(CharSequence charSequence) {
+                        String mSearchstr = charSequence.toString();
+                        findvideos(mSearchstr);
+                    }
+                });
         mRv.addOnItemTouchListener(new RecyclerTouchListener(getActivity(), mRv, new RecyclerClick_Listener() {
             @Override
             public void onClick(View view, int position) {
@@ -137,32 +177,112 @@ public class PromoterVideosFragment extends BaseFragment {
                 //Select item on long click
             }
         }));
+        /*mRv.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                int mVisibleItemCount = layoutManager.getChildCount();
+                int mTotalItemCount = layoutManager.getItemCount();
+                int mFirstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition();
+                if (!mIsPostsRvLoading && !(mPostsRvOffset >= mPostsRvTotalCount)) {
+                    if ((mVisibleItemCount + mFirstVisibleItemPosition) >= mTotalItemCount
+                            && mFirstVisibleItemPosition >= 0) {
+                        mIsPostsRvLoading = true;
+                        getVideoDataFromAPi();
+                    }
+                }
+            }
+        });*/
+    }
+
+    @Override
+    public void setRefresh(boolean refresh) {
+        super.setRefresh(refresh);
+        this.mRefresh = refresh;
+    }
+
+    public void onRefresh() {
+        setRefresh(true);
+        //getVideoDataFromAPi();
     }
 
     private void getVideoDataFromAPi() {
-        String mFilter = "(ProfileID=" + mPromotersResModel.getUserId() + ") AND (" + APIConstants.UserType + "=promoter)";
+        String mFilter = "(UserID=" + mPromotersResModel.getUserId() + ") AND ((" + APIConstants.UserType + "=promoter) OR ("
+                + APIConstants.UserType + " = " + AppConstants.USER_EVENT_VIDEOS + "))";
+        /*RetrofitClient.getRetrofitInstance()
+                .getPromoterVideoGallery1((BaseActivity) getActivity(),
+                        mFilter, RetrofitClient.GET_VIDEO_FILE_RESPONSE, mDataLimit, mPostsRvOffset);*/
         RetrofitClient.getRetrofitInstance()
-                .getPromoterVideoGallery((BaseActivity) getActivity(),
-                        mFilter, RetrofitClient.GET_VIDEO_FILE_RESPONSE);
+                .getPromoterVideoGallery((BaseActivity) getActivity(), mFilter, RetrofitClient.GET_VIDEO_FILE_RESPONSE);
+    }
+
+    private void findvideos(String searchstr) {
+        mSearchStr = searchstr;
+        if ((mSearchStr.trim().isEmpty() || mSearchStr.length() == 0) && Isvisible) {
+            getVideoDataFromAPi();
+        } else if (Isvisible) {
+            videoResModels.clear();
+            searchVideoDataFromApi();
+        }
+    }
+
+    private void searchVideoDataFromApi() {
+        String mFilter = "(UserID=" + mPromotersResModel.getUserId() + ") AND (Caption like '%" + mSearchStr + "%') AND ((" + APIConstants.UserType + "=promoter) OR ("
+                + APIConstants.UserType + " = " + AppConstants.USER_EVENT_VIDEOS + "))";
+        /*RetrofitClient.getRetrofitInstance().getPromoterVideoGallery1((BaseActivity) getActivity(),
+                mFilter, RetrofitClient.SEARCH_VIDEO_FILE_RESPONSE, mDataLimit, mPostsRvOffset);*/
+        RetrofitClient.getRetrofitInstance()
+                .getPromoterVideoGallery((BaseActivity) getActivity(), mFilter, RetrofitClient.SEARCH_VIDEO_FILE_RESPONSE);
     }
 
     @Override
     public void retrofitOnResponse(Object responseObj, int responseType) {
         super.retrofitOnResponse(responseObj, responseType);
+        GalleryVideoModel videoModel = (GalleryVideoModel) responseObj;
         switch (responseType) {
             case RetrofitClient.GET_VIDEO_FILE_RESPONSE:
-                GalleryVideoModel videoModel = (GalleryVideoModel) responseObj;
+                mRefresh = false;
+                Isvisible = true;
                 if (videoModel != null && videoModel.getResModelList().size() > 0) {
                     videoResModels.clear();
                     videoResModels.addAll(videoModel.getResModelList());
-                    mAdapter.notifyDataSetChanged();
+                    mRv.setVisibility(View.VISIBLE);
+                    txtNoData.setVisibility(View.GONE);
                 } else {
                     ((BaseActivity) getActivity()).showToast(getActivity(), getString(R.string.video_not_found));
                     mRv.setVisibility(View.GONE);
                     txtNoData.setVisibility(View.VISIBLE);
                     searchEdt.setVisibility(View.GONE);
                 }
+                mAdapter.notifyDataSetChanged();
                 break;
+            case RetrofitClient.SEARCH_VIDEO_FILE_RESPONSE:
+                mRefresh = false;
+                if (videoModel != null && videoModel.getResModelList().size() > 0) {
+                    videoResModels.clear();
+                    videoResModels.addAll(videoModel.getResModelList());
+                    mRv.setVisibility(View.VISIBLE);
+                    txtNoData.setVisibility(View.GONE);
+                } else {
+                    ((BaseActivity) getActivity()).showToast(getActivity(), getString(R.string.video_not_found));
+                    mRv.setVisibility(View.GONE);
+                    txtNoData.setVisibility(View.VISIBLE);
+                }
+                mAdapter.notifyDataSetChanged();
+                break;
+        }
+    }
+
+    @Override
+    public void retrofitOnError(int code, String message) {
+        super.retrofitOnError(code, message);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if (mUnBinder != null) {
+            mUnBinder.unbind();
         }
     }
 
@@ -173,12 +293,10 @@ public class PromoterVideosFragment extends BaseFragment {
             getVideoDataFromAPi();
     }
 
-
     private void filter(String text) {
         ArrayList<GalleryVideoResModel> temp = new ArrayList();
         for (GalleryVideoResModel d : videoResModels) {
-            //or use .equal(text) with you want equal match
-            //use .toLowerCase() for better matches
+            //use .toLowerCase() for better matches or use .equal(text) with you want equal match
             if (d.getCaption().toLowerCase().contains(text.toLowerCase())) {
                 temp.add(d);
             }
@@ -193,46 +311,6 @@ public class PromoterVideosFragment extends BaseFragment {
             txtNoData.setVisibility(View.VISIBLE);
             mRv.setVisibility(View.GONE);
         }
-    }
-
-    public void setupUI(View view) {
-
-        if (!(view instanceof EditText)) {
-            view.setOnTouchListener(new View.OnTouchListener() {
-
-                @Override
-                public boolean onTouch(View v, MotionEvent event) {
-                    hideSoftKeyboard(getActivity());
-                    return false;
-                }
-            });
-        }
-        if (view instanceof ViewGroup) {
-
-            for (int i = 0; i < ((ViewGroup) view).getChildCount(); i++) {
-                View mInnerView = ((ViewGroup) view).getChildAt(i);
-                setupUI(mInnerView);
-            }
-        }
-    }
-
-    public void hideSoftKeyboard(Activity mActivity) {
-        try {
-            if (mActivity != null && !mActivity.isFinishing()) {
-                InputMethodManager mInputMethodManager = (InputMethodManager) mActivity
-                        .getSystemService(INPUT_METHOD_SERVICE);
-
-                if (mActivity.getCurrentFocus() != null
-                        && mActivity.getCurrentFocus().getWindowToken() != null) {
-                    mInputMethodManager.hideSoftInputFromWindow(mActivity
-                            .getCurrentFocus().getWindowToken(), 0);
-
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
     }
 
 }

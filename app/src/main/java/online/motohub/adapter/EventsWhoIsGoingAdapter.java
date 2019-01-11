@@ -128,6 +128,8 @@ public class EventsWhoIsGoingAdapter extends ArrayAdapter<EventsWhoIsGoingResMod
 
                 mWhoIsGoingListData = (List<EventsWhoIsGoingResModel>) results.values; // has the filtered values
                 notifyDataSetChanged();  // notifies the data with new filtered values
+                if(mWhoIsGoingListData.size() == 0)
+                    ((BaseActivity)mContext).showToast(mContext, mContext.getString(R.string.no_result_err));
 
             }
         };

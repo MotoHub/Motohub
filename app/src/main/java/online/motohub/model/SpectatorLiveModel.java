@@ -8,6 +8,9 @@ import java.util.ArrayList;
 
 public class SpectatorLiveModel {
 
+    public static final String TABLE = "SpectatorTable";
+    public static final String ID = "id";
+
     public static final String CAPTION = "Caption";
     public static final String FILEURL = "VideoUrl";
     public static final String OTHERPROFILEID = "OtherProfileID";

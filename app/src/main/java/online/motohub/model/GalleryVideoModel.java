@@ -3,6 +3,7 @@ package online.motohub.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
@@ -11,6 +12,18 @@ public class GalleryVideoModel implements Parcelable {
 
     @SerializedName("resource")
     private List<GalleryVideoResModel> resModelList;
+
+    @SerializedName("meta")
+    @Expose
+    private MetaModel meta;
+
+    public MetaModel getMeta() {
+        return meta;
+    }
+
+    public void setMeta(MetaModel meta) {
+        this.meta = meta;
+    }
 
     private GalleryVideoModel(Parcel in) {
         resModelList = in.createTypedArrayList(GalleryVideoResModel.CREATOR);

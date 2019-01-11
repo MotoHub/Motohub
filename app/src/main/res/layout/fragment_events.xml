@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.RecyclerView android:id="@+id/events_list_view"
     style="@style/LayoutMatch"
     android:divider="@android:color/transparent"

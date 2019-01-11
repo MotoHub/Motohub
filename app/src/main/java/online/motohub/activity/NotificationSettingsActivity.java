@@ -11,6 +11,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import online.motohub.R;
+import online.motohub.util.DialogManager;
 import online.motohub.util.PreferenceUtils;
 
 public class NotificationSettingsActivity extends BaseActivity {
@@ -88,6 +89,12 @@ public class NotificationSettingsActivity extends BaseActivity {
                 finish();
                 break;
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        DialogManager.hideProgress();
+        super.onDestroy();
     }
 }
 

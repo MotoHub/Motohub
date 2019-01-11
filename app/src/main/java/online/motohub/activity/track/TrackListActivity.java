@@ -1,12 +1,13 @@
 package online.motohub.activity.track;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.LinearLayout;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,36 +19,30 @@ import butterknife.OnClick;
 import online.motohub.R;
 import online.motohub.activity.BaseActivity;
 import online.motohub.adapter.TrackAdapter;
-import online.motohub.model.ProfileModel;
+import online.motohub.application.MotoHub;
 import online.motohub.model.ProfileResModel;
 import online.motohub.model.SessionModel;
 import online.motohub.model.promoter_club_news_media.PromotersModel;
 import online.motohub.model.promoter_club_news_media.PromotersResModel;
 import online.motohub.retrofit.RetrofitClient;
+import online.motohub.util.DialogManager;
 import online.motohub.util.PreferenceUtils;
 
-import static online.motohub.activity.promoter.PromotersListActivity.PROMOTER_FOLLOW_RESPONSE;
+public class TrackListActivity extends BaseActivity {
 
-public class TrackListActivity extends BaseActivity  {
-
+    public static final String EXTRA_PROFILE_DATA = "extra_profile_data";
     @BindView(R.id.track_list_parent_view)
     LinearLayout mParentView;
-
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
-
     @BindView(R.id.track_list_rv)
     RecyclerView mTrackListRv;
-
     List<PromotersResModel> mTrackResModelsList;
     TrackAdapter mTrackAdapter;
-
     @BindString(R.string.internet_failure)
     String mInternetFailed;
-
     @BindString(R.string.now_track_error)
     String mTracksFoundErr;
-    public static final String EXTRA_PROFILE_DATA = "extra_profile_data";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,12 +57,20 @@ public class TrackListActivity extends BaseActivity  {
 
     }
 
+    @Override
+    protected void onDestroy() {
+        DialogManager.hideProgress();
+        super.onDestroy();
+    }
+
     private void initRv() {
 
         setToolbar(mToolbar, getString(R.string.Tracks));
         showToolbarBtn(mToolbar, R.id.toolbar_back_img_btn);
 
-        ProfileResModel mProfileResModel = (ProfileResModel) getIntent().getSerializableExtra(EXTRA_PROFILE_DATA);
+        //ProfileResModel mProfileResModel = (ProfileResModel) getIntent().getSerializableExtra(EXTRA_PROFILE_DATA);
+        //ProfileResModel mProfileResModel = MotoHub.getApplicationInstance().getmProfileResModel();
+        ProfileResModel mProfileResModel = EventBus.getDefault().getStickyEvent(ProfileResModel.class);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(TrackListActivity.this);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -79,7 +82,7 @@ public class TrackListActivity extends BaseActivity  {
 
     }
 
-    @Override
+    /*@Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(resultCode == RESULT_OK) {
@@ -96,7 +99,7 @@ public class TrackListActivity extends BaseActivity  {
                     break;
             }
         }
-    }
+    }*/
 
     @Override
     public void onBackPressed() {
@@ -129,7 +132,7 @@ public class TrackListActivity extends BaseActivity  {
     @Override
     public void retrofitOnResponse(Object responseObj, int responseType) {
         super.retrofitOnResponse(responseObj, responseType);
-       if (responseObj instanceof PromotersModel) {
+        if (responseObj instanceof PromotersModel) {
 
             PromotersModel mPromotersModel = (PromotersModel) responseObj;
 
@@ -152,16 +155,16 @@ public class TrackListActivity extends BaseActivity  {
 
         } else if (responseObj instanceof SessionModel) {
 
-           SessionModel mSessionModel = (SessionModel) responseObj;
-           if (mSessionModel.getSessionToken() == null) {
-               PreferenceUtils.getInstance(this).saveStrData(PreferenceUtils.SESSION_TOKEN, mSessionModel.getSessionId());
-           } else {
-               PreferenceUtils.getInstance(this).saveStrData(PreferenceUtils.SESSION_TOKEN, mSessionModel.getSessionToken());
-           }
+            SessionModel mSessionModel = (SessionModel) responseObj;
+            if (mSessionModel.getSessionToken() == null) {
+                PreferenceUtils.getInstance(this).saveStrData(PreferenceUtils.SESSION_TOKEN, mSessionModel.getSessionId());
+            } else {
+                PreferenceUtils.getInstance(this).saveStrData(PreferenceUtils.SESSION_TOKEN, mSessionModel.getSessionToken());
+            }
 
-           getAllTrackList();
+            getAllTrackList();
 
-       }
+        }
 
     }
 

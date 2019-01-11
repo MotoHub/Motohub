@@ -102,34 +102,38 @@ public class StreamAcceptedUserAdapter extends RecyclerView.Adapter<RecyclerView
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int pos) {
         switch (getItemViewType(pos)) {
             case VIEW_TYPE_ITEM:
-                final Holder mHolder = (Holder) holder;
-                LiveStreamRequestEntity mEntity = mStreamUserList.get(pos);
-                String imgStr = mEntity.getProfiles_by_ReceiverProfileID().getProfilePicture();
-                if (!imgStr.isEmpty()) {
-                    ((BaseActivity) mContext).setImageWithGlide(mHolder.mUserImg, imgStr, R.drawable.default_profile_icon);
-                } else {
-                    mHolder.mUserImg.setImageResource(R.drawable.default_profile_icon);
-                }
-                mHolder.mSendRequestBtn.setText(mContext.getString(R.string.start_live_stream));
-                mHolder.mSendRequestBtn.setVisibility(View.GONE);
-                mHolder.mUserImg.setTag(pos);
-                mHolder.mUserImg.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        int selPos = (int) v.getTag();
+                try {
+                    final Holder mHolder = (Holder) holder;
+                    LiveStreamRequestEntity mEntity = mStreamUserList.get(pos);
+                    String imgStr = mEntity.getProfiles_by_ReceiverProfileID().getProfilePicture();
+                    if (!imgStr.isEmpty()) {
+                        ((BaseActivity) mContext).setImageWithGlide(mHolder.mUserImg, imgStr, R.drawable.default_profile_icon);
+                    } else {
+                        mHolder.mUserImg.setImageResource(R.drawable.default_profile_icon);
+                    }
+                    mHolder.mSendRequestBtn.setText(mContext.getString(R.string.start_live_stream));
+                    mHolder.mSendRequestBtn.setVisibility(View.GONE);
+                    mHolder.mUserImg.setTag(pos);
+                    mHolder.mUserImg.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            int selPos = (int) v.getTag();
 
-                    }
-                });
-                mHolder.mSendRequestBtn.setTag(pos);
-                mHolder.mSendRequestBtn.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        selPos = (int) v.getTag();
-                        int receiverProfileID = mStreamUserList.get(selPos).getReceiverProfileID();
-                        startSingleStream(receiverProfileID);
-                    }
-                });
-                mHolder.mUserNameTxt.setText(mEntity.getProfiles_by_ReceiverProfileID().getDriver());
+                        }
+                    });
+                    mHolder.mSendRequestBtn.setTag(pos);
+                    mHolder.mSendRequestBtn.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            selPos = (int) v.getTag();
+                            int receiverProfileID = mStreamUserList.get(selPos).getReceiverProfileID();
+                            startSingleStream(receiverProfileID);
+                        }
+                    });
+                    mHolder.mUserNameTxt.setText(mEntity.getProfiles_by_ReceiverProfileID().getDriver());
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
                 break;
             case VIEW_TYPE_LOADING:
                 ViewHolderLoader mViewHolderLoader = (ViewHolderLoader) holder;

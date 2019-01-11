@@ -9,23 +9,14 @@ import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.lang.reflect.Type;
-import java.util.ArrayList;
-
 import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import de.hdodenhof.circleimageview.CircleImageView;
 import online.motohub.R;
-import online.motohub.model.ProfileResModel;
 import online.motohub.util.AppConstants;
+import online.motohub.util.DialogManager;
 
 import static android.view.View.VISIBLE;
 
@@ -56,7 +47,11 @@ public class ReportWritePostActivity extends BaseActivity {
         setToolbar(mToolbar, mToolbarTitle);
         initView();
     }
-
+    @Override
+    protected void onDestroy() {
+        DialogManager.hideProgress();
+        super.onDestroy();
+    }
     private void initView() {
         setupUI(mReportWritePostLayout);
         toolBack.setVisibility(VISIBLE);

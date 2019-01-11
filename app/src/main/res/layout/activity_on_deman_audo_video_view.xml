@@ -1,78 +1,158 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/parent"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorBlack"
     android:keepScreenOn="true">
 
-    <FrameLayout
+    <!-- <FrameLayout
+         android:layout_width="match_parent"
+         android:layout_height="match_parent"
+         android:background="@color/colorBlack">-->
+
+    <Button
+        android:id="@+id/btn_skip"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/size30"
+        android:layout_gravity="end"
+        android:layout_marginEnd="@dimen/size5"
+        android:layout_marginTop="@dimen/size5"
+        android:background="@drawable/black_rect_btn"
+        android:text="@string/skip"
+        android:textAllCaps="false"
+        android:textColor="@color/colorOrange"
+        app:layout_constraintRight_toRightOf="@id/parent" />
+
+    <Button
+        android:id="@+id/likeBtn"
+        android:layout_width="@dimen/size32"
+        android:layout_height="@dimen/size32"
+        android:background="@drawable/like_to_like_click_bg"
+        android:contentDescription="@string/like"
+        android:gravity="center"
+        android:padding="@dimen/size5"
+        app:layout_constraintBottom_toTopOf="@+id/like_count_txt"
+        app:layout_constraintLeft_toLeftOf="@id/like_count_txt"
+        app:layout_constraintRight_toRightOf="@id/like_count_txt" />
+
+    <Button
+        android:id="@+id/like_count_txt"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/size30"
+        android:layout_below="@+id/likeBtn"
+        android:background="@color/transparent"
+        android:textAllCaps="false"
+        android:textColor="@color/colorOrange"
+        android:textSize="@dimen/text12"
+        app:layout_constraintBottom_toTopOf="@+id/tv_caption"
+        app:layout_constraintLeft_toLeftOf="@+id/parent" />
+
+    <Button
+        android:id="@+id/right_btn"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:background="@drawable/iconsright"
+        app:layout_constraintBottom_toBottomOf="@id/parent"
+        app:layout_constraintRight_toRightOf="@+id/parent"
+        android:visibility="invisible"
+        app:layout_constraintTop_toTopOf="@+id/parent" />
+
+    <Button
+        android:id="@+id/left_btn"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:background="@drawable/iconsleft"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@id/parent"
+        app:layout_constraintLeft_toLeftOf="@id/parent"
+        app:layout_constraintTop_toTopOf="@+id/parent" />
+
+    <Button
+        android:id="@+id/follow_unfollow_btn"
+        android:layout_width="@dimen/size32"
+        android:layout_height="@dimen/size32"
+        android:layout_below="@+id/like_count_txt"
+        android:layout_marginTop="@dimen/size10"
+        android:background="@drawable/ic_follow"
+        android:contentDescription="@string/app_name"
+        android:visibility="visible"
+        app:layout_constraintBottom_toTopOf="@+id/follow_count_txt"
+        app:layout_constraintLeft_toLeftOf="@+id/follow_count_txt"
+        app:layout_constraintRight_toRightOf="@+id/follow_count_txt" />
+
+    <Button
+        android:id="@+id/follow_count_txt"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/size30"
+        android:layout_below="@+id/likeBtn"
+        android:background="@color/transparent"
+        android:textAllCaps="false"
+        android:textColor="@color/colorOrange"
+        android:textSize="@dimen/text12"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="@+id/parent"
+        app:layout_constraintBottom_toTopOf="@+id/tv_caption"
+        app:layout_constraintRight_toRightOf="@+id/parent" />
+
+    <com.google.android.exoplayer2.ui.SimpleExoPlayerView
+        android:id="@+id/video_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/colorBlack">
+        android:background="@color/colorBlack"
+        app:resize_mode="fit" />
 
-        <Button
-            android:id="@+id/btn_skip"
-            android:layout_width="wrap_content"
-            android:layout_height="@dimen/size30"
-            android:layout_gravity="end"
-            android:layout_marginEnd="@dimen/size5"
-            android:layout_marginTop="@dimen/size5"
-            android:background="@drawable/black_rect_btn"
-            android:text="@string/skip"
-            android:textAllCaps="false"
-            android:textColor="@color/colorOrange" />
-
-        <com.google.android.exoplayer2.ui.SimpleExoPlayerView
-            android:id="@+id/video_view"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:resize_mode="fit" />
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="top"
-            android:gravity="start"
-            android:paddingStart="@dimen/size10"
-            android:visibility="gone">
-
-            <TextView
-                android:id="@+id/tv_name"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@android:color/transparent"
-                android:text="@string/caption"
-                android:textColor="@color/colorBlack" />
-
-            <TextView
-                android:id="@+id/tv_time"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/tv_name"
-                android:background="@color/transparent"
-                android:text="@string/caption"
-                android:textColor="@color/colorBlack" />
-        </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top"
+        android:gravity="start"
+        android:paddingStart="@dimen/size10"
+        android:visibility="gone">
 
         <TextView
-            android:id="@+id/tv_caption"
+            android:id="@+id/tv_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:layout_marginBottom="@dimen/size20"
-            android:background="@color/transparent"
-            android:gravity="center"
-            android:textColor="@color/colorOrange" />
+            android:background="@android:color/transparent"
+            android:text="@string/caption"
+            android:textColor="@color/colorBlack" />
 
-    </FrameLayout>
+        <TextView
+            android:id="@+id/tv_time"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_name"
+            android:background="@color/transparent"
+            android:text="@string/caption"
+            android:textColor="@color/colorBlack" />
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/tv_caption"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_marginBottom="@dimen/size20"
+        android:background="@color/transparent"
+        android:gravity="center"
+        android:textColor="@color/colorOrange"
+        app:layout_constraintBottom_toBottomOf="@id/parent"
+        app:layout_constraintLeft_toLeftOf="@id/parent"
+        app:layout_constraintRight_toRightOf="@id/parent" />
+
+    <!-- </FrameLayout>-->
 
     <ProgressBar
         android:id="@+id/progress_bar"
         style="@style/MyProgressBarTheme"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
         android:theme="@style/MyProgressBarTheme"
-        android:visibility="invisible" />
-</RelativeLayout>
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@id/parent"
+        app:layout_constraintLeft_toLeftOf="@id/parent"
+        app:layout_constraintRight_toRightOf="@id/parent"
+        app:layout_constraintTop_toTopOf="@id/parent" />
+</android.support.constraint.ConstraintLayout>

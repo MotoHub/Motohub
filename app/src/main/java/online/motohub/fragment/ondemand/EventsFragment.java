@@ -1,10 +1,15 @@
 package online.motohub.fragment.ondemand;
 
+
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,19 +19,26 @@ import android.widget.LinearLayout;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import online.motohub.R;
-import online.motohub.adapter.OnDemandNewAdapter;
+import online.motohub.adapter.OnDemandEventsAdapter;
 import online.motohub.application.MotoHub;
 import online.motohub.fragment.BaseFragment;
 import online.motohub.interfaces.OnLoadMoreListener;
 import online.motohub.model.OndemandNewResponse;
 import online.motohub.model.ProfileModel;
 import online.motohub.model.ProfileResModel;
+import online.motohub.model.PromoterVideoModel;
 import online.motohub.retrofit.RetrofitClient;
+import online.motohub.util.AppConstants;
+
+import static android.app.Activity.RESULT_OK;
+
 
 /**
  * Created by pickzy01 on 30/05/2018.
@@ -34,7 +46,8 @@ import online.motohub.retrofit.RetrofitClient;
 
 public class EventsFragment extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener {
 
-    public OnDemandNewAdapter adapter;
+    private final long DELAY = 600;
+    public OnDemandEventsAdapter adapter;
     @BindView(R.id.search_edt)
     EditText searchEdt;
     @BindView(R.id.recycler_view)
@@ -55,6 +68,7 @@ public class EventsFragment extends BaseFragment implements SwipeRefreshLayout.O
     private String mSearchStr = "";
     private int mOffset = 0;
     private boolean mIsLoadMore = false;
+    private Timer timer = new Timer();
     private OnLoadMoreListener mOnLoadMoreListener = new OnLoadMoreListener() {
         @Override
         public void onLoadMore() {
@@ -88,6 +102,7 @@ public class EventsFragment extends BaseFragment implements SwipeRefreshLayout.O
         View obj = inflater.inflate(R.layout.events_fragment, container, false);
         unbinder = ButterKnife.bind(this, obj);
         initView();
+        setupUI(parent);
         return obj;
     }
 
@@ -119,27 +134,60 @@ public class EventsFragment extends BaseFragment implements SwipeRefreshLayout.O
         api_key = getResources().getString(R.string.dream_factory_api_key);
         mCurrentProfileID = MotoHub.getApplicationInstance().getProfileId();
 
-        /*recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-                int mVisibleItemCount = mLinearLayoutManager.getChildCount();
-                int mTotalItemCount = mLinearLayoutManager.getItemCount();
-                int mFirstVisibleItemPosition = mLinearLayoutManager.findFirstVisibleItemPosition();
+        getMyProfiles();
 
-                if (!isLoading && (mOffset < mFeedTotalCount)) {
-                    if ((mVisibleItemCount + mFirstVisibleItemPosition) >= mTotalItemCount
-                            && mFirstVisibleItemPosition >= 0) {
-                        isLoading = true;
-                        if (mOnLoadMoreListener != null) {
-                            mOnLoadMoreListener.onLoadMore();
-                        }
+        searchEdt.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                final String searchStr = s.toString();
+                timer = new Timer();
+                timer.schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                searchOnDemand(searchStr);
+                            }
+                        });
+                        //
                     }
+
+                }, DELAY);
+            }
+        });
+
+    }
+
+    private void searchOnDemand(String searchStr) {
+        try {
+            mSearchStr = searchStr;
+            ArrayList<OndemandNewResponse> temp = new ArrayList();
+            for (OndemandNewResponse d : mListOndemand) {
+                if (d.getName().toLowerCase().contains(mSearchStr.toLowerCase())) {
+                    temp.add(d);
                 }
             }
-        });*/
-
-        getMyProfiles();
+            if (adapter != null) {
+                if (temp.size() > 0) {
+                    adapter.updateList(temp);
+                    recyclerView.setVisibility(View.VISIBLE);
+                } else if (temp.isEmpty() && !mSearchStr.isEmpty()) {
+                    recyclerView.setVisibility(View.GONE);
+                    showSnackBar(parent, getString(R.string.video_not_found));
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void getMyProfiles() {
@@ -147,7 +195,8 @@ public class EventsFragment extends BaseFragment implements SwipeRefreshLayout.O
         if (isNetworkConnected())
             RetrofitClient.getRetrofitInstance().callGetProfiles(this, mFilter, RetrofitClient.GET_PROFILE_RESPONSE);
         else {
-            showSnackBar(parent, getActivity().getResources().getString(R.string.internet_err));
+            Snackbar snackbar = Snackbar.make(getActivity().findViewById(R.id.parent), getActivity().getResources().getString(R.string.internet_err), Snackbar.LENGTH_LONG);
+            snackbar.show();
         }
     }
 
@@ -166,25 +215,61 @@ public class EventsFragment extends BaseFragment implements SwipeRefreshLayout.O
      */
     @Override
     public void onRefresh() {
-        getMyProfiles();
+        searchEdt.setText(null);
+        //recyclerView.getRecycledViewPool().clear();
+        callApi();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            switch (requestCode) {
+                case AppConstants.ONDEMAND_REQUEST:
+                    assert data.getExtras() != null;
+                    /*DialogManager.showProgress(getActivity());
+                    mPromoterVideoList.clear();*/
+                    ArrayList<PromoterVideoModel.Resource> mTempPromoterVideoList = (ArrayList<PromoterVideoModel.Resource>) data.getExtras().getSerializable(AppConstants.VIDEO_LIST);
+                    /*mPromoterVideoList.addAll(mTempPromoterVideoList);
+                    mAdapter.notifyDataSetChanged();
+                    DialogManager.hideProgress();*/
+                    break;
+            }
+        }
     }
 
     private void setAdapter() {
-        if (adapter == null) {
-            adapter = new OnDemandNewAdapter(getActivity(), mListOndemand, mCurrentProfileID, mMyProfileResModel);
-            recyclerView.setAdapter(adapter);
-        } else {
-            adapter.notifyDataSetChanged();
-        }
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                // Do whatever you want
+                try {
+                    if (adapter == null && mMyProfileResModel.getID() != 0) {
+                        adapter = new OnDemandEventsAdapter(getActivity(), mListOndemand, mCurrentProfileID, mMyProfileResModel);
+                        recyclerView.setAdapter(adapter);
+                    } else {
+                        adapter.notifyDataSetChanged();
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
     }
 
     @Override
     public void retrofitOnResponse(ArrayList<OndemandNewResponse> responseObj, int responseType) {
         super.retrofitOnResponse(responseObj, responseType);
-        swipeContainer.setRefreshing(false);
-        if (RetrofitClient.CALL_GET_NOTIFICATIONS == responseType) {
-            mListOndemand.addAll(responseObj);
-            setAdapter();
+        try {
+            swipeContainer.setRefreshing(false);
+            if (RetrofitClient.CALL_GET_NOTIFICATIONS == responseType) {
+                mListOndemand.clear();
+                mListOndemand.addAll(responseObj);
+                setAdapter();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -198,7 +283,9 @@ public class EventsFragment extends BaseFragment implements SwipeRefreshLayout.O
                 mMyProfileResModel = mProfileModel.getResource().get(0);
                 callApi();
             } else {
-                showSnackBar(parent, getActivity().getResources().getString(R.string.no_profile_found_err));
+                //showSnackBar(parent, getActivity().getResources().getString(R.string.no_profile_found_err));
+                Snackbar snackbar = Snackbar.make(getActivity().findViewById(R.id.parent), getActivity().getResources().getString(R.string.no_profile_found_err), Snackbar.LENGTH_LONG);
+                snackbar.show();
             }
         }
     }
@@ -206,15 +293,19 @@ public class EventsFragment extends BaseFragment implements SwipeRefreshLayout.O
     @Override
     public void retrofitOnFailure(int code) {
         super.retrofitOnFailure(code);
+        swipeContainer.setRefreshing(false);
     }
 
     @Override
     public void retrofitOnError(int code, String message) {
         super.retrofitOnError(code, message);
+        swipeContainer.setRefreshing(false);
     }
 
     @Override
     public void retrofitOnSessionError(int code, String message) {
         super.retrofitOnSessionError(code, message);
+        swipeContainer.setRefreshing(false);
     }
+
 }

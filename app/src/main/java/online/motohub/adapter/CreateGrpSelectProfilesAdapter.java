@@ -42,24 +42,28 @@ public class CreateGrpSelectProfilesAdapter extends RecyclerView.Adapter<Recycle
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+        try {
 
-        final ViewHolderGrpSelectProfiles mViewHolderGrpSelectProfiles = (ViewHolderGrpSelectProfiles) holder;
+            final ViewHolderGrpSelectProfiles mViewHolderGrpSelectProfiles = (ViewHolderGrpSelectProfiles) holder;
 
-        ProfileResModel mProfileResModel = mGrpSelectProfilesList.get(position);
+            ProfileResModel mProfileResModel = mGrpSelectProfilesList.get(position);
 
-        String mUsernameStr=Utility.getInstance().getUserName(mProfileResModel);
+            String mUsernameStr = Utility.getInstance().getUserName(mProfileResModel);
 
-        ((BaseActivity) mContext).setImageWithGlide(mViewHolderGrpSelectProfiles.mUserImgView, mProfileResModel.getProfilePicture(), R.drawable.default_profile_icon);
+            ((BaseActivity) mContext).setImageWithGlide(mViewHolderGrpSelectProfiles.mUserImgView, mProfileResModel.getProfilePicture(), R.drawable.default_profile_icon);
 
-        mViewHolderGrpSelectProfiles.mUsernameTv.setText(mUsernameStr);
+            mViewHolderGrpSelectProfiles.mUsernameTv.setText(mUsernameStr);
 
-        if(mProfileResModel.getIsSelected()) {
-            mViewHolderGrpSelectProfiles.mRelativeLayout.setBackgroundColor(ContextCompat.getColor(mContext, R.color.colorGrey));
-        } else {
-            mViewHolderGrpSelectProfiles.mRelativeLayout.setBackgroundColor(ContextCompat.getColor(mContext, R.color.colorWhite));
+            if (mProfileResModel.getIsSelected()) {
+                mViewHolderGrpSelectProfiles.mRelativeLayout.setBackgroundColor(ContextCompat.getColor(mContext, R.color.colorGrey));
+            } else {
+                mViewHolderGrpSelectProfiles.mRelativeLayout.setBackgroundColor(ContextCompat.getColor(mContext, R.color.colorWhite));
+            }
+
+            mViewHolderGrpSelectProfiles.mRightArrow.setVisibility(View.GONE);
+        }catch (Exception e){
+            e.printStackTrace();
         }
-
-        mViewHolderGrpSelectProfiles.mRightArrow.setVisibility(View.GONE);
 
     }
 

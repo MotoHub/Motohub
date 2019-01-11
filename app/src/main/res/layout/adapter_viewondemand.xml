@@ -20,113 +20,127 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="20dp">
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/image_cover"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/size120"
+                android:src="@drawable/default_cover_img" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:paddingLeft="@dimen/size10"
-                android:paddingTop="20dp">
-
-                <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/imageURL"
-                    android:layout_width="@dimen/size70"
-                    android:layout_height="@dimen/size70"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentRight="true"
-                    android:src="@drawable/default_profile_icon" />
-
+                android:orientation="vertical"
+                android:paddingBottom="@dimen/size20"
+                android:paddingLeft="@dimen/size20"
+                android:paddingRight="@dimen/size20"
+                android:paddingTop="@dimen/size5">
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginStart="@dimen/size15"
-                    android:gravity="center_vertical"
-                    android:orientation="vertical">
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingLeft="@dimen/size10">
 
-                    <TextView
-                        android:id="@+id/txt_event_name"
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/imageURL"
+                        android:layout_width="@dimen/size70"
+                        android:layout_height="@dimen/size70"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:src="@drawable/default_profile_icon" />
+
+
+                    <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginBottom="10dp"
-                        android:background="@color/colorWhite"
-                        android:ellipsize="end"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="@dimen/size15"
                         android:gravity="center_vertical"
-                        android:maxLines="2"
-                        android:text="Event Name"
-                        android:textColor="@color/colorBlack"
-                        android:textSize="@dimen/size16"
-                        android:textStyle="bold" />
+                        android:orientation="vertical">
 
-                    <TextView
-                        android:id="@+id/followBtn"
-                        android:layout_width="@dimen/size90"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/size5"
-                        android:background="@drawable/black_orange_btn_bg"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:paddingBottom="@dimen/size5"
-                        android:paddingTop="@dimen/size5"
-                        android:text="@string/follow"
-                        android:textAlignment="center"
-                        android:textColor="@color/text_color"
-                        android:textSize="@dimen/text12" />
+                        <TextView
+                            android:id="@+id/txt_event_name"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginBottom="10dp"
+                            android:background="@color/colorWhite"
+                            android:ellipsize="end"
+                            android:gravity="center_vertical"
+                            android:maxLines="2"
+                            android:text="Event Name"
+                            android:textColor="@color/colorBlack"
+                            android:textSize="@dimen/size16"
+                            android:textStyle="bold" />
+
+                    </LinearLayout>
 
                 </LinearLayout>
 
+                <TextView
+                    android:id="@+id/view_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:clickable="false"
+                    android:focusable="false"
+                    android:paddingBottom="@dimen/size5"
+                    android:paddingRight="@dimen/size40"
+                    android:text="@string/view_count"
+                    android:textAlignment="center"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="@dimen/text12"
+                    android:visibility="visible" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="@dimen/size10"
+                    android:background="@android:color/darker_gray" />
+
+                <TextView
+                    android:id="@+id/txt_no_videos"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="@dimen/size10"
+                    android:background="@color/colorWhite"
+                    android:gravity="center_horizontal"
+                    android:text="No. of Videos"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="@dimen/size14" />
+
+                <TextView
+                    android:id="@+id/btn_watch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="45dp"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="@dimen/size15"
+                    android:background="@drawable/rounded_button"
+                    android:clickable="true"
+                    android:drawableLeft="@drawable/ic_play_circle"
+                    android:drawablePadding="@dimen/size20"
+                    android:elevation="4dp"
+                    android:gravity="center"
+                    android:text="Watch Now"
+                    android:textAlignment="center"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="12sp"
+                    android:visibility="gone" />
+
+                <com.github.ybq.android.spinkit.SpinKitView xmlns:app="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/loader"
+                    style="@style/SpinKitView.Large.Wave"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_centerVertical="true"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="@dimen/size10"
+                    android:visibility="visible"
+                    app:SpinKit_Color="@color/colorOrange" />
+
             </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginTop="@dimen/size10"
-                android:background="@android:color/darker_gray" />
-
-            <TextView
-                android:id="@+id/txt_no_videos"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="@dimen/size10"
-                android:background="@color/colorWhite"
-                android:gravity="center_horizontal"
-                android:text="No. of Videos"
-                android:textColor="@color/colorBlack"
-                android:textSize="@dimen/size14" />
-
-            <TextView
-                android:id="@+id/btn_watch"
-                android:layout_width="wrap_content"
-                android:layout_height="45dp"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="@dimen/size15"
-                android:background="@drawable/rounded_button"
-                android:clickable="true"
-                android:drawableLeft="@drawable/ic_play_circle"
-                android:drawablePadding="@dimen/size20"
-                android:elevation="4dp"
-                android:gravity="center"
-                android:text="Watch Now"
-                android:textAlignment="center"
-                android:textColor="@color/colorWhite"
-                android:textSize="12sp"
-                android:visibility="gone" />
-
-            <com.github.ybq.android.spinkit.SpinKitView xmlns:app="http://schemas.android.com/apk/res-auto"
-                android:id="@+id/loader"
-                style="@style/SpinKitView.Large.Wave"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_centerVertical="true"
-                android:layout_gravity="center"
-                android:layout_marginTop="@dimen/size10"
-                android:visibility="visible"
-                app:SpinKit_Color="@color/colorOrange" />
-
         </LinearLayout>
 
     </android.support.v7.widget.CardView>

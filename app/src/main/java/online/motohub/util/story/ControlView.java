@@ -2,7 +2,6 @@ package online.motohub.util.story;
 
 
 import android.content.Context;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;

@@ -15,6 +15,7 @@
 
 package online.motohub.util;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
@@ -81,6 +82,7 @@ public class TimerView extends android.support.v7.widget.AppCompatTextView {
         startTimer(DEFAULT_REFRESH_INTERVAL);
     }
 
+    @SuppressLint("SetTextI18n")
     public synchronized void startTimer(long refreshInterval) {
         if (mTimerThread != null) return;
         if (mTimerProvider == null) mTimerProvider = mDefaultTimerProvider;
@@ -104,6 +106,7 @@ public class TimerView extends android.support.v7.widget.AppCompatTextView {
         setVisibility(VISIBLE);
     }
 
+    @SuppressLint("DefaultLocale")
     private String genTimerDisplay() {
         String formatStr;
 
@@ -128,6 +131,7 @@ public class TimerView extends android.support.v7.widget.AppCompatTextView {
         return formatStr;
     }
 
+    @SuppressLint("SetTextI18n")
     public synchronized void stopTimer() {
         if (mTimerThread == null) return;
 

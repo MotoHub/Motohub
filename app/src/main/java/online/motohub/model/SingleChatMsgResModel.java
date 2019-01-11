@@ -5,6 +5,8 @@ import com.google.gson.annotations.SerializedName;
 
 public class SingleChatMsgResModel {
 
+    public static String MessageStatus = "messagestatus";
+
     @SerializedName("ID")
     @Expose
     private int mID;
@@ -16,6 +18,10 @@ public class SingleChatMsgResModel {
     @SerializedName("ToProfileID")
     @Expose
     private int mToProfileID;
+
+    @SerializedName("ChatRelation")
+    @Expose
+    private String mChatRelation;
 
     @SerializedName("Message")
     @Expose
@@ -33,8 +39,6 @@ public class SingleChatMsgResModel {
     @Expose
     private String mCreatedAt;
 
-
-
     @SerializedName("msg_type")
     @Expose
     private String msgType;
@@ -46,6 +50,16 @@ public class SingleChatMsgResModel {
     @SerializedName("IsChecked")
     @Expose
     private Boolean IsDateVisible = false;
+
+    public String getmChatRelation() {
+        if(mChatRelation == null)
+            mChatRelation  = "";
+        return mChatRelation;
+    }
+
+    public void setmChatRelation(String mChatRelation) {
+        this.mChatRelation = mChatRelation;
+    }
 
     public Boolean getIsDateVisible() {
         return IsDateVisible;
@@ -120,7 +134,7 @@ public class SingleChatMsgResModel {
     }
 
     public String getPhotoMessage() {
-        if(photoMessage == null)
+        if (photoMessage == null)
             photoMessage = "";
         return photoMessage;
     }

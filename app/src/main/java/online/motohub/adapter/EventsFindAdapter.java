@@ -1,11 +1,11 @@
 package online.motohub.adapter;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,7 +13,6 @@ import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.LinearInterpolator;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Filter;
 import android.widget.ImageView;
@@ -23,6 +22,8 @@ import android.widget.Toast;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -38,7 +39,6 @@ import online.motohub.activity.ChatBoxEventGrpActivity;
 import online.motohub.activity.EventLiveActivity;
 import online.motohub.activity.EventQuestionAnswerActivity;
 import online.motohub.activity.EventsAddOnActivity;
-import online.motohub.activity.EventsFindActivity;
 import online.motohub.activity.EventsWhoIsGoingActivity;
 import online.motohub.activity.PaymentActivity;
 import online.motohub.activity.TimeTableActivity;
@@ -71,6 +71,7 @@ import online.motohub.retrofit.RetrofitClient;
 import online.motohub.util.AppConstants;
 import online.motohub.util.DialogManager;
 import online.motohub.util.PreferenceUtils;
+import online.motohub.util.UrlUtils;
 import online.motohub.util.Utility;
 
 import static android.app.Activity.RESULT_OK;
@@ -88,7 +89,6 @@ public class EventsFindAdapter extends RecyclerView.Adapter<EventsFindAdapter.Ho
     public static final int EVENT_PAYMENT_REQ_CODE = 500;
 
     public static final int EVENT_QUESTIONS_REQ_CODE = 501;
-    private int mMyUserID = 0;
     private int mStreamAmount;
     public static final int EVENT_LIVE_PAYMENT_REQ_CODE = 505;
     private String mToken = "";
@@ -96,14 +96,14 @@ public class EventsFindAdapter extends RecyclerView.Adapter<EventsFindAdapter.Ho
     private String mTransactionID = "";
     private ArrayList<PromoterFollowerResModel> mPromoterFollowerList = new ArrayList<>();
     private boolean isFromEventList = false;
+    public String mEventType = "";
 
-    public EventsFindAdapter(@NonNull Context context, List<EventsResModel> eventsFindListData, ProfileResModel myProfileResModel, boolean isFromEventList) {
+    public EventsFindAdapter(@NonNull Context context, List<EventsResModel> eventsFindListData, ProfileResModel myProfileResModel, PromotersResModel mPromoterResModel, boolean isFromEventList) {
         this.mContext = context;
         this.mOriginalEventsFindListData = eventsFindListData;
         this.mMyProfileResModel = myProfileResModel;
         this.mEventsFindListData = eventsFindListData;
         this.isFromEventList = isFromEventList;
-        mMyUserID = mMyProfileResModel.getUserID();
     }
 
 
@@ -118,7 +118,8 @@ public class EventsFindAdapter extends RecyclerView.Adapter<EventsFindAdapter.Ho
             case AppDialogFragment.EVENT_CATEGORY_DIALOG:
                 mSelectedCategory = MotoHub.getApplicationInstance().getSelectedEventCategoryList();
                 MotoHub.getApplicationInstance().setSelectedEventCategoryList(null);
-                callEventAnswer(mMyProfileResModel.getID(), mEventsFindListData.get(mAdapterPos).getID());
+                if (mMyProfileResModel != null)
+                    callEventAnswer(mMyProfileResModel.getID(), mEventsFindListData.get(mAdapterPos).getID());
                 break;
         }
     }
@@ -141,6 +142,7 @@ public class EventsFindAdapter extends RecyclerView.Adapter<EventsFindAdapter.Ho
 
     private void setEventCategory(ArrayList<EventCategoryModel> mCategoryNameList) {
         if (mCategoryNameList != null && !mCategoryNameList.isEmpty()) {
+
             AppDialogFragment.newInstance(AppDialogFragment.EVENT_CATEGORY_DIALOG, null, mCategoryNameList)
                     .show(((BaseActivity) mContext).getSupportFragmentManager(), AppDialogFragment.TAG);
         }
@@ -154,7 +156,7 @@ public class EventsFindAdapter extends RecyclerView.Adapter<EventsFindAdapter.Ho
     }
 
     @Override
-    public void onBindViewHolder(@NonNull EventsFindAdapter.Holder mViewHolder, int position) {
+    public void onBindViewHolder(@NonNull final EventsFindAdapter.Holder mViewHolder, @SuppressLint("RecyclerView") final int position) {
         try {
             boolean isLive = ((BaseActivity) mContext).isLiveEvent(mEventsFindListData.get(position).getDate(), mEventsFindListData.get(position).getFinish());
             if (isLive) {
@@ -182,9 +184,25 @@ public class EventsFindAdapter extends RecyclerView.Adapter<EventsFindAdapter.Ho
             }
 
             mViewHolder.mPromoterNameTxt.setText(mEventsFindListData.get(position).getPromoterByUserID().getName());
-            ((BaseActivity) mContext).setImageWithGlide(mViewHolder.mPromoterProfileImg, mEventsFindListData.get(position).getPromoterByUserID().getProfileImage(), R.drawable.default_profile_icon);
-            ((BaseActivity) mContext).setImageWithGlide(mViewHolder.mCoverImg, mEventsFindListData.get(position).getPromoterByUserID().getCoverImage(), R.drawable.default_cover_img);
+            ((BaseActivity) mContext).setImageWithGlide(mViewHolder.mPromoterProfileImg,mEventsFindListData.get(position).getPromoterByUserID().getProfileImage(), R.drawable.default_profile_icon);
+            if(!mEventsFindListData.get(position).getmEventImage().isEmpty())
+                ((BaseActivity) mContext).setImageWithGlide(mViewHolder.mCoverImg,mEventsFindListData.get(position).getmEventImage(), R.drawable.default_cover_img);
+            else
+                ((BaseActivity) mContext).setImageWithGlide(mViewHolder.mCoverImg,mEventsFindListData.get(position).getPromoterByUserID().getProfileImage(), R.drawable.default_cover_img);
 
+            mViewHolder.mCoverImg.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    String imgUrl;
+
+                    if (!mEventsFindListData.get(position).getmEventImage().isEmpty())
+                        imgUrl = mEventsFindListData.get(position).getmEventImage();
+                    else
+                        imgUrl = mEventsFindListData.get(position).getPromoterByUserID().getProfileImage();
+                    ((BaseActivity) mContext).moveLoadImageScreen(mContext, UrlUtils.FILE_URL + imgUrl);
+                }
+            });
 
             mViewHolder.mWhoIsGoingBtn.setTag(position);
             mViewHolder.mWhoIsGoingBtn.setOnClickListener(this);
@@ -201,6 +219,10 @@ public class EventsFindAdapter extends RecyclerView.Adapter<EventsFindAdapter.Ho
             mViewHolder.mLiveButton.setTag(position);
             mViewHolder.mLiveButton.setOnClickListener(this);
 
+            if(mMyProfileResModel == null){
+                mViewHolder.mBookNowBtn.setEnabled(false);
+            }
+
             if (isFromEventList) {
                 mPromoterFollowerList = mMyProfileResModel.getPromoterFollowerByProfileID();
                 if (isAlreadyFollowed(position, mPromoterFollowerList)) {
@@ -215,7 +237,7 @@ public class EventsFindAdapter extends RecyclerView.Adapter<EventsFindAdapter.Ho
                 mViewHolder.mPromoterFollowBtn.setVisibility(View.GONE);
                 mViewHolder.mPromoterLay.setVisibility(View.GONE);
             }
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -274,10 +296,11 @@ public class EventsFindAdapter extends RecyclerView.Adapter<EventsFindAdapter.Ho
 
     private boolean isAlreadyPaid() {
         boolean isAlreadyPaid = false;
+        int mUserId = PreferenceUtils.getInstance(mContext).getIntData(PreferenceUtils.USER_ID);
         EventsResModel mEventsResModel = mEventsFindListData.get(mAdapterPos);
         int mEventID = mEventsResModel.getID();
         for (LiveStreamPaymentEntity mPaymentEntity : mEventsResModel.getLivestreampayment_by_EventID()) {
-            if (mEventID == mPaymentEntity.getEventID() && mPaymentEntity.getViewUserID() == mMyUserID) {
+            if (mEventID == mPaymentEntity.getEventID() && mPaymentEntity.getViewUserID() == mUserId) {
                 isAlreadyPaid = true;
                 break;
             }
@@ -296,8 +319,10 @@ public class EventsFindAdapter extends RecyclerView.Adapter<EventsFindAdapter.Ho
                     return;
                 }
 
+                //MotoHub.getApplicationInstance().setmProfileResModel(mMyProfileResModel);
+                EventBus.getDefault().postSticky(mMyProfileResModel);
                 Bundle mBundle = new Bundle();
-                mBundle.putSerializable(ProfileModel.MY_PROFILE_RES_MODEL, mMyProfileResModel);
+                //mBundle.putSerializable(ProfileModel.MY_PROFILE_RES_MODEL, mMyProfileResModel);
                 mBundle.putInt(EventsModel.EVENT_ID, mEventsFindListData.get(mAdapterPos).getID());
                 mBundle.putSerializable(EventsWhoIsGoingModel.WHO_IS_GOING_RES_MODEL, mEventsFindListData.get(mAdapterPos).getWhoIsGoingByEventID());
                 mBundle.putString(EventsWhoIsGoingActivity.TOOLBAR_TITLE, mContext.getResources().getString(R.string.who_is_going));
@@ -353,7 +378,9 @@ public class EventsFindAdapter extends RecyclerView.Adapter<EventsFindAdapter.Ho
                 }
                 if (isEligibleToChat) {
                     mBundle = new Bundle();
-                    mBundle.putSerializable(ProfileModel.MY_PROFILE_RES_MODEL, mMyProfileResModel);
+                    //MotoHub.getApplicationInstance().setmProfileResModel(mMyProfileResModel);
+                    EventBus.getDefault().postSticky(mMyProfileResModel);
+                    //mBundle.putSerializable(ProfileModel.MY_PROFILE_RES_MODEL, mMyProfileResModel);
                     //  mBundle.putSerializable(EventsWhoIsGoingModel.WHO_IS_GOING_RES_MODEL, mEventsFindListData.get(mAdapterPos).getWhoIsGoingByEventID());
                     mBundle.putInt(EventsModel.EVENT_ID, mEventsFindListData.get(mAdapterPos).getID());
                     mContext.startActivity(new Intent(mContext, ChatBoxEventGrpActivity.class)
@@ -376,7 +403,9 @@ public class EventsFindAdapter extends RecyclerView.Adapter<EventsFindAdapter.Ho
                             mContext.getString(R.string.alert_live_pay_amount) + "" + mResAmount);
                 }*/
                 mBundle = new Bundle();
-                mBundle.putSerializable(ProfileModel.MY_PROFILE_RES_MODEL, mMyProfileResModel);
+                //MotoHub.getApplicationInstance().setmProfileResModel(mMyProfileResModel);
+                EventBus.getDefault().postSticky(mMyProfileResModel);
+                //mBundle.putSerializable(ProfileModel.MY_PROFILE_RES_MODEL, mMyProfileResModel);
                 mBundle.putInt(EventsModel.EVENT_ID, mEventsFindListData.get(mAdapterPos).getID());
                 mContext.startActivity(new Intent(mContext, EventLiveActivity.class)
                         .putExtras(mBundle));
@@ -417,7 +446,7 @@ public class EventsFindAdapter extends RecyclerView.Adapter<EventsFindAdapter.Ho
         @Override
         public void onSuccess() {
             Intent paymentActivity = new Intent(mContext, PaymentActivity.class);
-            paymentActivity.putExtra(EventsModel.EVENT_AMOUNT, mStreamAmount);
+            paymentActivity.putExtra(EventsModel.EVENT_AMOUNT, mStreamAmount).putExtra(AppConstants.PROFILE_ID, mMyProfileResModel.getID());
             ((Activity) mContext).startActivityForResult(paymentActivity, EVENT_LIVE_PAYMENT_REQ_CODE);
         }
     };
@@ -443,11 +472,12 @@ public class EventsFindAdapter extends RecyclerView.Adapter<EventsFindAdapter.Ho
                 break;
             case EVENT_QUESTIONS_REQ_CODE:
                 if (mEventsFindListData.get(mAdapterPos).getPrice() == 0) {
+                    mEventType = AppConstants.FREE_EVENT;
                     bookAnFreeEventRequest();
                 } else {
                     Intent addOnActivity = new Intent(mContext, EventsAddOnActivity.class);
                     addOnActivity.putExtra(EventsModel.EVENT_AMOUNT, (mEventsFindListData.get(mAdapterPos).getPrice()));
-                    addOnActivity.putExtra(EventsModel.EVENT_ID, mEventsFindListData.get(mAdapterPos).getID());
+                    addOnActivity.putExtra(EventsModel.EVENT_ID, mEventsFindListData.get(mAdapterPos).getID()).putExtra(AppConstants.PROFILE_ID, mMyProfileResModel.getID());
                     ((Activity) mContext).startActivityForResult(addOnActivity, EVENT_PAYMENT_REQ_CODE);
                 }
                 break;
@@ -477,7 +507,9 @@ public class EventsFindAdapter extends RecyclerView.Adapter<EventsFindAdapter.Ho
 
     private void callPayViewLiveStream() {
         isUpdatePayment = false;
-        RetrofitClient.getRetrofitInstance().postPayForViewLiveStream(mContext, mRetrofitResInterface, mToken, "", mStreamAmount, AppConstants.LIVE_STREAM_PAYMENT);
+        PromotersResModel mPromoterResModel = mEventsFindListData.get(mAdapterPos).getPromoterByUserID();
+        String mAcctNo = mPromoterResModel.getStripeUserId();
+        RetrofitClient.getRetrofitInstance().postPayForViewLiveStream(mContext, mRetrofitResInterface, mToken, mAcctNo, mStreamAmount, AppConstants.LIVE_STREAM_PAYMENT);
     }
 
     RetrofitResInterface mRetrofitResInterface = new RetrofitResInterface() {
@@ -554,7 +586,7 @@ public class EventsFindAdapter extends RecyclerView.Adapter<EventsFindAdapter.Ho
                 } else {
                     mErrorMsg = mContext.getString(R.string.payment_must_update);
                 }
-                ((BaseActivity)mContext).showToast(mContext,mContext.getString(R.string.internet_err));
+                ((BaseActivity) mContext).showToast(mContext, mContext.getString(R.string.internet_err));
 //                DialogManager.showRetryAlertDialogWithCallback(mContext, mCommonInterface, mErrorMsg);
             }
 
@@ -567,7 +599,7 @@ public class EventsFindAdapter extends RecyclerView.Adapter<EventsFindAdapter.Ho
 
         @Override
         public void retrofitOnFailure() {
-            ((BaseActivity)mContext).showToast(mContext,mContext.getString(R.string.internet_err));
+            ((BaseActivity) mContext).showToast(mContext, mContext.getString(R.string.internet_err));
 //            DialogManager.showRetryAlertDialogWithCallback(mContext, mCommonInterface, mContext.getString(R.string.internet_err));
         }
     };
@@ -596,10 +628,11 @@ public class EventsFindAdapter extends RecyclerView.Adapter<EventsFindAdapter.Ho
     }
 
     private void callUpdateLiveStreamPayment() {
+        int mUserId = PreferenceUtils.getInstance(mContext).getIntData(PreferenceUtils.USER_ID);
         try {
             JsonObject mJsonObject = new JsonObject();
             mJsonObject.addProperty(APIConstants.PromoterID, mEventsFindListData.get(mAdapterPos).getUserID());
-            mJsonObject.addProperty(APIConstants.ViewUserID, mMyUserID);
+            mJsonObject.addProperty(APIConstants.ViewUserID, mUserId);
             mJsonObject.addProperty(APIConstants.EventID, mEventsFindListData.get(mAdapterPos).getID());
             mJsonObject.addProperty(APIConstants.TransactionID, mTransactionID);
             mJsonObject.addProperty(APIConstants.Amount, mStreamAmount);
@@ -620,10 +653,12 @@ public class EventsFindAdapter extends RecyclerView.Adapter<EventsFindAdapter.Ho
         mItem.addProperty("UserID", mUserId);
         mItem.addProperty("ProfileID", mMyProfileResModel.getID());
         mItem.addProperty("Answers", String.valueOf(MotoHub.getApplicationInstance().getEventQuestionAnswerObject()));
+        mItem.addProperty("transaction_token", "");
+        mItem.addProperty("payment_details", mContext.getString(R.string.free_event));
 
         JsonArray mJsonArray = new JsonArray();
         mJsonArray.add(mItem);
-        RetrofitClient.getRetrofitInstance().callBookNowEvent((BaseActivity) mContext, mJsonArray, RetrofitClient.EVENTS_BOOKING_RESPONSE);
+        RetrofitClient.getRetrofitInstance().callBookNowEvent((BaseActivity) mContext, mJsonArray, RetrofitClient.EVENTS_FREE_BOOKING_RESPONSE);
 
         MotoHub.getApplicationInstance().setEventQuestionAnswerObject(null);
     }
@@ -641,6 +676,9 @@ public class EventsFindAdapter extends RecyclerView.Adapter<EventsFindAdapter.Ho
         mItem.addProperty("PaymentStatus", mPaymentModel.getStatus());
         mItem.addProperty("ProfileID", mMyProfileResModel.getID());
         mItem.addProperty("Answers", String.valueOf(MotoHub.getApplicationInstance().getEventQuestionAnswerObject()));
+        mItem.addProperty("transaction_token", mPaymentModel.getID());
+        mItem.addProperty("payment_details", mPaymentModel.getMessage());
+
 
         JsonArray mJsonArray = new JsonArray();
         mJsonArray.add(mItem);
@@ -760,8 +798,6 @@ public class EventsFindAdapter extends RecyclerView.Adapter<EventsFindAdapter.Ho
 
     }
 
-
-
     @NonNull
     @Override
     public Filter getFilter() {
@@ -808,7 +844,7 @@ public class EventsFindAdapter extends RecyclerView.Adapter<EventsFindAdapter.Ho
 
             @SuppressWarnings("unchecked")
             @Override
-            protected void publishResults(CharSequence constraint, Filter.FilterResults results) {
+            protected void publishResults(CharSequence constraint, FilterResults results) {
 
                 mEventsFindListData = (List<EventsResModel>) results.values; // has the filtered values
                 notifyDataSetChanged();  // notifies the data with new filtered values

@@ -34,6 +34,9 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.Toolbar;
+import android.text.SpannableString;
+import android.text.TextPaint;
+import android.text.style.ClickableSpan;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -50,7 +53,6 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestBuilder;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.model.GlideUrl;
 import com.bumptech.glide.load.model.LazyHeaders;
 import com.bumptech.glide.request.RequestOptions;
@@ -58,6 +60,9 @@ import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.gson.Gson;
+import com.yalantis.contextmenu.lib.MenuObject;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -85,6 +90,7 @@ import butterknife.BindString;
 import butterknife.ButterKnife;
 import online.motohub.R;
 import online.motohub.adapter.EventsFindAdapter;
+import online.motohub.application.MotoHub;
 import online.motohub.fragment.dialog.AppDialogFragment;
 import online.motohub.interfaces.CommonInterface;
 import online.motohub.interfaces.PermissionCallback;
@@ -94,7 +100,6 @@ import online.motohub.model.EventsModel;
 import online.motohub.model.ImageModel;
 import online.motohub.model.OndemandNewResponse;
 import online.motohub.model.PostsModel;
-import online.motohub.model.ProfileModel;
 import online.motohub.model.ProfileResModel;
 import online.motohub.model.SingleChatRoomResModel;
 import online.motohub.retrofit.RetrofitClient;
@@ -102,6 +107,7 @@ import online.motohub.util.AppConstants;
 import online.motohub.util.DialogManager;
 import online.motohub.util.PreferenceUtils;
 import online.motohub.util.UrlUtils;
+import online.motohub.util.Utils;
 import online.motohub.util.ZoomImageView;
 
 @SuppressLint("Registered")
@@ -121,9 +127,9 @@ public class BaseActivity extends AppCompatActivity {
     public static final String BOAT_STR = "Boat";
     public static final String CAR_STR = "Car";
     public static final String KART_STR = "Kart";
-    public static final String CREATE_PROF_AFTER_REG = "create_profile_after_registration";
-    protected static final int CAMERA_PERMISSION_REQ_CODE = 1, STORAGE_PERMISSION_REQ_CODE = 2, CAMERA_CAPTURE_REQ = 1, GALLERY_PIC_REQ = 2, IN_APP_PURCHASE = 15551,
+    public static final int CAMERA_PERMISSION_REQ_CODE = 1, STORAGE_PERMISSION_REQ_CODE = 2, CAMERA_CAPTURE_REQ = 1, GALLERY_PIC_REQ = 2, IN_APP_PURCHASE = 15551,
             ACTION_TAKE_VIDEO = 95, GALLERY_VIDEO_REQ = 96;
+    public static final String CREATE_PROF_AFTER_REG = "create_profile_after_registration";
     //Profile Types
     protected static final String PROFILE_TYPE = "profile_type";
     protected static final String PROFILE_PURCHASED = "0";
@@ -146,14 +152,11 @@ public class BaseActivity extends AppCompatActivity {
     protected static final String COVER_IMAGE_NAME_TYPE = "cover";
     protected static final String POST_IMAGE_NAME_TYPE = "post";
     protected static final String GROUP_IMAGE_NAME_TYPE = "grp_chat_img";
-    private static int PERMISSION_ACTION_TYPE = 0;
+    public static int PERMISSION_ACTION_TYPE = 0;
     public SendVideoUrl sendVideoUrl;
-    public Dialog mPurchaseDialog;
-    /**
-     * Don't use/change this String "mCompressedVideoPath" value anywhere in the app.
-     */
-    public String mCompressedVideoPath = "";
+    public Dialog mPurchaseDialog, mPurchaseSuccessDialog;
     public List<String> listPermissionsNeeded;
+
     public int settingsReqCode = 143;
     @BindString(R.string.no_profile_found_err)
     protected String mNoProfileErr;
@@ -177,6 +180,7 @@ public class BaseActivity extends AppCompatActivity {
     private String[] mShareVideoUrl;
     private Uri mVideoFileUri;
     private String COMPRESSED_VIDEO_FOLDER = "MotoHub";
+    private String mPhoneNumbers = "", mEmailIDs = "";
     private int permsRequestCode = 200;
     private PermissionCallback mPermissionCallback = null;
     PermissionCallback permissionCallback = new PermissionCallback() {
@@ -239,6 +243,10 @@ public class BaseActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Don't use/change this String "mCompressedVideoPath" value anywhere in the app.
+     */
+    //public String mCompressedVideoPath = "";
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -249,6 +257,11 @@ public class BaseActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         mActivity = this;
+    }
+
+
+    public BaseActivity getActivity() {
+        return this;
     }
 
     protected void setToolbar(Toolbar toolbar, String toolbarTitle) {
@@ -270,14 +283,19 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     public void movePostCommentScreen(Context mContext, int postID, ProfileResModel mMyProfileModel) {
-        Intent mPostCommentsActivity = new Intent(mContext, PostCommentsActivity.class).putExtra(PostsModel.POST_ID, postID).
-                putExtra(ProfileModel.MY_PROFILE_RES_MODEL, mMyProfileModel);
+        //MotoHub.getApplicationInstance().setmProfileResModel(mMyProfileModel);
+        EventBus.getDefault().postSticky(mMyProfileModel);
+        Intent mPostCommentsActivity = new Intent(mContext, PostCommentsActivity.class)
+                .putExtra(PostsModel.POST_ID, postID)
+                /*.putExtra(ProfileModel.MY_PROFILE_RES_MODEL, mMyProfileModel)*/;
         ((BaseActivity) mContext).startActivityForResult(mPostCommentsActivity, AppConstants.POST_COMMENT_REQUEST);
     }
 
     public void moveVideoCommentScreen(Context mContext, int postID, ProfileResModel mMyProfileModel) {
-        Intent mPostCommentsActivity = new Intent(mContext, VideoCommentsActivity.class).putExtra(AppConstants.VIDEO_ID, postID).
-                putExtra(ProfileModel.MY_PROFILE_RES_MODEL, mMyProfileModel);
+        //MotoHub.getApplicationInstance().setmProfileResModel(mMyProfileModel);
+        EventBus.getDefault().postSticky(mMyProfileModel);
+        Intent mPostCommentsActivity = new Intent(mContext, VideoCommentsActivity.class).putExtra(AppConstants.VIDEO_ID, postID)
+                /*.putExtra(ProfileModel.MY_PROFILE_RES_MODEL, mMyProfileModel)*/;
         ((BaseActivity) mContext).startActivityForResult(mPostCommentsActivity, AppConstants.VIDEO_COMMENT_REQUEST);
     }
 
@@ -286,8 +304,18 @@ public class BaseActivity extends AppCompatActivity {
          * Exo Player
          */
         Intent mLoadVideoFromServerActivity = new Intent(mContext, LoadVideoFromServerActivity.class).
-                putExtra(AppConstants.VIDEO_PATH, UrlUtils.FILE_URL + mVideoPath);
+                putExtra(AppConstants.VIDEO_PATH, mVideoPath);
         mContext.startActivity(mLoadVideoFromServerActivity);
+    }
+
+    public void LoadVideoScreen(Context mContext, String mVideoPath, int pos, int requestcode) {
+        /**
+         * Exo Player
+         */
+        Intent mLoadVideoFromServerActivity = new Intent(mContext, LoadVideoFromServerActivity.class)
+                .putExtra(AppConstants.VIDEO_PATH, mVideoPath)
+                .putExtra(AppConstants.POSITION, pos);
+        this.startActivityForResult(mLoadVideoFromServerActivity, requestcode);
     }
 
     public void moveLoadVideoPreviewScreen(Context mContext, String mVideoPath) {
@@ -332,12 +360,11 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     public boolean isMultiClicked() {
-        if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
+        if (SystemClock.elapsedRealtime() - mLastClickTime < 3000) {
             return true;
         }
         mLastClickTime = SystemClock.elapsedRealtime();
         return false;
-
     }
 
     public String[] getImgVideoList(String str) {
@@ -372,30 +399,33 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     public ArrayList<Bitmap> getBitmapImageGlide(String[] imgUrl) {
-
         final ArrayList<Bitmap> mBitmap = new ArrayList<>();
+        try {
+            for (String anImgUrl : imgUrl) {
 
-        for (String anImgUrl : imgUrl) {
+                GlideUrl glideUrl = new GlideUrl(UrlUtils.AWS_FILE_URL + anImgUrl, new LazyHeaders.Builder()
+                        .addHeader("X-DreamFactory-Api-Key", getString(R.string.dream_factory_api_key))
+                        .build());
 
-            GlideUrl glideUrl = new GlideUrl(UrlUtils.FILE_URL + anImgUrl, new LazyHeaders.Builder()
-                    .addHeader("X-DreamFactory-Api-Key", getString(R.string.dream_factory_api_key))
-                    .build());
-
-            RequestBuilder<Bitmap> mRequestBuilder = Glide
-                    .with(this)
-                    .asBitmap();
-            mRequestBuilder
-                    .load(glideUrl)
-                    .into(new SimpleTarget<Bitmap>() {
-                        @Override
-                        public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition) {
-                            mBitmap.add(resource);
-
-                        }
-                    });
+                RequestBuilder<Bitmap> mRequestBuilder = Glide
+                        .with(this)
+                        .asBitmap();
+                mRequestBuilder
+                        .load(glideUrl)
+                        .into(new SimpleTarget<Bitmap>() {
+                            @Override
+                            public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition) {
+                                mBitmap.add(resource);
+                            }
+                        });
+            }
+            return mBitmap;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return mBitmap;
         }
 
-        return mBitmap;
+
     }
 
     protected void showPopupMenu(View v) {
@@ -405,8 +435,25 @@ public class BaseActivity extends AppCompatActivity {
         mPopup.show();
     }
 
+    protected void showLogoutMenu(View v) {
+        PopupMenu mPopup = new PopupMenu(this, v);
+        mPopup.inflate(R.menu.logout_menu);
+        mPopup.setOnMenuItemClickListener((PopupMenu.OnMenuItemClickListener) this);
+        mPopup.show();
+    }
+
     public void showSnackBar(View view, String msg) {
         Snackbar snackbar = Snackbar.make(view, msg, Snackbar.LENGTH_LONG);
+        snackbar.setActionTextColor(ContextCompat.getColor(this, R.color.text_color));
+
+        snackbar.show();
+    }
+
+    public void showColorSnackBar(View view, String msg) {
+
+        Snackbar snackbar = Snackbar.make(view, msg, Snackbar.LENGTH_LONG);
+        View sbView = snackbar.getView();
+        sbView.setBackgroundColor(ContextCompat.getColor(this, R.color.colorOrange));
         snackbar.show();
     }
 
@@ -421,12 +468,16 @@ public class BaseActivity extends AppCompatActivity {
         new Handler().post(new Runnable() {
             @Override
             public void run() {
-                DialogFragment mDialogFragment = (DialogFragment) getSupportFragmentManager().findFragmentByTag(AppDialogFragment.TAG);
-                if (mDialogFragment != null && mDialogFragment.isAdded()) {
-                    getSupportFragmentManager().beginTransaction().remove(mDialogFragment).commitAllowingStateLoss();
+                try {
+                    DialogFragment mDialogFragment = (DialogFragment) getSupportFragmentManager().findFragmentByTag(AppDialogFragment.TAG);
+                    if (mDialogFragment != null && mDialogFragment.isAdded()) {
+                        getSupportFragmentManager().beginTransaction().remove(mDialogFragment).commitAllowingStateLoss();
+                    }
+                    AppDialogFragment.newInstance(dialogType, mFollowProfileTypes).show
+                            (getSupportFragmentManager(), AppDialogFragment.TAG);
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-                AppDialogFragment.newInstance(dialogType, mFollowProfileTypes).show
-                        (getSupportFragmentManager(), AppDialogFragment.TAG);
             }
         });
     }
@@ -443,9 +494,16 @@ public class BaseActivity extends AppCompatActivity {
         });
     }
 
-    public boolean isNetworkConnected() {
-        ConnectivityManager conMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+    @Override
+    protected void onDestroy() {
+        DialogManager.hideProgress();
+        super.onDestroy();
+    }
 
+    public boolean isNetworkConnected(Context context) {
+        ConnectivityManager conMgr = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        assert conMgr != null;
         if (conMgr.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED
                 || conMgr.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED) {
 
@@ -457,7 +515,6 @@ public class BaseActivity extends AppCompatActivity {
 
     public void alertDialogPositiveBtnClick(BaseActivity activity, String dialogType, StringBuilder profileTypesStr, ArrayList<String> profileTypes,
                                             int position) {
-
     }
 
     public void alertDialogNegativeBtnClick() {
@@ -465,7 +522,7 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     public String getCurrentDate() {
-        DateFormat mDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss", Locale.getDefault());
+        DateFormat mDateFormat = new SimpleDateFormat("yyyy-MM-dd H:mm:ss", Locale.getDefault());
         return mDateFormat.format(new Date());
     }
 
@@ -564,7 +621,7 @@ public class BaseActivity extends AppCompatActivity {
         PERMISSION_ACTION_TYPE = PERMISSION_SHARING_WRITE_ACCESS;
         if (isPermissionAdded()) {
 
-            final String uri = (UrlUtils.FILE_URL + videoUrl[0] + "?api_key="
+            final String uri = (UrlUtils.AWS_FILE_URL + videoUrl[0] + "?api_key="
                     + getResources().getString(R.string.dream_factory_api_key)
                     + "&session_token="
                     + PreferenceUtils.getInstance(this).getStrData(PreferenceUtils
@@ -650,8 +707,8 @@ public class BaseActivity extends AppCompatActivity {
                     if (outputFile != null) {
                         mVideoFileUri = Uri.fromFile(outputFile);
                         sendVideoUrl = new AppDialogFragment();
-                        sendVideoUrl.SendData(mVideoFileUri, BaseActivity.this);
-                        // AppDialogFragment.getInstance().showFBVideoShareDialog(mVideoFileUri);
+                        //sendVideoUrl.SendData(mVideoFileUri, BaseActivity.this);
+                        AppDialogFragment.getInstance().showFBVideoShareDialog(mVideoFileUri, BaseActivity.this);
                     } else {
                         showToast(getApplicationContext(), "Something went wrong!! Video could not been shared.");
                     }
@@ -808,6 +865,17 @@ public class BaseActivity extends AppCompatActivity {
 
     }
 
+    protected boolean checkPhoneContactsPermission() {
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            int mCamera = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS);
+            return mCamera == PackageManager.PERMISSION_GRANTED;
+        }
+
+        return true;
+
+    }
+
     /**
      * Checks Read Storage Permission of this app.
      *
@@ -822,6 +890,10 @@ public class BaseActivity extends AppCompatActivity {
 
         return true;
 
+    }
+
+    protected void requestContactPermission() {
+        ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.CAMERA}, CAMERA_PERMISSION_REQ_CODE);
     }
 
     /**
@@ -881,6 +953,15 @@ public class BaseActivity extends AppCompatActivity {
         }
     }
 
+    public void galleryIntentMultiple() {
+        PERMISSION_ACTION_TYPE = PERMISSION_IMAGE_GALLERY;
+        if (isPermissionAdded()) {
+            Intent mGalleryIntent = new Intent(AppConstants.ACTION_MULTIPLE_PICK);
+            startActivityForResult(mGalleryIntent, 200);
+            overridePendingTransition(R.anim.anim_bottom_up, R.anim.anim_bottom_down);
+        }
+    }
+
     public void galleryIntentVideo() {
         PERMISSION_ACTION_TYPE = PERMISSION_VIDEO_GALLERY;
         if (isPermissionAdded()) {
@@ -899,12 +980,13 @@ public class BaseActivity extends AppCompatActivity {
         }
     }
 
-    private boolean isPermissionAdded() {
+    public boolean isPermissionAdded() {
         boolean addPermission = true;
         if (android.os.Build.VERSION.SDK_INT >= 23) {
             int permissionCamera = ContextCompat.checkSelfPermission(this, android.Manifest.permission.CAMERA);
             int readStoragePermission = ContextCompat.checkSelfPermission(this, android.Manifest.permission.READ_EXTERNAL_STORAGE);
             int storagePermission = ContextCompat.checkSelfPermission(this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE);
+
             List<String> listPermissionsNeeded = new ArrayList<>();
             if (permissionCamera != PackageManager.PERMISSION_GRANTED) {
                 listPermissionsNeeded.add(android.Manifest.permission.CAMERA);
@@ -915,11 +997,55 @@ public class BaseActivity extends AppCompatActivity {
             if (storagePermission != PackageManager.PERMISSION_GRANTED) {
                 listPermissionsNeeded.add(android.Manifest.permission.WRITE_EXTERNAL_STORAGE);
             }
+
             if (!listPermissionsNeeded.isEmpty()) {
                 addPermission = isPermission(permissionCallback, listPermissionsNeeded);
             }
         }
         return addPermission;
+    }
+
+    public List<MenuObject> getMenuObjects() {
+
+        List<MenuObject> menuObjects = new ArrayList<>();
+
+        MenuObject close = new MenuObject();
+        close.setBgColor(ContextCompat.getColor(this, R.color.colorBlack));
+        close.setResource(R.drawable.orange_close_icon);
+
+
+        MenuObject newprofile = new MenuObject(getString(R.string.create_new_profile));
+        newprofile.setBgColor(ContextCompat.getColor(this, R.color.colorBlack));
+        newprofile.setResource(R.drawable.ic_new_profile);
+
+        MenuObject otherprofile = new MenuObject(getString(R.string.other_profiles));
+        otherprofile.setBgColor(ContextCompat.getColor(this, R.color.colorBlack));
+        otherprofile.setResource(R.drawable.ic_other_profile);
+
+        MenuObject notification = new MenuObject(getString(R.string.notifications));
+        notification.setBgColor(ContextCompat.getColor(this, R.color.colorBlack));
+        notification.setResource(R.drawable.ic_notification);
+
+        MenuObject blockeduser = new MenuObject(getString(R.string.blocked_users));
+        blockeduser.setBgColor(ContextCompat.getColor(this, R.color.colorBlack));
+        blockeduser.setResource(R.drawable.ic_blocked_user);
+
+        MenuObject cardmanagement = new MenuObject(getString(R.string.card_management));
+        cardmanagement.setBgColor(ContextCompat.getColor(this, R.color.colorBlack));
+        cardmanagement.setResource(R.drawable.ic_card_management);
+
+        MenuObject logout = new MenuObject(getString(R.string.logout));
+        logout.setBgColor(ContextCompat.getColor(this, R.color.colorBlack));
+        logout.setResource(R.drawable.ic_logout);
+
+        menuObjects.add(close);
+        menuObjects.add(newprofile);
+        menuObjects.add(otherprofile);
+        menuObjects.add(notification);
+        menuObjects.add(blockeduser);
+        menuObjects.add(cardmanagement);
+        menuObjects.add(logout);
+        return menuObjects;
     }
 
     protected Uri getImgUri() {
@@ -950,6 +1076,21 @@ public class BaseActivity extends AppCompatActivity {
         return BitmapFactory.decodeByteArray(mByte, 0, mByte.length);
     }
 
+    public void setImageWithGlideshop(ImageView imgView, String imgUrl, int drawable) {
+
+        /*GlideUrl glideUrl = new GlideUrl(UrlUtils.AWS_FILE_URL + imgUrl, new LazyHeaders.Builder()
+                .addHeader("X-DreamFactory-Api-Key", getString(R.string.dream_factory_api_key))
+                .build());*/
+        Glide.with(getApplicationContext())
+                .load(UrlUtils.AWS_S3_BASE_URL + imgUrl)
+                .apply(new RequestOptions().placeholder(drawable)
+                        .override(800, 400)
+                        .dontAnimate()
+                        .error(drawable)
+                )
+                .into(imgView);
+    }
+
     public void setImageWithGlide(ImageView imgView, String imgUrl, int drawable) {
 
         GlideUrl glideUrl = new GlideUrl(UrlUtils.FILE_URL + imgUrl, new LazyHeaders.Builder()
@@ -957,11 +1098,10 @@ public class BaseActivity extends AppCompatActivity {
                 .build());
         Glide.with(getApplicationContext())
                 .load(glideUrl)
-                .apply(new RequestOptions()
-                        .error(drawable)
-                        .dontAnimate())
+                .apply(new RequestOptions().placeholder(drawable)
+                        .dontAnimate()
+                )
                 .into(imgView);
-
     }
 
     public void setCoverImageWithGlide(ImageView imgView, String imgUrl, int drawable) {
@@ -973,7 +1113,6 @@ public class BaseActivity extends AppCompatActivity {
         Glide.with(getApplicationContext())
                 .load(glideUrl)
                 .apply(new RequestOptions()
-                        .error(drawable)
                         .placeholder(drawable)
                         .dontAnimate().centerCrop())
                 .into(imgView);
@@ -984,6 +1123,7 @@ public class BaseActivity extends AppCompatActivity {
         GlideUrl glideUrl = new GlideUrl(UrlUtils.FILE_URL + imgUrl, new LazyHeaders.Builder()
                 .addHeader("X-DreamFactory-Api-Key", getString(R.string.dream_factory_api_key))
                 .build());
+
         Glide.with(getApplicationContext())
                 .load(glideUrl)
                 .apply(new RequestOptions().dontAnimate())
@@ -995,8 +1135,7 @@ public class BaseActivity extends AppCompatActivity {
                 .load(imgUrl)
                 .apply(new RequestOptions()
                         .dontAnimate()
-                        .skipMemoryCache(true)
-                        .diskCacheStrategy(DiskCacheStrategy.NONE))
+                )
                 .into(imgView);
     }
 
@@ -1006,8 +1145,7 @@ public class BaseActivity extends AppCompatActivity {
                 .load(imgUrl)
                 .apply(new RequestOptions()
                         .dontAnimate()
-                        .skipMemoryCache(true)
-                        .diskCacheStrategy(DiskCacheStrategy.NONE))
+                )
                 .into(imgView);
     }
 
@@ -1017,15 +1155,16 @@ public class BaseActivity extends AppCompatActivity {
                 .load(imgUrl)
                 .apply(new RequestOptions()
                         .dontAnimate()
-                        .skipMemoryCache(true)
-                        .diskCacheStrategy(DiskCacheStrategy.NONE))
+                )
                 .into(imgView);
     }
 
     public void setImageWithGlide(ZoomImageView imgView, String imgUrl) {
-        GlideUrl glideUrl = new GlideUrl(UrlUtils.FILE_URL + imgUrl, new LazyHeaders.Builder()
+        /*GlideUrl glideUrl = new GlideUrl(UrlUtils.FILE_URL + imgUrl, new LazyHeaders.Builder()
                 .addHeader("X-DreamFactory-Api-Key", getString(R.string.dream_factory_api_key))
-                .build());
+                .build());*/
+        GlideUrl glideUrl = new GlideUrl(UrlUtils.FILE_URL + imgUrl);
+
         Glide.with(getApplicationContext())
                 .load(glideUrl)
                 .apply(new RequestOptions()
@@ -1038,7 +1177,7 @@ public class BaseActivity extends AppCompatActivity {
                 .load(imgUrl)
                 .apply(new RequestOptions()
                         .dontAnimate()
-                        .error(drawable)
+                        .placeholder(drawable)
                 )
                 .into(imgView);
 
@@ -1583,11 +1722,11 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     public void retrofitOnError(int code, String message, int responseType) {
-        if (message.equals("Unauthorized") || code == 401) {
+        if (code == 401) {
             RetrofitClient.getRetrofitInstance().callUpdateSession(this, RetrofitClient.UPDATE_SESSION_RESPONSE);
         } else {
             String mErrorMsg = code + " - " + message;
-            showToast(this, mErrorMsg);
+            //showToast(this, mErrorMsg);
         }
     }
 
@@ -1595,8 +1734,8 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     public void sysOut(String msg) {
-        System.out.println(getString(R.string.app_name) + " " + msg);
-        Log.e(getString(R.string.app_name), " " + msg);
+        /*System.out.println(getString(R.string.app_name) + " " + msg);
+        Log.e(getString(R.string.app_name), " " + msg);*/
     }
 
     /**
@@ -1672,36 +1811,44 @@ public class BaseActivity extends AppCompatActivity {
         switch (requestCode) {
             case 200: {
                 Map<String, Integer> perms = new HashMap<>();
-                for (int i = 0; i < listPermissionsNeeded.size(); i++) {
-                    perms.put(listPermissionsNeeded.get(i), PackageManager.PERMISSION_GRANTED);
-                }
-                if (grantResults.length > 0) {
-                    for (int i = 0; i < permissions.length; i++)
-                        perms.put(permissions[i], grantResults[i]);
-                    for (int j = 0; j < listPermissionsNeeded.size(); j++) {
-                        if (perms.get(listPermissionsNeeded.get(j)) == PackageManager.PERMISSION_GRANTED) {
-                            if (j == listPermissionsNeeded.size() - 1) {
-                                if (mPermissionCallback != null) {
-                                    mPermissionCallback.permissionOkClick();
+                if (listPermissionsNeeded != null && listPermissionsNeeded.size() > 0) {
+                    for (int i = 0; i < listPermissionsNeeded.size(); i++) {
+                        perms.put(listPermissionsNeeded.get(i), PackageManager.PERMISSION_GRANTED);
+                    }
+                    if (grantResults.length > 0) {
+                        for (int i = 0; i < permissions.length; i++)
+                            perms.put(permissions[i], grantResults[i]);
+                        for (int j = 0; j < listPermissionsNeeded.size(); j++) {
+                            if (perms.get(listPermissionsNeeded.get(j)) == PackageManager.PERMISSION_GRANTED) {
+
+                                if (j == listPermissionsNeeded.size() - 1) {
+                                    if (mPermissionCallback != null) {
+                                        mPermissionCallback.permissionOkClick();
+                                    }
                                 }
-                            }
-                        } else {
-                            if (ActivityCompat.shouldShowRequestPermissionRationale(this, listPermissionsNeeded.get(j))) {
-                                //permission is denied (this is the first time, when "never ask again" is not checked) so ask again explaining the usage of permission
-                                DialogManager.showAlertDialogWithCallback(this, mAlertCallback,
-                                        "Permission must be required for this app");
-                                break;
                             } else {
-                                //permission is denied (and never ask again is  checked)
-                                //shouldShowRequestPermissionRationale will return false
-                                if (perms.get(listPermissionsNeeded.get(j)) == PackageManager.PERMISSION_DENIED) {
-                                    DialogManager.showAlertDialogWithCallback(this, mConfirmCallback,
-                                            getString(R.string.alert_settings));
+                                if (ActivityCompat.shouldShowRequestPermissionRationale(this, listPermissionsNeeded.get(j))) {
+
+                                    //permission is denied (this is the first time, when "never ask again" is not checked) so ask again explaining the usage of permission
+                                    DialogManager.showAlertDialogWithCallback(this, mAlertCallback,
+                                            "Permission must be required for this app");
+
                                     break;
                                 } else {
-                                    if (j == listPermissionsNeeded.size() - 1) {
-                                        if (mPermissionCallback != null) {
-                                            mPermissionCallback.permissionOkClick();
+                                    //permission is denied (and never ask again is  checked)
+                                    //shouldShowRequestPermissionRationale will return false
+                                    if (perms.get(listPermissionsNeeded.get(j)) == PackageManager.PERMISSION_DENIED) {
+
+                                        DialogManager.showAlertDialogWithCallback(this, mConfirmCallback,
+                                                getString(R.string.alert_settings));
+
+                                        break;
+                                    } else {
+
+                                        if (j == listPermissionsNeeded.size() - 1) {
+                                            if (mPermissionCallback != null) {
+                                                mPermissionCallback.permissionOkClick();
+                                            }
                                         }
                                     }
                                 }
@@ -1713,14 +1860,14 @@ public class BaseActivity extends AppCompatActivity {
         }
     }
 
-    public String getCompressedVideoPath() {
+   /* public String getCompressedVideoPath() {
         CreateCompressedVideoPath();
         mCompressedVideoPath = Environment.getExternalStorageDirectory()
                 + File.separator
                 + COMPRESSED_VIDEO_FOLDER + System.currentTimeMillis() + "COMPRESSED_VIDEO.mp4";
         return mCompressedVideoPath;
 
-    }
+    }*/
 
     public void CreateCompressedVideoPath() {
         File f = new File(Environment.getExternalStorageDirectory(), File.separator + COMPRESSED_VIDEO_FOLDER);
@@ -1729,7 +1876,6 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     public int getProfileCurrentPos() {
-
         return PreferenceUtils.getInstance(this).getIntData(PreferenceUtils.CURRENT_PROFILE_POS);
     }
 
@@ -1738,7 +1884,7 @@ public class BaseActivity extends AppCompatActivity {
         }
     }
 
-    public void setUpPurchseUI(final int price) {
+    public void setUpPurchseUI(final int price, final int mProfileID) {
         View view = LayoutInflater.from(mActivity).inflate(R.layout.widget_purchase_dialog, null);
         mPurchaseDialog = new Dialog(mActivity);
         mPurchaseDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
@@ -1748,19 +1894,232 @@ public class BaseActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 mPurchaseDialog.dismiss();
-                moveToPaymentScreen(price);
+                moveToPaymentScreen(price, mProfileID);
             }
         });
     }
 
-    private void moveToPaymentScreen(int price) {
+    public void setUpPurchseSuccessUI() {
+        View view = LayoutInflater.from(mActivity).inflate(R.layout.widget_purchase_success_dialog, null);
+        mPurchaseSuccessDialog = new Dialog(mActivity);
+        mPurchaseSuccessDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        mPurchaseSuccessDialog.setContentView(view);
+        view.findViewById(R.id.btn_ok).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mPurchaseSuccessDialog.dismiss();
+            }
+        });
+    }
+
+    private void moveToPaymentScreen(int price, int mProfileID) {
         Intent paymentActivity = new Intent(mActivity, PaymentActivity.class);
-        paymentActivity.putExtra(EventsModel.EVENT_AMOUNT, price);
+        paymentActivity.putExtra(EventsModel.EVENT_AMOUNT, price).putExtra(AppConstants.PROFILE_ID, mProfileID);
         mActivity.startActivityForResult(paymentActivity, EventsFindAdapter.EVENT_PAYMENT_REQ_CODE);
     }
 
     public void moveToReportWritePostScreen(Context mContext) {
         Intent mReportWritePostActivity = new Intent(mContext, ReportWritePostActivity.class);
         ((BaseActivity) mContext).startActivityForResult(mReportWritePostActivity, AppConstants.REPORT_WRITE_POST_RESPONSE);
+    }
+
+    private int getNumberOfSubStr(String str, String subStr) {
+        if (subStr.length() > 0)
+            return (str.length() - str.replace(subStr, "").length()) / subStr.length();
+        else
+            return 0;
+
+    }
+
+    public SpannableString setTextEdt(final Context mContext, String mCommentTagString, String mTagList, final String mTaggedUserIds, final int mMyProfileID) {
+        SpannableString mWordToSpan = new SpannableString(mCommentTagString);
+        if (mTagList.trim().isEmpty())
+            return mWordToSpan;
+
+        String[] mCommentTagArray = mTagList.split(",");
+        final String[] mCommentTagUserIDs = mTaggedUserIds.split(",");
+
+        for (int i = 0; i < mCommentTagArray.length; i++) {
+            final int mCurrentPos = i;
+            if (mCommentTagString.contains(mCommentTagArray[i])) {
+                int subStrLength = mCommentTagArray[i].length();
+                int subStrIndex = mCommentTagString.indexOf(mCommentTagArray[i]);
+                int noOfSubStr = getNumberOfSubStr(mCommentTagString, mCommentTagArray[i]);
+                if (noOfSubStr == 1) {
+                    //   mWordToSpan.setSpan(new ForegroundColorSpan(ContextCompat.getColor(this, R.color.colorOrange)), subStrIndex, subStrIndex + subStrLength, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    mWordToSpan.setSpan(new ClickableSpan() {
+
+                        @Override
+                        public void updateDrawState(TextPaint ds) {
+                            super.updateDrawState(ds);
+                            ds.setColor(ContextCompat.getColor(getApplicationContext(), R.color.colorOrange));
+                            ds.setUnderlineText(false);
+
+                        }
+
+                        @Override
+                        public void onClick(View view) {
+
+                            // showToast(getApplicationContext(),"TAG");
+
+                            //  int mOtherProfileID = Integer.parseInt(mCommentTagUserIDs[mCurrentPos]);
+
+                            //moveOtherProfileScreen(mContext, mMyProfileID, mOtherProfileID);
+
+                            // sharedPostProfileClick(view);
+
+                        }
+
+                    }, subStrIndex, subStrIndex + subStrLength, 0);
+                } else {
+
+                    for (int j = 0; j < noOfSubStr; j++) {
+
+                        mWordToSpan.setSpan(new ClickableSpan() {
+
+                            @Override
+                            public void updateDrawState(TextPaint ds) {
+                                super.updateDrawState(ds);
+                                ds.setColor(ContextCompat.getColor(getApplicationContext(), R.color.colorOrange));
+                                ds.setUnderlineText(false);
+
+                            }
+
+                            @Override
+                            public void onClick(View view) {
+
+                                // sharedPostProfileClick(view);
+
+                            }
+
+                        }, subStrIndex, subStrIndex + subStrLength, 0);
+                        //  mWordToSpan.setSpan(new ForegroundColorSpan(ContextCompat.getColor(this, R.color.colorOrange)), subStrIndex, subStrIndex + subStrLength, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                        subStrIndex = mCommentTagString.indexOf(mCommentTagArray[mCurrentPos], subStrIndex + subStrLength);
+                    }
+                }
+
+            }
+        }
+       /* mWordToSpan.setSpan(new ClickableSpan() {
+
+            @Override
+            public void updateDrawState(TextPaint ds) {
+                super.updateDrawState(ds);
+                ds.setUnderlineText(false);
+            }
+
+            @Override
+            public void onClick(View view) {
+
+            }
+
+        }, 0, mCommentTagString.length(), 0);*/
+        return mWordToSpan;
+    }
+
+    public String setPaymentCardNumber(String cardNumber) {
+        cardNumber = cardNumber.replace(" ", "");
+        String mFirstSubStr = cardNumber.substring(0, 4);
+        String mLastSubStr = cardNumber.substring(12, 16);
+        String resStrTxt = mFirstSubStr + "-xxxx-xxxx-" + mLastSubStr;
+        return resStrTxt;
+    }
+
+    public SpannableString setCommentTagText(final Context mContext, String mCommentTagString, String mTagList, final String mTaggedUserIds) {
+        SpannableString mWordToSpan = new SpannableString(mCommentTagString);
+        if (mTagList.trim().isEmpty())
+            return mWordToSpan;
+
+        String[] mCommentTagArray = mTagList.split(",");
+        final String[] mCommentTagUserIDs = mTaggedUserIds.split(",");
+
+        for (int i = 0; i < mCommentTagArray.length; i++) {
+            final int mCurrentPos = i;
+            if (mCommentTagString.contains(mCommentTagArray[i])) {
+                int subStrLength = mCommentTagArray[i].length();
+                int subStrIndex = mCommentTagString.indexOf(mCommentTagArray[i]);
+                int noOfSubStr = getNumberOfSubStr(mCommentTagString, mCommentTagArray[i]);
+                if (noOfSubStr == 1) {
+                    //   mWordToSpan.setSpan(new ForegroundColorSpan(ContextCompat.getColor(this, R.color.colorOrange)), subStrIndex, subStrIndex + subStrLength, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    mWordToSpan.setSpan(new ClickableSpan() {
+
+                        @Override
+                        public void updateDrawState(TextPaint ds) {
+                            super.updateDrawState(ds);
+                            ds.setColor(ContextCompat.getColor(getApplicationContext(), R.color.colorOrange));
+                            ds.setUnderlineText(false);
+
+                        }
+
+                        @Override
+                        public void onClick(View view) {
+
+                            // showToast(getApplicationContext(),"TAG");
+
+                            //  int mOtherProfileID = Integer.parseInt(mCommentTagUserIDs[mCurrentPos]);
+
+                            //moveOtherProfileScreen(mContext, mMyProfileID, mOtherProfileID);
+
+                            // sharedPostProfileClick(view);
+
+                        }
+
+                    }, subStrIndex, subStrIndex + subStrLength, 0);
+                } else {
+
+                    for (int j = 0; j < noOfSubStr; j++) {
+
+                        mWordToSpan.setSpan(new ClickableSpan() {
+
+                            @Override
+                            public void updateDrawState(TextPaint ds) {
+                                super.updateDrawState(ds);
+                                ds.setColor(ContextCompat.getColor(getApplicationContext(), R.color.colorOrange));
+                                ds.setUnderlineText(false);
+
+                            }
+
+                            @Override
+                            public void onClick(View view) {
+
+                                // sharedPostProfileClick(view);
+
+                            }
+
+                        }, subStrIndex, subStrIndex + subStrLength, 0);
+                        //  mWordToSpan.setSpan(new ForegroundColorSpan(ContextCompat.getColor(this, R.color.colorOrange)), subStrIndex, subStrIndex + subStrLength, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                        subStrIndex = mCommentTagString.indexOf(mCommentTagArray[mCurrentPos], subStrIndex + subStrLength);
+                    }
+                }
+
+            }
+        }
+       /* mWordToSpan.setSpan(new ClickableSpan() {
+
+            @Override
+            public void updateDrawState(TextPaint ds) {
+                super.updateDrawState(ds);
+                ds.setUnderlineText(false);
+            }
+
+            @Override
+            public void onClick(View view) {
+
+            }
+
+        }, 0, mCommentTagString.length(), 0);*/
+        return mWordToSpan;
+    }
+
+    // https://stackoverflow.com/questions/9769554/how-to-convert-number-into-k-thousands-m-million-and-b-billion-suffix-in-jsp
+    // Converts the number to K, M suffix
+    // Ex: 5500 will be displayed as 5.5k
+
+    public static String convertToSuffix(long count) {
+        if (count < 1000) return "" + count;
+        int exp = (int) (Math.log(count) / Math.log(1000));
+        return String.format("%.1f%c",
+                count / Math.pow(1000, exp),
+                "kmgtpe".charAt(exp - 1));
     }
 }

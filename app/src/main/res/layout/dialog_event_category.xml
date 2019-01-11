@@ -12,9 +12,11 @@
 
         <TextView
             android:id="@+id/title_tv"
-            style="@style/LayoutWrap"
+            style="@style/LayoutMatchWrap"
             android:padding="@dimen/size10"
-            android:text="Select Event Category"
+            android:text="@string/category_list"
+            android:gravity="center"
+            android:textStyle="bold"
             android:textColor="@color/colorBlack"
             android:textSize="@dimen/text16" />
 

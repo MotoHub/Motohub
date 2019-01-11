@@ -50,21 +50,24 @@ public class RecycleViewVideoList extends RecyclerView.Adapter<RecycleViewVideoL
 
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int i) {
-        VideoListInFolder current = data.get(i);
+        try {
+            VideoListInFolder current = data.get(i);
 
-        viewHolder.textTitle.setText(current.getVideo_Title());
+            viewHolder.textTitle.setText(current.getVideo_Title());
 
-        new ImageLoader().execute(current.getVideo_ID(), viewHolder.videoView);
+            new ImageLoader().execute(current.getVideo_ID(), viewHolder.videoView);
 
-        long minutes = TimeUnit.MILLISECONDS.toMinutes(Long.parseLong(current.getVideo_Duration()));
+            long minutes = TimeUnit.MILLISECONDS.toMinutes(Long.parseLong(current.getVideo_Duration()));
 
-        if (minutes < 1){
+            if (minutes < 1) {
 
-             minutes = TimeUnit.MILLISECONDS.toSeconds(Long.parseLong(current.getVideo_Duration()));
-            viewHolder.textSecond.setText(String.valueOf(minutes) + " sec");
-        }
-        else {
-            viewHolder.textSecond.setText(String.valueOf(minutes) + " min");
+                minutes = TimeUnit.MILLISECONDS.toSeconds(Long.parseLong(current.getVideo_Duration()));
+                viewHolder.textSecond.setText(String.valueOf(minutes) + " sec");
+            } else {
+                viewHolder.textSecond.setText(String.valueOf(minutes) + " min");
+            }
+        }catch (Exception e){
+            e.printStackTrace();
         }
     }
 

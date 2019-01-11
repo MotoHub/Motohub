@@ -8,6 +8,8 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,6 +20,7 @@ import butterknife.OnClick;
 import online.motohub.R;
 import online.motohub.activity.BaseActivity;
 import online.motohub.adapter.promoter.PromotersListAdapter;
+import online.motohub.application.MotoHub;
 import online.motohub.model.ProfileModel;
 import online.motohub.model.ProfileResModel;
 import online.motohub.model.SessionModel;
@@ -25,32 +28,26 @@ import online.motohub.model.promoter_club_news_media.PromotersModel;
 import online.motohub.model.promoter_club_news_media.PromotersResModel;
 import online.motohub.retrofit.RetrofitClient;
 import online.motohub.util.AppConstants;
+import online.motohub.util.DialogManager;
 import online.motohub.util.PreferenceUtils;
 
 public class PromotersListActivity extends BaseActivity {
 
+    public static final int PROMOTER_FOLLOW_RESPONSE = 1397;
     @BindView(R.id.promotersViewGroup)
     ConstraintLayout mCoordinatorLayout;
-
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
-
     @BindView(R.id.recycler_view)
     RecyclerView mPromotersRv;
-
     @BindString(R.string.promoters)
     String mToolbarTitle;
-
     @BindString(R.string.internet_failure)
     String mInternetFailed;
-
     @BindString(R.string.no_promoters_err)
     String mPromotersFoundErr;
-
     private List<PromotersResModel> mPromotersList;
     private PromotersListAdapter mPromotersListAdapter;
-
-    public static final int PROMOTER_FOLLOW_RESPONSE = 1397;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +61,12 @@ public class PromotersListActivity extends BaseActivity {
 
     }
 
+    @Override
+    protected void onDestroy() {
+        DialogManager.hideProgress();
+        super.onDestroy();
+    }
+
     private void initView() {
 
         setToolbar(mToolbar, mToolbarTitle);
@@ -75,8 +78,11 @@ public class PromotersListActivity extends BaseActivity {
 
         mPromotersRv.setLayoutManager(mLinearLayoutManager);
 
-        assert getIntent().getExtras() != null;
-        ProfileResModel mProfileResModel = (ProfileResModel) getIntent().getExtras().getSerializable(ProfileModel.MY_PROFILE_RES_MODEL);
+        //assert getIntent().getExtras() != null;
+        //ProfileResModel mProfileResModel = (ProfileResModel) getIntent().getExtras().getSerializable(ProfileModel.MY_PROFILE_RES_MODEL);
+
+        //ProfileResModel mProfileResModel = MotoHub.getApplicationInstance().getmProfileResModel();
+        ProfileResModel mProfileResModel = EventBus.getDefault().getStickyEvent(ProfileResModel.class);
 
         mPromotersList = new ArrayList<>();
         mPromotersListAdapter = new PromotersListAdapter(mPromotersList, this, mProfileResModel);
@@ -106,18 +112,24 @@ public class PromotersListActivity extends BaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(resultCode == RESULT_OK) {
+        if (resultCode == RESULT_OK) {
             switch (requestCode) {
                 case PROMOTER_FOLLOW_RESPONSE:
                     assert data.getExtras() != null;
-                    PromotersResModel mPromotersResModel = (PromotersResModel) data.getExtras()
-                                            .getSerializable(PromotersModel.PROMOTERS_RES_MODEL);
-                    mPromotersListAdapter.updatePromoterFollowResponse(mPromotersResModel);
-                    ProfileResModel mMyProfileResModel = (ProfileResModel) data.getExtras()
-                            .getSerializable(ProfileModel.MY_PROFILE_RES_MODEL);
+                    //PromotersResModel mPromotersResModel = (PromotersResModel) data.getExtras().getSerializable(PromotersModel.PROMOTERS_RES_MODEL);
+                    //mPromotersListAdapter.updatePromoterFollowResponse(mPromotersResModel);
+                    //ProfileResModel mMyProfileResModel = (ProfileResModel) data.getExtras().getSerializable(ProfileModel.MY_PROFILE_RES_MODEL);
 
+                    /*PromotersResModel mPromotersResModel = MotoHub.getApplicationInstance().getmPromoterResModel();
+                    ProfileResModel mMyProfileResModel=MotoHub.getApplicationInstance().getmProfileResModel();*/
+                    PromotersResModel mPromotersResModel = EventBus.getDefault().getStickyEvent(PromotersResModel.class);
+                    ProfileResModel mMyProfileResModel=EventBus.getDefault().getStickyEvent(ProfileResModel.class);
+                    mPromotersListAdapter.updatePromoterFollowResponse(mPromotersResModel);
+
+                    //MotoHub.getApplicationInstance().setmProfileResModel(mMyProfileResModel);
+                    EventBus.getDefault().postSticky(mMyProfileResModel);
                     setResult(RESULT_OK, new Intent()
-                            .putExtra(AppConstants.MY_PROFILE_OBJ, mMyProfileResModel)
+                            /*.putExtra(AppConstants.MY_PROFILE_OBJ, mMyProfileResModel)*/
                             .putExtra(AppConstants.IS_FOLLOW_RESULT, true));
                     break;
             }

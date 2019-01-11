@@ -16,7 +16,6 @@
 package online.motohub.in_app_billing;
 
 import android.text.TextUtils;
-import android.util.Log;
 
 import java.security.InvalidKeyException;
 import java.security.KeyFactory;

@@ -10,8 +10,9 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.BindString;
 import butterknife.BindView;
@@ -19,13 +20,14 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import online.motohub.R;
 import online.motohub.adapter.NotificationAdapter;
+import online.motohub.application.MotoHub;
 import online.motohub.model.NotificationModel;
 import online.motohub.model.NotificationResModel;
-import online.motohub.model.ProfileModel;
 import online.motohub.model.ProfileResModel;
 import online.motohub.model.SessionModel;
 import online.motohub.retrofit.RetrofitClient;
 import online.motohub.util.AppConstants;
+import online.motohub.util.DialogManager;
 import online.motohub.util.PreferenceUtils;
 
 public class NotificationActivity extends BaseActivity implements View.OnClickListener, SwipeRefreshLayout.OnRefreshListener, NotificationAdapter.TotalNotificationResultCount {
@@ -50,7 +52,7 @@ public class NotificationActivity extends BaseActivity implements View.OnClickLi
     @BindView(R.id.notification_refresh_layout)
     SwipeRefreshLayout mNotificationRefreshLayout;
 
-    private List<NotificationResModel> mNotificationListData;
+    private ArrayList<NotificationResModel> mNotificationListData;
     private NotificationAdapter mNotificationAdapter;
     private ProfileResModel mProfileResModel;
     private LinearLayoutManager mLinearLayoutManager;
@@ -64,6 +66,12 @@ public class NotificationActivity extends BaseActivity implements View.OnClickLi
         setContentView(R.layout.activity_notification);
         ButterKnife.bind(this);
         initView();
+    }
+
+    @Override
+    protected void onDestroy() {
+        DialogManager.hideProgress();
+        super.onDestroy();
     }
 
     private void initView() {
@@ -96,8 +104,10 @@ public class NotificationActivity extends BaseActivity implements View.OnClickLi
             mNotificationListData = new ArrayList<>();
             mNotificationRefreshLayout.setOnRefreshListener(this);
             setNotificationAdapter();
-            assert getIntent().getExtras() != null;
-            mProfileResModel = (ProfileResModel) getIntent().getExtras().get(ProfileModel.MY_PROFILE_RES_MODEL);
+            /*assert getIntent().getExtras() != null;
+            mProfileResModel = (ProfileResModel) getIntent().getExtras().get(ProfileModel.MY_PROFILE_RES_MODEL);*/
+            //mProfileResModel = MotoHub.getApplicationInstance().getmProfileResModel();
+            mProfileResModel = EventBus.getDefault().getStickyEvent(ProfileResModel.class);
             getNotifications();
         } catch (Exception e) {
             e.printStackTrace();
@@ -215,6 +225,8 @@ public class NotificationActivity extends BaseActivity implements View.OnClickLi
     @Override
     public void onRefresh() {
         mMsgRvOffset = 0;
+        mIsMsgRvLoading = true;
+        mMsgRvTotalCount = -1;
         mNotificationListData.clear();
         mNotificationRecyclerView.getRecycledViewPool().clear();
         mNotificationAdapter.notifyDataSetChanged();

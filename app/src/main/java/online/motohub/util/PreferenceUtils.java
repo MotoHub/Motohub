@@ -21,12 +21,18 @@ public class PreferenceUtils {
     public static final String SESSION_TOKEN = "session_token";
     public static final String CURRENT_PROFILE_POS = "current_profile_id";
 
+    public static final String IS_CONTACT_PERMISSION_ADDED = "IS_CONTACT_PERMISSION_ADDED";
+
     //In-App Keys
     public static final String BIKE_IN_APP = "bike_in_app";
     public static final String BOAT_IN_APP = "boat_in_app";
     public static final String CAR_IN_APP = "car_in_app";
     public static final String KART_IN_APP = "kart_in_app";
     public static final String USER_EMAIL = "user_email";
+    public static final String IS_PERMANATLY_DENIED_CONTACT_PERMISSION = "is_permanently _denied";
+    public static final String BUSINESS_PROFILE_COMPLETED = "BUSINESS_PROFILE_COMPLETED";
+    public static final String CURRENT_PROFILE_MODEL = "CURRENT_PROFILE_MODEL";
+    public static final String FULL_PROFILE_LIST = "FULL_PROFILE_LIST";
 
     private static PreferenceUtils mPreferenceUtils = new PreferenceUtils();
 
@@ -36,6 +42,7 @@ public class PreferenceUtils {
     public static String ALLOW_NOTIFICATION_VIB="allow_vib";
 
     public static final String IS_TUTORIAL_FIRST = "IS_TUTORIAL_FIRST";
+    public static final String IS_JOB_SCHEDULER = "IS_JOB_SCHEDULER";
 
     /**
      * PreferenceUtils default constructor.

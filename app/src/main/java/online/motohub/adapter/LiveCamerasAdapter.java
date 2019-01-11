@@ -36,18 +36,22 @@ public class LiveCamerasAdapter extends RecyclerView.Adapter<LiveCamerasAdapter.
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
+        try {
 
 //        String mCamera = "Camera "+String.valueOf(position+1);
-        String mCamera = mLiveStreamList.get(position).getStreamName();
+            String mCamera = mLiveStreamList.get(position).getStreamName();
 
-        holder.mCameraView.setText(mCamera);
+            holder.mCameraView.setText(mCamera);
 
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mListener.cameraClicked(position);
-            }
-        });
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mListener.cameraClicked(position);
+                }
+            });
+        }catch (Exception e){
+            e.printStackTrace();
+        }
 
 
     }

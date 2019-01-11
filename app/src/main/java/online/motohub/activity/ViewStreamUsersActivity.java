@@ -25,6 +25,7 @@ import online.motohub.model.ProfileResModel;
 import online.motohub.model.SessionModel;
 import online.motohub.retrofit.RetrofitClient;
 import online.motohub.util.AppConstants;
+import online.motohub.util.DialogManager;
 import online.motohub.util.PreferenceUtils;
 
 public class ViewStreamUsersActivity extends BaseActivity {
@@ -93,6 +94,12 @@ public class ViewStreamUsersActivity extends BaseActivity {
             callGetUsersList();
         }
 
+    }
+
+    @Override
+    protected void onDestroy() {
+        DialogManager.hideProgress();
+        super.onDestroy();
     }
 
     private void searchUser(String searchStr) {

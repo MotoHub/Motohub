@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -28,6 +29,8 @@ import com.bumptech.glide.request.target.Target;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.ArrayList;
@@ -38,11 +41,17 @@ import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
 import online.motohub.R;
 import online.motohub.activity.BaseActivity;
-import online.motohub.activity.MyMotoFileActivity;
+import online.motohub.activity.club.ClubProfileActivity;
+import online.motohub.activity.news_and_media.NewsAndMediaProfileActivity;
+import online.motohub.activity.performance_shop.PerformanceShopProfileActivity;
+import online.motohub.activity.promoter.PromoterProfileActivity;
+import online.motohub.activity.track.TrackProfileActivity;
+import online.motohub.application.MotoHub;
 import online.motohub.model.FeedCommentModel;
 import online.motohub.model.FeedCommentReplyModel;
 import online.motohub.model.ProfileResModel;
 import online.motohub.model.ReplyLikeModel;
+import online.motohub.model.promoter_club_news_media.PromotersModel;
 import online.motohub.retrofit.RetrofitClient;
 import online.motohub.util.AppConstants;
 import online.motohub.util.UrlUtils;
@@ -95,43 +104,6 @@ public class FeedCommentsReplyAdapter extends RecyclerView.Adapter<FeedCommentsR
         notifyDataSetChanged();
     }
 
-    public class Holder extends RecyclerView.ViewHolder {
-
-        @BindView(R.id.reply_user_img)
-        CircleImageView mUserImg;
-
-        @BindView(R.id.reply_user_img_lay)
-        RelativeLayout mCommentReplyImgLay;
-
-        @BindView(R.id.reply_user_name_txt)
-        TextView mUserNameTxt;
-
-        @BindView(R.id.reply_txt)
-        TextView mCommentReplyTxt;
-
-        @BindView(R.id.like_count_txt)
-        TextView mLikeCountTxt;
-
-        @BindView(R.id.likeBtn)
-        ImageView mLikeBtn;
-
-        @BindView(R.id.ivCommentImg)
-        ImageView mIvCommentImg;
-
-        @BindView(R.id.replyPostTimeTxt)
-        TextView mReplyPostTime;
-
-        @BindView(R.id.smallProgressBar)
-        ProgressBar mPostPicProgressBar;
-
-
-        public Holder(View view) {
-            super(view);
-            ButterKnife.bind(this, view);
-        }
-
-    }
-
     @Override
     public FeedCommentsReplyAdapter.Holder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.adap_feed_comments_reply, parent, false);
@@ -140,132 +112,137 @@ public class FeedCommentsReplyAdapter extends RecyclerView.Adapter<FeedCommentsR
 
     @Override
     public void onBindViewHolder(final FeedCommentsReplyAdapter.Holder mHolder, final int pos) {
-        final FeedCommentReplyModel mEntity = mFeedReplyList.get(pos);
+        try {
+            final FeedCommentReplyModel mEntity = mFeedReplyList.get(pos);
 
-        mHolder.mReplyPostTime.setText(((BaseActivity) mContext).findTime(mEntity.getCreateTime()));
-        if (mFeedReplyList.get(pos).getReplyLikeByReplyID() != null) {
-            setLikeUnLikeForPost(mHolder, pos);
-        } else {
-            mHolder.mLikeBtn.setImageResource(R.drawable.like_to_like_click_bg);
-            mHolder.mLikeBtn.setTag("like");
-            mHolder.mLikeCountTxt.setText("like");
-        }
-
-        mHolder.mCommentReplyImgLay.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-             //   int selPos = (int) v.getTag();
-                profileClick(mFeedReplyList.get(pos));
+            mHolder.mReplyPostTime.setText(((BaseActivity) mContext).findTime(mEntity.getCreateTime()));
+            if (mFeedReplyList.get(pos).getReplyLikeByReplyID() != null) {
+                setLikeUnLikeForPost(mHolder, pos);
+            } else {
+                mHolder.mLikeBtn.setImageResource(R.drawable.like_to_like_click_bg);
+                mHolder.mLikeBtn.setTag("like");
+                mHolder.mLikeCountTxt.setText("like");
             }
-        });
 
-        if(mEntity.getUserType().isEmpty() || mEntity.getUserType().trim().equals(AppConstants.USER)) {
-            String imgStr = mEntity.getProfilesByProfileID().getProfilePicture();
+            mHolder.mCommentReplyImgLay.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //   int selPos = (int) v.getTag();
+                    mTempPosition = pos;
+                    profileClick(mFeedReplyList.get(pos));
+                }
+            });
 
-            ((BaseActivity) mContext).setImageWithGlide(mHolder.mUserImg, imgStr, R.drawable.default_profile_icon);
+            if (mEntity.getUserType().isEmpty() || mEntity.getUserType().trim().equals(AppConstants.USER)) {
+                String imgStr = mEntity.getProfilesByProfileID().getProfilePicture();
 
-            mHolder.mUserNameTxt.setText(Utility.getInstance().getUserName(mEntity.getProfilesByProfileID()));
-        } else{
-            String imgStr = mEntity.getPromoterByProfileID().getProfileImage();
+                ((BaseActivity) mContext).setImageWithGlide(mHolder.mUserImg, imgStr, R.drawable.default_profile_icon);
 
-            ((BaseActivity) mContext).setImageWithGlide(mHolder.mUserImg, imgStr, R.drawable.default_profile_icon);
+                mHolder.mUserNameTxt.setText(Utility.getInstance().getUserName(mEntity.getProfilesByProfileID()));
+            } else {
+                String imgStr = mEntity.getPromoterByProfileID().getProfileImage();
 
-            mHolder.mUserNameTxt.setText(mEntity.getPromoterByProfileID().getName());
+                ((BaseActivity) mContext).setImageWithGlide(mHolder.mUserImg, imgStr, R.drawable.default_profile_icon);
 
-        }
+                mHolder.mUserNameTxt.setText(mEntity.getPromoterByProfileID().getName());
 
-
-        if (!mEntity.getReplyText().trim().isEmpty()) {
-            try {
-                mHolder.mCommentReplyTxt.setVisibility(View.VISIBLE);
-                mHolder.mCommentReplyTxt.setText(URLDecoder.decode(mEntity.getReplyText(), "UTF-8"));
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
             }
-        } else {
-            mHolder.mCommentReplyTxt.setVisibility(View.GONE);
-        }
-        if (!mEntity.getReplyImages().trim().isEmpty()) {
-            mHolder.mIvCommentImg.setVisibility(View.VISIBLE);
-            mHolder.mPostPicProgressBar.setVisibility(View.VISIBLE);
-            GlideUrl glideUrl = new GlideUrl(UrlUtils.FILE_URL + mEntity.getReplyImages().trim(), new LazyHeaders.Builder()
-                    .addHeader("X-DreamFactory-Api-Key", mContext.getString(R.string.dream_factory_api_key))
-                    .build());
 
-            Glide.with(mContext)
-                    .load(glideUrl)
-                    .listener(new RequestListener<Drawable>() {
-                        @Override
-                        public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
-                            mHolder.mPostPicProgressBar.setVisibility(View.GONE);
-                            return false;
-                        }
 
-                        @Override
-                        public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-                            mHolder.mPostPicProgressBar.setVisibility(View.GONE);
-                            return false;
-                        }
-                    })
-                    .apply(new RequestOptions()
-                            .dontAnimate()
-                    )
-                    .into(mHolder.mIvCommentImg);
-        } else {
-            mHolder.mIvCommentImg.setVisibility(View.GONE);
-        }
-
-        mHolder.mIvCommentImg.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ((BaseActivity) mContext).moveLoadImageScreen(mContext, mEntity.getReplyImages());
+            if (!mEntity.getReplyText().trim().isEmpty()) {
+                try {
+                    mHolder.mCommentReplyTxt.setVisibility(View.VISIBLE);
+                    mHolder.mCommentReplyTxt.setText(((BaseActivity) mContext).setTextEdt(mContext, URLDecoder.decode(mEntity.getReplyText(), "UTF-8"), mEntity.getReplyTaggedUserNames(), mEntity.getReplyTaggedUserIDs(), mMyProfileResModel.getID()));
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                mHolder.mCommentReplyTxt.setVisibility(View.GONE);
             }
-        });
-        mHolder.mLikeBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mTempPosition = pos;
-                if(!((BaseActivity)mContext).isMultiClicked()){
+            if (!mEntity.getReplyImages().trim().isEmpty()) {
+                mHolder.mIvCommentImg.setVisibility(View.VISIBLE);
+                mHolder.mPostPicProgressBar.setVisibility(View.VISIBLE);
+                GlideUrl glideUrl = new GlideUrl(UrlUtils.FILE_URL + mEntity.getReplyImages().trim(), new LazyHeaders.Builder()
+                        .addHeader("X-DreamFactory-Api-Key", mContext.getString(R.string.dream_factory_api_key))
+                        .build());
 
-                switch (v.getTag().toString()) {
-                    case "unlike":
+                Glide.with(mContext)
+                        .load(glideUrl)
+                        .listener(new RequestListener<Drawable>() {
+                            @Override
+                            public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                                mHolder.mPostPicProgressBar.setVisibility(View.GONE);
+                                return false;
+                            }
 
-                        ArrayList<ReplyLikeModel> mReplyLikeList = mFeedReplyList.get(pos).getReplyLikeByReplyID();
+                            @Override
+                            public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                                mHolder.mPostPicProgressBar.setVisibility(View.GONE);
+                                return false;
+                            }
+                        })
+                        .apply(new RequestOptions()
+                                .dontAnimate()
+                        )
+                        .into(mHolder.mIvCommentImg);
+            } else {
+                mHolder.mIvCommentImg.setVisibility(View.GONE);
+            }
 
-                        if (mReplyLikeList.size() > 0) {
+            mHolder.mIvCommentImg.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ((BaseActivity) mContext).moveLoadImageScreen(mContext, UrlUtils.FILE_URL + mEntity.getReplyImages());
+                }
+            });
+            mHolder.mLikeBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mTempPosition = pos;
+                    if (!((BaseActivity) mContext).isMultiClicked()) {
 
-                            for (ReplyLikeModel likesEntity : mReplyLikeList) {
-                                if (likesEntity.getProfileID() == mMyProfileResModel.getID() && likesEntity.getReplyID() == mFeedReplyList.get(pos).getID()) {
-                                    mDeleteLikeID = likesEntity.getID();
-                                    break;
+                        switch (v.getTag().toString()) {
+                            case "unlike":
+
+                                ArrayList<ReplyLikeModel> mReplyLikeList = mFeedReplyList.get(pos).getReplyLikeByReplyID();
+
+                                if (mReplyLikeList.size() > 0) {
+
+                                    for (ReplyLikeModel likesEntity : mReplyLikeList) {
+                                        if (likesEntity.getProfileID() == mMyProfileResModel.getID() && likesEntity.getReplyID() == mFeedReplyList.get(pos).getID()) {
+                                            mDeleteLikeID = likesEntity.getID();
+                                            break;
+                                        }
+
+                                    }
+                                    callUnLikeReply(mDeleteLikeID);
                                 }
 
-                            }
-                            callUnLikeReply(mDeleteLikeID);
+                                break;
+
+                            case "like":
+
+                                callLikeReply(mFeedCommentModel.getId(), mFeedReplyList.get(pos).getID(), mMyProfileResModel.getID());
+
+                                break;
                         }
-
-                        break;
-
-                    case "like":
-
-                        callLikeReply(mFeedCommentModel.getId(), mFeedReplyList.get(pos).getID(), mMyProfileResModel.getID());
-
-                        break;
+                    }
                 }
+            });
+            mHolder.mLikeCountTxt.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mTempPosition = pos;
+                    ArrayList<ReplyLikeModel> mReplyLikeList = mFeedReplyList.get(mTempPosition).getReplyLikeByReplyID();
+                    if (mReplyLikeList.size() > 0) {
+                        showCommentReplyListPopup(mContext.getString(R.string.reply_likes));
+                        setFeedReplyLikeAdapter(mReplyLikeList);
+                    }
                 }
-            }
-        });
-        mHolder.mLikeCountTxt.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mTempPosition = pos;
-                ArrayList<ReplyLikeModel> mReplyLikeList = mFeedReplyList.get(mTempPosition).getReplyLikeByReplyID();
-                if (mReplyLikeList.size() > 0) {
-                    showCommentReplyListPopup(mContext.getString(R.string.reply_likes));
-                    setFeedReplyLikeAdapter(mReplyLikeList);
-                }
-            }
-        });
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
     }
 
@@ -332,12 +309,65 @@ public class FeedCommentsReplyAdapter extends RecyclerView.Adapter<FeedCommentsR
     }
 
     private void profileClick(FeedCommentReplyModel feedCommentReplyModel) {
-        if (mMyProfileResModel.getID() == feedCommentReplyModel.getProfileID()) {
-            ((BaseActivity) mContext).moveMyProfileScreen(mContext,0);
+
+        if (feedCommentReplyModel.getUserType().equals(AppConstants.USER) || feedCommentReplyModel.getUserType().equals("") || feedCommentReplyModel.getUserType().equals(AppConstants.ONDEMAND) || feedCommentReplyModel.getUserType().equals(AppConstants.USER_VIDEO_SHARED_POST) || feedCommentReplyModel.getUserType().equals(AppConstants.USER_EVENT_VIDEOS) || feedCommentReplyModel.getUserType().equals(AppConstants.CLUB_USER)) {
+            if (mMyProfileResModel.getID() == feedCommentReplyModel.getProfileID()) {
+                ((BaseActivity) mContext).moveMyProfileScreen(mContext, 0);
+            } else {
+                ((BaseActivity) mContext).moveOtherProfileScreen(mContext, mMyProfileResModel.getID(),
+                        feedCommentReplyModel.getProfilesByProfileID().getID());
+            }
+
+            return;
+        }
+
+        Bundle mBundle = new Bundle();
+        String mPostUserType = mFeedReplyList.get(mTempPosition).getUserType().trim();
+        if (mPostUserType.equals(PromotersModel.PROMOTER) || mPostUserType.equals(PromotersModel.NEWS_AND_MEDIA) ||
+                mPostUserType.equals(PromotersModel.TRACK) || mPostUserType.equals(PromotersModel.CLUB)
+                || mPostUserType.equals(PromotersModel.SHOP) || mPostUserType.equals(AppConstants.SHARED_POST) || mPostUserType.equals(AppConstants.VIDEO_SHARED_POST)) {
+            Class mClassName;
+            String mUserType = "";
+            if (mFeedReplyList.get(mTempPosition).getPromoterByProfileID() != null) {
+                //mBundle.putSerializable(PromotersModel.PROMOTERS_RES_MODEL, mFeedReplyList.get(mTempPosition).getPromoterByProfileID());
+                //MotoHub.getApplicationInstance().setmPromoterResModel(mFeedReplyList.get(mTempPosition).getPromoterByProfileID());
+                EventBus.getDefault().postSticky(mFeedReplyList.get(mTempPosition).getPromoterByProfileID());
+                mUserType = mFeedReplyList.get(mTempPosition).getUserType();
+            }
+
+            switch (mUserType) {
+                case PromotersModel.NEWS_AND_MEDIA:
+                    mClassName = NewsAndMediaProfileActivity.class;
+                    break;
+                case PromotersModel.CLUB:
+                    mClassName = ClubProfileActivity.class;
+                    break;
+                case PromotersModel.PROMOTER:
+                    mClassName = PromoterProfileActivity.class;
+                    break;
+                case PromotersModel.TRACK:
+                    mClassName = TrackProfileActivity.class;
+                    break;
+                case PromotersModel.SHOP:
+                    mClassName = PerformanceShopProfileActivity.class;
+                    break;
+                default:
+                    mClassName = PromoterProfileActivity.class;
+                    break;
+            }
+
+            //mBundle.putSerializable(ProfileModel.MY_PROFILE_RES_MODEL, mMyProfileResModel);
+            //MotoHub.getApplicationInstance().setmProfileResModel(mMyProfileResModel);
+            EventBus.getDefault().postSticky(mMyProfileResModel);
+            /*((BaseActivity) mContext).startActivityForResult(new Intent(mContext, mClassName).putExtras(mBundle), AppConstants.FOLLOWERS_FOLLOWING_RESULT);*/
+            ((BaseActivity) mContext).startActivityForResult(new Intent(mContext, mClassName), AppConstants.FOLLOWERS_FOLLOWING_RESULT);
+
         } else {
             ((BaseActivity) mContext).moveOtherProfileScreen(mContext, mMyProfileResModel.getID(),
-                    feedCommentReplyModel.getProfilesByProfileID().getID());
+                    mFeedReplyList.get(mTempPosition).getPromoterByProfileID().getID());
         }
+
+
     }
 
     private void setLikeUnLikeForPost(Holder mViewHolder, int position) {
@@ -373,5 +403,42 @@ public class FeedCommentsReplyAdapter extends RecyclerView.Adapter<FeedCommentsR
             mViewHolder.mLikeBtn.setTag("like");
             mViewHolder.mLikeCountTxt.setText("like");
         }
+    }
+
+    public class Holder extends RecyclerView.ViewHolder {
+
+        @BindView(R.id.reply_user_img)
+        CircleImageView mUserImg;
+
+        @BindView(R.id.reply_user_img_lay)
+        RelativeLayout mCommentReplyImgLay;
+
+        @BindView(R.id.reply_user_name_txt)
+        TextView mUserNameTxt;
+
+        @BindView(R.id.reply_txt)
+        TextView mCommentReplyTxt;
+
+        @BindView(R.id.like_count_txt)
+        TextView mLikeCountTxt;
+
+        @BindView(R.id.likeBtn)
+        ImageView mLikeBtn;
+
+        @BindView(R.id.ivCommentImg)
+        ImageView mIvCommentImg;
+
+        @BindView(R.id.replyPostTimeTxt)
+        TextView mReplyPostTime;
+
+        @BindView(R.id.smallProgressBar)
+        ProgressBar mPostPicProgressBar;
+
+
+        public Holder(View view) {
+            super(view);
+            ButterKnife.bind(this, view);
+        }
+
     }
 }

@@ -18,6 +18,7 @@ import butterknife.OnClick;
 import online.motohub.R;
 import online.motohub.util.AppConstants;
 import online.motohub.util.AutoFocusListener;
+import online.motohub.util.DialogManager;
 import online.motohub.util.MultiStateButton;
 import online.motohub.util.TimerView;
 
@@ -70,6 +71,8 @@ public class CameraActivity extends CameraActivityBase {
         }
     }
 
+
+
     @Override
     public void onBackPressed() {
         finish();
@@ -78,6 +81,7 @@ public class CameraActivity extends CameraActivityBase {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        DialogManager.hideProgress();
         if(AppConstants.LIVE_STREAM_CALL_BACK!=null){
             AppConstants.LIVE_STREAM_CALL_BACK.onSuccess();
         }

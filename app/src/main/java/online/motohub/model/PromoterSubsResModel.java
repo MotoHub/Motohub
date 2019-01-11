@@ -7,15 +7,15 @@ import java.util.ArrayList;
 
 import online.motohub.model.promoter_club_news_media.PromoterSubs;
 
-/**
- * Created by pickzy01 on 05/04/2018.
- */
-
 public class PromoterSubsResModel {
 
     @SerializedName("resource")
     @Expose
     private ArrayList<PromoterSubs> resource = null;
+
+    @SerializedName("meta")
+    @Expose
+    private MetaModel meta;
 
     public ArrayList<PromoterSubs> getResource() {
         return resource;
@@ -24,4 +24,13 @@ public class PromoterSubsResModel {
     public void setResource(ArrayList<PromoterSubs> resource) {
         this.resource = resource;
     }
+
+    public MetaModel getMeta() {
+        return meta;
+    }
+
+    public void setMeta(MetaModel meta) {
+        this.meta = meta;
+    }
+
 }

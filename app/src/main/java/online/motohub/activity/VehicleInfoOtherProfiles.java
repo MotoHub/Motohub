@@ -17,6 +17,8 @@ import android.widget.TextView;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.ArrayList;
 
 import butterknife.BindString;
@@ -25,10 +27,11 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import online.motohub.R;
 import online.motohub.adapter.VehicleInfoLikeAdapter;
-import online.motohub.model.ProfileModel;
+import online.motohub.application.MotoHub;
 import online.motohub.model.ProfileResModel;
 import online.motohub.model.VehicleInfoLikeModel;
 import online.motohub.retrofit.RetrofitClient;
+import online.motohub.util.DialogManager;
 
 public class VehicleInfoOtherProfiles extends BaseActivity {
 
@@ -321,19 +324,29 @@ public class VehicleInfoOtherProfiles extends BaseActivity {
         initView();
     }
 
+    @Override
+    protected void onDestroy() {
+        DialogManager.hideProgress();
+        super.onDestroy();
+    }
+
     private void initView() {
         setToolbar(mToolbar, mToolbarTitle);
         showToolbarBtn(mToolbar, R.id.toolbar_back_img_btn);
         assert getIntent().getExtras() != null;
-        mOthersProfileResModel =
+        /*mOthersProfileResModel =
                 (ProfileResModel) getIntent()
                         .getExtras()
-                        .getSerializable(ProfileModel.OTHERS_PROFILE_RES_MODEL);
-        mMyProfileResModel = (ProfileResModel) getIntent().getExtras().getSerializable(ProfileModel.MY_PROFILE_RES_MODEL);
+                        .getSerializable(ProfileModel.OTHERS_PROFILE_RES_MODEL);*/
+        //mMyProfileResModel = (ProfileResModel) getIntent().getExtras().getSerializable(ProfileModel.MY_PROFILE_RES_MODEL);
+        mOthersProfileResModel = MotoHub.getApplicationInstance().getmOthersProfileResModel();
+        //mMyProfileResModel = MotoHub.getApplicationInstance().getmProfileResModel();
+        mMyProfileResModel = EventBus.getDefault().getStickyEvent(ProfileResModel.class);
         setProfileReady();
     }
 
     private void setProfileReady() {
+
         String mProfileTitleStr =
                 getProfileTypeStr(String.valueOf(mOthersProfileResModel.getProfileType()))
                         + " Profile";
@@ -423,8 +436,6 @@ public class VehicleInfoOtherProfiles extends BaseActivity {
             mLikeBtn.setImageResource(R.drawable.like_to_like_click_bg);
             mLikeBtn.setTag("like");
         }
-
-
     }
 
     private void setMotoProfileVal() {
@@ -626,16 +637,16 @@ public class VehicleInfoOtherProfiles extends BaseActivity {
         mHelmetBox.setVisibility(visibility);
         mSuitBox.setVisibility(visibility);
         mGloveBox.setVisibility(visibility);
-        mBackProtectionBox.setVisibility(visibility);
-        mChestProtectionBox.setVisibility(visibility);
+        // mBackProtectionBox.setVisibility(visibility);
+        // mChestProtectionBox.setVisibility(visibility);
         mTrailerLine.setVisibility(visibility);
         mEcuLine.setVisibility(visibility);
         mBootsLine.setVisibility(visibility);
         mHelmetLine.setVisibility(visibility);
         mSuitLine.setVisibility(visibility);
         mGloveLine.setVisibility(visibility);
-        mBackProtectionLine.setVisibility(visibility);
-        mChestProtectionLine.setVisibility(visibility);
+        // mBackProtectionLine.setVisibility(visibility);
+        // mChestProtectionLine.setVisibility(visibility);
         mWheelsAndTyresBox.setVisibility(visibility);
         mWheelsAndTyresLine.setVisibility(visibility);
     }
@@ -777,7 +788,8 @@ public class VehicleInfoOtherProfiles extends BaseActivity {
             mLikes = mVehicleInfoLikeList.size() + " likes";
         }
         mLikeCountTxt.setText(mLikes);
-        setResult(RESULT_OK, new Intent().putExtra(ProfileModel.MY_PROFILE_RES_MODEL, mOthersProfileResModel));
+        MotoHub.getApplicationInstance().setmOthersProfileResModel(mOthersProfileResModel);
+        setResult(RESULT_OK, new Intent()/*.putExtra(ProfileModel.MY_PROFILE_RES_MODEL, mOthersProfileResModel)*/);
 
     }
 
@@ -803,7 +815,8 @@ public class VehicleInfoOtherProfiles extends BaseActivity {
         }
 
         mLikeCountTxt.setText(mLikes);
-        setResult(RESULT_OK, new Intent().putExtra(ProfileModel.MY_PROFILE_RES_MODEL, mOthersProfileResModel));
+        MotoHub.getApplicationInstance().setmOthersProfileResModel(mOthersProfileResModel);
+        setResult(RESULT_OK, new Intent()/*.putExtra(ProfileModel.MY_PROFILE_RES_MODEL, mOthersProfileResModel)*/);
     }
 
     @Override

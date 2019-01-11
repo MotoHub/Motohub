@@ -1,5 +1,6 @@
 package online.motohub.model;
 
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 /**
@@ -9,43 +10,37 @@ import com.google.gson.annotations.SerializedName;
 public class OndemandNewResponse {
 
 
-    @SerializedName("Count")
-    private int Count;
+    @Expose
+    @SerializedName("CoverImage")
+    private String CoverImage;
+    @Expose
     @SerializedName("ProfilePicture")
     private String ProfilePicture;
+    @Expose
+    @SerializedName("ViewCount")
+    private int ViewCount;
+    @Expose
+    @SerializedName("Count")
+    private int Count;
+    @Expose
+    @SerializedName("EventImage")
+    private String EventImage;
+    @Expose
     @SerializedName("Name")
     private String Name;
-    @SerializedName("ProfileID")
-    private int ProfileID;
-    @SerializedName("UserID")
-    private int UserID;
+    @Expose
     @SerializedName("EventID")
     private int EventID;
+    @Expose
     @SerializedName("Type")
     private String Type;
 
-    public int getEventID() {
-        return EventID;
+    public String getCoverImage() {
+        return CoverImage;
     }
 
-    public void setEventID(int eventID) {
-        EventID = eventID;
-    }
-
-    public int getUserID() {
-        return UserID;
-    }
-
-    public void setUserID(int userID) {
-        UserID = userID;
-    }
-
-    public int getCount() {
-        return Count;
-    }
-
-    public void setCount(int Count) {
-        this.Count = Count;
+    public void setCoverImage(String CoverImage) {
+        this.CoverImage = CoverImage;
     }
 
     public String getProfilePicture() {
@@ -56,6 +51,30 @@ public class OndemandNewResponse {
         this.ProfilePicture = ProfilePicture;
     }
 
+    public int getViewCount() {
+        return ViewCount;
+    }
+
+    public void setViewCount(int ViewCount) {
+        this.ViewCount = ViewCount;
+    }
+
+    public int getCount() {
+        return Count;
+    }
+
+    public void setCount(int Count) {
+        this.Count = Count;
+    }
+
+    public String getEventImage() {
+        return EventImage;
+    }
+
+    public void setEventImage(String EventImage) {
+        this.EventImage = EventImage;
+    }
+
     public String getName() {
         return Name;
     }
@@ -64,12 +83,12 @@ public class OndemandNewResponse {
         this.Name = Name;
     }
 
-    public int getProfileID() {
-        return ProfileID;
+    public int getEventID() {
+        return EventID;
     }
 
-    public void setProfileID(int ProfileID) {
-        this.ProfileID = ProfileID;
+    public void setEventID(int EventID) {
+        this.EventID = EventID;
     }
 
     public String getType() {

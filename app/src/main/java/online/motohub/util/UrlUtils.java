@@ -3,17 +3,18 @@ package online.motohub.util;
 public class UrlUtils {
     //   TODO BASE URL public static final String BASE_URL = "https://df.motohub.online/api/v2/";
     //   TODO TEST BASE URL public static final String BASE_URL = "https://motodev.spotya.online/api/v2/";
-    public static final String BASE_URL = "https://motodev.spotya.online/api/v2/";
+    public static final String BASE_URL = "https://df.motohub.online/api/v2/";
 
     //   TODO PAYMENT URL -  public static final String PAYMENT_BASE_URL = "https://portal.motohub.online/";
     //   TODO TEST PAYMENT URL - public static final String PAYMENT_BASE_URL= "https://motodev.spotya.online/pickzy/upload/promoter/motohub_test/";
-    public static final String PAYMENT_BASE_URL = "https://motodev.spotya.online/pickzy/upload/promoter/motohub_test/";
+    public static final String PAYMENT_BASE_URL = "https://portal.motohub.online/";
 
     public static final String TERMS_AND_CON = "https://df.motohub.online/motohubterms.html";
 
     public static final String FACEBOOK_LOGIN = "user/session?service=facebook";
 
-    public static final String FACEBOOK_CALLBACK = "user/session?oauth_callback=true";
+    //public static final String FACEBOOK_CALLBACK = "user/session?oauth_callback=true";
+    public static final String FACEBOOK_CALLBACK = "user/session?oauth_callback=true&remember_me=true";
 
     public static final String EMAIL_SIGN_UP = "user/register";
 
@@ -28,6 +29,8 @@ public class UrlUtils {
     public static final String GET_EVENTS_WHO_IS_GOING = "mysql/_table/WhosGoing";
 
     public static final String PUSH_TOKEN = "mysql/_table/PushToken";
+
+    public static final String Block_Unblock_Post_Notifications = "mysql/_table/PostNotificationBlockedUsers";
 
     public static final String SINGLE_CHAT_ROOM = "mysql/_table/SingleChatRoom";
 
@@ -114,20 +117,32 @@ public class UrlUtils {
     public static final String VIDEO_REPLY_LIKE = "mysql/_table/videoreplylike";
 
     public static final String REPORT_POST = "mysql/_table/reportpost";
-	
-	public static final String NEW_ONDEMAND = "ondemand";
+
+    public static final String NEW_ONDEMAND = "ondemand";
+
+    public static final String PAYMENT_CARD_DETAILS = "mysql/_table/PaymentCardDetails";
+
+    public static final String PHONE_NUMBERS = "phnumbers";
+
+    public static final String USER_TYPE = "user/profile";
+
+    public static final String ALL_POST = "allposts";
 
     //File Urls
 
-    public static final String FILE_GALLERY_IMAGE = "files/gallery/images/";
+    public static final String AWS_S3_BASE_URL = "https://s3-ap-southeast-2.amazonaws.com/motohub/";
 
-    public static final String FILE_GALLERY_VIDEO = "files/gallery/video/";
+    public static final String AWS_FILE_URL = BASE_URL + "s3_files/";
+
+    public static final String FILE_GALLERY_IMAGE = "s3_files/gallery/images/";
+
+    public static final String FILE_GALLERY_VIDEO = "s3_files/gallery/video/";
 
     public static final String FILE_COVER_IMG = "files/CoverImages/";
 
     public static final String FILE_PROFILE_IMG = "files/ProfileImages/";
 
-    public static final String FILE_POST_IMG = "files/Posts/";
+    public static final String FILE_POST_IMG = "s3_files/Posts/";
 
     public static final String COMMENT_REPLY_IMG = "files/CommentReplyImages/";
 
@@ -135,10 +150,17 @@ public class UrlUtils {
 
     public static final String FILE_URL = BASE_URL + "files/";
 
-    public static final String File_Upload_Video = "files/PostVideos/";
+    public static final String File_Upload_Video = "s3_files/PostVideos/";
 
-    public static final String FILE_SPECTATOR_LIVE = "files/SpectatorLive/";
+    public static final String FILE_SPECTATOR_LIVE = "s3_files/SpectatorLive/";
 
     public static final String FILE_SINGLE_CHAT = "files/Chat/images/";
+
+    //TODO aws s3 file upload path
+    public static final String FILE_ONDEMAND = "gallery/video/";
+    public static final String FILE_WRITE_POST = "PostVideos/";
+    public static final String FILE_WRITE_POST_IMAGE = "Posts/";
+    public static final String FILE_WRITE_POST_VIDEO_THUBILINE = "PostVideosThumb/";
+    public static final String FILE_UPLOAD_SPECTOCTORLIVE = "SpectatorLive/";
 
 }

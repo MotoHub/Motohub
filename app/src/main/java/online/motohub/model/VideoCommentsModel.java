@@ -46,6 +46,15 @@ public class VideoCommentsModel implements Serializable {
     @Expose
     private ProfileResModel mProfilesByProfileID;
 
+    @SerializedName("CommentTaggedUserNames")
+    @Expose
+    private String mCommentTaggedUserNames;
+
+
+    @SerializedName("CommentTaggedUserID")
+    @Expose
+    private String mCommentTaggedUserID;
+
     @SerializedName("videocommentreply_by_CommentID")
     @Expose
     private ArrayList<VideoCommentReplyModel> mFeedCommentReplyModel;
@@ -68,6 +77,15 @@ public class VideoCommentsModel implements Serializable {
         this.mResource = resource;
     }
 
+    public String getCommentTaggedUserID() {
+        if(mCommentTaggedUserID == null)
+            mCommentTaggedUserID = "";
+        return mCommentTaggedUserID;
+    }
+
+    public void setCommentTaggedUserID(String mCommentTaggedUserID) {
+        this.mCommentTaggedUserID = mCommentTaggedUserID;
+    }
 
     public int getId() {
         return mId;
@@ -147,5 +165,15 @@ public class VideoCommentsModel implements Serializable {
 
     public void setCommentImages(String mCommentImages) {
         this.mCommentImages = mCommentImages;
+    }
+
+    public String getCommentTaggedUserNames() {
+        if(mCommentTaggedUserNames == null)
+            mCommentTaggedUserNames = "";
+        return mCommentTaggedUserNames;
+    }
+
+    public void setCommentTaggedUserNames(String mCommentTaggedUserNames) {
+        this.mCommentTaggedUserNames = mCommentTaggedUserNames;
     }
 }

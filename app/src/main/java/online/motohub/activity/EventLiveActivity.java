@@ -23,12 +23,12 @@ import android.widget.TextView;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
+import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
 import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
@@ -109,7 +109,7 @@ public class EventLiveActivity extends BaseActivity implements ChatBoxEventGrpAd
     ImageView mReplyChatCloseIv;
     @BindView(R.id.replyChatImageIv)
     ImageView mReplyChatImageIv;
-	@BindView(R.id.imageConstraintLay)
+    @BindView(R.id.imageConstraintLay)
     ConstraintLayout mImageConstraintLay;
     @BindView(R.id.iv_post_image)
     ImageView mIvPostImage;
@@ -147,19 +147,15 @@ public class EventLiveActivity extends BaseActivity implements ChatBoxEventGrpAd
         @Override
         public void onSuccess() {
             Intent paymentActivity = new Intent(EventLiveActivity.this, PaymentActivity.class);
-            paymentActivity.putExtra(EventsModel.EVENT_AMOUNT, mStreamAmount);
+            paymentActivity.putExtra(EventsModel.EVENT_AMOUNT, mStreamAmount).putExtra(AppConstants.PROFILE_ID, mMyProfileResModel.getID());
             startActivityForResult(paymentActivity, EVENT_LIVE_PAYMENT_REQ_CODE);
         }
     };
-	private String mPostImgUri = null;
-    private String imgUrl = "";
+    private String mPostImgUri = null;
+    private String imgUrl = null;
     private String mToken = "";
     private boolean isUpdatePayment = false;
     private String mTransactionID = "";
-    private boolean isRepliedMsg = false;
-    private int mReplyMsgID;
-    private String mReplyMsg = "", mReplyUserName, mReplyImg = "";
-    private int mReplyUserProfileID;
     RetrofitResInterface mRetrofitResInterface = new RetrofitResInterface() {
         @Override
         public void retrofitOnResponse(Object responseObj, int responseType) {
@@ -237,6 +233,10 @@ public class EventLiveActivity extends BaseActivity implements ChatBoxEventGrpAd
             }
         }
     };
+    private boolean isRepliedMsg = false;
+    private int mReplyMsgID;
+    private String mReplyMsg = "", mReplyUserName, mReplyImg = "";
+    private int mReplyUserProfileID;
     private ArrayList<PromoterFollowerResModel> mPromoterFollowerList = new ArrayList<>();
 
 /*
@@ -278,7 +278,9 @@ public class EventLiveActivity extends BaseActivity implements ChatBoxEventGrpAd
             getMotoProfiles();
 
         } else {
-            mMyProfileResModel = (ProfileResModel) getIntent().getSerializableExtra(ProfileModel.MY_PROFILE_RES_MODEL);
+            //mMyProfileResModel = (ProfileResModel) getIntent().getSerializableExtra(ProfileModel.MY_PROFILE_RES_MODEL);
+            //mMyProfileResModel = MotoHub.getApplicationInstance().getmProfileResModel();
+            mMyProfileResModel = EventBus.getDefault().getStickyEvent(ProfileResModel.class);
             mEventID = getIntent().getExtras().getInt(EventsModel.EVENT_ID);
             getEvent();
         }
@@ -293,14 +295,19 @@ public class EventLiveActivity extends BaseActivity implements ChatBoxEventGrpAd
 
     @Override
     protected void onDestroy() {
+        DialogManager.hideProgress();
         super.onDestroy();
         //  RemoveMembersFromGroupChat();
     }
 
     private void initView() {
 
-        mSenderProfileID = mMyProfileResModel.getID();
-
+        try {
+            if (mMyProfileResModel != null && mMyProfileResModel.getID() != 0)
+                mSenderProfileID = mMyProfileResModel.getID();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         String mEventName = mEventResModel.getName();
 
         setToolbar(mToolbar, mEventName);
@@ -310,7 +317,7 @@ public class EventLiveActivity extends BaseActivity implements ChatBoxEventGrpAd
         mEventStartTimeTxt.setText(mEventResModel.getDate());
         mEventEndTimeTxt.setText(mEventResModel.getFinish());
 
-        if(mEventResModel.getLivestream_by_EventID().size() == 0){
+        if (mEventResModel.getLivestream_by_EventID().size() == 0) {
             mLiveFeedBtn.setVisibility(GONE);
             LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.MATCH_PARENT,
@@ -347,7 +354,7 @@ public class EventLiveActivity extends BaseActivity implements ChatBoxEventGrpAd
         });
 
         mEventGrpChatMsgList = new ArrayList<>();
-        mChatBoxEventGrpAdapter = new ChatBoxEventGrpAdapter(mEventGrpChatMsgList, this);
+        mChatBoxEventGrpAdapter = new ChatBoxEventGrpAdapter(mMyProfileResModel, mEventGrpChatMsgList, this);
         mEventGrpChatMsgRv.setAdapter(mChatBoxEventGrpAdapter);
 
         //  AddMembersIntoGroupChat();
@@ -355,19 +362,15 @@ public class EventLiveActivity extends BaseActivity implements ChatBoxEventGrpAd
     }
 
     private void getEvent() {
-
         String mFilter = "ID=" + mEventID;
         RetrofitClient.getRetrofitInstance().callGetEvents(this, mFilter, RetrofitClient.GET_EVENTS_RESPONSE);
-
     }
 
     private void getEventGrpChatMsg() {
-
         String mFilter = "EventID=" + mEventID;
-
         RetrofitClient.getRetrofitInstance().callGetLiveEventGrpChatMsg(this, mFilter, RetrofitClient.GET_LIVE_EVENT_GRP_CHAT_MSG, mDataLimit, mMsgRvOffset);
-
     }
+
 
     @Override
     public void onBackPressed() {
@@ -376,7 +379,7 @@ public class EventLiveActivity extends BaseActivity implements ChatBoxEventGrpAd
         //   RemoveMembersFromGroupChat();
     }
 
-    @OnClick({R.id.toolbar_back_img_btn, R.id.send_btn, R.id.timetable_view_lay, R.id.btnSpectatorLive, R.id.btnLiveFeed, R.id.promoterLay, R.id.fileAttachImgBtn, R.id.iv_remove_image,R.id.replyChatCloseIv})
+    @OnClick({R.id.toolbar_back_img_btn, R.id.send_btn, R.id.timetable_view_lay, R.id.btnSpectatorLive, R.id.btnLiveFeed, R.id.promoterLay, R.id.fileAttachImgBtn, R.id.iv_remove_image, R.id.replyChatCloseIv})
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.toolbar_back_img_btn:
@@ -390,28 +393,38 @@ public class EventLiveActivity extends BaseActivity implements ChatBoxEventGrpAd
                 }
                 break;
             case R.id.timetable_view_lay:
-                Intent mTimeTableIntent = new Intent(this, TimeTableActivity.class);
-                mTimeTableIntent.putExtra(EventsModel.EVENT_ID, mEventResModel.getID());
-                startActivity(mTimeTableIntent);
+                if (mEventResModel != null) {
+                    Intent mTimeTableIntent = new Intent(this, TimeTableActivity.class);
+                    mTimeTableIntent.putExtra(EventsModel.EVENT_ID, mEventResModel.getID());
+                    startActivity(mTimeTableIntent);
+                }
                 break;
             case R.id.btnSpectatorLive:
                 DialogManager.showMultiLiveOptionPopup(this, this, getString(R.string.go_live), getString(R.string.view_live));
                 break;
             case R.id.btnLiveFeed:
-                mStreamAmount = mEventResModel.getStream_amount();
-                float mResAmount = (float) mStreamAmount / 100;
-                if (mStreamAmount == 0 || isAlreadyPaid()) {
-                    int eventID = mEventResModel.getID();
-                    Intent mGoWatchActivity = new Intent(this, PromoterLiveStreamViewActivity.class);
-                    mGoWatchActivity.putExtra(AppConstants.EVENT_ID, eventID);
-                    startActivity(mGoWatchActivity);
-                } else {
-                    DialogManager.showAlertDialogWithCallback(this, mPaymentAlertInterface,
-                            getString(R.string.alert_live_pay_amount) + "" + mResAmount);
+                try {
+                    if (mEventResModel != null && mEventResModel.getStream_amount() != null) {
+                        mStreamAmount = mEventResModel.getStream_amount();
+                        float mResAmount = (float) mStreamAmount / 100;
+                        if (mStreamAmount == 0 || isAlreadyPaid()) {
+                            int eventID = mEventResModel.getID();
+                            Intent mGoWatchActivity = new Intent(this, PromoterLiveStreamViewActivity.class);
+                            mGoWatchActivity.putExtra(AppConstants.EVENT_ID, eventID);
+                            startActivity(mGoWatchActivity);
+                        } else {
+                            DialogManager.showAlertDialogWithCallback(this, mPaymentAlertInterface,
+                                    getString(R.string.alert_live_pay_amount) + "" + mResAmount);
+                        }
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
                 break;
             case R.id.promoterLay:
-                DialogManager.showPromoterChatPopup(this, mPromoterEventGrpChatList, mEventResModel.getPromoterByUserID().getName());
+                if (mEventResModel != null) {
+                    DialogManager.showPromoterChatPopup(this, mPromoterEventGrpChatList, mEventResModel.getPromoterByUserID().getName());
+                }
                 break;
             case R.id.fileAttachImgBtn:
                 showAppDialog(AppDialogFragment.BOTTOM_ADD_IMG_DIALOG, null);
@@ -524,7 +537,9 @@ public class EventLiveActivity extends BaseActivity implements ChatBoxEventGrpAd
 
     private void callPayViewLiveStream() {
         isUpdatePayment = false;
-        RetrofitClient.getRetrofitInstance().postPayForViewLiveStream(this, mRetrofitResInterface, mToken, "", mStreamAmount, AppConstants.LIVE_STREAM_PAYMENT);
+        PromotersResModel mPromoterResModel = mEventResModel.getPromoterByUserID();
+        String mAcctNo = mPromoterResModel.getStripeUserId();
+        RetrofitClient.getRetrofitInstance().postPayForViewLiveStream(this, mRetrofitResInterface, mToken, mAcctNo, mStreamAmount, AppConstants.LIVE_STREAM_PAYMENT);
     }
 
     private void updateList(LiveStreamPaymentEntity mEntity) {
@@ -648,6 +663,7 @@ public class EventLiveActivity extends BaseActivity implements ChatBoxEventGrpAd
 
             if (mPostImgUri != null) {
                 uploadPicture(mPostImgUri);
+                return;
             } else if (mMessage.isEmpty()) {
                 showToast(getApplicationContext(), getString(R.string.write_something));
                 return;
@@ -661,10 +677,10 @@ public class EventLiveActivity extends BaseActivity implements ChatBoxEventGrpAd
             mEventGrpChatMsgResModel.setSenderProfileID(mSenderProfileID);
             mEventGrpChatMsgResModel.setSenderUserID(PreferenceUtils.getInstance(this).getIntData(PreferenceUtils.USER_ID));
             mEventGrpChatMsgResModel.setSenderUserID(PreferenceUtils.getInstance(this).getIntData(PreferenceUtils.USER_ID));
-			   mEventGrpChatMsgResModel.setMsgType(imgUrl != null ? "media" : "text");
+            mEventGrpChatMsgResModel.setMsgType(imgUrl != null ? "media" : "text");
             mEventGrpChatMsgResModel.setPhotoMessage(imgUrl != null ? imgUrl : "");
 
-            if (isRepliedMsg) {
+         /*   if (isRepliedMsg) {
                 mEventGrpChatMsgResModel.setRepliedMsgID(mReplyMsgID);
                 mEventGrpChatMsgResModel.setReplyMessage(URLEncoder.encode(mReplyMsg,"UTF-8"));
                 mEventGrpChatMsgResModel.setReplyUserProfileID(mReplyUserProfileID);
@@ -672,7 +688,7 @@ public class EventLiveActivity extends BaseActivity implements ChatBoxEventGrpAd
                 mEventGrpChatMsgResModel.setReplyImage(mReplyImg);
                 mEventGrpChatMsgResModel.setIsRepliedMsg(true);
                 mReplyChatLayout.setVisibility(GONE);
-            }
+            }*/
 
             List<EventGrpChatMsgResModel> mEventGrpChatMsgResModelList = new ArrayList<>();
             mEventGrpChatMsgResModelList.add(mEventGrpChatMsgResModel);
@@ -699,7 +715,11 @@ public class EventLiveActivity extends BaseActivity implements ChatBoxEventGrpAd
                     if (mProfileModel.getResource() != null && mProfileModel.getResource().size() > 0) {
                         ArrayList<ProfileResModel> mFullMPList = new ArrayList<>();
                         mFullMPList.addAll(mProfileModel.getResource());
-                        mMyProfileResModel = mFullMPList.get(PreferenceUtils.getInstance(this).getIntData(PreferenceUtils.CURRENT_PROFILE_POS));
+                        //mMyProfileResModel = mFullMPList.get(PreferenceUtils.getInstance(this).getIntData(PreferenceUtils.CURRENT_PROFILE_POS));
+                        //MotoHub.getApplicationInstance().setmProfileResModel(mFullMPList.get(PreferenceUtils.getInstance(this).getIntData(PreferenceUtils.CURRENT_PROFILE_POS)));
+                        EventBus.getDefault().postSticky(mFullMPList.get(PreferenceUtils.getInstance(this).getIntData(PreferenceUtils.CURRENT_PROFILE_POS)));
+                        //mMyProfileResModel = MotoHub.getApplicationInstance().getmProfileResModel();
+                        mMyProfileResModel = EventBus.getDefault().getStickyEvent(ProfileResModel.class);
                         getEvent();
                     }
                     break;
@@ -814,7 +834,7 @@ public class EventLiveActivity extends BaseActivity implements ChatBoxEventGrpAd
         mMessageEt.setText("");
         mfileAttachImgBtn.setVisibility(View.VISIBLE);
         mPostImgUri = null;
-        imgUrl = "";
+        imgUrl = null;
     }
 
 
@@ -877,19 +897,24 @@ public class EventLiveActivity extends BaseActivity implements ChatBoxEventGrpAd
     public void onSuccess(int type) {
         Bundle mBundle = new Bundle();
         if (type == 1) {
-            mBundle.putSerializable(ProfileModel.MY_PROFILE_RES_MODEL, mMyProfileResModel);
+            //MotoHub.getApplicationInstance().setmProfileResModel(mMyProfileResModel);
+            if (mMyProfileResModel != null)
+                EventBus.getDefault().postSticky(mMyProfileResModel);
+            //mBundle.putSerializable(ProfileModel.MY_PROFILE_RES_MODEL, mMyProfileResModel);
             mBundle.putSerializable(EventsModel.EVENTS_RES_MODEL, mEventResModel);
             startActivity(new Intent(this, CameraStoryActivity.class).putExtras(mBundle));
         } else {
-            mBundle.putSerializable(EventsModel.EVENTS_RES_MODEL, mEventResModel);
-            mBundle.putString(AppConstants.TAG, TAG);
-            startActivity(new Intent(this, ViewSpecLiveActivity.class).putExtras(mBundle));
+            if (mEventResModel != null) {
+                mBundle.putSerializable(EventsModel.EVENTS_RES_MODEL, mEventResModel);
+                mBundle.putString(AppConstants.TAG, TAG);
+                startActivity(new Intent(this, ViewSpecLiveActivity.class).putExtras(mBundle));
+            }
         }
     }
 
-    public void setReplyChatMsg(String replyMsg, int replyMsgID, int replyUserProfileID, String replyMsgUserName, String mImgUrl){
+    public void setReplyChatMsg(String replyMsg, int replyMsgID, int replyUserProfileID, String replyMsgUserName, String mImgUrl) {
         isRepliedMsg = true;
-        mReplyUserProfileID  = replyUserProfileID;
+        mReplyUserProfileID = replyUserProfileID;
         mReplyMsgID = replyMsgID;
         mReplyMsg = replyMsg;
         mReplyImg = mImgUrl;
@@ -897,14 +922,14 @@ public class EventLiveActivity extends BaseActivity implements ChatBoxEventGrpAd
         mReplyChatUserNameTv.setText(replyMsgUserName);
         mReplyChatLayout.setVisibility(View.VISIBLE);
         mReplyChatCloseIv.setVisibility(View.VISIBLE);
-        mReplyChatView.setLayoutParams(new RelativeLayout.LayoutParams(3,mReplyChatLayout.getHeight()));
-        if(replyMsg.trim().isEmpty()){
+        mReplyChatView.setLayoutParams(new RelativeLayout.LayoutParams(3, mReplyChatLayout.getHeight()));
+        if (replyMsg.trim().isEmpty()) {
             mReplyChatMsgTv.setVisibility(GONE);
         } else {
             mReplyChatMsgTv.setVisibility(View.VISIBLE);
             mReplyChatMsgTv.setText(replyMsg);
         }
-        if(mImgUrl.trim().isEmpty()){
+        if (mImgUrl.trim().isEmpty()) {
             mReplyChatImageIv.setVisibility(GONE);
         } else {
             mReplyChatImageIv.setVisibility(View.VISIBLE);
@@ -913,7 +938,7 @@ public class EventLiveActivity extends BaseActivity implements ChatBoxEventGrpAd
 
     }
 
-    public void hideReplyChatMsg(){
+    public void hideReplyChatMsg() {
         mReplyChatLayout.setVisibility(GONE);
     }
 }

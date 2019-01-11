@@ -28,7 +28,6 @@ public class FeedLikesModel implements Serializable{
         this.mProfileID = profileID;
     }
 
-
     @SerializedName("resource")
     @Expose
     private ArrayList<FeedLikesModel> mResource = null;

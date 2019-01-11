@@ -61,23 +61,27 @@ public class FeedCommentLikeAdapter extends RecyclerView.Adapter<FeedCommentLike
 
     @Override
     public void onBindViewHolder(final Holder mHolder, int pos) {
-        FeedCommentLikeModel mEntity = mFeedLikesList.get(pos);
-        String imgStr = mEntity.getProfileByProfileID().getProfilePicture();
-        if (!imgStr.isEmpty()) {
-            ((BaseActivity)mContext).setImageWithGlide(mHolder.mUserImg,imgStr, R.drawable.default_profile_icon);
-        } else {
-            mHolder.mUserImg.setImageResource(R.drawable.default_profile_icon);
-        }
-        mHolder.mCommentImgLay.setTag(pos);
-        mHolder.mCommentImgLay.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                int selPos = (int) v.getTag();
-                profileClick(mFeedLikesList.get(selPos));
+        try {
+            FeedCommentLikeModel mEntity = mFeedLikesList.get(pos);
+            String imgStr = mEntity.getProfileByProfileID().getProfilePicture();
+            if (!imgStr.isEmpty()) {
+                ((BaseActivity) mContext).setImageWithGlide(mHolder.mUserImg, imgStr, R.drawable.default_profile_icon);
+            } else {
+                mHolder.mUserImg.setImageResource(R.drawable.default_profile_icon);
             }
-        });
+            mHolder.mCommentImgLay.setTag(pos);
+            mHolder.mCommentImgLay.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int selPos = (int) v.getTag();
+                    profileClick(mFeedLikesList.get(selPos));
+                }
+            });
 
-        mHolder.mUserNameTxt.setText(Utility.getInstance().getUserName(mEntity.getProfileByProfileID()));
+            mHolder.mUserNameTxt.setText(Utility.getInstance().getUserName(mEntity.getProfileByProfileID()));
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     @Override

@@ -6,7 +6,8 @@
     android:focusable="true"
     android:focusableInTouchMode="true"
     android:orientation="vertical"
-    tools:context="online.motohub.activity.PaymentActivity">
+    android:id="@+id/newCardLayout"
+    tools:context="online.motohub.activity.CreateNewPaymentActivity">
 
     <include
         android:id="@+id/include"
@@ -63,7 +64,7 @@
             android:layout_marginEnd="@dimen/size20"
             android:textColorHint="@color/colorGrey"
             android:layout_marginTop="@dimen/size20"
-            android:hint="4111 1111 1111 1111"
+            android:hint="@string/credit_card_number_hint"
             android:background="@drawable/orange_border_bg"
             android:inputType="number"
             android:labelFor="@+id/et_card_number"
@@ -97,9 +98,9 @@
                 android:layout_marginTop="@dimen/size20"
                 android:background="@drawable/orange_border_bg"
                 android:inputType="date"
-                android:hint="@string/expiry_date_hint"
+                android:hint="@string/stripe_expiry_date_hint"
                 android:labelFor="@+id/et_card_exp_date"
-                android:maxLength="5"
+                android:maxLength="7"
                 android:textColor="@color/colorBlack"
                 android:textSize="@dimen/text16" />
 
@@ -110,7 +111,7 @@
                 android:layout_marginStart="@dimen/size10"
                 android:layout_toEndOf="@+id/tv_exp_date"
                 android:textColor="@color/colorBlack"
-                android:text="@string/cvv"
+                android:text="@string/cvc_amex_hint"
                 android:textSize="@dimen/text16" />
 
             <EditText
@@ -120,7 +121,7 @@
                 android:layout_height="@dimen/size40"
                 android:textColorHint="@color/colorGrey"
                 android:layout_below="@+id/tv_exp_date"
-                android:hint="123"
+                android:hint="@string/cvc_amex_hint"
                 android:layout_marginStart="@dimen/size10"
                 android:layout_marginTop="@dimen/size20"
                 android:layout_toEndOf="@+id/et_card_exp_date"
@@ -131,6 +132,25 @@
                 android:textColor="@color/colorBlack"
                 android:textSize="@dimen/text16" />
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/cardAlertTxt"
+                android:layout_below="@+id/et_card_exp_date"
+                android:layout_marginStart="@dimen/size10"
+                android:layout_marginEnd="@dimen/size10"
+                android:layout_marginTop="@dimen/size20"
+                android:text="@string/save_card_alert_msg"
+                android:textColor="@color/colorBlack"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/txt_card_management"
+                android:text="@string/card_management"
+                android:textColor="@color/text_color"
+                android:layout_below="@+id/cardAlertTxt"
+                android:layout_marginStart="@dimen/size10"
+                />
             <Button
                 android:id="@+id/pay_btn"
                 style="@style/LayoutMatchWrap"

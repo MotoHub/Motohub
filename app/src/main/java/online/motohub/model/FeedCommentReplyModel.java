@@ -42,6 +42,14 @@ public class FeedCommentReplyModel implements Serializable {
     @Expose
     private String mUserType;
 
+    @SerializedName("ReplyTaggedUserNames")
+    @Expose
+    private String mReplyTaggedUserNames;
+
+    @SerializedName("ReplyTaggedUserID")
+    @Expose
+    private String mReplyTaggedUserID;
+
     @SerializedName("promoter_by_ProfileID")
     @Expose
     private PromotersResModel mPromoterByProfileID;
@@ -111,6 +119,30 @@ public class FeedCommentReplyModel implements Serializable {
 
     public void setProfilesByProfileID(ProfileResModel mProfilesByProfileID) {
         this.mProfilesByProfileID = mProfilesByProfileID;
+    }
+
+    public static String getReplyList() {
+        return REPLY_LIST;
+    }
+
+    public String getReplyTaggedUserNames() {
+        if(mReplyTaggedUserNames ==  null)
+            mReplyTaggedUserNames = "";
+        return mReplyTaggedUserNames;
+    }
+
+    public void setReplyTaggedUserNames(String mReplyTaggedUserNames) {
+        this.mReplyTaggedUserNames = mReplyTaggedUserNames;
+    }
+
+    public String getReplyTaggedUserIDs() {
+        if(mReplyTaggedUserID == null)
+            mReplyTaggedUserID = "";
+        return mReplyTaggedUserID;
+    }
+
+    public void setReplyTaggedUserIDs(String mReplyTaggedUserIDs) {
+        this.mReplyTaggedUserID = mReplyTaggedUserIDs;
     }
 
     public ArrayList<ReplyLikeModel> getReplyLikeByReplyID() {

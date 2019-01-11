@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/postViewCoLayout"
     android:layout_width="match_parent"
@@ -9,10 +9,28 @@
         android:id="@+id/include"
         layout="@layout/widget_toolbar" />
 
+    <com.facebook.shimmer.ShimmerFrameLayout
+        android:id="@+id/shimmer_postview"
+        style="@style/LayoutMatch"
+        android:layout_below="@+id/include"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <include layout="@layout/posts_placeholder_item" />
+
+        </LinearLayout>
+
+    </com.facebook.shimmer.ShimmerFrameLayout>
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_view"
+        android:layout_below="@+id/include"
         style="@style/LayoutMatch"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        android:paddingTop="@dimen/size10" />
+        android:paddingTop="@dimen/size10"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
-</android.support.design.widget.CoordinatorLayout>
+</RelativeLayout>

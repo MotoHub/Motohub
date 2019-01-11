@@ -1,18 +1,18 @@
 package online.motohub.activity;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.CardView;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.view.KeyEvent;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
-import android.widget.EditText;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.stripe.android.Stripe;
@@ -20,93 +20,160 @@ import com.stripe.android.TokenCallback;
 import com.stripe.android.model.Card;
 import com.stripe.android.model.Token;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
+import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.crypto.NoSuchPaddingException;
 
 import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import online.motohub.R;
+import online.motohub.adapter.EventsFindAdapter;
+import online.motohub.adapter.PaymentCardDetailsAdapter;
 import online.motohub.model.EventsModel;
+import online.motohub.model.PaymentCardDetailsModel;
+import online.motohub.retrofit.RetrofitClient;
+import online.motohub.util.AppConstants;
+import online.motohub.util.CryptLib;
 import online.motohub.util.DialogManager;
+import online.motohub.util.PreferenceUtils;
+import online.motohub.util.SwipeHelper;
 
 public class PaymentActivity extends BaseActivity {
 
-    @BindView(R.id.et_card_name)
-    EditText mCardName;
+    @BindView(R.id.parent)
+    RelativeLayout mParent;
 
-    @BindView(R.id.et_card_number)
-    EditText mCardNumber;
-
-    @BindView(R.id.et_card_exp_date)
-    EditText mCardExpDate;
-
-    @BindView(R.id.et_cvc)
-    EditText mCardCvc;
-
-    @BindString(R.string.payment)
+    @BindString(R.string.saved_cards)
     String mToolbarTitle;
 
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
 
+
     @BindView(R.id.pay_btn)
     Button mPayBtn;
 
-    String mCardNameTxt, mCardNumberTxt, mCardCvcTxt;
+    @BindView(R.id.savedCardRecyclerView)
+    RecyclerView mSavedardRecyclerView;
 
+    @BindView(R.id.newCardView)
+    CardView mNewCardView;
+
+    @BindView(R.id.payableAmountTxt)
+    TextView mPayableAmountTxt;
+
+    @BindView(R.id.payableCardView)
+    CardView mPayableCardView;
+
+    int mAmount, mUserID, mProfileID;
+    String mCardNumberTxt, mCardCvcTxt;
     int mCardExpMonthVal, mCardExpYearVal;
-
-    int mAmount;
+    private ArrayList<PaymentCardDetailsModel> mPaymentCardDetailsList = new ArrayList<>();
+    private boolean mIsFromCardManagement;
+    private LinearLayoutManager mSavedCardsLayoutManager;
+    private PaymentCardDetailsAdapter mPaymentCardDetailsAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_payment);
+        setContentView(R.layout.activity_payment_details);
         ButterKnife.bind(this);
-
-        showToast(this, "Please keep the perfect internet connection while doing payment");
-        mAmount = getIntent().getIntExtra(EventsModel.EVENT_AMOUNT, 0);
+        getData();
         initView();
 
     }
 
+    @Override
+    protected void onDestroy() {
+        DialogManager.hideProgress();
+        super.onDestroy();
+    }
+
+    private void getData() {
+        mUserID = PreferenceUtils.getInstance(this).getIntData(PreferenceUtils.USER_ID);
+        if (getIntent().hasExtra(AppConstants.CARD_SETTINGS)) {
+            mIsFromCardManagement = true;
+        } else {
+            showToast(this, "Please keep the perfect internet connection while doing payment");
+            mAmount = getIntent().getIntExtra(EventsModel.EVENT_AMOUNT, 0);
+            mProfileID = getIntent().getIntExtra(AppConstants.PROFILE_ID, 0);
+        }
+    }
+
     private void initView() {
+
+        setupUI(mParent);
 
         setToolbar(mToolbar, mToolbarTitle);
 
         showToolbarBtn(mToolbar, R.id.toolbar_back_img_btn);
+        if (!mIsFromCardManagement) {
 
-        float mResAmount = (float) mAmount / 100;
+            float mResAmount = (float) mAmount / 100;
 
-        String mPayAmount;
-        mPayAmount = "Pay" + " $" + mResAmount;
+            String mPayAmount;
+            mPayAmount = " $" + mResAmount;
 
-        mPayBtn.setText(mPayAmount);
+            mPayableAmountTxt.setText(mPayAmount);
+        } else {
+            mPayBtn.setVisibility(View.GONE);
+            mNewCardView.setVisibility(View.GONE);
+            mPayableCardView.setVisibility(View.GONE);
 
-        mCardNumber.addTextChangedListener(new CreditCardNumberFormattingTextWatcher());
+        }
+        mSavedCardsLayoutManager = new LinearLayoutManager(getApplicationContext());
+        mSavedCardsLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
 
-        mCardExpDate.addTextChangedListener(new CreditCardExpiryDateFormattingTextWatcher());
+        mSavedardRecyclerView.setLayoutManager(mSavedCardsLayoutManager);
+
+        new SwipeHelper(this, mSavedardRecyclerView) {
+            @Override
+            public void instantiateUnderlayButton(RecyclerView.ViewHolder viewHolder, List<UnderlayButton> underlayButtons) {
+                underlayButtons.add(new SwipeHelper.UnderlayButton(
+                        "Delete",
+                        0,
+                        ContextCompat.getColor(PaymentActivity.this, R.color.colorWhite),
+                        ContextCompat.getColor(PaymentActivity.this, R.color.colorRed),
+                        new SwipeHelper.UnderlayButtonClickListener() {
+                            @Override
+                            public void onClick(int pos) {
+                                // TODO: onDelete
+                                String mFilter = "ID = " + mPaymentCardDetailsList.get(pos).getID();
+                                callDeleteCardDetails(mFilter);
+                                mPaymentCardDetailsList.remove(pos);
+                                setPaymentCardAdapter();
+
+                            }
+                        }
+                ));
+
+            }
+        };
+
+        callGetCardDetails();
+
     }
 
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        assert imm != null;
-        imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
-        return super.onTouchEvent(event);
+    private void callDeleteCardDetails(String mFilter) {
+        RetrofitClient.getRetrofitInstance().callDeletePaymentCardDetails(this, mFilter, RetrofitClient.DELETE_PAYMENT_CARD_DETAILS);
+    }
+
+    private void callGetCardDetails() {
+
+        String mFilter = "UserID = " + mUserID;
+        RetrofitClient.getRetrofitInstance().callGetPaymentCardDetails(this, mFilter, RetrofitClient.CALL_GET_PAYMENT_CARD_DETAILS);
     }
 
     @Override
     public void onBackPressed() {
-        Intent resultIntent = new Intent();
-        setResult(Activity.RESULT_CANCELED, resultIntent);
         finish();
     }
 
-    @OnClick({R.id.pay_btn, R.id.toolbar_back_img_btn})
+    @OnClick({R.id.pay_btn, R.id.toolbar_back_img_btn, R.id.newCardView})
     public void onClick(View v) {
 
         switch (v.getId()) {
@@ -115,8 +182,10 @@ public class PaymentActivity extends BaseActivity {
                 hideSoftKeyboard();
                 break;
             case R.id.pay_btn:
-
-                checkValues();
+                purchase();
+                break;
+            case R.id.newCardView:
+                startActivityForResult(new Intent(this, CreateNewPaymentActivity.class).putExtra(AppConstants.PROFILE_ID, mProfileID).putExtra(EventsModel.EVENT_AMOUNT, mAmount), EventsFindAdapter.EVENT_PAYMENT_REQ_CODE);
                 break;
         }
 
@@ -124,7 +193,7 @@ public class PaymentActivity extends BaseActivity {
 
     private void purchase() {
         Card card = new Card(mCardNumberTxt, mCardExpMonthVal, mCardExpYearVal, mCardCvcTxt);
-        Stripe stripe = new Stripe(PaymentActivity.this, getString(R.string.stripe_publishable_key));
+        Stripe stripe = new Stripe(this, getString(R.string.stripe_publishable_key));
 
         if (card.validateCard()) {
             DialogManager.showProgress(this);
@@ -147,184 +216,19 @@ public class PaymentActivity extends BaseActivity {
                 }
             });
         } else {
-            showToast(PaymentActivity.this, "The given card is not valid");
+            showToast(this, "The given card is not valid");
         }
 
     }
 
     private void finishDialog() {
-         DialogManager.hideProgress();
+        DialogManager.hideProgress();
 
-    }
-
-    private void checkValues() {
-
-        if (mCardName.getText().toString().trim().equals("") && mCardNumber.getText().toString().trim().equals("") && mCardExpDate.getText().toString().trim().equals("") &&
-                mCardCvc.getText().toString().trim().equals("")) {
-            showToast(PaymentActivity.this, "Please fill all details");
-        } else if (mCardName.getText().toString().trim().equals("")) {
-            showToast(PaymentActivity.this, "Please specify the card holder name");
-        } else if (mCardNumber.getText().toString().trim().equals("")) {
-            showToast(PaymentActivity.this, "Please specify the card number");
-        } else if (mCardNumber.getText().toString().trim().length() < 16) {
-            showToast(this, "The Card number should contains 16 digits");
-        } else if (mCardExpDate.getText().toString().trim().equals("")) {
-            showToast(PaymentActivity.this, "Please specify the card valid date");
-        } else if (mCardExpDate.getText().toString().length() < 5) {
-            showToast(this, "Please enter valid expiry date");
-        } else if (mCardCvc.getText().toString().trim().equals("")) {
-            showToast(PaymentActivity.this, "Please enter the CVV number");
-        } else if (mCardCvc.getText().toString().length() < 3) {
-            showToast(this, "The CVV number should contains 3 digits");
-        } else {
-            //  showAppDialog(AppDialogFragment.PROGRESS_DIALOG,null);
-            mCardNameTxt = mCardName.getText().toString();
-            mCardNumberTxt = mCardNumber.getText().toString().trim();
-            if (mCardExpDate.getText().toString().contains("/")) {
-                String date[] = mCardExpDate.getText().toString().split("/");
-                mCardExpMonthVal = Integer.parseInt(date[0]);
-                mCardExpYearVal = Integer.parseInt(date[1]);
-            } else {
-                showToast(this, "Please enter valid expiry date");
-            }
-            mCardCvcTxt = mCardCvc.getText().toString().trim();
-
-            DateFormat df = new SimpleDateFormat("yy");
-            int mCurrentYear = Integer.parseInt(df.format(Calendar.getInstance().getTime()));
-
-            if (mCardExpMonthVal > 12) {
-                showToast(this, "Expiry month should not be greater than 12");
-            } else if (mCardExpYearVal < mCurrentYear) {
-                showToast(this, "Expiry year should not below the current year");
-            } else {
-                purchase();
-            }
-        }
-    }
-
-    private class CreditCardNumberFormattingTextWatcher implements TextWatcher {
-        String temp;
-        int keyDel;
-
-        @Override
-        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-        }
-
-        @Override
-        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            boolean flag = true;
-
-            String eachBlock = mCardNumber.getText().toString().trim();
-            if (!eachBlock.isEmpty()) {
-                if (eachBlock.length() % 5 == 0) {
-                    flag = false;
-                }
-            }
-            if (flag) {
-
-                mCardNumber.setOnKeyListener(new View.OnKeyListener() {
-
-                    @Override
-                    public boolean onKey(View v, int keyCode, KeyEvent event) {
-
-                        if (keyCode == KeyEvent.KEYCODE_DEL)
-                            keyDel = 1;
-                        return false;
-                    }
-                });
-
-                if (keyDel == 0) {
-
-                    if (((mCardNumber.getText().length() + 1) % 5) == 0) {
-
-                        if (mCardNumber.getText().toString().split(" ").length <= 3) {
-                            String mCardNum = mCardNumber.getText() + " ";
-                            mCardNumber.setText(mCardNum);
-                            mCardNumber.setSelection(mCardNumber.getText().length());
-                        }
-                    }
-                    temp = mCardNumber.getText().toString();
-                } else {
-                    temp = mCardNumber.getText().toString();
-                    keyDel = 0;
-                }
-
-            } else {
-                mCardNumber.setText(temp);
-            }
-
-        }
-
-        @Override
-        public void afterTextChanged(Editable editable) {
-
-        }
-
-    }
-
-    private class CreditCardExpiryDateFormattingTextWatcher implements TextWatcher {
-        String temp;
-        int keyDel;
-
-        @Override
-        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-        }
-
-        @Override
-        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            boolean flag = true;
-            String eachBlock[] = mCardExpDate.getText().toString().split("/");
-            for (String anEachBlock : eachBlock) {
-                if (anEachBlock.length() > 2) {
-                    flag = false;
-                }
-            }
-            if (flag) {
-
-                mCardExpDate.setOnKeyListener(new View.OnKeyListener() {
-
-                    @Override
-                    public boolean onKey(View v, int keyCode, KeyEvent event) {
-
-                        if (keyCode == KeyEvent.KEYCODE_DEL)
-                            keyDel = 1;
-                        return false;
-                    }
-                });
-
-                if (keyDel == 0) {
-
-                    if (((mCardExpDate.getText().length() + 1) % 3) == 0) {
-
-                        if (mCardExpDate.getText().toString().split("/").length <= 1) {
-                            String mCardNum = mCardExpDate.getText() + "/";
-                            mCardExpDate.setText(mCardNum);
-                            mCardExpDate.setSelection(mCardExpDate.getText().length());
-                        }
-                    }
-                    temp = mCardExpDate.getText().toString();
-                } else {
-                    temp = mCardExpDate.getText().toString();
-                    keyDel = 0;
-                }
-
-            } else {
-                mCardExpDate.setText(temp);
-            }
-
-        }
-
-        @Override
-        public void afterTextChanged(Editable editable) {
-
-        }
     }
 
     public void hideSoftKeyboard() {
         try {
-            InputMethodManager mInputMethodManager = (InputMethodManager) PaymentActivity.this.getSystemService(INPUT_METHOD_SERVICE);
+            InputMethodManager mInputMethodManager = (InputMethodManager) this.getSystemService(INPUT_METHOD_SERVICE);
             if (getCurrentFocus() != null
                     && getCurrentFocus().getWindowToken() != null) {
                 mInputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
@@ -332,5 +236,102 @@ public class PaymentActivity extends BaseActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void retrofitOnResponse(Object responseObj, int responseType) {
+        super.retrofitOnResponse(responseObj, responseType);
+        if (responseObj instanceof PaymentCardDetailsModel) {
+            switch (responseType) {
+                case RetrofitClient.CALL_GET_PAYMENT_CARD_DETAILS:
+                    if (((PaymentCardDetailsModel) responseObj).getResource().size() > 0) {
+                        mPaymentCardDetailsList.addAll(((PaymentCardDetailsModel) responseObj).getResource());
+                        setPaymentCardAdapter();
+                    } else {
+                        /*if(!mIsFromCardManagement) {
+                            startActivityForResult(new Intent(this, CreateNewPaymentActivity.class).putExtra(AppConstants.PROFILE_ID, mProfileID).putExtra(EventsModel.EVENT_AMOUNT, mAmount), EventsFindAdapter.EVENT_PAYMENT_REQ_CODE);
+                        } else{*/
+                        showSnackBar(mParent, getString(R.string.no_saved_cards));
+                        //  }
+                    }
+                    break;
+                case RetrofitClient.DELETE_PAYMENT_CARD_DETAILS:
+                    showColorSnackBar(mParent, getString(R.string.delete_card_msg));
+                    break;
+            }
+
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            if (requestCode == AppConstants.CREATE_NEW_PAYMENT_REQUEST) {
+                PaymentCardDetailsModel mNewPaymentCardDetails = (PaymentCardDetailsModel) data.getSerializableExtra(AppConstants.NEW_PAYMENT_CARD_DETAILS);
+                mPaymentCardDetailsList.add(mNewPaymentCardDetails);
+                mPaymentCardDetailsAdapter.notifyDataSetChanged();
+                setPaymentCardAdapter();
+            } else if (requestCode == EventsFindAdapter.EVENT_PAYMENT_REQ_CODE) {
+                String mToken = "";
+                if (data.hasExtra("TOKEN")) {
+                    mToken = data.getStringExtra("TOKEN");
+                }
+                Intent resultIntent = new Intent();
+                resultIntent.putExtra("TOKEN", mToken);
+                resultIntent.putExtra(EventsModel.EVENT_AMOUNT, mAmount);
+                setResult(Activity.RESULT_OK, resultIntent);
+                finish();
+            }
+        }
+    }
+
+    private void setPaymentCardAdapter() {
+
+        if (mPaymentCardDetailsAdapter == null) {
+            mPaymentCardDetailsAdapter = new PaymentCardDetailsAdapter(this, mPaymentCardDetailsList, mIsFromCardManagement);
+            mSavedardRecyclerView.setAdapter(mPaymentCardDetailsAdapter);
+        } else
+            mPaymentCardDetailsAdapter.notifyDataSetChanged();
+
+    }
+
+    @Override
+    public void retrofitOnFailure(int code, String message) {
+        super.retrofitOnFailure(code, message);
+    }
+
+    @Override
+    public void retrofitOnError(int code, String message) {
+        super.retrofitOnError(code, message);
+    }
+
+    @Override
+    public void retrofitOnSessionError(int code, String message) {
+        super.retrofitOnSessionError(code, message);
+    }
+
+    public void setCardDetails(String cvv, String cardNumber, String cardExpMonthVal, String cardExpYearVal) {
+
+        CryptLib cryptLib = null;
+        try {
+            cryptLib = new CryptLib();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (NoSuchPaddingException e) {
+            e.printStackTrace();
+        }
+        mCardCvcTxt = cvv;
+        try {
+            assert cryptLib != null;
+            mCardNumberTxt = cryptLib.decryptCipherTextWithRandomIV(cardNumber, AppConstants.ENCRYPT_KEY);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        mCardExpMonthVal = Integer.parseInt(cardExpMonthVal);
+        mCardExpYearVal = Integer.parseInt(cardExpYearVal);
+
+        purchase();
+
     }
 }

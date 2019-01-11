@@ -5,8 +5,12 @@ import android.os.Bundle;
 import android.os.Handler;
 
 import online.motohub.R;
+import online.motohub.activity.business.BusinessProfileActivity;
 import online.motohub.util.AppConstants;
+import online.motohub.util.DialogManager;
 import online.motohub.util.PreferenceUtils;
+
+import static online.motohub.application.MotoHub.setmIsFirstLaunch;
 
 public class MainSplashScreenActivity extends BaseActivity {
 
@@ -26,18 +30,23 @@ public class MainSplashScreenActivity extends BaseActivity {
                 public void run() {
                     boolean mKeepMeLoggedIn = PreferenceUtils.getInstance(MainSplashScreenActivity.this).getBooleanData(PreferenceUtils.USER_KEEP_LOGGED_IN);
                     boolean mUserProfileCompleted = PreferenceUtils.getInstance(MainSplashScreenActivity.this).getBooleanData(PreferenceUtils.USER_PROFILE_COMPLETED);
+                    boolean mBusinessProfileCompleted = PreferenceUtils.getInstance(MainSplashScreenActivity.this).getBooleanData(PreferenceUtils.BUSINESS_PROFILE_COMPLETED);
                     boolean mIsTutorialFirst = PreferenceUtils.getInstance(MainSplashScreenActivity.this).getBooleanData(PreferenceUtils.IS_TUTORIAL_FIRST);
                     if (!mIsTutorialFirst) {
                         startActivity(new Intent(MainSplashScreenActivity.this, TutorialScreen.class));
                     } else {
                         if (mKeepMeLoggedIn) {
-                            if (mUserProfileCompleted) {
+                            if(mBusinessProfileCompleted){
+                                startActivity(new Intent(MainSplashScreenActivity.this, BusinessProfileActivity.class));
+                            } else if (mUserProfileCompleted) {
+                                setmIsFirstLaunch(true);
                                 startActivity(new Intent(MainSplashScreenActivity.this, ViewProfileActivity.class));
                             } else {
                                 startActivity(new Intent(MainSplashScreenActivity.this, CreateProfileActivity.class)
                                         .putExtra(AppConstants.TAG, TAG));
                             }
                         } else {
+                            setmIsFirstLaunch(true);
                             startActivity(new Intent(MainSplashScreenActivity.this, LoginActivity.class));
                         }
                     }
@@ -45,12 +54,17 @@ public class MainSplashScreenActivity extends BaseActivity {
                 }
             }, mSecondsDelayed * 1000);
         } else {
+            setmIsFirstLaunch(true);
             startActivity(new Intent(MainSplashScreenActivity.this, MotoVideoScreen.class));
             finish();
         }
 
-
     }
 
+    @Override
+    protected void onDestroy() {
+        DialogManager.hideProgress();
+        super.onDestroy();
+    }
 
 }

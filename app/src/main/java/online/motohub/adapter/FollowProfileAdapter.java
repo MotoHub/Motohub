@@ -9,39 +9,27 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import online.motohub.R;
 import online.motohub.activity.BaseActivity;
 import online.motohub.activity.ViewProfileActivity;
-import online.motohub.interfaces.RetrofitResInterface;
 import online.motohub.model.FollowProfileEntity;
-import online.motohub.model.FollowProfileModel;
 import online.motohub.model.ProfileResModel;
-import online.motohub.model.SessionModel;
-import online.motohub.retrofit.RetrofitClient;
 import online.motohub.util.AppConstants;
 import online.motohub.util.CommonAPI;
-import online.motohub.util.PreferenceUtils;
 import online.motohub.util.Utility;
 
 public class FollowProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements
         View.OnClickListener {
 
+    private static final int VIEW_TYPE_LOADING = 0;
+    private static final int VIEW_TYPE_USER = 1;
     private ArrayList<ProfileResModel> mUnFollowedProfileListData;
     private ProfileResModel mCurrentProfileObj;
     private Context mContext;
     private int mAdapterPos;
     private int mMyProfileID = 0;
-    private static final int VIEW_TYPE_LOADING = 0;
-    private static final int VIEW_TYPE_USER = 1;
-
-    public interface TotalRetrofitResultCount {
-        int getTotalUnFollowedResultCount();
-    }
 
     public FollowProfileAdapter(ArrayList<ProfileResModel> unFollowedProfileListData, ProfileResModel currentProfileObj, Context ctx) {
         this.mUnFollowedProfileListData = unFollowedProfileListData;
@@ -68,32 +56,6 @@ public class FollowProfileAdapter extends RecyclerView.Adapter<RecyclerView.View
     @Override
     public long getItemId(int position) {
         return (getItemViewType(position) == VIEW_TYPE_USER) ? position : -1;
-    }
-
-    private class ViewHolderUser extends RecyclerView.ViewHolder {
-
-        private CircleImageView mProfileImg;
-        private TextView mUsername;
-        private TextView mFollow;
-
-        ViewHolderUser(View view) {
-            super(view);
-            mProfileImg = view.findViewById(R.id.profile_img);
-            mUsername = view.findViewById(R.id.name_of_driver_tv);
-            mFollow = view.findViewById(R.id.follow_tv);
-        }
-
-    }
-
-    private class ViewHolderLoader extends RecyclerView.ViewHolder {
-
-        ProgressBar mProgressBar;
-
-        ViewHolderLoader(View view) {
-            super(view);
-            mProgressBar = view.findViewById(R.id.smallProgressBar);
-        }
-
     }
 
     @Override
@@ -129,31 +91,39 @@ public class FollowProfileAdapter extends RecyclerView.Adapter<RecyclerView.View
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         switch (getItemViewType(position)) {
             case VIEW_TYPE_USER:
-                final ViewHolderUser mViewHolderUserProfile = (ViewHolderUser) holder;
-                mViewHolderUserProfile.mProfileImg.setTag(position);
-                mViewHolderUserProfile.mUsername.setTag(position);
-                mViewHolderUserProfile.mFollow.setTag(position);
+                try {
+                    final ViewHolderUser mViewHolderUserProfile = (ViewHolderUser) holder;
+                    mViewHolderUserProfile.mProfileImg.setTag(position);
+                    mViewHolderUserProfile.mUsername.setTag(position);
+                    mViewHolderUserProfile.mFollow.setTag(position);
 
-                ((BaseActivity) mContext).setImageWithGlide(mViewHolderUserProfile.mProfileImg, mUnFollowedProfileListData.get(position).getProfilePicture(), R.drawable.default_profile_icon);
-                mViewHolderUserProfile.mUsername.setText(Utility.getInstance().getUserName(mUnFollowedProfileListData.get(position)));
-                mMyProfileID = mCurrentProfileObj.getID();
-                mUnFollowedProfileListData.get(position).setIsFollowing(Utility.getInstance().
-                        isAlreadyFollowed(mUnFollowedProfileListData.get(position).getFollowprofile_by_FollowProfileID(), mMyProfileID));
-                if (mUnFollowedProfileListData.get(position).getIsFollowing()) {
-                    mViewHolderUserProfile.mFollow.setText(mContext.getResources().getString(R.string.UnFollow));
-                } else {
-                    mViewHolderUserProfile.mFollow.setText(mContext.getResources().getString(R.string.follow));
+                    ((BaseActivity) mContext).setImageWithGlide(mViewHolderUserProfile.mProfileImg, mUnFollowedProfileListData.get(position).getProfilePicture(), R.drawable.default_profile_icon);
+                    mViewHolderUserProfile.mUsername.setText(Utility.getInstance().getUserName(mUnFollowedProfileListData.get(position)));
+                    mMyProfileID = mCurrentProfileObj.getID();
+                    mUnFollowedProfileListData.get(position).setIsFollowing(Utility.getInstance().
+                            isAlreadyFollowed(mUnFollowedProfileListData.get(position).getFollowprofile_by_FollowProfileID(), mMyProfileID));
+                    if (mUnFollowedProfileListData.get(position).getIsFollowing()) {
+                        mViewHolderUserProfile.mFollow.setText(mContext.getResources().getString(R.string.UnFollow));
+                    } else {
+                        mViewHolderUserProfile.mFollow.setText(mContext.getResources().getString(R.string.follow));
+                    }
+                    mViewHolderUserProfile.mProfileImg.setOnClickListener(this);
+                    mViewHolderUserProfile.mUsername.setOnClickListener(this);
+                    mViewHolderUserProfile.mFollow.setOnClickListener(this);
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-                mViewHolderUserProfile.mProfileImg.setOnClickListener(this);
-                mViewHolderUserProfile.mUsername.setOnClickListener(this);
-                mViewHolderUserProfile.mFollow.setOnClickListener(this);
                 break;
             case VIEW_TYPE_LOADING:
-                final ViewHolderLoader mViewHolderLoader = (ViewHolderLoader) holder;
-                if (mUnFollowedProfileListData.size() != ((TotalRetrofitResultCount) mContext).getTotalUnFollowedResultCount()) {
-                    mViewHolderLoader.mProgressBar.setVisibility(View.VISIBLE);
-                } else {
-                    mViewHolderLoader.mProgressBar.setVisibility(View.GONE);
+                try {
+                    final ViewHolderLoader mViewHolderLoader = (ViewHolderLoader) holder;
+                    if (mUnFollowedProfileListData.size() != ((TotalRetrofitResultCount) mContext).getTotalUnFollowedResultCount()) {
+                        mViewHolderLoader.mProgressBar.setVisibility(View.VISIBLE);
+                    } else {
+                        mViewHolderLoader.mProgressBar.setVisibility(View.GONE);
+                    }
+                } catch (ClassCastException e) {
+                    e.printStackTrace();
                 }
                 break;
             default:
@@ -166,125 +136,122 @@ public class FollowProfileAdapter extends RecyclerView.Adapter<RecyclerView.View
         switch (view.getId()) {
             case R.id.profile_img:
             case R.id.name_of_driver_tv:
-                mAdapterPos = (int) view.getTag();
-                ((BaseActivity) mContext).moveOtherProfileScreenWithResult(mContext, mCurrentProfileObj.getID(),
-                        mUnFollowedProfileListData.get(mAdapterPos).getID(), AppConstants.FOLLOWERS_FOLLOWING_RESULT);
+                try {
+                    mAdapterPos = (int) view.getTag();
+                    ((BaseActivity) mContext).moveOtherProfileScreenWithResult(mContext, mCurrentProfileObj.getID(),
+                            mUnFollowedProfileListData.get(mAdapterPos).getID(), AppConstants.FOLLOWERS_FOLLOWING_RESULT);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 break;
             case R.id.follow_tv:
-                mAdapterPos = (int) view.getTag();
-                if (!mUnFollowedProfileListData.get(mAdapterPos).getIsFollowing()) {
-                    CommonAPI.getInstance().callFollowProfile(mContext, mRetrofitResInterface,
-                            mMyProfileID, mUnFollowedProfileListData.get(mAdapterPos).getID());
-                } else {
-                    CommonAPI.getInstance().callUnFollowProfile(mContext, mRetrofitResInterface, Utility.getInstance().getUnFollowRowID(
-                            mUnFollowedProfileListData.get(mAdapterPos).getFollowprofile_by_FollowProfileID(), mMyProfileID,
-                            mUnFollowedProfileListData.get(mAdapterPos).getID()));
-                }
-                break;
-        }
-    }
-
-    RetrofitResInterface mRetrofitResInterface = new RetrofitResInterface() {
-        @Override
-        public void retrofitOnResponse(Object responseObj, int responseType) {
-
-            if (responseObj instanceof FollowProfileModel) {
-                ((BaseActivity) mContext).sysOut(responseObj.toString());
-                FollowProfileModel mResponse = (FollowProfileModel) responseObj;
-                if (mResponse.getResource().size() > 0) {
-                    if (responseType == RetrofitClient.FOLLOW_PROFILE_RESPONSE) {
-                        updateFollowProfile(mResponse.getResource().get(0));
-                    } else {
-                        updateUnFollowProfile(mResponse.getResource().get(0));
+                try {
+                    mAdapterPos = (int) view.getTag();
+                    if (mUnFollowedProfileListData != null && mUnFollowedProfileListData.size() > 0) {
+                        if (!mUnFollowedProfileListData.get(mAdapterPos).getIsFollowing()) {
+                            CommonAPI.getInstance().callFollowProfile(mContext,
+                                    mMyProfileID, mUnFollowedProfileListData.get(mAdapterPos).getID());
+                        } else {
+                            CommonAPI.getInstance().callUnFollowProfile(mContext, Utility.getInstance().getUnFollowRowID(
+                                    mUnFollowedProfileListData.get(mAdapterPos).getFollowprofile_by_FollowProfileID(), mMyProfileID,
+                                    mUnFollowedProfileListData.get(mAdapterPos).getID()));
+                        }
                     }
-
-                } else {
-                    ((BaseActivity) mContext).showToast(mContext, mContext.getString(R.string.something_wrong));
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-            } else if (responseObj instanceof SessionModel) {
-                SessionModel mSessionModel = (SessionModel) responseObj;
-                if (mSessionModel.getSessionToken() == null) {
-                    PreferenceUtils.getInstance(mContext).saveStrData(PreferenceUtils.SESSION_TOKEN, mSessionModel.getSessionId());
-                } else {
-                    PreferenceUtils.getInstance(mContext).saveStrData(PreferenceUtils.SESSION_TOKEN, mSessionModel.getSessionToken());
-                }
-                ((BaseActivity) mContext).showToast(mContext, mContext.getString(R.string.session_updated));
-            }
+                break;
         }
-
-        @Override
-        public void retrofitOnError(int code, String message) {
-            if (message.equals("Unauthorized") || code == 401) {
-                RetrofitClient.getRetrofitInstance().callUpdateSession(mContext, mRetrofitResInterface, RetrofitClient.UPDATE_SESSION_RESPONSE);
-            } else {
-                ((BaseActivity) mContext).showToast(mContext, mContext.getString(R.string.internet_err));
-            }
-
-        }
-
-        @Override
-        public void retrofitOnSessionError(int code, String message) {
-            ((BaseActivity) mContext).retrofitOnSessionError(code, message);
-        }
-
-        @Override
-        public void retrofitOnFailure() {
-            ((BaseActivity) mContext).showToast(mContext, mContext.getString(R.string.internet_err));
-        }
-    };
-
-    private void updateFollowProfile(FollowProfileEntity mEntity) {
-        ArrayList<FollowProfileEntity> mList = mUnFollowedProfileListData.get(mAdapterPos).getFollowprofile_by_FollowProfileID();
-        ArrayList<FollowProfileEntity> mMyFollowingsList = mCurrentProfileObj.getFollowprofile_by_ProfileID();
-        mList.add(mEntity);
-        mMyFollowingsList.add(mEntity);
-        mUnFollowedProfileListData.get(mAdapterPos).setFollowprofile_by_FollowProfileID(mList);
-        mCurrentProfileObj.setFollowprofile_by_ProfileID(mMyFollowingsList);
-        ((ViewProfileActivity) mContext).refreshFeeds(mCurrentProfileObj);
-        notifyDataSetChanged();
-
     }
 
-    private void updateUnFollowProfile(FollowProfileEntity mEntity) {
-        ArrayList<FollowProfileEntity> mList = mUnFollowedProfileListData.get(mAdapterPos).getFollowprofile_by_FollowProfileID();
-        ArrayList<FollowProfileEntity> mMyFollowingsList = mCurrentProfileObj.getFollowprofile_by_ProfileID();
-        for (int i = 0; i < mList.size(); i++) {
-            if (mList.get(i).getID() == mEntity.getID()) {
-                mList.remove(i);
+    public void updateFollowProfile(FollowProfileEntity mEntity) {
+
+        int mSelectedPos = -1;
+
+        for (int i = 0; i < mUnFollowedProfileListData.size(); i++) {
+            if (mUnFollowedProfileListData.get(i).getID() == mEntity.getFollowProfileID()) {
+                mSelectedPos = i;
                 break;
             }
         }
-        for (int i = 0; i < mMyFollowingsList.size(); i++) {
-            if (mMyFollowingsList.get(i).getID() == mEntity.getID()) {
-                mMyFollowingsList.remove(i);
+
+        if (mSelectedPos != -1) {
+            if (mUnFollowedProfileListData.size() > 0) {
+                ArrayList<FollowProfileEntity> mList = mUnFollowedProfileListData.get(mSelectedPos).getFollowprofile_by_FollowProfileID();
+                ArrayList<FollowProfileEntity> mMyFollowingsList = mCurrentProfileObj.getFollowprofile_by_ProfileID();
+                mList.add(mEntity);
+                mMyFollowingsList.add(mEntity);
+
+                mUnFollowedProfileListData.get(mSelectedPos).setFollowprofile_by_FollowProfileID(mList);
+                mCurrentProfileObj.setFollowprofile_by_ProfileID(mMyFollowingsList);
+                ((ViewProfileActivity) mContext).refreshFeeds(mCurrentProfileObj);
+                notifyDataSetChanged();
+            }
+        }
+
+    }
+
+    public void updateUnFollowProfile(FollowProfileEntity mEntity) {
+
+        int mSelectedPos = -1;
+
+        for (int i = 0; i < mUnFollowedProfileListData.size(); i++) {
+            if (mUnFollowedProfileListData.get(i).getID() == mEntity.getFollowProfileID()) {
+                mSelectedPos = i;
                 break;
             }
         }
-        mUnFollowedProfileListData.get(mAdapterPos).setFollowprofile_by_FollowProfileID(mList);
-        mCurrentProfileObj.setFollowprofile_by_ProfileID(mMyFollowingsList);
-        ((ViewProfileActivity) mContext).refreshFeeds(mCurrentProfileObj);
-        notifyDataSetChanged();
-    }
-
-    private String getFollowerFollowing(StringBuilder userFollowerFollowing) {
-
-        String[] mFollowingID = userFollowerFollowing.toString().split(",");
-        Set<String> temp = new HashSet<>(Arrays.asList(mFollowingID));
-        mFollowingID = temp.toArray(new String[temp.size()]);
-
-        StringBuilder mNewStrBuilder = new StringBuilder("");
-        for (String mID : mFollowingID) {
-            if (!mID.isEmpty()) {
-                mNewStrBuilder.append(mID);
-                mNewStrBuilder.append(",");
+        if (mSelectedPos != -1) {
+            if (mUnFollowedProfileListData.size() > 0) {
+                ArrayList<FollowProfileEntity> mList = mUnFollowedProfileListData.get(mSelectedPos).getFollowprofile_by_FollowProfileID();
+                ArrayList<FollowProfileEntity> mMyFollowingsList = mCurrentProfileObj.getFollowprofile_by_ProfileID();
+                for (int i = 0; i < mList.size(); i++) {
+                    if (mList.get(i).getID() == mEntity.getID()) {
+                        mList.remove(i);
+                        break;
+                    }
+                }
+                for (int i = 0; i < mMyFollowingsList.size(); i++) {
+                    if (mMyFollowingsList.get(i).getID() == mEntity.getID()) {
+                        mMyFollowingsList.remove(i);
+                        break;
+                    }
+                }
+                mUnFollowedProfileListData.get(mSelectedPos).setFollowprofile_by_FollowProfileID(mList);
+                mCurrentProfileObj.setFollowprofile_by_ProfileID(mMyFollowingsList);
+                ((ViewProfileActivity) mContext).refreshFeeds(mCurrentProfileObj);
+                notifyDataSetChanged();
             }
         }
+    }
 
-        if (!mNewStrBuilder.toString().equals("") && mNewStrBuilder.charAt(mNewStrBuilder.length() - 1) == ',') {
-            mNewStrBuilder.deleteCharAt(mNewStrBuilder.length() - 1);
+    public interface TotalRetrofitResultCount {
+        int getTotalUnFollowedResultCount();
+    }
+
+    private class ViewHolderUser extends RecyclerView.ViewHolder {
+
+        private CircleImageView mProfileImg;
+        private TextView mUsername;
+        private TextView mFollow;
+
+        ViewHolderUser(View view) {
+            super(view);
+            mProfileImg = view.findViewById(R.id.profile_img);
+            mUsername = view.findViewById(R.id.name_of_driver_tv);
+            mFollow = view.findViewById(R.id.follow_tv);
         }
 
-        return mNewStrBuilder.toString();
+    }
+
+    private class ViewHolderLoader extends RecyclerView.ViewHolder {
+
+        ProgressBar mProgressBar;
+
+        ViewHolderLoader(View view) {
+            super(view);
+            mProgressBar = view.findViewById(R.id.smallProgressBar);
+        }
 
     }
 

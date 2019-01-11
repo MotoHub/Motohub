@@ -3,8 +3,27 @@
     android:id="@+id/clubfeedlay"
     style="@style/LayoutMatch">
 
+    <com.facebook.shimmer.ShimmerFrameLayout
+        android:id="@+id/shimmer_feeds"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <include layout="@layout/posts_placeholder_item"/>
+
+            <include layout="@layout/posts_placeholder_item"/>
+
+        </LinearLayout>
+
+    </com.facebook.shimmer.ShimmerFrameLayout>
+
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/swipeRefreshLayout"
+        android:visibility="gone"
         style="@style/LayoutMatchWrap">
 
         <android.support.v7.widget.RecyclerView

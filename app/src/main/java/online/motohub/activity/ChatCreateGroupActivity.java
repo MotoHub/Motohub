@@ -13,6 +13,8 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -29,6 +31,7 @@ import okhttp3.RequestBody;
 import online.motohub.R;
 import online.motohub.adapter.CreateGrpSelectProfilesAdapter;
 import online.motohub.adapter.CreateGrpSelectedProfilesAdapter;
+import online.motohub.application.MotoHub;
 import online.motohub.fragment.dialog.AppDialogFragment;
 import online.motohub.model.GroupChatRoomModel;
 import online.motohub.model.GroupChatRoomResModel;
@@ -37,6 +40,7 @@ import online.motohub.model.ProfileModel;
 import online.motohub.model.ProfileResModel;
 import online.motohub.model.SessionModel;
 import online.motohub.retrofit.RetrofitClient;
+import online.motohub.util.DialogManager;
 import online.motohub.util.PreferenceUtils;
 import online.motohub.util.Utility;
 
@@ -94,8 +98,12 @@ public class ChatCreateGroupActivity extends BaseActivity implements
             getFollowingProfileList();
         }
     }
-
     @Override
+    protected void onDestroy() {
+        DialogManager.hideProgress();
+        super.onDestroy();
+    }
+    /*@Override
     @SuppressWarnings("unchecked")
     protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
         mMyProfileResModel = (ProfileResModel)
@@ -132,12 +140,14 @@ public class ChatCreateGroupActivity extends BaseActivity implements
                 (Serializable) mGrpSelectedProfilesList);
         outState.putString(GroupChatRoomModel.GRP_PICTURE, mGrpChatImgUri);
         super.onSaveInstanceState(outState);
-    }
+    }*/
 
     private void initViews() {
         setToolbar(mToolbar, mToolbarTitle);
         showToolbarBtn(mToolbar, R.id.toolbar_back_img_btn);
-        mMyProfileResModel = (ProfileResModel) getIntent().getSerializableExtra(ProfileModel.MY_PROFILE_RES_MODEL);
+        //mMyProfileResModel = (ProfileResModel) getIntent().getSerializableExtra(ProfileModel.MY_PROFILE_RES_MODEL);
+        //mMyProfileResModel= MotoHub.getApplicationInstance().getmProfileResModel();
+        mMyProfileResModel= EventBus.getDefault().getStickyEvent(ProfileResModel.class);
         LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(this);
         mLinearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         mGrpSelectedProfilesRv.setLayoutManager(mLinearLayoutManager);

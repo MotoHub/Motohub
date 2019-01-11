@@ -10,7 +10,6 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.ActionMode;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
@@ -21,7 +20,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
@@ -29,9 +27,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.google.gson.reflect.TypeToken;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.File;
@@ -46,6 +42,7 @@ import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import online.motohub.R;
 import online.motohub.adapter.GalleryImgAdapter;
+import online.motohub.application.MotoHub;
 import online.motohub.model.DeleteProfileImagesResponse;
 import online.motohub.model.GalleryImgModel;
 import online.motohub.model.GalleryImgResModel;
@@ -93,7 +90,8 @@ public class ProfileImgGalleryActivity extends BaseActivity {
     private ProfileImgGalleryActivity.CustomPagerAdapter mCustomPagerAdapter;
 
     public static final String EXTRA_PROFILE = "extra_profile_data";
-    private ProfileResModel mProfileResModel;
+
+    private int mProfileID;
     private ActionMode mActionMode;
     private ArrayList<Integer> deleteList;
 
@@ -133,6 +131,12 @@ public class ProfileImgGalleryActivity extends BaseActivity {
 
     }
 
+    @Override
+    protected void onDestroy() {
+        DialogManager.hideProgress();
+        super.onDestroy();
+    }
+
     private void initRV() {
 
         setToolbar(mToolbar, getString(R.string.photos));
@@ -140,10 +144,11 @@ public class ProfileImgGalleryActivity extends BaseActivity {
         deleteList = new ArrayList<>();
 
         try {
-            mProfileResModel = (ProfileResModel) getIntent().getSerializableExtra(EXTRA_PROFILE);
+            mProfileID = getIntent().getIntExtra(EXTRA_PROFILE, 0);
+            // mProfileResModel = MotoHub.getApplicationInstance().getmProfileResModel();
         } catch (NullPointerException e) {
             e.printStackTrace();
-            mProfileResModel = null;
+            // mProfileResModel = null;
         }
 
         StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
@@ -203,7 +208,7 @@ public class ProfileImgGalleryActivity extends BaseActivity {
 
             case R.id.profile_gallery_upload_image_view:
                 Intent pickerIntent = new Intent(ProfileImgGalleryActivity.this, PickerImageActivity.class);
-                pickerIntent.putExtra("profileid", mProfileResModel.getID());
+                pickerIntent.putExtra("profileid", mProfileID);
                 startActivity(pickerIntent);
                 break;
             case R.id.toolbar_back_img_btn:
@@ -219,7 +224,6 @@ public class ProfileImgGalleryActivity extends BaseActivity {
     private void getGalleryImages() {
 
         mUpdateTask = UpdateTask.NONE;
-        int mProfileID = mProfileResModel.getID();
         RetrofitClient.getRetrofitInstance().callGetImageGallery(ProfileImgGalleryActivity.this, "MotoID = " + String.valueOf(mProfileID),
                 RetrofitClient.GET_GALLERY_DATA_RESPONSE);
 
@@ -235,9 +239,7 @@ public class ProfileImgGalleryActivity extends BaseActivity {
             RetrofitClient.getRetrofitInstance().uploadImageFileToServer(this, filePart, RetrofitClient.UPLOAD_IMAGE_FILE_RESPONSE);
 
         } else {
-
             showSnackBar(mParentLayout, getString(R.string.select_file_to_upload));
-
         }
 
     }
@@ -249,7 +251,7 @@ public class ProfileImgGalleryActivity extends BaseActivity {
             mUpdateTask = UpdateTask.DATA_ENTRY_UPLOAD;
             JsonObject obj = new JsonObject();
             obj.addProperty(GalleryImgModel.USER_ID, getUserId());
-            obj.addProperty(GalleryImgModel.MOTO_ID, mProfileResModel.getID());
+            obj.addProperty(GalleryImgModel.MOTO_ID, mProfileID);
             obj.addProperty(GalleryImgModel.GALLERY_IMG, getHttpFilePath(mImageResModel.getPath()));
 
             JsonArray jsonElements = new JsonArray();
@@ -257,13 +259,9 @@ public class ProfileImgGalleryActivity extends BaseActivity {
 
             RetrofitClient.getRetrofitInstance().postImgToGallery(ProfileImgGalleryActivity.this,
                     jsonElements, RetrofitClient.POST_GALLERY_DATA_RESPONSE);
-
         } else {
-
             showSnackBar(mParentLayout, getString(R.string.select_file_to_upload));
-
         }
-
     }
 
     private File mSelectedFile;
@@ -279,28 +277,18 @@ public class ProfileImgGalleryActivity extends BaseActivity {
                 case IMAGE_PICKER_REQUEST_CODE:
                     Uri selectedUri = (Uri) data.getExtras().get(PickerImageActivity.EXTRA_RESULT_DATA);
                     if (selectedUri != null) {
-
                         try {
-
                             mSelectedFile = compressedImgFile(selectedUri, GALLERY_IMAGE_NAME_TYPE, "");
                             uploadImageToServer();
-
                         } catch (Exception e) {
-
                             showSnackBar(mParentLayout, e.getMessage());
-
                         }
                     } else {
-
                         showSnackBar(mParentLayout, getString(R.string.picture_not_found));
-
                     }
                     break;
-
             }
-
         }
-
     }
 
     private ImageResModel mImageResModel = null;
@@ -313,11 +301,15 @@ public class ProfileImgGalleryActivity extends BaseActivity {
             case RetrofitClient.GET_GALLERY_DATA_RESPONSE:
                 GalleryImgModel model = (GalleryImgModel) responseObj;
                 if (model.getGalleryResModelList() != null && model.getGalleryResModelList().size() > 0) {
-                    mGalleryResModels.clear();
-                    mGalleryResModels.addAll(model.getGalleryResModelList());
-                    mAdapter.notifyDataSetChanged();
-                    visibleViewPager(false);
-                    mCustomPagerAdapter.notifyDataSetChanged();
+                    try {
+                        mGalleryResModels.clear();
+                        mGalleryResModels.addAll(model.getGalleryResModelList());
+                        mAdapter.notifyDataSetChanged();
+                        visibleViewPager(false);
+                        mCustomPagerAdapter.notifyDataSetChanged();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 } else {
                     showSnackBar(mParentLayout, getString(R.string.picture_not_found));
                 }
@@ -363,7 +355,7 @@ public class ProfileImgGalleryActivity extends BaseActivity {
             case RetrofitClient.DELETE_MY_PROFILE_IMAGE:
                 DeleteProfileImagesResponse deleteProfileImagesResponse = (DeleteProfileImagesResponse) responseObj;
                 if (deleteProfileImagesResponse.getResource() != null) {
-                    showSnackBar(mParentLayout, getString(R.string.post_delete));
+                    showSnackBar(mParentLayout, getString(R.string.img_delete));
                 } else {
                     showSnackBar(mParentLayout, getString(R.string.try_again));
                 }
@@ -414,7 +406,7 @@ public class ProfileImgGalleryActivity extends BaseActivity {
             ZoomImageView mImageView = convertView.findViewById(R.id.row_picker_img_pager_thumbnail_image_view);
 
             Glide.with(mContext)
-                    .load(UrlUtils.FILE_URL + mImgUriList.get(pos).getGalleryImage())
+                    .load(UrlUtils.AWS_S3_BASE_URL + mImgUriList.get(pos).getGalleryImage())
                     .apply(new RequestOptions()
                             .error(R.drawable.img_place_holder))
                     .into(mImageView);
@@ -513,7 +505,6 @@ public class ProfileImgGalleryActivity extends BaseActivity {
             //JSONArray jsonArray = new JSONArray(deleteList);
             JsonObject finalObject = new JsonObject();
             finalObject.add("ids", jsonArray);
-            Toast.makeText(this, "" + finalObject, Toast.LENGTH_LONG).show();//Show Toast
             mActionMode.finish();//Finish action mode after use
             deleteList.clear();
             callDeleteImagesMyProfile(finalObject, DELETE_MY_PROFILE_IMAGE);

@@ -21,6 +21,7 @@ import online.motohub.R;
 import online.motohub.model.EventAddOnModel;
 import online.motohub.model.EventCategoryModel;
 import online.motohub.model.ProfileResModel;
+import online.motohub.model.promoter_club_news_media.PromotersResModel;
 import online.motohub.util.CommonAPI;
 import online.motohub.util.DateUtil;
 import online.motohub.util.ScreenSize;
@@ -28,6 +29,7 @@ import online.motohub.util.Utility;
 
 public class MotoHub extends Application {
 
+    public static boolean mIsFirstLaunch = false;
     //Utility Class
     public static Utility UTILITY_INSTANCE;
     public static CommonAPI COMMON_API_INSTANCE;
@@ -43,11 +45,63 @@ public class MotoHub extends Application {
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
     }
 
+    private int profileId;
+   /* private ProfileResModel mProfileResModel;
+    private PromotersResModel mPromoterResModel;
+    private ProfileResModel mOthersProfileResModel;*/
+   private ProfileResModel mOthersProfileResModel;
+
     private String liveStreamName;
     private ArrayList<EventCategoryModel> mSelectedEventCategoryList;
     private ArrayList<ProfileResModel> mFullProfileList;
     private JsonObject mEventQuestionAnswer;
     private ArrayList<EventAddOnModel> mSelectedEventAddOn = new ArrayList<>();
+
+    public ProfileResModel getmOthersProfileResModel() {
+        return mOthersProfileResModel;
+    }
+
+    public void setmOthersProfileResModel(ProfileResModel mOthersProfileResModel) {
+        this.mOthersProfileResModel = mOthersProfileResModel;
+    }
+
+    /*public ProfileResModel getmOthersProfileResModel() {
+        return mOthersProfileResModel;
+    }
+
+    public void setmOthersProfileResModel(ProfileResModel mOthersProfileResModel) {
+        this.mOthersProfileResModel = mOthersProfileResModel;
+    }
+
+    public ProfileResModel getmProfileResModel() {
+        return mProfileResModel;
+    }
+
+    public void setmProfileResModel(ProfileResModel mProfileResModel) {
+        this.mProfileResModel = mProfileResModel;
+    }
+
+    public PromotersResModel getmPromoterResModel() {
+        return mPromoterResModel;
+    }
+
+    public void setmPromoterResModel(PromotersResModel mPromoterResModel) {
+        this.mPromoterResModel = mPromoterResModel;
+    }*/
+
+
+
+    public static boolean ismIsFirstLaunch() {
+        return mIsFirstLaunch;
+    }
+
+    public static void setmIsFirstLaunch(boolean mIsFirstLaunch) {
+        MotoHub.mIsFirstLaunch = mIsFirstLaunch;
+    }
+
+    public static synchronized MotoHub getApplicationInstance() {
+        return sMotoHub;
+    }
 
     public int getProfileId() {
         return profileId;
@@ -57,11 +111,6 @@ public class MotoHub extends Application {
         this.profileId = profileId;
     }
 
-    private int profileId;
-
-    public static synchronized MotoHub getApplicationInstance() {
-        return sMotoHub;
-    }
 
 
     @Override

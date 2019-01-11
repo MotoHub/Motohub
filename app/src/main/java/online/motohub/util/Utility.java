@@ -39,7 +39,6 @@ public class Utility {
         for (FollowProfileEntity mEntity : mFollowersList) {
             if (mEntity.getProfileID() == mMyProfileID) {
                 isAlreadyFollowed = true;
-                break;
             }
         }
         return isAlreadyFollowed;
@@ -61,7 +60,6 @@ public class Utility {
         for (BlockedUserResModel mEntity : mBlockedUserList) {
             if (mEntity.getBlockedProfileID() == mOtherProfileID) {
                 isAlreadyBlocked = true;
-                break;
             }
         }
         return isAlreadyBlocked;

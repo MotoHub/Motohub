@@ -11,6 +11,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,21 +35,14 @@ import online.motohub.model.EventsModel;
 import online.motohub.model.EventsResModel;
 import online.motohub.model.EventsWhoIsGoingModel;
 import online.motohub.model.PaymentModel;
-import online.motohub.model.ProfileModel;
 import online.motohub.model.ProfileResModel;
 import online.motohub.model.PurchasedAddOnModel;
 import online.motohub.model.RacingModel;
 import online.motohub.model.SessionModel;
-import online.motohub.model.promoter_club_news_media.PromotersModel;
 import online.motohub.model.promoter_club_news_media.PromotersResModel;
-import online.motohub.retrofit.APIConstants;
 import online.motohub.retrofit.RetrofitClient;
 import online.motohub.util.AppConstants;
-import online.motohub.util.DialogManager;
 import online.motohub.util.PreferenceUtils;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -97,12 +92,20 @@ public class PerfEventsFragment extends BaseFragment {
     }
 
     private void initView() {
-        mMyProfileResModel = (ProfileResModel) getArguments().getSerializable(ProfileModel.MY_PROFILE_RES_MODEL);
-        mPromotersResModel = (PromotersResModel) getArguments().getSerializable(PromotersModel.PROMOTERS_RES_MODEL);
+        assert getArguments() != null;
+        /*mMyProfileResModel = (ProfileResModel) getArguments().getSerializable(ProfileModel.MY_PROFILE_RES_MODEL);
+        mPromotersResModel = (PromotersResModel) getArguments().getSerializable(PromotersModel.PROMOTERS_RES_MODEL);*/
+        /*mMyProfileResModel = MotoHub.getApplicationInstance().getmProfileResModel();
+        mPromotersResModel = MotoHub.getApplicationInstance().getmPromoterResModel();*/
+        mMyProfileResModel = EventBus.getDefault().getStickyEvent(ProfileResModel.class);
+        mPromotersResModel = EventBus.getDefault().getStickyEvent(PromotersResModel.class);
         mClubEventsListData = new ArrayList<>();
-        mClubEventsAdapter = new EventsFindAdapter(mActivity, mClubEventsListData, mMyProfileResModel, false);
-        mEventsFindListView.setLayoutManager(new LinearLayoutManager(getContext()));
-        mEventsFindListView.setAdapter(mClubEventsAdapter);
+        if (mMyProfileResModel != null && mMyProfileResModel.getID() != 0) {
+            mClubEventsAdapter = new EventsFindAdapter(mActivity, mClubEventsListData, mMyProfileResModel, null, false);
+            mEventsFindListView.setLayoutManager(new LinearLayoutManager(getContext()));
+            mEventsFindListView.setAdapter(mClubEventsAdapter);
+        }
+        ((BaseActivity)getActivity()).setUpPurchseSuccessUI();
     }
 
     @Override
@@ -114,7 +117,7 @@ public class PerfEventsFragment extends BaseFragment {
     }
 
     private void getUpcomingEvents() {
-        int status = 2;
+        int status = AppConstants.EVENT_STATUS;
         String mDateFilter = "((( Date >= " + ((BaseActivity) mActivity).getCurrentDate() + " ) OR ( Finish >= "
                 + ((BaseActivity) mActivity).getCurrentDate() + " )) AND (UserID=" + mPromotersResModel.getUserId() + ")) AND ( EventStatus =" + status + ")";
 
@@ -201,10 +204,22 @@ public class PerfEventsFragment extends BaseFragment {
             ArrayList<EventAddOnModel> mSelectedEventAddOn = MotoHub.getApplicationInstance().getPurchasedAddOn();
             if (mSelectedEventAddOn.size() > 0)
                 mClubEventsAdapter.callPostSelectedAddOns(mSelectedEventAddOn);
-            else
-                ((BaseActivity) getActivity()).showToast(getActivity(), getString(R.string.event_booked_successfully));
+            else {
+                if(mClubEventsAdapter.mEventType.equals(AppConstants.FREE_EVENT)){
+                    showToast(getActivity(), "Successfully booked an event.");
+                } else {
+                    if (((BaseActivity) getActivity()).mPurchaseSuccessDialog != null)
+                        ((BaseActivity) getActivity()).mPurchaseSuccessDialog.show();
+                }
+            }
+
         } else if (responseObj instanceof PurchasedAddOnModel) {
-            ((BaseActivity) getActivity()).showToast(getActivity(), getString(R.string.event_booked_successfully));
+            if(mClubEventsAdapter.mEventType.equals(AppConstants.FREE_EVENT)){
+                showToast(getActivity(), "Successfully booked an event.");
+            } else {
+                if (((BaseActivity) getActivity()).mPurchaseSuccessDialog != null)
+                    ((BaseActivity) getActivity()).mPurchaseSuccessDialog.show();
+            }
         } else if (responseObj instanceof EventAnswersModel) {
             EventAnswersModel mEventAnswerList = (EventAnswersModel) responseObj;
             ArrayList<EventAnswersModel> mResEventAnswerModel = mEventAnswerList.getResource();

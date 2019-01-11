@@ -83,6 +83,8 @@ public class BaseFragment extends Fragment {
 
     public void callGetChatRoom(ProfileResModel myProfileModel) {}
 
+    public void getaddedChat(ProfileResModel myProfileModel,boolean addedchat){}
+
     public void launchSingleChatAddActivity() {}
 
     public void launchCreateGroupChatActivity() {}
@@ -125,6 +127,7 @@ public class BaseFragment extends Fragment {
     public boolean isNetworkConnected() {
         ConnectivityManager conMgr = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
 
+        assert conMgr != null;
         if (conMgr.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED
                 || conMgr.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED) {
 

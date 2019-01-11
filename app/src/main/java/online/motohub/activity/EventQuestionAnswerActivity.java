@@ -27,6 +27,7 @@ import online.motohub.model.EventAnswersModel;
 import online.motohub.model.EventRegistrationQuestionModel;
 import online.motohub.model.SessionModel;
 import online.motohub.retrofit.RetrofitClient;
+import online.motohub.util.DialogManager;
 import online.motohub.util.PreferenceUtils;
 
 
@@ -63,6 +64,12 @@ public class EventQuestionAnswerActivity extends BaseActivity {
 
         initView();
 
+    }
+
+    @Override
+    protected void onDestroy() {
+        DialogManager.hideProgress();
+        super.onDestroy();
     }
 
     private void initView() {

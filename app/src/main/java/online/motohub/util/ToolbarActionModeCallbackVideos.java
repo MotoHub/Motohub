@@ -10,11 +10,8 @@ import android.view.MenuItem;
 import java.util.List;
 
 import online.motohub.R;
-import online.motohub.activity.ProfileImgGalleryActivity;
 import online.motohub.activity.ProfileVideoGalleryActivity;
-import online.motohub.adapter.GalleryImgAdapter;
 import online.motohub.adapter.GalleryVideoAdapter;
-import online.motohub.model.GalleryImgResModel;
 import online.motohub.model.GalleryVideoResModel;
 
 /**

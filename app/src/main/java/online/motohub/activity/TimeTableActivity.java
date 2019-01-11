@@ -29,6 +29,7 @@ import online.motohub.model.SessionModel;
 import online.motohub.retrofit.RetrofitClient;
 import online.motohub.util.DateComparator;
 import online.motohub.util.DateUtil;
+import online.motohub.util.DialogManager;
 import online.motohub.util.PreferenceUtils;
 
 public class TimeTableActivity extends BaseActivity {
@@ -74,7 +75,11 @@ public class TimeTableActivity extends BaseActivity {
         mEventID =  getIntent().getIntExtra(EventsModel.EVENT_ID,0);
         getEvent();
     }
-
+    @Override
+    protected void onDestroy() {
+        DialogManager.hideProgress();
+        super.onDestroy();
+    }
     private void initView() {
 
         setToolbar(mToolbar, getString(R.string.time_table));

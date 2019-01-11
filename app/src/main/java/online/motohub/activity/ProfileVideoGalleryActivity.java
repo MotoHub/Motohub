@@ -12,7 +12,6 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.ActionMode;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -23,9 +22,9 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.MediaController;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 import android.widget.VideoView;
 
+import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -33,13 +32,13 @@ import com.google.gson.JsonParser;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import online.motohub.R;
 import online.motohub.adapter.GalleryVideoAdapter;
+import online.motohub.application.MotoHub;
 import online.motohub.model.DeleteProfileImagesResponse;
 import online.motohub.model.GalleryVideoModel;
 import online.motohub.model.GalleryVideoResModel;
@@ -52,8 +51,8 @@ import online.motohub.util.PreferenceUtils;
 import online.motohub.util.ProfileUploadService;
 import online.motohub.util.RecyclerClick_Listener;
 import online.motohub.util.RecyclerTouchListener;
-import online.motohub.util.ToolbarActionModeCallback;
 import online.motohub.util.ToolbarActionModeCallbackVideos;
+import online.motohub.util.UrlUtils;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -75,29 +74,23 @@ public class ProfileVideoGalleryActivity extends BaseActivity {
     RelativeLayout mVideoContainer;
     @BindView(R.id.gallery_video_view)
     VideoView mVideoView;
+    @BindView(R.id.shimmer_ondemand_events)
+    ShimmerFrameLayout mShimmer_myvideos;
     /*final GalleryVideoAdapter.OnItemClickListener onItemClickListener = new GalleryVideoAdapter.OnItemClickListener() {
         @Override
         public void onItemClick(GalleryVideoResModel model, int position) {
-
             if (model != null) {
                 moveLoadVideoScreen(ProfileVideoGalleryActivity.this, model.getVideoUrl());
             }
-
         }
     };*/
     @BindView(R.id.video_gallery_fab)
     FloatingActionButton mUpdateFAB;
-    ProfileResModel mProfileResModel;
-    private List<GalleryVideoResModel> videoResModels;
-    private GalleryVideoAdapter mAdapter;
-    private String mVideoPathUri;
-    private ActionMode mActionMode;
-    private ArrayList<Integer> deleteList;
 
+    private int mProfileID;
     BroadcastReceiver broadCastUploadStatus = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-
             try {
                 String status = intent.getStringExtra("status");
                 if (status.equalsIgnoreCase("File Uploaded")) {
@@ -112,6 +105,11 @@ public class ProfileVideoGalleryActivity extends BaseActivity {
             }
         }
     };
+    private ArrayList<GalleryVideoResModel> videoResModels;
+    private GalleryVideoAdapter mAdapter;
+    private String mVideoPathUri;
+    private ActionMode mActionMode;
+    private ArrayList<Integer> deleteList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -125,30 +123,27 @@ public class ProfileVideoGalleryActivity extends BaseActivity {
         setToolbar(mToolbar, getString(R.string.videos));
         showToolbarBtn(mToolbar, R.id.toolbar_back_img_btn);
         deleteList = new ArrayList<>();
-
+        mShimmer_myvideos.startShimmerAnimation();
+        mRv.setVisibility(View.GONE);
         try {
-            mProfileResModel = (ProfileResModel) getIntent().getSerializableExtra(EXTRA_PROFILE);
+            mProfileID = getIntent().getIntExtra(EXTRA_PROFILE, 0);
+            // mProfileResModel = MotoHub.getApplicationInstance().getmProfileResModel();
         } catch (Exception e) {
             e.printStackTrace();
-            mProfileResModel = null;
+            // mProfileResModel = null;
         }
-
         GridLayoutManager layoutManager = new GridLayoutManager(ProfileVideoGalleryActivity.this, 2);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mRv.setLayoutManager(layoutManager);
-
         videoResModels = new ArrayList<>();
         mAdapter = new GalleryVideoAdapter(ProfileVideoGalleryActivity.this, videoResModels);
         mRv.setAdapter(mAdapter);
-
         //mAdapter.setOnItemClickListener(onItemClickListener);
-
         if (getIntent().getBooleanExtra(AppConstants.FROM_OTHER_PROFILE, false)) {
             mUpdateFAB.setVisibility(View.GONE);
         }
         initVideoPlayer();
         getVideoDataFromAPi();
-
         mRv.addOnItemTouchListener(new RecyclerTouchListener(this, mRv, new RecyclerClick_Listener() {
             @Override
             public void onClick(View view, int position) {
@@ -158,7 +153,7 @@ public class ProfileVideoGalleryActivity extends BaseActivity {
                 } else {
                     GalleryVideoResModel model = videoResModels.get(position);
                     if (model != null) {
-                        moveLoadVideoScreen(ProfileVideoGalleryActivity.this, model.getVideoUrl());
+                        moveLoadVideoScreen(ProfileVideoGalleryActivity.this, UrlUtils.AWS_S3_BASE_URL + model.getVideoUrl());
                     }
                 }
             }
@@ -171,12 +166,16 @@ public class ProfileVideoGalleryActivity extends BaseActivity {
         }));
     }
 
-    private void initVideoPlayer() {
+    @Override
+    protected void onDestroy() {
+        DialogManager.hideProgress();
+        super.onDestroy();
+    }
 
+    private void initVideoPlayer() {
         MediaController mMediaController = new MediaController(ProfileVideoGalleryActivity.this);
         mMediaController.setAnchorView(mVideoView);
         mVideoView.setMediaController(mMediaController);
-
     }
 
     @Override
@@ -189,7 +188,6 @@ public class ProfileVideoGalleryActivity extends BaseActivity {
     }
 
     private void getVideoDataFromAPi() {
-        int mProfileID = mProfileResModel.getID();
         String filter = "ProfileID = " + mProfileID;
         RetrofitClient.getRetrofitInstance()
                 .callGetVideoGallery(ProfileVideoGalleryActivity.this,
@@ -226,11 +224,17 @@ public class ProfileVideoGalleryActivity extends BaseActivity {
                 case GALLERY_VIDEO_REQ:
                     mVideoPathUri = data.getStringExtra(EXTRA_RESULT_DATA);
                     if (mVideoPathUri != null) {
-                        new VideoCompressor().execute(getSelectedVideoPath(), getCompressedVideoPath());
+                        uploadVideoFile();
+                        //   new VideoCompressor().execute(getSelectedVideoPath(), getCompressedVideoPath());
                     } else {
                         showSnackBar(mParentView, getString(R.string.file_not_found));
                     }
                     break;
+               /* case AppConstants.ONDEMAND_REQUEST:
+                    videoResModels.clear();
+                    ArrayList<GalleryVideoResModel> mTempPromoterVideoList = (ArrayList<GalleryVideoResModel>) data.getSerializableExtra(AppConstants.VIDEO_LIST);
+                    videoResModels.addAll(mTempPromoterVideoList);
+                    break;*/
             }
         }
     }
@@ -248,45 +252,22 @@ public class ProfileVideoGalleryActivity extends BaseActivity {
         return mPath;
     }
 
-    class VideoCompressor extends AsyncTask<String, Void, Boolean> {
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            DialogManager.showProgress(ProfileVideoGalleryActivity.this);
-        }
-
-        @Override
-        protected Boolean doInBackground(String... params) {
-            return com.yovenny.videocompress.MediaController.getInstance().convertVideo(params[0], params[1]);
-        }
-
-        @Override
-        protected void onPostExecute(Boolean compressed) {
-            super.onPostExecute(compressed);
-            DialogManager.hideProgress();
-            if (compressed) {
-                showToast(ProfileVideoGalleryActivity.this, getString(R.string.uploading_video));
-                uploadVideoFile();
-            }
-        }
-    }
-
     private void uploadVideoFile() {
         try {
             Bitmap thumb = ThumbnailUtils.createVideoThumbnail(mVideoPathUri,
                     MediaStore.Images.Thumbnails.MINI_KIND);
             File imageFile = compressedImgFromBitmap(thumb);
             Intent service_intent = new Intent(this, ProfileUploadService.class);
-            service_intent.putExtra(AppConstants.VIDEO_PATH, mCompressedVideoPath);
+            service_intent.putExtra(AppConstants.VIDEO_PATH, mVideoPathUri);
             service_intent.putExtra(AppConstants.IMAGE_PATH, String.valueOf(imageFile));
             String destFilePath = Environment.getExternalStorageDirectory().getPath() + getString(R.string.util_app_folder_root_path);
-            service_intent.putExtra(AppConstants.PROFILE_ID, mProfileResModel.getID());
+            service_intent.putExtra(AppConstants.PROFILE_ID, mProfileID);
             service_intent.putExtra(AppConstants.DEST_PATH, destFilePath);
             service_intent.putExtra(AppConstants.USER_TYPE, AppConstants.USER);
             service_intent.setAction("ProfileUploadService");
             startService(service_intent);
-            mCompressedVideoPath = "";
+            //mCompressedVideoPath = "";
+            mVideoPathUri = "";
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -297,13 +278,21 @@ public class ProfileVideoGalleryActivity extends BaseActivity {
         super.retrofitOnResponse(responseObj, responseType);
         switch (responseType) {
             case RetrofitClient.GET_VIDEO_FILE_RESPONSE:
-                GalleryVideoModel videoModel = (GalleryVideoModel) responseObj;
-                if (videoModel != null && videoModel.getResModelList().size() > 0) {
-                    videoResModels.clear();
-                    videoResModels.addAll(videoModel.getResModelList());
-                    mAdapter.notifyDataSetChanged();
-                } else {
-                    showSnackBar(mParentView, getString(R.string.video_not_found));
+                try {
+                    GalleryVideoModel videoModel = (GalleryVideoModel) responseObj;
+                    if (videoModel != null && videoModel.getResModelList().size() > 0) {
+                        videoResModels.clear();
+                        videoResModels.addAll(videoModel.getResModelList());
+                        mAdapter.notifyDataSetChanged();
+                        mRv.setVisibility(View.VISIBLE);
+                    } else {
+                        showSnackBar(mParentView, getString(R.string.video_not_found));
+                        mRv.setVisibility(View.GONE);
+                    }
+                    mShimmer_myvideos.stopShimmerAnimation();
+                    mShimmer_myvideos.setVisibility(View.GONE);
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
                 break;
             case RetrofitClient.UPDATE_SESSION_RESPONSE:
@@ -322,36 +311,25 @@ public class ProfileVideoGalleryActivity extends BaseActivity {
     @Override
     public void retrofitOnFailure() {
         super.retrofitOnFailure();
-
         showSnackBar(mParentView, getString(R.string.internet_failure));
-
     }
 
     @Override
     public void retrofitOnError(int code, String message) {
         super.retrofitOnError(code, message);
-
         if (message.equals("Unauthorized") || code == 401) {
-
             RetrofitClient.getRetrofitInstance().callUpdateSession(this, RetrofitClient.UPDATE_SESSION_RESPONSE);
-
         } else {
-
             String mErrorMsg = code + " - " + message;
             showSnackBar(mParentView, mErrorMsg);
-
         }
-
     }
 
     @Override
     public void retrofitOnSessionError(int code, String message) {
         super.retrofitOnSessionError(code, message);
-
         showSnackBar(mParentView, message);
-
     }
-
 
     @Override
     protected void onResume() {
@@ -402,7 +380,6 @@ public class ProfileVideoGalleryActivity extends BaseActivity {
         //JSONArray jsonArray = new JSONArray(deleteList);
         JsonObject finalObject = new JsonObject();
         finalObject.add("ids", jsonArray);
-        Toast.makeText(this, selected.size() + " item deleted.", Toast.LENGTH_SHORT).show();//Show Toast
         mActionMode.finish();//Finish action mode after use
         deleteList.clear();
         callDeleteVideosMyProfile(finalObject, DELETE_MY_PROFILE_IMAGE);
@@ -430,6 +407,30 @@ public class ProfileVideoGalleryActivity extends BaseActivity {
                         retrofitOnFailure();
                     }
                 });
+    }
+
+    class VideoCompressor extends AsyncTask<String, Void, Boolean> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            DialogManager.showProgress(ProfileVideoGalleryActivity.this);
+        }
+
+        @Override
+        protected Boolean doInBackground(String... params) {
+            return com.yovenny.videocompress.MediaController.getInstance().convertVideo(params[0], params[1]);
+        }
+
+        @Override
+        protected void onPostExecute(Boolean compressed) {
+            super.onPostExecute(compressed);
+            DialogManager.hideProgress();
+            if (compressed) {
+                showToast(ProfileVideoGalleryActivity.this, getString(R.string.uploading_video));
+                uploadVideoFile();
+            }
+        }
     }
 
 }
