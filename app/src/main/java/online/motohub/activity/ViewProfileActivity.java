@@ -3,6 +3,7 @@ package online.motohub.activity;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
 import android.content.Context;
@@ -44,6 +45,16 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.amazonaws.ClientConfiguration;
+import com.amazonaws.Protocol;
+import com.amazonaws.auth.BasicAWSCredentials;
+import com.amazonaws.mobileconnectors.s3.transferutility.TransferListener;
+import com.amazonaws.mobileconnectors.s3.transferutility.TransferObserver;
+import com.amazonaws.mobileconnectors.s3.transferutility.TransferState;
+import com.amazonaws.mobileconnectors.s3.transferutility.TransferUtility;
+import com.amazonaws.regions.Region;
+import com.amazonaws.regions.Regions;
+import com.amazonaws.services.s3.AmazonS3Client;
 import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -54,9 +65,11 @@ import com.yalantis.contextmenu.lib.MenuParams;
 import com.yalantis.contextmenu.lib.interfaces.OnMenuItemClickListener;
 
 import org.greenrobot.eventbus.EventBus;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -73,6 +86,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import de.hdodenhof.circleimageview.CircleImageView;
+
 import online.motohub.R;
 import online.motohub.activity.club.ClubsListActivity;
 import online.motohub.activity.news_and_media.NewsAndMediaListActivity;
@@ -114,7 +128,9 @@ import online.motohub.model.PushTokenModel;
 import online.motohub.model.RacingModel;
 import online.motohub.model.SessionModel;
 import online.motohub.model.SpectatorLiveEntity;
+import online.motohub.model.SpectatorLiveModel;
 import online.motohub.model.VideoShareModel;
+import online.motohub.model.promoter_club_news_media.PromotersResModel;
 import online.motohub.retrofit.APIConstants;
 import online.motohub.retrofit.RetrofitClient;
 import online.motohub.util.AppConstants;
@@ -124,7 +140,9 @@ import online.motohub.util.PreferenceUtils;
 import online.motohub.util.StringUtils;
 import online.motohub.util.UploadFileService;
 import online.motohub.util.UploadOfflineVideos;
+import online.motohub.util.UrlUtils;
 import online.motohub.util.Utility;
+import rx.Observable;
 import rx.Observer;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Func1;
@@ -271,6 +289,13 @@ public class ViewProfileActivity extends BaseActivity implements
     private FragmentManager fragmentManager;
     private ContextMenuDialogFragment mMenuDialogFragment;
 
+    AmazonS3Client s3;
+    BasicAWSCredentials credentials;
+    TransferUtility transferUtility;
+    TransferObserver observerVideo, observerImage;
+    private static String id;
+    private ProgressDialog pDialog;
+
     public ViewProfileActivity getInstance() {
         return this;
     }
@@ -306,7 +331,13 @@ public class ViewProfileActivity extends BaseActivity implements
                 }
             }
         }
-        uploadOffline();
+        //uploadOffline();
+        DatabaseHandler handler = new DatabaseHandler(this);
+        ArrayList<SpectatorLiveEntity> mList = handler.getSpectatorLiveVideos();
+        if (mList.size() > 0) {
+            //showAlertOfflineVideos();
+            uploadOffline();
+        }
     }
 
     @Override
@@ -327,6 +358,8 @@ public class ViewProfileActivity extends BaseActivity implements
         setUpPurchseSuccessUI();
         AppConstants.LIVE_STREAM_CALL_BACK = this;
         setToolbar(mToolbar, mToolbarTitle);
+        pDialog = new ProgressDialog(this, R.style.MyAlertDialogStyle);
+        pDialog.setCancelable(false);
 
         //Shimmer Animation
         mShimmerView_otherprofiles.startShimmerAnimation();
@@ -1629,6 +1662,9 @@ public class ViewProfileActivity extends BaseActivity implements
             finish();
         } else if (responseObj instanceof VideoShareModel) {
             RetrofitClient.getRetrofitInstance().callDeleteProfilePosts(this, mNewsFeedList.get(mCurrentPostPosition).getID(), RetrofitClient.DELETE_PROFILE_POSTS_RESPONSE);
+        } else if (responseObj instanceof SpectatorLiveModel) {
+            showToast(getApplicationContext(), "Successfully uploaded");
+            hideDialog();
         }
     }
 
@@ -2227,8 +2263,8 @@ public class ViewProfileActivity extends BaseActivity implements
         }
     }
 
-    private void uploadOffline(){
-        DatabaseHandler handler = new DatabaseHandler(this);
+    private void uploadOffline() {
+        final DatabaseHandler handler = new DatabaseHandler(this);
         ArrayList<SpectatorLiveEntity> mList = handler.getSpectatorLiveVideos();
         if (mList.size() > 0) {
             if (isNetworkConnected(this)) {
@@ -2238,11 +2274,280 @@ public class ViewProfileActivity extends BaseActivity implements
                     service_intent.putExtra("data", data);
                     startService(service_intent);
                 }
-
-                /*Intent service_intent = new Intent(this, UploadOfflineVideos.class);
-                startService(service_intent);*/
             }
+
+            /*if (isNetworkConnected(this)) {
+                pDialog.setMessage("Please wait videos are uploading...");
+                showDialog();
+                Observable.from(mList)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .concatMap(new Func1<SpectatorLiveEntity, Observable<SpectatorLiveModel>>() {
+                            @Override
+                            public Observable<SpectatorLiveModel> call(final SpectatorLiveEntity spectatorLiveEntity) {
+                                ClientConfiguration configuration = new ClientConfiguration();
+                                configuration.setMaxErrorRetry(3);
+                                configuration.setConnectionTimeout(501000);
+                                configuration.setSocketTimeout(501000);
+                                configuration.setProtocol(Protocol.HTTP);
+                                id = spectatorLiveEntity.getID();
+
+                                final JsonArray mJsonArray = new JsonArray();
+
+                                credentials = new BasicAWSCredentials(AppConstants.KEY, AppConstants.SECRET);
+                                s3 = new AmazonS3Client(credentials, configuration);
+                                s3.setRegion(Region.getRegion(Regions.AP_SOUTHEAST_2));
+                                transferUtility = new TransferUtility(s3, ViewProfileActivity.this);
+                                final File videoFile = new File(spectatorLiveEntity.getVideoUrl());
+                                File mThumbImgFile = new File(spectatorLiveEntity.getThumbnail());
+
+                                final String videoFileName = videoFile.getName();
+                                final String imageFileName = mThumbImgFile.getName();
+
+                                observerVideo = transferUtility.upload(AppConstants.BUCKET_NAME, UrlUtils.FILE_UPLOAD_SPECTOCTORLIVE + videoFileName, videoFile);
+
+                                observerImage = transferUtility.upload(AppConstants.BUCKET_NAME, UrlUtils.FILE_UPLOAD_SPECTOCTORLIVE + imageFileName, mThumbImgFile);
+
+                                observerVideo.setTransferListener(new TransferListener() {
+                                    @Override
+                                    public void onStateChanged(int id, TransferState state) {
+
+                                        if (TransferState.COMPLETED.equals(observerVideo.getState())) {
+                                            JsonObject mObject = new JsonObject();
+                                            mObject.addProperty(SpectatorLiveModel.PROFILE_ID, spectatorLiveEntity.getProfileID());
+                                            mObject.addProperty(SpectatorLiveModel.USERID, spectatorLiveEntity.getUserID());
+                                            mObject.addProperty(SpectatorLiveModel.USERTYPE, AppConstants.USER_EVENT_VIDEOS);
+                                            mObject.addProperty(SpectatorLiveModel.CAPTION, spectatorLiveEntity.getCaption());
+                                            mObject.addProperty(SpectatorLiveModel.FILEURL, UrlUtils.FILE_UPLOAD_SPECTOCTORLIVE + videoFileName);
+                                            mObject.addProperty(SpectatorLiveModel.THUMBNAIL, UrlUtils.FILE_UPLOAD_SPECTOCTORLIVE + imageFileName);
+                                            mObject.addProperty(SpectatorLiveModel.EVENTID, spectatorLiveEntity.getEventID());
+                                            mObject.addProperty(SpectatorLiveModel.EVENT_FINISH_DATE, spectatorLiveEntity.getEventFinishDate());
+                                            mObject.addProperty(SpectatorLiveModel.LIVE_POST_PROFILE_ID, spectatorLiveEntity.getLivePostProfileID());
+
+                                            mJsonArray.add(mObject);
+                                        }
+                                    }
+
+                                    @SuppressLint("SetTextI18n")
+                                    @Override
+                                    public void onProgressChanged(int id, long bytesCurrent, long bytesTotal) {
+
+                                        long _bytesCurrent = bytesCurrent;
+                                        long _bytesTotal = bytesTotal;
+
+                                        float percentage = ((float) _bytesCurrent / (float) _bytesTotal * 100);
+                                        Log.d("percentage", "" + percentage);
+                                        //pDialog.setProgress((int) percentage);
+
+                                    }
+
+                                    @Override
+                                    public void onError(int id, Exception ex) {
+                                        //Toast.makeText(VideoStoryPreviewActivity.this, "" + ex.getMessage(), Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+
+
+                                observerImage.setTransferListener(new TransferListener() {
+                                    @Override
+                                    public void onStateChanged(int id, TransferState state) {
+
+                                        if (TransferState.COMPLETED.equals(observerImage.getState())) {
+                                        }
+                                    }
+
+                                    @SuppressLint("SetTextI18n")
+                                    @Override
+                                    public void onProgressChanged(int id, long bytesCurrent, long bytesTotal) {
+
+                                        long _bytesCurrent = bytesCurrent;
+                                        long _bytesTotal = bytesTotal;
+
+                                        float percentage = ((float) _bytesCurrent / (float) _bytesTotal * 100);
+                                        Log.d("percentage", "" + percentage);
+                                        *//*pb.setProgress((int) percentage);*//*
+                                    }
+
+                                    @Override
+                                    public void onError(int id, Exception ex) {
+                                        //Toast.makeText(VideoStoryPreviewActivity.this, "" + ex.getMessage(), Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                                return callUploadVideos(mJsonArray);
+                            }
+                        })
+                        .subscribe(new Observer<SpectatorLiveModel>() {
+                            @Override
+                            public void onCompleted() {
+                                hideDialog();
+                                showToast(getApplicationContext(), "Successfully uploaded");
+                            }
+
+                            @Override
+                            public void onError(Throwable e) {
+                                hideDialog();
+                            }
+
+                            @Override
+                            public void onNext(SpectatorLiveModel spectatorLiveModel) {
+                                handler.deleteRow(id);
+                            }
+                        });
+            }*/
         }
+    }
+
+    private void amazoneUpload(final SpectatorLiveEntity myObj) {
+
+        pDialog.setMessage("Please wait videos are uploading...");
+        showDialog();
+
+        ClientConfiguration configuration = new ClientConfiguration();
+        configuration.setMaxErrorRetry(3);
+        configuration.setConnectionTimeout(501000);
+        configuration.setSocketTimeout(501000);
+        configuration.setProtocol(Protocol.HTTP);
+
+        credentials = new BasicAWSCredentials(AppConstants.KEY, AppConstants.SECRET);
+        s3 = new AmazonS3Client(credentials, configuration);
+        s3.setRegion(Region.getRegion(Regions.AP_SOUTHEAST_2));
+        transferUtility = new TransferUtility(s3, ViewProfileActivity.this);
+        final File videoFile = new File(myObj.getVideoUrl());
+        File mThumbImgFile = new File(myObj.getThumbnail());
+
+        if (!videoFile.exists()) {
+            Toast.makeText(ViewProfileActivity.this, "File Not Found!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        final String videoFileName = videoFile.getName();
+        final String imageFileName = mThumbImgFile.getName();
+
+        observerVideo = transferUtility.upload(AppConstants.BUCKET_NAME, UrlUtils.FILE_UPLOAD_SPECTOCTORLIVE + videoFileName, videoFile);
+
+        observerImage = transferUtility.upload(AppConstants.BUCKET_NAME, UrlUtils.FILE_UPLOAD_SPECTOCTORLIVE + imageFileName, mThumbImgFile);
+
+        observerVideo.setTransferListener(new TransferListener() {
+            @Override
+            public void onStateChanged(int id, TransferState state) {
+
+                if (TransferState.COMPLETED.equals(observerVideo.getState())) {
+                    hideDialog();
+                    apiCallToUploadSpecLiveStreamVideo(UrlUtils.FILE_UPLOAD_SPECTOCTORLIVE + videoFileName, UrlUtils.FILE_UPLOAD_SPECTOCTORLIVE + imageFileName, myObj);
+                }
+            }
+
+            @SuppressLint("SetTextI18n")
+            @Override
+            public void onProgressChanged(int id, long bytesCurrent, long bytesTotal) {
+
+                long _bytesCurrent = bytesCurrent;
+                long _bytesTotal = bytesTotal;
+
+                float percentage = ((float) _bytesCurrent / (float) _bytesTotal * 100);
+                Log.d("percentage", "" + percentage);
+                //pDialog.setProgress((int) percentage);
+
+            }
+
+            @Override
+            public void onError(int id, Exception ex) {
+                hideDialog();
+                //Toast.makeText(VideoStoryPreviewActivity.this, "" + ex.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
+        observerImage.setTransferListener(new TransferListener() {
+            @Override
+            public void onStateChanged(int id, TransferState state) {
+
+                if (TransferState.COMPLETED.equals(observerImage.getState())) {
+                }
+            }
+
+            @SuppressLint("SetTextI18n")
+            @Override
+            public void onProgressChanged(int id, long bytesCurrent, long bytesTotal) {
+
+                long _bytesCurrent = bytesCurrent;
+                long _bytesTotal = bytesTotal;
+
+                float percentage = ((float) _bytesCurrent / (float) _bytesTotal * 100);
+                Log.d("percentage", "" + percentage);
+                /*pb.setProgress((int) percentage);*/
+            }
+
+            @Override
+            public void onError(int id, Exception ex) {
+                //Toast.makeText(VideoStoryPreviewActivity.this, "" + ex.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void showDialog() {
+        if (!pDialog.isShowing())
+            pDialog.show();
+    }
+
+    private void hideDialog() {
+        if (pDialog.isShowing())
+            pDialog.dismiss();
+    }
+
+    private void apiCallToUploadSpecLiveStreamVideo(String mVideoPath, String mThumb, SpectatorLiveEntity myObj) {
+        try {
+            JsonObject mObject = new JsonObject();
+            mObject.addProperty(SpectatorLiveModel.PROFILE_ID, myObj.getProfileID());
+            mObject.addProperty(SpectatorLiveModel.USERID, myObj.getUserID());
+            mObject.addProperty(SpectatorLiveModel.USERTYPE, AppConstants.USER_EVENT_VIDEOS);
+            mObject.addProperty(SpectatorLiveModel.CAPTION, myObj.getCaption());
+            mObject.addProperty(SpectatorLiveModel.FILEURL, UrlUtils.FILE_UPLOAD_SPECTOCTORLIVE + mVideoPath);
+            mObject.addProperty(SpectatorLiveModel.THUMBNAIL, UrlUtils.FILE_UPLOAD_SPECTOCTORLIVE + mThumb);
+            mObject.addProperty(SpectatorLiveModel.EVENTID, myObj.getEventID());
+            mObject.addProperty(SpectatorLiveModel.EVENT_FINISH_DATE, myObj.getEventFinishDate());
+            mObject.addProperty(SpectatorLiveModel.LIVE_POST_PROFILE_ID, myObj.getLivePostProfileID());
+
+            JsonArray mJsonArray = new JsonArray();
+            mJsonArray.add(mObject);
+
+            RetrofitClient.getRetrofitInstance().callToPostSpectatorData(ViewProfileActivity.this, mJsonArray, RetrofitClient.SPECTATOR_LIVE_RESPONSE);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void showAlertOfflineVideos() {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                final AlertDialog.Builder builder = new AlertDialog.Builder(ViewProfileActivity.this, R.style.MyAlertDialogStyle);
+                builder.setTitle("Do you want upload offline videos to server?");
+                builder.setCancelable(false);
+                builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        dialog.dismiss();
+                        uploadOffline();
+                    }
+                });
+                builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+                builder.show();
+            }
+        });
+    }
+
+    private Observable<SpectatorLiveModel> callUploadVideos(final JsonArray jsonArray) {
+
+        return RetrofitClient.getRetrofitInstance().getRetrofitApiInterfaceRxjava()
+                .callPostSpectatorLiveStoryRxjava("*", jsonArray)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
     }
 
 }

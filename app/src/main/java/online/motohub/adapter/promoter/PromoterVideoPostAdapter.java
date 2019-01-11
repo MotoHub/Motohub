@@ -28,6 +28,7 @@ import com.bumptech.glide.load.model.LazyHeaders;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
+import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
@@ -327,9 +328,13 @@ public class PromoterVideoPostAdapter extends RecyclerView.Adapter<RecyclerView.
 
                                     Intent intent = new Intent(mContext, OnDemanAudoVideoView.class);
                                     intent.putExtra(AppConstants.POSITION, position);
-                                    intent.putExtra(AppConstants.ONDEMAND_DATA, mPostsList);
+                                    //intent.putExtra(AppConstants.ONDEMAND_DATA, mPostsList);
                                     intent.putExtra("Filter", "EventID =" + ProfileID);
-                                    EventBus.getDefault().postSticky(mCurrentProfileResModel);
+                                    String profile = new Gson().toJson(mCurrentProfileResModel);
+                                    String list = new Gson().toJson(mPostsList);
+                                    EventBus.getDefault().postSticky(mPostsList);
+                                    intent.putExtra("profile", profile);
+                                    //intent.putExtra(AppConstants.ONDEMAND_DATA, list);
                                     ((PromoterVideoGalleryActivity) mContext).startActivityForResult(intent, AppConstants.ONDEMAND_REQUEST);
                                 }
                             } catch (Exception e) {

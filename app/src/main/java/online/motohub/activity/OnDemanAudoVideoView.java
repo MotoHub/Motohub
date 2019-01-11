@@ -43,6 +43,7 @@ import com.google.android.exoplayer2.upstream.cache.CacheDataSource;
 import com.google.android.exoplayer2.upstream.cache.CacheDataSourceFactory;
 import com.google.android.exoplayer2.upstream.cache.LeastRecentlyUsedCacheEvictor;
 import com.google.android.exoplayer2.upstream.cache.SimpleCache;
+import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.plattysoft.leonids.ParticleSystem;
@@ -127,11 +128,16 @@ public class OnDemanAudoVideoView extends BaseActivity {
         try {
             setSwipeListenerForVideoView();
             checkPosition = getIntent().getIntExtra(AppConstants.POSITION, 0);
-            mPostsList = (ArrayList<PromoterVideoModel.Resource>) getIntent().getSerializableExtra(AppConstants.ONDEMAND_DATA);
+            //mPostsList = (ArrayList<PromoterVideoModel.Resource>) getIntent().getSerializableExtra(AppConstants.ONDEMAND_DATA);
             //mMyProfileResModel = (ProfileResModel) getIntent().getSerializableExtra(AppConstants.MY_PROFILE_OBJ);
             //mMyProfileResModel = MotoHub.getApplicationInstance().getmProfileResModel();
-            mMyProfileResModel = EventBus.getDefault().getStickyEvent(ProfileResModel.class);
+            //mMyProfileResModel = EventBus.getDefault().getStickyEvent(ProfileResModel.class);
+
+            mPostsList = EventBus.getDefault().getStickyEvent(ArrayList.class);
+
             mFilter = getIntent().getStringExtra("Filter");
+            String profile = getIntent().getStringExtra("profile");
+            mMyProfileResModel = new Gson().fromJson(profile, ProfileResModel.class);
 
             mOtherProfileID = Integer.parseInt(mPostsList.get(pos).getProfileID());
             if (mMyProfileResModel != null) {
@@ -157,6 +163,8 @@ public class OnDemanAudoVideoView extends BaseActivity {
     @Override
     protected void onDestroy() {
         DialogManager.hideProgress();
+        if (mPostsList != null)
+            EventBus.getDefault().removeStickyEvent(mPostsList);
         super.onDestroy();
     }
 
