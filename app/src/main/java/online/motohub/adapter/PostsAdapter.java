@@ -1232,9 +1232,11 @@ public class PostsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             } else {
                 //mBundle.putSerializable(PromotersModel.PROMOTERS_RES_MODEL, mPostsList.get(selPos).getPromoterByProfileID());
                 //MotoHub.getApplicationInstance().setmPromoterResModel(mPostsList.get(selPos).getPromoterByProfileID());
-                EventBus.getDefault().postSticky(mPostsList.get(selPos).getPromoterByWhoPostedProfileID());
-                mUserType = mPostsList.get(selPos)
-                        .getPromoterByProfileID().getUserType();
+                if (mPostsList.get(selPos).getPromoterByProfileID() != null) {
+                    EventBus.getDefault().postSticky(mPostsList.get(selPos).getPromoterByProfileID());
+                    mUserType = mPostsList.get(selPos)
+                            .getPromoterByProfileID().getUserType();
+                }
             }
 
             switch (mUserType) {

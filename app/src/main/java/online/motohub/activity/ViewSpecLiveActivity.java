@@ -95,6 +95,7 @@ public class ViewSpecLiveActivity extends BaseActivity {
     }
 
     private void getVideoFrmIntent() {
+        mListLiveVideos = new ArrayList<>();
         mListLiveVideos = getIntent().getParcelableArrayListExtra(AppConstants.VIDEOLIST);
         pos = getIntent().getIntExtra(AppConstants.POSITION, 0);
     }
@@ -102,8 +103,10 @@ public class ViewSpecLiveActivity extends BaseActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        mListLiveVideos.clear();
-        manageNextVideoAndPlayer();
+        if (mListLiveVideos != null) {
+            mListLiveVideos.clear();
+            manageNextVideoAndPlayer();
+        }
     }
 
     @Override
