@@ -316,25 +316,12 @@ public class PromoterVideoPostAdapter extends RecyclerView.Adapter<RecyclerView.
                         public void onClick(View v) {
                             try {
                                 if (mPostsList != null && mModel.getVideoUrl() != null && mCurrentProfileResModel != null) {
-                                    /*Bundle mBundle = new Bundle();
-                                    mBundle.putSerializable(AppConstants.ONDEMAND_DATA, mPostsList);
-                                    mBundle.putString("Filter", "EventID =" + ProfileID);
-                                    mBundle.putInt(AppConstants.POSITION, position);
-                                    //mBundle.putSerializable(AppConstants.MY_PROFILE_OBJ, mCurrentProfileResModel);
-                                    //MotoHub.getApplicationInstance().setmProfileResModel(mCurrentProfileResModel);
-                                    EventBus.getDefault().postSticky(mCurrentProfileResModel);
-                                    //if (mContext instanceof PromoterVideoGalleryActivity)
-                                    ((PromoterVideoGalleryActivity) mContext).startActivityForResult(new Intent(mContext, OnDemanAudoVideoView.class).putExtras(mBundle), AppConstants.ONDEMAND_REQUEST);*/
-
                                     Intent intent = new Intent(mContext, OnDemanAudoVideoView.class);
                                     intent.putExtra(AppConstants.POSITION, position);
-                                    //intent.putExtra(AppConstants.ONDEMAND_DATA, mPostsList);
                                     intent.putExtra("Filter", "EventID =" + ProfileID);
                                     String profile = new Gson().toJson(mCurrentProfileResModel);
-                                    String list = new Gson().toJson(mPostsList);
-                                    EventBus.getDefault().postSticky(mPostsList);
+                                    MotoHub.getApplicationInstance().setmPostsList(mPostsList);
                                     intent.putExtra("profile", profile);
-                                    //intent.putExtra(AppConstants.ONDEMAND_DATA, list);
                                     ((PromoterVideoGalleryActivity) mContext).startActivityForResult(intent, AppConstants.ONDEMAND_REQUEST);
                                 }
                             } catch (Exception e) {

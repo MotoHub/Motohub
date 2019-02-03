@@ -21,6 +21,7 @@ import online.motohub.R;
 import online.motohub.model.EventAddOnModel;
 import online.motohub.model.EventCategoryModel;
 import online.motohub.model.ProfileResModel;
+import online.motohub.model.PromoterVideoModel;
 import online.motohub.model.promoter_club_news_media.PromotersResModel;
 import online.motohub.util.CommonAPI;
 import online.motohub.util.DateUtil;
@@ -56,6 +57,15 @@ public class MotoHub extends Application {
     private ArrayList<ProfileResModel> mFullProfileList;
     private JsonObject mEventQuestionAnswer;
     private ArrayList<EventAddOnModel> mSelectedEventAddOn = new ArrayList<>();
+    private ArrayList<PromoterVideoModel.Resource> mPostsList = new ArrayList<>();
+
+    public ArrayList<PromoterVideoModel.Resource> getmPostsList() {
+        return mPostsList;
+    }
+
+    public void setmPostsList(ArrayList<PromoterVideoModel.Resource> mPostsList) {
+        this.mPostsList = mPostsList;
+    }
 
     public ProfileResModel getmOthersProfileResModel() {
         return mOthersProfileResModel;
