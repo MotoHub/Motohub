@@ -297,7 +297,7 @@
                                     style="@style/LayoutMatch"
                                     android:layout_below="@+id/chat_img_view"
                                     android:gravity="center"
-                                    android:text="@string/message"
+                                    android:text="@string/mainObj"
                                     android:textColor="@color/colorBlack"
                                     android:textSize="@dimen/text12" />
 

@@ -70,7 +70,7 @@ public class EventLivePromoterChatAdapter extends RecyclerView.Adapter<RecyclerV
         try {
             final Holder mHolder = (Holder) holder;
             try {
-                //mHolder.mMsgTxt.setText(URLDecoder.decode(mMsgList.get(pos).getMessage(), "UTF-8"));
+                //mHolder.mMsgTxt.setText(URLDecoder.decode(mMsgList.get(pos).getMainObj(), "UTF-8"));
                 mHolder.mMsgTxt.setText(sb.append(mMsgList.get(pos).getMessage()));
             } catch (Exception e) {
                 e.printStackTrace();

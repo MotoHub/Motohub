@@ -205,7 +205,7 @@ public class ChatBoxEventGrpAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                     public void onClick(View v) {
                        if(mContext instanceof EventLiveActivity){
                            try {
-                               ((EventLiveActivity) mContext).setReplyChatMsg(URLDecoder.decode(mEventGrpChatMsgList.get(position).getMessage(), "UTF-8"), mEventGrpChatMsgList.get(position).getID(),mEventGrpChatMsgList.get(position).getSenderProfileID(), Utility.getInstance().getUserName(mEventGrpChatMsgList.get(position).getProfilesBySenderProfileID()), mEventGrpChatMsgList.get(position).getPhotoMessage());
+                               ((EventLiveActivity) mContext).setReplyChatMsg(URLDecoder.decode(mEventGrpChatMsgList.get(position).getMainObj(), "UTF-8"), mEventGrpChatMsgList.get(position).getID(),mEventGrpChatMsgList.get(position).getSenderProfileID(), Utility.getInstance().getUserName(mEventGrpChatMsgList.get(position).getProfilesBySenderProfileID()), mEventGrpChatMsgList.get(position).getPhotoMessage());
                                mViewHolderSender.mForwardSenderMsgBtn.setVisibility(View.GONE);
                                mViewHolderSender.mSenderChatView.setVisibility(View.GONE);
                            } catch (UnsupportedEncodingException e) {
@@ -213,7 +213,7 @@ public class ChatBoxEventGrpAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                            }
                        } else if( mContext instanceof ChatBoxEventGrpActivity){
                            try {
-                               ((ChatBoxEventGrpActivity) mContext).setReplyChatMsg(URLDecoder.decode(mEventGrpChatMsgList.get(position).getMessage(), "UTF-8"), mEventGrpChatMsgList.get(position).getID(),mEventGrpChatMsgList.get(position).getSenderProfileID(), Utility.getInstance().getUserName(mEventGrpChatMsgList.get(position).getProfilesBySenderProfileID()), mEventGrpChatMsgList.get(position).getPhotoMessage());
+                               ((ChatBoxEventGrpActivity) mContext).setReplyChatMsg(URLDecoder.decode(mEventGrpChatMsgList.get(position).getMainObj(), "UTF-8"), mEventGrpChatMsgList.get(position).getID(),mEventGrpChatMsgList.get(position).getSenderProfileID(), Utility.getInstance().getUserName(mEventGrpChatMsgList.get(position).getProfilesBySenderProfileID()), mEventGrpChatMsgList.get(position).getPhotoMessage());
                                mViewHolderSender.mForwardSenderMsgBtn.setVisibility(View.GONE);
                                mViewHolderSender.mSenderChatView.setVisibility(View.GONE);
                            } catch (UnsupportedEncodingException e) {
@@ -264,7 +264,7 @@ public class ChatBoxEventGrpAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                         mViewHolderSender.mSenderMsgTv.setVisibility(View.VISIBLE);
                         try {
                             mViewHolderSender.mSenderMsgTv.setText(URLDecoder.decode(mEventGrpChatMsgList.get(position).getMessage(), "UTF-8"));
-                           // mViewHolderSender.mSenderMsgTv.setText(replacer(sb.append(mEventGrpChatMsgList.get(position).getMessage())));
+                           // mViewHolderSender.mSenderMsgTv.setText(replacer(sb.append(mEventGrpChatMsgList.get(position).getMainObj())));
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -349,7 +349,7 @@ public class ChatBoxEventGrpAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                     public void onClick(View v) {
                         if(mContext instanceof EventLiveActivity){
                             try {
-                                ((EventLiveActivity) mContext).setReplyChatMsg(URLDecoder.decode(mEventGrpChatMsgList.get(position).getMessage(),"UTF-8"), mEventGrpChatMsgList.get(position).getID(), mEventGrpChatMsgList.get(position).getSenderProfileID(),Utility.getInstance().getUserName(mEventGrpChatMsgList.get(position).getProfilesBySenderProfileID()), mEventGrpChatMsgList.get(position).getPhotoMessage());
+                                ((EventLiveActivity) mContext).setReplyChatMsg(URLDecoder.decode(mEventGrpChatMsgList.get(position).getMainObj(),"UTF-8"), mEventGrpChatMsgList.get(position).getID(), mEventGrpChatMsgList.get(position).getSenderProfileID(),Utility.getInstance().getUserName(mEventGrpChatMsgList.get(position).getProfilesBySenderProfileID()), mEventGrpChatMsgList.get(position).getPhotoMessage());
                                 mViewHolderOthers.mReceiverChatView.setVisibility(View.GONE);
                                 mViewHolderOthers.mForwardReceiverMsgBtn.setVisibility(View.GONE);
                             } catch (UnsupportedEncodingException e) {
@@ -357,7 +357,7 @@ public class ChatBoxEventGrpAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                             }
                         } else if( mContext instanceof ChatBoxEventGrpActivity){
                             try {
-                                ((ChatBoxEventGrpActivity) mContext).setReplyChatMsg(URLDecoder.decode(mEventGrpChatMsgList.get(position).getMessage(), "UTF-8"), mEventGrpChatMsgList.get(position).getID(),mEventGrpChatMsgList.get(position).getSenderProfileID(), Utility.getInstance().getUserName(mEventGrpChatMsgList.get(position).getProfilesBySenderProfileID()), mEventGrpChatMsgList.get(position).getPhotoMessage());
+                                ((ChatBoxEventGrpActivity) mContext).setReplyChatMsg(URLDecoder.decode(mEventGrpChatMsgList.get(position).getMainObj(), "UTF-8"), mEventGrpChatMsgList.get(position).getID(),mEventGrpChatMsgList.get(position).getSenderProfileID(), Utility.getInstance().getUserName(mEventGrpChatMsgList.get(position).getProfilesBySenderProfileID()), mEventGrpChatMsgList.get(position).getPhotoMessage());
                                 mViewHolderOthers.mForwardReceiverMsgBtn.setVisibility(View.GONE);
                                 mViewHolderOthers.mReceiverChatView.setVisibility(View.GONE);
                             } catch (UnsupportedEncodingException e) {
@@ -416,7 +416,7 @@ public class ChatBoxEventGrpAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                         mViewHolderOthers.mOthersMsgTv.setVisibility(View.VISIBLE);
                         try {
                             mViewHolderOthers.mOthersMsgTv.setText(URLDecoder.decode(mEventGrpChatMsgList.get(position).getMessage(), "UTF-8"));
-                            //mViewHolderOthers.mOthersMsgTv.setText(replacer(sb.append(mEventGrpChatMsgList.get(position).getMessage())));
+                            //mViewHolderOthers.mOthersMsgTv.setText(replacer(sb.append(mEventGrpChatMsgList.get(position).getMainObj())));
                         } catch (Exception e) {
                             e.printStackTrace();
                         }

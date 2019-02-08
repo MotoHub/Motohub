@@ -632,7 +632,7 @@ public class BusinessWritePostActivity1 extends BaseActivity {
 
     private void amazoneUpload(final File file, final String urlPath, final int type) {
 
-        /*pDialog.setMessage("Please wait video is uploading...");
+        /*pDialog.setMainObj("Please wait video is uploading...");
         showDialog();*/
 
         final ArrayList<String> postImage = new ArrayList<>();
@@ -695,7 +695,7 @@ public class BusinessWritePostActivity1 extends BaseActivity {
             @Override
             public void onError(int id, Exception ex) {
                 //hideDialog();
-                //Toast.makeText(VideoStoryPreviewActivity.this, "" + ex.getMessage(), Toast.LENGTH_SHORT).show();
+                //Toast.makeText(VideoStoryPreviewActivity.this, "" + ex.getMainObj(), Toast.LENGTH_SHORT).show();
             }
         });
     }

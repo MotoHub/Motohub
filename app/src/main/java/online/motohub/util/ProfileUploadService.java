@@ -380,7 +380,7 @@ public class ProfileUploadService extends IntentService implements ProgressReque
 
                     @Override
                     public void onFailure(Call<OnDemandVideoUploadedResponse> call, Throwable t) {
-                        // onDownloadComplete(t.getMessage(), 0);
+                        // onDownloadComplete(t.getMainObj(), 0);
                     }
                 });
     }
