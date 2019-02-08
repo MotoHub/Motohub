@@ -199,7 +199,7 @@ public class UploadFileService extends IntentService implements ProgressRequestB
 
                     @Override
                     public void onFailure(Call<GalleryImgModel> call, Throwable t) {
-                        // onDownloadComplete(t.getMessage(), 0);
+                        // onDownloadComplete(t.getMainObj(), 0);
                     }
                 });
 

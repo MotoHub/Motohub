@@ -363,7 +363,7 @@ public class BusinnesPostFileUploadService extends IntentService implements Prog
 
                     @Override
                     public void onFailure(Call<GalleryImgModel> call, Throwable t) {
-                        // onDownloadComplete(t.getMessage(), 0);
+                        // onDownloadComplete(t.getMainObj(), 0);
                     }
                 });
 

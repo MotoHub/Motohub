@@ -473,7 +473,7 @@ public class VideoStoryPreviewActivity extends BaseActivity implements MediaPlay
             @Override
             public void onError(int id, Exception ex) {
                 hideDialog();
-                //Toast.makeText(VideoStoryPreviewActivity.this, "" + ex.getMessage(), Toast.LENGTH_SHORT).show();
+                //Toast.makeText(VideoStoryPreviewActivity.this, "" + ex.getMainObj(), Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -500,7 +500,7 @@ public class VideoStoryPreviewActivity extends BaseActivity implements MediaPlay
 
             @Override
             public void onError(int id, Exception ex) {
-                //Toast.makeText(VideoStoryPreviewActivity.this, "" + ex.getMessage(), Toast.LENGTH_SHORT).show();
+                //Toast.makeText(VideoStoryPreviewActivity.this, "" + ex.getMainObj(), Toast.LENGTH_SHORT).show();
             }
         });
     }
