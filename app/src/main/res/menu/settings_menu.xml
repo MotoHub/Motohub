@@ -23,4 +23,9 @@
         app:showAsAction="never"
         android:title="@string/com_facebook_loginview_log_out_button"/>
 
+
+    <item android:id="@+id/card_management"
+        app:showAsAction="never"
+        android:title="@string/CardManagement"/>
+
 </menu>

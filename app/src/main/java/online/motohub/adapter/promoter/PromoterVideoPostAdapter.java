@@ -1,5 +1,6 @@
 package online.motohub.adapter.promoter;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
@@ -30,7 +31,8 @@ import com.bumptech.glide.request.target.Target;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
-import java.io.UnsupportedEncodingException;
+import org.greenrobot.eventbus.EventBus;
+
 import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -44,17 +46,22 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import online.motohub.R;
 import online.motohub.activity.BaseActivity;
 import online.motohub.activity.OnDemanAudoVideoView;
+import online.motohub.activity.PromoterVideoGalleryActivity;
+import online.motohub.activity.ReportActivity;
 import online.motohub.activity.club.ClubProfileActivity;
 import online.motohub.activity.news_and_media.NewsAndMediaProfileActivity;
+import online.motohub.activity.performance_shop.PerformanceShopProfileActivity;
 import online.motohub.activity.promoter.PromoterProfileActivity;
 import online.motohub.activity.promoter.PromotersListActivity;
 import online.motohub.activity.track.TrackProfileActivity;
 import online.motohub.adapter.VideoLikesAdapter;
 import online.motohub.adapter.VideoSharesAdapter;
+import online.motohub.application.MotoHub;
 import online.motohub.fragment.dialog.AppDialogFragment;
-import online.motohub.interfaces.CommonInterface;
+import online.motohub.interfaces.CommonReturnInterface;
 import online.motohub.interfaces.RetrofitResInterface;
 import online.motohub.model.GalleryImgModel;
+import online.motohub.model.PostsModel;
 import online.motohub.model.ProfileModel;
 import online.motohub.model.ProfileResModel;
 import online.motohub.model.PromoterVideoModel;
@@ -72,9 +79,10 @@ public class PromoterVideoPostAdapter extends RecyclerView.Adapter<RecyclerView.
 
     private static final int VIEW_TYPE_LOADING = 0;
     private static final int VIEW_TYPE_POSTS = 1;
-    ArrayList<HashMap<String, String>> mResMap;
     private ArrayList<PromoterVideoModel.Resource> mPostsList;
+    // ArrayList<HashMap<String, String>> mResMap;
     private Context mContext;
+    // private ArrayList<HashMap<String, String>> mVideoList;
     RetrofitResInterface mApiInterface = new RetrofitResInterface() {
         @Override
         public void retrofitOnResponse(Object responseObj, int responseType) {
@@ -106,23 +114,32 @@ public class PromoterVideoPostAdapter extends RecyclerView.Adapter<RecyclerView.
     private ProfileResModel mCurrentProfileResModel;
     private ViewHolderPosts mViewHolderPost;
     private int mAdapterPosition;
-    CommonInterface mSaveMyVideoCallback = new CommonInterface() {
+    CommonReturnInterface mSaveMyVideoCallback = new CommonReturnInterface() {
         @Override
-        public void onSuccess() {
-            //TODO call API
-            JsonArray jsonElements = new JsonArray();
-            JsonObject obj = new JsonObject();
-            obj.addProperty(GalleryImgModel.USER_ID, mCurrentProfileResModel.getUserID());
-            obj.addProperty(GalleryImgModel.PROFILE_ID, mCurrentProfileResModel.getID());
-            obj.addProperty(GalleryImgModel.VIDEO_URL, mPostsList.get(mAdapterPosition).getVideoUrl());
-            obj.addProperty(GalleryImgModel.THUMBNAIL, mPostsList.get(mAdapterPosition).getThumbnail());
-            obj.addProperty(GalleryImgModel.USER_TYPE, AppConstants.USER);
-            obj.addProperty(GalleryImgModel.CAPTION, mPostsList.get(mAdapterPosition).getCaption());
-            jsonElements.add(obj);
-            RetrofitClient.getRetrofitInstance().postVideoToGallery(mContext, mApiInterface, jsonElements, 1);
+        public void onSuccess(int type) {
+            if (type == 2) {
+                //TODO call API
+                JsonArray jsonElements = new JsonArray();
+                JsonObject obj = new JsonObject();
+                obj.addProperty(GalleryImgModel.USER_ID, mCurrentProfileResModel.getUserID());
+                obj.addProperty(GalleryImgModel.PROFILE_ID, mCurrentProfileResModel.getID());
+                obj.addProperty(GalleryImgModel.VIDEO_URL, mPostsList.get(mAdapterPosition).getVideoUrl());
+                obj.addProperty(GalleryImgModel.THUMBNAIL, mPostsList.get(mAdapterPosition).getThumbnail());
+                obj.addProperty(GalleryImgModel.USER_TYPE, AppConstants.USER);
+                obj.addProperty(GalleryImgModel.CAPTION, mPostsList.get(mAdapterPosition).getCaption());
+                jsonElements.add(obj);
+                RetrofitClient.getRetrofitInstance().postVideoToGallery(mContext, mApiInterface, jsonElements, 1);
+            } else {
+                mActivity.startActivityForResult(
+                        new Intent(mActivity, ReportActivity.class)
+                                .putExtra(PostsModel.POST_ID, mPostsList.get(mAdapterPosition).getID())
+                                .putExtra(ProfileModel.PROFILE_ID, mCurrentProfileResModel.getID())
+                                .putExtra(ProfileModel.USER_ID, mCurrentProfileResModel.getUserID())
+                                .putExtra(AppConstants.REPORT, AppConstants.REPORT_VIDEO),
+                        AppConstants.REPORT_POST_SUCCESS);
+            }
         }
     };
-
 
     public PromoterVideoPostAdapter(List<PromoterVideoModel.Resource> postsList, ProfileResModel mMyProfileResModel, Context ctx, int ProfileID) {
         this.mPostsList = (ArrayList<PromoterVideoModel.Resource>) postsList;
@@ -130,14 +147,14 @@ public class PromoterVideoPostAdapter extends RecyclerView.Adapter<RecyclerView.
         this.mActivity = (Activity) ctx;
         this.mCurrentProfileResModel = mMyProfileResModel;
         this.ProfileID = ProfileID;
-
     }
 
     public void resetShareCount(VideoShareModel mSharedFeed) {
         ArrayList<VideoShareModel> mShareModel = mPostsList.get(mAdapterPosition).getVideoshares_by_OriginalVideoID();
         mShareModel.add(mSharedFeed);
         mPostsList.get(mAdapterPosition).setVideoshares_by_OriginalVideoID(mShareModel);
-        notifyDataSetChanged();
+        //notifyDataSetChanged();
+        notifyItemChanged(mAdapterPosition);
     }
 
     @Override
@@ -169,51 +186,53 @@ public class PromoterVideoPostAdapter extends RecyclerView.Adapter<RecyclerView.
         }
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         switch (getItemViewType(position)) {
             case VIEW_TYPE_POSTS:
+                final PromoterVideoModel.Resource mModel = mPostsList.get(position);
                 try {
-
-                    PromoterVideoModel.Resource mModel = mPostsList.get(position);
-
                     mViewHolderPost = (ViewHolderPosts) holder;
-
                     mViewHolderPost.mPostPic.setVisibility(View.GONE);
                     mViewHolderPost.playicon.setVisibility(View.VISIBLE);
                     mViewHolderPost.mBottomArrowImgView.setVisibility(View.VISIBLE);
                     mViewHolderPost.mCommentViewLay.setVisibility(View.GONE);
                     mViewHolderPost.mCountLay.setVisibility(View.GONE);
                     mViewHolderPost.mProfileImg.setTag(position);
-                    if (mModel.getUserType().equals(AppConstants.ONDEMAND)) {
-                        if (mModel.promoter_by_UserID != null)
-                            ((BaseActivity) mContext).setImageWithGlide(mViewHolderPost.mProfileImg, mModel.profiles_by_ProfileID.getProfilePicture(), R.drawable.default_profile_icon);
+                    Glide.with(mContext).clear(mViewHolderPost.mProfileImg);
+                    if (mModel.getUserType().trim().equals(AppConstants.ONDEMAND) || mModel.getUserType().trim().equals(AppConstants.USER) || mModel.getUserType().trim().equals(AppConstants.USER_EVENT_VIDEOS)) {
+                        ((BaseActivity) mContext).setImageWithGlide(mViewHolderPost.mProfileImg, mModel.profiles_by_ProfileID.getProfilePicture(), R.drawable.default_profile_icon);
                         mViewHolderPost.mUsername.setText(Utility.getInstance().getUserName(mModel.profiles_by_ProfileID));
-                    } else {
-                        if (mModel.promoter_by_UserID != null)
-                            ((BaseActivity) mContext).setImageWithGlide(mViewHolderPost.mProfileImg, mModel.promoter_by_UserID.getProfileImage(), R.drawable.default_profile_icon);
+                    } else if (mModel.getPromoter_by_UserID() != null) {
+                        ((BaseActivity) mContext).setImageWithGlide(mViewHolderPost.mProfileImg, mModel.promoter_by_UserID.getProfileImage(), R.drawable.default_profile_icon);
                         mViewHolderPost.mUsername.setText(mModel.promoter_by_UserID.getName());
                     }
-
                     if (mModel.getEvent_by_EventID().getID() != null && !mModel.getUserID().equals(mModel.getProfileID()))
                         mViewHolderPost.mUsername.setText(Utility.getInstance().getUserName(mModel.profiles_by_ProfileID) + " " + "IS " + "@ " + mModel.getPromoter_by_UserID().getName() + " " + mModel.getEvent_by_EventID().getName());
-
-                    if (mModel.getCaption().isEmpty()) {
+                    if (mModel.getCaption() == null || mModel.getCaption().isEmpty()) {
                         mViewHolderPost.mPostText.setVisibility(View.GONE);
                     } else {
-                        mViewHolderPost.mPostText.setText(mModel.getCaption());
+                        try {
+                            if (mModel.getCaption().contains(" ")) {
+                                mViewHolderPost.mPostText.setText(mModel.getCaption());
+                            } else {
+                                mViewHolderPost.mPostText.setText(URLDecoder.decode(mModel.getCaption(), "UTF-8"));
+                            }
+                            //mViewHolderPost.mPostText.setText(sb.append(mModel.getCaption()));
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                         mViewHolderPost.mPostText.setVisibility(View.VISIBLE);
                     }
-
-                    RelativeLayout.LayoutParams relativeParams = (RelativeLayout.LayoutParams) mViewHolderPost.mProfileDetailedLay.getLayoutParams();
+/*                    RelativeLayout.LayoutParams relativeParams = (RelativeLayout.LayoutParams) mViewHolderPost.mProfileDetailedLay.getLayoutParams();
                     relativeParams.height = mContext.getResources().getDimensionPixelSize(R.dimen.size65);
                     relativeParams.width = ViewGroup.MarginLayoutParams.MATCH_PARENT;
-                    relativeParams.setMargins(mContext.getResources().getDimensionPixelSize(R.dimen.size10), mContext.getResources().getDimensionPixelSize(R.dimen.size0), mContext.getResources().getDimensionPixelSize(R.dimen.size10), mContext.getResources().getDimensionPixelSize(R.dimen.size0));
-                    mViewHolderPost.mProfileDetailedLay.setLayoutParams(relativeParams);
+                    relativeParams.setMargins(mContext.getResources().getDimensionPixelSize(R.dimen.size10), mContext.getResources().getDimensionPixelSize(R.dimen.size0), mContext.getResources().getDimensionPixelSize(R.dimen.size10), mContext.getResources().getDimensionPixelSize(R.dimen.size0));*/
+                    // mViewHolderPost.mProfileDetailedLay.setLayoutParams(relativeParams);
                     mViewHolderPost.mProfileDetailedLay.requestLayout();
                     mViewHolderPost.mPostDate.setText(((BaseActivity) mContext).findTime(mPostsList.get(position).getCreatedAt()));
                     final String[] mVideoArray = getImgVideoList(mModel.getThumbnail());
-
                     if (mVideoArray == null) {
                         mViewHolderPost.mPostImageVideoBox.setVisibility(View.GONE);
                         mViewHolderPost.playicon.setVisibility(View.GONE);
@@ -223,7 +242,6 @@ public class PromoterVideoPostAdapter extends RecyclerView.Adapter<RecyclerView.
                         mViewHolderPost.mPostPicProgressBar.setVisibility(View.VISIBLE);
                         showVideoFile(mViewHolderPost, mVideoArray[0]);
                     }
-
                     if (mPostsList.get(position).getVideolikes_by_VideoID().size() > 0) {
                         setLikeUnLikeForPost(mViewHolderPost, position);
                     } else {
@@ -236,13 +254,21 @@ public class PromoterVideoPostAdapter extends RecyclerView.Adapter<RecyclerView.
                     } else {
                         mViewHolderPost.mCommentCountTxt.setText(" ");
                     }
-                    if (mPostsList.get(position).getVideolikes_by_VideoID().size() == 0 &&
-                            mPostsList.get(position).getVideoComments_by_VideoID().size() == 0 &&
-                            mPostsList.get(position).getVideoshares_by_OriginalVideoID().size() == 0) {
+                    if (mPostsList.get(position).getVideolikes_by_VideoID().size() == 0
+                            && mPostsList.get(position).getVideoComments_by_VideoID().size() == 0
+                            && mPostsList.get(position).getVideoshares_by_OriginalVideoID().size() == 0
+                            && mPostsList.get(position).getViewCount() == 0) {
                         mViewHolderPost.mCountLay.setVisibility(View.GONE);
                     } else {
                         mViewHolderPost.mCountLay.setVisibility(View.VISIBLE);
                     }
+                    //View Count
+                    if (mPostsList.get(position).getViewCount() > 0) {
+                        setViewCount(mViewHolderPost, position);
+                    }/* else {
+                        mViewHolderPost.mViewCount.setVisibility(View.GONE);
+                    }*/
+
                     ArrayList<VideoCommentsModel> mFeedCommentModel = mPostsList.get(position).getVideoComments_by_VideoID();
 
                     if (mFeedCommentModel.size() > 0) {
@@ -262,29 +288,51 @@ public class PromoterVideoPostAdapter extends RecyclerView.Adapter<RecyclerView.
                         mViewHolderPost.mShareCountTxt.setText(numberOfShares);
                         mViewHolderPost.mShareCountTxt.setVisibility(View.VISIBLE);
                     }
-
-                    mViewHolderPost.mPostImageVideoBox.setOnClickListener(new View.OnClickListener() {
+                    mViewHolderPost.mProfileImg.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            if (mPostsList != null) {
-                                Bundle mBundle = new Bundle();
-                                mBundle.putSerializable(AppConstants.ONDEMAND_DATA, mPostsList);
-                                mBundle.putInt("ID", ProfileID);
-                                mBundle.putInt(AppConstants.POSITION, position);
-                                mContext.startActivity(new Intent(mContext, OnDemanAudoVideoView.class).putExtras(mBundle));
-                                //((BaseActivity) mContext).moveLoadVideoScreen(mContext, mPostsList.get(getLayoutPosition()).getVideoUrl());
+                            if (mCurrentProfileResModel != null && mPostsList.size() > 0 && mPostsList != null) {
+                                try {
+                                    if (mPostsList.get(position).getUserType().equals(AppConstants.ONDEMAND) || mPostsList.get(position).getUserType().equals(AppConstants.USER_EVENT_VIDEOS) || mPostsList.get(position).getUserType().equals(AppConstants.USER)) {
+                                        if (Integer.parseInt(mPostsList.get(position).getProfileID()) == mCurrentProfileResModel.getID()) {
+                                            ((BaseActivity) mContext).moveMyProfileScreenWithResult(mContext,
+                                                    mCurrentProfileResModel.getID(), AppConstants.FOLLOWERS_FOLLOWING_RESULT);
+                                        } else {
+                                            ((BaseActivity) mContext).moveOtherProfileScreen(mContext, mCurrentProfileResModel.getID(),
+                                                    Integer.parseInt(mPostsList.get(position).getProfileID()));
+                                        }
+                                    } else {
+                                        navigationToProfileActivity(position);
+                                    }
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
                             }
                         }
                     });
-
+                    mViewHolderPost.mPostImageVideoBox.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            if (mPostsList != null && mModel.getVideoUrl() != null && mCurrentProfileResModel != null) {
+                                Bundle mBundle = new Bundle();
+                                mBundle.putSerializable(AppConstants.ONDEMAND_DATA, mPostsList);
+                                mBundle.putString("Filter", "EventID =" + ProfileID);
+                                mBundle.putInt(AppConstants.POSITION, position);
+                                //mBundle.putSerializable(AppConstants.MY_PROFILE_OBJ, mCurrentProfileResModel);
+                                //MotoHub.getApplicationInstance().setmProfileResModel(mCurrentProfileResModel);
+                                EventBus.getDefault().postSticky(mCurrentProfileResModel);
+                                if (mContext instanceof PromoterVideoGalleryActivity)
+                                    ((PromoterVideoGalleryActivity) mContext).startActivityForResult(new Intent(mContext, OnDemanAudoVideoView.class).putExtras(mBundle), AppConstants.ONDEMAND_REQUEST);
+                            }
+                        }
+                    });
                     mViewHolderPost.mBottomArrowImgView.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
                             mAdapterPosition = position;
-                            DialogManager.showSaveToMyVideos(mContext, mSaveMyVideoCallback);
+                            DialogManager.showSaveToMyVideos(mContext, mSaveMyVideoCallback, mCurrentProfileResModel.getUserID(), Integer.parseInt(mModel.getUserID()));
                         }
                     });
-
                     mViewHolderPost.mLikeBtn.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
@@ -292,7 +340,6 @@ public class PromoterVideoPostAdapter extends RecyclerView.Adapter<RecyclerView.
                                 mAdapterPosition = position;
                                 switch (view.getTag().toString()) {
                                     case "unlike":
-
                                         ArrayList<VideoLikesModel> mFeedLikeList = mPostsList.get(position).getVideolikes_by_VideoID();
 
                                         if (mFeedLikeList.size() > 0) {
@@ -305,18 +352,14 @@ public class PromoterVideoPostAdapter extends RecyclerView.Adapter<RecyclerView.
                                             }
                                             callUnLikePost(mDeleteLikeID);
                                         }
-
                                         break;
-
                                     case "like":
-
                                         callLikePost(mPostsList.get(position).getID(), mCurrentProfileResModel.getID());
                                         break;
                                 }
                             }
                         }
                     });
-
                     mViewHolderPost.mCommentViewLay.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
@@ -324,7 +367,6 @@ public class PromoterVideoPostAdapter extends RecyclerView.Adapter<RecyclerView.
                             ((BaseActivity) mContext).moveVideoCommentScreen(mContext, mPostsList.get(mAdapterPosition).getID(), mCurrentProfileResModel);
                         }
                     });
-
                     mViewHolderPost.mCommentCountTxt.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
@@ -332,7 +374,6 @@ public class PromoterVideoPostAdapter extends RecyclerView.Adapter<RecyclerView.
                             ((BaseActivity) mContext).moveVideoCommentScreen(mContext, mPostsList.get(mAdapterPosition).getID(), mCurrentProfileResModel);
                         }
                     });
-
                     mViewHolderPost.mCommentBtn.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
@@ -340,7 +381,6 @@ public class PromoterVideoPostAdapter extends RecyclerView.Adapter<RecyclerView.
                             ((BaseActivity) mContext).moveVideoCommentScreen(mContext, mPostsList.get(mAdapterPosition).getID(), mCurrentProfileResModel);
                         }
                     });
-
                     mViewHolderPost.mLikeCountText.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
@@ -351,7 +391,6 @@ public class PromoterVideoPostAdapter extends RecyclerView.Adapter<RecyclerView.
 
                         }
                     });
-
                     mViewHolderPost.mShareCountTxt.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
@@ -364,10 +403,8 @@ public class PromoterVideoPostAdapter extends RecyclerView.Adapter<RecyclerView.
                             }
                             showLikeListPopup(mContext.getString(R.string.shares));
                             setFeedShareAdapter(mShareModel);
-
                         }
                     });
-
                     mViewHolderPost.mShareBtn.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
@@ -375,37 +412,31 @@ public class PromoterVideoPostAdapter extends RecyclerView.Adapter<RecyclerView.
                             mAdapterPosition = position;
                             String mMyFollowingsID = Utility.getInstance().getMyFollowersFollowingsID(mCurrentProfileResModel.getFollowprofile_by_ProfileID(), false);
                             if (mMyFollowingsID != null) {
-
                                 try {
-                                    content = URLDecoder.decode(mPostsList.get(position).getCaption(), "UTF-8");
-                                } catch (UnsupportedEncodingException e) {
+                                    if (mPostsList.get(position).getCaption().contains(" "))
+                                        content = mPostsList.get(position).getCaption();
+                                    else
+                                        content = URLDecoder.decode(mPostsList.get(position).getCaption(), "UTF-8");
+                                    //content = replacer(sb.append(mPostsList.get(position).getCaption()));
+                                } catch (Exception e) {
                                     e.printStackTrace();
                                 }
-
                                 boolean isVideoFile;
-
                                 String[] mVideoList = getImgVideoList(mPostsList.get(position).getVideoUrl());
-
                                 if (mVideoList == null) {
                                     isVideoFile = false;
                                 } else {
                                     isVideoFile = !(mVideoList.length == 1 && mVideoList[0].trim().equals(""));
                                 }
-
                                 if (isVideoFile) {
-
                                     String mVideosList[] = getImgVideoList(mPostsList.get(position).getVideoUrl());
-
                                     ((BaseActivity) mContext).showFBShareDialog(AppDialogFragment.BOTTOM_SHARE_DIALOG, content, null, mVideosList, position, true);
-
                                 } else {
-
                                     ((BaseActivity) mContext).showFBShareDialog(AppDialogFragment.BOTTOM_SHARE_DIALOG, content, null, null, position, true);
                                 }
                             } else {
                                 Toast.makeText(mContext, mContext.getResources().getString(R.string.check_follower), Toast.LENGTH_SHORT).show();
                             }
-
                         }
                     });
                 } catch (Exception e) {
@@ -421,64 +452,69 @@ public class PromoterVideoPostAdapter extends RecyclerView.Adapter<RecyclerView.
         }
     }
 
-    private void showPostCommentsLay(ViewHolderPosts mViewHolderPost, ArrayList<VideoCommentsModel> mFeedCommentModel, int position) {
-
-        mViewHolderPost.mCommentViewLay.setVisibility(View.VISIBLE);
-
-        int latestPostion = mFeedCommentModel.size() - 1;
-
-        String mCommentText = mFeedCommentModel.get(latestPostion).getmComment().trim();
-        String mCommentImgUrl = mFeedCommentModel.get(latestPostion).getCommentImages().trim();
-
-        if (!mCommentImgUrl.isEmpty()) {
-            mViewHolderPost.mCommentTxt.setVisibility(View.VISIBLE);
-            mViewHolderPost.mCommentTxt.setText("Commented to this post.");
-        } else if (!mCommentText.isEmpty()) {
-            try {
-                mViewHolderPost.mCommentTxt.setText(URLDecoder.decode(mCommentText, "UTF-8"));
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
-            }
-
-            mViewHolderPost.mCommentTxt.setVisibility(View.VISIBLE);
-        } else {
-            mViewHolderPost.mCommentTxt.setVisibility(View.GONE);
-        }
-
-        mViewHolderPost.mCommentUserName.setText(Utility.getInstance().getUserName(mFeedCommentModel.get(latestPostion).getProfiles_by_ProfileID()));
-
-        ((BaseActivity) mContext).setImageWithGlide(mViewHolderPost.mCommentImg, mFeedCommentModel.get(latestPostion).getProfiles_by_ProfileID().getProfilePicture(), R.drawable.default_profile_icon);
-
-        mViewHolderPost.mCommentImg.setTag(position);
-
+    //OnBindView
+    private void setViewCount(ViewHolderPosts mViewHolderPost, int position) {
+        String view_count;
+        int val = 11;
+        /*view_count = String.valueOf(mPostsList.get(position).getViewCount() * val) + " Views";
+        mViewHolderPost.mViewCount.setText(view_count);*/view_count = String.valueOf(mPostsList.get(position).getViewCount() * val);
+        String count = BaseActivity.convertToSuffix(Long.parseLong(view_count));
+        mViewHolderPost.mViewCount.setText(count + " Views");
     }
 
+    private void showPostCommentsLay(ViewHolderPosts mViewHolderPost, ArrayList<VideoCommentsModel> mFeedCommentModel, int position) {
+        int latestPostion = 0;
+        if (mFeedCommentModel != null && mFeedCommentModel.size() > 0) {
+            latestPostion = mFeedCommentModel.size() - 1;
+            mViewHolderPost.mCommentViewLay.setVisibility(View.VISIBLE);
+            String mCommentText = mFeedCommentModel.get(latestPostion).getmComment().trim();
+            String mCommentImgUrl = mFeedCommentModel.get(latestPostion).getCommentImages().trim();
+            if (!mCommentImgUrl.isEmpty()) {
+                mViewHolderPost.mCommentTxt.setVisibility(View.VISIBLE);
+                mViewHolderPost.mCommentTxt.setText("Commented to this post.");
+            } else if (!mCommentText.isEmpty()) {
+                mViewHolderPost.mCommentTxt.setVisibility(View.VISIBLE);
+                String mTemp = "";
+                try {
+                    if (mCommentText.contains(" ")) {
+                        mTemp = mCommentText;
+                    } else {
+                        mTemp = URLDecoder.decode(mCommentText, "UTF-8");
+                    }
+                    //mTemp = replacer(sb.append(mCommentText));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                mViewHolderPost.mCommentTxt.setText(((BaseActivity) mContext).setTextEdt(mContext, mTemp, mFeedCommentModel.get(latestPostion).getCommentTaggedUserNames(), mFeedCommentModel.get(latestPostion).getCommentTaggedUserID(), mCurrentProfileResModel.getID()));
+            } else {
+                mViewHolderPost.mCommentTxt.setVisibility(View.GONE);
+            }
+            if (mFeedCommentModel.get(latestPostion).getProfiles_by_ProfileID() != null)
+                mViewHolderPost.mCommentUserName.setText(Utility.getInstance().getUserName(mFeedCommentModel.get(latestPostion).getProfiles_by_ProfileID()));
+            if (mFeedCommentModel.get(latestPostion).getProfiles_by_ProfileID() != null && mFeedCommentModel.get(latestPostion).getProfiles_by_ProfileID().getProfilePicture() != null)
+                ((BaseActivity) mContext).setImageWithGlide(mViewHolderPost.mCommentImg, mFeedCommentModel.get(latestPostion).getProfiles_by_ProfileID().getProfilePicture(), R.drawable.default_profile_icon);
+            mViewHolderPost.mCommentImg.setTag(position);
+        }
+    }
+
+
     private void setVideoComments(ViewHolderPosts mViewHolderPost, int position) {
-
         String resComments;
-
         if (mPostsList.get(position).getVideoComments_by_VideoID().size() == 1) {
             resComments = mPostsList.get(position).getVideoComments_by_VideoID().size() + " Comment ";
         } else {
             resComments = mPostsList.get(position).getVideoComments_by_VideoID().size() + " Comments ";
         }
-
         mViewHolderPost.mCommentCountTxt.setText(resComments);
-
     }
 
     private void setLikeUnLikeForPost(ViewHolderPosts mViewHolderPost, int position) {
-
         ArrayList<VideoLikesModel> mFeedLikes = mPostsList.get(position).getVideolikes_by_VideoID();
-
         String resLikes;
-
         if (mPostsList.get(position).getVideolikes_by_VideoID().size() == 1) {
-
             resLikes = String.valueOf(mPostsList.get(position).getVideolikes_by_VideoID().size()) + " Like";
         } else {
             resLikes = String.valueOf(mPostsList.get(position).getVideolikes_by_VideoID().size()) + " Likes";
-
         }
         mViewHolderPost.mLikeCountText.setText(resLikes);
         for (final VideoLikesModel likesEntity : mFeedLikes) {
@@ -500,19 +536,20 @@ public class PromoterVideoPostAdapter extends RecyclerView.Adapter<RecyclerView.
     public void refreshCommentList(ArrayList<VideoCommentsModel> mCommentList) {
         Collections.reverse(mCommentList);
         mPostsList.get(mAdapterPosition).setVideoComments_by_VideoID(mCommentList);
-        notifyDataSetChanged();
+        //notifyDataSetChanged();
+        notifyItemChanged(mAdapterPosition);
     }
 
     private void showVideoFile(final ViewHolderPosts mViewHolderPost, String videoThumbnail) {
-
         mViewHolderPost.mPostImageVideoBox.setVisibility(View.VISIBLE);
         mViewHolderPost.mPostPic.setVisibility(View.VISIBLE);
         mViewHolderPost.mPostPicProgressBar.setVisibility(View.VISIBLE);
 
-        GlideUrl glideUrl = new GlideUrl(UrlUtils.FILE_URL + videoThumbnail, new LazyHeaders
+        GlideUrl glideUrl = new GlideUrl(UrlUtils.AWS_S3_BASE_URL + videoThumbnail, new LazyHeaders
                 .Builder()
                 .addHeader("X-DreamFactory-Api-Key", mContext.getString(R.string.dream_factory_api_key))
                 .build());
+
         Glide.with(mContext)
                 .load(glideUrl)
                 .listener(new RequestListener<Drawable>() {
@@ -531,7 +568,8 @@ public class PromoterVideoPostAdapter extends RecyclerView.Adapter<RecyclerView.
                     }
                 })
                 .apply(new RequestOptions()
-                        .dontAnimate())
+                        .dontAnimate()
+                        .error(R.drawable.video_place_holder))
                 .into(mViewHolderPost.mPostPic);
     }
 
@@ -555,14 +593,16 @@ public class PromoterVideoPostAdapter extends RecyclerView.Adapter<RecyclerView.
         ArrayList<VideoCommentsModel> mCommentList = mPostsList.get(mAdapterPosition).getVideoComments_by_VideoID();
         mCommentList.add(feedCommentModel);
         mPostsList.get(mAdapterPosition).setVideoComments_by_VideoID(mCommentList);
-        notifyDataSetChanged();
+        //notifyDataSetChanged();
+        notifyItemChanged(mAdapterPosition);
     }
 
     public void resetLikeAdapter(VideoLikesModel feedLikesModel) {
         ArrayList<VideoLikesModel> mFeedLikesList = mPostsList.get(mAdapterPosition).getVideolikes_by_VideoID();
         mFeedLikesList.add(feedLikesModel);
         mPostsList.get(mAdapterPosition).setVideolikes_by_VideoID(mFeedLikesList);
-        notifyDataSetChanged();
+        //notifyDataSetChanged();
+        notifyItemChanged(mAdapterPosition);
     }
 
     public void resetDisLike(VideoLikesModel feedLikesModel) {
@@ -576,7 +616,8 @@ public class PromoterVideoPostAdapter extends RecyclerView.Adapter<RecyclerView.
             }
         }
         mPostsList.get(mAdapterPosition).setVideolikes_by_VideoID(mFeedLikesList);
-        notifyDataSetChanged();
+        //notifyDataSetChanged();
+        notifyItemChanged(mAdapterPosition);
     }
 
     private void callUnLikePost(Integer profileId) {
@@ -584,13 +625,10 @@ public class PromoterVideoPostAdapter extends RecyclerView.Adapter<RecyclerView.
     }
 
     private void callLikePost(int postId, int profileId) {
-
         JsonObject mJsonObject = new JsonObject();
         JsonObject mItem = new JsonObject();
-
         mItem.addProperty("VideoID", postId);
         mItem.addProperty("ProfileID", profileId);
-
         JsonArray mJsonArray = new JsonArray();
         mJsonArray.add(mItem);
         mJsonObject.add("resource", mJsonArray);
@@ -610,43 +648,39 @@ public class PromoterVideoPostAdapter extends RecyclerView.Adapter<RecyclerView.
     }
 
     private void showLikeListPopup(String title) {
-
         if (mCommentListPopup != null && mCommentListPopup.isShowing()) {
             mCommentListPopup.dismiss();
         }
-
         // Create custom dialog object
         mCommentListPopup = new Dialog(this.mContext, R.style.MyDialogBottomSheet);
         mCommentListPopup.setContentView(R.layout.popup_feed_like_list);
-
         ImageView mCloseIcon = mCommentListPopup.findViewById(R.id.close_btn);
         TextView mTitleTxt = mCommentListPopup.findViewById(R.id.title_txt);
         mFeedLikesListView = mCommentListPopup.findViewById(R.id.feeds_likes_list_view);
-
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(mContext);
         mFeedLikesListView.setLayoutManager(mLayoutManager);
         mFeedLikesListView.setItemAnimator(new DefaultItemAnimator());
-
         mTitleTxt.setText(title);
-
         mCloseIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mCommentListPopup.dismiss();
             }
         });
-
         mCommentListPopup.show();
-
     }
 
     private ArrayList<HashMap<String, String>> convertModelToList(List<PromoterVideoModel.Resource> mPostsList) {
         ArrayList<HashMap<String, String>> mVideoList = new ArrayList<>();
-        for (PromoterVideoModel.Resource mResource : mPostsList) {
-            HashMap<String, String> mMapData = new HashMap<>();
-            mMapData.put(AppConstants.VIDEO_PATH, mResource.getVideoUrl());
-            mMapData.put(AppConstants.CAPTION, mResource.getCaption());
-            mVideoList.add(mMapData);
+        try {
+            for (PromoterVideoModel.Resource mResource : mPostsList) {
+                HashMap<String, String> mMapData = new HashMap<>();
+                mMapData.put(AppConstants.VIDEO_PATH, mResource.getVideoUrl());
+                mMapData.put(AppConstants.CAPTION, mResource.getCaption());
+                mVideoList.add(mMapData);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return mVideoList;
     }
@@ -670,24 +704,43 @@ public class PromoterVideoPostAdapter extends RecyclerView.Adapter<RecyclerView.
                 case PromotersModel.TRACK:
                     mClassName = TrackProfileActivity.class;
                     break;
+
+                case PromotersModel.SHOP:
+                    mClassName = PerformanceShopProfileActivity.class;
+                    break;
                 default:
                     mClassName = PromoterProfileActivity.class;
                     break;
             }
-            mBundle.putSerializable(PromotersModel.PROMOTERS_RES_MODEL, mPostsList.get(layoutPosition)
+            /*mBundle.putSerializable(PromotersModel.PROMOTERS_RES_MODEL, mPostsList.get(layoutPosition)
                     .getPromoter_by_UserID());
             mBundle.putSerializable(ProfileModel.MY_PROFILE_RES_MODEL, mCurrentProfileResModel);
             ((BaseActivity) mContext).startActivityForResult(
                     new Intent(mContext, mClassName).putExtras(mBundle),
+                    PromotersListActivity.PROMOTER_FOLLOW_RESPONSE);*/
+            /*MotoHub.getApplicationInstance().setmProfileResModel(mCurrentProfileResModel);
+            MotoHub.getApplicationInstance().setmPromoterResModel(mPostsList.get(layoutPosition)
+                    .getPromoter_by_UserID());*/
+            EventBus.getDefault().postSticky(mCurrentProfileResModel);
+            EventBus.getDefault().postSticky(mPostsList.get(layoutPosition)
+                    .getPromoter_by_UserID());
+
+            ((BaseActivity) mContext).startActivityForResult(
+                    new Intent(mContext, mClassName),
                     PromotersListActivity.PROMOTER_FOLLOW_RESPONSE);
         }
+    }
+
+    public void updateList(ArrayList<PromoterVideoModel.Resource> list) {
+        mPostsList = list;
+        this.notifyDataSetChanged();
     }
 
     public interface TotalRetrofitPostsResultCount {
         int getTotalPostsResultCount();
     }
 
-    class ViewHolderPosts extends RecyclerView.ViewHolder implements View.OnClickListener {
+    class ViewHolderPosts extends RecyclerView.ViewHolder {
 
         @BindView(R.id.circular_img_view)
         CircleImageView mProfileImg;
@@ -723,6 +776,9 @@ public class PromoterVideoPostAdapter extends RecyclerView.Adapter<RecyclerView.
         @BindView(R.id.comment_view_lay)
         RelativeLayout mCommentViewLay;
 
+        @BindView(R.id.view_count_txt)
+        TextView mViewCount;
+
         @BindView(R.id.share_count_txt)
         TextView mShareCountTxt;
 
@@ -756,40 +812,18 @@ public class PromoterVideoPostAdapter extends RecyclerView.Adapter<RecyclerView.
         ViewHolderPosts(View view) {
             super(view);
             ButterKnife.bind(this, view);
-            mProfileImg.setOnClickListener(this);
-
+            // mProfileImg.setOnClickListener(this);
         }
 
-        @Override
-        public void onClick(View view) {
-            int selPos = (int) view.getTag();
-            switch (view.getId()) {
-                case R.id.circular_img_view:
-                    if (mPostsList.get(selPos).getUserType().equals(AppConstants.ONDEMAND)) {
-                        if (mPostsList.get(selPos).getProfiles_by_ProfileID().getID() == mCurrentProfileResModel.getID()) {
-                            ((BaseActivity) mContext).moveMyProfileScreenWithResult(mContext,
-                                    mCurrentProfileResModel.getID(), AppConstants.FOLLOWERS_FOLLOWING_RESULT);
-                        } else {
-                            ((BaseActivity) mContext).moveOtherProfileScreen(mContext, mCurrentProfileResModel.getID(),
-                                    mPostsList.get(selPos).getProfiles_by_ProfileID().getID());
-                        }
-                    } else {
-                        navigationToProfileActivity(getLayoutPosition());
-                    }
-
-                    break;
-            }
-        }
     }
 
     private class ViewHolderLoader extends RecyclerView.ViewHolder {
-
         ProgressBar mProgressBar;
 
         ViewHolderLoader(View view) {
             super(view);
             mProgressBar = view.findViewById(R.id.myProgressBar);
         }
-
     }
+
 }

@@ -52,6 +52,8 @@ public class PromoterVideoModel implements Serializable {
 
         private String CreatedAt;
 
+        private int ViewCount;
+
         private ArrayList<VideoLikesModel> videolikes_by_VideoID;
 
         private EventsResModel event_by_EventID;
@@ -62,6 +64,8 @@ public class PromoterVideoModel implements Serializable {
 
 
         public String getUserType() {
+            if (UserType == null)
+                UserType = "";
             return UserType;
         }
 
@@ -70,6 +74,9 @@ public class PromoterVideoModel implements Serializable {
         }
 
         public String getCaption() {
+            if (Caption == null) {
+                Caption = "";
+            }
             return Caption;
         }
 
@@ -113,7 +120,7 @@ public class PromoterVideoModel implements Serializable {
         }
 
         public String getVideoUrl() {
-            if(VideoUrl == null)
+            if (VideoUrl == null)
                 VideoUrl = "";
             return VideoUrl;
         }
@@ -146,6 +153,14 @@ public class PromoterVideoModel implements Serializable {
 
         public void setCreatedAt(String CreatedAt) {
             this.CreatedAt = CreatedAt;
+        }
+
+        public int getViewCount() {
+            return ViewCount;
+        }
+
+        public void setViewCount(int viewCount) {
+            ViewCount = viewCount;
         }
 
         public ArrayList<VideoLikesModel> getVideolikes_by_VideoID() {

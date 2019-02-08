@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <include
+        android:id="@+id/include"
+        layout="@layout/widget_toolbar" />
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:layout_marginLeft="@dimen/size10"
+        android:layout_marginRight="@dimen/size10"
+        android:layout_marginTop="@dimen/size10"
+        android:layout_marginBottom="@dimen/size5"
+        app:cardCornerRadius="4dp"
+        app:cardElevation="4dp"
+        app:cardBackgroundColor="@color/colorGrey"
+        android:layout_below="@+id/include"
+        android:id="@+id/payableCardView"
+        >
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/size15">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorBlack"
+                android:textSize="@dimen/text14"
+                android:text="@string/payable_amount"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/payableAmountTxt"
+                android:textColor="@color/colorOrange"
+                android:textSize="@dimen/text14"
+                android:layout_alignParentEnd="true"
+                />
+        </RelativeLayout>
+    </android.support.v7.widget.CardView>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/scrollView"
+        android:layout_above="@+id/pay_btn"
+        android:layout_below="@+id/payableCardView">
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/size10">
+
+    <android.support.v7.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/savedCardRecyclerView"
+        android:layout_marginTop="@dimen/size10"
+        android:layout_marginBottom="@dimen/size10"
+        app:layout_constraintBottom_toTopOf="@+id/newCardView"/>
+
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:foreground="?android:attr/selectableItemBackground"
+                android:layout_marginLeft="@dimen/size10"
+                android:layout_marginRight="@dimen/size10"
+                android:layout_marginTop="@dimen/size5"
+                android:layout_marginBottom="@dimen/size5"
+                app:cardCornerRadius="5dp"
+                app:cardElevation="10dp"
+                app:cardBackgroundColor="@color/colorGrey"
+                app:layout_constraintTop_toBottomOf="@+id/savedCardRecyclerView"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                android:id="@+id/newCardView"
+                >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorWhite"
+            android:orientation="horizontal"
+            android:padding="@dimen/size10"
+            >
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/newCardImage"
+            android:src="@drawable/new_card"
+            />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="@string/new_card"
+                android:textColor="@color/colorBlack"
+                android:textSize="@dimen/text14"
+                android:gravity="center"
+                android:layout_marginStart="@dimen/size10"
+
+                />
+
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
+
+        </android.support.constraint.ConstraintLayout>
+    </ScrollView>
+
+    <Button
+        android:id="@+id/pay_btn"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/size50"
+        android:layout_margin="@dimen/size10"
+        android:background="@drawable/black_orange_btn_bg"
+        android:text="@string/enter"
+        android:textColor="@color/text_color"
+        android:textSize="@dimen/text16"
+        android:textStyle="bold"
+        android:visibility="gone"
+        android:layout_alignParentBottom="true"/>
+</RelativeLayout>

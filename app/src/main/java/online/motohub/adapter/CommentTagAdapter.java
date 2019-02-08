@@ -13,7 +13,10 @@ import java.util.ArrayList;
 import de.hdodenhof.circleimageview.CircleImageView;
 import online.motohub.R;
 import online.motohub.activity.BaseActivity;
+import online.motohub.activity.CommentReplyActivity;
 import online.motohub.activity.PostCommentsActivity;
+import online.motohub.activity.VideoCommentReplyActivity;
+import online.motohub.activity.VideoCommentsActivity;
 import online.motohub.model.ProfileResModel;
 import online.motohub.util.Utility;
 
@@ -113,21 +116,32 @@ public class CommentTagAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         switch (getItemViewType(position)) {
             case VIEW_TYPE_USER:
-                final ViewHolderUser mViewHolderUserProfile = (ViewHolderUser) holder;
-                mViewHolderUserProfile.mProfileImg.setTag(position);
-                mViewHolderUserProfile.mUsername.setTag(position);
+                try {
 
-                ((BaseActivity) mContext).setImageWithGlide(mViewHolderUserProfile.mProfileImg, mUnFollowedProfileListData.get(position).getProfilePicture(), R.drawable.default_profile_icon);
-                mViewHolderUserProfile.mUsername.setText(Utility.getInstance().getUserName(mUnFollowedProfileListData.get(position)));
+                    final ViewHolderUser mViewHolderUserProfile = (ViewHolderUser) holder;
+                    mViewHolderUserProfile.mProfileImg.setTag(position);
+                    mViewHolderUserProfile.mUsername.setTag(position);
 
-                mViewHolderUserProfile.mCardView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if(mContext instanceof PostCommentsActivity)
-                            ((PostCommentsActivity)mContext).addTaggedFriends(mUnFollowedProfileListData.get(position));
-                    }
-                });
-               // mViewHolderUserProfile.mUsername.setOnClickListener(this);
+                    ((BaseActivity) mContext).setImageWithGlide(mViewHolderUserProfile.mProfileImg, mUnFollowedProfileListData.get(position).getProfilePicture(), R.drawable.default_profile_icon);
+                    mViewHolderUserProfile.mUsername.setText(Utility.getInstance().getUserName(mUnFollowedProfileListData.get(position)));
+
+                    mViewHolderUserProfile.mCardView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            if (mContext instanceof PostCommentsActivity)
+                                ((PostCommentsActivity) mContext).addTaggedFriends(mUnFollowedProfileListData.get(position));
+                            else if (mContext instanceof VideoCommentsActivity)
+                                ((VideoCommentsActivity) mContext).addTaggedFriends(mUnFollowedProfileListData.get(position));
+                            else if(mContext instanceof CommentReplyActivity)
+                                ((CommentReplyActivity) mContext).addTaggedFriends(mUnFollowedProfileListData.get(position));
+                            else if(mContext instanceof VideoCommentReplyActivity)
+                                ((VideoCommentReplyActivity) mContext).addTaggedFriends(mUnFollowedProfileListData.get(position));
+                        }
+                    });
+                    // mViewHolderUserProfile.mUsername.setOnClickListener(this);
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
                 break;
             case VIEW_TYPE_LOADING:
                 final ViewHolderLoader mViewHolderLoader = (ViewHolderLoader) holder;

@@ -1,11 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><!--<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/my_moto_file_co_layout"
-    style="@style/LayoutMatch"
-    android:fitsSystemWindows="true"
-    tools:context="online.motohub.activity.MyMotoFileActivity">-->
-
+<?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -26,25 +19,12 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_below="@+id/include"
+        android:id="@+id/nestedScrollView"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <android.support.design.widget.CoordinatorLayout
             android:id="@+id/ll"
             style="@style/LayoutMatch">
-
-            <!--<android.support.design.widget.AppBarLayout
-                android:id="@+id/appBarLayout"
-                style="@style/LayoutMatchWrap"
-                android:fitsSystemWindows="true"
-                android:theme="@style/ThemeOverlay.AppCompat.Light"
-                app:layout_behavior="online.motohub.util.ToolbarBehavior">
-
-                <android.support.design.widget.CollapsingToolbarLayout
-                    android:id="@+id/collapsing_toolbar"
-                    style="@style/LayoutMatchWrap"
-                    android:background="@color/colorWhite"
-                    android:theme="@style/ThemeOverlay.AppCompat.Light"
-                    app:layout_scrollFlags="scroll|exitUntilCollapsed">-->
 
             <RelativeLayout
                 android:id="@+id/RootLayout"
@@ -101,7 +81,29 @@
                             android:scaleType="centerCrop"
                             android:src="@drawable/default_profile_icon" />
 
+                        <com.facebook.shimmer.ShimmerFrameLayout
+                            android:id="@+id/shimmer_myprofile"
+                            android:layout_alignBottom="@id/profile_img"
+                            android:layout_alignTop="@id/profile_img"
+                            android:layout_marginLeft="@dimen/size5"
+                            android:layout_marginStart="@dimen/size5"
+                            android:layout_toEndOf="@id/profile_img"
+                            android:layout_toRightOf="@id/profile_img"
+                            style="@style/LayoutWrap">
+
+                            <LinearLayout
+                                android:layout_height="match_parent"
+                                android:layout_width="match_parent">
+
+                                <include layout="@layout/profiledetails_placeholder_item"/>
+
+                            </LinearLayout>
+
+                        </com.facebook.shimmer.ShimmerFrameLayout>
+
                         <LinearLayout
+                            android:id="@+id/user_details"
+                            android:visibility="gone"
                             style="@style/LayoutWrap"
                             android:layout_alignBottom="@id/profile_img"
                             android:layout_alignTop="@id/profile_img"
@@ -157,7 +159,6 @@
                             android:id="@+id/name_of_followers_count_tv"
                             style="@style/LayoutMatchWrap"
                             android:gravity="center"
-                            android:text="@string/zero"
                             android:textColor="@color/colorBlack"
                             android:textSize="@dimen/text12"
                             android:textStyle="bold" />
@@ -198,7 +199,6 @@
                             android:id="@+id/name_of_following_count_tv"
                             style="@style/LayoutMatchWrap"
                             android:gravity="center"
-                            android:text="@string/zero"
                             android:textColor="@color/colorBlack"
                             android:textSize="@dimen/text12"
                             android:textStyle="bold" />
@@ -247,7 +247,7 @@
                     <RelativeLayout
                         android:id="@+id/your_build_box"
                         android:layout_width="@dimen/size0"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:background="@drawable/white_orange_bg"
                         android:clickable="true"
@@ -266,7 +266,7 @@
 
                         <TextView
                             android:id="@+id/your_build_tv"
-                            style="@style/LayoutMatchWrap"
+                            style="@style/LayoutMatch"
                             android:layout_below="@+id/your_build_img_view"
                             android:gravity="center"
                             android:text="@string/your_build"
@@ -431,6 +431,19 @@
                     android:layout_below="@+id/btn_write_post"
                     android:background="@color/colorLighterGrey" />
 
+                <com.facebook.shimmer.ShimmerFrameLayout
+                    android:id="@+id/shimmer_myfeeds"
+                    android:layout_below="@+id/writePostSeparator"
+                    style="@style/LayoutMatchWrap">
+
+                    <LinearLayout
+                        style="@style/LayoutMatchWrap">
+
+                        <include layout="@layout/posts_placeholder_item"/>
+
+                    </LinearLayout>
+
+                </com.facebook.shimmer.ShimmerFrameLayout>
 
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/posts_recycler_view"
@@ -438,14 +451,10 @@
                     android:layout_below="@+id/writePostSeparator"
                     android:background="@color/colorLighterGrey"
                     android:scrollbars="none"
+                    android:nestedScrollingEnabled="false"
                     app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
             </RelativeLayout>
-
-            <!-- </android.support.design.widget.CollapsingToolbarLayout>
-
-         </android.support.design.widget.AppBarLayout>-->
-
 
         </android.support.design.widget.CoordinatorLayout>
 
@@ -464,4 +473,3 @@
         app:fabCustomSize="@dimen/size30"
         app:srcCompat="@drawable/refresh_icon" />
 </RelativeLayout>
-

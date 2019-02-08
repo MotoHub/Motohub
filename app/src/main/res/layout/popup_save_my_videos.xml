@@ -12,6 +12,18 @@
         android:orientation="vertical">
 
         <Button
+            android:id="@+id/report_btn"
+            style="@style/LayoutMatchWrap"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/size40"
+            android:layout_marginBottom="@dimen/size10"
+            android:layout_marginTop="@dimen/size10"
+            android:background="@null"
+            android:text="@string/report"
+            android:textColor="@color/colorBlack"
+            android:textSize="@dimen/text14" />
+
+        <Button
             android:id="@+id/save_my_video_btn"
             style="@style/LayoutMatchWrap"
             android:layout_width="match_parent"

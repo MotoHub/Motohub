@@ -37,8 +37,8 @@
                             android:id="@+id/cover_photo_img_view"
                             android:layout_width="match_parent"
                             android:layout_height="@dimen/size100"
-                            android:scaleType="centerCrop"
                             android:contentDescription="@string/app_name"
+                            android:scaleType="centerCrop"
                             app:srcCompat="@drawable/default_cover_img" />
 
                         <View
@@ -71,8 +71,30 @@
                                     android:scaleType="centerCrop"
                                     android:src="@drawable/default_profile_icon" />
 
-                                <LinearLayout
+                                <com.facebook.shimmer.ShimmerFrameLayout
+                                    android:id="@+id/shimmer_otherprofiles"
                                     style="@style/LayoutWrap"
+                                    android:layout_alignBottom="@id/profile_img"
+                                    android:layout_alignTop="@id/profile_img"
+                                    android:layout_marginLeft="@dimen/size5"
+                                    android:layout_marginStart="@dimen/size5"
+                                    android:layout_toEndOf="@id/profile_img"
+                                    android:layout_toRightOf="@id/profile_img">
+
+                                    <LinearLayout
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content">
+
+                                        <include layout="@layout/profiledetails_placeholder_item" />
+
+                                    </LinearLayout>
+
+                                </com.facebook.shimmer.ShimmerFrameLayout>
+
+                                <LinearLayout
+                                    android:id="@+id/other_profiles_details"
+                                    style="@style/LayoutWrap"
+                                    android:visibility="visible"
                                     android:layout_alignBottom="@id/profile_img"
                                     android:layout_alignTop="@id/profile_img"
                                     android:layout_marginLeft="@dimen/size5"
@@ -127,7 +149,6 @@
                                     android:id="@+id/name_of_followers_count_tv"
                                     style="@style/LayoutMatchWrap"
                                     android:gravity="center"
-                                    android:text="@string/zero"
                                     android:textColor="@color/colorBlack"
                                     android:textSize="@dimen/text12"
                                     android:textStyle="bold" />
@@ -168,7 +189,6 @@
                                     android:id="@+id/name_of_following_count_tv"
                                     style="@style/LayoutMatchWrap"
                                     android:gravity="center"
-                                    android:text="@string/zero"
                                     android:textColor="@color/colorBlack"
                                     android:textSize="@dimen/text12"
                                     android:textStyle="bold" />

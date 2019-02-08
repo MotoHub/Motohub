@@ -305,7 +305,7 @@
                             android:background="@null"
                             android:hint="@string/phone_number"
                             android:inputType="phone"
-                            android:maxLength="10"
+                            android:maxLength="12"
                             android:padding="@dimen/size10"
                             android:textColor="@color/colorBlack"
                             android:textColorHint="@color/colorGrey"
@@ -343,7 +343,7 @@
                             android:background="@null"
                             android:hint="@string/hp"
                             android:inputType="numberDecimal"
-                            android:maxLength="10"
+                            android:maxLength="12"
                             android:padding="@dimen/size10"
                             android:textColor="@color/colorBlack"
                             android:textColorHint="@color/colorGrey"
@@ -1947,7 +1947,8 @@
                     <LinearLayout
                         android:id="@+id/back_protection_box"
                         style="@style/LayoutMatchWrap"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        android:visibility="gone">
 
                         <TextView
                             android:id="@+id/back_protection_tv"
@@ -1990,12 +1991,14 @@
                         android:id="@+id/back_protection_line"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/size1"
-                        android:background="@color/colorGrey" />
+                        android:background="@color/colorGrey"
+                        android:visibility="gone" />
 
                     <LinearLayout
                         android:id="@+id/chest_protection_box"
                         style="@style/LayoutMatchWrap"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        android:visibility="gone">
 
                         <TextView
                             android:id="@+id/chest_protection_tv"
@@ -2038,7 +2041,8 @@
                         android:id="@+id/chest_protection_line"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/size1"
-                        android:background="@color/colorGrey" />
+                        android:background="@color/colorGrey"
+                        android:visibility="gone" />
 
                     <LinearLayout
                         android:id="@+id/more_info_box"
@@ -2065,9 +2069,9 @@
                             android:background="@null"
                             android:gravity="start|top"
                             android:hint="@string/more_info"
-                            android:scrollbars="vertical"
                             android:inputType="textMultiLine"
                             android:padding="@dimen/size10"
+                            android:scrollbars="vertical"
                             android:textColor="@color/colorBlack"
                             android:textColorHint="@color/colorGrey"
                             android:textSize="@dimen/text12" />
@@ -2103,6 +2107,15 @@
                         android:textColor="@color/text_color"
                         android:textSize="@dimen/text16"
                         android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/txt_version"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/submit_btn"
+                        android:layout_marginTop="@dimen/size10"
+                        android:gravity="center_horizontal"
+                        android:textColor="@android:color/darker_gray" />
 
                 </RelativeLayout>
 

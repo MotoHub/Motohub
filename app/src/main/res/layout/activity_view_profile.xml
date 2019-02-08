@@ -15,25 +15,36 @@
             android:id="@+id/include"
             layout="@layout/widget_toolbar" />
 
+        <FrameLayout
+            android:id="@+id/container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
         <android.support.design.widget.CoordinatorLayout
             android:id="@+id/inner_co_layout"
             style="@style/LayoutMatchWrap"
             android:layout_above="@+id/bottom_box"
             android:layout_below="@id/include">
 
-            <android.support.design.widget.AppBarLayout
-                android:id="@+id/appBarLayout"
+            <android.support.v4.widget.NestedScrollView
+                android:id="@+id/postNextedScrollView"
                 style="@style/LayoutMatchWrap"
-                android:fitsSystemWindows="true"
-                android:theme="@style/ThemeOverlay.AppCompat.Light">
+                android:orientation="vertical"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-                <android.support.design.widget.CollapsingToolbarLayout
-                    android:id="@+id/collapsing_toolbar"
+                <!--<android.support.design.widget.AppBarLayout
+                    android:id="@+id/appBarLayout"
                     style="@style/LayoutMatchWrap"
-                    android:background="@color/colorWhite"
                     android:fitsSystemWindows="true"
-                    android:theme="@style/ThemeOverlay.AppCompat.Light"
-                    app:layout_scrollFlags="scroll">
+                    android:theme="@style/ThemeOverlay.AppCompat.Light">
+
+                    <android.support.design.widget.CollapsingToolbarLayout
+                        android:id="@+id/collapsing_toolbar"
+                        style="@style/LayoutMatchWrap"
+                        android:background="@color/colorWhite"
+                        android:fitsSystemWindows="true"
+                        android:theme="@style/ThemeOverlay.AppCompat.Light"
+                        app:layout_scrollFlags="scroll">-->
 
                     <RelativeLayout style="@style/LayoutMatchWrap">
 
@@ -57,6 +68,24 @@
                                     android:focusable="true"
                                     android:scaleType="centerCrop"
                                     android:src="@drawable/default_profile_icon" />
+
+                            <com.facebook.shimmer.ShimmerFrameLayout
+                                android:id="@+id/shimmer_profile"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_alignBottom="@+id/profile_img"
+                                android:layout_alignTop="@id/profile_img"
+                                android:layout_toEndOf="@id/profile_img">
+
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content">
+
+                                        <include layout="@layout/profiledetails_placeholder_item"/>
+
+                                    </LinearLayout>
+
+                                </com.facebook.shimmer.ShimmerFrameLayout>
 
                                 <LinearLayout
                                     style="@style/LayoutWrap"
@@ -177,7 +206,7 @@
                                     android:gravity="center"
                                     android:text="@string/shop"
                                     android:textColor="@color/colorBlack"
-                                    android:textSize="@dimen/text10" />
+                                    android:textSize="@dimen/text12" />
 
                             </RelativeLayout>
 
@@ -332,6 +361,26 @@
                             android:layout_below="@+id/tab_box"
                             android:background="@color/colorLighterGrey" />
 
+                        <com.facebook.shimmer.ShimmerFrameLayout
+                            android:id="@+id/shimmer_findfriends"
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/size100"
+                            android:layout_below="@+id/tabSeparator"
+                            android:layout_centerHorizontal="true"
+                            android:layout_marginBottom="@dimen/size10"
+                            android:layout_marginStart="@dimen/size20"
+                            android:layout_marginTop="@dimen/size10">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal">
+
+                                <include layout="@layout/profiles_placeholder_item" />
+
+                            </LinearLayout>
+                        </com.facebook.shimmer.ShimmerFrameLayout>
+
                         <android.support.v7.widget.RecyclerView
                             android:id="@+id/hor_recycler_view"
                             android:layout_width="wrap_content"
@@ -363,23 +412,25 @@
                             android:paddingBottom="@dimen/size10"
                             android:paddingTop="@dimen/size10">
 
-                            <EditText
-                                android:id="@+id/search_et"
-                                style="@style/LayoutMatchWrap"
-                                android:background="@drawable/orange_border_bg"
-                                android:drawableEnd="@drawable/search_icon"
-                                android:hint="@string/find_friends"
-                                android:imeOptions="actionDone"
-                                android:inputType="text"
-                                android:maxLines="1"
-                                android:paddingBottom="@dimen/size3"
-                                android:paddingEnd="@dimen/size5"
-                                android:paddingLeft="@dimen/size5"
-                                android:paddingRight="@dimen/size5"
-                                android:paddingTop="@dimen/size3"
-                                android:textColor="@color/colorBlack"
-                                android:textColorHint="@color/colorGrey"
-                                android:textSize="@dimen/text14" />
+                        <EditText
+                            android:id="@+id/search_et"
+                            style="@style/LayoutMatchWrap"
+                            android:background="@drawable/orange_border_bg"
+                            android:clickable="false"
+                            android:drawableEnd="@drawable/search_icon"
+                            android:hint="@string/find_friends"
+                            android:imeOptions="actionDone"
+                            android:inputType="text"
+                            android:maxLines="1"
+                            android:paddingBottom="@dimen/size3"
+                            android:paddingEnd="@dimen/size5"
+                            android:paddingLeft="@dimen/size5"
+                            android:paddingRight="@dimen/size5"
+                            android:paddingTop="@dimen/size3"
+                            android:textColor="@color/colorBlack"
+                            android:textColorHint="@color/colorGrey"
+                            android:textSize="@dimen/text14"
+                            android:visibility="gone" />
 
                         </RelativeLayout>
 
@@ -416,52 +467,160 @@
                             android:textColor="@color/text_color"
                             android:textSize="@dimen/text14" />
 
+                        <Button
+                            android:id="@+id/btn_connect_with_friends"
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/size35"
+                            android:layout_below="@+id/btn_write_post"
+                            android:layout_marginEnd="@dimen/size10"
+                            android:layout_marginLeft="@dimen/size10"
+                            android:layout_marginRight="@dimen/size10"
+                            android:layout_marginStart="@dimen/size10"
+                            android:layout_marginTop="@dimen/size10"
+                            android:background="@drawable/black_orange_btn_bg"
+                            android:gravity="center"
+                            android:text="@string/connect_with_friends"
+                            android:textAllCaps="false"
+                            android:textColor="@color/text_color"
+                            android:textSize="@dimen/text14" />
+
                         <View
                             android:id="@+id/writePostSeparator"
                             android:layout_width="match_parent"
                             android:layout_height="@dimen/size10"
-                            android:layout_below="@+id/btn_write_post"
+                            android:layout_below="@+id/btn_connect_with_friends"
                             android:background="@color/colorLighterGrey" />
 
-                    </RelativeLayout>
+                        <RelativeLayout
+                            android:id="@+id/relative_layout_phone_email_friends"
+                            style="@style/LayoutMatchWrap"
+                            android:layout_below="@+id/writePostSeparator"
+                            android:visibility="visible">
 
-                </android.support.design.widget.CollapsingToolbarLayout>
+                            <com.facebook.shimmer.ShimmerFrameLayout
+                                android:id="@+id/shimmer_phonecontacts"
+                                android:layout_width="match_parent"
+                                android:layout_height="@dimen/size100"
+                                android:layout_centerHorizontal="true"
+                                android:layout_marginBottom="@dimen/size10"
+                                android:layout_marginStart="@dimen/size20"
+                                android:layout_marginTop="@dimen/size10">
 
-            </android.support.design.widget.AppBarLayout>
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent">
 
-            <!--<fragment
-                android:id="@+id/newsFeedFragment"
-                android:name="online.motohub.fragment.NewsFeedFragment"
-                style="@style/LayoutMatchWrap"
-                android:layout_below="@+id/appBarLayout"
-                app:layout_behavior="@string/appbar_scrolling_view_behavior" />-->
+                                    <include layout="@layout/profiles_placeholder_item"/>
 
-            <android.support.v4.widget.NestedScrollView
-                app:layout_behavior="@string/appbar_scrolling_view_behavior"
-                android:orientation="vertical"
-                android:id="@+id/postNextedScrollView"
-                style="@style/LayoutMatchWrap">
-                <LinearLayout
-                    app:layout_behavior="@string/appbar_scrolling_view_behavior"
-                    android:orientation="vertical"
-                    style="@style/LayoutMatchWrap">
+                                </LinearLayout>
 
-                    <android.support.v7.widget.RecyclerView
-                        android:id="@+id/live_events_recycler_view"
+                            </com.facebook.shimmer.ShimmerFrameLayout>
+
+                            <android.support.v7.widget.RecyclerView
+                                android:id="@+id/hor_phone_email_friends_recycler_view"
+                                android:layout_width="wrap_content"
+                                android:layout_height="@dimen/size100"
+                                android:layout_centerHorizontal="true"
+                                android:layout_marginBottom="@dimen/size10"
+                                android:layout_marginStart="@dimen/size20"
+                                android:layout_marginTop="@dimen/size10"
+                                android:orientation="horizontal"
+                                app:layoutManager="android.support.v7.widget.LinearLayoutManager" />
+
+                            <View
+                                android:id="@+id/hor_phone_email_friends_view"
+                                android:layout_width="match_parent"
+                                android:layout_height="@dimen/size10"
+                                android:layout_below="@+id/hor_phone_email_friends_recycler_view"
+                                android:background="@color/colorLighterGrey" />
+
+                            <RelativeLayout
+                                android:id="@+id/searchPhoneEmailBox"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_below="@id/hor_phone_email_friends_view"
+                                android:layout_marginEnd="@dimen/size10"
+                                android:layout_marginLeft="@dimen/size10"
+                                android:layout_marginRight="@dimen/size10"
+                                android:layout_marginStart="@dimen/size10"
+                                android:paddingBottom="@dimen/size10"
+                                android:paddingTop="@dimen/size10">
+
+                            <EditText
+                                android:id="@+id/search_phone_email_et"
+                                style="@style/LayoutMatchWrap"
+                                android:background="@drawable/orange_border_bg"
+                                android:clickable="false"
+                                android:drawableEnd="@drawable/search_icon"
+                                android:hint="@string/find_friends"
+                                android:imeOptions="actionDone"
+                                android:maxLines="1"
+                                android:paddingBottom="@dimen/size3"
+                                android:paddingEnd="@dimen/size5"
+                                android:paddingLeft="@dimen/size5"
+                                android:paddingRight="@dimen/size5"
+                                android:paddingTop="@dimen/size3"
+                                android:textColor="@color/colorBlack"
+                                android:textColorHint="@color/colorGrey"
+                                android:textSize="@dimen/text14"
+                                android:visibility="gone" />
+
+                            </RelativeLayout>
+
+                            <View
+                                android:id="@+id/searchPhoneEmailView"
+                                android:layout_width="match_parent"
+                                android:layout_height="@dimen/size10"
+                                android:layout_below="@+id/searchPhoneEmailBox"
+                                android:background="@color/colorLighterGrey" />
+                        </RelativeLayout>
+
+
+                    <LinearLayout
                         style="@style/LayoutMatchWrap"
-                        android:nestedScrollingEnabled="false"
-                        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-                        android:layout_height="wrap_content"
-                        />
+                        android:layout_below="@+id/relative_layout_phone_email_friends"
+                        android:orientation="vertical"
+                        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-                    <android.support.v7.widget.RecyclerView
-                        android:id="@+id/news_feed_recycler_view"
+                        <android.support.v7.widget.RecyclerView
+                            android:id="@+id/live_events_recycler_view"
+                            style="@style/LayoutMatchWrap"
+                            android:layout_height="wrap_content"
+                            android:nestedScrollingEnabled="false"
+                            android:visibility="gone"
+                            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+                    <com.facebook.shimmer.ShimmerFrameLayout
+                        android:id="@+id/shimmer_posts"
                         style="@style/LayoutMatchWrap"
-                        android:nestedScrollingEnabled="false"
-                        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-                        android:background="@color/colorLighterGrey"/>
+                        android:background="@color/colorLighterGrey">
 
-                </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical">
+
+                            <include layout="@layout/posts_placeholder_item" />
+
+                            <include layout="@layout/posts_placeholder_item" />
+
+                        </LinearLayout>
+
+                    </com.facebook.shimmer.ShimmerFrameLayout>
+
+                        <android.support.v7.widget.RecyclerView
+                            android:id="@+id/news_feed_recycler_view"
+                            style="@style/LayoutMatchWrap"
+                            android:background="@color/colorLighterGrey"
+                            android:nestedScrollingEnabled="false"
+                            android:visibility="gone"
+                            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+                    </LinearLayout>
+
+
+                </RelativeLayout>
+
             </android.support.v4.widget.NestedScrollView>
             <!--<android.support.v7.widget.RecyclerView
                 android:id="@+id/news_feed_recycler_view"
@@ -535,7 +694,7 @@
                         android:background="@null"
                         android:clickable="false"
                         android:contentDescription="@string/app_name"
-                        android:src="@drawable/live" />
+                        android:src="@drawable/ic_ondemand_home" />
 
                     <TextView
                         android:id="@+id/txt_live"
@@ -576,7 +735,6 @@
                         android:textSize="@dimen/text12" />
 
                 </RelativeLayout>
-
 
             </LinearLayout>
 

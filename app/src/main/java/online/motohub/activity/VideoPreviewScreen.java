@@ -19,7 +19,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import online.motohub.R;
-import online.motohub.fragment.dialog.AppDialogFragment;
 import online.motohub.util.AppConstants;
 import online.motohub.util.DialogManager;
 
@@ -65,6 +64,8 @@ public class VideoPreviewScreen extends BaseActivity {
             showToast(this,"Oops!!! Something went wrong! Please try again.");
         }
     }
+
+
 
     private void initVideoView() {
         mVideoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
@@ -170,6 +171,7 @@ public class VideoPreviewScreen extends BaseActivity {
 
     @Override
     protected void onDestroy() {
+        DialogManager.hideProgress();
         super.onDestroy();
         releasePlayer();
     }

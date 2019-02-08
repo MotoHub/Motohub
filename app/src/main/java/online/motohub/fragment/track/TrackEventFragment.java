@@ -11,6 +11,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.ArrayList;
 
 import butterknife.BindString;
@@ -31,13 +33,11 @@ import online.motohub.model.EventsModel;
 import online.motohub.model.EventsResModel;
 import online.motohub.model.EventsWhoIsGoingModel;
 import online.motohub.model.PaymentModel;
-import online.motohub.model.ProfileModel;
 import online.motohub.model.ProfileResModel;
 import online.motohub.model.PurchasedAddOnModel;
 import online.motohub.model.RacingModel;
 import online.motohub.model.SessionModel;
 import online.motohub.model.TrackResModel;
-import online.motohub.model.promoter_club_news_media.PromotersModel;
 import online.motohub.model.promoter_club_news_media.PromotersResModel;
 import online.motohub.retrofit.RetrofitClient;
 import online.motohub.util.AppConstants;
@@ -55,17 +55,16 @@ public class TrackEventFragment extends BaseFragment {
     @BindString(R.string.no_events_err)
     String mNoEventsErr;
 
+    private Activity mActivity;
     private Unbinder mUnBinder;
     private ArrayList<EventsResModel> mEventsFindListData = new ArrayList<>();
     private EventsFindAdapter mEventsFindAdapter;
     private boolean mRefresh = true;
     private ProfileResModel mMyProfileResModel;
-    private TrackResModel mTrackResModel;
+    private PromotersResModel mPromoterResModel;
     private PaymentModel mTempPaymentModel;
     private int mFailureResponseType;
-    private Activity mActivity;
-    private PromotersResModel mPromoterResModel;
-
+    private TrackResModel mTrackResModel;
 
     @Override
     public void onAttach(Context context) {
@@ -80,11 +79,6 @@ public class TrackEventFragment extends BaseFragment {
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_events, container, false);
@@ -94,43 +88,43 @@ public class TrackEventFragment extends BaseFragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mUnBinder = ButterKnife.bind(this, view);
-
         initView();
-
     }
 
     private void initView() {
         assert getArguments() != null;
-        mMyProfileResModel = (ProfileResModel) getArguments().getSerializable(ProfileModel.MY_PROFILE_RES_MODEL);
-        mPromoterResModel = (PromotersResModel) getArguments().getSerializable(PromotersModel.PROMOTERS_RES_MODEL);
-        mTrackResModel = mPromoterResModel.getTrackByUserID();
-        if (mTrackResModel != null) {
-            mEventsFindAdapter = new EventsFindAdapter(getContext(), mEventsFindListData, mMyProfileResModel, false);
-            mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-            mRecyclerView.setAdapter(mEventsFindAdapter);
+        /*mMyProfileResModel = (ProfileResModel) getArguments().getSerializable(ProfileModel.MY_PROFILE_RES_MODEL);
+        mPromoterResModel = (PromotersResModel) getArguments().getSerializable(PromotersModel.PROMOTERS_RES_MODEL);*/
+        /*mMyProfileResModel = MotoHub.getApplicationInstance().getmProfileResModel();
+        mPromoterResModel = MotoHub.getApplicationInstance().getmPromoterResModel();*/
+        mMyProfileResModel = EventBus.getDefault().getStickyEvent(ProfileResModel.class);
+        mPromoterResModel = EventBus.getDefault().getStickyEvent(PromotersResModel.class);
+        ((BaseActivity) getActivity()).setUpPurchseSuccessUI();
+    }
+
+    private void setAdapter() {
+        if (mEventsFindAdapter == null) {
+            if (mMyProfileResModel != null && mMyProfileResModel.getID() != 0) {
+                mEventsFindAdapter = new EventsFindAdapter(getContext(), mEventsFindListData, mMyProfileResModel, null, false);
+                mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+                mRecyclerView.setAdapter(mEventsFindAdapter);
+            }
         } else {
-            mRecyclerView.setVisibility(View.GONE);
+            mEventsFindAdapter.notifyDataSetChanged();
         }
     }
 
-    @Override
-    public void setUserVisibleHint(boolean isVisibleToUser) {
-        super.setUserVisibleHint(isVisibleToUser);
-        if (isVisibleToUser && mEventsFindListData.size() == 0)
-            if(mTrackResModel != null)
-                callGetEvents(mTrackResModel.getId());
-    }
-
-    public void callGetEvents(int trackid) {
+    public void callGetEvents(int userid) {
         super.callGetEvents();
         if (mRefresh) {
-            callGetTrackEvents(trackid);
+            callGetTrackEvents(userid);
         }
     }
 
-    private void callGetTrackEvents(int trackId) {
+    private void callGetTrackEvents(int userid) {
         int status = 2;
-        String mDateFilter = "((( Date >= " + ((BaseActivity) mActivity).getCurrentDate() + " ) OR ( Finish >= " + ((BaseActivity) mActivity).getCurrentDate() + " )) AND ( EventStatus=" + status + ")) AND (track_id = " + trackId + ")";
+        String mDateFilter = "((( Date >= " + ((BaseActivity) mActivity).getCurrentDate() + " ) OR ( Finish >= " + ((BaseActivity) mActivity).getCurrentDate()
+                + " )) AND ( EventStatus=" + status + ")) AND (UserID = " + userid + ")";
         RetrofitClient.getRetrofitInstance().callGetAllEventsFromTrack(((BaseActivity) mActivity), mDateFilter, RetrofitClient.GET_ALL_EVENTS_FROM_TRACK_RESPONSE);
     }
 
@@ -151,23 +145,6 @@ public class TrackEventFragment extends BaseFragment {
             }
         }
     }
-
-    @Override
-    public void retrofitOnFailure(int responseType) {
-        super.retrofitOnFailure(responseType);
-        mFailureResponseType = responseType;
-        ((BaseActivity) getActivity()).showAppDialog(AppDialogFragment.ALERT_API_FAILURE_DIALOG, null);
-    }
-
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        if (mUnBinder != null) {
-            mUnBinder.unbind();
-        }
-    }
-
 
     @Override
     public void alertDialogPositiveBtnClick(String dialogType, int position) {
@@ -220,23 +197,59 @@ public class TrackEventFragment extends BaseFragment {
             ArrayList<EventAddOnModel> mSelectedEventAddOn = MotoHub.getApplicationInstance().getPurchasedAddOn();
             if (mSelectedEventAddOn.size() > 0)
                 mEventsFindAdapter.callPostSelectedAddOns(mSelectedEventAddOn);
-            else
-                ((BaseActivity) getActivity()).showToast(getActivity(), getString(R.string.event_booked_successfully));
+            else {
+                if(mEventsFindAdapter.mEventType.equals(AppConstants.FREE_EVENT)) {
+                    ((BaseActivity) getActivity()).showToast(getActivity(), getString(R.string.event_booked_successfully));
+                } else {
+                    if (((BaseActivity) getActivity()).mPurchaseSuccessDialog != null)
+                        ((BaseActivity) getActivity()).mPurchaseSuccessDialog.show();
+                }
+            }
         } else if (responseObj instanceof PurchasedAddOnModel) {
-            ((BaseActivity) getActivity()).showToast(getActivity(), getString(R.string.event_booked_successfully));
+            if(mEventsFindAdapter.mEventType.equals(AppConstants.FREE_EVENT)){
+                showToast(getActivity(), "Successfully booked an event.");
+            } else {
+                if (((BaseActivity) getActivity()).mPurchaseSuccessDialog != null)
+                    ((BaseActivity) getActivity()).mPurchaseSuccessDialog.show();
+            }
         } else if (responseObj instanceof EventsModel) {
             EventsModel model = (EventsModel) responseObj;
-            if(model.getResource()!=null && model.getResource().size()>0){
+            if (model.getResource() != null && model.getResource().size() > 0) {
                 mEventsFindListData.clear();
                 mEventsFindListData.addAll(model.getResource());
-                mEventsFindAdapter.notifyDataSetChanged();
-            }else{
-                ((BaseActivity) mActivity).showToast(mActivity,mNoEventsErr);
+            } else {
+                ((BaseActivity) mActivity).showToast(mActivity, mNoEventsErr);
             }
+            setAdapter();
         } else if (responseObj instanceof EventAnswersModel) {
             EventAnswersModel mEventAnswerList = (EventAnswersModel) responseObj;
             ArrayList<EventAnswersModel> mResEventAnswerModel = mEventAnswerList.getResource();
             mEventsFindAdapter.callUpdateEventAnswerScreen(mResEventAnswerModel);
         }
     }
+
+    @Override
+    public void retrofitOnFailure(int responseType) {
+        super.retrofitOnFailure(responseType);
+        mFailureResponseType = responseType;
+        ((BaseActivity) getActivity()).showAppDialog(AppDialogFragment.ALERT_API_FAILURE_DIALOG, null);
+    }
+
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if (mUnBinder != null) {
+            mUnBinder.unbind();
+        }
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser && mEventsFindListData.size() == 0)
+            /*if (mTrackResModel != null)*/
+            callGetEvents(mPromoterResModel.getUserId());
+    }
+
 }

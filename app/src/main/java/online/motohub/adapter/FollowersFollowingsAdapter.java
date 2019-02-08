@@ -93,54 +93,58 @@ public class FollowersFollowingsAdapter extends RecyclerView.Adapter<RecyclerVie
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int pos) {
-        final Holder mHolder = (Holder) holder;
-        ProfileResModel mEntity = mFollowersFollowingsList.get(pos);
+        try {
+            final Holder mHolder = (Holder) holder;
+            ProfileResModel mEntity = mFollowersFollowingsList.get(pos);
 
-        String imgStr = mEntity.getProfilePicture();
-        if (!imgStr.isEmpty()) {
-            ((BaseActivity) mContext).setImageWithGlide(mHolder.mUserImg, imgStr, R.drawable.default_profile_icon);
-        } else {
-            mHolder.mUserImg.setImageResource(R.drawable.default_profile_icon);
-        }
-        mHolder.mUserNameTxt.setText(Utility.getInstance().getUserName(mEntity));
-
-        mFollowersFollowingsList.get(pos).setIsFollowing(Utility.getInstance().
-                isAlreadyFollowed(mFollowersFollowingsList.get(pos).getFollowprofile_by_FollowProfileID(), mMyProfileID));
-
-        if (mFollowersFollowingsList.get(pos).getIsFollowing()) {
-            mHolder.mFollowBtn.setText(mContext.getString(R.string.un_follow));
-        } else {
-            mHolder.mFollowBtn.setText(mContext.getString(R.string.follow));
-        }
-        mHolder.mUserImg.setTag(pos);
-        mHolder.mUserImg.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mAdapterPos = (int) v.getTag();
-                ((BaseActivity) mContext).moveOtherProfileScreenWithResult(mContext, mMyProfileResModel.getID(),
-                        mFollowersFollowingsList.get(mAdapterPos).getID(), AppConstants.FOLLOWERS_FOLLOWING_RESULT);
-
+            String imgStr = mEntity.getProfilePicture();
+            if (!imgStr.isEmpty()) {
+                ((BaseActivity) mContext).setImageWithGlide(mHolder.mUserImg, imgStr, R.drawable.default_profile_icon);
+            } else {
+                mHolder.mUserImg.setImageResource(R.drawable.default_profile_icon);
             }
-        });
-        mHolder.mFollowBtn.setTag(pos);
-        mHolder.mFollowBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mAdapterPos = (int) v.getTag();
-                ProfileResModel mEntity = mFollowersFollowingsList.get(mAdapterPos);
-                if (mFollowersFollowingsList.get(mAdapterPos).getIsFollowing()) {
-                    //TODO show alert then call Unfollow API
-                    DialogManager.showUnFollowBlockDialogWithCallback(mContext, mUnFollowBlockCallback, mEntity);
+            mHolder.mUserNameTxt.setText(Utility.getInstance().getUserName(mEntity));
 
-                } else {
-                    //TODO call Follow API
-                    CommonAPI.getInstance().callFollowProfile(mContext, mRetrofitResInterface,
-                            mMyProfileID, mEntity.getID());
+            mFollowersFollowingsList.get(pos).setIsFollowing(Utility.getInstance().
+                    isAlreadyFollowed(mFollowersFollowingsList.get(pos).getFollowprofile_by_FollowProfileID(), mMyProfileID));
+
+            if (mFollowersFollowingsList.get(pos).getIsFollowing()) {
+                mHolder.mFollowBtn.setText(mContext.getString(R.string.un_follow));
+            } else {
+                mHolder.mFollowBtn.setText(mContext.getString(R.string.follow));
+            }
+            mHolder.mUserImg.setTag(pos);
+            mHolder.mUserImg.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mAdapterPos = (int) v.getTag();
+                    ((BaseActivity) mContext).moveOtherProfileScreenWithResult(mContext, mMyProfileResModel.getID(),
+                            mFollowersFollowingsList.get(mAdapterPos).getID(), AppConstants.FOLLOWERS_FOLLOWING_RESULT);
 
                 }
+            });
+            mHolder.mFollowBtn.setTag(pos);
+            mHolder.mFollowBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mAdapterPos = (int) v.getTag();
+                    ProfileResModel mEntity = mFollowersFollowingsList.get(mAdapterPos);
+                    if (mFollowersFollowingsList.get(mAdapterPos).getIsFollowing()) {
+                        //TODO show alert then call Unfollow API
+                        DialogManager.showUnFollowBlockDialogWithCallback(mContext, mUnFollowBlockCallback, mEntity);
 
-            }
-        });
+                    } else {
+                        //TODO call Follow API
+                        CommonAPI.getInstance().callFollowProfile(mContext, mRetrofitResInterface,
+                                mMyProfileID, mEntity.getID());
+
+                    }
+
+                }
+            });
+        }catch (Exception e){
+            e.printStackTrace();
+        }
 
     }
 

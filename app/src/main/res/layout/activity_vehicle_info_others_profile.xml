@@ -11,6 +11,7 @@
     <ScrollView
         android:id="@+id/profile_scroll_view"
         style="@style/LayoutMatch"
+        android:padding="@dimen/size5"
         android:layout_marginTop="@dimen/size56"
         android:scrollbars="none">
 
@@ -324,7 +325,7 @@
                             android:background="@null"
                             android:gravity="center_vertical"
                             android:hint="@string/hp"
-                            android:maxLength="10"
+                            android:maxLength="12"
                             android:textColor="@color/colorBlack"
                             android:textColorHint="@color/colorGrey"
                             android:textSize="@dimen/text12" />
@@ -1540,7 +1541,8 @@
                     <LinearLayout
                         android:id="@+id/back_protection_box"
                         style="@style/LayoutMatchWrap"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        android:visibility="gone">
 
                         <TextView
                             android:id="@+id/back_protection_tv"
@@ -1571,12 +1573,14 @@
                         android:id="@+id/back_protection_line"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/size1"
+                        android:visibility="gone"
                         android:background="@color/colorGrey" />
 
                     <LinearLayout
                         android:id="@+id/chest_protection_box"
                         style="@style/LayoutMatchWrap"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        android:visibility="gone">
 
                         <TextView
                             android:id="@+id/chest_protection_tv"
@@ -1607,7 +1611,8 @@
                         android:id="@+id/chest_protection_line"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/size1"
-                        android:background="@color/colorGrey" />
+                        android:background="@color/colorGrey"
+                        android:visibility="gone"/>
 
                     <LinearLayout
                         android:id="@+id/more_info_box"

@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
 
     <!-- Base application theme. -->
@@ -21,6 +22,10 @@
 
     <style name="AppTheme.WhiteStatusBar" parent="AppTheme">
         <item name="colorPrimaryDark">@color/colorWhite</item>
+    </style>
+
+    <style name="MyAlertDialogStyle" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="colorAccent">#FF6600</item>
     </style>
 
     <style name="SwitchTheme" parent="Theme.AppCompat.Light">
@@ -147,10 +152,6 @@
 
     <style name="DataTableTheme" parent="android:Theme.Holo.Light"></style>
 
-    <style name="DataHeaderTheme" parent="android:Theme.Holo.Light">
-        <item name="android:background">#000</item>
-    </style>
-
     <style name="DataTableHeaderAppearance" parent="@android:style/TextAppearance">
         <item name="android:textColor">#fff</item>
         <item name="android:textStyle">bold</item>
@@ -178,7 +179,5 @@
     </style>
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
-
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
 </resources>

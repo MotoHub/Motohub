@@ -25,6 +25,7 @@ import online.motohub.model.LiveStreamRequestResponse;
 import online.motohub.model.SessionModel;
 import online.motohub.retrofit.RetrofitClient;
 import online.motohub.util.AppConstants;
+import online.motohub.util.DialogManager;
 import online.motohub.util.PreferenceUtils;
 
 public class ViewRequestUsersActivity extends BaseActivity {
@@ -54,7 +55,11 @@ public class ViewRequestUsersActivity extends BaseActivity {
         ButterKnife.bind(this);
         initView();
     }
-
+    @Override
+    protected void onDestroy() {
+        DialogManager.hideProgress();
+        super.onDestroy();
+    }
     private void initView() {
 
         Bundle mBundle = getIntent().getExtras();

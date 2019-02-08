@@ -13,7 +13,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
@@ -110,14 +109,13 @@ public class AppDialogFragment extends DialogFragment implements
             BOTTOM_VIEW_PHOTOS_DIALOG = "29", BOTTOM_CHAT_EDIT = "30",
             BOTTOM_LIVE_STREAM_OPTION_DIALOG = "31", BOTTOM_LIVE_STREAM_OPTION_MULTI = "32",
             BOTTOM_SHARED_POST_ACTION_DIALOG = "33", ALERT_TRIAL_DIALOG = "34", LOG_OUT_DIALOG = "35", DIALOG_PROMOTER_PROFILE_VIEW = "36",
-            BOTTOM_REPORT_ACTION_DIALOG = "37";
-    public static AppDialogFragment mAppDialogFragment = new AppDialogFragment();
+            BOTTOM_REPORT_ACTION_DIALOG = "37", ACCESS_CONTACT_ALERT_DIALOG = "38", SET_CONTACT_PERMISSION = "39",
+            BOTTOM_ADD_IMG_DIALOG_BUSINESS = "40";
+
     private static String mDialogType;
     private static ArrayList<Bitmap> mShareImage;
-    private static String[] mVideoUrl;
     //private static AppDialogFragment mAppDialogFragment;
     public ShareDialog shareFBDialog;
-    public SendVideoUrl sendVideoUrl;
     private Unbinder mUnBinder;
     private ArrayList<String> mProfileTypes;
     private String mShareContent;
@@ -130,26 +128,9 @@ public class AppDialogFragment extends DialogFragment implements
     private EditText mSponsorEmailEt;
     private SingleChatRoomResModel singleChatMsgResModel;
     private EventCategoryAdapter mEventCategoryAdapter;
-    private String[] mShareVideoUrl;
-    private Uri mVideoFileUri;
-    private Context context;
-    private boolean isFragment;
-    private FacebookCallback<Sharer.Result> callback = new FacebookCallback<Sharer.Result>() {
-        @Override
-        public void onSuccess(Sharer.Result result) {
-            // Write some code to do some operations when you shared content successfully.
-        }
+    private static String[] mVideoUrl;
+    public static AppDialogFragment mAppDialogFragment = new AppDialogFragment();
 
-        @Override
-        public void onCancel() {
-            // Write some code to do some operations when you cancel sharing content.
-        }
-
-        @Override
-        public void onError(FacebookException error) {
-            // Write some code to do some operations when some error occurs while sharing content.
-        }
-    };
 
     public static AppDialogFragment getInstance() {
         return mAppDialogFragment;
@@ -169,6 +150,7 @@ public class AppDialogFragment extends DialogFragment implements
             case BOTTOM_ADD_VIDEO_DIALOG:
             case BOTTOM_CHAT_EDIT:
             case BOTTOM_ADD_IMG_DIALOG:
+            case BOTTOM_ADD_IMG_DIALOG_BUSINESS:
             case BOTTOM_POST_ACTION_DIALOG:
             case BOTTOM_REPORT_ACTION_DIALOG:
             case BOTTOM_SHARED_POST_ACTION_DIALOG:
@@ -192,6 +174,8 @@ public class AppDialogFragment extends DialogFragment implements
             case LOG_OUT_DIALOG:
             case ALERT_API_FAILURE_DIALOG:
             case EVENT_CATEGORY_DIALOG:
+            case ACCESS_CONTACT_ALERT_DIALOG:
+            case SET_CONTACT_PERMISSION:
             case ALERT_TRIAL_DIALOG:
                 initAppDialog(mAppDialogFragment, 0, false);
                 break;
@@ -285,7 +269,6 @@ public class AppDialogFragment extends DialogFragment implements
 
         mVideoUrl = videoUrl;
 
-
         switch (mDialogType) {
             case BOTTOM_SHARE_DIALOG:
                 initAppDialog(mAppDialogFragment, R.style.MyDialogBottomSheet, true);
@@ -334,6 +317,16 @@ public class AppDialogFragment extends DialogFragment implements
             case BOTTOM_ADD_IMG_DIALOG:
 
                 mView = inflater.inflate(R.layout.dialog_image_selection, container, false);
+
+                mUnBinder = ButterKnife.bind(this, mView);
+
+                setDialogProperties(Gravity.BOTTOM, WindowManager.LayoutParams.MATCH_PARENT);
+
+                return mView;
+
+            case BOTTOM_ADD_IMG_DIALOG_BUSINESS:
+
+                mView = inflater.inflate(R.layout.dialog_image_selection_business, container, false);
 
                 mUnBinder = ButterKnife.bind(this, mView);
 
@@ -716,7 +709,7 @@ public class AppDialogFragment extends DialogFragment implements
 
                 RecyclerView mEventCategoryRecyclerView = ButterKnife.findById(mView, R.id.rvEventCategory);
 
-                RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getActivity(), 2);
+                RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
                 mEventCategoryRecyclerView.setLayoutManager(mLayoutManager);
                 mEventCategoryRecyclerView.setItemAnimator(new DefaultItemAnimator());
 
@@ -815,6 +808,21 @@ public class AppDialogFragment extends DialogFragment implements
                         mDialogPosBtn.setText(R.string.ok);
                         mDialogTv.setText(R.string.profile_trial);
                         break;
+                    case SET_CONTACT_PERMISSION:
+                        mDialogPosBtn.setVisibility(View.VISIBLE);
+                        mDialogPosBtn.setText(R.string.open_settings);
+                        mDialogNegBtn.setVisibility(View.VISIBLE);
+                        mDialogNegBtn.setText(R.string.cancel);
+                        mDialogTv.setText(R.string.set_contact_alert);
+                        break;
+                    case ACCESS_CONTACT_ALERT_DIALOG:
+                        mDialogPosBtn.setVisibility(View.VISIBLE);
+                        mDialogPosBtn.setText(R.string.allow);
+                        mDialogNegBtn.setVisibility(View.VISIBLE);
+                        mDialogNegBtn.setText(R.string.cancel);
+                        mDialogTv.setText(R.string.access_contact_alert);
+                        break;
+
                 }
                 return mView;
         }
@@ -932,7 +940,7 @@ public class AppDialogFragment extends DialogFragment implements
             R.id.done_btn, R.id.buy_monthly_btn, R.id.buy_yearly_btn, R.id.editLayout, R.id.deleteLayout, R.id.un_follow_btn, R.id.block_btn,
             R.id.tag_profiles_done_btn, R.id.ok_no_session_tv, R.id.facebook_lay, R.id.Friends_lay, R.id.txtvwCancel, R.id.btnGoLive, R.id.btnGoWatch,
             R.id.searchSponsorBtn, R.id.send_email_btn, R.id.cameraLayout_video, R.id.galleryLayout_video, R.id.single_stream_btn, R.id.multi_stream_btn, R.id.deleteConversationsLayout,
-            R.id.reportLayout})
+            R.id.reportLayout, R.id.cameraLayoutBusiness, R.id.galleryLayoutBusiness})
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.dialog_negative_btn:
@@ -964,8 +972,13 @@ public class AppDialogFragment extends DialogFragment implements
                     getActivity().startActivity(mIntent);
                 }
                 break;
+            case R.id.cameraLayoutBusiness:
             case R.id.cameraLayout:
                 ((BaseActivity) getActivity()).cameraIntent();
+                dismiss();
+                break;
+            case R.id.galleryLayoutBusiness:
+                ((BaseActivity) getActivity()).galleryIntentMultiple();
                 dismiss();
                 break;
             case R.id.galleryLayout:
@@ -1078,6 +1091,7 @@ public class AppDialogFragment extends DialogFragment implements
                 break;
         }
     }
+
 
     private void searchSponsors() {
         String mSearchSponsorStr = mSearchSponsorEt.getText().toString().trim();
@@ -1215,6 +1229,23 @@ public class AppDialogFragment extends DialogFragment implements
         ((BaseActivity) getActivity()).showToast(getActivity(), getString(R.string.internet_failure));
     }
 
+    private FacebookCallback<Sharer.Result> callback = new FacebookCallback<Sharer.Result>() {
+        @Override
+        public void onSuccess(Sharer.Result result) {
+            // Write some code to do some operations when you shared content successfully.
+        }
+
+        @Override
+        public void onCancel() {
+            // Write some code to do some operations when you cancel sharing content.
+        }
+
+        @Override
+        public void onError(FacebookException error) {
+            // Write some code to do some operations when some error occurs while sharing content.
+        }
+    };
+
 
     /*public void getUriVideo(final String[] videoUrl) {
         mShareVideoUrl = videoUrl;
@@ -1315,6 +1346,7 @@ public class AppDialogFragment extends DialogFragment implements
             }.execute();
         }
     }*/
+
 
     @Override
     public void SendData(Uri uri, Context context) {

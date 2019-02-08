@@ -79,6 +79,7 @@ public class ProfileModel implements Serializable {
     public static final String FULL_PROFILE_LIST = "FullProfileList";
     public static final String PROMOTER_FOLLOWER_BY_PROFILE_ID = "promoterfollower_by_ProfileID";
     public static final String PHONE = "PhoneNumber";
+    public static final String ActiveUserCount = "ActiveUserCount";
 
     @SerializedName("resource")
     @Expose

@@ -24,6 +24,7 @@ import android.widget.TextView;
 import android.widget.VideoView;
 
 import java.io.File;
+import java.net.URLEncoder;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -33,6 +34,7 @@ import online.motohub.model.EventsResModel;
 import online.motohub.model.ProfileResModel;
 import online.motohub.retrofit.RetrofitClient;
 import online.motohub.util.AppConstants;
+import online.motohub.util.DialogManager;
 import online.motohub.util.ProfileUploadService;
 
 public class VideoPreviewOnDemandActivity extends BaseActivity implements MediaPlayer.OnPreparedListener, MediaPlayer.OnCompletionListener {
@@ -105,6 +107,12 @@ public class VideoPreviewOnDemandActivity extends BaseActivity implements MediaP
             String mErrorMsg = code + " - " + message;
             showToast(this, mErrorMsg);
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        DialogManager.hideProgress();
+        super.onDestroy();
     }
 
     @OnClick({R.id.iv_video_play, R.id.edit_caption, R.id.btn_cancel, R.id.btn_next, R.id.toolbar_back_img_btn})
@@ -184,6 +192,7 @@ public class VideoPreviewOnDemandActivity extends BaseActivity implements MediaP
 
     private void uploadVideoFile() {
         try {
+            String text = URLEncoder.encode(editCaption.getText().toString(), "UTF-8");
             Bitmap thumb = ThumbnailUtils.createVideoThumbnail(mVideoPathUri, MediaStore.Images.Thumbnails.MINI_KIND);
             File imageFile = compressedImgFromBitmap(thumb);
             Intent service_intent = new Intent(this, ProfileUploadService.class);
@@ -191,12 +200,13 @@ public class VideoPreviewOnDemandActivity extends BaseActivity implements MediaP
             service_intent.putExtra(AppConstants.IMAGE_PATH, String.valueOf(imageFile));
             String destFilePath = Environment.getExternalStorageDirectory().getPath() + getString(R.string.util_app_folder_root_path);
             service_intent.putExtra(AppConstants.PROFILE_ID, mMyProfileResModel.getID());
-            service_intent.putExtra(AppConstants.CAPTION, editCaption.getText().toString());
+            service_intent.putExtra(AppConstants.CAPTION, text);
             service_intent.putExtra(AppConstants.DEST_PATH, destFilePath);
             service_intent.putExtra(AppConstants.USER_TYPE, AppConstants.ONDEMAND);
             service_intent.setAction("ProfileUploadService");
             startService(service_intent);
-            mCompressedVideoPath = "";
+            //mCompressedVideoPath = "";
+            mVideoPathUri = "";
             parent.setVisibility(View.GONE);
             finish();
         } catch (Exception ex) {

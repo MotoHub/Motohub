@@ -26,6 +26,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import online.motohub.R;
 import online.motohub.model.TutorialEntity;
+import online.motohub.util.DialogManager;
 import online.motohub.util.PreferenceUtils;
 
 
@@ -57,6 +58,12 @@ public class TutorialScreen extends BaseActivity {
         ButterKnife.bind(this);
         initView();
 
+    }
+
+    @Override
+    protected void onDestroy() {
+        DialogManager.hideProgress();
+        super.onDestroy();
     }
 
     private void initView() {

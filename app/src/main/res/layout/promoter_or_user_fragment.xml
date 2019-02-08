@@ -4,22 +4,57 @@
     android:id="@+id/patent"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:focusable="true"
     android:orientation="vertical">
 
-    <EditText
+    <!--<EditText
         android:id="@+id/search_edt"
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:layout_below="@+id/parent"
-        android:layout_marginTop="110dp"
+        android:layout_marginBottom="@dimen/size5"
+        android:layout_marginTop="@dimen/size110"
         android:background="@drawable/edittext_roundradious"
         android:hint="@string/search_here"
-        android:focusable="false"
         android:padding="5dp"
         android:textColor="@color/colorBlack"
-        android:textColorHint="@color/colorGrey" />
+        android:textColorHint="@color/colorGrey"
+        android:visibility="visible" />-->
+    <EditText
+        android:id="@+id/search_edt"
+        style="@style/LayoutMatchWrap"
+        android:layout_marginBottom="@dimen/size5"
+        android:layout_marginTop="@dimen/size110"
+        android:layout_marginLeft="@dimen/size5"
+        android:layout_marginRight="@dimen/size5"
+        android:background="@drawable/orange_border_bg"
+        android:hint="@string/search_here"
+        android:padding="5dp"
+        android:textColor="@color/colorBlack"
+        android:textColorHint="@color/colorGrey"
+        android:visibility="visible" />
 
-    <android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <com.facebook.shimmer.ShimmerFrameLayout
+        android:id="@+id/shimmer_ondemand_promoters"
+        android:layout_below="@+id/search_edt"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <include layout="@layout/posts_placeholder_item"/>
+
+            <include layout="@layout/posts_placeholder_item"/>
+
+        </LinearLayout>
+
+    </com.facebook.shimmer.ShimmerFrameLayout>
+
+    <android.support.v4.widget.SwipeRefreshLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/swipe_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

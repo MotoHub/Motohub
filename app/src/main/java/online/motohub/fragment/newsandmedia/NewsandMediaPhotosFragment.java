@@ -9,6 +9,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,19 +19,16 @@ import butterknife.ButterKnife;
 import online.motohub.R;
 import online.motohub.activity.BaseActivity;
 import online.motohub.adapter.GalleryImgAdapter;
+import online.motohub.application.MotoHub;
 import online.motohub.fragment.BaseFragment;
 import online.motohub.model.GalleryImgModel;
 import online.motohub.model.GalleryImgResModel;
-import online.motohub.model.promoter_club_news_media.PromotersModel;
 import online.motohub.model.promoter_club_news_media.PromotersResModel;
 import online.motohub.retrofit.APIConstants;
 import online.motohub.retrofit.RetrofitClient;
-import online.motohub.util.DialogManager;
 import online.motohub.util.RecyclerClick_Listener;
 import online.motohub.util.RecyclerTouchListener;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import online.motohub.util.UrlUtils;
 
 public class NewsandMediaPhotosFragment extends BaseFragment {
 
@@ -59,7 +58,9 @@ public class NewsandMediaPhotosFragment extends BaseFragment {
     private void initRV() {
 
         try {
-            mPromotersResModel = (PromotersResModel) getArguments().getSerializable(PromotersModel.PROMOTERS_RES_MODEL);
+            //mPromotersResModel = (PromotersResModel) getArguments().getSerializable(PromotersModel.PROMOTERS_RES_MODEL);
+            //mPromotersResModel = MotoHub.getApplicationInstance().getmPromoterResModel();
+            mPromotersResModel = EventBus.getDefault().getStickyEvent(PromotersResModel.class);
         } catch (NullPointerException e) {
             e.printStackTrace();
             mPromotersResModel = null;
@@ -76,7 +77,7 @@ public class NewsandMediaPhotosFragment extends BaseFragment {
         mGalleryRv.addOnItemTouchListener(new RecyclerTouchListener(getActivity(), mGalleryRv, new RecyclerClick_Listener() {
             @Override
             public void onClick(View view, int position) {
-                ((BaseActivity) getActivity()).moveLoadImageScreen(getActivity(), mGalleryResModels.get(position).getGalleryImage());
+                ((BaseActivity) getActivity()).moveLoadImageScreen(getActivity(), UrlUtils.AWS_S3_BASE_URL+mGalleryResModels.get(position).getGalleryImage());
             }
 
             @Override

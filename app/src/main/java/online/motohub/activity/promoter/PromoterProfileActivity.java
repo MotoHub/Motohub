@@ -12,6 +12,8 @@ import android.widget.TextView;
 
 import com.google.gson.Gson;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,16 +28,18 @@ import online.motohub.activity.ComingSoonActivity;
 import online.motohub.activity.UpgradeProfileActivity;
 import online.motohub.adapter.promoter.PromoterPostsAdapter;
 import online.motohub.adapter.promoter.PromoterViewPagerAdapter;
+import online.motohub.application.MotoHub;
 import online.motohub.fragment.BaseFragment;
 import online.motohub.fragment.dialog.AppDialogFragment;
+import online.motohub.fragment.promoter.PromoterVideosFragment;
 import online.motohub.model.EventAnswersModel;
 import online.motohub.model.EventsModel;
 import online.motohub.model.EventsWhoIsGoingModel;
-
 import online.motohub.model.FeedLikesModel;
 import online.motohub.model.FeedShareModel;
 import online.motohub.model.GalleryImgModel;
 import online.motohub.model.GalleryVideoModel;
+import online.motohub.model.NotificationBlockedUsersModel;
 import online.motohub.model.PaymentModel;
 import online.motohub.model.PostsModel;
 import online.motohub.model.ProfileModel;
@@ -50,7 +54,9 @@ import online.motohub.model.promoter_club_news_media.PromotersResModel;
 import online.motohub.retrofit.RetrofitClient;
 import online.motohub.util.AppConstants;
 import online.motohub.util.CommonAPI;
+import online.motohub.util.DialogManager;
 import online.motohub.util.PreferenceUtils;
+import online.motohub.util.UrlUtils;
 
 public class PromoterProfileActivity extends BaseActivity implements
         TabLayout.OnTabSelectedListener,
@@ -93,7 +99,7 @@ public class PromoterProfileActivity extends BaseActivity implements
     private ProfileResModel mMyProfileResModel;
     private PromotersResModel mPromotersResModel;
     private PromotersFollowers1.Resource mPromoterFollowers1;
-    private PromotersFollowers1.Meta meta;
+    private PromotersFollowers1.Meta meta = new PromotersFollowers1.Meta();
     private int followCount;
 
     @Override
@@ -104,13 +110,25 @@ public class PromoterProfileActivity extends BaseActivity implements
         initView();
     }
 
+    @Override
+    protected void onDestroy() {
+        DialogManager.hideProgress();
+        super.onDestroy();
+    }
+
     private void initView() {
         Bundle mBundle = getIntent().getExtras();
-        if (mBundle != null) {
+        /*if (mBundle != null) {
             mPromotersResModel = (PromotersResModel) mBundle.get(PromotersModel.PROMOTERS_RES_MODEL);
-            mMyProfileResModel = (ProfileResModel) getIntent().getExtras().getSerializable(ProfileModel.MY_PROFILE_RES_MODEL);
+            if(getIntent().hasExtra(ProfileModel.MY_PROFILE_RES_MODEL))
+                 mMyProfileResModel = (ProfileResModel) getIntent().getExtras().getSerializable(ProfileModel.MY_PROFILE_RES_MODEL);
             callGetPromoters();
-        }
+        }*/
+        /*mMyProfileResModel = MotoHub.getApplicationInstance().getmProfileResModel();
+        mPromotersResModel = MotoHub.getApplicationInstance().getmPromoterResModel();*/
+        mMyProfileResModel = EventBus.getDefault().getStickyEvent(ProfileResModel.class);
+        mPromotersResModel = EventBus.getDefault().getStickyEvent(PromotersResModel.class);
+        callGetPromoters();
     }
 
     private void callGetPromoters() {
@@ -119,39 +137,36 @@ public class PromoterProfileActivity extends BaseActivity implements
     }
 
     private void setProfile() {
-        mViewPagerAdapter = new PromoterViewPagerAdapter(getSupportFragmentManager(), this, mPromotersResModel, mMyProfileResModel);
-        mViewPager.setAdapter(mViewPagerAdapter);
-        mViewPagerTabLayout.setupWithViewPager(mViewPager);
-        mViewPager.setOffscreenPageLimit(4);
-        mViewPagerTabLayout.addOnTabSelectedListener(this);
-        if (mPromotersResModel != null) {
-            setToolbar(mToolbar, mPromotersResModel.getName());
-            showToolbarBtn(mToolbar, R.id.toolbar_back_img_btn);
-            if (mPromotersResModel.getProfileImage() != null && !mPromotersResModel.getProfileImage().isEmpty()) {
-                setImageWithGlide(mProfileImg, mPromotersResModel.getProfileImage(), R.drawable.default_profile_icon);
-            }
-            if (mPromotersResModel.getCoverImage() != null && !mPromotersResModel.getCoverImage().isEmpty()) {
-                setCoverImageWithGlide(mCoverImg, mPromotersResModel.getCoverImage(), R.drawable.default_cover_img);
-            }
-            mPromoterNameTv.setText(mPromotersResModel.getName());
-            List<PromoterFollowerResModel> mPromoterFollowerResModelList =
-                    mPromotersResModel.getPromoterFollowerByPromoterUserID();
-            PromoterFollowerResModel mPromoterFollowerResModel = new PromoterFollowerResModel();
-            mPromoterFollowerResModel.setProfileID(mMyProfileResModel.getID());
+        try {
+            mViewPagerAdapter = new PromoterViewPagerAdapter(getSupportFragmentManager(), this, mPromotersResModel, mMyProfileResModel);
+            mViewPager.setAdapter(mViewPagerAdapter);
+            mViewPagerTabLayout.setupWithViewPager(mViewPager);
+            mViewPager.setOffscreenPageLimit(4);
+            mViewPagerTabLayout.addOnTabSelectedListener(this);
+            if (mPromotersResModel != null) {
+                setToolbar(mToolbar, mPromotersResModel.getName());
+                showToolbarBtn(mToolbar, R.id.toolbar_back_img_btn);
+                if (mPromotersResModel.getProfileImage() != null && !mPromotersResModel.getProfileImage().isEmpty()) {
+                    setImageWithGlide(mProfileImg, mPromotersResModel.getProfileImage(), R.drawable.default_profile_icon);
+                }
+                if (mPromotersResModel.getCoverImage() != null && !mPromotersResModel.getCoverImage().isEmpty()) {
+                    setCoverImageWithGlide(mCoverImg, mPromotersResModel.getCoverImage(), R.drawable.default_cover_img);
+                }
+                mPromoterNameTv.setText(mPromotersResModel.getName());
+                List<PromoterFollowerResModel> mPromoterFollowerResModelList =
+                        mPromotersResModel.getPromoterFollowerByPromoterUserID();
+                PromoterFollowerResModel mPromoterFollowerResModel = new PromoterFollowerResModel();
+                mPromoterFollowerResModel.setProfileID(mMyProfileResModel.getID());
+                isAlreadyFollowed();
 
-            /*if (isAlreadyFollowed()) {
-                mPromotersResModel.setIsFollowing(true);
+                if (meta != null) {
+                    followCount = meta.getCount();
+                    mFollowersCountTv.setText(String.valueOf(followCount));
+                }
+                callCheckFollow();
             }
-            if (mPromotersResModel.getIsFollowing()) {
-                mFollowBtn.setBackgroundResource(R.drawable.black_orange_btn_bg);
-                mFollowBtn.setText(R.string.following);
-            }*/
-            //mFollowersCountTv.setText(String.valueOf(mPromoterFollowerResModelList.size()));
-            if (meta != null) {
-                followCount = meta.getCount();
-                mFollowersCountTv.setText(String.valueOf(followCount));
-            }
-            callCheckFollow();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -164,41 +179,36 @@ public class PromoterProfileActivity extends BaseActivity implements
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.toolbar_back_img_btn:
+                hideSoftKeyboard(this);
                 finish();
                 break;
             case R.id.followBtn:
-                if (!mPromotersResModel.getIsFollowing()) {
-                    CommonAPI.getInstance().callFollowPromoter(this, mPromotersResModel.getUserId(), mMyProfileResModel.getID());
-                } else {
-                    showProfileViewDialog();
+                try {
+                    if (!mPromotersResModel.getIsFollowing()) {
+                        CommonAPI.getInstance().callFollowPromoter(this, mPromotersResModel.getUserId(), mMyProfileResModel.getID());
+                    } else {
+                        showProfileViewDialog();
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
                 break;
             case R.id.subscribeBtn:
                 startActivity(new Intent(this, ComingSoonActivity.class));
                 break;
             case R.id.followers_box:
-//                startActivityForResult(new Intent(this, FollowersFollowingActivity.class)
-//                        .putExtra(ProfileModel.MY_PROFILE_RES_MODEL, mMyProfileResModel)
-//                        .putExtra(ProfileModel.FOLLOWERS, false),
-//                        AppConstants.FOLLOWERS_FOLLOWING_RESULT);
                 break;
             case R.id.cover_photo_img_view:
                 if (!mPromotersResModel.getCoverImage().trim().isEmpty()) {
-                    moveLoadImageScreen(this, mPromotersResModel.getCoverImage().trim());
+                    moveLoadImageScreen(this, UrlUtils.FILE_URL + mPromotersResModel.getCoverImage().trim());
                 }
                 break;
         }
     }
 
-    private boolean isAlreadyFollowed() {
+    private void isAlreadyFollowed() {
         String mFollowRelation = mMyProfileResModel.getID() + "_" + mPromotersResModel.getUserId();
-        ArrayList<PromoterFollowerResModel> mPromoterFollowerResModelList = mPromotersResModel.getPromoterFollowerByPromoterUserID();
-        for (int i = 0; i < mPromoterFollowerResModelList.size(); i++) {
-            if (mPromoterFollowerResModelList.get(i).getFollowRelation().trim().equals(mFollowRelation)) {
-                return true;
-            }
-        }
-        return false;
+        RetrofitClient.getRetrofitInstance().callGetIsAlreadyFollowedPromoter(this, mFollowRelation, RetrofitClient.PROMOTER_IS_ALREADY_FOLLOWED);
     }
 
     private void callUnFollowPromoterRequest() {
@@ -267,18 +277,39 @@ public class PromoterProfileActivity extends BaseActivity implements
                 .onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
-                case AppConstants.FOLLOWERS_FOLLOWING_RESULT:
-                    ProfileResModel mMyProfileResModel = (ProfileResModel) data.getExtras()
-                            .get(ProfileModel.MY_PROFILE_RES_MODEL);
-                    assert mMyProfileResModel != null;
-                    this.mMyProfileResModel = mMyProfileResModel;
-                    setResult(RESULT_OK, new Intent()
-                            .putExtra(ProfileModel.MY_PROFILE_RES_MODEL, this.mMyProfileResModel)
-                            .putExtra(PromotersModel.PROMOTERS_RES_MODEL, mPromotersResModel));
-                    break;
-                case AppConstants.POST_COMMENT_REQUEST:
+                case RetrofitClient.UPDATE_FEED_COUNT:
                     mViewPagerAdapter.getItem(mViewPagerTabLayout.getSelectedTabPosition()).onActivityResult(requestCode, resultCode, data);
                     break;
+                case AppConstants.FOLLOWERS_FOLLOWING_RESULT:
+                    //ProfileResModel mMyProfileResModel = (ProfileResModel) data.getExtras().get(ProfileModel.MY_PROFILE_RES_MODEL);
+                    //ProfileResModel mMyProfileResModel = MotoHub.getApplicationInstance().getmProfileResModel();
+                    ProfileResModel mMyProfileResModel = EventBus.getDefault().getStickyEvent(ProfileResModel.class);
+                    assert mMyProfileResModel != null;
+                    this.mMyProfileResModel = mMyProfileResModel;
+                    /*MotoHub.getApplicationInstance().setmProfileResModel(this.mMyProfileResModel);
+                    MotoHub.getApplicationInstance().setmPromoterResModel(mPromotersResModel);*/
+                    EventBus.getDefault().postSticky(this.mMyProfileResModel);
+                    EventBus.getDefault().postSticky(mPromotersResModel);
+                    setResult(RESULT_OK, new Intent()
+                            /*.putExtra(ProfileModel.MY_PROFILE_RES_MODEL, this.mMyProfileResModel)
+                            .putExtra(PromotersModel.PROMOTERS_RES_MODEL, mPromotersResModel)*/);
+                    break;
+                case AppConstants.POST_COMMENT_REQUEST:
+                case AppConstants.REPORT_POST_SUCCESS:
+                case AppConstants.POST_UPDATE_SUCCESS:
+                case AppConstants.WRITE_POST_REQUEST:
+                    try {
+                        mViewPagerAdapter.getItem(mViewPagerTabLayout.getSelectedTabPosition()).onActivityResult(requestCode, resultCode, data);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    break;
+                default:
+                    try {
+                        mViewPagerAdapter.getItem(mViewPagerTabLayout.getSelectedTabPosition()).onActivityResult(requestCode, resultCode, data);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
             }
         }
     }
@@ -286,65 +317,64 @@ public class PromoterProfileActivity extends BaseActivity implements
     @Override
     public void retrofitOnResponse(Object responseObj, int responseType) {
         super.retrofitOnResponse(responseObj, responseType);
-        if (responseObj instanceof PromotersModel) {
-            PromotersModel mPromotersModel = (PromotersModel) responseObj;
-            switch (responseType) {
-                case RetrofitClient.GET_PROMOTERS_RESPONSE:
-                    if (mPromotersModel.getResource() != null && mPromotersModel.getResource().size() > 0) {
-                        mPromotersResModel = mPromotersModel.getResource().get(0);
-                        setProfile();
-                    } else {
-                        showSnackBar(mCoordinatorLayout, mNoPromotersFoundErr);
-                    }
-                    break;
-            }
-        } else if (responseObj instanceof PromoterFollowerModel) {
+        if (responseObj instanceof PromoterFollowerModel) {
             PromoterFollowerModel mPromoterFollowerModel = (PromoterFollowerModel) responseObj;
             switch (responseType) {
                 case RetrofitClient.GET_PROMOTER_FOLLOW_RESPONSE:
                     if (mPromoterFollowerModel.getResource() != null
                             && mPromoterFollowerModel.getResource().size() > 0) {
                         mPromotersResModel.setIsFollowing(true);
-                        ArrayList<PromoterFollowerResModel> mPromoterFollowerResModelList =
-                                mPromotersResModel.getPromoterFollowerByPromoterUserID();
-                        mPromoterFollowerResModelList
-                                .add(mPromoterFollowerModel.getResource().get(0));
-                        mPromotersResModel
-                                .setPromoterFollowerByPromoterUserID(mPromoterFollowerResModelList);
                         mFollowBtn.setBackgroundResource(R.drawable.black_orange_btn_bg);
                         mFollowBtn.setText(R.string.following);
                         followCount = followCount + 1;
                         mFollowersCountTv.setText(String.valueOf(followCount));
                         showSnackBar(mCoordinatorLayout, getString(R.string.follow_success));
                         mPromotersResModel.setIsFollowing(true);
+                        Intent mIntent = new Intent();
+                        /*mIntent.putExtra(ProfileModel.MY_PROFILE_RES_MODEL, mMyProfileResModel);
+                        mIntent.putExtra(PromotersModel.PROMOTERS_RES_MODEL, mPromotersResModel);*/
+                        /*MotoHub.getApplicationInstance().setmProfileResModel(mMyProfileResModel);
+                        MotoHub.getApplicationInstance().setmPromoterResModel(mPromotersResModel);*/
+                        EventBus.getDefault().postSticky(mMyProfileResModel);
+                        EventBus.getDefault().postSticky(mPromotersResModel);
+                        setResult(RESULT_OK, mIntent);
                     }
                     break;
                 case RetrofitClient.GET_PROMOTER_UN_FOLLOW_RESPONSE:
                     if (mPromoterFollowerModel.getResource() != null
                             && mPromoterFollowerModel.getResource().size() > 0) {
                         mPromotersResModel.setIsFollowing(false);
-                        ArrayList<PromoterFollowerResModel> mPromoterFollowerResModelList =
-                                mPromotersResModel.getPromoterFollowerByPromoterUserID();
-                        for (int i = 0; i < mPromoterFollowerResModelList.size(); i++) {
-                            if (mPromoterFollowerResModelList.get(i).getFollowRelation().trim().equals(mPromoterFollowerModel.getResource().get(0).getFollowRelation().trim())) {
-                                mPromoterFollowerResModelList.remove(i);
-                            }
-                        }
-                        mPromotersResModel.setPromoterFollowerByPromoterUserID(mPromoterFollowerResModelList);
                         mFollowBtn.setBackgroundResource(R.drawable.black_orange_btn_bg);
                         mFollowBtn.setText(R.string.follow);
                         followCount = followCount - 1;
                         mFollowersCountTv.setText(String.valueOf(followCount));
                         showSnackBar(mCoordinatorLayout, getString(R.string.un_follow_success));
                         mPromotersResModel.setIsFollowing(false);
+                        Intent mIntent = new Intent();
+                        /*mIntent.putExtra(ProfileModel.MY_PROFILE_RES_MODEL, mMyProfileResModel);
+                        mIntent.putExtra(PromotersModel.PROMOTERS_RES_MODEL, mPromotersResModel);*/
+                        /*MotoHub.getApplicationInstance().setmProfileResModel(mMyProfileResModel);
+                        MotoHub.getApplicationInstance().setmPromoterResModel(mPromotersResModel);*/
+                        EventBus.getDefault().postSticky(mMyProfileResModel);
+                        EventBus.getDefault().postSticky(mPromotersResModel);
+                        setResult(RESULT_OK, mIntent);
+                    }
+                    break;
+                case RetrofitClient.PROMOTER_IS_ALREADY_FOLLOWED:
+                    if (mPromoterFollowerModel.getResource() != null && mPromoterFollowerModel.getResource().size() > 0) {
+                        mPromotersResModel.setIsFollowing(true);
+                        mFollowBtn.setBackgroundResource(R.drawable.black_orange_btn_bg);
+                        mFollowBtn.setText(R.string.following);
+                    } else {
+                        mPromotersResModel.setIsFollowing(false);
+                        mFollowBtn.setBackgroundResource(R.drawable.black_orange_btn_bg);
+                        mFollowBtn.setText(R.string.follow);
                     }
                     break;
             }
-            Intent mIntent = new Intent();
-            mIntent.putExtra(ProfileModel.MY_PROFILE_RES_MODEL, mMyProfileResModel);
-            mIntent.putExtra(PromotersModel.PROMOTERS_RES_MODEL, mPromotersResModel);
-            setResult(RESULT_OK, mIntent);
+
         } else if (responseObj instanceof PostsModel) {
+            PostsModel mPostsModel = (PostsModel) responseObj;
             switch (responseType) {
                 case RetrofitClient.GET_FEED_POSTS_RESPONSE:
                     if ((mViewPagerAdapter.getItem(mViewPagerTabLayout.getSelectedTabPosition())).isVisible()) {
@@ -352,10 +382,28 @@ public class PromoterProfileActivity extends BaseActivity implements
                     }
                     break;
                 case RetrofitClient.SHARED_POST_RESPONSE:
-                    PostsModel mPostsModel = (PostsModel) responseObj;
                     if (mPostsModel.getResource() != null && mPostsModel.getResource().size() > 0) {
                         ((BaseFragment) mViewPagerAdapter.getItem(mViewPagerTabLayout.getSelectedTabPosition())).retrofitOnResponse(responseObj, responseType);
                         showSnackBar(mCoordinatorLayout, getResources().getString(R.string.post_shared));
+                    }
+                    break;
+                case RetrofitClient.FEED_VIDEO_COUNT:
+                    if (mPostsModel.getResource() != null && mPostsModel.getResource().size() > 0) {
+                        ((BaseFragment) mViewPagerAdapter
+                                .getItem(mViewPagerTabLayout.getSelectedTabPosition())).retrofitOnResponse(responseObj, responseType);
+                    }
+                    break;
+                case RetrofitClient.ADD_FEED_COUNT:
+                    if (mPostsModel.getResource() != null && mPostsModel.getResource().size() > 0) {
+                        ((BaseFragment) mViewPagerAdapter
+                                .getItem(mViewPagerTabLayout.getSelectedTabPosition())).retrofitOnResponse(responseObj, responseType);
+                    }
+                    break;
+                case RetrofitClient.DELETE_PROFILE_POSTS_RESPONSE:
+                    if (mPostsModel.getResource() != null && mPostsModel.getResource().size() > 0) {
+                        ((BaseFragment) mViewPagerAdapter
+                                .getItem(mViewPagerTabLayout.getSelectedTabPosition())).retrofitOnResponse(responseObj, responseType);
+                        showSnackBar(mCoordinatorLayout, getResources().getString(R.string.post_delete));
                     }
                     break;
             }
@@ -400,6 +448,11 @@ public class PromoterProfileActivity extends BaseActivity implements
                     ((BaseFragment) mViewPagerAdapter.getItem(mViewPagerTabLayout.getSelectedTabPosition())).retrofitOnResponse(responseObj, responseType);
                 }
             }
+        } else if (responseObj instanceof NotificationBlockedUsersModel) {
+
+            ((BaseFragment) mViewPagerAdapter
+                    .getItem(mViewPagerTabLayout.getSelectedTabPosition())).retrofitOnResponse(responseObj, responseType);
+
         } else if (responseObj instanceof FeedShareModel) {
 
             ((BaseFragment) mViewPagerAdapter.getItem(mViewPagerTabLayout.getSelectedTabPosition())).retrofitOnResponse(responseObj, responseType);
@@ -419,10 +472,10 @@ public class PromoterProfileActivity extends BaseActivity implements
                     if (promotersFollowers1.getResource() != null && promotersFollowers1.getResource().size() > 0) {
                         mPromoterFollowers1 = promotersFollowers1.getResource().get(0);
                         meta = promotersFollowers1.getMeta();
-                        setProfile();
                     } else {
-                        showSnackBar(mCoordinatorLayout, getResources().getString(R.string.no_news_media_err));
+                        meta.setCount(0);
                     }
+                    setProfile();
                     break;
                 case RetrofitClient.CHECK_FOLLOWER_STATUS:
                     if (promotersFollowers1.getResource() != null && promotersFollowers1.getResource().size() > 0) {
@@ -447,6 +500,8 @@ public class PromoterProfileActivity extends BaseActivity implements
             RetrofitClient.getRetrofitInstance().callUpdateSession(this, RetrofitClient.UPDATE_SESSION_RESPONSE);
         } else if (code == RetrofitClient.GET_FEED_POSTS_RESPONSE) {
             ((BaseFragment) mViewPagerAdapter.getItem(mViewPagerTabLayout.getSelectedTabPosition())).retrofitOnError(code, message);
+        } else if (code == RetrofitClient.GET_VIDEO_FILE_RESPONSE) {
+            ((PromoterVideosFragment) mViewPagerAdapter.getItem(mViewPagerTabLayout.getSelectedTabPosition())).retrofitOnError(code, message);
         } else {
             String mErrorMsg = code + " - " + message;
             showSnackBar(mCoordinatorLayout, mErrorMsg);

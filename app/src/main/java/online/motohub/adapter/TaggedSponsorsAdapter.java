@@ -49,18 +49,22 @@ public class TaggedSponsorsAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+        try {
 
-        final TaggedSponsorsAdapter.viewHolderTaggedSponsors mViewHolderTaggedSponsors = (TaggedSponsorsAdapter.viewHolderTaggedSponsors) holder;
+            final TaggedSponsorsAdapter.viewHolderTaggedSponsors mViewHolderTaggedSponsors = (TaggedSponsorsAdapter.viewHolderTaggedSponsors) holder;
 
-        mViewHolderTaggedSponsors.mFollowerNameTv.setText(mTaggedSponsorsList.get(position).getName());
-        mViewHolderTaggedSponsors.mCloseBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mTaggedSponsorsInterface.deselectTagSponsorItemFromTagSponsorsList(mViewHolderTaggedSponsors.getLayoutPosition());
-                mTaggedSponsorsList.remove(mViewHolderTaggedSponsors.getLayoutPosition());
-                notifyDataSetChanged();
-            }
-        });
+            mViewHolderTaggedSponsors.mFollowerNameTv.setText(mTaggedSponsorsList.get(position).getName());
+            mViewHolderTaggedSponsors.mCloseBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mTaggedSponsorsInterface.deselectTagSponsorItemFromTagSponsorsList(mViewHolderTaggedSponsors.getLayoutPosition());
+                    mTaggedSponsorsList.remove(mViewHolderTaggedSponsors.getLayoutPosition());
+                    notifyDataSetChanged();
+                }
+            });
+        }catch (Exception e){
+            e.printStackTrace();
+        }
 
     }
 

@@ -12,8 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_margin="@dimen/size5"
-        android:background="@color/colorLighterGrey"
-        />
+        android:background="@color/colorLighterGrey" />
 
     <RelativeLayout
         android:id="@+id/sender_chat_layout"
@@ -55,33 +54,34 @@
                 android:id="@+id/senderReplyChatLayout"
                 style="@style/LayoutWrap"
                 layout="@layout/reply_chat_layout"
-                android:visibility="gone"
-                />
+                android:visibility="gone" />
 
             <include
-            layout="@layout/widget_small_progress_bar"
-            android:layout_width="@dimen/size150"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/senderReplyChatLayout"
-            android:layout_gravity="center"
-            android:layout_marginBottom="@dimen/size5"
-            android:layout_marginTop="@dimen/size5"
-            android:visibility="gone" />
+                layout="@layout/widget_small_progress_bar"
+                android:layout_width="@dimen/size150"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/senderReplyChatLayout"
+                android:layout_gravity="center"
+                android:layout_marginBottom="@dimen/size5"
+                android:layout_marginTop="@dimen/size5"
+                android:visibility="gone" />
 
             <ImageView
-            android:id="@+id/ivCommentImg"
-            android:layout_width="@dimen/size150"
-            android:layout_height="@dimen/size100"
-            android:layout_below="@+id/senderReplyChatLayout"
-	        android:adjustViewBounds="true"
-            android:contentDescription="@string/app_name"
-            android:layout_margin="@dimen/size10"
-            android:visibility="gone" />
+                android:id="@+id/ivCommentImg"
+                android:layout_width="@dimen/size150"
+                android:layout_height="@dimen/size100"
+                android:layout_below="@+id/senderReplyChatLayout"
+                android:layout_margin="@dimen/size10"
+                android:adjustViewBounds="true"
+                android:contentDescription="@string/app_name"
+                android:visibility="gone" />
+
             <TextView
                 android:id="@+id/senderMsgTv"
                 style="@style/LayoutWrap"
                 android:layout_below="@+id/ivCommentImg"
                 android:autoLink="all"
+                android:elevation="@dimen/size1"
                 android:gravity="start"
                 android:linksClickable="true"
                 android:minHeight="@dimen/size20"
@@ -92,7 +92,6 @@
                 android:text="@string/messages"
                 android:textAlignment="textStart"
                 android:textColor="@color/colorWhite"
-                android:textColorLink="@color/colorOrange"
                 android:textSize="@dimen/text12"
                 android:textStyle="bold" />
         </RelativeLayout>

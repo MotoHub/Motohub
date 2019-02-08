@@ -177,23 +177,27 @@ public class TagSponsorsHorAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         switch (getItemViewType(position)) {
 
             case VIEW_TYPE_USER:
+                try {
 
-                final ViewHolderTagSponsors mViewHolderTagSponsors = (ViewHolderTagSponsors) holder;
+                    final ViewHolderTagSponsors mViewHolderTagSponsors = (ViewHolderTagSponsors) holder;
 
-                PromotersResModel mPromotersResModel = mTagSponsorsList.get(position);
+                    PromotersResModel mPromotersResModel = mTagSponsorsList.get(position);
 
-                ((BaseActivity) mContext).setImageWithGlide(mViewHolderTagSponsors.mUserImgView, mPromotersResModel.getProfileImage(), R.drawable.default_profile_icon);
+                    ((BaseActivity) mContext).setImageWithGlide(mViewHolderTagSponsors.mUserImgView, mPromotersResModel.getProfileImage(), R.drawable.default_profile_icon);
 
-                mViewHolderTagSponsors.mPromoterNameTv.setText(mPromotersResModel.getName());
+                    mViewHolderTagSponsors.mPromoterNameTv.setText(mPromotersResModel.getName());
 
-                if(mPromotersResModel.getIsSelected()) {
-                    mViewHolderTagSponsors.mAddOrRemoveImgBtn.setImageResource(R.drawable.cancel_circle_icon);
-                    mViewHolderTagSponsors.mRelativeLayout.setBackgroundColor(ContextCompat.getColor(mContext, R.color.colorLighterGrey));
-                } else {
-                    mViewHolderTagSponsors.mAddOrRemoveImgBtn.setImageResource(R.drawable.add_circle_icon);
-                    mViewHolderTagSponsors.mRelativeLayout.setBackgroundColor(ContextCompat.getColor(mContext, R.color.colorWhite));
+                    if (mPromotersResModel.getIsSelected()) {
+                        mViewHolderTagSponsors.mAddOrRemoveImgBtn.setImageResource(R.drawable.cancel_circle_icon);
+                        mViewHolderTagSponsors.mRelativeLayout.setBackgroundColor(ContextCompat.getColor(mContext, R.color.colorLighterGrey));
+                    } else {
+                        mViewHolderTagSponsors.mAddOrRemoveImgBtn.setImageResource(R.drawable.add_circle_icon);
+                        mViewHolderTagSponsors.mRelativeLayout.setBackgroundColor(ContextCompat.getColor(mContext, R.color.colorWhite));
+                    }
+
+                }catch (Exception e){
+                    e.printStackTrace();
                 }
-
                 break;
 
             case VIEW_TYPE_LOADING:

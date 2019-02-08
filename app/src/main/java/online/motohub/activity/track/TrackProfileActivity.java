@@ -12,8 +12,9 @@ import android.widget.TextView;
 
 import com.google.gson.Gson;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.BindString;
 import butterknife.BindView;
@@ -25,8 +26,10 @@ import online.motohub.activity.BaseActivity;
 import online.motohub.activity.UpgradeProfileActivity;
 import online.motohub.adapter.TrackProfileTabPagerAdapter;
 import online.motohub.adapter.promoter.PromoterPostsAdapter;
+import online.motohub.application.MotoHub;
 import online.motohub.fragment.BaseFragment;
 import online.motohub.fragment.dialog.AppDialogFragment;
+import online.motohub.fragment.track.TrackVideosFragment;
 import online.motohub.model.EventAnswersModel;
 import online.motohub.model.EventsModel;
 import online.motohub.model.EventsWhoIsGoingModel;
@@ -34,6 +37,7 @@ import online.motohub.model.FeedLikesModel;
 import online.motohub.model.FeedShareModel;
 import online.motohub.model.GalleryImgModel;
 import online.motohub.model.GalleryVideoModel;
+import online.motohub.model.NotificationBlockedUsersModel;
 import online.motohub.model.PaymentModel;
 import online.motohub.model.PostsModel;
 import online.motohub.model.ProfileModel;
@@ -50,7 +54,9 @@ import online.motohub.model.promoter_club_news_media.PromotersResModel;
 import online.motohub.retrofit.RetrofitClient;
 import online.motohub.util.AppConstants;
 import online.motohub.util.CommonAPI;
+import online.motohub.util.DialogManager;
 import online.motohub.util.PreferenceUtils;
+import online.motohub.util.UrlUtils;
 
 public class TrackProfileActivity extends BaseActivity implements
         TabLayout.OnTabSelectedListener, PromoterPostsAdapter.TotalRetrofitPostsResultCount {
@@ -93,8 +99,7 @@ public class TrackProfileActivity extends BaseActivity implements
     private TrackResModel mTrackResModel;
     private ProfileResModel mProfileResModel;
     private PromotersResModel mPromoterResModel;
-    private PromotersFollowers1.Resource mPromoterFollowers1;
-    private PromotersFollowers1.Meta meta;
+    private PromotersFollowers1.Meta meta = new PromotersFollowers1.Meta();
     private int followCount;
 
     @Override
@@ -102,30 +107,50 @@ public class TrackProfileActivity extends BaseActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_track_profile);
         ButterKnife.bind(this);
+        setupUI(mCoordinatorLayout);
         getData();
 
     }
 
+    @Override
+    protected void onDestroy() {
+        DialogManager.hideProgress();
+        super.onDestroy();
+    }
+
     private void getData() {
         Bundle mBundle = getIntent().getExtras();
-        if (mBundle != null) {
-            mProfileResModel = (ProfileResModel) getIntent().getSerializableExtra(ProfileModel.MY_PROFILE_RES_MODEL);
-            mPromoterResModel = (PromotersResModel) mBundle.get(PromotersModel.PROMOTERS_RES_MODEL);
+        //if (mBundle != null) {
+            /*mProfileResModel = (ProfileResModel) getIntent().getSerializableExtra(ProfileModel.MY_PROFILE_RES_MODEL);
+            mPromoterResModel = (PromotersResModel) mBundle.get(PromotersModel.PROMOTERS_RES_MODEL);*/
+
+        /*mProfileResModel = MotoHub.getApplicationInstance().getmProfileResModel();
+        mPromoterResModel = MotoHub.getApplicationInstance().getmPromoterResModel();*/
+        mProfileResModel = EventBus.getDefault().getStickyEvent(ProfileResModel.class);
+        mPromoterResModel = EventBus.getDefault().getStickyEvent(PromotersResModel.class);
+        assert mPromoterResModel != null;
+        if (mPromoterResModel.getTrackByUserID() != null) {
             mTrackResModel = mPromoterResModel.getTrackByUserID();
-            callGetTracks();
         }
+        callGetTracks();
+        //}
     }
 
     private void callGetTracks() {
-
-        String mFilter = "PromoterUserID=" + mPromoterResModel.getUserId();
-        RetrofitClient.getRetrofitInstance().callGetPromotersFollowers(this, mFilter, RetrofitClient.GET_PROMOTERS_RESPONSE);
+        if (mPromoterResModel != null && mPromoterResModel.getUserId() != 0) {
+            String mFilter = "";
+            try {
+                mFilter = "PromoterUserID=" + mPromoterResModel.getUserId();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            RetrofitClient.getRetrofitInstance().callGetPromotersFollowers(this, mFilter, RetrofitClient.GET_PROMOTERS_RESPONSE);
+        }
     }
 
     @Override
     public void alertDialogNegativeBtnClick() {
         super.alertDialogNegativeBtnClick();
-
         dismissAppDialog();
 
     }
@@ -138,38 +163,44 @@ public class TrackProfileActivity extends BaseActivity implements
 
     private void setProfileReady() {
 
-        String mToolbarTitle;
-        if (mTrackResModel != null) {
+        try {
 
-            mToolbarTitle = mTrackResModel.getTrackName();
+            String mToolbarTitle;
+            if (mTrackResModel != null) {
 
-            if (mTrackResModel.getTrackDescription() == null) {
-                mTrackDescriptionTv.setVisibility(View.GONE);
+                mToolbarTitle = mTrackResModel.getTrackName();
+
+                if (mTrackResModel.getTrackDescription() == null) {
+                    mTrackDescriptionTv.setVisibility(View.GONE);
+                } else {
+                    mTrackDescriptionTv.setText(mTrackResModel.getTrackDescription());
+                }
+                setCoverImageWithGlide(mCoverPic, mTrackResModel.getCoverImg(), R.drawable.moto_track_dummy_img);
             } else {
-                mTrackDescriptionTv.setText(mTrackResModel.getTrackDescription());
+                //mToolbarTitle = "TRACK PROFILE";
+                mToolbarTitle = mPromoterResModel.getName();
+                mTrackDescriptionTv.setVisibility(View.GONE);
+                mProfileName.setText(mPromoterResModel.getName());
+                if (mPromoterResModel.getCoverImage() != null)
+                    setCoverImageWithGlide(mCoverPic, mPromoterResModel.getCoverImage(), R.drawable.moto_track_dummy_img);
             }
-            setCoverImageWithGlide(mCoverPic, mPromoterResModel.getCoverImage(), R.drawable.default_cover_img);
-        } else {
-            mToolbarTitle = "TRACK PROFILE";
-            mTrackDescriptionTv.setVisibility(View.GONE);
             mProfileName.setText(mPromoterResModel.getName());
+            setImageWithGlide(mProfileImg, mPromoterResModel.getProfileImage(), R.drawable.default_profile_icon);
+            showToolbarBtn(mToolbar, R.id.toolbar_back_img_btn);
+            /*if (mPromoterResModel.getCoverImage() != null)
+                setCoverImageWithGlide(mCoverPic, mPromoterResModel.getCoverImage(), R.drawable.moto_track_dummy_img);*/
 
-        }
-        mProfileName.setText(mPromoterResModel.getName());
-        setImageWithGlide(mProfileImg, mPromoterResModel.getProfileImage(), R.drawable.default_profile_icon);
-        showToolbarBtn(mToolbar, R.id.toolbar_back_img_btn);
+            mTrackFeedTabAdapter = new TrackProfileTabPagerAdapter(this, getSupportFragmentManager(), mProfileResModel, mPromoterResModel);
+            mViewPager.setAdapter(mTrackFeedTabAdapter);
+            mTabLayout.setupWithViewPager(mViewPager);
+            mTabLayout.addOnTabSelectedListener(this);
+            mViewPager.setOffscreenPageLimit(5);
 
-        mTrackFeedTabAdapter = new TrackProfileTabPagerAdapter(this, getSupportFragmentManager(), mProfileResModel, mPromoterResModel);
-        mViewPager.setAdapter(mTrackFeedTabAdapter);
-        mTabLayout.setupWithViewPager(mViewPager);
-        mTabLayout.addOnTabSelectedListener(this);
-        mViewPager.setOffscreenPageLimit(3);
+            setToolbar(mToolbar, mToolbarTitle);
 
-        setToolbar(mToolbar, mToolbarTitle);
-        List<PromoterFollowerResModel> mPromoterFollowerResModelList =
-                mPromoterResModel.getPromoterFollowerByPromoterUserID();
-        PromoterFollowerResModel mPromoterFollowerResModel = new PromoterFollowerResModel();
-        mPromoterFollowerResModel.setProfileID(mProfileResModel.getID());
+            PromoterFollowerResModel mPromoterFollowerResModel = new PromoterFollowerResModel();
+            mPromoterFollowerResModel.setProfileID(mProfileResModel.getID());
+            isAlreadyFollowed();
 
         /*if (isAlreadyFollowed()) {
             mPromoterResModel.setIsFollowing(true);
@@ -178,14 +209,17 @@ public class TrackProfileActivity extends BaseActivity implements
             mFollowBtn.setBackgroundResource(R.drawable.black_orange_btn_bg);
             mFollowBtn.setText(R.string.following);
         }
-        mFollowersCountTv.setText(String.valueOf(mPromoterFollowerResModelList.size()));*/
+        */
 
-        if (meta != null) {
-            followCount = meta.getCount();
-            mFollowersCountTv.setText(String.valueOf(followCount));
+            if (meta != null) {
+                followCount = meta.getCount();
+                mFollowersCountTv.setText(String.valueOf(followCount));
+            }
+
+            callCheckFollow();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-
-        callCheckFollow();
 
     }
 
@@ -194,6 +228,7 @@ public class TrackProfileActivity extends BaseActivity implements
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.toolbar_back_img_btn:
+                hideSoftKeyboard(this);
                 finish();
                 break;
             case R.id.followBtn:
@@ -204,25 +239,22 @@ public class TrackProfileActivity extends BaseActivity implements
                 }
                 break;
             case R.id.track_profile_cover_iv:
-                if (!mTrackResModel.getCoverImg().trim().isEmpty()) {
-                    moveLoadImageScreen(this, mPromoterResModel.getCoverImage());
+                try {
+                    if (!mTrackResModel.getCoverImg().trim().isEmpty()) {
+                        moveLoadImageScreen(this, UrlUtils.FILE_URL + mTrackResModel.getCoverImg());
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
                 break;
         }
     }
 
-
-    private boolean isAlreadyFollowed() {
+    private void isAlreadyFollowed() {
         String mFollowRelation = mProfileResModel.getID() + "_" + mPromoterResModel.getUserId();
-        ArrayList<PromoterFollowerResModel> mPromoterFollowerResModelList = mPromoterResModel.getPromoterFollowerByPromoterUserID();
-        for (int i = 0; i < mPromoterFollowerResModelList.size(); i++) {
-            if (mPromoterFollowerResModelList.get(i).getFollowRelation().trim().equals(mFollowRelation)) {
-                return true;
-            }
-        }
-        return false;
-    }
+        RetrofitClient.getRetrofitInstance().callGetIsAlreadyFollowedPromoter(this, mFollowRelation, RetrofitClient.PROMOTER_IS_ALREADY_FOLLOWED);
 
+    }
 
     private void showProfileViewDialog() {
         ArrayList<String> mArrayList = new ArrayList<>();
@@ -257,7 +289,7 @@ public class TrackProfileActivity extends BaseActivity implements
                         mPromoterResModel = mPromotersModel.getResource().get(0);
                         setProfileReady();
                     } else {
-                        showSnackBar(mCoordinatorLayout, "No Tracks");
+                        showSnackBar(mCoordinatorLayout, getString(R.string.now_track_error));
                     }
                     break;
             }
@@ -293,11 +325,30 @@ public class TrackProfileActivity extends BaseActivity implements
                 ((BaseFragment) mTrackFeedTabAdapter.getItem(mTabLayout.getSelectedTabPosition())).retrofitOnResponse(responseObj, responseType);
             }
         } else if (responseObj instanceof PostsModel) {
+            PostsModel mPostsModel = (PostsModel) responseObj;
             switch (responseType) {
                 case RetrofitClient.SHARED_POST_RESPONSE:
-                    PostsModel mPostsModel = (PostsModel) responseObj;
                     if (mPostsModel.getResource() != null && mPostsModel.getResource().size() > 0) {
                         showSnackBar(mCoordinatorLayout, getResources().getString(R.string.post_shared));
+                    }
+                    break;
+                case RetrofitClient.FEED_VIDEO_COUNT:
+                    if (mPostsModel.getResource() != null && mPostsModel.getResource().size() > 0) {
+                        ((BaseFragment) mTrackFeedTabAdapter
+                                .getItem(mTabLayout.getSelectedTabPosition())).retrofitOnResponse(responseObj, responseType);
+                    }
+                    break;
+                case RetrofitClient.ADD_FEED_COUNT:
+                    if (mPostsModel.getResource() != null && mPostsModel.getResource().size() > 0) {
+                        ((BaseFragment) mTrackFeedTabAdapter
+                                .getItem(mTabLayout.getSelectedTabPosition())).retrofitOnResponse(responseObj, responseType);
+                    }
+                    break;
+                case RetrofitClient.DELETE_PROFILE_POSTS_RESPONSE:
+                    if (mPostsModel.getResource() != null && mPostsModel.getResource().size() > 0) {
+                        ((BaseFragment) mTrackFeedTabAdapter
+                                .getItem(mTabLayout.getSelectedTabPosition())).retrofitOnResponse(responseObj, responseType);
+                        showSnackBar(mCoordinatorLayout, getResources().getString(R.string.post_delete));
                     }
                     break;
                 default:
@@ -306,7 +357,6 @@ public class TrackProfileActivity extends BaseActivity implements
                     }
                     break;
             }
-
         } else if (responseObj instanceof SessionModel) {
             SessionModel mSessionModel = (SessionModel) responseObj;
             if (mSessionModel.getSessionToken() == null) {
@@ -319,14 +369,15 @@ public class TrackProfileActivity extends BaseActivity implements
                     ((BaseFragment) mTrackFeedTabAdapter.getItem(mTabLayout.getSelectedTabPosition())).retrofitOnResponse(responseObj, responseType);
                 }
             }
+        } else if (responseObj instanceof NotificationBlockedUsersModel) {
+            ((BaseFragment) mTrackFeedTabAdapter
+                    .getItem(mTabLayout.getSelectedTabPosition())).retrofitOnResponse(responseObj, responseType);
         } else if (responseObj instanceof FeedShareModel) {
-
-            ((BaseFragment) mTrackFeedTabAdapter.getItem(mTabLayout.getSelectedTabPosition())).retrofitOnResponse(responseObj, responseType);
-
+            ((BaseFragment) mTrackFeedTabAdapter
+                    .getItem(mTabLayout.getSelectedTabPosition())).retrofitOnResponse(responseObj, responseType);
         } else if (responseObj instanceof FeedLikesModel) {
-
-            ((BaseFragment) mTrackFeedTabAdapter.getItem(mTabLayout.getSelectedTabPosition())).retrofitOnResponse(responseObj, responseType);
-
+            ((BaseFragment) mTrackFeedTabAdapter
+                    .getItem(mTabLayout.getSelectedTabPosition())).retrofitOnResponse(responseObj, responseType);
         } else if (responseObj instanceof PromoterFollowerModel) {
             PromoterFollowerModel mPromoterFollowerModel = (PromoterFollowerModel) responseObj;
             switch (responseType) {
@@ -334,19 +385,28 @@ public class TrackProfileActivity extends BaseActivity implements
                     if (mPromoterFollowerModel.getResource() != null
                             && mPromoterFollowerModel.getResource().size() > 0) {
                         mPromoterResModel.setIsFollowing(true);
-                        ArrayList<PromoterFollowerResModel> mPromoterFollowerResModelList =
+                      /*  ArrayList<PromoterFollowerResModel> mPromoterFollowerResModelList =
                                 mPromoterResModel.getPromoterFollowerByPromoterUserID();
                         mPromoterFollowerResModelList
                                 .add(mPromoterFollowerModel.getResource().get(0));
                         mPromoterResModel
-                                .setPromoterFollowerByPromoterUserID(mPromoterFollowerResModelList);
+                                .setPromoterFollowerByPromoterUserID(mPromoterFollowerResModelList);*/
                         mFollowBtn.setBackgroundResource(R.drawable.black_orange_btn_bg);
                         mFollowBtn.setText(R.string.following);
                         followCount = followCount + 1;
                         mFollowersCountTv
                                 .setText(String.valueOf(followCount));
-                        showSnackBar(mCoordinatorLayout, getString(R.string.follow_success));
+                        showSnackBar(mCoordinatorLayout,
+                                getString(R.string.follow_success));
                         mPromoterResModel.setIsFollowing(true);
+                        Intent mIntent = new Intent();
+                        /*mIntent.putExtra(ProfileModel.MY_PROFILE_RES_MODEL, mProfileResModel);
+                        mIntent.putExtra(PromotersModel.PROMOTERS_RES_MODEL, mPromoterResModel);*/
+                        /*MotoHub.getApplicationInstance().setmProfileResModel(mProfileResModel);
+                        MotoHub.getApplicationInstance().setmPromoterResModel(mPromoterResModel);*/
+                        EventBus.getDefault().postSticky(mProfileResModel);
+                        EventBus.getDefault().postSticky(mPromoterResModel);
+                        setResult(RESULT_OK, mIntent);
 
                     }
                     break;
@@ -354,7 +414,7 @@ public class TrackProfileActivity extends BaseActivity implements
                     if (mPromoterFollowerModel.getResource() != null
                             && mPromoterFollowerModel.getResource().size() > 0) {
                         mPromoterResModel.setIsFollowing(false);
-                        ArrayList<PromoterFollowerResModel> mPromoterFollowerResModelList =
+                       /* ArrayList<PromoterFollowerResModel> mPromoterFollowerResModelList =
                                 mPromoterResModel.getPromoterFollowerByPromoterUserID();
                         mPromoterFollowerResModelList.remove(mPromoterFollowerModel.getResource().get(0));
 
@@ -364,7 +424,7 @@ public class TrackProfileActivity extends BaseActivity implements
                             }
                         }
                         mPromoterResModel
-                                .setPromoterFollowerByPromoterUserID(mPromoterFollowerResModelList);
+                                .setPromoterFollowerByPromoterUserID(mPromoterFollowerResModelList);*/
                         mFollowBtn.setBackgroundResource(R.drawable.black_orange_btn_bg);
                         mFollowBtn.setText(R.string.follow);
                         followCount = followCount - 1;
@@ -372,13 +432,29 @@ public class TrackProfileActivity extends BaseActivity implements
                                 .setText(String.valueOf(followCount));
                         showSnackBar(mCoordinatorLayout, getString(R.string.un_follow_success));
                         mPromoterResModel.setIsFollowing(false);
+                        Intent mIntent = new Intent();
+                        /*mIntent.putExtra(ProfileModel.MY_PROFILE_RES_MODEL, mProfileResModel);
+                        mIntent.putExtra(PromotersModel.PROMOTERS_RES_MODEL, mPromoterResModel);*/
+                        /*MotoHub.getApplicationInstance().setmProfileResModel(mProfileResModel);
+                        MotoHub.getApplicationInstance().setmPromoterResModel(mPromoterResModel);*/
+                        EventBus.getDefault().postSticky(mProfileResModel);
+                        EventBus.getDefault().postSticky(mPromoterResModel);
+                        setResult(RESULT_OK, mIntent);
+                    }
+                    break;
+                case RetrofitClient.PROMOTER_IS_ALREADY_FOLLOWED:
+                    if (mPromoterFollowerModel.getResource() != null && mPromoterFollowerModel.getResource().size() > 0) {
+                        mPromoterResModel.setIsFollowing(true);
+                        mFollowBtn.setBackgroundResource(R.drawable.black_orange_btn_bg);
+                        mFollowBtn.setText(R.string.following);
+                    } else {
+                        mPromoterResModel.setIsFollowing(false);
+                        mFollowBtn.setBackgroundResource(R.drawable.black_orange_btn_bg);
+                        mFollowBtn.setText(R.string.follow);
                     }
                     break;
             }
-            Intent mIntent = new Intent();
-            mIntent.putExtra(ProfileModel.MY_PROFILE_RES_MODEL, mProfileResModel);
-            mIntent.putExtra(PromotersModel.PROMOTERS_RES_MODEL, mPromoterResModel);
-            setResult(RESULT_OK, mIntent);
+
         } else if (responseObj instanceof EventsModel) {
             if ((mTrackFeedTabAdapter.getItem(mTabLayout.getSelectedTabPosition())).isVisible()) {
                 ((BaseFragment) mTrackFeedTabAdapter.getItem(1)).retrofitOnResponse(responseObj, responseType);
@@ -388,12 +464,11 @@ public class TrackProfileActivity extends BaseActivity implements
             switch (responseType) {
                 case RetrofitClient.GET_PROMOTERS_RESPONSE:
                     if (promotersFollowers1.getResource() != null && promotersFollowers1.getResource().size() > 0) {
-                        mPromoterFollowers1 = promotersFollowers1.getResource().get(0);
                         meta = promotersFollowers1.getMeta();
-                        setProfileReady();
                     } else {
-                        showSnackBar(mCoordinatorLayout, "No Tracks");
+                        meta.setCount(0);
                     }
+                    setProfileReady();
                     break;
                 case RetrofitClient.CHECK_FOLLOWER_STATUS:
                     if (promotersFollowers1.getResource() != null && promotersFollowers1.getResource().size() > 0) {
@@ -407,7 +482,7 @@ public class TrackProfileActivity extends BaseActivity implements
                     }
                     break;
             }
-        }  else if (responseObj instanceof GalleryImgModel) {
+        } else if (responseObj instanceof GalleryImgModel) {
             ((BaseFragment) mTrackFeedTabAdapter.getItem(2)).retrofitOnResponse(responseObj, responseType);
         } else if (responseObj instanceof GalleryVideoModel) {
             ((BaseFragment) mTrackFeedTabAdapter.getItem(3)).retrofitOnResponse(responseObj, responseType);
@@ -423,16 +498,13 @@ public class TrackProfileActivity extends BaseActivity implements
                 startActivity(new Intent(this, UpgradeProfileActivity.class).putExtra(AppConstants.MY_PROFILE_OBJ, myProfileObj));
                 dismissAppDialog();
                 break;
-
             case AppDialogFragment.BOTTOM_SHARE_DIALOG:
                 ((BaseFragment) mTrackFeedTabAdapter.getItem(mTabLayout.getSelectedTabPosition())).alertDialogPositiveBtnClick(dialogType, position);
                 break;
-
             case AppDialogFragment.DIALOG_PROMOTER_PROFILE_VIEW:
                 callUnFollowPromoterRequest();
                 dismissAppDialog();
                 break;
-
             default:
                 ((BaseFragment) (mTrackFeedTabAdapter.getItem(mTabLayout.getSelectedTabPosition()))).alertDialogPositiveBtnClick(dialogType, position);
                 break;
@@ -447,6 +519,8 @@ public class TrackProfileActivity extends BaseActivity implements
             RetrofitClient.getRetrofitInstance().callUpdateSession(this, RetrofitClient.UPDATE_SESSION_RESPONSE);
         } else if (code == RetrofitClient.GET_FEED_POSTS_RESPONSE) {
             ((BaseFragment) (mTrackFeedTabAdapter.getItem(mTabLayout.getSelectedTabPosition()))).retrofitOnError(code, message);
+        } else if (code == RetrofitClient.GET_VIDEO_FILE_RESPONSE) {
+            ((TrackVideosFragment) mTrackFeedTabAdapter.getItem(3)).retrofitOnError(code, message);
         } else {
             String mErrorMsg = code + " - " + message;
             showSnackBar(mCoordinatorLayout, mErrorMsg);
@@ -457,10 +531,8 @@ public class TrackProfileActivity extends BaseActivity implements
     @Override
     public void retrofitOnSessionError(int code, String message) {
         super.retrofitOnSessionError(code, message);
-
         String mErrorMsg = code + " - " + message;
         showSnackBar(mCoordinatorLayout, mErrorMsg);
-
     }
 
     @Override
@@ -481,7 +553,6 @@ public class TrackProfileActivity extends BaseActivity implements
 
     @Override
     public void onTabSelected(TabLayout.Tab tab) {
-
     }
 
     @Override
@@ -491,7 +562,6 @@ public class TrackProfileActivity extends BaseActivity implements
 
     @Override
     public void onTabReselected(TabLayout.Tab tab) {
-
     }
 
     @Override
@@ -509,18 +579,42 @@ public class TrackProfileActivity extends BaseActivity implements
             switch (requestCode) {
                 case AppConstants.FOLLOWERS_FOLLOWING_RESULT:
                     assert data.getExtras() != null;
-                    ProfileResModel mMyProfileResModel = (ProfileResModel) data.getExtras()
-                            .get(ProfileModel.MY_PROFILE_RES_MODEL);
-                    assert mMyProfileResModel != null;
-                    this.mProfileResModel = mMyProfileResModel;
+                    //ProfileResModel mMyProfileResModel = (ProfileResModel) data.getExtras().get(ProfileModel.MY_PROFILE_RES_MODEL);
+                    /*assert mMyProfileResModel != null;
+                    this.mProfileResModel = mMyProfileResModel;*/
+                   /* mProfileResModel = MotoHub.getApplicationInstance().getmProfileResModel();
+                    mPromoterResModel = MotoHub.getApplicationInstance().getmPromoterResModel();*/
+                    /*MotoHub.getApplicationInstance().setmProfileResModel(mProfileResModel);
+                    MotoHub.getApplicationInstance().setmPromoterResModel(mPromoterResModel);*/
+                    mProfileResModel = EventBus.getDefault().getStickyEvent(ProfileResModel.class);
+                    mPromoterResModel = EventBus.getDefault().getStickyEvent(PromotersResModel.class);
+                    EventBus.getDefault().postSticky(mProfileResModel);
+                    EventBus.getDefault().postSticky(mPromoterResModel);
                     setResult(RESULT_OK, new Intent()
-                            .putExtra(ProfileModel.MY_PROFILE_RES_MODEL, this.mProfileResModel)
-                            .putExtra(PromotersModel.PROMOTERS_RES_MODEL, mPromoterResModel));
+                            /*.putExtra(ProfileModel.MY_PROFILE_RES_MODEL, this.mProfileResModel)
+                            .putExtra(PromotersModel.PROMOTERS_RES_MODEL, mPromoterResModel)*/);
                     break;
-                case AppConstants.POST_COMMENT_REQUEST:
+                case RetrofitClient.UPDATE_FEED_COUNT:
                     mTrackFeedTabAdapter.getItem(mTabLayout.getSelectedTabPosition()).onActivityResult(requestCode, resultCode, data);
                     break;
-
+                case AppConstants.POST_COMMENT_REQUEST:
+                case AppConstants.REPORT_POST_SUCCESS:
+                case AppConstants.POST_UPDATE_SUCCESS:
+                case AppConstants.WRITE_POST_REQUEST:
+                    try {
+                        mTrackFeedTabAdapter
+                                .getItem(mTabLayout.getSelectedTabPosition()).onActivityResult(requestCode, resultCode, data);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    break;
+                default:
+                    try {
+                        mTrackFeedTabAdapter
+                                .getItem(mTabLayout.getSelectedTabPosition()).onActivityResult(requestCode, resultCode, data);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
             }
         }
     }

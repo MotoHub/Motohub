@@ -5,9 +5,11 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
+import org.greenrobot.eventbus.EventBus;
+
+import online.motohub.application.MotoHub;
 import online.motohub.fragment.ChatGroupFragment;
 import online.motohub.fragment.ChatSingleFragment;
-import online.motohub.model.ProfileModel;
 import online.motohub.model.ProfileResModel;
 
 public class ChatTabPagerAdapter extends FragmentPagerAdapter {
@@ -45,8 +47,10 @@ public class ChatTabPagerAdapter extends FragmentPagerAdapter {
     }
 
     private void setFragment(Fragment mFragment, int position) {
+        //MotoHub.getApplicationInstance().setmProfileResModel(mMyProfileModel);
+        EventBus.getDefault().postSticky(mMyProfileModel);
         Bundle mBundle = new Bundle();
-        mBundle.putSerializable(ProfileModel.MY_PROFILE_RES_MODEL, mMyProfileModel);
+        //mBundle.putSerializable(ProfileModel.MY_PROFILE_RES_MODEL, mMyProfileModel);
         mFragment.setArguments(mBundle);
         this.mFragments[position] = mFragment;
     }

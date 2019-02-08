@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="center">
@@ -23,7 +24,7 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="@dimen/size35"
-            android:text="@string/your_trial_period_has_been_end"
+            android:text="@string/to_subscribe"
             android:textColor="@color/colorBlack"
             android:textSize="@dimen/size18"
             android:textStyle="bold" />
@@ -67,9 +68,9 @@
             android:layout_marginRight="@dimen/size25"
             android:layout_marginStart="@dimen/size25"
             android:layout_marginTop="@dimen/size25"
-            android:background="@drawable/orange_btn_bg"
+            android:background="@drawable/black_orange_btn_bg"
             android:text="@string/subscribe_now"
-            android:textColor="@color/colorWhite" />
+            android:textColor="@color/text_color" />
 
     </RelativeLayout>
 
@@ -81,6 +82,7 @@
         android:src="@drawable/ic_money"
         app:civ_border_color="@color/colorWhite"
         app:civ_border_width="@dimen/size5"
-        app:civ_fill_color="@color/colorOrange" />
+        app:civ_fill_color="@color/colorBlack"
+        tools:ignore="VectorDrawableCompat" />
 
 </RelativeLayout>

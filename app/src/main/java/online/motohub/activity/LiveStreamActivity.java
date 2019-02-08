@@ -12,6 +12,8 @@ import android.widget.TextView;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.ArrayList;
 
 import butterknife.BindString;
@@ -43,6 +45,10 @@ import online.motohub.util.StringUtils;
 public class LiveStreamActivity extends BaseActivity implements CommonInterface {
 
 
+    private final int PROMOTERS_LIVE_STREAM = 1;
+    private final int FRIENDS_LIVE_STREAM = 2;
+    private final int START_LIVE_STREAM = 3;
+    private final int DELETE_LIVE_STREAM = 4;
     @BindView(R.id.parent_lay)
     CoordinatorLayout mParentLay;
     @BindView(R.id.promoters_stream_list_view)
@@ -55,13 +61,10 @@ public class LiveStreamActivity extends BaseActivity implements CommonInterface 
     TextView mPromotersStreamTxt;
     @BindView(R.id.friends_live_streams_txt)
     TextView mFriendsStreamTxt;
-
     @BindString(R.string.live)
     String mToolbarTitle;
-
     private ArrayList<LiveStreamEntity> mFriendsStreamList = new ArrayList<>();
     private ArrayList<PromotersResModel> mPromotersStreamList = new ArrayList<>();
-
     private FriendsStreamAdapter mFriendsStreamAdapter;
     private PromotersStreamAdapter mPromotersStreamAdapter;
     private int mCurrentProfileID = 0;
@@ -70,13 +73,18 @@ public class LiveStreamActivity extends BaseActivity implements CommonInterface 
     private int liveStreamID = 0;
     private String mLiveStreamName = "";
     private ProfileResModel mMyProfileResModel;
-
     private int LIVE_STREAM_RES_TYPE = 0;
-    private final int PROMOTERS_LIVE_STREAM = 1;
-    private final int FRIENDS_LIVE_STREAM = 2;
-    private final int START_LIVE_STREAM = 3;
-    private final int DELETE_LIVE_STREAM = 4;
-
+    CommonReturnInterface mCommonReturnInterface = new CommonReturnInterface() {
+        @Override
+        public void onSuccess(int type) {
+            if (type == 1) {
+                startSingleStream();
+            } else {
+                startActivity(new Intent(LiveStreamActivity.this, ViewStreamUsersActivity.class).putExtra(AppConstants.PROFILE_ID, mCurrentProfileID)
+                        .putExtra(AppConstants.MY_FOLLOWINGS, mMyFollowings));
+            }
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,6 +94,12 @@ public class LiveStreamActivity extends BaseActivity implements CommonInterface 
         initView();
     }
 
+    @Override
+    protected void onDestroy() {
+        DialogManager.hideProgress();
+        super.onDestroy();
+    }
+
     private void initView() {
         AppConstants.LIVE_STREAM_CALL_BACK = this;
         Bundle mBundle = getIntent().getExtras();
@@ -93,7 +107,9 @@ public class LiveStreamActivity extends BaseActivity implements CommonInterface 
             mCurrentProfileID = mBundle.getInt(AppConstants.PROFILE_ID, 0);
             mMyFollowings = mBundle.getString(AppConstants.MY_FOLLOWINGS, "");
             mMyPromoterFollowings = mBundle.getString(AppConstants.MY_PROMOTERS_FOLLOWINGS, "");
-            mMyProfileResModel = (ProfileResModel) mBundle.getSerializable(ProfileModel.MY_PROFILE_RES_MODEL);
+            //mMyProfileResModel = (ProfileResModel) mBundle.getSerializable(ProfileModel.MY_PROFILE_RES_MODEL);
+            //mMyProfileResModel = MotoHub.getApplicationInstance().getmProfileResModel();
+            mMyProfileResModel = EventBus.getDefault().getStickyEvent(ProfileResModel.class);
         }
         setupUI(mParentLay);
         setToolbar(mToolbar, mToolbarTitle);
@@ -102,17 +118,6 @@ public class LiveStreamActivity extends BaseActivity implements CommonInterface 
         mPromoterListView.setLayoutManager(new LinearLayoutManager(this));
         callGetPromotersStream();
 
-    }
-
-    private void callGetPromotersStream() {
-        if (mMyPromoterFollowings.isEmpty()) {
-            String mStr = getString(R.string.on_demand) + "\n" + getString(R.string.empty_promoters);
-            mPromotersStreamTxt.setText(mStr);
-        } else {
-            String mFilter = "(" + APIConstants.user_id + " in (" + mMyPromoterFollowings + ")) AND (" + APIConstants.user_type + "!=newsmedia)";
-            LIVE_STREAM_RES_TYPE = PROMOTERS_LIVE_STREAM;
-            RetrofitClient.getRetrofitInstance().callGetStreamPromoters(this, mFilter);
-        }
     }
 //    private void callGetPromotersStream() {
 //        if (mMyPromoterFollowings.isEmpty()) {
@@ -125,6 +130,17 @@ public class LiveStreamActivity extends BaseActivity implements CommonInterface 
 //            RetrofitClient.getRetrofitInstance().callGetFriendsStream(this, mFilter);
 //        }
 //    }
+
+    private void callGetPromotersStream() {
+        if (mMyPromoterFollowings.isEmpty()) {
+            String mStr = getString(R.string.on_demand) + "\n" + getString(R.string.empty_promoters);
+            mPromotersStreamTxt.setText(mStr);
+        } else {
+            String mFilter = "(" + APIConstants.user_id + " in (" + mMyPromoterFollowings + ")) AND (" + APIConstants.user_type + "!=newsmedia)";
+            LIVE_STREAM_RES_TYPE = PROMOTERS_LIVE_STREAM;
+            RetrofitClient.getRetrofitInstance().callGetStreamPromoters(this, mFilter);
+        }
+    }
 
     private void callGetFriendsStream() {
         if (mMyFollowings.isEmpty()) {
@@ -168,7 +184,7 @@ public class LiveStreamActivity extends BaseActivity implements CommonInterface 
 //                    mPromotersStreamList.addAll(mLiveStreamResponse.getResource());
                     setPromoterStreamAdapter();
                 } else {
-                    String mStr = getString(R.string.on_demand) + "\n" +getString(R.string.empty_event_live_streams);
+                    String mStr = getString(R.string.on_demand) + "\n" + getString(R.string.empty_event_live_streams);
                     mPromotersStreamTxt.setText(mStr);
                 }
                 callGetFriendsStream();
@@ -261,23 +277,11 @@ public class LiveStreamActivity extends BaseActivity implements CommonInterface 
                 onBackPressed();
                 break;
             case R.id.go_live_btn:
-                DialogManager.showMultiLiveOptionPopup(this, mCommonReturnInterface,getString(R.string.single_stream),getString(R.string.live_stream));
+                DialogManager.showMultiLiveOptionPopup(this, mCommonReturnInterface, getString(R.string.single_stream), getString(R.string.live_stream));
 //                showAppDialog(AppDialogFragment.BOTTOM_LIVE_STREAM_OPTION_DIALOG, null);
                 break;
         }
     }
-
-    CommonReturnInterface mCommonReturnInterface = new CommonReturnInterface() {
-        @Override
-        public void onSuccess(int type) {
-            if (type == 1) {
-                startSingleStream();
-            } else {
-                startActivity(new Intent(LiveStreamActivity.this, ViewStreamUsersActivity.class).putExtra(AppConstants.PROFILE_ID, mCurrentProfileID)
-                        .putExtra(AppConstants.MY_FOLLOWINGS, mMyFollowings));
-            }
-        }
-    };
 
     @Override
     public void onBackPressed() {
@@ -321,19 +325,27 @@ public class LiveStreamActivity extends BaseActivity implements CommonInterface 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(resultCode == RESULT_OK) {
+        if (resultCode == RESULT_OK) {
             switch (requestCode) {
                 case PromotersListActivity.PROMOTER_FOLLOW_RESPONSE:
                     assert data.getExtras() != null;
-                    PromotersResModel mPromotersResModel = (PromotersResModel) data.getExtras()
-                            .getSerializable(PromotersModel.PROMOTERS_RES_MODEL);
-
+                    //PromotersResModel mPromotersResModel = (PromotersResModel) data.getExtras().getSerializable(PromotersModel.PROMOTERS_RES_MODEL);
+                    //ProfileResModel mMyProfileResModel = (ProfileResModel) data.getExtras().getSerializable(ProfileModel.MY_PROFILE_RES_MODEL);
+                    //TODO getting data
+                    /*PromotersResModel mPromotersResModel = MotoHub.getApplicationInstance().getmPromoterResModel();
+                    ProfileResModel mMyProfileResModel = MotoHub.getApplicationInstance().getmProfileResModel();*/
+                    PromotersResModel mPromotersResModel = EventBus.getDefault().getStickyEvent(PromotersResModel.class);
+                    ProfileResModel mMyProfileResModel = EventBus.getDefault().getStickyEvent(ProfileResModel.class);
                     mPromotersStreamAdapter.updatePromoterFollowResponse(mPromotersResModel);
-                    ProfileResModel mMyProfileResModel = (ProfileResModel) data.getExtras()
-                            .getSerializable(ProfileModel.MY_PROFILE_RES_MODEL);
+
+                    //TODO setting data
+                    /*MotoHub.getApplicationInstance().setmProfileResModel(mMyProfileResModel);
+                    MotoHub.getApplicationInstance().setmPromoterResModel(mPromotersResModel);*/
+                    EventBus.getDefault().postSticky(mMyProfileResModel);
+                    EventBus.getDefault().postSticky(mPromotersResModel);
                     setResult(RESULT_OK, new Intent()
-                            .putExtra(ProfileModel.MY_PROFILE_RES_MODEL, mMyProfileResModel)
-                            .putExtra(PromotersModel.PROMOTERS_RES_MODEL, mPromotersResModel));
+                            /*.putExtra(ProfileModel.MY_PROFILE_RES_MODEL, mMyProfileResModel)
+                            .putExtra(PromotersModel.PROMOTERS_RES_MODEL, mPromotersResModel)*/);
                     break;
 
                 case PromotersStreamAdapter.LIVE_PAYMENT_REQ_CODE:

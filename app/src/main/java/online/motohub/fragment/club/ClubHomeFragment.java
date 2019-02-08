@@ -15,8 +15,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
+import com.facebook.shimmer.ShimmerFrameLayout;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 
@@ -25,49 +26,49 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import online.motohub.R;
 import online.motohub.activity.BaseActivity;
-import online.motohub.activity.PostCommentsActivity;
 import online.motohub.activity.PostEditActivity;
+import online.motohub.activity.ReportActivity;
 import online.motohub.adapter.club.ClubPostsAdapter;
+import online.motohub.application.MotoHub;
 import online.motohub.fragment.BaseFragment;
 import online.motohub.fragment.dialog.AppDialogFragment;
-
-import online.motohub.model.ClubGroupModel;
+import online.motohub.interfaces.SharePostInterface;
 import online.motohub.model.FeedCommentModel;
 import online.motohub.model.FeedLikesModel;
 import online.motohub.model.FeedShareModel;
+import online.motohub.model.NotificationBlockedUsersModel;
 import online.motohub.model.PostsModel;
 import online.motohub.model.PostsResModel;
 import online.motohub.model.ProfileModel;
 import online.motohub.model.ProfileResModel;
 import online.motohub.model.SessionModel;
-import online.motohub.model.promoter_club_news_media.PromotersModel;
 import online.motohub.model.promoter_club_news_media.PromotersResModel;
 import online.motohub.retrofit.RetrofitClient;
 import online.motohub.util.AppConstants;
 import online.motohub.util.CommonAPI;
+import online.motohub.util.DialogManager;
 import online.motohub.util.UploadFileService;
 import online.motohub.util.Utility;
 
 import static android.app.Activity.RESULT_OK;
 
-public class ClubHomeFragment extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener{
-
-    @BindView(R.id.swipeRefreshLayout)
-    SwipeRefreshLayout mSwipeRefreshLayout;
-
-    @BindView(R.id.recycler_view)
-    RecyclerView mNewsFeedRecyclerView;
-
-    @BindView(R.id.clubfeedlay)
-    RelativeLayout mClubFeedLay;
+public class ClubHomeFragment extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener {
 
     private static final int mDataLimit = 15;
+    public boolean mRefresh = true;
+    @BindView(R.id.swipeRefreshLayout)
+    SwipeRefreshLayout mSwipeRefreshLayout;
+    @BindView(R.id.recycler_view)
+    RecyclerView mNewsFeedRecyclerView;
+    @BindView(R.id.clubfeedlay)
+    RelativeLayout mClubFeedLay;
+    @BindView(R.id.shimmer_feeds)
+    ShimmerFrameLayout mShimmer_feeds;
     private Activity mActivity;
     private Unbinder mUnBinder;
     private LinearLayoutManager mNewsFeedLayoutManager;
     private boolean mIsPostsRvLoading = true;
     private int mPostsRvOffset = 0, mPostsRvTotalCount = 0;
-    public boolean mRefresh = true;
     private ArrayList<PostsResModel> mNewsFeedList = new ArrayList<>();
     private ClubPostsAdapter mClubPostsAdapter;
     private PromotersResModel mPromotersResModel;
@@ -79,7 +80,18 @@ public class ClubHomeFragment extends BaseFragment implements SwipeRefreshLayout
     BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            updatePost(intent);
+            Bundle b = intent.getExtras();
+            String mUsertype = b.getString(AppConstants.USER_TYPE);
+            if (mUsertype.trim().equals("club_user"))
+                updatePost(intent);
+        }
+    };
+    private String mShareTxt = "";
+    SharePostInterface mShareTextWithPostInterface = new SharePostInterface() {
+        @Override
+        public void onSuccess(String shareMessage) {
+            mShareTxt = shareMessage;
+            CommonAPI.getInstance().callPostShare(getActivity(), mNewsFeedList.get(mCurrentPostPosition), mMyProfileResModel.getID());
         }
     };
 
@@ -109,6 +121,8 @@ public class ClubHomeFragment extends BaseFragment implements SwipeRefreshLayout
     }
 
     private void initView() {
+
+        mShimmer_feeds.startShimmerAnimation();
         mNewsFeedLayoutManager = new LinearLayoutManager(mActivity);
         mNewsFeedLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mNewsFeedRecyclerView.setLayoutManager(mNewsFeedLayoutManager);
@@ -129,11 +143,20 @@ public class ClubHomeFragment extends BaseFragment implements SwipeRefreshLayout
             }
         });
 
-        mMyProfileResModel = (ProfileResModel) getArguments().getSerializable(ProfileModel.MY_PROFILE_RES_MODEL);
-        mPromotersResModel = (PromotersResModel) getArguments().getSerializable(PromotersModel.PROMOTERS_RES_MODEL);
+        /*mMyProfileResModel = (ProfileResModel) getArguments().getSerializable(ProfileModel.MY_PROFILE_RES_MODEL);
+        mPromotersResModel = (PromotersResModel) getArguments().getSerializable(PromotersModel.PROMOTERS_RES_MODEL);*/
+        /*mMyProfileResModel = MotoHub.getApplicationInstance().getmProfileResModel();
+        mPromotersResModel = MotoHub.getApplicationInstance().getmPromoterResModel();*/
+        mMyProfileResModel = EventBus.getDefault().getStickyEvent(ProfileResModel.class);
+        mPromotersResModel = EventBus.getDefault().getStickyEvent(PromotersResModel.class);
+
         mSwipeRefreshLayout.setOnRefreshListener(this);
-        mClubPostsAdapter = new ClubPostsAdapter(mNewsFeedList, mPromotersResModel, mMyProfileResModel, mActivity);
-        mNewsFeedRecyclerView.setAdapter(mClubPostsAdapter);
+        try {
+            mClubPostsAdapter = new ClubPostsAdapter(mNewsFeedList, mPromotersResModel, mMyProfileResModel, mActivity);
+            mNewsFeedRecyclerView.setAdapter(mClubPostsAdapter);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
         if (mNewsFeedList.size() == 0)
             callGetEvents();
     }
@@ -148,6 +171,9 @@ public class ClubHomeFragment extends BaseFragment implements SwipeRefreshLayout
     public void onRefresh() {
         setRefresh(true);
         mPostsRvOffset = 0;
+        mIsPostsRvLoading = true;
+        mPostsRvTotalCount = -1;
+        mNewsFeedList.clear();
         getNewsFeedPosts();
     }
 
@@ -157,6 +183,7 @@ public class ClubHomeFragment extends BaseFragment implements SwipeRefreshLayout
         if (mRefresh) {
             mPostsRvTotalCount = -1;
             mPostsRvOffset = 0;
+            mIsPostsRvLoading = true;
             mNewsFeedList.clear();
             mClubPostsAdapter.notifyDataSetChanged();
             getNewsFeedPosts();
@@ -168,31 +195,7 @@ public class ClubHomeFragment extends BaseFragment implements SwipeRefreshLayout
             mSwipeRefreshLayout.setRefreshing(false);
         }
 
-        ArrayList<ClubGroupModel> mClubGroupList = mPromotersResModel.getClubGroupByClubUserID();
-
-        String mFilter = "(ProfileID=" + mPromotersResModel.getUserId() + ") AND (user_type=club)";
-
-        if (mClubGroupList != null) {
-
-            StringBuilder mClubMembersID = new StringBuilder();
-            String mClubGroupMembers = "";
-
-            if (!mClubGroupList.isEmpty()) {
-                for (int i = 0; i < mClubGroupList.size(); i++) {
-                    mClubMembersID.append(mClubGroupList.get(i).getMemberProfileID()).append(",");
-                }
-                mClubMembersID.deleteCharAt(mClubMembersID.length() - 1);
-                mClubGroupMembers = String.valueOf(mClubMembersID);
-            }
-
-            for (int i = 0; i < mClubGroupList.size(); i++) {
-                if (String.valueOf(mClubGroupList.get(i).getMemberProfileID()).trim().equals(String.valueOf(mMyProfileResModel.getID()).trim()) && mClubGroupList.get(i).getStatus() == 2) {
-                    mFilter = "(" + mFilter + ") OR ((ProfileID IN (" + mClubGroupMembers + ")) AND (user_type=club_user))";
-                    break;
-                }
-            }
-        }
-
+        String mFilter = "((ProfileID=" + mPromotersResModel.getUserId() + ") AND (user_type=club)) OR ((" + PostsModel.TO_SUBSCRIBED_USER_ID + "=" + mPromotersResModel.getUserId() + ") AND (user_type = club_user)) AND (ReportStatus == 0)";
         RetrofitClient.getRetrofitInstance().callGetProfilePosts((BaseActivity) mActivity, mFilter, RetrofitClient.GET_FEED_POSTS_RESPONSE, mDataLimit, mPostsRvOffset);
     }
 
@@ -203,28 +206,51 @@ public class ClubHomeFragment extends BaseFragment implements SwipeRefreshLayout
             PostsModel mPostsModel = (PostsModel) responseObj;
             switch (responseType) {
                 case RetrofitClient.GET_FEED_POSTS_RESPONSE:
-                    mRefresh = false;
-                    mSwipeRefreshLayout.setRefreshing(false);
-                    if (mPostsModel.getResource() != null && mPostsModel.getResource().size() > 0) {
-                        mPostsRvTotalCount = mPostsModel.getMeta().getCount();
-                        mIsPostsRvLoading = false;
-                        if (mPostsRvOffset == 0) {
-                            mNewsFeedList.clear();
+                    try {
+                        mRefresh = false;
+                        mSwipeRefreshLayout.setRefreshing(false);
+                        if (mPostsModel.getResource() != null && mPostsModel.getResource().size() > 0) {
+                            mPostsRvTotalCount = mPostsModel.getMeta().getCount();
+                            mIsPostsRvLoading = false;
+                            if (mPostsRvOffset == 0) {
+                                mNewsFeedList.clear();
+                            }
+                            mNewsFeedList.addAll(mPostsModel.getResource());
+                            mPostsRvOffset = mPostsRvOffset + mDataLimit;
+                        } else {
+                            if (mPostsRvOffset == 0) {
+                                mPostsRvTotalCount = 0;
+                            }
                         }
-                        mNewsFeedList.addAll(mPostsModel.getResource());
-                        mPostsRvOffset = mPostsRvOffset + mDataLimit;
-                    } else {
-                        if (mPostsRvOffset == 0) {
-                            mPostsRvTotalCount = 0;
-                        }
+                        mShimmer_feeds.stopShimmerAnimation();
+                        mShimmer_feeds.setVisibility(View.GONE);
+                        mSwipeRefreshLayout.setVisibility(View.VISIBLE);
+                        mClubPostsAdapter.notifyDataSetChanged();
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
-                    mClubPostsAdapter.notifyDataSetChanged();
                     break;
-
                 case RetrofitClient.SHARED_POST_RESPONSE:
                     mClubPostsAdapter.resetShareCount(mSharedFeed);
                     break;
-
+                case RetrofitClient.FEED_VIDEO_COUNT:
+                    try {
+                        if (mPostsModel.getResource() != null && mPostsModel.getResource().size() > 0) {
+                            mClubPostsAdapter.addViewCount(mPostsModel.getResource().get(0).getmViewCount());
+                        }
+                    } catch (IndexOutOfBoundsException e) {
+                        e.printStackTrace();
+                    }
+                    break;
+                case RetrofitClient.ADD_FEED_COUNT:
+                    try {
+                        if (mPostsModel.getResource() != null && mPostsModel.getResource().size() > 0) {
+                            mClubPostsAdapter.ViewCount(mPostsModel.getResource().get(0).getmViewCount());
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    break;
                 case RetrofitClient.CREATE_PROFILE_POSTS_RESPONSE:
 
                     if (mPostsModel.getResource() != null && mPostsModel.getResource().size() > 0) {
@@ -251,20 +277,16 @@ public class ClubHomeFragment extends BaseFragment implements SwipeRefreshLayout
                     }
                     break;
                 case RetrofitClient.DELETE_PROFILE_POSTS_RESPONSE:
-
                     if (mPostsModel.getResource() != null && mPostsModel.getResource().size() > 0) {
-
                         mNewsFeedList.remove(mPostPos);
                         mPostsRvTotalCount -= 1;
                         mClubPostsAdapter.notifyDataSetChanged();
                     }
                     break;
-
             }
         } else if (responseObj instanceof SessionModel) {
             getNewsFeedPosts();
         } else if (responseObj instanceof FeedLikesModel) {
-
             FeedLikesModel mFeedLikesList = (FeedLikesModel) responseObj;
             ArrayList<FeedLikesModel> mNewFeedLike = mFeedLikesList.getResource();
             switch (responseType) {
@@ -275,14 +297,30 @@ public class ClubHomeFragment extends BaseFragment implements SwipeRefreshLayout
                     mClubPostsAdapter.resetDisLike(mNewFeedLike.get(0));
                     break;
             }
-
         } else if (responseObj instanceof FeedShareModel) {
             FeedShareModel mFeedShareList = (FeedShareModel) responseObj;
             ArrayList<FeedShareModel> mNewFeedShare = mFeedShareList.getResource();
             switch (responseType) {
                 case RetrofitClient.POST_SHARES:
                     mSharedFeed = mNewFeedShare.get(0);
-                    CommonAPI.getInstance().callAddSharedPost(getContext(), mNewsFeedList.get(mCurrentPostPosition), mMyProfileResModel);
+                    CommonAPI.getInstance().callAddSharedPost(getContext(), mNewsFeedList.get(mCurrentPostPosition), mMyProfileResModel, mShareTxt);
+                    break;
+                case RetrofitClient.DELETE_SHARED_POST_RESPONSE:
+                    RetrofitClient.getRetrofitInstance()
+                            .callDeleteProfilePosts((BaseActivity) mActivity, mNewsFeedList.get(mCurrentPostPosition).getID(), RetrofitClient.DELETE_PROFILE_POSTS_RESPONSE);
+                    break;
+            }
+        } else if (responseObj instanceof NotificationBlockedUsersModel) {
+            NotificationBlockedUsersModel mNotify = (NotificationBlockedUsersModel) responseObj;
+            ArrayList<NotificationBlockedUsersModel> mPostNotification = mNotify.getResource();
+            switch (responseType) {
+                case RetrofitClient.BLOCK_NOTIFY:
+                    if (mPostNotification.size() > 0)
+                        mClubPostsAdapter.resetBlock(mPostNotification.get(0));
+                    break;
+                case RetrofitClient.UNBLOCK_NOTIFY:
+                    if (mPostNotification.size() > 0)
+                        mClubPostsAdapter.resetUnBlock(mPostNotification.get(0));
                     break;
             }
         }
@@ -294,7 +332,7 @@ public class ClubHomeFragment extends BaseFragment implements SwipeRefreshLayout
         if (code == RetrofitClient.GET_FEED_POSTS_RESPONSE) {
             mPostsRvTotalCount = 0;
         } else if (message.equals("Unauthorized") || code == 401) {
-            RetrofitClient.getRetrofitInstance().callUpdateSession((BaseActivity)mActivity,  RetrofitClient.UPDATE_SESSION_RESPONSE);
+            RetrofitClient.getRetrofitInstance().callUpdateSession((BaseActivity) mActivity, RetrofitClient.UPDATE_SESSION_RESPONSE);
         } else {
             String mErrorMsg = code + " - " + message;
             ((BaseActivity) mActivity).showToast(getActivity(), mErrorMsg);
@@ -320,22 +358,37 @@ public class ClubHomeFragment extends BaseFragment implements SwipeRefreshLayout
         switch (dialogType) {
             case AppDialogFragment.BOTTOM_SHARE_DIALOG:
                 mCurrentPostPosition = position;
-                CommonAPI.getInstance().callPostShare(getContext(),mNewsFeedList.get(mCurrentPostPosition),mMyProfileResModel.getID());
+                DialogManager.showShareDialogWithCallback(getActivity(), mShareTextWithPostInterface);
+                // CommonAPI.getInstance().callPostShare(getContext(), mNewsFeedList.get(mCurrentPostPosition), mMyProfileResModel.getID());
                 break;
             case AppDialogFragment.BOTTOM_DELETE_DIALOG:
                 mPostPos = position;
-                RetrofitClient.getRetrofitInstance().callDeleteProfilePosts((BaseActivity) mActivity, mNewsFeedList.get(position).getID(), RetrofitClient.DELETE_PROFILE_POSTS_RESPONSE);
-                RetrofitClient.getRetrofitInstance().callDeleteSharedPost((BaseActivity) mActivity, mNewsFeedList.get(position).getID(), RetrofitClient.DELETE_SHARED_POST_RESPONSE);
+                RetrofitClient.getRetrofitInstance().callDeleteSharedPost((BaseActivity) mActivity, mNewsFeedList.get(position).getNewSharedPostID(), RetrofitClient.DELETE_SHARED_POST_RESPONSE);
                 break;
             case AppDialogFragment.BOTTOM_EDIT_DIALOG:
                 mPostPos = position;
+                //MotoHub.getApplicationInstance().setmProfileResModel(mMyProfileResModel);
+                EventBus.getDefault().postSticky(mMyProfileResModel);
                 Bundle mBundle = new Bundle();
                 mBundle.putSerializable(PostsModel.POST_MODEL, mNewsFeedList.get(position));
-                mBundle.putSerializable(ProfileModel.MY_PROFILE_RES_MODEL,
-                        mMyProfileResModel);
+                /*mBundle.putSerializable(ProfileModel.MY_PROFILE_RES_MODEL,
+                        mMyProfileResModel);*/
                 getActivity().startActivityForResult(
                         new Intent(getActivity(), PostEditActivity.class).putExtras(mBundle),
                         AppConstants.POST_UPDATE_SUCCESS);
+                /*MotoHub.getApplicationInstance().setmProfileResModel(mMyProfileResModel);
+                MotoHub.getApplicationInstance().setmPostResModel(mNewsFeedList.get(position));
+                getActivity().startActivityForResult(
+                        new Intent(getActivity(), PostEditActivity.class),
+                        AppConstants.POST_UPDATE_SUCCESS);*/
+                break;
+            case AppDialogFragment.BOTTOM_REPORT_ACTION_DIALOG:
+                startActivityForResult(
+                        new Intent(getActivity(), ReportActivity.class)
+                                .putExtra(PostsModel.POST_ID, mNewsFeedList.get(position).getID())
+                                .putExtra(ProfileModel.PROFILE_ID, mMyProfileResModel.getID())
+                                .putExtra(ProfileModel.USER_ID, mMyProfileResModel.getUserID())
+                                .putExtra(AppConstants.REPORT, AppConstants.REPORT_POST), AppConstants.REPORT_POST_SUCCESS);
                 break;
         }
     }
@@ -345,10 +398,36 @@ public class ClubHomeFragment extends BaseFragment implements SwipeRefreshLayout
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
+                case RetrofitClient.UPDATE_FEED_COUNT:
+                    assert data.getExtras() != null;
+                    mClubPostsAdapter.updateView(data.getIntExtra(AppConstants.POSITION, 0));
+                    break;
                 case AppConstants.POST_COMMENT_REQUEST:
                     assert data.getExtras() != null;
-                    ArrayList<FeedCommentModel> mFeedCommentModel = (ArrayList<FeedCommentModel>)data.getExtras().getSerializable(PostsModel.COMMENTS_BY_POSTID);
+                    ArrayList<FeedCommentModel> mFeedCommentModel = (ArrayList<FeedCommentModel>) data.getExtras().getSerializable(PostsModel.COMMENTS_BY_POSTID);
                     mClubPostsAdapter.refreshCommentList(mFeedCommentModel);
+                    break;
+                case AppConstants.WRITE_POST_REQUEST:
+                    mIsPostsRvLoading = true;
+                    mPostsRvTotalCount = -1;
+                    mPostsRvOffset = 0;
+                    mNewsFeedList.clear();
+                    getNewsFeedPosts();
+                    break;
+                case AppConstants.REPORT_POST_SUCCESS:
+                    //TODO remove the reported post
+                    mIsPostsRvLoading = true;
+                    mPostsRvTotalCount = -1;
+                    mPostsRvOffset = 0;
+                    mNewsFeedList.clear();
+                    getNewsFeedPosts();
+                    break;
+                case AppConstants.POST_UPDATE_SUCCESS:
+                    mIsPostsRvLoading = true;
+                    mPostsRvTotalCount = -1;
+                    mPostsRvOffset = 0;
+                    mNewsFeedList.clear();
+                    getNewsFeedPosts();
                     break;
             }
         }

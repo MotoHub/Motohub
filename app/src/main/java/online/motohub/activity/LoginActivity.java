@@ -1,32 +1,48 @@
 package online.motohub.activity;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.SpannableString;
 import android.text.TextPaint;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.util.Patterns;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.gson.JsonObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import online.motohub.R;
+import online.motohub.activity.business.BusinessProfileActivity;
+import online.motohub.adapter.RecentUsersAdapter;
+import online.motohub.database.DatabaseHandler;
 import online.motohub.fcm.MyFireBaseInstanceIdService;
+import online.motohub.interfaces.CommonReturnInterface;
 import online.motohub.model.LoginModel;
 import online.motohub.model.ProfileModel;
+import online.motohub.model.ProfileResModel;
+import online.motohub.model.promoter_club_news_media.PromotersModel;
 import online.motohub.retrofit.RetrofitClient;
 import online.motohub.util.AppConstants;
+import online.motohub.util.DialogManager;
 import online.motohub.util.PreferenceUtils;
 import online.motohub.util.UrlUtils;
 
@@ -49,6 +65,9 @@ public class LoginActivity extends BaseActivity {
     @BindView(R.id.pwd_et)
     EditText mPwdEt;
 
+    @BindView(R.id.fb_login_btn)
+    Button btnFB;
+
     @BindView(R.id.terms_conditions_check_box)
     CheckBox mTermsAndConChkBox;
 
@@ -61,21 +80,40 @@ public class LoginActivity extends BaseActivity {
     @BindString(R.string.storage_permission_denied)
     String mNoStoragePer;
 
+    @BindView(R.id.recent_users_list)
+    RecyclerView mRecentUsersList;
+
+    @BindView(R.id.recent_users_lay)
+    RelativeLayout mRecentUsersLay;
+
     private String mEmail = "", mPwd = "";
+
+    private String mLoginType = "0";
+
+    private DatabaseHandler mDatabaseHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
         ButterKnife.bind(this);
-
+        //isPermissionAdded();
         initView();
 
     }
 
+    @Override
+    protected void onDestroy() {
+        DialogManager.hideProgress();
+        super.onDestroy();
+    }
+
     private void initView() {
         setupUI(mCoordinatorLayout);
+        mDatabaseHandler = new DatabaseHandler(this);
+        LinearLayoutManager manager = new LinearLayoutManager(this);
+        manager.setOrientation(LinearLayoutManager.HORIZONTAL);
+        mRecentUsersList.setLayoutManager(manager);
         SpannableString mSpannableString = new SpannableString(mTermsAndConStr);
         PreferenceUtils.getInstance(this).saveBooleanData(PreferenceUtils.ALLOW_NOTIFICATION, true);
         PreferenceUtils.getInstance(this).saveBooleanData(PreferenceUtils.ALLOW_NOTIFICATION_Sound, true);
@@ -104,22 +142,48 @@ public class LoginActivity extends BaseActivity {
         String action = intent.getAction();
         if (action != null) {
             Uri data = intent.getData();
+            mLoginType = "1";
             RetrofitClient.getRetrofitInstance().callFacebookLogin(this, data.getQueryParameter("service"),
                     data.getQueryParameter("code"), data.getQueryParameter("state"), RetrofitClient.FACEBOOK_LOGIN_RESPONSE);
         }
+
+        setRecentUserAdapter();
+
     }
+
+    private ArrayList<ProfileResModel> mRecentList = new ArrayList<>();
+
+    private void setRecentUserAdapter() {
+        mRecentList.clear();
+        mRecentList.addAll(mDatabaseHandler.getLocalUserList());
+        if (mRecentList.size() > 0) {
+            mRecentUsersLay.setVisibility(View.VISIBLE);
+            RecentUsersAdapter mAdapter = new RecentUsersAdapter(this, mRecentList,mCommonReturnInterface);
+            mRecentUsersList.setAdapter(mAdapter);
+        }
+
+    }
+
+    CommonReturnInterface mCommonReturnInterface=new CommonReturnInterface() {
+        @Override
+        public void onSuccess(int pos) {
+
+            if(mRecentList.get(pos).getLoginType().equals("1")){
+                callFbLogin();
+            }else{
+                mEmail=mRecentList.get(pos).getEmail();
+                mPwd=mRecentList.get(pos).getPassword();
+                callEmailLogin();
+            }
+        }
+    };
 
     @OnClick({R.id.fb_login_btn, R.id.register_btn, R.id.email_login_btn, R.id.forgot_pwd_btn})
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.fb_login_btn:
                 if (mTermsAndConChkBox.isChecked()) {
-                    Uri uri = Uri.parse(UrlUtils.BASE_URL + UrlUtils.FACEBOOK_LOGIN);
-                    Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-                    startActivity(intent);
-                    finish();
-//                    startActivity(new Intent(this, BrowserActivity.class));
-//                    finish();
+                    callFbLogin();
                 } else {
                     showSnackBar(mCoordinatorLayout, mAcceptTermsAndConStr);
                 }
@@ -136,6 +200,16 @@ public class LoginActivity extends BaseActivity {
                 startActivity(new Intent(this, ForgotPasswordScreen.class));
                 break;
         }
+    }
+
+    private void callFbLogin() {
+        Uri uri = Uri.parse(UrlUtils.BASE_URL + UrlUtils.FACEBOOK_LOGIN);
+        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+        startActivity(intent);
+        finish();
+
+        //startActivity(new Intent(this, BrowserActivity.class));
+        //finish();
     }
 
     private void validateFields() {
@@ -170,7 +244,8 @@ public class LoginActivity extends BaseActivity {
             final JsonObject mJsonObject = new JsonObject();
             mJsonObject.addProperty(LoginModel.email, mEmail);
             mJsonObject.addProperty(LoginModel.password, mPwd);
-            mJsonObject.addProperty("remember_me",true);
+            mJsonObject.addProperty("remember_me", true);
+            mLoginType = "0";
             RetrofitClient.getRetrofitInstance().callEmailLogin(this, mJsonObject,
                     RetrofitClient.EMAIL_LOGIN_RESPONSE);
         } catch (Exception e) {
@@ -183,15 +258,37 @@ public class LoginActivity extends BaseActivity {
         super.retrofitOnResponse(responseObj, responseType);
 
         if (responseObj instanceof LoginModel) {
+
             LoginModel mLoginModel = (LoginModel) responseObj;
-            saveUserDataLocally(mLoginModel);
-            MyFireBaseInstanceIdService mMyFireBaseInstanceIdService = new MyFireBaseInstanceIdService();
+            switch (responseType) {
+                case RetrofitClient.CALL_GET_PROFILE_USER_TYPE:
+                    MyFireBaseInstanceIdService mMyFireBaseInstanceIdService = new MyFireBaseInstanceIdService();
+                    String refreshedToken = FirebaseInstanceId.getInstance().getToken();
+                    mMyFireBaseInstanceIdService.sendRegistrationToken(refreshedToken, MyFireBaseInstanceIdService.UPDATE_PUSH_TOKEN);
+                    int mUserID = PreferenceUtils.getInstance(this).getIntData(PreferenceUtils.USER_ID);
+                    String mUserType = mLoginModel.getPhone();
+                    if (mUserType.equals(AppConstants.PROMOTER) || mUserType.equals(AppConstants.TRACK) || mUserType.equals(AppConstants.NEWS_MEDIA) || mUserType.equals(AppConstants.SHOP) || mUserType.equals(AppConstants.CLUB)) {
+                        String mFilter = "user_id=" + mUserID;
+                        RetrofitClient.getRetrofitInstance().callGetPromoterWithPushToken(this, mFilter, RetrofitClient.GET_PROMOTER_RESPONSE);
+                    } else {
+                        String mFilter = "UserID=" + mUserID;
+                        RetrofitClient.getRetrofitInstance().callGetProfilesWithPushToken(this, mFilter, RetrofitClient.GET_PROFILE_RESPONSE);
+                    }
+
+                    break;
+                default:
+                    saveUserDataLocally(mLoginModel);
+                    RetrofitClient.getRetrofitInstance().callGetProfileUserType(this, RetrofitClient.CALL_GET_PROFILE_USER_TYPE);
+                    break;
+            }
+            //saveUserDataLocally(mLoginModel);
+            /*MyFireBaseInstanceIdService mMyFireBaseInstanceIdService = new MyFireBaseInstanceIdService();
             String refreshedToken = FirebaseInstanceId.getInstance().getToken();
-            mMyFireBaseInstanceIdService.sendRegistrationToken(refreshedToken, MyFireBaseInstanceIdService.UPDATE_PUSH_TOKEN);
-            int mUserID = PreferenceUtils.getInstance(this).getIntData(PreferenceUtils.USER_ID);
+            mMyFireBaseInstanceIdService.sendRegistrationToken(refreshedToken, MyFireBaseInstanceIdService.UPDATE_PUSH_TOKEN);*/
+            /*int mUserID = PreferenceUtils.getInstance(this).getIntData(PreferenceUtils.USER_ID);
             String mFilter = "UserID=" + mUserID;
 
-            RetrofitClient.getRetrofitInstance().callGetProfilesWithPushToken(this, mFilter, RetrofitClient.GET_PROFILE_RESPONSE);
+            RetrofitClient.getRetrofitInstance().callGetProfilesWithPushToken(this, mFilter, RetrofitClient.GET_PROFILE_RESPONSE);*/
 
         }
 
@@ -201,18 +298,40 @@ public class LoginActivity extends BaseActivity {
 
             if (mProfileModel.getResource() != null && mProfileModel.getResource().size() > 0) {
                 PreferenceUtils.getInstance(this).saveBooleanData(PreferenceUtils.USER_PROFILE_COMPLETED, true);
+                localDBModel.setProfilePicture(mProfileModel.getResource().get(0).getProfilePicture());
+                addUserToLocalDB();
+                PERMISSION_ACTION_TYPE = PERMISSION_SHARING_WRITE_ACCESS;
+                // if (isPermissionAdded()) {
                 startActivity(new Intent(this, ViewProfileActivity.class));
+                // }
                 finish();
             } else {
+                addUserToLocalDB();
                 startActivity(new Intent(this, CreateProfileActivity.class).putExtra(AppConstants.TAG, TAG));
                 finish();
             }
 
+        } else if (responseObj instanceof PromotersModel) {
+            PromotersModel mPromoterModel = (PromotersModel) responseObj;
+            if (mPromoterModel.getResource() != null && mPromoterModel.getResource().size() > 0) {
+                localDBModel.setProfilePicture(mPromoterModel.getResource().get(0).getProfileImage());
+                addUserToLocalDB();
+                PreferenceUtils.getInstance(this).saveBooleanData(PreferenceUtils.BUSINESS_PROFILE_COMPLETED, true);
+                // if (isPermissionAdded()) {
+                startActivity(new Intent(this, BusinessProfileActivity.class));
+                // }
+                finish();
+            }
         }
 
     }
 
+    private ProfileResModel localDBModel;
+
     private void saveUserDataLocally(LoginModel loginModel) {
+        localDBModel = new ProfileResModel();
+        localDBModel.setEmail(loginModel.getEmail());
+        localDBModel.setUserName(loginModel.getName());
 
         PreferenceUtils mPreferenceUtils = PreferenceUtils.getInstance(this);
 
@@ -232,16 +351,18 @@ public class LoginActivity extends BaseActivity {
 
         mPreferenceUtils.saveStrData(PreferenceUtils.FIRST_NAME, loginModel.getFirstName());
 
+        PreferenceUtils.getInstance(getApplicationContext()).saveBooleanData(PreferenceUtils.IS_PERMANATLY_DENIED_CONTACT_PERMISSION, false);
+
     }
 
     @Override
-    public void retrofitOnError(int code, String message) {
-        super.retrofitOnError(code, message);
+    public void retrofitOnError(int code, String message, int responsetype) {
+        // super.retrofitOnError(code, message);
         if (code == 401) {
             showSnackBar(mCoordinatorLayout, getString(R.string.invalid_credentials));
         } else {
             String mErrorMsg = code + " - " + message;
-            //showSnackBar(mCoordinatorLayout, mErrorMsg);
+            showSnackBar(mCoordinatorLayout, mErrorMsg);
         }
 
     }
@@ -251,5 +372,44 @@ public class LoginActivity extends BaseActivity {
         super.retrofitOnFailure();
         showSnackBar(mCoordinatorLayout, mInternetFailed);
     }
+
+    public boolean isPermissionAdded() {
+        boolean addPermission = true;
+        if (android.os.Build.VERSION.SDK_INT >= 23) {
+            int permissionCamera = ContextCompat.checkSelfPermission(this, android.Manifest.permission.CAMERA);
+            int readStoragePermission = ContextCompat.checkSelfPermission(this, android.Manifest.permission.READ_EXTERNAL_STORAGE);
+            int storagePermission = ContextCompat.checkSelfPermission(this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE);
+            int readContactPermission = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS);
+            int writeContactPermission = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_CONTACTS);
+            List<String> listPermissionsNeeded = new ArrayList<>();
+            if (permissionCamera != PackageManager.PERMISSION_GRANTED) {
+                listPermissionsNeeded.add(android.Manifest.permission.CAMERA);
+            }
+            if (readStoragePermission != PackageManager.PERMISSION_GRANTED) {
+                listPermissionsNeeded.add(android.Manifest.permission.READ_EXTERNAL_STORAGE);
+            }
+            if (storagePermission != PackageManager.PERMISSION_GRANTED) {
+                listPermissionsNeeded.add(android.Manifest.permission.WRITE_EXTERNAL_STORAGE);
+            }
+            if (readContactPermission != PackageManager.PERMISSION_GRANTED) {
+                listPermissionsNeeded.add(Manifest.permission.READ_CONTACTS);
+            }
+            if (writeContactPermission != PackageManager.PERMISSION_GRANTED) {
+                listPermissionsNeeded.add(Manifest.permission.WRITE_CONTACTS);
+            }
+            if (!listPermissionsNeeded.isEmpty()) {
+                addPermission = isPermission(permissionCallback, listPermissionsNeeded);
+            }
+        }
+        return addPermission;
+    }
+
+    private void addUserToLocalDB() {
+        localDBModel.setLoginType(mLoginType);
+        localDBModel.setPassword(mPwd);
+
+        mDatabaseHandler.addLocalUser(localDBModel);
+    }
+
 
 }

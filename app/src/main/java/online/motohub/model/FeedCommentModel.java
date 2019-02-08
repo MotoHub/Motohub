@@ -38,11 +38,21 @@ public class FeedCommentModel implements Serializable{
     @Expose
     private String mCreateTime;
 
+    @SerializedName("CommentTaggedUserNames")
+    @Expose
+    private String mCommentTaggedUserNames;
+
+    @SerializedName("CommentTaggedUserID")
+    @Expose
+    private String mCommentTaggedUserID;
+
     @SerializedName("profiles_by_ProfileID")
     @Expose
     private ProfileResModel mProfilesByProfileID;
 
     public String getCommentTaggedUserNames() {
+        if(mCommentTaggedUserNames == null)
+            mCommentTaggedUserNames = "";
         return mCommentTaggedUserNames;
     }
 
@@ -50,10 +60,16 @@ public class FeedCommentModel implements Serializable{
         this.mCommentTaggedUserNames = mCommentTaggedUserNames;
     }
 
-    @SerializedName("CommentTaggedUserNames")
-    @Expose
 
-    private String mCommentTaggedUserNames;
+    public String getCommentTaggedUserID() {
+        if(mCommentTaggedUserID == null)
+            mCommentTaggedUserID = "";
+        return mCommentTaggedUserID;
+    }
+
+    public void setCommentTaggedUserID(String mCommentTaggedUserID) {
+        this.mCommentTaggedUserID = mCommentTaggedUserID;
+    }
 
     @SerializedName("commentreply_by_CommentID")
     @Expose

@@ -97,6 +97,7 @@
                 android:id="@+id/circular_img_view"
                 android:layout_width="@dimen/size55"
                 android:layout_height="@dimen/size55"
+                android:layout_marginLeft="@dimen/size5"
                 android:layout_centerVertical="true"
                 android:scaleType="centerCrop"
                 android:src="@drawable/default_profile_icon" />
@@ -290,10 +291,20 @@
                         android:layout_centerVertical="true"
                         android:layout_marginLeft="@dimen/size10"
                         android:layout_marginStart="@dimen/size10"
-                        android:layout_toLeftOf="@+id/ll_like_share_count"
-                        android:layout_toStartOf="@+id/ll_like_share_count"
+                        android:padding="@dimen/size5"
                         android:textColor="@color/colorDarkGrey"
                         android:textSize="@dimen/text14" />
+
+                    <TextView
+                        android:id="@+id/view_count_txt"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_toEndOf="@+id/like_count_txt"
+                        android:layout_toStartOf="@+id/ll_like_share_count"
+                        android:padding="@dimen/size5"
+                        android:textColor="@color/colorDarkGrey"
+                        android:textSize="@dimen/text14"/>
 
                     <LinearLayout
                         android:id="@+id/ll_like_share_count"

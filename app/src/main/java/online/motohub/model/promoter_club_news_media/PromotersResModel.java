@@ -70,6 +70,10 @@ public class PromotersResModel implements Serializable {
     @Expose
     private String stripeUserId;
 
+    @SerializedName("Priority")
+    @Expose
+    private int mPriority;
+
     @SerializedName("promoterfollower_by_PromoterUserID")
     @Expose
     private ArrayList<PromoterFollowerResModel> mPromoterFollowerByPromoterUserID;
@@ -94,6 +98,42 @@ public class PromotersResModel implements Serializable {
     @SerializedName("subscription_fee")
     @Expose
     private int subscription_fee = 0;
+
+    @SerializedName("subscription_desp")
+    @Expose
+    private String mSubscriptionDesp;
+
+    @SerializedName("subscription_videourl")
+    @Expose
+    private String mSubscriptionVideoUrl;
+
+    @SerializedName("subscription_imageurl")
+    @Expose
+    private String mSubscriptionImageUrl;
+
+    @SerializedName("subscription_thumburl")
+    @Expose
+    private String mSubscriptionThumbUrl;
+
+    @SerializedName("subscription_productname")
+    @Expose
+    private String mSubscriptionProductName;
+
+    @SerializedName("subscription_productID")
+    @Expose
+    private String mSubscriptionProductID;
+
+    @SerializedName("subscription_status")
+    @Expose
+    private int mSubscriptionStatus;
+
+    @SerializedName("member_status")
+    @Expose
+    private boolean mMemberStatus;
+
+    @SerializedName("subscription_createtime")
+    @Expose
+    private String mSubscriptionCreateTime;
 
     private boolean mIsFollowing;
 
@@ -147,6 +187,8 @@ public class PromotersResModel implements Serializable {
     }
 
     public String getUserType() {
+        if(userType == null)
+            userType = "";
         return userType;
     }
 
@@ -205,6 +247,8 @@ public class PromotersResModel implements Serializable {
     }
 
     public String getStripeUserId() {
+        if(stripeUserId == null)
+            stripeUserId = "";
         return stripeUserId;
     }
 
@@ -288,10 +332,84 @@ public class PromotersResModel implements Serializable {
     }
 
     public String getSubscription_planID() {
+        if(subscription_planID == null)
+            subscription_planID = "";
         return subscription_planID;
     }
 
     public void setSubscription_planID(String subscription_planID) {
         this.subscription_planID = subscription_planID;
+    }
+
+    public String getSubscriptionDesp() {
+        return mSubscriptionDesp;
+    }
+
+    public void setSubscriptionDesp(String mSubscriptionDesp) {
+        this.mSubscriptionDesp = mSubscriptionDesp;
+    }
+
+    public String getSubscriptionVideoUrl() {
+        return mSubscriptionVideoUrl;
+    }
+
+    public void setSubscriptionVideoUrl(String mSubscriptionVideoUrl) {
+        this.mSubscriptionVideoUrl = mSubscriptionVideoUrl;
+    }
+
+    public String getSubscriptionImageUrl() {
+        return mSubscriptionImageUrl;
+    }
+
+    public void setSubscriptionImageUrl(String mSubscriptionImageUrl) {
+        this.mSubscriptionImageUrl = mSubscriptionImageUrl;
+    }
+
+    public String getSubscriptionThumbUrl() {
+        return mSubscriptionThumbUrl;
+    }
+
+    public void setSubscriptionThumbUrl(String mSubscriptionThumbUrl) {
+        this.mSubscriptionThumbUrl = mSubscriptionThumbUrl;
+    }
+
+    public String getSubscriptionProductName() {
+        return mSubscriptionProductName;
+    }
+
+    public void setSubscriptionProductName(String mSubscriptionProductName) {
+        this.mSubscriptionProductName = mSubscriptionProductName;
+    }
+
+    public String getSubscriptionProductID() {
+        return mSubscriptionProductID;
+    }
+
+    public void setSubscriptionProductID(String mSubscriptionProductID) {
+        this.mSubscriptionProductID = mSubscriptionProductID;
+    }
+
+    public int getSubscriptionStatus() {
+        return mSubscriptionStatus;
+    }
+
+    public void setSubscriptionStatus(int mSubscriptionStatus) {
+        this.mSubscriptionStatus = mSubscriptionStatus;
+    }
+
+    public boolean ismMemberStatus() {
+        return mMemberStatus;
+    }
+
+    public void setMemberStatus(boolean mMemberStatus) {
+        this.mMemberStatus = mMemberStatus;
+    }
+
+    public String getSubscriptionCreateTime() {
+        return mSubscriptionCreateTime;
+    }
+
+    public void setSubscriptionCreateTime(String mSubscriptionCreateTime) {
+        this.mSubscriptionCreateTime = mSubscriptionCreateTime;
     }
 }

@@ -63,22 +63,26 @@ public class CommentReplyLikeAdapter  extends RecyclerView.Adapter<CommentReplyL
 
     @Override
     public void onBindViewHolder(final Holder mHolder, int pos) {
-        ReplyLikeModel mEntity = mReplyLikesList.get(pos);
-        String imgStr = mEntity.getProfilesByProfileID().getProfilePicture();
-        if (!imgStr.isEmpty()) {
-            ((BaseActivity)mContext).setImageWithGlide(mHolder.mUserImg,imgStr, R.drawable.default_profile_icon);
-        } else {
-            mHolder.mUserImg.setImageResource(R.drawable.default_profile_icon);
-        }
-        mHolder.mCommentImgLay.setTag(pos);
-        mHolder.mCommentImgLay.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                profileClick(mReplyLikesList.get(mHolder.getLayoutPosition()));
+        try {
+            ReplyLikeModel mEntity = mReplyLikesList.get(pos);
+            String imgStr = mEntity.getProfilesByProfileID().getProfilePicture();
+            if (!imgStr.isEmpty()) {
+                ((BaseActivity) mContext).setImageWithGlide(mHolder.mUserImg, imgStr, R.drawable.default_profile_icon);
+            } else {
+                mHolder.mUserImg.setImageResource(R.drawable.default_profile_icon);
             }
-        });
+            mHolder.mCommentImgLay.setTag(pos);
+            mHolder.mCommentImgLay.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    profileClick(mReplyLikesList.get(mHolder.getLayoutPosition()));
+                }
+            });
 
-        mHolder.mUserNameTxt.setText(Utility.getInstance().getUserName(mEntity.getProfilesByProfileID()));
+            mHolder.mUserNameTxt.setText(Utility.getInstance().getUserName(mEntity.getProfilesByProfileID()));
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     @Override

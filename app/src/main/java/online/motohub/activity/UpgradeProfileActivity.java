@@ -43,6 +43,7 @@ import online.motohub.model.ProfileResModel;
 import online.motohub.model.SessionModel;
 import online.motohub.retrofit.RetrofitClient;
 import online.motohub.util.AppConstants;
+import online.motohub.util.DialogManager;
 import online.motohub.util.PreferenceUtils;
 
 public class UpgradeProfileActivity extends BaseActivity {
@@ -143,6 +144,8 @@ public class UpgradeProfileActivity extends BaseActivity {
         ButterKnife.bind(this);
         initView();
     }
+
+
 
     private void initView() {
         setupUI(mCoordinatorLayout);
@@ -258,6 +261,7 @@ public class UpgradeProfileActivity extends BaseActivity {
 
     @Override
     protected void onDestroy() {
+        DialogManager.hideProgress();
         super.onDestroy();
     }
 

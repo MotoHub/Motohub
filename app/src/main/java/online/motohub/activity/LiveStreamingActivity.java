@@ -10,7 +10,6 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
@@ -37,6 +36,7 @@ import online.motohub.adapter.LiveCamerasAdapter;
 import online.motohub.model.LiveStreamEntity;
 import online.motohub.model.LiveStreamResponse;
 import online.motohub.retrofit.RetrofitClient;
+import online.motohub.util.DialogManager;
 
 
 public class LiveStreamingActivity extends BaseActivity implements IVLCVout.Callback, LiveCamerasAdapter.CameraListener {
@@ -107,6 +107,7 @@ public class LiveStreamingActivity extends BaseActivity implements IVLCVout.Call
 
     @Override
     protected void onDestroy() {
+        DialogManager.hideProgress();
         super.onDestroy();
         releasePlayer();
     }

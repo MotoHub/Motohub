@@ -11,6 +11,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import online.motohub.R;
+import online.motohub.util.DialogManager;
 
 public class EventsResultActivity extends BaseActivity {
 
@@ -41,6 +42,13 @@ public class EventsResultActivity extends BaseActivity {
 
         initView();
 
+    }
+
+
+    @Override
+    protected void onDestroy() {
+        DialogManager.hideProgress();
+        super.onDestroy();
     }
 
     private void initView() {

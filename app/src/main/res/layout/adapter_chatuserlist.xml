@@ -60,8 +60,8 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@id/name"
                     android:layout_marginTop="5dp"
-                    android:text="Seems gcm will take some time"
-                    android:textColor="#888888" />
+                    android:textColor="#888888"
+                    android:visibility="visible"/>
 
                 <TextView
                     android:id="@+id/timestamp"
@@ -69,9 +69,8 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_alignParentTop="true"
-                    android:text="12:00 AM"
                     android:textColor="@android:color/black"
-                    android:textSize="10dp" />
+                    android:textSize="10dp"/>
 
                 <TextView
                     android:id="@+id/count"
@@ -80,11 +79,9 @@
                     android:layout_alignParentRight="true"
                     android:layout_below="@id/timestamp"
                     android:layout_marginTop="5dp"
-                    android:background="@drawable/bg_circle"
                     android:gravity="center"
-                    android:text="5"
                     android:textColor="@android:color/black"
-                    android:textSize="10dp" />
+                    android:textSize="10dp"/>
 
             </RelativeLayout>
         </LinearLayout>

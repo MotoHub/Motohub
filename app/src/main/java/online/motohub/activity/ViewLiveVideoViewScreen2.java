@@ -62,6 +62,7 @@ public class ViewLiveVideoViewScreen2 extends BaseActivity {
         initView();
     }
 
+
     private void initView() {
         Bundle mBundle = getIntent().getExtras();
         if (mBundle != null) {
@@ -267,6 +268,7 @@ public class ViewLiveVideoViewScreen2 extends BaseActivity {
 
     @Override
     protected void onDestroy() {
+        DialogManager.hideProgress();
         super.onDestroy();
         releasePlayer();
     }

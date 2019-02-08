@@ -51,6 +51,10 @@ public class EventsWhoIsGoingResModel implements Serializable {
     @Expose
     private String mAnswers;
 
+    @SerializedName("transaction_token")
+    @Expose
+    private String mTransactionToken;
+
     public int getID() {
         return mID;
     }
@@ -107,4 +111,11 @@ public class EventsWhoIsGoingResModel implements Serializable {
         this.mAnswers = mAnswers;
     }
 
+    public String getTransactionToken() {
+        return mTransactionToken;
+    }
+
+    public void setTransactionToken(String mTransactionToken) {
+        this.mTransactionToken = mTransactionToken;
+    }
 }

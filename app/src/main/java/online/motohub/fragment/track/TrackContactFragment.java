@@ -17,13 +17,15 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import org.greenrobot.eventbus.EventBus;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import online.motohub.R;
+import online.motohub.application.MotoHub;
 import online.motohub.fragment.BaseFragment;
 import online.motohub.model.TrackResModel;
-import online.motohub.model.promoter_club_news_media.PromotersModel;
 import online.motohub.model.promoter_club_news_media.PromotersResModel;
 
 public class TrackContactFragment extends BaseFragment {
@@ -50,7 +52,6 @@ public class TrackContactFragment extends BaseFragment {
 
 
     private TrackResModel mTrackResModel;
-    private PromotersResModel mPromoterResModel;
 
     public TrackContactFragment() {
         // Required empty public constructor
@@ -68,8 +69,11 @@ public class TrackContactFragment extends BaseFragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        mPromoterResModel = (PromotersResModel) getArguments()
-                .getSerializable(PromotersModel.PROMOTERS_RES_MODEL);
+        assert getArguments() != null;
+        //PromotersResModel mPromoterResModel = (PromotersResModel) getArguments().getSerializable(PromotersModel.PROMOTERS_RES_MODEL);
+        //PromotersResModel mPromoterResModel = MotoHub.getApplicationInstance().getmPromoterResModel();
+        PromotersResModel mPromoterResModel = EventBus.getDefault().getStickyEvent(PromotersResModel.class);
+        assert mPromoterResModel != null;
         mTrackResModel = mPromoterResModel.getTrackByUserID();
 
         mUnBinder = ButterKnife.bind(this, view);

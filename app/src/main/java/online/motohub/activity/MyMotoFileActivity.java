@@ -4,45 +4,48 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
-import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Environment;
-import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.android.flexbox.FlexDirection;
 import com.google.android.flexbox.FlexWrap;
 import com.google.android.flexbox.FlexboxLayoutManager;
 import com.google.android.flexbox.JustifyContent;
-import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.yovenny.videocompress.MediaController;
+import com.yalantis.contextmenu.lib.ContextMenuDialogFragment;
+import com.yalantis.contextmenu.lib.MenuObject;
+import com.yalantis.contextmenu.lib.MenuParams;
+import com.yalantis.contextmenu.lib.interfaces.OnMenuItemClickListener;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 import butterknife.BindString;
 import butterknife.BindView;
@@ -56,15 +59,17 @@ import online.motohub.R;
 import online.motohub.adapter.PostsAdapter;
 import online.motohub.adapter.TaggedProfilesAdapter;
 import online.motohub.application.MotoHub;
-import online.motohub.database.DatabaseHandler;
 import online.motohub.fragment.dialog.AppDialogFragment;
 import online.motohub.interfaces.CommonInterface;
 import online.motohub.interfaces.CommonReturnInterface;
+import online.motohub.interfaces.SharePostInterface;
 import online.motohub.model.FeedCommentModel;
 import online.motohub.model.FeedLikesModel;
 import online.motohub.model.FeedShareModel;
+import online.motohub.model.FollowProfileModel1;
 import online.motohub.model.ImageModel;
 import online.motohub.model.LiveStreamResponse;
+import online.motohub.model.NotificationBlockedUsersModel;
 import online.motohub.model.PostsModel;
 import online.motohub.model.PostsResModel;
 import online.motohub.model.ProfileModel;
@@ -79,27 +84,20 @@ import online.motohub.util.DialogManager;
 import online.motohub.util.PreferenceUtils;
 import online.motohub.util.StringUtils;
 import online.motohub.util.UploadFileService;
+import online.motohub.util.UrlUtils;
 import online.motohub.util.Utility;
 
-public class MyMotoFileActivity extends BaseActivity implements
-        PopupMenu.OnMenuItemClickListener,
-        PostsAdapter.TotalRetrofitPostsResultCount,
-        TaggedProfilesAdapter.TaggedProfilesSizeInterface,
-        CommonInterface {
+public class MyMotoFileActivity extends BaseActivity implements PostsAdapter.TotalRetrofitPostsResultCount,
+        TaggedProfilesAdapter.TaggedProfilesSizeInterface, CommonInterface, OnMenuItemClickListener {
 
     public static final String EXTRA_RESULT_DATA = "activity_video_picker_uri";
     private static final String TAG = MyMotoFileActivity.class.getName();
     private static final int mDataLimit = 15;
     private final int START_LIVE_STREAM = 1;
-    private final int DELETE_LIVE_STREAM = 2;
     @BindView(R.id.swipe_refresh_view)
     SwipeRefreshLayout mSwipeRefreshLay;
-    /* @BindView(R.id.appBarLayout)
-     AppBarLayout mAppBarLay;*/
-   /* @BindView(R.id.collapsing_toolbar)
-    CollapsingToolbarLayout mCollapsingToolbarLay;*/
-    /*@BindView(R.id.my_moto_file_co_layout)
-    CoordinatorLayout mCoordinatorLayout;*/
+    @BindView(R.id.nestedScrollView)
+    NestedScrollView mNestedScrollView;
     @BindView(R.id.my_moto_file_co_layout)
     RelativeLayout mCoordinatorLayout;
     @BindView(R.id.toolbar)
@@ -144,7 +142,14 @@ public class MyMotoFileActivity extends BaseActivity implements
     RelativeLayout mLiveBoxLay;
     @BindString(R.string.storage_permission_denied)
     String mNoStoragePer;
-    private String mBlockedUsers = "";
+    @BindView(R.id.user_details)
+    LinearLayout mUserdetails;
+    @BindView(R.id.shimmer_myfeeds)
+    ShimmerFrameLayout mShimmer_myfeeds;
+    @BindView(R.id.shimmer_myprofile)
+    ShimmerFrameLayout mShimmer_myprofiledet;
+    @BindString(R.string.update_profile_success)
+    String mUpdateProfileSuccessStr;
     private ArrayList<ProfileResModel> mFullMPList = new ArrayList<>();
     private ArrayList<PostsResModel> mPostsList = new ArrayList<>();
     private PostsAdapter mPostsAdapter;
@@ -153,21 +158,28 @@ public class MyMotoFileActivity extends BaseActivity implements
     BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            updatePost(intent);
+            Bundle b = intent.getExtras();
+            assert b != null;
+            String mUsertype = b.getString(AppConstants.USER_TYPE);
+            assert mUsertype != null;
+            if (mUsertype.equals("user"))
+                updatePost(intent);
         }
     };
+    int DELETE_LIVE_STREAM = 2;
     private ArrayList<ProfileResModel> mFollowingListData = new ArrayList<>();
     private ArrayList<ProfileResModel> mTaggedProfilesList = new ArrayList<>();
+    private ProfileResModel mCurrentProfileObj;
     private TaggedProfilesAdapter mTaggedProfilesAdapter;
     private LinearLayoutManager mPostsLayoutManager;
     private int mPostsRvOffset = 0, mPostsRvTotalCount = 0;
     private FeedShareModel mSharedFeed;
     private int mCurrentPostPosition;
-    private String mNewSharedID;
     private boolean mIsPostsRvLoading = true;
     private int mCurrentProfileID = 0;
-    private String mVideoPathUri, mPostImgUri, mMyFollowings;
+    private String mMyFollowings;
     private int LIVE_STREAM_RES_TYPE = 0;
+    private String mShareTxt = "";
     CommonReturnInterface mCommonReturnInterface = new CommonReturnInterface() {
         @Override
         public void onSuccess(int type) {
@@ -182,8 +194,21 @@ public class MyMotoFileActivity extends BaseActivity implements
     private int liveStreamID = 0;
     private String mLiveStreamName = "";
     private boolean isExtraProfile = false;
+    private boolean isCoverPicture;
     private int selProfileID = 0;
     private int prevProfilePos = 0;
+
+    String mCoverImgUri, mUploadedServerCoverImgFileUrl;
+
+    private FragmentManager fragmentManager;
+    private ContextMenuDialogFragment mMenuDialogFragment;
+    SharePostInterface mShareTextWithPostInterface = new SharePostInterface() {
+        @Override
+        public void onSuccess(String shareMessage) {
+            mShareTxt = shareMessage;
+            CommonAPI.getInstance().callPostShare(MyMotoFileActivity.this, mPostsList.get(mCurrentPostPosition), mCurrentProfileObj.getID());
+        }
+    };
 
     private void updatePost(Intent intent) {
         PostsResModel mPostsModel =
@@ -209,43 +234,7 @@ public class MyMotoFileActivity extends BaseActivity implements
         getMyProfiles();
     }
 
-    /*   @Override
-       @SuppressWarnings("unchecked")
-       protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
-           mFullMPList.clear();
-           mFullMPList.addAll((ArrayList<ProfileResModel>)
-                   savedInstanceState.getSerializable(ProfileModel.MY_PROFILE_RES_MODEL));
-           mMPSpinnerList.clear();
-           mMPSpinnerList.addAll((ArrayList<String>)
-                   savedInstanceState.getSerializable(ProfileModel.SPINNER_LIST));
-           mPostImgUri = savedInstanceState.getString(PostsModel.POST_PICTURE);
-           mPostsList.clear();
-           mPostsList.addAll((ArrayList<PostsResModel>)
-                   savedInstanceState.getSerializable(PostsModel.POST_MODEL));
-           setPostAdapter();
-           if (mPostImgUri != null) {
-               setImageWithGlide(mPostPicImgView, Uri.parse(mPostImgUri));
-               mPostImgVideoCloseBtnLayout.setVisibility(View.VISIBLE);
-               mPostPicImgView.setVisibility(View.VISIBLE);
-               mPostImgVideoLayout.setVisibility(View.VISIBLE);
-           }
-           mVideoPathUri = savedInstanceState.getString(PostsModel.PostVideoURL);
-           if (mVideoPathUri != null) {
-               setVideoPost();
-           }
-           mTaggedProfilesList.clear();
-           mTaggedProfilesList.addAll((ArrayList<ProfileResModel>)
-                   savedInstanceState.getSerializable(ProfileModel.FOLLOWING));
-           if (mTaggedProfilesAdapter != null)
-               mTaggedProfilesAdapter.notifyDataSetChanged();
-           if (mTaggedProfilesList.size() > 0) {
-               mTagProfilesRecyclerView.setVisibility(View.VISIBLE);
-           } else {
-               mTagProfilesRecyclerView.setVisibility(View.GONE);
-           }
-           changeAndSetProfile(getProfileCurrentPos());
-           super.onRestoreInstanceState(savedInstanceState);
-       }*/
+
     @Override
     public void onResume() {
         super.onResume();
@@ -253,18 +242,6 @@ public class MyMotoFileActivity extends BaseActivity implements
         MotoHub.getApplicationInstance().myMotoFileOnResume();
     }
 
-    /*   @Override
-       protected void onSaveInstanceState(Bundle outState) {
-           outState.putSerializable(ProfileModel.MY_PROFILE_RES_MODEL, mFullMPList);
-           outState.putSerializable(ProfileModel.SPINNER_LIST, mMPSpinnerList);
-           outState.putSerializable(ProfileModel.FOLLOWING, mTaggedProfilesList);
-           outState.putSerializable(PostsModel.POST_MODEL, mPostsList);
-           outState.putString(PostsModel.POST_PICTURE, mPostImgUri);
-           outState.putString(PostsModel.PostVideoURL, mVideoPathUri);
-           outState.putString(PostsModel.PostVideoURL, mVideoPathUri);
-           super.onSaveInstanceState(outState);
-       }
-   */
     @Override
     public void onPause() {
         super.onPause();
@@ -274,6 +251,7 @@ public class MyMotoFileActivity extends BaseActivity implements
 
     @Override
     protected void onDestroy() {
+        DialogManager.hideProgress();
         if (selProfileID != 0)
             PreferenceUtils.getInstance(this).saveIntData(PreferenceUtils.CURRENT_PROFILE_POS, prevProfilePos);
         super.onDestroy();
@@ -283,11 +261,10 @@ public class MyMotoFileActivity extends BaseActivity implements
         setupUI(mCoordinatorLayout);
         AppConstants.LIVE_STREAM_CALL_BACK = this;
         setToolbar(mToolbar, mToolbarTitle);
-
         showToolbarBtn(mToolbar, R.id.toolbar_back_img_btn);
-        showToolbarBtn(mToolbar, R.id.toolbar_settings_img_btn);
-        showToolbarBtn(mToolbar, R.id.toolbar_messages_img_btn);
-        showToolbarBtn(mToolbar, R.id.toolbar_notification_img_btn);
+        mShimmer_myfeeds.startShimmerAnimation();
+        mShimmer_myprofiledet.startShimmerAnimation();
+
         selProfileID = getIntent().getIntExtra(AppConstants.MY_PROFILE_ID, 0);
         if (selProfileID != 0)
             prevProfilePos = getProfileCurrentPos();
@@ -297,40 +274,47 @@ public class MyMotoFileActivity extends BaseActivity implements
 
         mPostsRecyclerView.setLayoutManager(mPostsLayoutManager);
 
-        mPostsRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-
+        mNestedScrollView.getViewTreeObserver().addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
             @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-                int mVisibleItemCount = mPostsLayoutManager.getChildCount();
-                int mTotalItemCount = mPostsLayoutManager.getItemCount();
-                int mFirstVisibleItemPosition = mPostsLayoutManager.findFirstVisibleItemPosition();
-                if (!mIsPostsRvLoading && !(mPostsRvOffset >= mPostsRvTotalCount)) {
-                    if ((mVisibleItemCount + mFirstVisibleItemPosition) >= mTotalItemCount
-                            && mFirstVisibleItemPosition >= 0) {
-                        mIsPostsRvLoading = true;
-                        getProfilePosts();
+            public void onScrollChanged() {
+                View view = mNestedScrollView.getChildAt(mNestedScrollView.getChildCount() - 1);
+
+                int diff = (view.getBottom() - (mNestedScrollView.getHeight() + mNestedScrollView
+                        .getScrollY()));
+
+                if (diff == 0) {
+                    // your pagination code
+
+                    int mVisibleItemCount = mPostsLayoutManager.getChildCount();
+                    int mTotalItemCount = mPostsLayoutManager.getItemCount();
+                    int mFirstVisibleItemPosition = mPostsLayoutManager.findFirstVisibleItemPosition();
+                    if (!mIsPostsRvLoading && !(mPostsRvOffset >= mPostsRvTotalCount)) {
+                        if ((mVisibleItemCount + mFirstVisibleItemPosition) >= mTotalItemCount
+                                && mFirstVisibleItemPosition >= 0) {
+                            mIsPostsRvLoading = true;
+                            getProfilePosts();
+                        }
                     }
                 }
             }
-
         });
-
 
         FlexboxLayoutManager mFlexBoxLayoutManager = new FlexboxLayoutManager(this);
         mFlexBoxLayoutManager.setFlexWrap(FlexWrap.WRAP);
         mFlexBoxLayoutManager.setFlexDirection(FlexDirection.ROW);
         mFlexBoxLayoutManager.setJustifyContent(JustifyContent.FLEX_START);
         mTagProfilesRecyclerView.setLayoutManager(mFlexBoxLayoutManager);
-
         mTaggedProfilesAdapter = new TaggedProfilesAdapter(mTaggedProfilesList, this);
         mTagProfilesRecyclerView.setAdapter(mTaggedProfilesAdapter);
+
+        fragmentManager = getSupportFragmentManager();
+        initMenuFragment();
 
     }
 
     private void setPostAdapter() {
         if (mPostsAdapter == null) {
-            mPostsAdapter = new PostsAdapter(mPostsList, getCurrentProfile(), this);
+            mPostsAdapter = new PostsAdapter(mPostsList, getCurrentProfile(), this, true);
             mPostsRecyclerView.setAdapter(mPostsAdapter);
         } else {
             mPostsAdapter.notifyDataSetChanged();
@@ -338,118 +322,85 @@ public class MyMotoFileActivity extends BaseActivity implements
     }
 
     private void getMyProfiles() {
-        Collections.addAll(mMPSpinnerList, getResources().getStringArray(R.array.empty_array));
-        int mUserID = PreferenceUtils.getInstance(this).getIntData(PreferenceUtils.USER_ID);
-        String mFilter = "UserID = " + mUserID;
-        if (isNetworkConnected())
-            RetrofitClient.getRetrofitInstance().callGetProfiles(this, mFilter, RetrofitClient.GET_PROFILE_RESPONSE);
-        else
-            showAppDialog(AppDialogFragment.ALERT_INTERNET_FAILURE_DIALOG, null);
-
+        AsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
+                //TODO your background code
+                Collections.addAll(mMPSpinnerList, getResources().getStringArray(R.array.empty_array));
+                int mUserID = PreferenceUtils.getInstance(MyMotoFileActivity.this).getIntData(PreferenceUtils.USER_ID);
+                String mFilter = "UserID = " + mUserID;
+                RetrofitClient.getRetrofitInstance().callGetProfiles(MyMotoFileActivity.this, mFilter, RetrofitClient.GET_PROFILE_RESPONSE);
+            }
+        });
     }
 
     private void getProfilePosts() {
-        String mFilter;
-        ProfileResModel mProfileResModel = getCurrentProfile();
-        mBlockedUsers = Utility.getInstance().getMyBlockedUsersID(mProfileResModel.getBlockedUserProfilesByProfileID(),
-                mProfileResModel.getBlockeduserprofiles_by_BlockedProfileID());
-
-
-
-       if (mBlockedUsers.trim().isEmpty()) {
-           mFilter = "((ProfileID=" + mProfileResModel.getID() + ") OR (TaggedProfileID LIKE '%," +mProfileResModel.getID() + ",%') OR (SharedProfileID LIKE '%," + mProfileResModel.getID() +
-                   ",%') AND ((user_type!='promoter') AND (user_type!='club') AND (user_type!='newsmedia') AND (user_type!='track')  AND (user_type!='shop')))";
-
-       } else {
-
-           mFilter = "((ProfileID=" + mProfileResModel.getID() + ") OR (TaggedProfileID LIKE '%," +mProfileResModel.getID() + ",%') OR (SharedProfileID LIKE '%," + mProfileResModel.getID() +
-                   ",%') AND ((user_type!='promoter') AND (user_type!='club') AND (user_type!='newsmedia') AND (user_type!='track')  AND (user_type!='shop'))) AND (ProfileID NOT IN (" + mBlockedUsers + "))";
-        }
-
-        if (isNetworkConnected())
-            RetrofitClient.getRetrofitInstance().callGetProfilePosts(this, mFilter, RetrofitClient.GET_PROFILE_POSTS_RESPONSE, mDataLimit, mPostsRvOffset);
-        else
-            showAppDialog(AppDialogFragment.ALERT_INTERNET_FAILURE_DIALOG, null);
-    }
-
-    private void getTagProfileList() {
-        ProfileResModel mMyProfileResModel = mFullMPList.get(PreferenceUtils.getInstance(this)
-                .getIntData(PreferenceUtils.CURRENT_PROFILE_POS));
-        String mMyFollowingsID = Utility.getInstance().getMyFollowersFollowingsID(mMyProfileResModel.getFollowprofile_by_ProfileID(), false);
-        if (mMyFollowingsID.isEmpty()) {
-            showSnackBar(mCoordinatorLayout, mTagErr);
-            return;
-        }
-        mBlockedUsers = Utility.getInstance().getMyBlockedUsersID(mMyProfileResModel.getBlockedUserProfilesByProfileID(),
-                mMyProfileResModel.getBlockeduserprofiles_by_BlockedProfileID());
-        String mFilter;
-        if (mBlockedUsers.trim().isEmpty()) {
-            mFilter = "id IN (" + mMyFollowingsID + ")";
-        } else {
-            mFilter = "id IN (" + mMyFollowingsID + ") AND ( id NOT IN (" + mBlockedUsers + "))";
-        }
-        if (isNetworkConnected())
-            RetrofitClient.getRetrofitInstance().callGetProfiles(this, mFilter, RetrofitClient.GET_FOLLOWING_PROFILE_RESPONSE);
-        else
-            showAppDialog(AppDialogFragment.ALERT_INTERNET_FAILURE_DIALOG, null);
-    }
-
-    private void uploadPicture(String imgUri) {
-        File mFile = new File(Uri.parse(imgUri).getPath());
-        RequestBody requestBody = RequestBody.create(MediaType.parse("*/*"), mFile);
-        MultipartBody.Part filePart = MultipartBody.Part.createFormData("files", mFile.getName(), requestBody);
-        if (isNetworkConnected())
-            RetrofitClient.getRetrofitInstance().callUploadProfilePostImg(
-                    this,
-                    filePart,
-                    RetrofitClient.UPLOAD_IMAGE_FILE_RESPONSE);
-        else
-            showAppDialog(AppDialogFragment.ALERT_INTERNET_FAILURE_DIALOG, null);
-    }
-
-    private void profilePostContent(String postImgFilePath) {
-
-        try {
-            String mWritePostStr = mWritePostEt.getText().toString().trim();
-
-            if (TextUtils.isEmpty(postImgFilePath) && TextUtils.isEmpty(mWritePostStr)) {
-                return;
-            }
-
-            int mUserId = PreferenceUtils.getInstance(this).getIntData(PreferenceUtils.USER_ID);
-
-            JsonObject mJsonObject = new JsonObject();
-            mJsonObject.addProperty(PostsModel.POST_TEXT, URLEncoder.encode(mWritePostStr, "UTF-8"));
-
-            String mPostPic = "[\"" + postImgFilePath + "\"]";
-
-            mJsonObject.addProperty(PostsModel.POST_PICTURE, mPostPic);
-            mJsonObject.addProperty(PostsModel.PROFILE_ID, getCurrentProfile().getID());
-            mJsonObject.addProperty(PostsModel.WHO_POSTED_PROFILE_ID, getCurrentProfile().getID());
-            mJsonObject.addProperty(PostsModel.WHO_POSTED_USER_ID, mUserId);
-            mJsonObject.addProperty(PostsModel.IS_NEWS_FEED_POST, true);
-
-            if (mTaggedProfilesList.size() == 0) {
-                mJsonObject.addProperty(PostsModel.TAGGED_PROFILE_ID, "");
-            } else {
-                StringBuilder mTaggedProfileID = new StringBuilder();
-                for (ProfileResModel mProfileResModel : mTaggedProfilesList) {
-                    mTaggedProfileID.append(mProfileResModel.getID()).append(",");
+        AsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
+                //TODO your background code.
+                String mFilter;
+                ProfileResModel mProfileResModel = getCurrentProfile();
+                String mBlockedUsers = Utility.getInstance().getMyBlockedUsersID(mProfileResModel.getBlockedUserProfilesByProfileID(),
+                        mProfileResModel.getBlockeduserprofiles_by_BlockedProfileID());
+                if (mBlockedUsers.trim().isEmpty()) {
+                    mFilter = "((ProfileID=" + mProfileResModel.getID() + ") AND ((user_type!='promoter') AND (user_type!='club') AND (user_type!='newsmedia') AND (user_type!='track') AND (user_type!='shop'))) AND (ReportStatus == 0)";
+                } else {
+                    mFilter = "((ProfileID=" + mProfileResModel.getID() + ") AND ((user_type!='promoter') AND (user_type!='club') AND (user_type!='newsmedia') AND (user_type!='track') AND (user_type!='shop'))) AND (ProfileID NOT IN (" + mBlockedUsers + ")) AND (ReportStatus == 0)";
                 }
-                mTaggedProfileID.deleteCharAt(mTaggedProfileID.length() - 1);
-                mJsonObject.addProperty(PostsModel.TAGGED_PROFILE_ID, mTaggedProfileID.toString());
+                RetrofitClient.getRetrofitInstance().callGetProfilePosts(MyMotoFileActivity.this, mFilter, RetrofitClient.GET_PROFILE_POSTS_RESPONSE, mDataLimit, mPostsRvOffset);
             }
+        });
+    }
 
-            JsonArray mJsonArray = new JsonArray();
-            mJsonArray.add(mJsonObject);
-            if (isNetworkConnected())
-                RetrofitClient.getRetrofitInstance().callCreateProfilePosts(this, mJsonArray, RetrofitClient.CREATE_PROFILE_POSTS_RESPONSE);
-            else
-                showAppDialog(AppDialogFragment.ALERT_INTERNET_FAILURE_DIALOG, null);
+    private void profilePostContent(final String postImgFilePath) {
+        AsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
+                //TODO your background code
+                try {
+                    String mWritePostStr = mWritePostEt.getText().toString().trim();
+                    if (TextUtils.isEmpty(postImgFilePath) && TextUtils.isEmpty(mWritePostStr)) {
+                        return;
+                    }
 
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
+                    int mUserId = PreferenceUtils.getInstance(MyMotoFileActivity.this).getIntData(PreferenceUtils.USER_ID);
+
+                    JsonObject mJsonObject = new JsonObject();
+                    mJsonObject.addProperty(PostsModel.POST_TEXT, URLEncoder.encode(mWritePostStr, "UTF-8"));
+
+                    String mPostPic = "[\"" + postImgFilePath + "\"]";
+
+                    mJsonObject.addProperty(PostsModel.POST_PICTURE, mPostPic);
+                    mJsonObject.addProperty(PostsModel.PROFILE_ID, getCurrentProfile().getID());
+                    mJsonObject.addProperty(PostsModel.WHO_POSTED_PROFILE_ID, getCurrentProfile().getID());
+                    mJsonObject.addProperty(PostsModel.WHO_POSTED_USER_ID, mUserId);
+                    mJsonObject.addProperty(PostsModel.IS_NEWS_FEED_POST, true);
+
+                    if (mTaggedProfilesList.size() == 0) {
+                        mJsonObject.addProperty(PostsModel.TAGGED_PROFILE_ID, "");
+                    } else {
+                        StringBuilder mTaggedProfileID = new StringBuilder();
+                        for (ProfileResModel mProfileResModel : mTaggedProfilesList) {
+                            mTaggedProfileID.append(mProfileResModel.getID()).append(",");
+                        }
+                        mTaggedProfileID.deleteCharAt(mTaggedProfileID.length() - 1);
+                        mJsonObject.addProperty(PostsModel.TAGGED_PROFILE_ID, mTaggedProfileID.toString());
+                    }
+
+                    JsonArray mJsonArray = new JsonArray();
+                    mJsonArray.add(mJsonObject);
+                    if (isNetworkConnected(MyMotoFileActivity.this))
+                        RetrofitClient.getRetrofitInstance().callCreateProfilePosts(MyMotoFileActivity.this, mJsonArray, RetrofitClient.CREATE_PROFILE_POSTS_RESPONSE);
+                    else
+                        showAppDialog(AppDialogFragment.ALERT_INTERNET_FAILURE_DIALOG, null);
+
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        });
 
     }
 
@@ -472,46 +423,60 @@ public class MyMotoFileActivity extends BaseActivity implements
                 finish();
                 break;
             case R.id.toolbar_settings_img_btn:
-                showPopupMenu(v);
+                //showPopupMenu(v);
+                if (fragmentManager.findFragmentByTag(ContextMenuDialogFragment.TAG) == null) {
+                    mMenuDialogFragment.show(fragmentManager, ContextMenuDialogFragment.TAG);
+                }
                 break;
             case R.id.toolbar_messages_img_btn:
                 if (mFullMPList.size() > 0) {
-                    startActivity(new Intent(MyMotoFileActivity.this, ChatHomeActivity.class)
-                            .putExtra(ProfileModel.MY_PROFILE_RES_MODEL, getCurrentProfile()));
+                    //MotoHub.getApplicationInstance().setmProfileResModel(getCurrentProfile());
+                    EventBus.getDefault().postSticky(getCurrentProfile());
+                    startActivity(new Intent(MyMotoFileActivity.this, ChatHomeActivity.class));
                 } else {
                     showAppDialog(AppDialogFragment.ALERT_INTERNET_FAILURE_DIALOG, null);
                 }
                 break;
-            case R.id.imageframe:
-                if (mVideoPathUri != null) {
-                    moveLoadVideoPreviewScreen(this, mVideoPathUri);
-                }
-                break;
+
             case R.id.toolbar_notification_img_btn:
                 if (mFullMPList.size() > 0) {
-                    startActivityForResult(new Intent(this, NotificationActivity.class)
-                            .putExtra(ProfileModel.MY_PROFILE_RES_MODEL, getCurrentProfile()), AppConstants.FOLLOWERS_FOLLOWING_RESULT);
+                    //MotoHub.getApplicationInstance().setmProfileResModel(getCurrentProfile());
+                    EventBus.getDefault().postSticky(getCurrentProfile());
+                    startActivityForResult(new Intent(this, NotificationActivity.class), AppConstants.FOLLOWERS_FOLLOWING_RESULT);
                 } else {
                     showAppDialog(AppDialogFragment.ALERT_INTERNET_FAILURE_DIALOG, null);
                 }
                 break;
             case R.id.cover_photo_img_view:
-                ProfileResModel mMyProfileResModel = mFullMPList.get(PreferenceUtils.getInstance(this)
-                        .getIntData(PreferenceUtils.CURRENT_PROFILE_POS));
-                if (!mMyProfileResModel.getCoverPicture().trim().isEmpty()) {
-                    moveLoadImageScreen(this, mMyProfileResModel.getCoverPicture());
+                if (mFullMPList.size() > 0) {
+                    ProfileResModel mMyProfileResModel = mFullMPList.get(PreferenceUtils.getInstance(this)
+                            .getIntData(PreferenceUtils.CURRENT_PROFILE_POS));
+                    if (!mMyProfileResModel.getCoverPicture().trim().isEmpty()) {
+                        moveLoadImageScreen(this, UrlUtils.FILE_URL + mMyProfileResModel.getCoverPicture());
+                    }
+                } else {
+                    showAppDialog(AppDialogFragment.ALERT_INTERNET_FAILURE_DIALOG, null);
                 }
                 break;
             case R.id.ib_add_cover_photo:
+                isCoverPicture = true;
+                showAppDialog(AppDialogFragment.BOTTOM_ADD_IMG_DIALOG, null);
+                break;
             case R.id.profile_img:
             case R.id.name_of_moto_tv:
             case R.id.name_of_driver_tv:
                 if (mFullMPList.size() > 0) {
                     Bundle mBundle = new Bundle();
-                    mBundle.putSerializable(ProfileModel.MY_PROFILE_RES_MODEL, mFullMPList.get(PreferenceUtils
+                    /*mBundle.putSerializable(ProfileModel.MY_PROFILE_RES_MODEL, mFullMPList.get(PreferenceUtils
+                            .getInstance
+                                    (this).getIntData(PreferenceUtils.CURRENT_PROFILE_POS)));*/
+                    /*MotoHub.getApplicationInstance().setmProfileResModel(mFullMPList.get(PreferenceUtils
+                            .getInstance
+                                    (this).getIntData(PreferenceUtils.CURRENT_PROFILE_POS)));*/
+                    EventBus.getDefault().postSticky(mFullMPList.get(PreferenceUtils
                             .getInstance
                                     (this).getIntData(PreferenceUtils.CURRENT_PROFILE_POS)));
-                    startActivityForResult(new Intent(this, UpdateProfileActivity.class).putExtras(mBundle), AppConstants.FOLLOWERS_FOLLOWING_RESULT);
+                    startActivityForResult(new Intent(this, UpdateProfileActivity.class), AppConstants.FOLLOWERS_FOLLOWING_RESULT);
 
                 } else {
                     showAppDialog(AppDialogFragment.ALERT_INTERNET_FAILURE_DIALOG, null);
@@ -520,7 +485,13 @@ public class MyMotoFileActivity extends BaseActivity implements
             case R.id.vehicle_info_box:
                 if (mFullMPList.size() > 0) {
                     Bundle mBundle = new Bundle();
-                    mBundle.putSerializable(ProfileModel.MY_PROFILE_RES_MODEL, mFullMPList.get(PreferenceUtils
+                    /*mBundle.putSerializable(ProfileModel.MY_PROFILE_RES_MODEL, mFullMPList.get(PreferenceUtils
+                            .getInstance
+                                    (this).getIntData(PreferenceUtils.CURRENT_PROFILE_POS)));*/
+                    /*MotoHub.getApplicationInstance().setmProfileResModel(mFullMPList.get(PreferenceUtils
+                            .getInstance
+                                    (this).getIntData(PreferenceUtils.CURRENT_PROFILE_POS)));*/
+                    EventBus.getDefault().postSticky(mFullMPList.get(PreferenceUtils
                             .getInstance
                                     (this).getIntData(PreferenceUtils.CURRENT_PROFILE_POS)));
                     mBundle.putBoolean(AppConstants.IS_FROM_VEHICLE_INFO, true);
@@ -533,13 +504,14 @@ public class MyMotoFileActivity extends BaseActivity implements
             case R.id.followers_box:
                 if (mFullMPList.size() > 0) {
                     if (getCurrentProfile().getFollowprofile_by_FollowProfileID().size() > 0) {
+                        //MotoHub.getApplicationInstance().setmProfileResModel(getCurrentProfile());
+                        EventBus.getDefault().postSticky(getCurrentProfile());
                         startActivityForResult(new Intent(this, FollowersFollowingActivity.class)
-                                .putExtra(AppConstants.MY_PROFILE_OBJ, getCurrentProfile())
+                                /*.putExtra(AppConstants.MY_PROFILE_OBJ, getCurrentProfile())*/
                                 .putExtra(AppConstants.IS_FOLLOWERS, true), AppConstants.FOLLOWERS_FOLLOWING_RESULT);
                     } else {
                         showToast(MyMotoFileActivity.this, getString(R.string.no_followers_found_err));
                     }
-
                 } else {
                     showAppDialog(AppDialogFragment.ALERT_INTERNET_FAILURE_DIALOG, null);
                 }
@@ -547,53 +519,14 @@ public class MyMotoFileActivity extends BaseActivity implements
             case R.id.following_box:
                 if (mFullMPList.size() > 0) {
                     if (getCurrentProfile().getFollowprofile_by_ProfileID().size() > 0) {
+                        //MotoHub.getApplicationInstance().setmProfileResModel(getCurrentProfile());
+                        EventBus.getDefault().postSticky(getCurrentProfile());
                         startActivityForResult(new Intent(this, FollowersFollowingActivity.class)
-                                .putExtra(AppConstants.MY_PROFILE_OBJ, getCurrentProfile())
+                                /*.putExtra(AppConstants.MY_PROFILE_OBJ, getCurrentProfile())*/
                                 .putExtra(AppConstants.IS_FOLLOWERS, false), AppConstants.FOLLOWERS_FOLLOWING_RESULT);
                     } else {
                         showToast(MyMotoFileActivity.this, getString(R.string.no_following_found_err));
                     }
-
-                } else {
-                    showAppDialog(AppDialogFragment.ALERT_INTERNET_FAILURE_DIALOG, null);
-                }
-                break;
-            case R.id.post_btn:
-                try {
-                    if (mFullMPList.size() > 0) {
-                        if (mVideoPathUri != null) {
-                            File videoFile = copiedVideoFile(Uri.fromFile(new File(mVideoPathUri)),
-                                    GALLERY_VIDEO_NAME_TYPE);
-                            String mPath = String.valueOf(videoFile);
-                            new VideoCompressor().execute(mPath, getCompressedVideoPath());
-
-                        } else if (mPostImgUri != null) {
-                            uploadPicture(mPostImgUri);
-                        } else {
-                            profilePostContent("");
-                        }
-                    } else {
-                        showAppDialog(AppDialogFragment.ALERT_INTERNET_FAILURE_DIALOG, null);
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                break;
-            case R.id.add_post_img:
-                showAppDialog(AppDialogFragment.BOTTOM_ADD_IMG_DIALOG, null);
-                break;
-            case R.id.remove_post_img_btn:
-                mPostImgUri = null;
-                mVideoPathUri = null;
-                mPostPicImgView.setImageDrawable(null);
-                mPostImgVideoCloseBtnLayout.setVisibility(View.GONE);
-                mPostImgVideoLayout.setVisibility(View.GONE);
-                mPostPicImgView.setVisibility(View.GONE);
-                break;
-            case R.id.tag_profile_img:
-                if (mFullMPList.size() > 0) {
-                    getTagProfileList();
-
                 } else {
                     showAppDialog(AppDialogFragment.ALERT_INTERNET_FAILURE_DIALOG, null);
                 }
@@ -603,9 +536,11 @@ public class MyMotoFileActivity extends BaseActivity implements
                 break;
             case R.id.photo_box:
                 if (mFullMPList.size() > 0) {
+                    //MotoHub.getApplicationInstance().setmProfileResModel(getCurrentProfile());
+                    EventBus.getDefault().postSticky(getCurrentProfile());
                     Intent photoIntent = new Intent(MyMotoFileActivity.this, ProfileImgGalleryActivity.class);
                     ProfileResModel model = getCurrentProfile();
-                    photoIntent.putExtra(ProfileImgGalleryActivity.EXTRA_PROFILE, model);
+                    photoIntent.putExtra(ProfileImgGalleryActivity.EXTRA_PROFILE, model.getID());
                     startActivity(photoIntent);
 
                 } else {
@@ -614,9 +549,11 @@ public class MyMotoFileActivity extends BaseActivity implements
                 break;
             case R.id.video_box:
                 if (mFullMPList.size() > 0) {
+                    //MotoHub.getApplicationInstance().setmProfileResModel(getCurrentProfile());
+                    EventBus.getDefault().postSticky(getCurrentProfile());
                     Intent videoIntent = new Intent(MyMotoFileActivity.this, ProfileVideoGalleryActivity.class);
                     ProfileResModel model1 = getCurrentProfile();
-                    videoIntent.putExtra(ProfileVideoGalleryActivity.EXTRA_PROFILE, model1);
+                    videoIntent.putExtra(ProfileVideoGalleryActivity.EXTRA_PROFILE, model1.getID());
                     startActivity(videoIntent);
                 } else {
                     showAppDialog(AppDialogFragment.ALERT_INTERNET_FAILURE_DIALOG, null);
@@ -626,65 +563,17 @@ public class MyMotoFileActivity extends BaseActivity implements
                 DialogManager.showMultiLiveOptionPopup(this, mCommonReturnInterface, getString(R.string.single_stream), getString(R.string.live_stream));
                 break;
             case R.id.btn_write_post:
-                Gson mGson = new Gson();
-                String mProfile = mGson.toJson(mFullMPList);
-                startActivityForResult(new Intent(MyMotoFileActivity.this, WritePostActivity.class).putExtra(AppConstants.MY_PROFILE_OBJ, mProfile).putExtra(AppConstants.IS_NEWSFEED_POST, true), AppConstants.WRITE_POST_REQUEST);
-                break;
-        }
-    }
-
-    private void startUploadVideoService() {
-        try {
-            Bitmap thumb = ThumbnailUtils.createVideoThumbnail(mVideoPathUri,
-                    MediaStore.Images.Thumbnails.MINI_KIND);
-            File imageFile = compressedImgFromBitmap(thumb);
-            String postText;
-            if (mWritePostEt.getText().toString().isEmpty() || mWritePostEt.getText().toString().equals("")) {
-                postText = "";
-            } else {
-                postText = mWritePostEt.getText().toString();
-            }
-            DatabaseHandler databaseHandler = new DatabaseHandler(this);
-            int count = databaseHandler.getPendingCount();
-            String destFilePath = Environment.getExternalStorageDirectory().getPath()
-                    + getString(R.string.util_app_folder_root_path);
-            Intent service_intent = new Intent(this, UploadFileService.class);
-            service_intent.putExtra("videofile", mCompressedVideoPath);
-            service_intent.putExtra("imagefile", String.valueOf(imageFile));
-            service_intent.putExtra("posttext", postText);
-            service_intent.putExtra("profileid", getCurrentProfile().getID());
-            service_intent.putExtra("dest_file", destFilePath);
-            service_intent.putExtra("running", count + 1);
-            service_intent.putExtra("flag", 2);
-            service_intent.setAction("UploadService");
-            if (mTaggedProfilesList.size() == 0) {
-                service_intent.putExtra(PostsModel.TAGGED_PROFILE_ID, "");
-            } else {
-                StringBuilder mTaggedProfileID = new StringBuilder();
-                for (ProfileResModel mProfileResModel : mTaggedProfilesList) {
-                    mTaggedProfileID.append(mProfileResModel.getID()).append(",");
+                if (mCurrentProfileObj != null) {
+                    /*Gson mGson = new Gson();
+                    String mProfile = mGson.toJson(mCurrentProfileObj);*/
+                    //MotoHub.getApplicationInstance().setmProfileResModel(mCurrentProfileObj);
+                    EventBus.getDefault().postSticky(mCurrentProfileObj);
+                    startActivityForResult(new Intent(MyMotoFileActivity.this, WritePostActivity.class)
+                            /*.putExtra(AppConstants.MY_PROFILE_OBJ, mProfile)*/
+                            .putExtra(AppConstants.USER_TYPE, AppConstants.USER)
+                            .putExtra(AppConstants.IS_NEWSFEED_POST, true), AppConstants.WRITE_POST_REQUEST);
                 }
-                mTaggedProfileID.deleteCharAt(mTaggedProfileID.length() - 1);
-                service_intent.putExtra(PostsModel.TAGGED_PROFILE_ID, mTaggedProfileID.toString());
-            }
-            startService(service_intent);
-            mCompressedVideoPath = "";
-            mVideoPathUri = null;
-            mPostImgUri = null;
-            mWritePostEt.setText("");
-            mPostPicImgView.setImageDrawable(null);
-            mPostPicImgView.setVisibility(View.GONE);
-            mPostImgVideoLayout.setVisibility(View.GONE);
-            mPostImgVideoCloseBtnLayout.setVisibility(View.GONE);
-            mTaggedProfilesList.clear();
-            mTaggedProfilesAdapter.notifyDataSetChanged();
-            if (mTaggedProfilesList.size() > 0) {
-                mTagProfilesRecyclerView.setVisibility(View.VISIBLE);
-            } else {
-                mTagProfilesRecyclerView.setVisibility(View.GONE);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+                break;
         }
     }
 
@@ -698,7 +587,7 @@ public class MyMotoFileActivity extends BaseActivity implements
             JsonArray mJsonArray = new JsonArray();
             mJsonArray.add(mJsonObject);
             LIVE_STREAM_RES_TYPE = START_LIVE_STREAM;
-            if (isNetworkConnected())
+            if (isNetworkConnected(this))
                 RetrofitClient.getRetrofitInstance().callPostLiveStream(this, mJsonArray);
             else
                 showAppDialog(AppDialogFragment.ALERT_INTERNET_FAILURE_DIALOG, null);
@@ -711,14 +600,15 @@ public class MyMotoFileActivity extends BaseActivity implements
     public void onSuccess() {
         String mFilter = "ID=" + liveStreamID;
         LIVE_STREAM_RES_TYPE = DELETE_LIVE_STREAM;
-        if (isNetworkConnected())
+        if (isNetworkConnected(this))
             RetrofitClient.getRetrofitInstance().callDeleteLiveStream(this, mFilter);
         else
             showAppDialog(AppDialogFragment.ALERT_INTERNET_FAILURE_DIALOG, null);
     }
 
     @Override
-    public void alertDialogPositiveBtnClick(BaseActivity activity, String mDialogType, StringBuilder profileTypesStr, ArrayList<String> profileTypes, int position) {
+    public void alertDialogPositiveBtnClick(BaseActivity activity, String mDialogType, StringBuilder profileTypesStr,
+                                            ArrayList<String> profileTypes, int position) {
         super.alertDialogPositiveBtnClick(activity, mDialogType, profileTypesStr, profileTypes, position);
         switch (mDialogType) {
             case AppDialogFragment.ALERT_INTERNET_FAILURE_DIALOG:
@@ -730,11 +620,17 @@ public class MyMotoFileActivity extends BaseActivity implements
                 setResult(RESULT_OK, new Intent()
                         .putExtra(AppConstants.IS_FOLLOW_RESULT, true));
                 changeAndSetProfile(position);
-                getProfilePosts();
+                getMyProfiles();
+                //refreshFeeds(getCurrentProfile());
+                break;
+            case AppDialogFragment.BOTTOM_REPORT_ACTION_DIALOG:
+                startActivityForResult(
+                        new Intent(this, ReportActivity.class).putExtra(PostsModel.POST_ID, mPostsList.get(position).getID()).putExtra(ProfileModel.PROFILE_ID, mFullMPList.get(getProfileCurrentPos()).getID()).putExtra(ProfileModel.USER_ID, mFullMPList.get(getProfileCurrentPos()).getUserID()),
+                        AppConstants.REPORT_POST_SUCCESS);
                 break;
             case AppDialogFragment.BOTTOM_DELETE_DIALOG:
                 mPostPos = position;
-                if (isNetworkConnected())
+                if (isNetworkConnected(this))
                     RetrofitClient.getRetrofitInstance().callDeleteProfilePosts(this, mPostsList.get(position).getID(), RetrofitClient.DELETE_PROFILE_POSTS_RESPONSE);
                 else
                     showAppDialog(AppDialogFragment.ALERT_INTERNET_FAILURE_DIALOG, null);
@@ -742,10 +638,17 @@ public class MyMotoFileActivity extends BaseActivity implements
             case AppDialogFragment.BOTTOM_EDIT_DIALOG:
                 mPostPos = position;
                 Bundle mBundle = new Bundle();
-                mBundle.putSerializable(PostsModel.POST_MODEL, mPostsList.get(position));
-                mBundle.putSerializable(ProfileModel.MY_PROFILE_RES_MODEL, mFullMPList.get(PreferenceUtils.getInstance(this)
+                /*MotoHub.getApplicationInstance().setmProfileResModel(mFullMPList.get(PreferenceUtils.getInstance(this)
+                        .getIntData(PreferenceUtils.CURRENT_PROFILE_POS)));*/
+                EventBus.getDefault().postSticky(mFullMPList.get(PreferenceUtils.getInstance(this)
                         .getIntData(PreferenceUtils.CURRENT_PROFILE_POS)));
+                mBundle.putSerializable(PostsModel.POST_MODEL, mPostsList.get(position));
+                //mBundle.putSerializable(ProfileModel.MY_PROFILE_RES_MODEL, mFullMPList.get(PreferenceUtils.getInstance(this).getIntData(PreferenceUtils.CURRENT_PROFILE_POS)));
                 startActivityForResult(new Intent(this, PostEditActivity.class).putExtras(mBundle), AppConstants.POST_UPDATE_SUCCESS);
+                /*MotoHub.getApplicationInstance().setmPostResModel(mPostsList.get(position));
+                MotoHub.getApplicationInstance().setmProfileResModel(mFullMPList.get(PreferenceUtils.getInstance(this)
+                        .getIntData(PreferenceUtils.CURRENT_PROFILE_POS)));
+                startActivityForResult(new Intent(this, PostEditActivity.class), AppConstants.POST_UPDATE_SUCCESS);*/
                 break;
             case AppDialogFragment.TAG_FOLLOWING_PROFILE_DIALOG:
                 mTaggedProfilesList.clear();
@@ -778,97 +681,79 @@ public class MyMotoFileActivity extends BaseActivity implements
     private void logout() {
         int mUserID = PreferenceUtils.getInstance(this).getIntData(PreferenceUtils.USER_ID);
         String mFilter = "UserID=" + mUserID;
-        if (isNetworkConnected())
+        if (isNetworkConnected(this))
             RetrofitClient.getRetrofitInstance().callDeletePushToken(this, mFilter, RetrofitClient.FACEBOOK_LOGOUT);
         else
             showAppDialog(AppDialogFragment.ALERT_INTERNET_FAILURE_DIALOG, null);
     }
 
-    @Override
-    public boolean onMenuItemClick(MenuItem item) {
-        int id = item.getItemId();
-
-        switch (id) {
-
-            case R.id.create_new_profile:
-                if (mFullMPList.size() > 0) {
-                    Intent intent = new Intent(this, CreateProfileActivity.class);
-                    intent.putExtra(CREATE_PROF_AFTER_REG, true);
-                    intent.putExtra(AppConstants.TAG, TAG);
-                    startActivityForResult(intent, AppConstants.CREATE_PROFILE_RES);
-                } else {
-                    showAppDialog(AppDialogFragment.ALERT_INTERNET_FAILURE_DIALOG, null);
-                }
-                return true;
-            case R.id.other_profiles:
-                if (mFullMPList.size() > 0) {
-                    showAppDialog(AppDialogFragment.ALERT_OTHER_PROFILE_DIALOG, mMPSpinnerList);
-                } else {
-                    showAppDialog(AppDialogFragment.ALERT_INTERNET_FAILURE_DIALOG, null);
-                }
-                return true;
-            case R.id.notification_settings:
-                startActivity(new Intent(MyMotoFileActivity.this, NotificationSettingsActivity.class));
-                return true;
-            case R.id.blocked_users:
-                if (mFullMPList.size() > 0) {
-                    if (getCurrentProfile().getBlockedUserProfilesByProfileID().size() > 0) {
-                        startActivityForResult(new Intent(this, BlockedUsersActivity.class).putExtra(ProfileModel.MY_PROFILE_RES_MODEL,
-                                getCurrentProfile()),
-                                AppConstants.FOLLOWERS_FOLLOWING_RESULT);
-                    } else {
-                        showToast(MyMotoFileActivity.this, getString(R.string.no_blocked_users_found_err));
+    private void changeAndSetProfile(final int position) {
+        runOnUiThread(new Runnable() {
+            public void run() {
+                //TODO updating values in UI thread
+                try {
+                    if (mFullMPList.size() > position) {
+                        ProfileResModel mProfileResModel = mFullMPList.get(position);
+                        mCurrentProfileID = mProfileResModel.getID();
+                        mMyFollowings = Utility.getInstance().getMyFollowersFollowingsID(mProfileResModel.getFollowprofile_by_FollowProfileID(), true);
+                        if (!mProfileResModel.getProfilePicture().isEmpty()) {
+                            setImageWithGlide(mMPImg, mProfileResModel.getProfilePicture(), R.drawable.default_profile_icon);
+                        } else {
+                            mMPImg.setImageResource(R.drawable.default_profile_icon);
+                        }
+                        if (!mProfileResModel.getCoverPicture().isEmpty()) {
+                            setImageWithGlide(mMPCoverImg, mProfileResModel.getCoverPicture(), R.drawable.default_cover_img);
+                        } else {
+                            mMPCoverImg.setImageResource(R.drawable.default_cover_img);
+                        }
+                        if (Utility.getInstance().isSpectator(mProfileResModel)) {
+                            mNameOfMotoTv.setText(mProfileResModel.getSpectatorName());
+                            mNameOfDriverTv.setVisibility(View.GONE);
+                        } else {
+                            mNameOfMotoTv.setText(mProfileResModel.getMotoName());
+                            mNameOfDriverTv.setVisibility(View.VISIBLE);
+                            mNameOfDriverTv.setText(mProfileResModel.getDriver());
+                        }
+                        mShimmer_myprofiledet.stopShimmerAnimation();
+                        mShimmer_myprofiledet.setVisibility(View.GONE);
+                        mUserdetails.setVisibility(View.VISIBLE);
+                        showToolbarBtn(mToolbar, R.id.toolbar_settings_img_btn);
+                        showToolbarBtn(mToolbar, R.id.toolbar_messages_img_btn);
+                        showToolbarBtn(mToolbar, R.id.toolbar_notification_img_btn);
+                        setFollowUnFollowContent(mProfileResModel);
                     }
-                } else {
-                    showAppDialog(AppDialogFragment.ALERT_INTERNET_FAILURE_DIALOG, null);
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-                return true;
-            case R.id.logout:
-                showAppDialog(AppDialogFragment.LOG_OUT_DIALOG, null);
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-
-        }
+            }
+        });
 
     }
 
-    private void changeAndSetProfile(int position) {
-
-        if (mFullMPList.size() > position) {
-
-            ProfileResModel mProfileResModel = mFullMPList.get(position);
-            mCurrentProfileID = mProfileResModel.getID();
-            mMyFollowings = Utility.getInstance().getMyFollowersFollowingsID(mProfileResModel.getFollowprofile_by_FollowProfileID(), true);
-            if (!mProfileResModel.getProfilePicture().isEmpty()) {
-                setImageWithGlide(mMPImg, mProfileResModel.getProfilePicture(), R.drawable.default_profile_icon);
-            } else {
-                mMPImg.setImageResource(R.drawable.default_profile_icon);
-            }
-
-            if (!mProfileResModel.getCoverPicture().isEmpty()) {
-                setImageWithGlide(mMPCoverImg, mProfileResModel.getCoverPicture(), R.drawable.default_cover_img);
-            } else {
-                mMPCoverImg.setImageResource(R.drawable.default_cover_img);
-            }
-
-            if (Utility.getInstance().isSpectator(mProfileResModel)) {
-                mNameOfMotoTv.setText(mProfileResModel.getSpectatorName());
-                mNameOfDriverTv.setVisibility(View.GONE);
-            } else {
-                mNameOfMotoTv.setText(mProfileResModel.getMotoName());
-                mNameOfDriverTv.setVisibility(View.VISIBLE);
-                mNameOfDriverTv.setText(mProfileResModel.getDriver());
-            }
-            setFollowUnFollowContent(mProfileResModel);
-        }
+    private void initMenuFragment() {
+        MenuParams menuParams = new MenuParams();
+        menuParams.setActionBarSize((int) getResources().getDimension(R.dimen.tool_bar_height));
+        menuParams.setMenuObjects(getMenuObjects());
+        menuParams.setClosableOutside(true);
+        menuParams.setAnimationDuration(100);
+        mMenuDialogFragment = ContextMenuDialogFragment.newInstance(menuParams);
+        mMenuDialogFragment.setItemClickListener(this);
+        //mMenuDialogFragment.setItemLongClickListener(this);
     }
 
     private void setFollowUnFollowContent(ProfileResModel mProfileResModel) {
-        int followingCount = mProfileResModel.getFollowprofile_by_ProfileID().size();
-        mFollowingCount.setText(String.valueOf(followingCount));
-        int followersCount = mProfileResModel.getFollowprofile_by_FollowProfileID().size();
-        mFollowersCount.setText(String.valueOf(followersCount));
+        getFollowerscount(mProfileResModel);
+        getFollowingcount(mProfileResModel);
+    }
+
+    private void getFollowerscount(ProfileResModel mProfileResModel) {
+        String FFilter = "FollowProfileID=" + mProfileResModel.getID();
+        RetrofitClient.getRetrofitInstance().callfollowfollowerscount(this, FFilter, RetrofitClient.GET_follower_count);
+    }
+
+    private void getFollowingcount(ProfileResModel mProfileResModel) {
+        String FFilter = "ProfileID=" + mProfileResModel.getID();
+        RetrofitClient.getRetrofitInstance().callfollowfollowerscount(this, FFilter, RetrofitClient.GET_following_count);
     }
 
     @Override
@@ -876,67 +761,12 @@ public class MyMotoFileActivity extends BaseActivity implements
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
-                case CAMERA_CAPTURE_REQ:
-                    Uri mCameraPicUri = getImgResultUri(data);
-                    mVideoPathUri = null;
-                    if (mCameraPicUri != null) {
-                        try {
-                            File mPostImgFile = compressedImgFile(mCameraPicUri,
-                                    POST_IMAGE_NAME_TYPE, "");
-                            mPostImgUri = Uri.fromFile(mPostImgFile).toString();
-                            setImageWithGlide(mPostPicImgView, Uri.parse(mPostImgUri));
-                            mPostImgVideoCloseBtnLayout.setVisibility(View.VISIBLE);
-                            mPlayIconImgView.setVisibility(View.GONE);
-                            mPostPicImgView.setVisibility(View.VISIBLE);
-                            mPostImgVideoLayout.setVisibility(View.VISIBLE);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                            showSnackBar(mCoordinatorLayout, e.getMessage());
-                        }
-                    } else {
-                        showSnackBar(mCoordinatorLayout, getString(R.string.file_not_found));
-                    }
-                    break;
-                case GALLERY_PIC_REQ:
-                    assert data.getExtras() != null;
-                    mVideoPathUri = null;
-                    Uri mSelectedImgFileUri = (Uri) data.getExtras()
-                            .get(PickerImageActivity.EXTRA_RESULT_DATA);
-                    if (mSelectedImgFileUri != null) {
-                        try {
-                            File mPostImgFile = compressedImgFile(mSelectedImgFileUri,
-                                    POST_IMAGE_NAME_TYPE, "");
-                            mPostImgUri = Uri.fromFile(mPostImgFile).toString();
-                            setImageWithGlide(mPostPicImgView, Uri.parse(mPostImgUri));
-                            mPostImgVideoCloseBtnLayout.setVisibility(View.VISIBLE);
-                            mPlayIconImgView.setVisibility(View.GONE);
-                            mPostPicImgView.setVisibility(View.VISIBLE);
-                            mPostImgVideoLayout.setVisibility(View.VISIBLE);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                            showSnackBar(mCoordinatorLayout, e.getMessage());
-                        }
-                    } else {
-                        showSnackBar(mCoordinatorLayout, getString(R.string.file_not_found));
-                    }
-                    break;
-                case ACTION_TAKE_VIDEO:
-                    mPostImgUri = null;
-                    Uri videoUri = data.getData();
-                    if (videoUri != null) {
-                        mVideoPathUri = getRealPathFromURI(videoUri);
-                        setVideoPost();
-                    } else {
-                        showSnackBar(mCoordinatorLayout, getString(R.string.file_not_found));
-                    }
-                    break;
-                case GALLERY_VIDEO_REQ:
-                    mPostImgUri = null;
-                    mVideoPathUri = data.getStringExtra(EXTRA_RESULT_DATA);
-                    if (mVideoPathUri != null) {
-                        setVideoPost();
-                    } else {
-                        showSnackBar(mCoordinatorLayout, getString(R.string.file_not_found));
+                case RetrofitClient.UPDATE_FEED_COUNT:
+                    try {
+                        assert data.getExtras() != null;
+                        mPostsAdapter.updateView(data.getIntExtra(AppConstants.POSITION, 0));
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
                     break;
                 case AppConstants.FOLLOWERS_FOLLOWING_RESULT:
@@ -971,22 +801,82 @@ public class MyMotoFileActivity extends BaseActivity implements
                     mPostsAdapter.refreshCommentList(mFeedCommentModel);
                     break;
                 case AppConstants.WRITE_POST_REQUEST:
-                    getMyProfiles();
+                    /*getMyProfiles();*/
+                    refreshFeeds(mCurrentProfileObj);
+                    break;
+                case CAMERA_CAPTURE_REQ:
+                    Uri mCameraPicUri = getImgResultUri(data);
+                    DialogManager.showProgress(this);
+                    if (mCameraPicUri != null) {
+                        try {
+                            if (isCoverPicture) {
+                                File mCoverImgFile = compressedImgFile(mCameraPicUri, POST_IMAGE_NAME_TYPE, "");
+                                mCoverImgUri = Uri.fromFile(mCoverImgFile).toString();
+                                setImageWithGlide(mMPCoverImg, Uri.parse(mCoverImgUri), R.drawable.default_cover_img);
+                                if (mCoverImgUri != null)
+                                    uploadCoverPicture(mCoverImgUri);
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            mCoverImgUri = null;
+                            showSnackBar(mCoordinatorLayout, e.getMessage());
+                        }
+                    } else {
+                        DialogManager.hideProgress();
+                        showSnackBar(mCoordinatorLayout, getString(R.string.file_not_found));
+                    }
+                    break;
+                case GALLERY_PIC_REQ:
+                    assert data.getExtras() != null;
+                    Uri mSelectedImgFileUri = (Uri) data.getExtras().get(PickerImageActivity.EXTRA_RESULT_DATA);
+                    DialogManager.showProgress(this);
+                    if (mSelectedImgFileUri != null) {
+                        try {
+                            if (isCoverPicture) {
+                                File mCoverImgFile = compressedImgFile(mSelectedImgFileUri, POST_IMAGE_NAME_TYPE, "");
+                                mCoverImgUri = Uri.fromFile(mCoverImgFile).toString();
+                                setImageWithGlide(mMPCoverImg, Uri.parse(mCoverImgUri), R.drawable.default_cover_img);
+                                if (mCoverImgUri != null)
+                                    uploadCoverPicture(mCoverImgUri);
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            mCoverImgUri = null;
+                            showSnackBar(mCoordinatorLayout, e.getMessage());
+                        }
+                    } else {
+                        DialogManager.hideProgress();
+                        showSnackBar(mCoordinatorLayout, getString(R.string.file_not_found));
+                    }
                     break;
             }
         }
 
     }
 
-    private void setVideoPost() {
-        Bitmap thumb = ThumbnailUtils.createVideoThumbnail(this.mVideoPathUri,
-                MediaStore.Images.Thumbnails.MINI_KIND);
-        Drawable drawable = new BitmapDrawable(getResources(), thumb);
-        mPostImgVideoCloseBtnLayout.setVisibility(View.VISIBLE);
-        mPostPicImgView.setVisibility(View.VISIBLE);
-        mPlayIconImgView.setVisibility(View.VISIBLE);
-        mPostImgVideoLayout.setVisibility(View.VISIBLE);
-        mPostPicImgView.setImageDrawable(drawable);
+    private void uploadCoverPicture(String imgUri) {
+        File mFile = new File(Uri.parse(imgUri).getPath());
+        RequestBody requestBody = RequestBody.create(MediaType.parse("*/*"), mFile);
+        MultipartBody.Part filePart = MultipartBody.Part.createFormData("files", mFile.getName(), requestBody);
+        RetrofitClient.getRetrofitInstance()
+                .callUploadProfileCoverImg(this, filePart, RetrofitClient.UPLOAD_COVER_IMAGE_FILE_RESPONSE);
+    }
+
+    private void submitCoverpic(String coverimguri) {
+        String mTempCoverImgUrl;
+        mTempCoverImgUrl = coverimguri;
+        if (coverimguri == null || TextUtils.isEmpty(coverimguri)) {
+            mTempCoverImgUrl = mCurrentProfileObj.getCoverPicture();
+        }
+        int mUserId = PreferenceUtils.getInstance(this).getIntData(PreferenceUtils.USER_ID);
+        JsonObject mJsonObject = new JsonObject();
+        mJsonObject.addProperty(ProfileModel.ID, mCurrentProfileObj.getID());
+        mJsonObject.addProperty(ProfileModel.USER_ID, mUserId);
+        mJsonObject.addProperty(ProfileModel.COVER_PICTURE, mTempCoverImgUrl);
+        JsonArray mJsonArray = new JsonArray();
+        mJsonArray.add(mJsonObject);
+
+        RetrofitClient.getRetrofitInstance().callUpdateProfile(this, mJsonArray, RetrofitClient.UPDATE_PROFILE_RESPONSE);
     }
 
     @Override
@@ -994,15 +884,13 @@ public class MyMotoFileActivity extends BaseActivity implements
         super.retrofitOnResponse(responseObj, responseType);
 
         if (responseObj instanceof ProfileModel) {
-
             ProfileModel mProfileModel = (ProfileModel) responseObj;
-
+            if (mProfileModel.getResource().size() > 0) {
+                mCurrentProfileObj = mProfileModel.getResource().get(0);
+            }
             switch (responseType) {
-
                 case RetrofitClient.GET_PROFILE_RESPONSE:
-
                     if (mProfileModel.getResource() != null && mProfileModel.getResource().size() > 0) {
-
                         mFullMPList.clear();
                         mFullMPList.addAll(mProfileModel.getResource());
                         for (int i = 0; i < mFullMPList.size(); i++) {
@@ -1015,6 +903,7 @@ public class MyMotoFileActivity extends BaseActivity implements
                             isExtraProfile = false;
                             PreferenceUtils.getInstance(this).saveIntData(PreferenceUtils.CURRENT_PROFILE_POS, (mFullMPList.size() - 1));
                         }
+                        mCurrentProfileObj = mFullMPList.get(getProfileCurrentPos());
                         ArrayList<String> mTempMPSpinnerList = new ArrayList<>();
                         for (ProfileResModel mProfileResModel : mFullMPList) {
                             if (Utility.getInstance().isSpectator(mProfileResModel)) {
@@ -1023,28 +912,28 @@ public class MyMotoFileActivity extends BaseActivity implements
                                 mTempMPSpinnerList.add(mProfileResModel.getMotoName());
                             }
                         }
-
+                        mPostsRvOffset = 0;
+                        mIsPostsRvLoading = true;
                         mMPSpinnerList.clear();
                         mMPSpinnerList.addAll(mTempMPSpinnerList);
-
                         changeAndSetProfile(getProfileCurrentPos());
+                        //MotoHub.getApplicationInstance().setmProfileResModel(getCurrentProfile());
+                        EventBus.getDefault().postSticky(getCurrentProfile());
                         mPostsRvTotalCount = -1;
                         setPostAdapter();
-                        getProfilePosts();
-
+                        refreshFeeds(getCurrentProfile());
                     } else {
                         showSnackBar(mCoordinatorLayout, mNoProfileErr);
                     }
-
                     break;
-
                 case RetrofitClient.UPDATE_PROFILE_RESPONSE:
                     if (mProfileModel.getResource() != null && mProfileModel.getResource().size() > 0) {
+                        showToast(this, mUpdateProfileSuccessStr);
                         saveInAppPurchasesLocally(Integer.parseInt(PROFILE_PURCHASED), String.valueOf(getCurrentProfile().getProfileType()));
                         getMyProfiles();
+                        DialogManager.hideProgress();
                     }
                     break;
-
                 case RetrofitClient.GET_FOLLOWING_PROFILE_RESPONSE:
                     if (mProfileModel.getResource() != null && mProfileModel.getResource().size() > 0) {
                         mFollowingListData.clear();
@@ -1056,53 +945,40 @@ public class MyMotoFileActivity extends BaseActivity implements
                     break;
             }
         } else if (responseObj instanceof PostsModel) {
-
             PostsModel mPostsModel = (PostsModel) responseObj;
-
             switch (responseType) {
-
                 case RetrofitClient.GET_PROFILE_POSTS_RESPONSE:
-
-                    if (mPostsModel.getResource() != null && mPostsModel.getResource().size() > 0) {
-
-                        mPostsRvTotalCount = mPostsModel.getMeta().getCount();
-                        mPostsList.clear();
-
-                        mIsPostsRvLoading = false;
-
-                        if (mPostsRvOffset == 0) {
+                    try {
+                        if (mPostsModel.getResource() != null && mPostsModel.getResource().size() > 0) {
+                            mPostsRvTotalCount = mPostsModel.getMeta().getCount();
                             mPostsList.clear();
+                            mIsPostsRvLoading = false;
+                            if (mPostsRvOffset == 0) {
+                                mPostsList.clear();
+                            }
+                            mPostsList.addAll(mPostsModel.getResource());
+                            mPostsRvOffset = mPostsRvOffset + mDataLimit;
+                        } else {
+                            if (mPostsRvOffset == 0) {
+                                mPostsRvTotalCount = 0;
+                            }
                         }
-
-                        mPostsList.addAll(mPostsModel.getResource());
-
-                        mPostsRvOffset = mPostsRvOffset + mDataLimit;
-
-                    } else {
-                        if (mPostsRvOffset == 0) {
-                            mPostsRvTotalCount = 0;
-                        }
+                        setPostAdapter();
+                        mShimmer_myfeeds.stopShimmerAnimation();
+                        mShimmer_myfeeds.setVisibility(View.GONE);
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
-
-                    setPostAdapter();
-
                     break;
-
                 case RetrofitClient.CREATE_PROFILE_POSTS_RESPONSE:
-
                     if (mPostsModel.getResource() != null && mPostsModel.getResource().size() > 0) {
-
                         mWritePostEt.setText("");
-                        mVideoPathUri = null;
-                        mPostImgUri = null;
                         mPostPicImgView.setImageResource(R.drawable.photos_icon);
                         mPostPicImgView.setVisibility(View.GONE);
                         mPostImgVideoLayout.setVisibility(View.GONE);
                         mPostImgVideoCloseBtnLayout.setVisibility(View.GONE);
-
                         int prefPos = getProfileCurrentPos();
                         PostsResModel mPostsResModel = mPostsModel.getResource().get(0);
-
                         ProfileResModel mProfileResModel = new ProfileResModel();
                         mProfileResModel.setProfilePicture(mFullMPList.get(prefPos).getProfilePicture());
                         mProfileResModel.setProfileType(mFullMPList.get(prefPos).getProfileType());
@@ -1111,58 +987,56 @@ public class MyMotoFileActivity extends BaseActivity implements
                         } else {
                             mProfileResModel.setDriver(mFullMPList.get(prefPos).getDriver());
                         }
-
                         mPostsResModel.setProfilesByWhoPostedProfileID(mProfileResModel);
-
                         mPostsRvTotalCount = mPostsRvTotalCount + 1;
-
                         mPostsList.add(0, mPostsResModel);
                         setPostAdapter();
-
                         mTaggedProfilesList.clear();
                         mTaggedProfilesAdapter.notifyDataSetChanged();
-
                         if (mTaggedProfilesList.size() > 0) {
                             mTagProfilesRecyclerView.setVisibility(View.VISIBLE);
                         } else {
                             mTagProfilesRecyclerView.setVisibility(View.GONE);
                         }
-
                         showSnackBar(mCoordinatorLayout, mPostSuccess);
-
                     }
-
                     break;
-
                 case RetrofitClient.DELETE_PROFILE_POSTS_RESPONSE:
-
                     if (mPostsModel.getResource() != null && mPostsModel.getResource().size() > 0) {
-
                         mPostsList.remove(mPostPos);
                         mPostsRvTotalCount -= 1;
                         setPostAdapter();
                         showSnackBar(mCoordinatorLayout, mPostDeleteSuccess);
-
                     }
-
                     break;
-
                 case RetrofitClient.SHARED_POST_RESPONSE:
-
                     if (mPostsModel.getResource() != null && mPostsModel.getResource().size() > 0) {
                         PostsResModel mPostsResModel = mPostsModel.getResource().get(0);
                         mPostsList.add(0, mPostsResModel);
                         mPostsRvTotalCount += 1;
                         setPostAdapter();
                     }
-
                     mPostsAdapter.resetShareAdapter(mSharedFeed);
-
                     break;
-
-
+                case RetrofitClient.FEED_VIDEO_COUNT:
+                    try {
+                        if (mPostsModel.getResource() != null && mPostsModel.getResource().size() > 0) {
+                            mPostsAdapter.addViewCount(mPostsModel.getResource().get(0).getmViewCount());
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    break;
+                case RetrofitClient.ADD_FEED_COUNT:
+                    try {
+                        if (mPostsModel.getResource() != null && mPostsModel.getResource().size() > 0) {
+                            mPostsAdapter.ViewCount(mPostsModel.getResource().get(0).getmViewCount());
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    break;
             }
-
         } else if (responseObj instanceof ImageModel) {
             ImageModel mImageModel = (ImageModel) responseObj;
             switch (responseType) {
@@ -1171,41 +1045,58 @@ public class MyMotoFileActivity extends BaseActivity implements
                     String imgUrl = getHttpFilePath(mImageModel.getmModels().get(0).getPath());
                     profilePostContent(imgUrl);
                     break;
+                case RetrofitClient.UPLOAD_COVER_IMAGE_FILE_RESPONSE:
+                    mUploadedServerCoverImgFileUrl = getHttpFilePath(mImageModel.getmModels().get(0).getPath());
+                    mCoverImgUri = null;
+                    submitCoverpic(mUploadedServerCoverImgFileUrl);
+                    break;
             }
-
+        } else if (responseObj instanceof NotificationBlockedUsersModel) {
+            NotificationBlockedUsersModel mNotify = (NotificationBlockedUsersModel) responseObj;
+            ArrayList<NotificationBlockedUsersModel> mPostNotification = mNotify.getResource();
+            switch (responseType) {
+                case RetrofitClient.BLOCK_NOTIFY:
+                    if (mPostNotification != null && mPostNotification.size() > 0) {
+                        mPostsAdapter.resetBlock(mPostNotification.get(0));
+                    }
+                    break;
+                case RetrofitClient.UNBLOCK_NOTIFY:
+                    if (mPostNotification != null && mPostNotification.size() > 0) {
+                        mPostsAdapter.resetUnBlock(mPostNotification.get(0));
+                    }
+                    break;
+            }
         } else if (responseObj instanceof FeedLikesModel) {
             FeedLikesModel mFeedLikesList = (FeedLikesModel) responseObj;
             ArrayList<FeedLikesModel> mNewFeedLike = mFeedLikesList.getResource();
             switch (responseType) {
                 case RetrofitClient.POST_LIKES:
-                    mPostsAdapter.resetLikeAdapter(mNewFeedLike.get(0));
+                    if (mNewFeedLike != null && mNewFeedLike.size() > 0) {
+                        mPostsAdapter.resetLikeAdapter(mNewFeedLike.get(0));
+                    }
                     break;
                 case RetrofitClient.POST_UNLIKE:
-                    mPostsAdapter.resetDisLike(mNewFeedLike.get(0));
+                    if (mNewFeedLike != null && mNewFeedLike.size() > 0) {
+                        mPostsAdapter.resetDisLike(mNewFeedLike.get(0));
+                    }
                     break;
             }
-
         } else if (responseObj instanceof SessionModel) {
-
             SessionModel mSessionModel = (SessionModel) responseObj;
             if (mSessionModel.getSessionToken() == null) {
                 PreferenceUtils.getInstance(this).saveStrData(PreferenceUtils.SESSION_TOKEN, mSessionModel.getSessionId());
             } else {
                 PreferenceUtils.getInstance(this).saveStrData(PreferenceUtils.SESSION_TOKEN, mSessionModel.getSessionToken());
             }
-
             getMyProfiles();
-
         } else if (responseObj instanceof FeedShareModel) {
-
             FeedShareModel mFeedShareList = (FeedShareModel) responseObj;
             ArrayList<FeedShareModel> mNewFeedShare = mFeedShareList.getResource();
             switch (responseType) {
                 case RetrofitClient.POST_SHARES:
                     mSharedFeed = mNewFeedShare.get(0);
-                    CommonAPI.getInstance().callAddSharedPost(this, mPostsList.get(mCurrentPostPosition), getCurrentProfile());
+                    CommonAPI.getInstance().callAddSharedPost(this, mPostsList.get(mCurrentPostPosition), getCurrentProfile(), mShareTxt);
                     break;
-
             }
         } else if (responseObj instanceof PushTokenModel) {
             clearBeforeLogout();
@@ -1224,8 +1115,25 @@ public class MyMotoFileActivity extends BaseActivity implements
                 Intent mCameraActivity = new Intent(this, CameraActivity.class);
                 startActivity(mCameraActivity);
             }
+        } else if (responseObj instanceof FollowProfileModel1) {
+            FollowProfileModel1 mResponse = (FollowProfileModel1) responseObj;
+            switch (responseType) {
+                case RetrofitClient.GET_follower_count:
+                    FollowProfileModel1.Meta meta1 = mResponse.getMeta();
+                    if (meta1 != null)
+                        mFollowersCount.setText(String.valueOf(meta1.getCount()));
+                    else
+                        mFollowersCount.setText(0);
+                    break;
+                case RetrofitClient.GET_following_count:
+                    FollowProfileModel1.Meta meta2 = mResponse.getMeta();
+                    if (meta2 != null)
+                        mFollowingCount.setText(String.valueOf(meta2.getCount()));
+                    else
+                        mFollowingCount.setText(0);
+                    break;
+            }
         }
-
     }
 
     private void launchTagFollowersProfileDialog() {
@@ -1241,7 +1149,7 @@ public class MyMotoFileActivity extends BaseActivity implements
     public void retrofitOnError(int code, String message) {
         super.retrofitOnError(code, message);
         if (message.equals("Unauthorized") || code == 401) {
-            if (isNetworkConnected())
+            if (isNetworkConnected(this))
                 RetrofitClient.getRetrofitInstance().callUpdateSession(this, RetrofitClient.UPDATE_SESSION_RESPONSE);
             else
                 showAppDialog(AppDialogFragment.ALERT_INTERNET_FAILURE_DIALOG, null);
@@ -1249,14 +1157,13 @@ public class MyMotoFileActivity extends BaseActivity implements
             String mErrorMsg = code + " - " + message;
             showSnackBar(mCoordinatorLayout, mErrorMsg);
         }
-
     }
 
     @Override
     public void retrofitOnError(int code, String message, int responseType) {
         super.retrofitOnError(code, message, responseType);
         if (message.equals("Unauthorized") || code == 401) {
-            if (isNetworkConnected())
+            if (isNetworkConnected(this))
                 RetrofitClient.getRetrofitInstance().callUpdateSession(this, RetrofitClient.UPDATE_SESSION_RESPONSE);
             else
                 showAppDialog(AppDialogFragment.ALERT_INTERNET_FAILURE_DIALOG, null);
@@ -1288,7 +1195,16 @@ public class MyMotoFileActivity extends BaseActivity implements
     }
 
     private ProfileResModel getCurrentProfile() {
-        return mFullMPList.get(getProfileCurrentPos());
+        return mCurrentProfileObj;
+    }
+
+    public void refreshFeeds(ProfileResModel mProfileObj) {
+        mCurrentProfileObj = mProfileObj;
+        mPostsRvTotalCount = -1;
+        mPostsRvOffset = 0;
+        mPostsList.clear();
+        setPostAdapter();
+        getProfilePosts();
     }
 
     @Override
@@ -1301,28 +1217,91 @@ public class MyMotoFileActivity extends BaseActivity implements
         }
     }
 
-    class VideoCompressor extends AsyncTask<String, Void, Boolean> {
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            DialogManager.showProgress(MyMotoFileActivity.this);
-        }
-
-        @Override
-        protected Boolean doInBackground(String... params) {
-            return MediaController.getInstance().convertVideo(params[0], params[1]);
-        }
-
-        @Override
-        protected void onPostExecute(Boolean compressed) {
-            super.onPostExecute(compressed);
-            DialogManager.hideProgress();
-            if (compressed) {
-                showToast(MyMotoFileActivity.this, getString(R.string.uploading_video));
-                startUploadVideoService();
-            }
+    @Override
+    public void onMenuItemClick(View view, int position) {
+        switch (position) {
+            case 1:
+                if (mFullMPList.size() > 0) {
+                    Intent intent = new Intent(this, CreateProfileActivity.class);
+                    intent.putExtra(CREATE_PROF_AFTER_REG, true);
+                    intent.putExtra(AppConstants.TAG, TAG);
+                    startActivityForResult(intent, AppConstants.CREATE_PROFILE_RES);
+                }
+                break;
+            case 2:
+                if (mFullMPList.size() > 0) {
+                    showAppDialog(AppDialogFragment.ALERT_OTHER_PROFILE_DIALOG, mMPSpinnerList);
+                } else {
+                    showAppDialog(AppDialogFragment.ALERT_INTERNET_FAILURE_DIALOG, null);
+                }
+                break;
+            case 3:
+                startActivity(new Intent(MyMotoFileActivity.this, NotificationSettingsActivity.class));
+                break;
+            case 4:
+                if (mFullMPList.size() > 0) {
+                    if (getCurrentProfile().getBlockedUserProfilesByProfileID().size() > 0) {
+                        //MotoHub.getApplicationInstance().setmProfileResModel(getCurrentProfile());
+                        EventBus.getDefault().postSticky(getCurrentProfile());
+                        /*startActivityForResult(new Intent(this, BlockedUsersActivity.class).putExtra(ProfileModel.MY_PROFILE_RES_MODEL,
+                                getCurrentProfile()),
+                                AppConstants.FOLLOWERS_FOLLOWING_RESULT);*/
+                        startActivityForResult(new Intent(this, BlockedUsersActivity.class), AppConstants.FOLLOWERS_FOLLOWING_RESULT);
+                    } else {
+                        showToast(MyMotoFileActivity.this, getString(R.string.no_blocked_users_found_err));
+                    }
+                } else {
+                    showAppDialog(AppDialogFragment.ALERT_INTERNET_FAILURE_DIALOG, null);
+                }
+                break;
+            case 5:
+                startActivity(new Intent(this, PaymentActivity.class).putExtra(AppConstants.CARD_SETTINGS, true));
+                break;
+            case 6:
+                showAppDialog(AppDialogFragment.LOG_OUT_DIALOG, null);
+                break;
         }
     }
 
+    public List<MenuObject> getMenuObjects() {
+
+        List<MenuObject> menuObjects = new ArrayList<>();
+
+        MenuObject close = new MenuObject();
+        close.setBgColor(ContextCompat.getColor(this, R.color.colorBlack));
+        close.setResource(R.drawable.orange_close_icon);
+
+        MenuObject newprofile = new MenuObject(getString(R.string.create_new_profile));
+        newprofile.setBgColor(ContextCompat.getColor(this, R.color.colorBlack));
+        newprofile.setResource(R.drawable.ic_new_profile);
+
+        MenuObject otherprofile = new MenuObject(getString(R.string.other_profiles));
+        otherprofile.setBgColor(ContextCompat.getColor(this, R.color.colorBlack));
+        otherprofile.setResource(R.drawable.ic_other_profile);
+
+        MenuObject notification = new MenuObject(getString(R.string.notifications));
+        notification.setBgColor(ContextCompat.getColor(this, R.color.colorBlack));
+        notification.setResource(R.drawable.ic_notification);
+
+        MenuObject blockeduser = new MenuObject(getString(R.string.blocked_users));
+        blockeduser.setBgColor(ContextCompat.getColor(this, R.color.colorBlack));
+        blockeduser.setResource(R.drawable.ic_blocked_user);
+
+        MenuObject cardmanagement = new MenuObject(getString(R.string.card_management));
+        cardmanagement.setBgColor(ContextCompat.getColor(this, R.color.colorBlack));
+        cardmanagement.setResource(R.drawable.ic_card_management);
+
+        MenuObject logout = new MenuObject(getString(R.string.logout));
+        logout.setBgColor(ContextCompat.getColor(this, R.color.colorBlack));
+        logout.setResource(R.drawable.ic_logout);
+
+        menuObjects.add(close);
+        menuObjects.add(newprofile);
+        menuObjects.add(otherprofile);
+        menuObjects.add(notification);
+        menuObjects.add(blockeduser);
+        menuObjects.add(cardmanagement);
+        menuObjects.add(logout);
+        return menuObjects;
+    }
 }

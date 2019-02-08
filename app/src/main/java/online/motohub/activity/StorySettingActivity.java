@@ -15,6 +15,8 @@ import android.widget.RelativeLayout;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.io.File;
 import java.util.ArrayList;
 
@@ -27,6 +29,7 @@ import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import online.motohub.R;
 import online.motohub.adapter.StoryAdapter;
+import online.motohub.application.MotoHub;
 import online.motohub.fragment.dialog.AppDialogFragment;
 import online.motohub.model.EventsModel;
 import online.motohub.model.EventsResModel;
@@ -37,6 +40,7 @@ import online.motohub.model.SpectatorLiveModel;
 import online.motohub.retrofit.APIConstants;
 import online.motohub.retrofit.RetrofitClient;
 import online.motohub.util.AppConstants;
+import online.motohub.util.DialogManager;
 
 public class StorySettingActivity extends BaseActivity {
 
@@ -63,12 +67,10 @@ public class StorySettingActivity extends BaseActivity {
 
     @BindView(R.id.parent)
     RelativeLayout mParent;
-
+    ArrayList<ProfileResModel> mProfileList;
     private Uri mFileURI;
     private String mFileType;
     private StoryAdapter mStoryAdapter;
-
-    ArrayList<ProfileResModel> mProfileList;
     private ArrayList<String> mSelectedIds;
 
     private boolean isMyStoryChecked = false;
@@ -88,12 +90,20 @@ public class StorySettingActivity extends BaseActivity {
         setUpRecyclerView();
     }
 
+    @Override
+    protected void onDestroy() {
+        DialogManager.hideProgress();
+        super.onDestroy();
+    }
+
     private void initialize() {
         mBackBtn.setVisibility(View.VISIBLE);
         mFileURI = getIntent().getParcelableExtra("file_uri");
         mFileType = getIntent().getStringExtra("file_type");
         mEventResModel = (EventsResModel) getIntent().getBundleExtra("bundle_data").getSerializable(EventsModel.EVENTS_RES_MODEL);
-        mMyProfileResModel = (ProfileResModel) getIntent().getBundleExtra("bundle_data").getSerializable(ProfileModel.MY_PROFILE_RES_MODEL);
+        //mMyProfileResModel = (ProfileResModel) getIntent().getBundleExtra("bundle_data").getSerializable(ProfileModel.MY_PROFILE_RES_MODEL);
+        //mMyProfileResModel= MotoHub.getApplicationInstance().getmProfileResModel();
+        mMyProfileResModel= EventBus.getDefault().getStickyEvent(ProfileResModel.class);
     }
 
     private void setPlayIconVisiblity(String mFileType) {
@@ -114,7 +124,7 @@ public class StorySettingActivity extends BaseActivity {
 
     private void apiCallToGetFollowings() {
         String mFilter = APIConstants.ID + " in (1,2,3,4)";
-        if (isNetworkConnected())
+        if (isNetworkConnected(this))
             RetrofitClient.getRetrofitInstance().callGetProfiles(this, mFilter, RetrofitClient.GET_FOLLOWERS_FOLLOWING_PROFILE_RESPONSE);
         else
             showAppDialog(AppDialogFragment.ALERT_INTERNET_FAILURE_DIALOG, null);

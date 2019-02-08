@@ -1,11 +1,11 @@
 package online.motohub.activity;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.ImageButton;
 import android.widget.ProgressBar;
 
 import com.google.android.exoplayer2.DefaultLoadControl;
@@ -42,20 +42,22 @@ import com.google.android.exoplayer2.upstream.cache.SimpleCache;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import online.motohub.R;
+import online.motohub.retrofit.RetrofitClient;
 import online.motohub.util.AppConstants;
-import online.motohub.util.PreferenceUtils;
+import online.motohub.util.DialogManager;
 
 public class LoadVideoFromServerActivity extends BaseActivity {
 
-   /* @BindView(R.id.toolbar)
-    Toolbar mToolbar;*/
+    /* @BindView(R.id.toolbar)
+     Toolbar mToolbar;*/
     @BindView(R.id.video_player)
     SimpleExoPlayerView mExoPlayerView;
     @BindView(R.id.videoProgress)
     ProgressBar mProgressBar;
 
     private SimpleExoPlayer mExoPlayer;
-    private String mVideoUrl = "";
+    private String mVideoUrl = "", replaceString;
+    private int post_pos = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,27 +67,20 @@ public class LoadVideoFromServerActivity extends BaseActivity {
         this.getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         setContentView(R.layout.activity_load_video_from_server);
         ButterKnife.bind(this);
-        initView();
-    }
-
-    private void initView() {
-        /*setToolbar(mToolbar, getString(R.string.videos));
-        setToolbarLeftBtn(mToolbar);
-        mProgressBar.setVisibility(View.GONE);
-        ImageButton toolbar_left_img_btn = findViewById(R.id.toolbar_back_img_btn);
-        mToolbar.setVisibility(View.GONE);*/
         mVideoUrl = getIntent().getStringExtra(AppConstants.VIDEO_PATH);
-        /*toolbar_left_img_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });*/
+        post_pos = getIntent().getIntExtra(AppConstants.POSITION, 0);
+        setResult(RESULT_OK, new Intent().putExtra(AppConstants.POSITION, post_pos));
     }
 
     @Override
     public void onBackPressed() {
         finish();
+    }
+
+    @Override
+    protected void onDestroy() {
+        DialogManager.hideProgress();
+        super.onDestroy();
     }
 
     private void initializePlayer() {
@@ -153,11 +148,17 @@ public class LoadVideoFromServerActivity extends BaseActivity {
         mExoPlayerView.setPlayer(mExoPlayer);
         mExoPlayerView.setResizeMode(AspectRatioFrameLayout.RESIZE_MODE_FIT);
         mExoPlayer.seekTo(0, 0);
-        Uri uri = Uri.parse(mVideoUrl + "?api_key="
+        /*Uri uri = Uri.parse(mVideoUrl + "?api_key="
                 + getResources().getString(R.string.dream_factory_api_key)
                 + "&session_token="
                 + PreferenceUtils.getInstance(this).getStrData(PreferenceUtils
-                .SESSION_TOKEN));
+                .SESSION_TOKEN));*/
+
+
+        replaceString = mVideoUrl.replaceAll(" ", "%20");
+
+        Uri uri = Uri.parse(replaceString);
+
         Cache mCache = new SimpleCache(getCacheDir(), new LeastRecentlyUsedCacheEvictor(getCacheDir().getUsableSpace()));
         DataSource.Factory mCacheDataSrcFactory = new CacheDataSourceFactory(mCache, new DefaultHttpDataSourceFactory("ua"), CacheDataSource.FLAG_BLOCK_ON_CACHE | CacheDataSource.FLAG_IGNORE_CACHE_ON_ERROR);
         MediaSource mediaSource = new ExtractorMediaSource(uri, mCacheDataSrcFactory, new DefaultExtractorsFactory(), null, null);

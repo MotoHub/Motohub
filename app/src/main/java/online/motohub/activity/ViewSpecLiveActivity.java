@@ -1,5 +1,6 @@
 package online.motohub.activity;
 
+import android.annotation.SuppressLint;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
@@ -35,6 +36,7 @@ import com.google.android.exoplayer2.upstream.cache.CacheDataSourceFactory;
 import com.google.android.exoplayer2.upstream.cache.LeastRecentlyUsedCacheEvictor;
 import com.google.android.exoplayer2.upstream.cache.SimpleCache;
 
+import java.net.URLDecoder;
 import java.util.ArrayList;
 
 import butterknife.BindView;
@@ -48,8 +50,8 @@ import online.motohub.model.GalleryVideoResModel;
 import online.motohub.retrofit.APIConstants;
 import online.motohub.retrofit.RetrofitClient;
 import online.motohub.util.AppConstants;
+import online.motohub.util.DialogManager;
 import online.motohub.util.OnSwipeTouchListener;
-import online.motohub.util.PreferenceUtils;
 import online.motohub.util.UrlUtils;
 
 public class ViewSpecLiveActivity extends BaseActivity {
@@ -71,6 +73,13 @@ public class ViewSpecLiveActivity extends BaseActivity {
 
     private int pos = 0;
     private CacheDataSourceFactory mCacheDataSrcFactory;
+    private String replaceString;
+
+    @Override
+    protected void onDestroy() {
+        DialogManager.hideProgress();
+        super.onDestroy();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,9 +95,18 @@ public class ViewSpecLiveActivity extends BaseActivity {
     }
 
     private void getVideoFrmIntent() {
+        mListLiveVideos = new ArrayList<>();
         mListLiveVideos = getIntent().getParcelableArrayListExtra(AppConstants.VIDEOLIST);
         pos = getIntent().getIntExtra(AppConstants.POSITION, 0);
+    }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        if (mListLiveVideos != null) {
+            mListLiveVideos.clear();
+            manageNextVideoAndPlayer();
+        }
     }
 
     @Override
@@ -173,6 +191,7 @@ public class ViewSpecLiveActivity extends BaseActivity {
 
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     private void setSwipeListenerForVideoView() {
 
         mVideoView.setOnTouchListener(new OnSwipeTouchListener(ViewSpecLiveActivity.this) {
@@ -206,12 +225,18 @@ public class ViewSpecLiveActivity extends BaseActivity {
     }
 
     private void playVideo() {
-        mCaption.setText(mListLiveVideos.get(pos).getCaption());
-        Uri uri = Uri.parse(UrlUtils.FILE_URL + mListLiveVideos.get(pos).getVideoUrl() + "?api_key="
-                + getResources().getString(R.string.dream_factory_api_key)
-                + "&session_token="
-                + PreferenceUtils.getInstance(this).getStrData(PreferenceUtils
-                .SESSION_TOKEN));
+        try {
+            if (mListLiveVideos.get(pos).getCaption().contains(" ")) {
+                mCaption.setText(mListLiveVideos.get(pos).getCaption());
+            } else {
+                mCaption.setText(URLDecoder.decode(mListLiveVideos.get(pos).getCaption(), "UTF-8"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        replaceString = mListLiveVideos.get(pos).getVideoUrl().replaceAll(" ", "%20");
+
+        Uri uri = Uri.parse(UrlUtils.AWS_S3_BASE_URL + replaceString);
 
         MediaSource mediaSource = new ExtractorMediaSource(uri,
                 mCacheDataSrcFactory,
@@ -224,20 +249,27 @@ public class ViewSpecLiveActivity extends BaseActivity {
 
     private void getSpecLiveVideos() {
         mEventResModel = (EventsResModel) getIntent().getSerializableExtra(EventsModel.EVENTS_RES_MODEL);
-        String mFilter = "(EventID=" + mEventResModel.getID() + ") AND (EventFinishDate>=" + getCurrentDate() + ") AND (" + APIConstants.UserType + "!=user)";
-        RetrofitClient.getRetrofitInstance()
-                .getPromoterVideoGallery(this,
-                        mFilter, RetrofitClient.GET_VIDEO_FILE_RESPONSE);
+        if (mEventResModel != null && mEventResModel.getID() != 0) {
+            String mFilter = "(EventID=" + mEventResModel.getID() + ") AND (EventFinishDate>=" + getCurrentDate() + ") AND (" + APIConstants.UserType + "!=user)";
+            RetrofitClient.getRetrofitInstance()
+                    .getPromoterVideoGalleryForSpectator(this,
+                            mFilter, RetrofitClient.GET_VIDEO_FILE_RESPONSE);
+        }
     }
 
     @Override
     public void retrofitOnResponse(Object responseObj, int responseType) {
         super.retrofitOnResponse(responseObj, responseType);
         GalleryVideoModel videoModel = (GalleryVideoModel) responseObj;
-        mListLiveVideos = new ArrayList<>();
-        mListLiveVideos.addAll(videoModel.getResModelList());
-        if (mListLiveVideos.size() > 0)
-            playVideo();
+        if (videoModel != null && videoModel.getResModelList().size() > 0) {
+            mListLiveVideos = new ArrayList<>();
+            mListLiveVideos.addAll(videoModel.getResModelList());
+            if (mListLiveVideos.size() > 0)
+                playVideo();
+        } else {
+            showToast(ViewSpecLiveActivity.this, "No videos found!");
+            finish();
+        }
     }
 
     private void manageNextVideoAndPlayer() {

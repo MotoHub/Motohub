@@ -78,48 +78,52 @@ public class BlockedProfilesAdapter extends RecyclerView.Adapter<RecyclerView.Vi
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int pos) {
-        final Holder mHolder = (Holder) holder;
-        ProfileResModel mEntity = mBlockedProfileList.get(pos);
-        String imgStr = mEntity.getProfilePicture();
-        if (!imgStr.isEmpty()) {
-            ((BaseActivity) mContext).setImageWithGlide(mHolder.mUserImg, imgStr, R.drawable.default_profile_icon);
-        } else {
-            mHolder.mUserImg.setImageResource(R.drawable.default_profile_icon);
-        }
-        mHolder.mUserNameTxt.setText(Utility.getInstance().getUserName(mEntity));
-
-        if (Utility.getInstance().isAlreadyBlocked(mMyProfileResModel.getBlockedUserProfilesByProfileID(), mEntity.getID())) {
-            mHolder.mBlockBtn.setText(mContext.getString(R.string.un_block));
-        } else {
-            mHolder.mBlockBtn.setText(mContext.getString(R.string.block));
-        }
-        mHolder.mUserImg.setTag(pos);
-        mHolder.mUserImg.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mAdapterPos = (int) v.getTag();
-                ((BaseActivity) mContext).moveOtherProfileScreenWithResult(mContext, mMyProfileResModel.getID(),
-                        mBlockedProfileList.get(mAdapterPos).getID(), AppConstants.FOLLOWERS_FOLLOWING_RESULT);
-
+        try {
+            final Holder mHolder = (Holder) holder;
+            ProfileResModel mEntity = mBlockedProfileList.get(pos);
+            String imgStr = mEntity.getProfilePicture();
+            if (!imgStr.isEmpty()) {
+                ((BaseActivity) mContext).setImageWithGlide(mHolder.mUserImg, imgStr, R.drawable.default_profile_icon);
+            } else {
+                mHolder.mUserImg.setImageResource(R.drawable.default_profile_icon);
             }
-        });
-        mHolder.mBlockBtn.setTag(pos);
-        mHolder.mBlockBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mAdapterPos = (int) v.getTag();
-                ProfileResModel mEntity = mBlockedProfileList.get(mAdapterPos);
-                if (Utility.getInstance().isAlreadyBlocked(mMyProfileResModel.getBlockedUserProfilesByProfileID(), mEntity.getID())) {
-                    CommonAPI.getInstance().callUnBlockProfile(mContext, mRetrofitResInterface,
-                            Utility.getInstance().getUnBlockRowID(mMyProfileResModel.getBlockedUserProfilesByProfileID(),
-                                    mMyProfileID, mEntity.getID()));
-                } else {
-                    CommonAPI.getInstance().callBlockProfile(mContext, mRetrofitResInterface,
-                            mMyProfileID, mEntity.getID());
+            mHolder.mUserNameTxt.setText(Utility.getInstance().getUserName(mEntity));
+
+            if (Utility.getInstance().isAlreadyBlocked(mMyProfileResModel.getBlockedUserProfilesByProfileID(), mEntity.getID())) {
+                mHolder.mBlockBtn.setText(mContext.getString(R.string.un_block));
+            } else {
+                mHolder.mBlockBtn.setText(mContext.getString(R.string.block));
+            }
+            mHolder.mUserImg.setTag(pos);
+            mHolder.mUserImg.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mAdapterPos = (int) v.getTag();
+                    ((BaseActivity) mContext).moveOtherProfileScreenWithResult(mContext, mMyProfileResModel.getID(),
+                            mBlockedProfileList.get(mAdapterPos).getID(), AppConstants.FOLLOWERS_FOLLOWING_RESULT);
+
                 }
+            });
+            mHolder.mBlockBtn.setTag(pos);
+            mHolder.mBlockBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mAdapterPos = (int) v.getTag();
+                    ProfileResModel mEntity = mBlockedProfileList.get(mAdapterPos);
+                    if (Utility.getInstance().isAlreadyBlocked(mMyProfileResModel.getBlockedUserProfilesByProfileID(), mEntity.getID())) {
+                        CommonAPI.getInstance().callUnBlockProfile(mContext, mRetrofitResInterface,
+                                Utility.getInstance().getUnBlockRowID(mMyProfileResModel.getBlockedUserProfilesByProfileID(),
+                                        mMyProfileID, mEntity.getID()));
+                    } else {
+                        CommonAPI.getInstance().callBlockProfile(mContext, mRetrofitResInterface,
+                                mMyProfileID, mEntity.getID());
+                    }
 
-            }
-        });
+                }
+            });
+        }catch (Exception e){
+            e.printStackTrace();
+        }
 
     }
 
@@ -179,7 +183,6 @@ public class BlockedProfilesAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     private void setResult() {
         ((BaseActivity) mContext).setResult(RESULT_OK, new Intent().putExtra(AppConstants.IS_FOLLOW_RESULT, true));
     }
-
 
     private void updateBlockProfile(BlockedUserResModel mEntity) {
         ArrayList<BlockedUserResModel> mBlockedUsersList = mMyProfileResModel.getBlockedUserProfilesByProfileID();

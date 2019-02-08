@@ -49,19 +49,23 @@ public class TaggedProfilesAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+        try {
 
-        final TaggedProfilesAdapter.viewHolderTaggedProfiles mViewHolderTaggedProfiles = (TaggedProfilesAdapter.viewHolderTaggedProfiles) holder;
-        mViewHolderTaggedProfiles.mFollowerNameTv.setText
-                (mContext.getString(R.string.tagged_profile_name, Utility.getInstance().getUserName(mTaggedProfilesList.get(position))));
+            final TaggedProfilesAdapter.viewHolderTaggedProfiles mViewHolderTaggedProfiles = (TaggedProfilesAdapter.viewHolderTaggedProfiles) holder;
+            mViewHolderTaggedProfiles.mFollowerNameTv.setText
+                    (mContext.getString(R.string.tagged_profile_name, Utility.getInstance().getUserName(mTaggedProfilesList.get(position))));
 
-        mViewHolderTaggedProfiles.mCloseBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mTaggedProfilesList.remove(mViewHolderTaggedProfiles.getLayoutPosition());
-                notifyDataSetChanged();
-                mTaggedProfilesSizeInterface.notifyEmptyTaggedProfilesList(mTaggedProfilesList);
-            }
-        });
+            mViewHolderTaggedProfiles.mCloseBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mTaggedProfilesList.remove(mViewHolderTaggedProfiles.getLayoutPosition());
+                    notifyDataSetChanged();
+                    mTaggedProfilesSizeInterface.notifyEmptyTaggedProfilesList(mTaggedProfilesList);
+                }
+            });
+        }catch (Exception e){
+            e.printStackTrace();
+        }
 
     }
 

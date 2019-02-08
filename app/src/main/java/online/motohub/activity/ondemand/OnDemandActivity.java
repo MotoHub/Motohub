@@ -2,9 +2,11 @@ package online.motohub.activity.ondemand;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
@@ -25,8 +27,12 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import online.motohub.R;
 import online.motohub.activity.BaseActivity;
+import online.motohub.fragment.BaseFragment;
+import online.motohub.fragment.dialog.AppDialogFragment;
 import online.motohub.fragment.ondemand.EventsFragment;
 import online.motohub.fragment.ondemand.PromoterOrUserFragment;
+import online.motohub.util.DialogManager;
+
 
 /**
  * Created by pickzy01 on 30/05/2018.
@@ -65,21 +71,55 @@ public class OnDemandActivity extends BaseActivity {
         }
     }
 
+    @Override
+    protected void onDestroy() {
+        DialogManager.hideProgress();
+        super.onDestroy();
+    }
+
     @OnClick({R.id.toolbar_back_img_btn})
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.toolbar_back_img_btn:
+                hideSoftKeyboard(this);
                 finish();
                 break;
         }
     }
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+    }
+
 
     private void setupViewPager(ViewPager viewPager) {
         adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(new PromoterOrUserFragment(), "Promoter/User");
+        adapter.addFragment(new PromoterOrUserFragment(), "Videos");
         adapter.addFragment(new EventsFragment(), "Events");
         viewPager.setAdapter(adapter);
     }
+
+    @Override
+    public void alertDialogPositiveBtnClick(BaseActivity activity, String dialogType, StringBuilder profileTypesStr, ArrayList<String> profileTypes, int position) {
+        super.alertDialogPositiveBtnClick(activity, dialogType, profileTypesStr, profileTypes, position);
+        switch (dialogType) {
+
+            case AppDialogFragment.BOTTOM_SHARE_DIALOG:
+                ((BaseFragment) adapter.getItem(tabs.getSelectedTabPosition())).alertDialogPositiveBtnClick(dialogType, position);
+                break;
+
+        }
+
+    }
+
+
+    @Override
+    @SuppressWarnings("unchecked")
+    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
+
+        super.onRestoreInstanceState(savedInstanceState);
+    }
+
 
     class ViewPagerAdapter extends FragmentStatePagerAdapter {
         private final List<Fragment> mFragmentList = new ArrayList<>();
@@ -87,6 +127,7 @@ public class OnDemandActivity extends BaseActivity {
 
         public ViewPagerAdapter(FragmentManager manager) {
             super(manager);
+            Bundle mBundle = new Bundle();
         }
 
         @Override
@@ -113,8 +154,7 @@ public class OnDemandActivity extends BaseActivity {
     public static void verifyStoragePermissions(Activity activity) {
         int writePermission = ActivityCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE);
         if (writePermission != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(
-                    activity, PERMISSIONS_STORAGE, PERMISSIONS_STORAGE_PREMISSONS);
+            ActivityCompat.requestPermissions(activity, PERMISSIONS_STORAGE, PERMISSIONS_STORAGE_PREMISSONS);
         }
     }
 
@@ -122,4 +162,18 @@ public class OnDemandActivity extends BaseActivity {
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
             Manifest.permission.READ_EXTERNAL_STORAGE
     };
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        ((BaseFragment) adapter.getItem(tabs.getSelectedTabPosition())).onActivityResult(requestCode, resultCode,data);
+    }
+
+    @Override
+    public void retrofitOnResponse(Object responseObj, int responseType) {
+        super.retrofitOnResponse(responseObj, responseType);
+        ((BaseFragment) adapter.getItem(tabs.getSelectedTabPosition())).retrofitOnResponse(responseObj, responseType);
+    }
+
+
 }

@@ -35,9 +35,9 @@ public class VideoLikesModel implements Serializable {
 
     @SerializedName("resource")
     @Expose
-    private ArrayList<VideoLikesModel> mResource = null;
+    private  ArrayList<VideoLikesModel> mResource = null;
 
-    public ArrayList<VideoLikesModel> getResource() {
+    public  ArrayList<VideoLikesModel> getResource() {
         return mResource;
     }
 

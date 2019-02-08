@@ -21,6 +21,10 @@ public class EventsResModel implements Serializable {
     @Expose
     private String mEventType;
 
+    @SerializedName("EventImage")
+    @Expose
+    private String mEventImage;
+
     @SerializedName("MotorVehicle")
     @Expose
     private String mMotorVehicle;
@@ -133,6 +137,16 @@ public class EventsResModel implements Serializable {
 
     public void setEventGroupsByEventID(ArrayList<EventCategoryModel> mEventGroupsByEventID) {
         this.mEventGroupsByEventID = mEventGroupsByEventID;
+    }
+
+    public String getmEventImage() {
+        if(mEventImage == null)
+            mEventImage = "";
+        return mEventImage;
+    }
+
+    public void setmEventImage(String mEventImage) {
+        this.mEventImage = mEventImage;
     }
 
     public Integer getID() {

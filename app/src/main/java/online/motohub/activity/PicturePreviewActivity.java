@@ -6,12 +6,12 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import online.motohub.R;
+import online.motohub.util.DialogManager;
 import online.motohub.util.ZoomImageView;
 
 
@@ -48,6 +48,12 @@ public class PicturePreviewActivity extends BaseActivity {
             default:
                 finish();
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        DialogManager.hideProgress();
+        super.onDestroy();
     }
 
     private void nextScreen() {

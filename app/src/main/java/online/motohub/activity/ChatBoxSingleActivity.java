@@ -17,7 +17,10 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 
+import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -48,10 +51,13 @@ import online.motohub.model.SingleChatRoomModel;
 import online.motohub.model.SingleChatRoomResModel;
 import online.motohub.retrofit.RetrofitClient;
 import online.motohub.util.CommonAPI;
+import online.motohub.util.DialogManager;
 import online.motohub.util.PreferenceUtils;
 import online.motohub.util.Utility;
 
 public class ChatBoxSingleActivity extends BaseActivity implements ChatBoxSingleAdapter.TotalRetrofitMsgResultCount {
+
+    public static final String NOTIFY_MSG_READ = "online.motohub.NOTIFY_MSG_READ";
 
     private static final int mDataLimit = 15;
     @BindView(R.id.chat_box_layout)
@@ -83,8 +89,10 @@ public class ChatBoxSingleActivity extends BaseActivity implements ChatBoxSingle
     };
     private int mMsgRvOffset = 0, mMsgRvTotalCount = -1;
     private boolean mIsMsgRvLoading = true;
+    private boolean mIsnewMSG = true;
+    private String mChatRelation = "";
     private String mPostImgUri = null;
-    private String imgUrl = "";
+    private String imgUrl = null;
     private String message;
 
     @Override
@@ -93,7 +101,13 @@ public class ChatBoxSingleActivity extends BaseActivity implements ChatBoxSingle
         setContentView(R.layout.activity_chat_room);
         ButterKnife.bind(this);
         initViews();
-        //setupUI(mCoordinatorLayout);
+        setupUI(mCoordinatorLayout);
+    }
+
+    @Override
+    protected void onDestroy() {
+        DialogManager.hideProgress();
+        super.onDestroy();
     }
 
     private void initViews() {
@@ -103,60 +117,51 @@ public class ChatBoxSingleActivity extends BaseActivity implements ChatBoxSingle
             try {
                 JSONObject mJsonObjectEntry = new JSONObject(getIntent().getExtras().getString(MyFireBaseMessagingService.ENTRY_JSON_OBJ));
                 JSONObject mDetailsObj = mJsonObjectEntry.getJSONObject("Details");
-
                 mSingleChatRoomResModel = new SingleChatRoomResModel();
-
                 mSingleChatRoomResModel.setFromProfileID(Integer.parseInt(mDetailsObj.get(MyFireBaseMessagingService.TO_PROFILE_ID).toString()));
                 mSingleChatRoomResModel.setToProfileID(Integer.parseInt(mDetailsObj.get(MyFireBaseMessagingService.FROM_PROFILE_ID).toString()));
-
                 ProfileResModel mProfileResModel = new ProfileResModel();
                 mProfileResModel.setProfilePicture(mDetailsObj.getString(MyFireBaseMessagingService.PROFILE_PICTURE));
                 mProfileResModel.setID(Integer.parseInt(mDetailsObj.get(MyFireBaseMessagingService.FROM_PROFILE_ID).toString()));
                 mProfileResModel.setUserID(Integer.parseInt(mDetailsObj.get(MyFireBaseMessagingService.FROM_USER_ID).toString()));
                 mProfileResModel.setProfileType(Integer.parseInt(BaseActivity.SPECTATOR));
                 mProfileResModel.setSpectatorName(mDetailsObj.getString(MyFireBaseMessagingService.SENDER_NAME));
-
                 mSingleChatRoomResModel.setProfilesByToProfileID(mProfileResModel);
-
                 getProfiles(Integer.parseInt(mDetailsObj.get(MyFireBaseMessagingService.TO_PROFILE_ID).toString()));
-
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-
         } else {
+            /*
+            this.mMyProfileResModel = (ProfileResModel) getIntent().getExtras().get(ProfileModel.MY_PROFILE_RES_MODEL);*/
+            //mSingleChatRoomResModel = MotoHub.getApplicationInstance().getmSingleChatRoomResModel();
             this.mSingleChatRoomResModel = (SingleChatRoomResModel) getIntent().getExtras().get(SingleChatRoomModel.SINGLE_CHAT_ROOM_RES_MODEL);
-            this.mMyProfileResModel = (ProfileResModel) getIntent().getExtras().get(ProfileModel.MY_PROFILE_RES_MODEL);
+            //mMyProfileResModel = MotoHub.getApplicationInstance().getmProfileResModel();
+            mMyProfileResModel = EventBus.getDefault().getStickyEvent(ProfileResModel.class);
             setViews();
         }
     }
 
     private void setViews() {
-
         assert mSingleChatRoomResModel != null;
         assert mMyProfileResModel != null;
-
         String mToolbarTitle;
         mToolbarTitle = Utility.getInstance().getUserName(mSingleChatRoomResModel.getProfilesByToProfileID());
         setToolbar(mToolbar, mToolbarTitle);
         showToolbarBtn(mToolbar, R.id.toolbar_back_img_btn);
-
         mLinearLayoutManager = new LinearLayoutManager(this);
         mLinearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mLinearLayoutManager.setStackFromEnd(true);
         mLinearLayoutManager.setReverseLayout(true);
         mSingleChatMsgRv.setItemAnimator(new DefaultItemAnimator());
         mSingleChatMsgRv.setLayoutManager(mLinearLayoutManager);
-
         mSingleChatMsgRv.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-
                 int mVisibleItemCount = mLinearLayoutManager.getChildCount();
                 int mTotalItemCount = mLinearLayoutManager.getItemCount();
                 int mFirstVisibleItemPosition = mLinearLayoutManager.findFirstVisibleItemPosition();
-
                 if (!mIsMsgRvLoading && !(mMsgRvOffset >= mMsgRvTotalCount)) {
                     if ((mVisibleItemCount + mFirstVisibleItemPosition) >= mTotalItemCount
                             && mFirstVisibleItemPosition >= 0) {
@@ -164,10 +169,8 @@ public class ChatBoxSingleActivity extends BaseActivity implements ChatBoxSingle
                         getSingleChatMsg();
                     }
                 }
-
             }
         });
-
         mSingleChatMsgList = new ArrayList<>();
         mSingleChatMsgAdapter = new ChatBoxSingleAdapter(mSingleChatMsgList, this, mSingleChatRoomResModel, mMyProfileResModel);
         mSingleChatMsgRv.setAdapter(mSingleChatMsgAdapter);
@@ -175,12 +178,10 @@ public class ChatBoxSingleActivity extends BaseActivity implements ChatBoxSingle
         /*if (mSingleChatMsgAdapter.getItemCount() > 1) {
             mSingleChatMsgRv.getLayoutManager().smoothScrollToPosition(mSingleChatMsgRv, null, mSingleChatMsgRv.getAdapter().getItemCount() - 1);
         }*/
-
         getSingleChatMsg();
     }
 
     private void getProfiles(int profileID) {
-
         String mFilter = "ID = " + profileID;
         RetrofitClient.getRetrofitInstance().callGetProfiles(this, mFilter, RetrofitClient.GET_PROFILE_RESPONSE);
     }
@@ -200,15 +201,11 @@ public class ChatBoxSingleActivity extends BaseActivity implements ChatBoxSingle
     }
 
     private void updatePushMsg(Intent intent) {
-
         try {
-
             JSONObject mJsonObjectEntry = new JSONObject(intent.getStringExtra(MyFireBaseMessagingService.ENTRY_JSON_OBJ));
             JSONObject mDetailsObj = mJsonObjectEntry.getJSONObject("Details");
-
             if ((mSingleChatRoomResModel.getFromProfileID() != Integer.parseInt(mDetailsObj.get(MyFireBaseMessagingService.TO_PROFILE_ID).toString()))
                     && (mSingleChatRoomResModel.getToProfileID() != Integer.parseInt(mDetailsObj.get(MyFireBaseMessagingService.FROM_PROFILE_ID).toString()))) {
-
                 JSONObject mNotificationJsonObject = new JSONObject();
                 mNotificationJsonObject.put(MyFireBaseMessagingService.ENTRY_JSON_OBJ, mJsonObjectEntry);
                 String mNotificationChatID = mMyProfileResModel.getID() + "_" + mSingleChatRoomResModel.getProfilesByToProfileID().getID();
@@ -217,8 +214,6 @@ public class ChatBoxSingleActivity extends BaseActivity implements ChatBoxSingle
                 MyFireBaseMessagingService.composeChatNotification(mNotificationJsonObject, this, mNotificationID, mNotificationChatID, mContentTitle, ChatBoxSingleActivity.class);
                 return;
             }
-
-
             SingleChatMsgResModel mSingleChatMsgResModel = new SingleChatMsgResModel();
             mSingleChatMsgResModel.setToUserID(Integer.parseInt(mDetailsObj.get(MyFireBaseMessagingService.TO_USER_ID).toString()));
             mSingleChatMsgResModel.setCreatedAt(mDetailsObj.getString(MyFireBaseMessagingService.CREATED_AT));
@@ -228,9 +223,14 @@ public class ChatBoxSingleActivity extends BaseActivity implements ChatBoxSingle
             mSingleChatMsgResModel.setMessage(mDetailsObj.getString(MyFireBaseMessagingService.MESSAGE));
             mSingleChatMsgResModel.setToProfileID(Integer.parseInt(mDetailsObj.get(MyFireBaseMessagingService.TO_PROFILE_ID).toString()));
             mSingleChatMsgResModel.setMsgType(mDetailsObj.getString(MyFireBaseMessagingService.MSG_TYPE));
-            mSingleChatMsgResModel.setPhotoMessage(mDetailsObj.getString(MyFireBaseMessagingService.PHOTO_MESSAGE));
+            String photoMessage = "";
+            if (mDetailsObj.has(MyFireBaseMessagingService.PHOTO_MESSAGE)) {
+                photoMessage = mDetailsObj.getString(MyFireBaseMessagingService.PHOTO_MESSAGE);
+            } else {
+                photoMessage = "";
+            }
+            mSingleChatMsgResModel.setPhotoMessage(photoMessage);
             mMsgRvTotalCount = mMsgRvTotalCount + 1;
-
             mSingleChatMsgList.add(0, mSingleChatMsgResModel);
             mSingleChatMsgAdapter.notifyDataSetChanged();
             mSingleChatMsgRv.smoothScrollToPosition(0);
@@ -240,21 +240,32 @@ public class ChatBoxSingleActivity extends BaseActivity implements ChatBoxSingle
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
     }
 
     private void getSingleChatMsg() {
+        String mFilter = "((FromProfileID=" + mSingleChatRoomResModel.getFromProfileID()
+                + ") AND (ToProfileID=" + mSingleChatRoomResModel.getToProfileID()
+                + ")) OR ((FromProfileID=" + mSingleChatRoomResModel.getToProfileID()
+                + ") AND (ToProfileID=" + mSingleChatRoomResModel.getFromProfileID() + "))";
+        RetrofitClient.getRetrofitInstance()
+                .callGetSingleChatMsg(this, mFilter, RetrofitClient.GET_SINGLE_CHAT_MSG, mDataLimit, mMsgRvOffset);
+    }
 
-        String mFilter = "((FromProfileID=" + mSingleChatRoomResModel.getFromProfileID() + ") AND (ToProfileID=" + mSingleChatRoomResModel.getToProfileID() + ")) OR ((FromProfileID=" + mSingleChatRoomResModel.getToProfileID() + ") AND (ToProfileID=" + mSingleChatRoomResModel.getFromProfileID() + "))";
-
-        RetrofitClient.getRetrofitInstance().callGetSingleChatMsg(this, mFilter, RetrofitClient.GET_SINGLE_CHAT_MSG, mDataLimit, mMsgRvOffset);
-
+    @Override
+    public void onBackPressed() {
+        Intent mintent = new Intent();
+        mintent.putExtra(SingleChatRoomModel.SINGLE_CHAT_ROOM_RES_MODEL, mSingleChatRoomResModel.getToProfileID());
+        setResult(RESULT_OK, mintent);
+        finish();
     }
 
     @OnClick({R.id.toolbar_back_img_btn, R.id.send_btn, R.id.fileAttachImgBtn, R.id.iv_remove_image})
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.toolbar_back_img_btn:
+                Intent mintent = new Intent();
+                mintent.putExtra(SingleChatRoomModel.SINGLE_CHAT_ROOM_RES_MODEL, mSingleChatRoomResModel.getToProfileID());
+                setResult(RESULT_OK, mintent);
                 finish();
                 break;
             case R.id.send_btn:
@@ -274,14 +285,12 @@ public class ChatBoxSingleActivity extends BaseActivity implements ChatBoxSingle
         mMessageEt.setText("");
         mfileAttachImgBtn.setVisibility(View.VISIBLE);
         mPostImgUri = null;
-        imgUrl = "";
+        imgUrl = null;
     }
 
     private void sendMessage() {
-
         try {
             String mMessage = mMessageEt.getText().toString().trim();
-
             if (mPostImgUri != null) {
                 uploadPicture(mPostImgUri);
             } else {
@@ -289,12 +298,17 @@ public class ChatBoxSingleActivity extends BaseActivity implements ChatBoxSingle
                     showToast(getApplicationContext(), getString(R.string.write_something));
                     return;
                 }
-
-                message = URLEncoder.encode(mMessage, "UTF-8");
-                CommonAPI.getInstance().callSendSingleChatMsg(this, mMyProfileResModel.getID(), mMyProfileResModel.getUserID(), mSingleChatRoomResModel.getProfilesByToProfileID().getID(), mSingleChatRoomResModel.getProfilesByToProfileID().getUserID(), message, imgUrl != null ? "media" : "text", imgUrl != null ? imgUrl : "");
+                message = URLEncoder.encode(mMessageEt.getText().toString(), "UTF-8");
+                if (mChatRelation.equals("")) {
+                    mChatRelation = mMyProfileResModel.getID() + "_" + mSingleChatRoomResModel.getToProfileID();
+                }
+                CommonAPI.getInstance().callSendSingleChatMsg(this,
+                        mMyProfileResModel.getID(), mMyProfileResModel.getUserID(),
+                        mSingleChatRoomResModel.getProfilesByToProfileID().getID(),
+                        mSingleChatRoomResModel.getProfilesByToProfileID().getUserID(),
+                        message, mChatRelation, imgUrl != null ? "media" : "text", imgUrl != null ? imgUrl : "");
                 clearFields();
             }
-
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
@@ -307,103 +321,97 @@ public class ChatBoxSingleActivity extends BaseActivity implements ChatBoxSingle
         RetrofitClient.getRetrofitInstance().callUploadChatImg(this, filePart, RetrofitClient.UPLOAD_IMAGE_FILE_RESPONSE);
     }
 
+    private void setMsgStatus() {
+        JsonArray jsonArray = new JsonArray();
+        JsonObject jsonobj = new JsonObject();
+        jsonobj.addProperty(SingleChatMsgResModel.MessageStatus, true);
+        jsonArray.add(jsonobj);
+        String mFilter = "((messagestatus=false)AND((FromProfileID=" + mSingleChatRoomResModel.getToProfileID()
+                + ")and(ToProfileID=" + mMyProfileResModel.getID() + ")))";
+        RetrofitClient.getRetrofitInstance().CallSetMsgStatus(this, mFilter, jsonArray, RetrofitClient.SET_MSG_STATUS);
+    }
+
     @Override
     public void retrofitOnResponse(Object responseObj, int responseType) {
         super.retrofitOnResponse(responseObj, responseType);
-
         if (responseObj instanceof SingleChatMsgModel) {
             String data = new Gson().toJson(responseObj);
             SingleChatMsgModel mSingleChatMsgModel = (SingleChatMsgModel) responseObj;
-
             switch (responseType) {
-
                 case RetrofitClient.GET_SINGLE_CHAT_MSG:
-
                     if (mSingleChatMsgModel.getResource() != null && mSingleChatMsgModel.getResource().size() > 0) {
-
+                        mIsnewMSG = false;
                         mMsgRvTotalCount = mSingleChatMsgModel.getMeta().getCount();
-
                         mIsMsgRvLoading = false;
-
                         if (mMsgRvOffset == 0) {
                             mSingleChatMsgList.clear();
                         }
-
                         mSingleChatMsgList.addAll(mSingleChatMsgModel.getResource());
+                        mChatRelation = mSingleChatMsgList.get(0).getmChatRelation();
                         mSingleChatMsgAdapter.notifyDataSetChanged();
-
                         if (mMsgRvOffset == 0) {
                             mSingleChatMsgRv.smoothScrollToPosition(0);
                             /*if (mSingleChatMsgAdapter.getItemCount() > 1) {
                                 mSingleChatMsgRv.getLayoutManager().smoothScrollToPosition(mSingleChatMsgRv, null, mSingleChatMsgRv.getAdapter().getItemCount() - 1);
                             }*/
                         }
-
                         mMsgRvOffset = mMsgRvOffset + mDataLimit;
-
+                        setMsgStatus();
                     } else {
                         if (mMsgRvOffset == 0) {
                             mMsgRvTotalCount = 0;
                             mSingleChatMsgAdapter.notifyDataSetChanged();
                         }
                     }
-
                     break;
-
                 case RetrofitClient.SEND_SINGLE_CHAT_MSG:
-
                     if (mSingleChatMsgModel.getResource() != null && mSingleChatMsgModel.getResource().size() > 0) {
-
                         mSingleChatMsgList.add(0, mSingleChatMsgModel.getResource().get(0));
                         mSingleChatMsgAdapter.notifyDataSetChanged();
                         mSingleChatMsgRv.smoothScrollToPosition(0);
-                        /*if (mSingleChatMsgAdapter.getItemCount() > 1) {
-                            mSingleChatMsgRv.getLayoutManager().smoothScrollToPosition(mSingleChatMsgRv, null, mSingleChatMsgRv.getAdapter().getItemCount() - 1);
-                        }*/
-
                         mMsgRvTotalCount = mMsgRvTotalCount + 1;
-
                         mMessageEt.setText("");
                     }
                     break;
+                case RetrofitClient.SET_MSG_STATUS:
+                    break;
             }
-
         } else if (responseObj instanceof SessionModel) {
-
             SessionModel mSessionModel = (SessionModel) responseObj;
             if (mSessionModel.getSessionToken() == null) {
                 PreferenceUtils.getInstance(this).saveStrData(PreferenceUtils.SESSION_TOKEN, mSessionModel.getSessionId());
             } else {
                 PreferenceUtils.getInstance(this).saveStrData(PreferenceUtils.SESSION_TOKEN, mSessionModel.getSessionToken());
             }
-
             getSingleChatMsg();
-
         } else if (responseObj instanceof ProfileModel) {
             ProfileModel mProfileModel = (ProfileModel) responseObj;
             mMyProfileResModel = mProfileModel.getResource().get(0);
             setViews();
         } else if (responseObj instanceof ImageModel) {
-
             ImageModel mImageModel = (ImageModel) responseObj;
-
             switch (responseType) {
-
                 case RetrofitClient.UPLOAD_IMAGE_FILE_RESPONSE:
                     //update the record in database/tablet
                     imgUrl = getHttpFilePath(mImageModel.getmModels().get(0).getPath());
                     try {
                         //callPostFeedComments(imgUrl, mPostID, mMyProfileResModel.getID());
                         String mMessage = mMessageEt.getText().toString().trim();
+                        if (mChatRelation.equals("")) {
+                            mChatRelation = mMyProfileResModel.getID() + "_" + mSingleChatRoomResModel.getToProfileID();
+                        }
                         message = URLEncoder.encode(mMessage, "UTF-8");
-                        CommonAPI.getInstance().callSendSingleChatMsg(this, mMyProfileResModel.getID(), mMyProfileResModel.getUserID(), mSingleChatRoomResModel.getProfilesByToProfileID().getID(), mSingleChatRoomResModel.getProfilesByToProfileID().getUserID(), message, imgUrl != null ? "media" : "text", imgUrl != null ? imgUrl : "");
+                        CommonAPI.getInstance().callSendSingleChatMsg(this,
+                                mMyProfileResModel.getID(), mMyProfileResModel.getUserID(),
+                                mSingleChatRoomResModel.getProfilesByToProfileID().getID(),
+                                mSingleChatRoomResModel.getProfilesByToProfileID().getUserID(),
+                                message, mChatRelation, imgUrl != null ? "media" : "text", imgUrl != null ? imgUrl : "");
                         clearFields();
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
                     break;
             }
-
         }
     }
 

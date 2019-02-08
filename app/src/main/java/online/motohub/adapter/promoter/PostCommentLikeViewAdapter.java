@@ -42,9 +42,9 @@ import com.bumptech.glide.request.target.Target;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
+import org.greenrobot.eventbus.EventBus;
 
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -55,16 +55,16 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import online.motohub.R;
 import online.motohub.activity.BaseActivity;
 import online.motohub.activity.MyMotoFileActivity;
-import online.motohub.activity.OthersMotoFileActivity;
 import online.motohub.activity.TaggedProfilesListActivity;
-import online.motohub.activity.track.TrackProfileActivity;
 import online.motohub.activity.club.ClubProfileActivity;
 import online.motohub.activity.news_and_media.NewsAndMediaProfileActivity;
+import online.motohub.activity.performance_shop.PerformanceShopProfileActivity;
 import online.motohub.activity.promoter.PromoterProfileActivity;
 import online.motohub.activity.promoter.PromotersImgListActivity;
-import online.motohub.activity.promoter.PromotersListActivity;
+import online.motohub.activity.track.TrackProfileActivity;
 import online.motohub.adapter.FeedLikesAdapter;
 import online.motohub.adapter.FeedSharesAdapter;
+import online.motohub.application.MotoHub;
 import online.motohub.fragment.dialog.AppDialogFragment;
 import online.motohub.model.FeedLikesModel;
 import online.motohub.model.FeedShareModel;
@@ -96,6 +96,7 @@ public class PostCommentLikeViewAdapter extends RecyclerView.Adapter<RecyclerVie
     private int mDeleteLikeID;
     private RecyclerView mFeedLikesListView;
     private ProfileResModel mCurrentProfileResModel;
+    private StringBuffer sb = new StringBuffer();
 
     public PostCommentLikeViewAdapter(List<PostsResModel> postsList, ArrayList<ProfileResModel> myfullMPList, ArrayList<ProfileResModel> myProfileResModel, Context ctx, boolean isFromOthersMotoProfile) {
         this.mPostsList = postsList;
@@ -104,6 +105,34 @@ public class PostCommentLikeViewAdapter extends RecyclerView.Adapter<RecyclerVie
         this.mMyProfileResModel = myProfileResModel;
         this.mContext = ctx;
         this.mActivity = (Activity) ctx;
+    }
+
+    public static String replacer(StringBuffer outBuffer) {
+
+        String data = outBuffer.toString();
+        try {
+            StringBuffer tempBuffer = new StringBuffer();
+            int incrementor = 0;
+            int dataLength = data.length();
+            while (incrementor < dataLength) {
+                char charecterAt = data.charAt(incrementor);
+                if (charecterAt == '%') {
+                    tempBuffer.append("<percentage>");
+                } else if (charecterAt == '+') {
+                    tempBuffer.append("<plus>");
+                } else {
+                    tempBuffer.append(charecterAt);
+                }
+                incrementor++;
+            }
+            data = tempBuffer.toString();
+            data = URLDecoder.decode(data, "utf-8");
+            data = data.replaceAll("<percentage>", "%");
+            data = data.replaceAll("<plus>", "+");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return data;
     }
 
     @Override
@@ -163,61 +192,38 @@ public class PostCommentLikeViewAdapter extends RecyclerView.Adapter<RecyclerVie
             case VIEW_TYPE_POSTS:
 
                 final ViewHolderPosts mViewHolderPost = (ViewHolderPosts) holder;
+                try {
 
-                String mUsernameStr;
+                    String mUsernameStr;
 
-                String mPostOwnerName = "";
+                    String mPostOwnerName = "";
 
-                mViewHolderPost.playicon.setVisibility(View.GONE);
-                mViewHolderPost.mPostPic.setVisibility(View.GONE);
-                mViewHolderPost.mPostPicProgressBar.setVisibility(View.GONE);
-                mViewHolderPost.mPostImageVideoBox.setVisibility(View.GONE);
-                mViewHolderPost.mCommentViewLay.setVisibility(View.GONE);
-                mViewHolderPost.mBottomArrowImgView.setVisibility(View.GONE);
-                mViewHolderPost.mSharedBottomArrow.setVisibility(View.GONE);
-
-
-                mViewHolderPost.mPostDate.setText(((BaseActivity) mContext).findTime(mPostsList.get(position).getDateCreatedAt()));
+                    mViewHolderPost.playicon.setVisibility(View.GONE);
+                    mViewHolderPost.mPostPic.setVisibility(View.GONE);
+                    mViewHolderPost.mPostPicProgressBar.setVisibility(View.GONE);
+                    mViewHolderPost.mPostImageVideoBox.setVisibility(View.GONE);
+                    mViewHolderPost.mCommentViewLay.setVisibility(View.GONE);
+                    mViewHolderPost.mBottomArrowImgView.setVisibility(View.GONE);
+                    mViewHolderPost.mSharedBottomArrow.setVisibility(View.GONE);
 
 
-                if (mIsFromOthersMotoProfile) {
-                    mCurrentProfileResModel = mMyProfileResModel.get(0);
-                } else {
-                    mCurrentProfileResModel = mMyFullMPList.get(((BaseActivity) mContext).getProfileCurrentPos());
-                }
+                    mViewHolderPost.mPostDate.setText(((BaseActivity) mContext).findTime(mPostsList.get(position).getDateCreatedAt()));
 
-                if (mPostsList.get(position).getUserType() == null
-                        || mPostsList.get(position).getUserType().isEmpty()
-                        || mPostsList.get(position).getUserType().trim().equals("user") || mPostsList.get(position).getUserType().trim().equals("club_user")) {
-                    ProfileResModel mProfileResModel = mPostsList.get(position).getProfilesByWhoPostedProfileID();
 
-                    mUsernameStr = Utility.getInstance().getUserName(mProfileResModel);
-                    mPostOwnerName = mUsernameStr;
-
-                    if (mPostsList.get(position).getTaggedProfileID() != null && !mPostsList.get(position).getTaggedProfileID().isEmpty()) {
-                        setUserName(mViewHolderPost, position, mUsernameStr);
+                    if (mIsFromOthersMotoProfile) {
+                        mCurrentProfileResModel = mMyProfileResModel.get(0);
                     } else {
-                        mViewHolderPost.mUsername.setText(mUsernameStr);
+                        mCurrentProfileResModel = mMyFullMPList.get(((BaseActivity) mContext).getProfileCurrentPos());
                     }
 
-                    ((BaseActivity) mContext).setImageWithGlide(mViewHolderPost.mProfileImg, mProfileResModel.getProfilePicture(), R.drawable.default_profile_icon);
-
-                } else if (mPostsList.get(position).getUserType().trim().equals(AppConstants.SHARED_POST)
-                        || mPostsList.get(position).getUserType().trim().equals(AppConstants.VIDEO_SHARED_POST)
-                        || mPostsList.get(position).getUserType().trim().equals(AppConstants.SHARED_VIDEO)) {
-
-                    if (mPostsList.get(position).getPromoterByWhoPostedProfileID() != null) {
-                        PromotersResModel mPromotersResModel = mPostsList.get(position).getPromoterByWhoPostedProfileID();
-
-                        mUsernameStr = (mPromotersResModel.getName());
-                        mPostOwnerName = mUsernameStr;
-                        mViewHolderPost.mUsername.setText(mUsernameStr);
-                        ((BaseActivity) mContext).setImageWithGlide(mViewHolderPost.mProfileImg, mPromotersResModel.getProfileImage(), R.drawable.default_profile_icon);
-                    } else {
+                    if (mPostsList.get(position).getUserType() == null
+                            || mPostsList.get(position).getUserType().isEmpty()
+                            || mPostsList.get(position).getUserType().trim().equals("user") || mPostsList.get(position).getUserType().trim().equals("club_user")) {
                         ProfileResModel mProfileResModel = mPostsList.get(position).getProfilesByWhoPostedProfileID();
 
                         mUsernameStr = Utility.getInstance().getUserName(mProfileResModel);
                         mPostOwnerName = mUsernameStr;
+
                         if (mPostsList.get(position).getTaggedProfileID() != null && !mPostsList.get(position).getTaggedProfileID().isEmpty()) {
                             setUserName(mViewHolderPost, position, mUsernameStr);
                         } else {
@@ -225,270 +231,298 @@ public class PostCommentLikeViewAdapter extends RecyclerView.Adapter<RecyclerVie
                         }
 
                         ((BaseActivity) mContext).setImageWithGlide(mViewHolderPost.mProfileImg, mProfileResModel.getProfilePicture(), R.drawable.default_profile_icon);
-                    }
 
-                } else if (mPostsList.get(position).getUserType().trim().equals(AppConstants.PROMOTER) || mPostsList.get(position).getUserType().trim().equals(AppConstants.CLUB) || mPostsList.get(position).getUserType().trim().equals(AppConstants.NEWS_MEDIA) || mPostsList.get(position).getUserType().trim().equals(AppConstants.TRACK)) {
+                    } else if (mPostsList.get(position).getUserType().trim().equals(AppConstants.SHARED_POST)
+                            || mPostsList.get(position).getUserType().trim().equals(AppConstants.VIDEO_SHARED_POST)
+                        /*|| mPostsList.get(position).getUserType().trim().equals(AppConstants.SHARED_VIDEO)*/) {
 
-                    PromotersResModel mPromotersProfilesModel = mPostsList.get(position).getPromoterByProfileID();
+                        if (mPostsList.get(position).getPromoterByWhoPostedProfileID() != null) {
+                            PromotersResModel mPromotersResModel = mPostsList.get(position).getPromoterByWhoPostedProfileID();
 
-                    mUsernameStr = mPromotersProfilesModel.getName();
-                    mPostOwnerName = mUsernameStr;
-                    mViewHolderPost.mUsername.setText(mUsernameStr);
-                    ((BaseActivity) mContext).setImageWithGlide(mViewHolderPost.mProfileImg, mPromotersProfilesModel.getProfileImage(), R.drawable.default_profile_icon);
-                }
+                            mUsernameStr = (mPromotersResModel.getName());
+                            mPostOwnerName = mUsernameStr;
+                            mViewHolderPost.mUsername.setText(mUsernameStr);
+                            ((BaseActivity) mContext).setImageWithGlide(mViewHolderPost.mProfileImg, mPromotersResModel.getProfileImage(), R.drawable.default_profile_icon);
+                        } else {
+                            ProfileResModel mProfileResModel = mPostsList.get(position).getProfilesByWhoPostedProfileID();
 
-                mViewHolderPost.mProfileImg.setTag(position);
-                mViewHolderPost.mProfileImg.setOnClickListener(this);
-                mViewHolderPost.mUsername.setTag(position);
-                mViewHolderPost.mUsername.setOnClickListener(this);
+                            mUsernameStr = Utility.getInstance().getUserName(mProfileResModel);
+                            mPostOwnerName = mUsernameStr;
+                            if (mPostsList.get(position).getTaggedProfileID() != null && !mPostsList.get(position).getTaggedProfileID().isEmpty()) {
+                                setUserName(mViewHolderPost, position, mUsernameStr);
+                            } else {
+                                mViewHolderPost.mUsername.setText(mUsernameStr);
+                            }
 
-                final String[] mVideoArray = ((BaseActivity) mContext).getImgVideoList(mPostsList.get(position).getPostVideoThumbnailURL());
-
-                if (mVideoArray == null) {
-                    mViewHolderPost.mPostImageVideoBox.setVisibility(View.GONE);
-                    mViewHolderPost.playicon.setVisibility(View.GONE);
-                } else if (mVideoArray.length == 1 && mVideoArray[0].trim().equals("")) {
-                    mViewHolderPost.mPostImageVideoBox.setVisibility(View.GONE);
-                    mViewHolderPost.playicon.setVisibility(View.GONE);
-                } else if (mVideoArray.length == 1) {
-                    mViewHolderPost.mPostImageVideoBox.setVisibility(View.VISIBLE);
-                    mViewHolderPost.mPostPic.setVisibility(View.VISIBLE);
-                    mViewHolderPost.mPostPicProgressBar.setVisibility(View.VISIBLE);
-                    showVideoFile(mViewHolderPost, mVideoArray[0]);
-                }
-
-                final String[] mImgArray = ((BaseActivity) mContext).getImgVideoList(mPostsList.get(position).getPostPicture());
-
-                if (mImgArray == null) {
-                    mViewHolderPost.mMultiImgLay.setVisibility(View.GONE);
-                } else if (mImgArray.length == 1 && mImgArray[0].trim().equals("")) {
-                    mViewHolderPost.mMultiImgLay.setVisibility(View.GONE);
-                } else if (mImgArray.length == 1) {
-                    mViewHolderPost.mMultiImgLay.setVisibility(View.GONE);
-                    setPostPicture(mViewHolderPost, mImgArray[0]);
-                } else {
-                    mViewHolderPost.mMultiImgLay.setVisibility(View.VISIBLE);
-                    setImageView(mViewHolderPost, mImgArray);
-                }
-
-                mViewHolderPost.multi_img_layout.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        if (mImgArray != null) {
-                            Intent intent = new Intent(mContext, PromotersImgListActivity.class);
-                            intent.putExtra("img", mImgArray);
-                            mContext.startActivity(intent);
+                            ((BaseActivity) mContext).setImageWithGlide(mViewHolderPost.mProfileImg, mProfileResModel.getProfilePicture(), R.drawable.default_profile_icon);
                         }
-                    }
-                });
 
-                if (mPostsList.get(position).getPostText().isEmpty()) {
-                    mViewHolderPost.mPostText.setVisibility(View.GONE);
-                } else {
+                    } else if (mPostsList.get(position).getUserType().trim().equals(AppConstants.PROMOTER) || mPostsList.get(position).getUserType().trim().equals(AppConstants.CLUB) || mPostsList.get(position).getUserType().trim().equals(AppConstants.NEWS_MEDIA) || mPostsList.get(position).getUserType().trim().equals(AppConstants.TRACK)) {
 
-                    try {
-                        mViewHolderPost.mPostText.setText(URLDecoder.decode(mPostsList.get(position).getPostText(), "UTF-8"));
-                    } catch (UnsupportedEncodingException e) {
-                        e.printStackTrace();
+                        PromotersResModel mPromotersProfilesModel = mPostsList.get(position).getPromoterByProfileID();
+
+                        mUsernameStr = mPromotersProfilesModel.getName();
+                        mPostOwnerName = mUsernameStr;
+                        mViewHolderPost.mUsername.setText(mUsernameStr);
+                        ((BaseActivity) mContext).setImageWithGlide(mViewHolderPost.mProfileImg, mPromotersProfilesModel.getProfileImage(), R.drawable.default_profile_icon);
                     }
 
-                    mViewHolderPost.mPostText.setVisibility(View.VISIBLE);
+                    mViewHolderPost.mProfileImg.setTag(position);
+                    mViewHolderPost.mProfileImg.setOnClickListener(this);
+                    mViewHolderPost.mUsername.setTag(position);
+                    mViewHolderPost.mUsername.setOnClickListener(this);
 
-                }
+                    final String[] mVideoArray = ((BaseActivity) mContext).getImgVideoList(mPostsList.get(position).getPostVideoThumbnailURL());
 
-                if (mPostsList.get(position).getPostLikes() != null && mPostsList.get(position).getPostComments() != null && mPostsList.get(position).getPostShares() != null) {
-                    if (mPostsList.get(position).getPostLikes().size() == 0 && mPostsList.get(position).getPostComments().size() == 0 && mPostsList.get(position).getPostShares().size() == 0) {
-                        mViewHolderPost.mCountLay.setVisibility(View.GONE);
+                    if (mVideoArray == null) {
+                        mViewHolderPost.mPostImageVideoBox.setVisibility(View.GONE);
+                        mViewHolderPost.playicon.setVisibility(View.GONE);
+                    } else if (mVideoArray.length == 1 && mVideoArray[0].trim().equals("")) {
+                        mViewHolderPost.mPostImageVideoBox.setVisibility(View.GONE);
+                        mViewHolderPost.playicon.setVisibility(View.GONE);
+                    } else if (mVideoArray.length == 1) {
+                        mViewHolderPost.mPostImageVideoBox.setVisibility(View.VISIBLE);
+                        mViewHolderPost.mPostPic.setVisibility(View.VISIBLE);
+                        mViewHolderPost.mPostPicProgressBar.setVisibility(View.VISIBLE);
+                        showVideoFile(mViewHolderPost, mVideoArray[0]);
+                    }
+
+                    final String[] mImgArray = ((BaseActivity) mContext).getImgVideoList(mPostsList.get(position).getPostPicture());
+
+                    if (mImgArray == null) {
+                        mViewHolderPost.mMultiImgLay.setVisibility(View.GONE);
+                    } else if (mImgArray.length == 1 && mImgArray[0].trim().equals("")) {
+                        mViewHolderPost.mMultiImgLay.setVisibility(View.GONE);
+                    } else if (mImgArray.length == 1) {
+                        mViewHolderPost.mMultiImgLay.setVisibility(View.GONE);
+                        setPostPicture(mViewHolderPost, mImgArray[0]);
                     } else {
-                        mViewHolderPost.mCountLay.setVisibility(View.VISIBLE);
+                        mViewHolderPost.mMultiImgLay.setVisibility(View.VISIBLE);
+                        setImageView(mViewHolderPost, mImgArray);
                     }
-                } else {
-                    mViewHolderPost.mCountLay.setVisibility(View.VISIBLE);
-                }
 
-                if (mPostsList.get(position).getPostLikes() != null) {
-                    setLikeUnLikeForPost(mViewHolderPost, position);
-                } else {
-                    mViewHolderPost.mLikeBtn.setImageResource(R.drawable.like_to_like_click_bg);
-                    mViewHolderPost.mLikeBtn.setTag("like");
-                    mViewHolderPost.mLikeCountText.setText("");
-                }
-
-                if (mPostsList.get(position).getPostComments() != null) {
-                    setPostComments(mViewHolderPost, position);
-                } else {
-                    mViewHolderPost.mCommentCountTxt.setText(" ");
-                }
-
-                //share
-                if (mPostsList.get(position).getNewSharedPostID().trim().isEmpty()) {
-                    HideShareLayout(mViewHolderPost);
-                } else {
-                    showShareLayout(mViewHolderPost, position, mPostOwnerName);
-                }
-
-                String numberOfShares;
-
-                if (mPostsList.get(position).getPostShares() != null) {
-
-                    if (mPostsList.get(position).getPostShares().size() == 0) {
-                        mViewHolderPost.mShareCountTxt.setVisibility(View.GONE);
-
-                    } else if (mPostsList.get(position).getPostShares().size() == 1) {
-                        numberOfShares = mPostsList.get(position).getPostShares().size() + " Share";
-                        mViewHolderPost.mShareCountTxt.setText(numberOfShares);
-                        mViewHolderPost.mShareCountTxt.setVisibility(View.VISIBLE);
-
-                    } else {
-                        numberOfShares = mPostsList.get(position).getPostShares().size() + " Shares";
-                        mViewHolderPost.mShareCountTxt.setText(numberOfShares);
-                        mViewHolderPost.mShareCountTxt.setVisibility(View.VISIBLE);
-                    }
-                } else {
-                    mViewHolderPost.mShareCountTxt.setVisibility(View.GONE);
-                }
-
-
-                mViewHolderPost.mLikeBtn.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        if (!((BaseActivity) mContext).isMultiClicked()) {
-                            mTempPosition = position;
-
-                            switch (view.getTag().toString()) {
-                                case "unlike":
-
-                                    ArrayList<FeedLikesModel> mFeedLikeList = mPostsList.get(position).getPostLikes();
-
-                                    if (mFeedLikeList.size() > 0) {
-
-                                        for (FeedLikesModel likesEntity : mFeedLikeList) {
-                                            if (likesEntity.getOwnerID() == mCurrentProfileResModel.getID() && likesEntity.getFeedID() == mPostsList.get(position).getID()) {
-                                                mDeleteLikeID = likesEntity.getId();
-                                                break;
-                                            }
-
-                                        }
-                                        String mFilter = "ID=" + mDeleteLikeID;
-                                        callUnLikePost(mFilter);
-                                    }
-                                    String mFilter = "(" + PostsModel.POST_ID + "=" + mPostsList.get(position).getID() + ") AND (" + PostsModel.PROFILE_ID + "=" + mCurrentProfileResModel.getID() + ")";
-                                    callUnLikePost(mFilter);
-                                    break;
-
-                                case "like":
-
-                                    callLikePost(mPostsList.get(position).getID(), mCurrentProfileResModel.getID());
-
-                                    break;
+                    mViewHolderPost.multi_img_layout.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            if (mImgArray != null) {
+                                Intent intent = new Intent(mContext, PromotersImgListActivity.class);
+                                intent.putExtra("img", mImgArray);
+                                mContext.startActivity(intent);
                             }
                         }
-                    }
-                });
+                    });
 
+                    if (mPostsList.get(position).getPostText().isEmpty()) {
+                        mViewHolderPost.mPostText.setVisibility(View.GONE);
+                    } else {
 
-                mViewHolderPost.mLikeCountText.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        ArrayList<FeedLikesModel> mLikeModel;
-                        mTempPosition = position;
-                        if (mPostsList.get(position).getPostLikes() != null) {
-                            mLikeModel = mPostsList.get(position).getPostLikes();
-                        } else {
-                            mLikeModel = new ArrayList<>();
-                        }
-                        showLikeListPopup(mContext.getString(R.string.likes));
-                        setFeedLikeAdapter(mLikeModel);
-
-                    }
-                });
-
-                mViewHolderPost.mShareCountTxt.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-
-                        ArrayList<FeedShareModel> mShareModel;
-                        mTempPosition = position;
-                        if (mPostsList.get(position).getPostShares() != null) {
-                            mShareModel = mPostsList.get(position).getPostShares();
-                        } else {
-                            mShareModel = new ArrayList<>();
-                        }
-                        showLikeListPopup(mContext.getString(R.string.shares));
-                        setFeedShareAdapter(mShareModel);
-
-                    }
-                });
-
-                mViewHolderPost.mShareBtn.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-
-                        mTempPosition = position;
-
-                        String content = null;
                         try {
-                            content = URLDecoder.decode(mPostsList.get(position).getPostText(), "UTF-8");
-                        } catch (UnsupportedEncodingException e) {
+                            mViewHolderPost.mPostText.setText(URLDecoder.decode(mPostsList.get(position).getPostText(), "UTF-8"));
+                            //mViewHolderPost.mPostText.setText(replacer(sb.append(mPostsList.get(position).getPostText())));
+                        } catch (Exception e) {
                             e.printStackTrace();
                         }
 
-                        boolean isImgFile = false;
+                        mViewHolderPost.mPostText.setVisibility(View.VISIBLE);
 
-                        String[] mImgList = ((BaseActivity) mContext).getImgVideoList(mPostsList.get(position).getPostPicture());
+                    }
 
-                        if (mImgList != null) {
-                            isImgFile = true;
+                    if (mPostsList.get(position).getPostLikes() != null && mPostsList.get(position).getPostComments() != null && mPostsList.get(position).getPostShares() != null) {
+                        if (mPostsList.get(position).getPostLikes().size() == 0 && mPostsList.get(position).getPostComments().size() == 0 && mPostsList.get(position).getPostShares().size() == 0) {
+                            mViewHolderPost.mCountLay.setVisibility(View.GONE);
+                        } else {
+                            mViewHolderPost.mCountLay.setVisibility(View.VISIBLE);
                         }
+                    } else {
+                        mViewHolderPost.mCountLay.setVisibility(View.VISIBLE);
+                    }
 
-                        boolean isVideoFile = false;
+                    if (mPostsList.get(position).getPostLikes() != null) {
+                        setLikeUnLikeForPost(mViewHolderPost, position);
+                    } else {
+                        mViewHolderPost.mLikeBtn.setImageResource(R.drawable.like_to_like_click_bg);
+                        mViewHolderPost.mLikeBtn.setTag("like");
+                        mViewHolderPost.mLikeCountText.setText("");
+                    }
 
-                        String[] mVideoList = ((BaseActivity) mContext).getImgVideoList(mPostsList.get(position).getPostVideoURL());
+                    if (mPostsList.get(position).getPostComments() != null) {
+                        setPostComments(mViewHolderPost, position);
+                    } else {
+                        mViewHolderPost.mCommentCountTxt.setText(" ");
+                    }
 
-                        if (mVideoList != null) {
-                            isVideoFile = true;
-                        }
+                    //share
+                    if (mPostsList.get(position).getNewSharedPostID().trim().isEmpty()) {
+                        HideShareLayout(mViewHolderPost);
+                    } else {
+                        showShareLayout(mViewHolderPost, position, mPostOwnerName);
+                    }
 
-                        boolean mIsOtherMotoProfile;
+                    String numberOfShares;
 
-                        mIsOtherMotoProfile = mPostsList.get(position).getProfileID() != mCurrentProfileResModel.getID();
+                    if (mPostsList.get(position).getPostShares() != null) {
 
-                        if (isImgFile) {
+                        if (mPostsList.get(position).getPostShares().size() == 0) {
+                            mViewHolderPost.mShareCountTxt.setVisibility(View.GONE);
 
-                            ArrayList<Bitmap> mBitmapList = ((BaseActivity) mContext).getBitmapImageGlide(mImgList);
-
-                            if (mBitmapList != null) {
-                                ((BaseActivity) mContext).showFBShareDialog(AppDialogFragment.BOTTOM_SHARE_DIALOG, content, mBitmapList, null, position, mIsOtherMotoProfile);
-                            }
-
-                        } else if (isVideoFile) {
-
-                            String mVideosList[] = ((BaseActivity) mContext).getImgVideoList(mPostsList.get(mViewHolderPost
-                                    .getLayoutPosition()).getPostVideoURL());
-
-                            ((BaseActivity) mContext).showFBShareDialog(AppDialogFragment.BOTTOM_SHARE_DIALOG, content, null, mVideosList, position, mIsOtherMotoProfile);
+                        } else if (mPostsList.get(position).getPostShares().size() == 1) {
+                            numberOfShares = mPostsList.get(position).getPostShares().size() + " Share";
+                            mViewHolderPost.mShareCountTxt.setText(numberOfShares);
+                            mViewHolderPost.mShareCountTxt.setVisibility(View.VISIBLE);
 
                         } else {
-
-                            ((BaseActivity) mContext).showFBShareDialog(AppDialogFragment.BOTTOM_SHARE_DIALOG, content, null, null, position, mIsOtherMotoProfile);
+                            numberOfShares = mPostsList.get(position).getPostShares().size() + " Shares";
+                            mViewHolderPost.mShareCountTxt.setText(numberOfShares);
+                            mViewHolderPost.mShareCountTxt.setVisibility(View.VISIBLE);
                         }
-
+                    } else {
+                        mViewHolderPost.mShareCountTxt.setVisibility(View.GONE);
                     }
-                });
 
-                mViewHolderPost.mPostImageVideoBox.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        String mVideosList[] = ((BaseActivity) mContext).getImgVideoList(mPostsList.get(position).getPostVideoURL());
-                        String mImgList[] = ((BaseActivity) mContext).getImgVideoList(mPostsList.get(position).getPostPicture());
-                        if (mVideosList != null && mVideosList.length > 0) {
-                            ((BaseActivity) mContext).moveLoadVideoScreen(mContext, mVideosList[0]);
-                        } else if (mImgList != null && mImgList.length > 0) {
-                            ((BaseActivity) mContext).moveLoadImageScreen(mContext, mImgList[0]);
+
+                    mViewHolderPost.mLikeBtn.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            if (!((BaseActivity) mContext).isMultiClicked()) {
+                                mTempPosition = position;
+
+                                switch (view.getTag().toString()) {
+                                    case "unlike":
+
+                                        ArrayList<FeedLikesModel> mFeedLikeList = mPostsList.get(position).getPostLikes();
+
+                                        if (mFeedLikeList.size() > 0) {
+
+                                            for (FeedLikesModel likesEntity : mFeedLikeList) {
+                                                if (likesEntity.getOwnerID() == mCurrentProfileResModel.getID() && likesEntity.getFeedID() == mPostsList.get(position).getID()) {
+                                                    mDeleteLikeID = likesEntity.getId();
+                                                    break;
+                                                }
+
+                                            }
+                                            String mFilter = "ID=" + mDeleteLikeID;
+                                            callUnLikePost(mFilter);
+                                        }
+                                        String mFilter = "(" + PostsModel.POST_ID + "=" + mPostsList.get(position).getID() + ") AND (" + PostsModel.PROFILE_ID + "=" + mCurrentProfileResModel.getID() + ")";
+                                        callUnLikePost(mFilter);
+                                        break;
+
+                                    case "like":
+
+                                        callLikePost(mPostsList.get(position).getID(), mCurrentProfileResModel.getID());
+
+                                        break;
+                                }
+                            }
                         }
-                    }
-                });
+                    });
 
+
+                    mViewHolderPost.mLikeCountText.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            ArrayList<FeedLikesModel> mLikeModel;
+                            mTempPosition = position;
+                            if (mPostsList.get(position).getPostLikes() != null) {
+                                mLikeModel = mPostsList.get(position).getPostLikes();
+                            } else {
+                                mLikeModel = new ArrayList<>();
+                            }
+                            showLikeListPopup(mContext.getString(R.string.likes));
+                            setFeedLikeAdapter(mLikeModel);
+
+                        }
+                    });
+
+                    mViewHolderPost.mShareCountTxt.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+
+                            ArrayList<FeedShareModel> mShareModel;
+                            mTempPosition = position;
+                            if (mPostsList.get(position).getPostShares() != null) {
+                                mShareModel = mPostsList.get(position).getPostShares();
+                            } else {
+                                mShareModel = new ArrayList<>();
+                            }
+                            showLikeListPopup(mContext.getString(R.string.shares));
+                            setFeedShareAdapter(mShareModel);
+
+                        }
+                    });
+
+                    mViewHolderPost.mShareBtn.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+
+                            mTempPosition = position;
+
+                            String content = null;
+                            try {
+                                content = URLDecoder.decode(mPostsList.get(position).getPostText(), "UTF-8");
+                                //content = replacer(sb.append(mPostsList.get(position).getPostText()));
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+
+                            boolean isImgFile = false;
+
+                            String[] mImgList = ((BaseActivity) mContext).getImgVideoList(mPostsList.get(position).getPostPicture());
+
+                            if (mImgList != null) {
+                                isImgFile = true;
+                            }
+
+                            boolean isVideoFile = false;
+
+                            String[] mVideoList = ((BaseActivity) mContext).getImgVideoList(mPostsList.get(position).getPostVideoURL());
+
+                            if (mVideoList != null) {
+                                isVideoFile = true;
+                            }
+
+                            boolean mIsOtherMotoProfile;
+
+                            mIsOtherMotoProfile = mPostsList.get(position).getProfileID() != mCurrentProfileResModel.getID();
+
+                            if (isImgFile) {
+
+                                ArrayList<Bitmap> mBitmapList = ((BaseActivity) mContext).getBitmapImageGlide(mImgList);
+
+                                if (mBitmapList != null) {
+                                    ((BaseActivity) mContext).showFBShareDialog(AppDialogFragment.BOTTOM_SHARE_DIALOG, content, mBitmapList, null, position, mIsOtherMotoProfile);
+                                }
+
+                            } else if (isVideoFile) {
+
+                                String mVideosList[] = ((BaseActivity) mContext).getImgVideoList(mPostsList.get(mViewHolderPost
+                                        .getLayoutPosition()).getPostVideoURL());
+
+                                ((BaseActivity) mContext).showFBShareDialog(AppDialogFragment.BOTTOM_SHARE_DIALOG, content, null, mVideosList, position, mIsOtherMotoProfile);
+
+                            } else {
+
+                                ((BaseActivity) mContext).showFBShareDialog(AppDialogFragment.BOTTOM_SHARE_DIALOG, content, null, null, position, mIsOtherMotoProfile);
+                            }
+
+                        }
+                    });
+
+                    mViewHolderPost.mPostImageVideoBox.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            String mVideosList[] = ((BaseActivity) mContext).getImgVideoList(mPostsList.get(position).getPostVideoURL());
+                            String mImgList[] = ((BaseActivity) mContext).getImgVideoList(mPostsList.get(position).getPostPicture());
+                            if (mVideosList != null && mVideosList.length > 0) {
+                                ((BaseActivity) mContext).moveLoadVideoScreen(mContext, UrlUtils.AWS_S3_BASE_URL + mVideosList[0]);
+                            } else if (mImgList != null && mImgList.length > 0) {
+                                ((BaseActivity) mContext).moveLoadImageScreen(mContext, UrlUtils.AWS_S3_BASE_URL + mImgList[0]);
+                            }
+                        }
+                    });
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 break;
 
             case VIEW_TYPE_LOADING:
@@ -621,9 +655,13 @@ public class PostCommentLikeViewAdapter extends RecyclerView.Adapter<RecyclerVie
                 mIntent.putExtra(TaggedProfilesListActivity.TAGGED_PROFILES_ID, mPostsList.get(position).getTaggedProfileID());
 
                 if (mIsFromOthersMotoProfile) {
-                    mIntent.putExtra(ProfileModel.MY_PROFILE_RES_MODEL, mMyProfileResModel.get(0));
+                    //mIntent.putExtra(ProfileModel.MY_PROFILE_RES_MODEL, mMyProfileResModel.get(0));
+                    //MotoHub.getApplicationInstance().setmProfileResModel(mMyProfileResModel.get(0));
+                    EventBus.getDefault().postSticky(mMyProfileResModel.get(0));
                 } else {
-                    mIntent.putExtra(ProfileModel.MY_PROFILE_RES_MODEL, mCurrentProfileResModel);
+                    //mIntent.putExtra(ProfileModel.MY_PROFILE_RES_MODEL, mCurrentProfileResModel);
+                    //MotoHub.getApplicationInstance().setmProfileResModel(mCurrentProfileResModel);
+                    EventBus.getDefault().postSticky(mCurrentProfileResModel);
                 }
 
                 mContext.startActivity(mIntent);
@@ -866,12 +904,12 @@ public class PostCommentLikeViewAdapter extends RecyclerView.Adapter<RecyclerVie
         mViewHolderPost.mPostPic.setVisibility(View.VISIBLE);
         mViewHolderPost.mPostPicProgressBar.setVisibility(View.VISIBLE);
 
-        GlideUrl glideUrl = new GlideUrl(UrlUtils.FILE_URL + imgUrl, new LazyHeaders.Builder()
+        /*GlideUrl glideUrl = new GlideUrl(UrlUtils.AWS_FILE_URL + imgUrl, new LazyHeaders.Builder()
                 .addHeader("X-DreamFactory-Api-Key", mContext.getString(R.string.dream_factory_api_key))
-                .build());
+                .build());*/
 
         Glide.with(mContext)
-                .load(glideUrl)
+                .load(UrlUtils.AWS_S3_BASE_URL + imgUrl)
                 .listener(new RequestListener<Drawable>() {
                     @Override
                     public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
@@ -894,13 +932,14 @@ public class PostCommentLikeViewAdapter extends RecyclerView.Adapter<RecyclerVie
 
     private void showVideoFile(final ViewHolderPosts mViewHolderPost, String videoThumbnail) {
 
-        GlideUrl glideUrl = new GlideUrl(UrlUtils.FILE_URL + videoThumbnail,
+        /*GlideUrl glideUrl = new GlideUrl(UrlUtils.AWS_FILE_URL + videoThumbnail,
                 new LazyHeaders.Builder()
                         .addHeader("X-DreamFactory-Api-Key", mContext.getString(R.string.dream_factory_api_key))
-                        .build());
+                        .build());*/
+
 
         Glide.with(mContext)
-                .load(glideUrl)
+                .load(UrlUtils.AWS_S3_BASE_URL + videoThumbnail)
                 .listener(new RequestListener<Drawable>() {
                     @Override
                     public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
@@ -934,27 +973,42 @@ public class PostCommentLikeViewAdapter extends RecyclerView.Adapter<RecyclerVie
             if (mPostsList.get(selPos).getNewSharedPostID() == null) {
                 if (mPostsList.get(selPos).getProfileID() == mProfileModel.getID()) {
                     if (!(mContext instanceof MyMotoFileActivity)) {
-                        ((BaseActivity) mContext).moveMyProfileScreen(mContext, 0);
+                        ((BaseActivity) mContext).moveMyProfileScreenWithResult(mContext, 0, AppConstants.FOLLOWERS_FOLLOWING_RESULT);
                     }
                     return;
                 }
             } else {
                 if (mPostsList.get(selPos).getWhoPostedProfileID() == mProfileModel.getID()) {
                     if (!(mContext instanceof MyMotoFileActivity)) {
-                        ((BaseActivity) mContext).moveMyProfileScreen(mContext, 0);
+                        ((BaseActivity) mContext).moveMyProfileScreenWithResult(mContext, 0, AppConstants.FOLLOWERS_FOLLOWING_RESULT);
                     }
                     return;
                 }
             }
+
         }
 
         Bundle mBundle = new Bundle();
         String mPostUserType = mPostsList.get(selPos).getUserType().trim();
-        if (mPostsList.get(selPos)
-                .getPromoterByWhoPostedProfileID() != null) {
+        if (mPostUserType.equals(PromotersModel.PROMOTER) || mPostUserType.equals(PromotersModel.NEWS_AND_MEDIA) ||
+                mPostUserType.equals(PromotersModel.TRACK) || mPostUserType.equals(PromotersModel.CLUB)
+                || mPostUserType.equals(PromotersModel.SHOP)) {
             Class mClassName;
-            String mUserType = mPostsList.get(selPos)
-                    .getPromoterByWhoPostedProfileID().getUserType();
+            String mUserType = "";
+            if (mPostsList.get(selPos).getPromoterByWhoPostedProfileID() != null) {
+                //mBundle.putSerializable(PromotersModel.PROMOTERS_RES_MODEL, mPostsList.get(selPos).getPromoterByWhoPostedProfileID());
+                //MotoHub.getApplicationInstance().setmPromoterResModel(mPostsList.get(selPos).getPromoterByWhoPostedProfileID());
+                EventBus.getDefault().postSticky(mPostsList.get(selPos).getPromoterByWhoPostedProfileID());
+                mUserType = mPostsList.get(selPos)
+                        .getPromoterByWhoPostedProfileID().getUserType();
+            } else {
+                //mBundle.putSerializable(PromotersModel.PROMOTERS_RES_MODEL, mPostsList.get(selPos).getPromoterByProfileID());
+                //MotoHub.getApplicationInstance().setmPromoterResModel(mPostsList.get(selPos).getPromoterByProfileID());
+                EventBus.getDefault().postSticky(mPostsList.get(selPos).getPromoterByProfileID());
+                mUserType = mPostsList.get(selPos)
+                        .getPromoterByProfileID().getUserType();
+            }
+
             switch (mUserType) {
                 case PromotersModel.NEWS_AND_MEDIA:
                     mClassName = NewsAndMediaProfileActivity.class;
@@ -968,51 +1022,24 @@ public class PostCommentLikeViewAdapter extends RecyclerView.Adapter<RecyclerVie
                 case PromotersModel.TRACK:
                     mClassName = TrackProfileActivity.class;
                     break;
-                default:
-                    mClassName = PromoterProfileActivity.class;
-                    break;
-            }
-            mBundle.putSerializable(PromotersModel.PROMOTERS_RES_MODEL, mPostsList.get(selPos)
-                    .getPromoterByWhoPostedProfileID());
-            mBundle.putSerializable(ProfileModel.MY_PROFILE_RES_MODEL, mProfileModel);
-            ((BaseActivity) mContext).startActivityForResult(
-                    new Intent(mContext, mClassName).putExtras(mBundle),
-                    PromotersListActivity.PROMOTER_FOLLOW_RESPONSE);
-        } else if (mPostUserType.equals(PromotersModel.PROMOTER) || mPostUserType.equals(PromotersModel.NEWS_AND_MEDIA) ||
-                mPostUserType.equals(PromotersModel.TRACK) || mPostUserType.equals(PromotersModel.CLUB)) {
-            Class mClassName;
-            String mUserType = mPostsList.get(selPos)
-                    .getPromoterByProfileID().getUserType();
-            switch (mUserType) {
-                case PromotersModel.NEWS_AND_MEDIA:
-                    mClassName = NewsAndMediaProfileActivity.class;
-                    break;
-                case PromotersModel.CLUB:
-                    mClassName = ClubProfileActivity.class;
-                    break;
-                case PromotersModel.PROMOTER:
-                    mClassName = PromoterProfileActivity.class;
-                    break;
-                case PromotersModel.TRACK:
-                    mClassName = TrackProfileActivity.class;
+                case PromotersModel.SHOP:
+                    mClassName = PerformanceShopProfileActivity.class;
                     break;
                 default:
                     mClassName = PromoterProfileActivity.class;
                     break;
             }
-            mBundle.putSerializable(PromotersModel.PROMOTERS_RES_MODEL, mPostsList.get(selPos)
-                    .getPromoterByProfileID());
-            mBundle.putSerializable(ProfileModel.MY_PROFILE_RES_MODEL, mProfileModel);
-            ((BaseActivity) mContext).startActivityForResult(
-                    new Intent(mContext, mClassName).putExtras(mBundle),
-                    PromotersListActivity.PROMOTER_FOLLOW_RESPONSE);
+
+            /*mBundle.putSerializable(ProfileModel.MY_PROFILE_RES_MODEL, mProfileModel);
+            ((BaseActivity) mContext).startActivityForResult(new Intent(mContext, mClassName).putExtras(mBundle), AppConstants.FOLLOWERS_FOLLOWING_RESULT);*/
+            //MotoHub.getApplicationInstance().setmProfileResModel(mProfileModel);
+            EventBus.getDefault().postSticky(mProfileModel);
+            ((BaseActivity) mContext).startActivityForResult(new Intent(mContext, mClassName), AppConstants.FOLLOWERS_FOLLOWING_RESULT);
+
         } else {
             ((BaseActivity) mContext).moveOtherProfileScreen(mContext, mProfileModel.getID(),
                     mPostsList.get(selPos).getProfilesByWhoPostedProfileID().getID());
         }
-
-        mContext.startActivity(new Intent(mContext, OthersMotoFileActivity.class).putExtras(mBundle));
-
     }
 
     private void sharedPostProfileClick(View view) {
@@ -1150,7 +1177,7 @@ public class PostCommentLikeViewAdapter extends RecyclerView.Adapter<RecyclerVie
     }
 
     private void setGlideImage(ImageView imgView, String imgUrl, int drawable) {
-        GlideUrl glideUrl = new GlideUrl(UrlUtils.FILE_URL + imgUrl, new LazyHeaders.Builder()
+        GlideUrl glideUrl = new GlideUrl(UrlUtils.AWS_FILE_URL + imgUrl, new LazyHeaders.Builder()
                 .addHeader("X-DreamFactory-Api-Key", mContext.getString(R.string.dream_factory_api_key))
                 .build());
 

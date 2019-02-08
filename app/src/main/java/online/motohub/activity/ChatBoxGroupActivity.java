@@ -17,6 +17,7 @@ import android.widget.RelativeLayout;
 
 import com.google.gson.Gson;
 
+import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -47,6 +48,7 @@ import online.motohub.model.ProfileResModel;
 import online.motohub.model.SessionModel;
 import online.motohub.retrofit.RetrofitClient;
 import online.motohub.util.AppConstants;
+import online.motohub.util.DialogManager;
 import online.motohub.util.PreferenceUtils;
 
 public class ChatBoxGroupActivity extends BaseActivity implements ChatBoxGroupMsgAdapter.TotalRetrofitMsgResultCount {
@@ -67,8 +69,10 @@ public class ChatBoxGroupActivity extends BaseActivity implements ChatBoxGroupMs
 
     @BindView(R.id.imageConstraintLay)
     ConstraintLayout mImageConstraintLay;
+
     @BindView(R.id.iv_post_image)
     ImageView mIvPostImage;
+
     @BindView(R.id.fileAttachImgBtn)
     ImageView mfileAttachImgBtn;
 
@@ -89,7 +93,7 @@ public class ChatBoxGroupActivity extends BaseActivity implements ChatBoxGroupMs
         }
     };
     private String mPostImgUri = null;
-    private String imgUrl = "";
+    private String imgUrl = null;
     private String message;
     private String mGroupName;
     private int mMsgRvOffset = 0, mMsgRvTotalCount = -1;
@@ -101,38 +105,36 @@ public class ChatBoxGroupActivity extends BaseActivity implements ChatBoxGroupMs
         setContentView(R.layout.activity_chat_room);
         ButterKnife.bind(this);
         initViews();
+        setupUI(mCoordinatorLayout);
+    }
+
+    @Override
+    protected void onDestroy() {
+        DialogManager.hideProgress();
+        super.onDestroy();
     }
 
     private void initViews() {
-
         if (getIntent().getExtras().getBoolean(MyFireBaseMessagingService.IS_FROM_NOTIFICATION_TRAY)) {
-
             try {
                 assert getIntent().getExtras() != null;
                 JSONObject mJsonObject = new JSONObject(getIntent().getExtras().getString(MyFireBaseMessagingService.ENTRY_JSON_OBJ));
                 JSONObject mDetailsObj = (mJsonObject.getJSONObject("Details"));
-
                 mGroupChatRoomID = Integer.parseInt(mDetailsObj.get(GroupChatRoomModel.GRP_CHAT_ROOM_ID).toString());
                 mGroupName = (mDetailsObj.getJSONObject("GroupChat").get(MyFireBaseMessagingService.GRP_NAME).toString());
-
                 getMotoProfiles();
-
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            return;
-
-
         } else {
-
-            mMyProfileResModel = (ProfileResModel) getIntent().getExtras().getSerializable(ProfileModel.MY_PROFILE_RES_MODEL);
-
+            /*mMyProfileResModel = (ProfileResModel) getIntent().getExtras().getSerializable(ProfileModel.MY_PROFILE_RES_MODEL);
+            mGroupChatRoomResModel = (GroupChatRoomResModel) getIntent().getExtras().getSerializable(GroupChatRoomModel.GRP_CHAT_ROOM_RES_MODEL);*/
+            //mMyProfileResModel = MotoHub.getApplicationInstance().getmProfileResModel();
+            mMyProfileResModel = EventBus.getDefault().getStickyEvent(ProfileResModel.class);
             mGroupChatRoomResModel = (GroupChatRoomResModel) getIntent().getExtras().getSerializable(GroupChatRoomModel.GRP_CHAT_ROOM_RES_MODEL);
-
             assert mGroupChatRoomResModel != null;
             mGroupChatRoomID = mGroupChatRoomResModel.getID();
             mGroupName = mGroupChatRoomResModel.getGroupName();
-
             assert mMyProfileResModel != null;
             mSenderProfileID = mMyProfileResModel.getID();
             setViews();
@@ -141,25 +143,19 @@ public class ChatBoxGroupActivity extends BaseActivity implements ChatBoxGroupMs
 
     public void setViews() {
         setToolbar(mToolbar, mGroupName);
-
         showToolbarBtn(mToolbar, R.id.toolbar_back_img_btn);
-
         mLinearLayoutManager = new LinearLayoutManager(this);
         mLinearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mLinearLayoutManager.setStackFromEnd(true);
         mLinearLayoutManager.setReverseLayout(true);
-
         mGrpChatMsgRv.setLayoutManager(mLinearLayoutManager);
-
         mGrpChatMsgRv.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-
                 int mVisibleItemCount = mLinearLayoutManager.getChildCount();
                 int mTotalItemCount = mLinearLayoutManager.getItemCount();
                 int mFirstVisibleItemPosition = mLinearLayoutManager.findFirstVisibleItemPosition();
-
                 if (!mIsMsgRvLoading && !(mMsgRvOffset >= mMsgRvTotalCount)) {
                     if ((mVisibleItemCount + mFirstVisibleItemPosition) >= mTotalItemCount
                             && mFirstVisibleItemPosition >= 0) {
@@ -167,15 +163,11 @@ public class ChatBoxGroupActivity extends BaseActivity implements ChatBoxGroupMs
                         getGrpChatMsg();
                     }
                 }
-
             }
         });
-
-        mChatBoxGroupMsgAdapter = new ChatBoxGroupMsgAdapter(mGrpChatMsgList, this);
+        mChatBoxGroupMsgAdapter = new ChatBoxGroupMsgAdapter(mMyProfileResModel, mGrpChatMsgList, this);
         mGrpChatMsgRv.setAdapter(mChatBoxGroupMsgAdapter);
-
         getGrpChatMsg();
-
     }
 
     @Override
@@ -199,13 +191,11 @@ public class ChatBoxGroupActivity extends BaseActivity implements ChatBoxGroupMs
     }
 
     private void updatePushMsg(Intent intent) {
-
         if (Integer.parseInt(intent.getStringExtra(GroupChatRoomModel.GRP_CHAT_ROOM_ID)) == mGroupChatRoomID) {
             try {
                 JSONObject mJsonObject = new JSONObject(intent.getStringExtra(MyFireBaseMessagingService.ENTRY_JSON_OBJ));
                 JSONObject mDetailsObj = mJsonObject.getJSONObject("Details");
                 JSONObject mGroupChatObj = mDetailsObj.getJSONObject("GroupChat");
-
                 mGrpChatMsgResModel = new GroupChatMsgResModel();
                 mGrpChatMsgResModel.setID(Integer.parseInt(mDetailsObj.getString(MyFireBaseMessagingService.ID)));
                 mGrpChatMsgResModel.setGroupChatRoomID(Integer.parseInt(mDetailsObj.getString(GroupChatRoomModel.GRP_CHAT_ROOM_ID)));
@@ -215,25 +205,18 @@ public class ChatBoxGroupActivity extends BaseActivity implements ChatBoxGroupMs
                 mGrpChatMsgResModel.setCreatedAt(mDetailsObj.getString(MyFireBaseMessagingService.CREATED_AT));
                 mGrpChatMsgResModel.setMsgType(mDetailsObj.getString(MyFireBaseMessagingService.MSG_TYPE));
                 mGrpChatMsgResModel.setPhotoMessage(mDetailsObj.getString(MyFireBaseMessagingService.PHOTO_MESSAGE));
-
                 ProfileResModel mProfileResModel = new ProfileResModel();
                 mProfileResModel.setSpectatorName(mGroupChatObj.getString(MyFireBaseMessagingService.GROUP_SENDER_NAME));
                 mProfileResModel.setProfilePicture(mGroupChatObj.getString(MyFireBaseMessagingService.GROUP_SENDER_PIC));
-
                 mGrpChatMsgResModel.setProfilesBySenderProfileID(mProfileResModel);
-
                 mMsgRvTotalCount = mMsgRvTotalCount + 1;
-
                 mGrpChatMsgList.add(0, mGrpChatMsgResModel);
                 mChatBoxGroupMsgAdapter.notifyDataSetChanged();
                 mGrpChatMsgRv.scrollToPosition(0);
-
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-
         } else {
-
             try {
                 JSONObject mNotificationJsonObject = new JSONObject();
                 JSONObject mJsonObject = new JSONObject(intent.getStringExtra(MyFireBaseMessagingService.ENTRY_JSON_OBJ));
@@ -241,22 +224,26 @@ public class ChatBoxGroupActivity extends BaseActivity implements ChatBoxGroupMs
                 String mGroupChatRoomID = (mJsonObject.getJSONObject("Details").get("GroupChatRoomID").toString());
                 int mNotificationID = Integer.parseInt((mJsonObject.getJSONObject("Details").get("GroupChatRoomID").toString()));
                 String mContentTitle = "Group : " + ((mJsonObject.getJSONObject("Details").get("GroupName").toString()));
-                MyFireBaseMessagingService.composeChatNotification(mNotificationJsonObject, this, mNotificationID, mGroupChatRoomID, mContentTitle, ChatBoxGroupActivity.class);
-
+                MyFireBaseMessagingService.composeChatNotification(mNotificationJsonObject, this, mNotificationID,
+                        mGroupChatRoomID, mContentTitle, ChatBoxGroupActivity.class);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-
         }
 
     }
 
     private void getGrpChatMsg() {
-
         String mFilter = "GroupChatRoomID=" + mGroupChatRoomID;
-
         RetrofitClient.getRetrofitInstance().callGetGrpChatMsg(this, mFilter, RetrofitClient.GET_GRP_CHAT_MSG, mDataLimit, mMsgRvOffset);
 
+    }
+
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
     }
 
     @OnClick({R.id.toolbar_back_img_btn, R.id.toolbar_title, R.id.send_btn, R.id.fileAttachImgBtn, R.id.iv_remove_image})
@@ -266,23 +253,20 @@ public class ChatBoxGroupActivity extends BaseActivity implements ChatBoxGroupMs
                 finish();
                 break;
             case R.id.toolbar_title:
-
                 if (mMyProfileResModel == null) {
                     return;
                 }
-
                 Bundle mBundle = new Bundle();
-                mBundle.putSerializable(ProfileModel.MY_PROFILE_RES_MODEL, mMyProfileResModel);
+                //mBundle.putSerializable(ProfileModel.MY_PROFILE_RES_MODEL, mMyProfileResModel);
+                //MotoHub.getApplicationInstance().setmProfileResModel(mMyProfileResModel);
+                EventBus.getDefault().postSticky(mMyProfileResModel);
                 mBundle.putString(EventsWhoIsGoingActivity.TOOLBAR_TITLE, mGroupName + " Member(s)");
-
                 if (mGroupChatRoomResModel == null) {
                     mBundle.putInt(GroupChatRoomModel.GRP_CHAT_ROOM_ID, mGroupChatRoomID);
                 } else {
                     mBundle.putSerializable(GroupChatRoomModel.GRP_CHAT_ROOM_RES_MODEL, mGroupChatRoomResModel);
                 }
-
                 startActivity(new Intent(this, ChatViewGrpMemActivity.class).putExtras(mBundle));
-
                 break;
             case R.id.send_btn:
                 sendMessage();
@@ -297,15 +281,11 @@ public class ChatBoxGroupActivity extends BaseActivity implements ChatBoxGroupMs
     }
 
     private void sendMessage() {
-
         try {
-
             String mMessage = mMessageEt.getText().toString().trim();
-
             if (mSenderProfileID == 0) {
                 return;
             }
-
             if (mPostImgUri != null) {
                 uploadPicture(mPostImgUri);
             } else {
@@ -314,30 +294,23 @@ public class ChatBoxGroupActivity extends BaseActivity implements ChatBoxGroupMs
                     return;
                 }
                 GroupChatMsgModel mGrpChatMsgModel = new GroupChatMsgModel();
-
                 mGrpChatMsgResModel = new GroupChatMsgResModel();
                 mGrpChatMsgResModel.setGroupChatRoomID(mGroupChatRoomID);
-                mGrpChatMsgResModel.setMessage(URLEncoder.encode(mMessage, "UTF-8"));
+                mGrpChatMsgResModel.setMessage(URLEncoder.encode(mMessageEt.getText().toString(), "UTF-8"));
                 mGrpChatMsgResModel.setSenderProfileID(mSenderProfileID);
                 mGrpChatMsgResModel.setSenderUserID(PreferenceUtils.getInstance(this).getIntData(PreferenceUtils.USER_ID));
                 mGrpChatMsgResModel.setMsgType(imgUrl != null ? "media" : "text");
                 mGrpChatMsgResModel.setPhotoMessage(imgUrl != null ? imgUrl : "");
-
                 List<GroupChatMsgResModel> mGrpChatMsgResModelList = new ArrayList<>();
                 mGrpChatMsgResModelList.add(mGrpChatMsgResModel);
-
                 mGrpChatMsgModel.setResource(mGrpChatMsgResModelList);
-
                 String data = new Gson().toJson(mGrpChatMsgModel);
-
                 RetrofitClient.getRetrofitInstance().callSendGrpChatMsg(this, mGrpChatMsgModel, RetrofitClient.SEND_GRP_CHAT_MSG);
                 clearFields();
             }
-
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
-
     }
 
     private void uploadPicture(String mCommentImgUri) {
@@ -350,129 +323,88 @@ public class ChatBoxGroupActivity extends BaseActivity implements ChatBoxGroupMs
     @Override
     public void retrofitOnResponse(Object responseObj, int responseType) {
         super.retrofitOnResponse(responseObj, responseType);
-
         if (responseObj instanceof ProfileModel) {
-
             ProfileModel mProfileModel = (ProfileModel) responseObj;
-
             switch (responseType) {
-
                 case RetrofitClient.GET_PROFILE_RESPONSE:
-
                     if (mProfileModel.getResource() != null && mProfileModel.getResource().size() > 0) {
-
                         ArrayList<ProfileResModel> mFullMPList = new ArrayList<>();
                         mFullMPList.addAll(mProfileModel.getResource());
-
                         mMyProfileResModel = mFullMPList.get(PreferenceUtils.getInstance(this).getIntData(PreferenceUtils.CURRENT_PROFILE_POS));
-
                         mSenderProfileID = mMyProfileResModel.getID();
-
                         setViews();
-
                     }
-
                     break;
-
             }
-
         } else if (responseObj instanceof GroupChatMsgModel) {
-
             GroupChatMsgModel mGrpChatMsgModel = (GroupChatMsgModel) responseObj;
-
             switch (responseType) {
-
                 case RetrofitClient.GET_GRP_CHAT_MSG:
-
                     if (mGrpChatMsgModel.getResource() != null && mGrpChatMsgModel.getResource().size() > 0) {
-
                         mMsgRvTotalCount = mGrpChatMsgModel.getMeta().getCount();
-
                         mIsMsgRvLoading = false;
-
                         if (mMsgRvOffset == 0) {
                             mGrpChatMsgList.clear();
                         }
-
                         mGrpChatMsgList.addAll(mGrpChatMsgModel.getResource());
                         mChatBoxGroupMsgAdapter.notifyDataSetChanged();
-
                         if (mMsgRvOffset == 0) {
                             mGrpChatMsgRv.scrollToPosition(0);
                         }
-
                         mMsgRvOffset = mMsgRvOffset + mDataLimit;
-
                     } else {
                         if (mMsgRvOffset == 0) {
                             mMsgRvTotalCount = 0;
                             mChatBoxGroupMsgAdapter.notifyDataSetChanged();
                         }
                     }
-
                     break;
-
                 case RetrofitClient.SEND_GRP_CHAT_MSG:
+                    mChatBoxGroupMsgAdapter.notifyDataSetChanged();
+                    mMsgRvTotalCount = mMsgRvTotalCount + 1;
                     mMessageEt.setText("");
                    /* mMsgRvTotalCount = mMsgRvTotalCount + 1;
                     mGrpChatMsgList.add(0, mGrpChatMsgResModel);
                     mChatBoxGroupMsgAdapter.notifyDataSetChanged();
                     mGrpChatMsgRv.scrollToPosition(0);*/
                     break;
-
             }
-
         } else if (responseObj instanceof SessionModel) {
-
             SessionModel mSessionModel = (SessionModel) responseObj;
             if (mSessionModel.getSessionToken() == null) {
                 PreferenceUtils.getInstance(this).saveStrData(PreferenceUtils.SESSION_TOKEN, mSessionModel.getSessionId());
             } else {
                 PreferenceUtils.getInstance(this).saveStrData(PreferenceUtils.SESSION_TOKEN, mSessionModel.getSessionToken());
             }
-
             getGrpChatMsg();
-
         } else if (responseObj instanceof ImageModel) {
-
             ImageModel mImageModel = (ImageModel) responseObj;
-
             switch (responseType) {
-
                 case RetrofitClient.UPLOAD_IMAGE_FILE_RESPONSE:
                     //update the record in database/tablet
                     imgUrl = getHttpFilePath(mImageModel.getmModels().get(0).getPath());
                     try {
-                        //String mMessage = mMessageEt.getText().toString().trim();
+                        String mMessage = mMessageEt.getText().toString().trim();
                         GroupChatMsgModel mGrpChatMsgModel = new GroupChatMsgModel();
-
                         mGrpChatMsgResModel = new GroupChatMsgResModel();
                         mGrpChatMsgResModel.setGroupChatRoomID(mGroupChatRoomID);
-                        //mGrpChatMsgResModel.setMessage(URLEncoder.encode(mMessage, "UTF-8"));
-                        mGrpChatMsgResModel.setMessage("");
+                        mGrpChatMsgResModel.setMessage(URLEncoder.encode(mMessage, "UTF-8"));
                         mGrpChatMsgResModel.setSenderProfileID(mSenderProfileID);
                         mGrpChatMsgResModel.setSenderUserID(PreferenceUtils.getInstance(this).getIntData(PreferenceUtils.USER_ID));
                         mGrpChatMsgResModel.setMsgType(imgUrl != null ? "media" : "text");
                         mGrpChatMsgResModel.setPhotoMessage(imgUrl != null ? imgUrl : "");
-
                         List<GroupChatMsgResModel> mGrpChatMsgResModelList = new ArrayList<>();
                         mGrpChatMsgResModelList.add(mGrpChatMsgResModel);
-
                         mGrpChatMsgModel.setResource(mGrpChatMsgResModelList);
-
                         String data = new Gson().toJson(mGrpChatMsgModel);
-
                         RetrofitClient.getRetrofitInstance().callSendGrpChatMsg(this, mGrpChatMsgModel, RetrofitClient.SEND_GRP_CHAT_MSG);
-
                         clearFields();
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
                     break;
             }
-
         }
-
     }
 
     private void clearFields() {
@@ -480,29 +412,25 @@ public class ChatBoxGroupActivity extends BaseActivity implements ChatBoxGroupMs
         mMessageEt.setText("");
         mfileAttachImgBtn.setVisibility(View.VISIBLE);
         mPostImgUri = null;
-        imgUrl = "";
+        imgUrl = null;
     }
 
     @Override
     public void retrofitOnError(int code, String message) {
         super.retrofitOnError(code, message);
-
         if (message.equals("Unauthorized") || code == 401) {
             RetrofitClient.getRetrofitInstance().callUpdateSession(this, RetrofitClient.UPDATE_SESSION_RESPONSE);
         } else {
             String mErrorMsg = code + " - " + message;
             showSnackBar(mCoordinatorLayout, mErrorMsg);
         }
-
     }
 
     @Override
     public void retrofitOnSessionError(int code, String message) {
         super.retrofitOnSessionError(code, message);
-
         String mErrorMsg = code + " - " + message;
         showSnackBar(mCoordinatorLayout, mErrorMsg);
-
     }
 
     @Override

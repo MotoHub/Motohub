@@ -75,6 +75,7 @@ public class ViewLiveVideoViewScreen3 extends BaseActivity {
 
     }
 
+
     private void initVideoView() {
         mVideoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
             @Override
@@ -283,6 +284,7 @@ public class ViewLiveVideoViewScreen3 extends BaseActivity {
 
     @Override
     protected void onDestroy() {
+        DialogManager.hideProgress();
         super.onDestroy();
         releasePlayer();
     }

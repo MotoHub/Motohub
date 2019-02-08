@@ -1,9 +1,7 @@
 package online.motohub.retrofit;
 
 import online.motohub.model.EventsModel;
-import online.motohub.model.PostsModel;
 import online.motohub.model.VideoCommentsModel;
-import online.motohub.model.promoter_club_news_media.PromotersModel;
 
 public class APIConstants {
     /**
@@ -15,7 +13,6 @@ public class APIConstants {
     public static final String RequestedProfileID = "RequestedProfileID";
     public static final String ReceiverProfileID = "ReceiverProfileID";
     public static final String Status = "Status";
-
 
     public static final String StreamName = "StreamName";
     public static final String CreatedProfileID = "CreatedProfileID";
@@ -38,18 +35,17 @@ public class APIConstants {
     public static final String BlockedProfileID = "BlockedProfileID";
     public static final String UniqueRelation = "UniqueRelation";
 
-
     public static final String FollowProfileID = "FollowProfileID";
     public static final String FollowRelation = "FollowRelation";
 
     public static final String FromProfileID = "FromProfileID";
     public static final String ToProfileID = "ToProfileID";
     public static final String FromUserID = "FromUserID";
+    public static final String ChatRelation = "ChatRelation";
     public static final String ToUserID = "ToUserID";
     public static final String Message = "Message";
     public static final String Message_Type = "msg_type";
     public static final String Image_Url = "photo_message";
-
 
     /**
      * API RELATION
@@ -92,6 +88,7 @@ public class APIConstants {
     public static final String SHARES_BY_NEW_SHARED_POST_ID = "postshares_by_NewSharedPostID";
     public static final String VIDEO_SHARES_BY_NEW_SHARED_POST_ID = "videoshares_by_NewSharedPostID";
     public static final String PROFILES_BY_PROFILE_ID = "profiles_by_ProfileID";
+    public static final String PROMOTER_RELATION = "clubgroup_by_ClubUserID,promoterfollower_by_PromoterUserID,track_by_user_id";
 
     /**
      * Event Relation
@@ -122,6 +119,7 @@ public class APIConstants {
             + "," + PROMOTER_BY_PROFILE_ID
             + "," + SHARES_BY_NEW_SHARED_POST_ID
             + "," + VIDEO_SHARES_BY_NEW_SHARED_POST_ID
+            + "," + PROMOTER_RELATION
             + "," + PROFILES_BY_PROFILE_ID;
 
     public static final String EVENT_RELATION = EventsModel.WHO_IS_GOING_BY_EVENT_ID
@@ -148,5 +146,4 @@ public class APIConstants {
 
     public static final String mPostCommentReplyRelated = "postcomments_by_CommentID,Profiles By ProfileID,promoter_by_ProfileID,replylike_by_ReplyID";
 
-    public static final String PROMOTER_RELATION = "clubgroup_by_ClubUserID,promoterfollower_by_PromoterUserID,track_by_user_id";
 }

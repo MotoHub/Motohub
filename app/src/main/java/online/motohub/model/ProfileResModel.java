@@ -1,5 +1,7 @@
 package online.motohub.model;
 
+import android.text.TextUtils;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -20,6 +22,10 @@ public class ProfileResModel implements Serializable {
     @SerializedName("UserID")
     @Expose
     private int mUserID;
+
+    @SerializedName("ActiveUserCount")
+    @Expose
+    private int mActiveUserCount;
 
     @SerializedName("ProfilePicture")
     @Expose
@@ -94,6 +100,73 @@ public class ProfileResModel implements Serializable {
     @SerializedName("PurchaseType")
     @Expose
     private String mPurchaseType;
+
+    @SerializedName("Password")
+    @Expose
+    private String Password;
+
+    @SerializedName("DB_ID")
+    @Expose
+    private String DB_ID;
+
+    @SerializedName("LoginType")
+    @Expose
+    private String LoginType;
+
+    @SerializedName("UserName")
+    @Expose
+    private String UserName;
+
+    public String getUserName() {
+        if(TextUtils.isEmpty(UserName)){
+            return (getDriver() == null || getDriver().equals("") ? getSpectatorName() : getDriver());
+        }
+        return UserName;
+    }
+
+    public void setUserName(String userName) {
+        UserName = userName;
+    }
+
+    public String getLoginType() {
+        return LoginType;
+    }
+
+    public void setLoginType(String loginType) {
+        LoginType = loginType;
+    }
+
+    public String getDB_ID() {
+        return DB_ID;
+    }
+
+    public void setDB_ID(String DB_ID) {
+        this.DB_ID = DB_ID;
+    }
+
+    public String getPassword() {
+        if(Password==null)
+            Password="";
+        return Password;
+    }
+
+    public void setPassword(String password) {
+        Password = password;
+    }
+
+    public String getEmail() {
+        if(mEmail == null)
+            mEmail = "";
+        return mEmail;
+    }
+
+    public void setEmail(String mEmail) {
+        this.mEmail = mEmail;
+    }
+
+    @SerializedName("Email")
+    @Expose
+    private String mEmail;
 
     @SerializedName("blockeduserprofiles_by_ProfileID")
     @Expose
@@ -686,6 +759,14 @@ public class ProfileResModel implements Serializable {
 
     public void setIsProfileTagged(boolean isProfileTagged) {
         this.mIsProfileTagged = isProfileTagged;
+    }
+
+    public int getmActiveUserCount() {
+        return mActiveUserCount;
+    }
+
+    public void setmActiveUserCount(int mActiveUserCount) {
+        this.mActiveUserCount = mActiveUserCount;
     }
 
     public boolean getIsSelected() {

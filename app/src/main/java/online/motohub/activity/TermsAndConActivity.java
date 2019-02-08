@@ -45,7 +45,11 @@ public class TermsAndConActivity extends BaseActivity {
         initView();
 
     }
-
+    @Override
+    protected void onDestroy() {
+        DialogManager.hideProgress();
+        super.onDestroy();
+    }
     private void initView() {
 
         setToolbar(mToolbar, mToolbarTitle);
