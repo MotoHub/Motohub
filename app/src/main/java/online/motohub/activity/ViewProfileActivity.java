@@ -1121,7 +1121,7 @@ public class ViewProfileActivity extends BaseActivity implements
             new MyTask().execute();
         } else {
             try {
-                showAlertDialog(contactDescription);
+               // showAlertDialog(contactDescription);
                 mShimmerView_phonecontacts.stopShimmerAnimation();
                 mShimmerView_phonecontacts.setVisibility(View.GONE);
                 mRelativeLayoutPhoneEmailFriends.setVisibility(View.GONE);
