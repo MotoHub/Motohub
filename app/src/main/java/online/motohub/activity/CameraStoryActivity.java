@@ -1,19 +1,25 @@
 package online.motohub.activity;
 
 import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.daasuu.gpuv.composer.FillMode;
+import com.daasuu.gpuv.composer.GPUMp4Composer;
 import com.otaliastudios.cameraview.CameraListener;
 import com.otaliastudios.cameraview.CameraLogger;
 import com.otaliastudios.cameraview.CameraOptions;
@@ -23,7 +29,9 @@ import com.otaliastudios.cameraview.Size;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
@@ -31,11 +39,13 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import online.motohub.R;
 import online.motohub.interfaces.PermissionCallback;
+import online.motohub.util.CustomWatermarkFilter;
 import online.motohub.util.DialogManager;
 import online.motohub.util.story.ControlView;
 
 public class CameraStoryActivity extends BaseActivity implements View.OnClickListener {
 
+    private static final String TAG = CameraStoryActivity.class.getSimpleName();
     @BindView(R.id.camera)
     CameraView camera;
     @BindView(R.id.capturePhoto)
@@ -61,6 +71,11 @@ public class CameraStoryActivity extends BaseActivity implements View.OnClickLis
     private Handler mHandler;
     private Runnable mRunnable;
     private boolean isExit = false;
+    private com.daasuu.gpuv.composer.GPUMp4Composer GPUMp4Composer;
+    private Bitmap bitmap;
+
+    private ProgressDialog pDialog;
+    //private String videoPath;
     PermissionCallback mPermissionCallBack = new PermissionCallback() {
         @Override
         public void permissionOkClick() {
@@ -73,6 +88,8 @@ public class CameraStoryActivity extends BaseActivity implements View.OnClickLis
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_story_camera);
         ButterKnife.bind(this);
+        pDialog = new ProgressDialog(this, R.style.MyAlertDialogStyle);
+        pDialog.setCancelable(false);
         if (isPermissionAdded())
             initView();
     }
@@ -192,13 +209,17 @@ public class CameraStoryActivity extends BaseActivity implements View.OnClickLis
 
     private void onVideo(File video) {
         mCapturingVideo = false;
-        Intent intent = new Intent(CameraStoryActivity.this, VideoStoryPreviewActivity.class);
+        /*Intent intent = new Intent(CameraStoryActivity.this, VideoStoryPreviewActivity.class);
         intent.putExtra("file_uri", Uri.fromFile(video));
         Bundle mBunlde = getIntent().getExtras();
         if (mBunlde != null)
             intent.putExtra("bundle_data", mBunlde);
         startActivity(intent);
-        finish();
+        finish();*/
+
+        Bitmap bMapScaled = BitmapFactory.decodeResource(getResources(), R.drawable.motohub_logo);
+        bitmap = Bitmap.createScaledBitmap(bMapScaled, 150, 150, true);
+        startCodec(video);
     }
 
     @OnClick({R.id.captureVideo, R.id.capturePhoto, R.id.toggleCamera, R.id.stopVideo, R.id.toolbar_back_img_btn})
@@ -316,5 +337,80 @@ public class CameraStoryActivity extends BaseActivity implements View.OnClickLis
         DialogManager.hideProgress();
         camera.destroy();
         stopTimer();
+    }
+
+    private void showDialog() {
+        if (!pDialog.isShowing())
+            pDialog.show();
+    }
+
+    private void hideDialog() {
+        if (pDialog.isShowing())
+            pDialog.dismiss();
+    }
+
+    private void startCodec(final File videoFile) {
+        pDialog.setTitle("Please wait...");
+        showDialog();
+        final String videoPath = getVideoFilePath();
+        GPUMp4Composer = null;
+        GPUMp4Composer = new GPUMp4Composer(videoFile.toString(), videoPath)
+                .fillMode(FillMode.PRESERVE_ASPECT_CROP)
+                .filter(new CustomWatermarkFilter(bitmap, CustomWatermarkFilter.Position.RIGHT_BOTTOM))
+                .listener(new GPUMp4Composer.Listener() {
+                    @Override
+                    public void onProgress(double progress) {
+                        Log.d(TAG, "onProgress = " + progress);
+                        runOnUiThread(() -> {
+                            double percen =  progress * 100;
+                            pDialog.setTitle("Please wait " + (int) percen + "%");
+                        });
+                    }
+
+                    @Override
+                    public void onCompleted() {
+                        Log.d(TAG, "onCompleted()");
+                        hideDialog();
+                        //exportMp4ToGallery(getApplicationContext(), videoPath);
+                        runOnUiThread(() -> {
+                            Toast.makeText(CameraStoryActivity.this, "codec complete path =" + videoPath, Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(CameraStoryActivity.this, VideoStoryPreviewActivity.class);
+                            intent.putExtra("file_uri", Uri.parse(videoPath));
+                            Bundle mBunlde = getIntent().getExtras();
+                            if (mBunlde != null)
+                                intent.putExtra("bundle_data", mBunlde);
+                            startActivity(intent);
+                            finish();
+                        });
+                    }
+
+                    @Override
+                    public void onCanceled() {
+                        Log.d(TAG, "Cancelled()");
+                        runOnUiThread(() -> {
+                            hideDialog();
+                        });
+                    }
+
+                    @Override
+                    public void onFailed(Exception exception) {
+                        Log.d(TAG, "onFailed()");
+                        runOnUiThread(() -> {
+                            hideDialog();
+                        });
+                    }
+                })
+                .start();
+    }
+
+    public File getAndroidMoviesFolder() {
+        //return Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES);
+        File dir = new File(Environment.getExternalStorageDirectory().getPath(), "/SpecLive");
+        return dir;
+    }
+
+    @SuppressLint("SimpleDateFormat")
+    public String getVideoFilePath() {
+        return getAndroidMoviesFolder().getAbsolutePath() + "/" + new SimpleDateFormat("yyyyMM_dd-HHmmss").format(new Date()) + "filter_apply.mp4";
     }
 }

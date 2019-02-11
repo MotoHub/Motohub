@@ -15,7 +15,7 @@ import online.motohub.model.VideoUploadModel;
 import online.motohub.util.AppConstants;
 
 public class DatabaseHandler extends SQLiteOpenHelper {
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 1;
     private static final String DATABASE_NAME = "contactsManager";
 
     private String LOCAL_USER_TABLE = "LOCAL_USER_TABLE";
