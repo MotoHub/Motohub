@@ -295,8 +295,9 @@ public class ChatBoxEventGrpActivity extends BaseActivity implements ChatBoxEven
                 String mEventChatID = "EVENT_CHAT" + (mDetailsObj.get("EventID").toString());
                 int mNotificationID = Integer.parseInt((mDetailsObj.get("EventID").toString()));
                 String mContentTitle = "EVENT :" + (mDetailsObj.get(MyFireBaseMessagingService.EVENT_GRP_CHAT_EVENT_NAME).toString());
-                MyFireBaseMessagingService.composeChatNotification(mNotificationJsonObject, this, mNotificationID,
-                        mEventChatID, mContentTitle, ChatBoxEventGrpActivity.class);
+                /*TODO make changes of notification */
+                /*MyFireBaseMessagingService.composeChatNotification(mNotificationJsonObject, this, mNotificationID,
+                        mEventChatID, mContentTitle, ChatBoxEventGrpActivity.class);*/
 
             } catch (JSONException e) {
                 e.printStackTrace();

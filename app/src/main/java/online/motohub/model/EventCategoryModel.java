@@ -11,6 +11,10 @@ public class EventCategoryModel implements Serializable {
 
     public static final String EVENT_CATEGORY_RES_MODEL = "EventCategoryResModel";
 
+    @SerializedName("ID")
+    @Expose
+    private int ID;
+
     @SerializedName("Section")
     @Expose
     private String mSection;
@@ -38,6 +42,14 @@ public class EventCategoryModel implements Serializable {
     @SerializedName("resource")
     @Expose
     private ArrayList<EventCategoryModel> mResource;
+
+    public int getID() {
+        return ID;
+    }
+
+    public void setID(int ID) {
+        this.ID = ID;
+    }
 
     public ArrayList<EventCategoryModel> getResource() {
         return mResource;

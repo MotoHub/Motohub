@@ -211,7 +211,8 @@ public class ChatBoxSingleActivity extends BaseActivity implements ChatBoxSingle
                 String mNotificationChatID = mMyProfileResModel.getID() + "_" + mSingleChatRoomResModel.getProfilesByToProfileID().getID();
                 int mNotificationID = (mSingleChatRoomResModel.getProfilesByToProfileID().getID());
                 String mContentTitle = "From : " + ((mDetailsObj.get(MyFireBaseMessagingService.SENDER_NAME).toString()));
-                MyFireBaseMessagingService.composeChatNotification(mNotificationJsonObject, this, mNotificationID, mNotificationChatID, mContentTitle, ChatBoxSingleActivity.class);
+                /*TODO make changes of notification */
+               // MyFireBaseMessagingService.composeChatNotification(mNotificationJsonObject, this, mNotificationID, mNotificationChatID, mContentTitle, ChatBoxSingleActivity.class);
                 return;
             }
             SingleChatMsgResModel mSingleChatMsgResModel = new SingleChatMsgResModel();

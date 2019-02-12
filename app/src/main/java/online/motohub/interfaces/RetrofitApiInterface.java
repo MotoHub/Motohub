@@ -471,7 +471,7 @@ public interface RetrofitApiInterface {
     @FormUrlEncoded
     @POST("payment.php")
     Call<PaymentModel> postSubscribeRequestToClub(@Field("plan") String plan, @Field("email") String email,
-                                                  @Field("token") String token, @Field("type") String type, @Field("account_no") String account, @Field("amount")int subscription_fee);
+                                                  @Field("token") String token, @Field("type") String type, @Field("account_no") String account, @Field("amount") int subscription_fee);
 
     @Headers({"Content-Type: application/x-www-form-urlencoded"})
     @FormUrlEncoded

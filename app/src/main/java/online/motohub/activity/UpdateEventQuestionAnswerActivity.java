@@ -12,6 +12,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
@@ -25,13 +26,14 @@ import online.motohub.R;
 import online.motohub.adapter.EventRegistrationQuestionAdapter;
 import online.motohub.application.MotoHub;
 import online.motohub.model.EventAnswersModel;
+import online.motohub.model.EventCategoryModel;
 import online.motohub.model.EventRegistrationQuestionModel;
 import online.motohub.model.SessionModel;
 import online.motohub.retrofit.RetrofitClient;
 import online.motohub.util.DialogManager;
 import online.motohub.util.PreferenceUtils;
 
-public class UpdateEventQuestionAnswerActivity extends BaseActivity{
+public class UpdateEventQuestionAnswerActivity extends BaseActivity {
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
 
@@ -48,10 +50,10 @@ public class UpdateEventQuestionAnswerActivity extends BaseActivity{
     private ArrayList<EventAnswersModel> mEventAnswerList;
     private EventRegistrationQuestionAdapter mEventQuestionAdapter;
     private ArrayList<EventAnswersModel> mEventAnswerModelList = new ArrayList<>();
+    private ArrayList<EventCategoryModel> mEventCategoryList = new ArrayList<>();
 
 
-
-    private boolean isAnsweredAllQuestion= true;
+    private boolean isAnsweredAllQuestion = true;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -89,11 +91,10 @@ public class UpdateEventQuestionAnswerActivity extends BaseActivity{
         mQuestionListRecyclerView.setLayoutManager(mLayoutManager);
         mQuestionListRecyclerView.setItemAnimator(new DefaultItemAnimator());
 
-        mEventQuestionAdapter = new EventRegistrationQuestionAdapter(this,mEventQuestionList,mEventAnswerList);
+        mEventQuestionAdapter = new EventRegistrationQuestionAdapter(this, mEventQuestionList, mEventAnswerList);
         mQuestionListRecyclerView.setAdapter(mEventQuestionAdapter);
 
     }
-
 
 
     @Override
@@ -105,7 +106,7 @@ public class UpdateEventQuestionAnswerActivity extends BaseActivity{
     }
 
 
-    @OnClick({R.id.toolbar_back_img_btn,R.id.save_answers_btn})
+    @OnClick({R.id.toolbar_back_img_btn, R.id.save_answers_btn})
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.toolbar_back_img_btn:
@@ -116,23 +117,23 @@ public class UpdateEventQuestionAnswerActivity extends BaseActivity{
                 String mAnswers[] = mEventQuestionAdapter.getAnswers();
                 JsonArray mJsonArray = new JsonArray();
 
-                for(int i=0;i<mEventQuestionList.size();i++) {
-                    if(mAnswers[i]==null || mAnswers[i].trim().isEmpty()) {
+                for (int i = 0; i < mEventQuestionList.size(); i++) {
+                    if (mAnswers[i] == null || mAnswers[i].trim().isEmpty()) {
                         isAnsweredAllQuestion = false;
-                        int mQtnPos = i+1;
-                        String mErrToast = "Please answer the question no "+ mQtnPos;
-                        Toast.makeText(this, mErrToast,Toast.LENGTH_SHORT).show();
+                        int mQtnPos = i + 1;
+                        String mErrToast = "Please answer the question no " + mQtnPos;
+                        Toast.makeText(this, mErrToast, Toast.LENGTH_SHORT).show();
                         break;
-                    } else{
+                    } else {
                         isAnsweredAllQuestion = true;
                     }
                 }
 
-                if(isAnsweredAllQuestion){
+                if (isAnsweredAllQuestion) {
 
                     JsonObject mQuestionAnswer = new JsonObject();
 
-                    for(int j=0;j<mEventQuestionList.size();j++){
+                    for (int j = 0; j < mEventQuestionList.size(); j++) {
 
                         mQuestionAnswer.addProperty(mEventQuestionList.get(j).getQuestion(), mAnswers[j]);
 
@@ -164,7 +165,7 @@ public class UpdateEventQuestionAnswerActivity extends BaseActivity{
     @Override
     public void retrofitOnResponse(Object responseObj, int responseType) {
         super.retrofitOnResponse(responseObj, responseType);
-        if(responseObj instanceof EventAnswersModel){
+        if (responseObj instanceof EventAnswersModel) {
             switch (responseType) {
                 case RetrofitClient.UPDATE_EVENT_ANSWERS:
                     Intent resultIntent = new Intent();
@@ -172,10 +173,10 @@ public class UpdateEventQuestionAnswerActivity extends BaseActivity{
                     finish();
                     break;
             }
-        } else if(responseObj instanceof SessionModel) {
+        } else if (responseObj instanceof SessionModel) {
 
             SessionModel mSessionModel = (SessionModel) responseObj;
-            if(mSessionModel.getSessionToken() == null) {
+            if (mSessionModel.getSessionToken() == null) {
                 PreferenceUtils.getInstance(this).saveStrData(PreferenceUtils.SESSION_TOKEN, mSessionModel.getSessionId());
             } else {
                 PreferenceUtils.getInstance(this).saveStrData(PreferenceUtils.SESSION_TOKEN, mSessionModel.getSessionToken());
@@ -185,11 +186,10 @@ public class UpdateEventQuestionAnswerActivity extends BaseActivity{
     }
 
 
-
     @Override
     public void retrofitOnError(int code, String message) {
         super.retrofitOnError(code, message);
-        if(message.equals("Unauthorized") || code == 401) {
+        if (message.equals("Unauthorized") || code == 401) {
             RetrofitClient.getRetrofitInstance().callUpdateSession(this, RetrofitClient.UPDATE_SESSION_RESPONSE);
         } else {
             String mErrorMsg = code + " - " + message;

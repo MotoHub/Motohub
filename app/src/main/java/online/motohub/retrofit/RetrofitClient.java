@@ -811,7 +811,7 @@ public class RetrofitClient {
                             Object mResponseObj = response.body();
                             activity.retrofitOnResponse(mResponseObj, responseType);
                         } else {
-                            activity.retrofitOnError(response.code(), response.message(),responseType);
+                            activity.retrofitOnError(response.code(), response.message(), responseType);
                         }
                     }
 
@@ -995,7 +995,7 @@ public class RetrofitClient {
                             Object mResponseObj = response.body();
                             activity.retrofitOnResponse(mResponseObj, responseType);
                         } else {
-                            activity.retrofitOnError(response.code(), response.message(),responseType);
+                            activity.retrofitOnError(response.code(), response.message(), responseType);
                         }
                     }
 
