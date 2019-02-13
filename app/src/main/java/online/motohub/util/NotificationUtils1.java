@@ -345,7 +345,6 @@ public class NotificationUtils1 {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        setSound();
     }
 
     private void setSound() {
