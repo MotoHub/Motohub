@@ -57,6 +57,7 @@ import online.motohub.model.EventsWhoIsGoingResModel;
 import online.motohub.model.ImageModel;
 import online.motohub.model.LiveStreamPaymentEntity;
 import online.motohub.model.LiveStreamPaymentResponse;
+import online.motohub.model.NotificationModel1;
 import online.motohub.model.PaymentModel;
 import online.motohub.model.ProfileModel;
 import online.motohub.model.ProfileResModel;
@@ -67,6 +68,7 @@ import online.motohub.retrofit.APIConstants;
 import online.motohub.retrofit.RetrofitClient;
 import online.motohub.util.AppConstants;
 import online.motohub.util.DialogManager;
+import online.motohub.util.NotificationUtils1;
 import online.motohub.util.PreferenceUtils;
 import online.motohub.util.Utility;
 
@@ -631,25 +633,15 @@ public class EventLiveActivity extends BaseActivity implements ChatBoxEventGrpAd
                 e.printStackTrace();
             }
         } else {
-
             try {
-
-                JSONObject mNotificationJsonObject = new JSONObject();
-                JSONObject mJsonObject = new JSONObject(intent.getStringExtra(MyFireBaseMessagingService.ENTRY_JSON_OBJ));
-                mNotificationJsonObject.put(MyFireBaseMessagingService.ENTRY_JSON_OBJ, mJsonObject);
-                JSONObject mDetailsObj = mJsonObject.getJSONObject("Details");
-                String mEventChatID = "EVENT_LIVE_CHAT" + (mDetailsObj.get("EventID").toString());
-                int mNotificationID = Integer.parseInt(mDetailsObj.get("EventID").toString());
-                /* TODO make change notification method */
-                //MyFireBaseMessagingService.composeChatNotification(mNotificationJsonObject, this, mNotificationID, mEventChatID, "LIVE EVENT", EventLiveActivity.class);
-
+                NotificationModel1 model1 = new NotificationModel1();
+                model1.setMainObj(new JSONObject(intent.getStringExtra(MyFireBaseMessagingService.ENTRY_JSON_OBJ)));
+                model1.setForceNotification(true);
+                new NotificationUtils1(this, model1);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-
         }
-
-
     }
 
     private void sendMessage() {

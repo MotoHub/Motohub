@@ -44,6 +44,7 @@ import online.motohub.model.EventsModel;
 import online.motohub.model.EventsWhoIsGoingModel;
 import online.motohub.model.EventsWhoIsGoingResModel;
 import online.motohub.model.ImageModel;
+import online.motohub.model.NotificationModel1;
 import online.motohub.model.ProfileModel;
 import online.motohub.model.ProfileResModel;
 import online.motohub.model.SessionModel;
@@ -51,6 +52,7 @@ import online.motohub.model.promoter_club_news_media.PromotersResModel;
 import online.motohub.retrofit.RetrofitClient;
 import online.motohub.util.AppConstants;
 import online.motohub.util.DialogManager;
+import online.motohub.util.NotificationUtils1;
 import online.motohub.util.PreferenceUtils;
 import online.motohub.util.Utility;
 
@@ -285,20 +287,11 @@ public class ChatBoxEventGrpActivity extends BaseActivity implements ChatBoxEven
             }
 
         } else {
-
             try {
-
-                JSONObject mNotificationJsonObject = new JSONObject();
-                JSONObject mJsonObject = new JSONObject(intent.getStringExtra(MyFireBaseMessagingService.ENTRY_JSON_OBJ));
-                mNotificationJsonObject.put(MyFireBaseMessagingService.ENTRY_JSON_OBJ, mJsonObject);
-                JSONObject mDetailsObj = mJsonObject.getJSONObject("Details");
-                String mEventChatID = "EVENT_CHAT" + (mDetailsObj.get("EventID").toString());
-                int mNotificationID = Integer.parseInt((mDetailsObj.get("EventID").toString()));
-                String mContentTitle = "EVENT :" + (mDetailsObj.get(MyFireBaseMessagingService.EVENT_GRP_CHAT_EVENT_NAME).toString());
-                /*TODO make changes of notification */
-                /*MyFireBaseMessagingService.composeChatNotification(mNotificationJsonObject, this, mNotificationID,
-                        mEventChatID, mContentTitle, ChatBoxEventGrpActivity.class);*/
-
+                NotificationModel1 model1 = new NotificationModel1();
+                model1.setMainObj(new JSONObject(intent.getStringExtra(MyFireBaseMessagingService.ENTRY_JSON_OBJ)));
+                model1.setForceNotification(true);
+                new NotificationUtils1(this, model1);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
