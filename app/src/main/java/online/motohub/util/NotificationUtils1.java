@@ -291,7 +291,7 @@ public class NotificationUtils1 {
                     break;
 
                 case "EVENT_CHAT":
-                    if (MotoHub.getApplicationInstance().isEventGrpChatOnline()) {
+                    if (!notificationModel.isForceNotification()&&MotoHub.getApplicationInstance().isEventGrpChatOnline()) {
                         Intent mIntent = new Intent(MyFireBaseMessagingService.PUSH_MSG_RECEIVER_ACTION);
                         mIntent.putExtra(MyFireBaseMessagingService.ENTRY_JSON_OBJ, notificationModel.getMainObj().toString());
                         mIntent.putExtra((EventsModel.EVENT_ID), (mDetailsObj.get("EventID").toString()));
@@ -303,7 +303,7 @@ public class NotificationUtils1 {
                     }
                     break;
                 case "EVENT_LIVE_CHAT":
-                    if (MotoHub.getApplicationInstance().isEventLiveGrpChatOnline()) {
+                    if (!notificationModel.isForceNotification()&&MotoHub.getApplicationInstance().isEventLiveGrpChatOnline()) {
                         Intent mIntent = new Intent(MyFireBaseMessagingService.PUSH_MSG_RECEIVER_ACTION);
                         mIntent.putExtra(MyFireBaseMessagingService.ENTRY_JSON_OBJ, notificationModel.getMainObj().toString());
                         mIntent.putExtra((EventsModel.EVENT_ID), (mDetailsObj.get("EventID").toString()));
@@ -316,7 +316,7 @@ public class NotificationUtils1 {
 
                     break;
                 case "GROUP_CHAT_MSG":
-                    if (MotoHub.getApplicationInstance().isGrpChatOnline()) {
+                    if (!notificationModel.isForceNotification()&&MotoHub.getApplicationInstance().isGrpChatOnline()) {
                         Intent mIntent = new Intent(MyFireBaseMessagingService.PUSH_MSG_RECEIVER_ACTION);
                         mIntent.putExtra(MyFireBaseMessagingService.ENTRY_JSON_OBJ, notificationModel.getMainObj().toString());
                         mIntent.putExtra((GroupChatRoomModel.GRP_CHAT_ROOM_ID), (mDetailsObj.get("GroupChatRoomID").toString()));
@@ -328,7 +328,7 @@ public class NotificationUtils1 {
                     }
                     break;
                 case "SINGLE_CHAT":
-                    if (MotoHub.getApplicationInstance().isSingleChatOnline()) {
+                    if (!notificationModel.isForceNotification()&&MotoHub.getApplicationInstance().isSingleChatOnline()) {
                         Intent mIntent = new Intent(MyFireBaseMessagingService.PUSH_MSG_RECEIVER_ACTION);
                         mIntent.putExtra(MyFireBaseMessagingService.ENTRY_JSON_OBJ, notificationModel.getMainObj().toString());
                         mContext.sendBroadcast(mIntent);

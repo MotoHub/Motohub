@@ -18,6 +18,8 @@ public class NotificationModel1 {
     private String Type;
     @SerializedName("Details")
     private JSONObject Details;
+    @SerializedName("forceNotification")
+    private boolean forceNotification;
 
     public JSONObject getMainObj() {
         return mainObj;
@@ -54,5 +56,13 @@ public class NotificationModel1 {
             e.printStackTrace();
         }
         return Details;
+    }
+
+    public boolean isForceNotification() {
+        return forceNotification;
+    }
+
+    public void setForceNotification(boolean forceNotification) {
+        this.forceNotification = forceNotification;
     }
 }
