@@ -2079,7 +2079,7 @@ public class ViewProfileActivity extends BaseActivity implements
                     break;
                 case 5:
                     if (mOtherProfilesList.size() > 0) {
-                        startActivity(new Intent(this, PaymentActivity.class).putExtra(AppConstants.CARD_SETTINGS, true));
+                        startActivity(new Intent(this, PaymentActivity.class).putExtra(AppConstants.CARD_SETTINGS, false));
                     }
                     break;
                 case 6:

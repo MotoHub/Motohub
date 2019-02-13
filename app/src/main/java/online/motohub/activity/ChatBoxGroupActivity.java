@@ -224,8 +224,9 @@ public class ChatBoxGroupActivity extends BaseActivity implements ChatBoxGroupMs
                 String mGroupChatRoomID = (mJsonObject.getJSONObject("Details").get("GroupChatRoomID").toString());
                 int mNotificationID = Integer.parseInt((mJsonObject.getJSONObject("Details").get("GroupChatRoomID").toString()));
                 String mContentTitle = "Group : " + ((mJsonObject.getJSONObject("Details").get("GroupName").toString()));
-                MyFireBaseMessagingService.composeChatNotification(mNotificationJsonObject, this, mNotificationID,
-                        mGroupChatRoomID, mContentTitle, ChatBoxGroupActivity.class);
+                /*TODO make changes of notification */
+               /* MyFireBaseMessagingService.composeChatNotification(mNotificationJsonObject, this, mNotificationID,
+                        mGroupChatRoomID, mContentTitle, ChatBoxGroupActivity.class);*/
             } catch (JSONException e) {
                 e.printStackTrace();
             }

@@ -7,7 +7,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
+
 
 import java.io.IOException;
 import java.lang.annotation.Annotation;
@@ -94,6 +94,7 @@ import retrofit2.Callback;
 import retrofit2.Converter;
 import retrofit2.Response;
 import retrofit2.Retrofit;
+import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RetrofitClient {
@@ -485,7 +486,7 @@ public class RetrofitClient {
         Retrofit mRetrofit = new Retrofit.Builder()
                 .baseUrl(UrlUtils.BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .client(mHttpClient)
                 .build();
         errorConverter = mRetrofit.responseBodyConverter(ErrorMessage.class, new Annotation[0]);
@@ -810,7 +811,7 @@ public class RetrofitClient {
                             Object mResponseObj = response.body();
                             activity.retrofitOnResponse(mResponseObj, responseType);
                         } else {
-                            activity.retrofitOnError(response.code(), response.message(),responseType);
+                            activity.retrofitOnError(response.code(), response.message(), responseType);
                         }
                     }
 
@@ -994,7 +995,7 @@ public class RetrofitClient {
                             Object mResponseObj = response.body();
                             activity.retrofitOnResponse(mResponseObj, responseType);
                         } else {
-                            activity.retrofitOnError(response.code(), response.message(),responseType);
+                            activity.retrofitOnError(response.code(), response.message(), responseType);
                         }
                     }
 

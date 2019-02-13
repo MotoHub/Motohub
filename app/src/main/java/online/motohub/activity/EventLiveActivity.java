@@ -640,7 +640,8 @@ public class EventLiveActivity extends BaseActivity implements ChatBoxEventGrpAd
                 JSONObject mDetailsObj = mJsonObject.getJSONObject("Details");
                 String mEventChatID = "EVENT_LIVE_CHAT" + (mDetailsObj.get("EventID").toString());
                 int mNotificationID = Integer.parseInt(mDetailsObj.get("EventID").toString());
-                MyFireBaseMessagingService.composeChatNotification(mNotificationJsonObject, this, mNotificationID, mEventChatID, "LIVE EVENT", EventLiveActivity.class);
+                /* TODO make change notification method */
+                //MyFireBaseMessagingService.composeChatNotification(mNotificationJsonObject, this, mNotificationID, mEventChatID, "LIVE EVENT", EventLiveActivity.class);
 
             } catch (JSONException e) {
                 e.printStackTrace();

@@ -24,6 +24,7 @@ import online.motohub.R;
 import online.motohub.adapter.EventRegistrationQuestionAdapter;
 import online.motohub.application.MotoHub;
 import online.motohub.model.EventAnswersModel;
+import online.motohub.model.EventCategoryModel;
 import online.motohub.model.EventRegistrationQuestionModel;
 import online.motohub.model.SessionModel;
 import online.motohub.retrofit.RetrofitClient;
@@ -49,10 +50,11 @@ public class EventQuestionAnswerActivity extends BaseActivity {
     private EventRegistrationQuestionAdapter mEventQuestionAdapter;
 
     private ArrayList<EventAnswersModel> mEventAnswerModelList = new ArrayList<>();
+    private ArrayList<EventCategoryModel> mEventCategoryList = new ArrayList<>();
 
     private int mProfileID, mEventID;
 
-    private boolean isAnsweredAllQuestion= true;
+    private boolean isAnsweredAllQuestion = true;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -83,11 +85,11 @@ public class EventQuestionAnswerActivity extends BaseActivity {
 
     private void setQuestions() {
 
-        if(getIntent().hasExtra("ProfileID"))
-            mProfileID = getIntent().getIntExtra("ProfileID",0);
+        if (getIntent().hasExtra("ProfileID"))
+            mProfileID = getIntent().getIntExtra("ProfileID", 0);
 
-        if(getIntent().hasExtra("EventID"))
-            mEventID = getIntent().getIntExtra("EventID",0);
+        if (getIntent().hasExtra("EventID"))
+            mEventID = getIntent().getIntExtra("EventID", 0);
 
         mEventQuestionList = (ArrayList<EventRegistrationQuestionModel>) getIntent().getSerializableExtra("QuestionList");
 
@@ -95,7 +97,7 @@ public class EventQuestionAnswerActivity extends BaseActivity {
         mQuestionListRecyclerView.setLayoutManager(mLayoutManager);
         mQuestionListRecyclerView.setItemAnimator(new DefaultItemAnimator());
 
-        mEventQuestionAdapter = new EventRegistrationQuestionAdapter(this,mEventQuestionList, null);
+        mEventQuestionAdapter = new EventRegistrationQuestionAdapter(this, mEventQuestionList, null);
         mQuestionListRecyclerView.setAdapter(mEventQuestionAdapter);
 
 
@@ -108,7 +110,7 @@ public class EventQuestionAnswerActivity extends BaseActivity {
         finish();
     }
 
-    @OnClick({R.id.toolbar_back_img_btn,R.id.save_answers_btn})
+    @OnClick({R.id.toolbar_back_img_btn, R.id.save_answers_btn})
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.toolbar_back_img_btn:
@@ -117,7 +119,7 @@ public class EventQuestionAnswerActivity extends BaseActivity {
 
             case R.id.save_answers_btn:
 
-                saveAnswers( );
+                saveAnswers();
 
                 break;
         }
@@ -127,23 +129,23 @@ public class EventQuestionAnswerActivity extends BaseActivity {
         String mAnswers[] = mEventQuestionAdapter.getAnswers();
         JsonArray mJsonArray = new JsonArray();
 
-        for(int i=0;i<mEventQuestionList.size();i++) {
-            if(mAnswers[i]==null || mAnswers[i].trim().isEmpty()) {
+        for (int i = 0; i < mEventQuestionList.size(); i++) {
+            if (mAnswers[i] == null || mAnswers[i].trim().isEmpty()) {
                 isAnsweredAllQuestion = false;
-                int mQtnPos = i+1;
-                String mErrToast = "Please answer the question no "+ mQtnPos;
-                Toast.makeText(this, mErrToast,Toast.LENGTH_SHORT).show();
+                int mQtnPos = i + 1;
+                String mErrToast = "Please answer the question no " + mQtnPos;
+                Toast.makeText(this, mErrToast, Toast.LENGTH_SHORT).show();
                 break;
-            } else{
+            } else {
                 isAnsweredAllQuestion = true;
             }
         }
 
-        if(isAnsweredAllQuestion){
+        if (isAnsweredAllQuestion) {
 
             JsonObject mQuestionAnswer = new JsonObject();
 
-            for(int j=0;j<mEventQuestionList.size();j++){
+            for (int j = 0; j < mEventQuestionList.size(); j++) {
 
                 mQuestionAnswer.addProperty(mEventQuestionList.get(j).getQuestion(), mAnswers[j]);
 
@@ -159,7 +161,7 @@ public class EventQuestionAnswerActivity extends BaseActivity {
                 mItem.addProperty(EventAnswersModel.QUESTION_ID, mEventQuestionList.get(j).getQuestionID());
                 mItem.addProperty(EventAnswersModel.EVENT_ID, mEventID);
                 mItem.addProperty(EventAnswersModel.PROFILE_ID, mProfileID);
-                mItem.addProperty(EventAnswersModel.GROUP_ID,mEventQuestionList.get(j).getGroupID());
+                mItem.addProperty(EventAnswersModel.GROUP_ID, mEventQuestionList.get(j).getGroupID());
 
 
                 mEventAnswerModelList.add(mEventAnswerModel);
@@ -168,35 +170,35 @@ public class EventQuestionAnswerActivity extends BaseActivity {
 
             MotoHub.getApplicationInstance().setEventQuestionAnswerObject(mQuestionAnswer);
 
-            RetrofitClient.getRetrofitInstance().callPostAnswerForEventRegistrationQuestions(this,mJsonArray,RetrofitClient.POST_EVENT_ANSWERS);
+            RetrofitClient.getRetrofitInstance().callPostAnswerForEventRegistrationQuestions(this, mJsonArray, RetrofitClient.POST_EVENT_ANSWERS);
         }
     }
 
     @Override
     public void retrofitOnResponse(Object responseObj, int responseType) {
         super.retrofitOnResponse(responseObj, responseType);
-       if(responseObj instanceof EventAnswersModel){
+        if (responseObj instanceof EventAnswersModel) {
             Intent resultIntent = new Intent();
-            resultIntent.putExtra("AnswerModel",mEventAnswerModelList);
+            resultIntent.putExtra("AnswerModel", mEventAnswerModelList);
             setResult(RESULT_OK, resultIntent);
             finish();
 
-        } else if(responseObj instanceof SessionModel) {
+        } else if (responseObj instanceof SessionModel) {
 
-           SessionModel mSessionModel = (SessionModel) responseObj;
-           if(mSessionModel.getSessionToken() == null) {
-               PreferenceUtils.getInstance(this).saveStrData(PreferenceUtils.SESSION_TOKEN, mSessionModel.getSessionId());
-           } else {
-               PreferenceUtils.getInstance(this).saveStrData(PreferenceUtils.SESSION_TOKEN, mSessionModel.getSessionToken());
-           }
+            SessionModel mSessionModel = (SessionModel) responseObj;
+            if (mSessionModel.getSessionToken() == null) {
+                PreferenceUtils.getInstance(this).saveStrData(PreferenceUtils.SESSION_TOKEN, mSessionModel.getSessionId());
+            } else {
+                PreferenceUtils.getInstance(this).saveStrData(PreferenceUtils.SESSION_TOKEN, mSessionModel.getSessionToken());
+            }
 
-       }
+        }
     }
 
     @Override
     public void retrofitOnError(int code, String message) {
         super.retrofitOnError(code, message);
-        if(message.equals("Unauthorized") || code == 401) {
+        if (message.equals("Unauthorized") || code == 401) {
             RetrofitClient.getRetrofitInstance().callUpdateSession(this, RetrofitClient.UPDATE_SESSION_RESPONSE);
         } else {
             String mErrorMsg = code + " - " + message;
@@ -208,7 +210,6 @@ public class EventQuestionAnswerActivity extends BaseActivity {
     public void retrofitOnFailure() {
         super.retrofitOnFailure();
     }
-
 
 
     @Override

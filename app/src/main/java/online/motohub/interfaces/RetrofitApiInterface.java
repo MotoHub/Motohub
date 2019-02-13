@@ -5,7 +5,6 @@ import com.google.gson.JsonObject;
 
 import java.util.ArrayList;
 
-import io.reactivex.Single;
 import okhttp3.MultipartBody;
 import okhttp3.ResponseBody;
 import online.motohub.model.BlockedUserModel;
@@ -83,6 +82,7 @@ import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Part;
 import retrofit2.http.Query;
+import rx.Observable;
 
 public interface RetrofitApiInterface {
 
@@ -339,10 +339,6 @@ public interface RetrofitApiInterface {
     Call<ImageModel> postProfilePostImgFile(@Part MultipartBody.Part imagePart);
 
     @Multipart
-    @POST(UrlUtils.FILE_POST_IMG)
-    Single<ImageModel> postProfilePostImgFileRxjava(@Part MultipartBody.Part imagePart);
-
-    @Multipart
     @POST(UrlUtils.FILE_COVER_IMG)
     Call<ImageModel> postProfileCoverImgFile(@Part MultipartBody.Part imagePart);
 
@@ -475,7 +471,7 @@ public interface RetrofitApiInterface {
     @FormUrlEncoded
     @POST("payment.php")
     Call<PaymentModel> postSubscribeRequestToClub(@Field("plan") String plan, @Field("email") String email,
-                                                  @Field("token") String token, @Field("type") String type, @Field("account_no") String account, @Field("amount")int subscription_fee);
+                                                  @Field("token") String token, @Field("type") String type, @Field("account_no") String account, @Field("amount") int subscription_fee);
 
     @Headers({"Content-Type: application/x-www-form-urlencoded"})
     @FormUrlEncoded
@@ -757,6 +753,10 @@ public interface RetrofitApiInterface {
     @PATCH(UrlUtils.PROMOTER_SUBSCRIPTION)
     Call<PromoterSubsResModel> callUpdateUnSubscription(@Body JsonArray mArray, @Query("fields") String fields);
 
+
+    @Headers("Content-Type: application/json")
+    @POST(UrlUtils.GALLERY_VIDEO)
+    Observable<SpectatorLiveModel> callPostSpectatorLiveStoryRxjava(@Query("fields") String mFields, @Body JsonArray mJsonObject);
 
     /**
      * Don't Delete

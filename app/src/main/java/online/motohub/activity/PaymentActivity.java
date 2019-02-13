@@ -96,7 +96,8 @@ public class PaymentActivity extends BaseActivity {
     private void getData() {
         mUserID = PreferenceUtils.getInstance(this).getIntData(PreferenceUtils.USER_ID);
         if (getIntent().hasExtra(AppConstants.CARD_SETTINGS)) {
-            mIsFromCardManagement = true;
+            //mIsFromCardManagement = true;
+            mIsFromCardManagement = getIntent().getBooleanExtra(AppConstants.CARD_SETTINGS, true);
         } else {
             showToast(this, "Please keep the perfect internet connection while doing payment");
             mAmount = getIntent().getIntExtra(EventsModel.EVENT_AMOUNT, 0);
@@ -271,7 +272,11 @@ public class PaymentActivity extends BaseActivity {
                 PaymentCardDetailsModel mNewPaymentCardDetails = (PaymentCardDetailsModel) data.getSerializableExtra(AppConstants.NEW_PAYMENT_CARD_DETAILS);
                 mPaymentCardDetailsList.add(mNewPaymentCardDetails);
                 mPaymentCardDetailsAdapter.notifyDataSetChanged();
-                setPaymentCardAdapter();
+                if (mPaymentCardDetailsList.size() > 0) {
+                    setPaymentCardAdapter();
+                } else {
+                    mSavedardRecyclerView.setVisibility(View.GONE);
+                }
             } else if (requestCode == EventsFindAdapter.EVENT_PAYMENT_REQ_CODE) {
                 String mToken = "";
                 if (data.hasExtra("TOKEN")) {
