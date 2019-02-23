@@ -39,6 +39,8 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import online.motohub.R;
 import online.motohub.interfaces.PermissionCallback;
+import online.motohub.model.EventsModel;
+import online.motohub.model.EventsResModel;
 import online.motohub.util.CustomWatermarkFilter;
 import online.motohub.util.DialogManager;
 import online.motohub.util.story.ControlView;
@@ -75,6 +77,7 @@ public class CameraStoryActivity extends BaseActivity implements View.OnClickLis
     private Bitmap bitmap;
 
     private ProgressDialog pDialog;
+    private EventsResModel mEventResModel;
     //private String videoPath;
     PermissionCallback mPermissionCallBack = new PermissionCallback() {
         @Override
@@ -90,6 +93,9 @@ public class CameraStoryActivity extends BaseActivity implements View.OnClickLis
         ButterKnife.bind(this);
         pDialog = new ProgressDialog(this, R.style.MyAlertDialogStyle);
         pDialog.setCancelable(false);
+        Bundle mBunlde = getIntent().getExtras();
+        assert mBunlde != null;
+        mEventResModel = (EventsResModel) mBunlde.getSerializable(EventsModel.EVENTS_RES_MODEL);
         if (isPermissionAdded())
             initView();
     }
@@ -209,17 +215,17 @@ public class CameraStoryActivity extends BaseActivity implements View.OnClickLis
 
     private void onVideo(File video) {
         mCapturingVideo = false;
-        /*Intent intent = new Intent(CameraStoryActivity.this, VideoStoryPreviewActivity.class);
+        Intent intent = new Intent(CameraStoryActivity.this, VideoStoryPreviewActivity.class);
         intent.putExtra("file_uri", Uri.fromFile(video));
         Bundle mBunlde = getIntent().getExtras();
         if (mBunlde != null)
             intent.putExtra("bundle_data", mBunlde);
         startActivity(intent);
-        finish();*/
+        finish();
 
-        Bitmap bMapScaled = BitmapFactory.decodeResource(getResources(), R.drawable.motohub_logo);
+        /*Bitmap bMapScaled = BitmapFactory.decodeResource(getResources(), R.drawable.motohub_logo);
         bitmap = Bitmap.createScaledBitmap(bMapScaled, 150, 150, true);
-        startCodec(video);
+        startCodec(video);*/
     }
 
     @OnClick({R.id.captureVideo, R.id.capturePhoto, R.id.toggleCamera, R.id.stopVideo, R.id.toolbar_back_img_btn})
@@ -361,10 +367,10 @@ public class CameraStoryActivity extends BaseActivity implements View.OnClickLis
                     @Override
                     public void onProgress(double progress) {
                         Log.d(TAG, "onProgress = " + progress);
-                        runOnUiThread(() -> {
+                        /*runOnUiThread(() -> {
                             double percen =  progress * 100;
                             pDialog.setTitle("Please wait " + (int) percen + "%");
-                        });
+                        });*/
                     }
 
                     @Override
