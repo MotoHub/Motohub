@@ -2,7 +2,7 @@ package online.motohub.util;
 
 public class UrlUtils {
     //   TODO BASE URL public static final String BASE_URL = "https://df.motohub.online/api/v2/";
-    //   TODO TEST BASE URL public static final String BASE_URL = "https://motodev.spotya.online/api/v2/";
+    //   TODO TEST BASE URL public static final String BASE_URL = "https://dev.motohub.online/api/v2/";
     public static final String BASE_URL = "https://df.motohub.online/api/v2/";
 
     //   TODO PAYMENT URL -  public static final String PAYMENT_BASE_URL = "https://portal.motohub.online/";
