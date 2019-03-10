@@ -42,7 +42,6 @@ import online.motohub.model.PaymentCardDetailsModel;
 import online.motohub.model.PaymentModel;
 import online.motohub.model.PostReportModel;
 import online.motohub.model.PostsModel;
-import online.motohub.model.PostsResModel;
 import online.motohub.model.ProfileModel;
 import online.motohub.model.PromoterSubsResModel;
 import online.motohub.model.PromoterVideoModel;
@@ -152,10 +151,10 @@ public interface RetrofitApiInterface {
     Call<PostsModel> callGetProfilePosts(@Query("filter") String filter, @Query("related") String related, @Query("order") String order,
                                          @Query("limit") int limit, @Query("offset") int offset, @Query("include_count") boolean count);
 
-    @Headers("Content-Type: application/json")
-    @GET(UrlUtils.POSTS)
-    Call<PostsModel> callGetProfilePosts(@Query("related") String related, @Query("order") String order,
-                                         @Query("limit") int limit, @Query("offset") int offset, @Query("include_count") boolean count);
+//    @Headers("Content-Type: application/json")
+//    @GET(UrlUtils.POSTS)
+//    Call<PostsModel> callGetProfilePosts(@Query("related") String related, @Query("order") String order,
+//                                         @Query("limit") int limit, @Query("offset") int offset, @Query("include_count") boolean count);
 
 
     @Headers("Content-Type: application/json")

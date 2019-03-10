@@ -1538,7 +1538,7 @@ public class RetrofitClient {
     }
 
     public void callGetProfilePosts(final BaseActivity activity, String filter, final int queryType, int limit, int offset) {
-
+        filter = filter + " AND (Post_on<=" + activity.getCurrentDate() + ")";
         String mOrderBy = "CreatedAt DESC";
         // DialogManager.showProgress(activity);
         activity.sysOut("API-TYPE: " + "GET");
@@ -1566,31 +1566,31 @@ public class RetrofitClient {
 
     }
 
-    public void callGetProfilePosts(final BaseActivity activity, final int queryType, int limit, int offset) {
-
-        String mOrderBy = "CreatedAt DESC";
-        String mFilter = "(ReportStatus == false) AND (user_type != club_user)";
-        activity.sysOut("API-TYPE: " + "GET");
-        activity.sysOut("API-OPERATION: " + UrlUtils.BASE_URL + UrlUtils.POSTS + "&related=" + APIConstants.POST_FEED_RELATION + "&order=" + mOrderBy + "&limit=" + limit + "&offset=" + offset);
-        RetrofitClient.getRetrofitInstance().getRetrofitApiInterface().callGetProfilePosts(mFilter, APIConstants.POST_FEED_RELATION, mOrderBy, limit, offset, true)
-                .enqueue(new Callback<PostsModel>() {
-                    @Override
-                    public void onResponse(Call<PostsModel> call, Response<PostsModel> response) {
-                        if (response.isSuccessful()) {
-                            Object mResponseObj = response.body();
-                            activity.retrofitOnResponse(mResponseObj, queryType);
-                        } else {
-                            activity.retrofitOnError(response.code(), response.message());
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<PostsModel> call, Throwable t) {
-                        activity.retrofitOnFailure();
-                    }
-                });
-
-    }
+//    public void callGetProfilePosts(final BaseActivity activity, final int queryType, int limit, int offset) {
+//
+//        String mOrderBy = "CreatedAt DESC";
+//        String mFilter = "(ReportStatus == false) AND (user_type != club_user) AND (Post_on<=" + activity.getCurrentDate() + ")";
+//        activity.sysOut("API-TYPE: " + "GET");
+//        activity.sysOut("API-OPERATION: " + UrlUtils.BASE_URL + UrlUtils.POSTS + "&related=" + APIConstants.POST_FEED_RELATION + "&order=" + mOrderBy + "&limit=" + limit + "&offset=" + offset);
+//        RetrofitClient.getRetrofitInstance().getRetrofitApiInterface().callGetProfilePosts(mFilter, APIConstants.POST_FEED_RELATION, mOrderBy, limit, offset, true)
+//                .enqueue(new Callback<PostsModel>() {
+//                    @Override
+//                    public void onResponse(Call<PostsModel> call, Response<PostsModel> response) {
+//                        if (response.isSuccessful()) {
+//                            Object mResponseObj = response.body();
+//                            activity.retrofitOnResponse(mResponseObj, queryType);
+//                        } else {
+//                            activity.retrofitOnError(response.code(), response.message());
+//                        }
+//                    }
+//
+//                    @Override
+//                    public void onFailure(Call<PostsModel> call, Throwable t) {
+//                        activity.retrofitOnFailure();
+//                    }
+//                });
+//
+//    }
 
     public void callGetEvents(final BaseActivity activity, String dateFilter, final int responseType) {
 

@@ -88,12 +88,19 @@ public class PostsResModel implements Serializable {
     @Expose
     private String mSharedTxt;
 
+    @SerializedName("Post_on")
+    @Expose
+    private String Post_on;
+    @SerializedName("is_scheduled")
+    @Expose
+    private boolean is_scheduled;
+
     @SerializedName("profiles_by_WhoPostedProfileID")
     @Expose
     private ProfileResModel mProfilesByWhoPostedProfileID;
 
     public String getSharedTxt() {
-        if(mSharedTxt == null)
+        if (mSharedTxt == null)
             mSharedTxt = "";
         return mSharedTxt;
     }
@@ -104,7 +111,7 @@ public class PostsResModel implements Serializable {
 
     @SerializedName("profiles_by_ProfileID")
     @Expose
-    private  ProfileResModel mProfilesByProfileID;
+    private ProfileResModel mProfilesByProfileID;
 
     @SerializedName("postcomments_by_PostID")
     @Expose
@@ -128,10 +135,10 @@ public class PostsResModel implements Serializable {
 
     @SerializedName("promoter_by_WhoPostedProfileID")
     @Expose
-    private  PromotersResModel mPromoterByWhoPostedProfileID;
+    private PromotersResModel mPromoterByWhoPostedProfileID;
 
 
-    @SerializedName( "videoshares_by_NewSharedPostID")
+    @SerializedName("videoshares_by_NewSharedPostID")
     @Expose
     private VideoShareModel mVideoSharesByNewSharedPostID;
 
@@ -140,7 +147,7 @@ public class PostsResModel implements Serializable {
     private ArrayList<NotificationBlockedUsersModel> mNotificationBlockedUsersID;
 
     public ArrayList<NotificationBlockedUsersModel> getmNotificationBlockedUsersID() {
-        if(mNotificationBlockedUsersID == null)
+        if (mNotificationBlockedUsersID == null)
             mNotificationBlockedUsersID = new ArrayList<>();
         return mNotificationBlockedUsersID;
     }
@@ -190,7 +197,7 @@ public class PostsResModel implements Serializable {
     }
 
     public String getPostText() {
-        if(mPostText ==  null)
+        if (mPostText == null)
             mPostText = "";
         return mPostText;
     }
@@ -200,7 +207,7 @@ public class PostsResModel implements Serializable {
     }
 
     public String getPostPicture() {
-        if(mPostPicture == null)
+        if (mPostPicture == null)
             mPostPicture = "";
         return mPostPicture;
     }
@@ -210,6 +217,9 @@ public class PostsResModel implements Serializable {
     }
 
     public String getDateCreatedAt() {
+        if(is_scheduled){
+            mDateCreatedAt=getPost_on();
+        }
         return mDateCreatedAt;
     }
 
@@ -233,35 +243,35 @@ public class PostsResModel implements Serializable {
         this.mProfilesByWhoPostedProfileID = profilesByProfileID;
     }
 
-    public ArrayList<FeedCommentModel> getPostComments(){
-        if(mPostComments == null)
+    public ArrayList<FeedCommentModel> getPostComments() {
+        if (mPostComments == null)
             mPostComments = new ArrayList<>();
-        return this.mPostComments ;
+        return this.mPostComments;
     }
 
-    public void setPostLikes(ArrayList<FeedLikesModel> likes){
+    public void setPostLikes(ArrayList<FeedLikesModel> likes) {
 
         this.mPostLikes = likes;
     }
 
-    public void setFeedComments(ArrayList<FeedCommentModel> comments){
+    public void setFeedComments(ArrayList<FeedCommentModel> comments) {
 
         this.mPostComments = comments;
     }
 
-    public ArrayList<FeedLikesModel> getPostLikes(){
-        if(mPostLikes == null)
+    public ArrayList<FeedLikesModel> getPostLikes() {
+        if (mPostLikes == null)
             mPostLikes = new ArrayList<>();
         return this.mPostLikes;
     }
 
-    public ArrayList<FeedShareModel> getPostShares(){
-        if( mPostSharesList == null)
+    public ArrayList<FeedShareModel> getPostShares() {
+        if (mPostSharesList == null)
             mPostSharesList = new ArrayList<>();
-        return  this.mPostSharesList;
+        return this.mPostSharesList;
     }
 
-    public void setPostShares(ArrayList<FeedShareModel> shares){
+    public void setPostShares(ArrayList<FeedShareModel> shares) {
 
         this.mPostSharesList = shares;
     }
@@ -283,7 +293,7 @@ public class PostsResModel implements Serializable {
     }
 
     public String getNewSharedPostID() {
-        if(mNewSharedPostID == null)
+        if (mNewSharedPostID == null)
             mNewSharedPostID = "";
         return mNewSharedPostID;
     }
@@ -317,7 +327,7 @@ public class PostsResModel implements Serializable {
     }
 
     public String getUserType() {
-        if(userType == null)
+        if (userType == null)
             userType = "";
         return userType;
     }
@@ -327,10 +337,10 @@ public class PostsResModel implements Serializable {
     }
 
     public String getPostVideoThumbnailURL() {
-        if(PostVideoThumbnailURL==null){
-            PostVideoThumbnailURL="";
-        }else if(PostVideoThumbnailURL.trim().equals("null")){
-            PostVideoThumbnailURL="";
+        if (PostVideoThumbnailURL == null) {
+            PostVideoThumbnailURL = "";
+        } else if (PostVideoThumbnailURL.trim().equals("null")) {
+            PostVideoThumbnailURL = "";
         }
         return PostVideoThumbnailURL;
     }
@@ -372,7 +382,7 @@ public class PostsResModel implements Serializable {
     }
 
     public VideoShareModel getVideoSharesByNewSharedPostID() {
-        if(mVideoSharesByNewSharedPostID == null)
+        if (mVideoSharesByNewSharedPostID == null)
             mVideoSharesByNewSharedPostID = new VideoShareModel();
         return mVideoSharesByNewSharedPostID;
     }
@@ -387,5 +397,13 @@ public class PostsResModel implements Serializable {
 
     public void setReportStatus(boolean mReportStatus) {
         this.mReportStatus = mReportStatus;
+    }
+
+    public String getPost_on() {
+        return Post_on;
+    }
+
+    public boolean isIs_scheduled() {
+        return is_scheduled;
     }
 }
