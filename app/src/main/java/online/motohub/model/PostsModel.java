@@ -41,6 +41,7 @@ public class PostsModel {
     public static final String viewCount = "ViewCount";
 
 
+
     @SerializedName("resource")
     @Expose
     private ArrayList<PostsResModel> mResource = null;
