@@ -16,6 +16,7 @@ import android.widget.Toast;
 import com.amazonaws.ClientConfiguration;
 import com.amazonaws.Protocol;
 import com.amazonaws.auth.BasicAWSCredentials;
+import com.amazonaws.mobile.client.AWSMobileClient;
 import com.amazonaws.mobileconnectors.s3.transferutility.TransferListener;
 import com.amazonaws.mobileconnectors.s3.transferutility.TransferObserver;
 import com.amazonaws.mobileconnectors.s3.transferutility.TransferState;
@@ -47,9 +48,9 @@ import retrofit2.Response;
 public class ProfileUploadService extends IntentService implements ProgressRequestBody.UploadCallbacks {
 
 
-    AmazonS3Client s3;
+    /*AmazonS3Client s3;
     BasicAWSCredentials credentials;
-    TransferUtility transferUtility;
+    TransferUtility transferUtility;*/
     TransferObserver observerVideo, observerImage;
     private int count = 111;
     private NotificationManager mNotificationManager;
@@ -167,6 +168,7 @@ public class ProfileUploadService extends IntentService implements ProgressReque
     protected void onHandleIntent(@Nullable Intent intent) {
         try {
             if (intent != null) {
+                AWSMobileClient.getInstance().initialize(this).execute();
                 mProfileID = intent.getIntExtra(AppConstants.PROFILE_ID, 0);
                 String mVideoPath = intent.getStringExtra(AppConstants.VIDEO_PATH);
                 mCaption = intent.getStringExtra(AppConstants.CAPTION);
@@ -265,7 +267,7 @@ public class ProfileUploadService extends IntentService implements ProgressReque
         }
         startForeground(notificationid, mNotification);
 
-        ClientConfiguration configuration = new ClientConfiguration();
+        /*ClientConfiguration configuration = new ClientConfiguration();
         configuration.setMaxErrorRetry(3);
         configuration.setConnectionTimeout(501000);
         configuration.setSocketTimeout(501000);
@@ -274,7 +276,14 @@ public class ProfileUploadService extends IntentService implements ProgressReque
         credentials = new BasicAWSCredentials(AppConstants.KEY, AppConstants.SECRET);
         s3 = new AmazonS3Client(credentials, configuration);
         s3.setRegion(Region.getRegion(Regions.AP_SOUTHEAST_2));
-        transferUtility = new TransferUtility(s3, ProfileUploadService.this);
+        transferUtility = new TransferUtility(s3, ProfileUploadService.this);*/
+
+        TransferUtility transferUtility =
+                TransferUtility.builder()
+                        .context(getApplicationContext())
+                        .awsConfiguration(AWSMobileClient.getInstance().getConfiguration())
+                        .s3Client(new AmazonS3Client(AWSMobileClient.getInstance().getCredentialsProvider()))
+                        .build();
 
         if (!video.exists()) {
             // Toast.makeText(ProfileUploadService.this, "File Not Found!", Toast.LENGTH_SHORT).show();
