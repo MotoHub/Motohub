@@ -17,6 +17,7 @@ import android.widget.Toast;
 import com.amazonaws.ClientConfiguration;
 import com.amazonaws.Protocol;
 import com.amazonaws.auth.BasicAWSCredentials;
+import com.amazonaws.mobile.client.AWSMobileClient;
 import com.amazonaws.mobileconnectors.s3.transferutility.TransferListener;
 import com.amazonaws.mobileconnectors.s3.transferutility.TransferObserver;
 import com.amazonaws.mobileconnectors.s3.transferutility.TransferState;
@@ -45,9 +46,9 @@ import retrofit2.Response;
 public class UploadJobService extends JobService implements ProgressRequestBody.UploadCallbacks {
     private static final String TAG = "UploadJobService";
     private DatabaseHandler databaseHandler = new DatabaseHandler(this);
-    private AmazonS3Client s3;
+    /*private AmazonS3Client s3;
     private BasicAWSCredentials credentials;
-    private TransferUtility transferUtility;
+    private TransferUtility transferUtility;*/
     private TransferObserver observerVideo;
     private TransferObserver observerImage;
     private int count = 111;
@@ -68,6 +69,7 @@ public class UploadJobService extends JobService implements ProgressRequestBody.
 
     @Override
     public boolean onStartJob(JobParameters params) {
+        AWSMobileClient.getInstance().initialize(this).execute();
         new JobTask(this, databaseHandler).execute(params);
         return true;
     }
@@ -191,7 +193,7 @@ public class UploadJobService extends JobService implements ProgressRequestBody.
         }
         startForeground(notificationid, mNotification);
 
-        ClientConfiguration configuration = new ClientConfiguration();
+        /*ClientConfiguration configuration = new ClientConfiguration();
         configuration.setMaxErrorRetry(3);
         configuration.setConnectionTimeout(501000);
         configuration.setSocketTimeout(501000);
@@ -200,7 +202,14 @@ public class UploadJobService extends JobService implements ProgressRequestBody.
         credentials = new BasicAWSCredentials(AppConstants.KEY, AppConstants.SECRET);
         s3 = new AmazonS3Client(credentials, configuration);
         s3.setRegion(Region.getRegion(Regions.AP_SOUTHEAST_2));
-        transferUtility = new TransferUtility(s3, UploadJobService.this);
+        transferUtility = new TransferUtility(s3, UploadJobService.this);*/
+
+        TransferUtility transferUtility =
+                TransferUtility.builder()
+                        .context(getApplicationContext())
+                        .awsConfiguration(AWSMobileClient.getInstance().getConfiguration())
+                        .s3Client(new AmazonS3Client(AWSMobileClient.getInstance().getCredentialsProvider()))
+                        .build();
 
         observerVideo = transferUtility.upload(AppConstants.BUCKET_NAME, UrlUtils.FILE_UPLOAD_SPECTOCTORLIVE + videoFile.getName(), videoFile);
 

@@ -16,6 +16,7 @@ import android.widget.Toast;
 import com.amazonaws.ClientConfiguration;
 import com.amazonaws.Protocol;
 import com.amazonaws.auth.BasicAWSCredentials;
+import com.amazonaws.mobile.client.AWSMobileClient;
 import com.amazonaws.mobileconnectors.s3.transferutility.TransferListener;
 import com.amazonaws.mobileconnectors.s3.transferutility.TransferObserver;
 import com.amazonaws.mobileconnectors.s3.transferutility.TransferState;
@@ -56,9 +57,9 @@ import retrofit2.Response;
 public class SpectatorLiveOfflineUpload extends IntentService implements ProgressRequestBody.UploadCallbacks {
 
 
-    private AmazonS3Client s3;
+    /*private AmazonS3Client s3;
     private BasicAWSCredentials credentials;
-    private TransferUtility transferUtility;
+    private TransferUtility transferUtility;*/
     private TransferObserver observerVideo;
     private TransferObserver observerImage;
     private int count = 111;
@@ -100,6 +101,7 @@ public class SpectatorLiveOfflineUpload extends IntentService implements Progres
     @Override
     public void onCreate() {
         super.onCreate();
+        AWSMobileClient.getInstance().initialize(this).execute();
         if (!EventBus.getDefault().isRegistered(this))
             EventBus.getDefault().register(this);
     }
@@ -245,7 +247,7 @@ public class SpectatorLiveOfflineUpload extends IntentService implements Progres
         }
         startForeground(notificationid, mNotification);
 
-        ClientConfiguration configuration = new ClientConfiguration();
+        /*ClientConfiguration configuration = new ClientConfiguration();
         configuration.setMaxErrorRetry(3);
         configuration.setConnectionTimeout(501000);
         configuration.setSocketTimeout(501000);
@@ -254,7 +256,14 @@ public class SpectatorLiveOfflineUpload extends IntentService implements Progres
         credentials = new BasicAWSCredentials(AppConstants.KEY, AppConstants.SECRET);
         s3 = new AmazonS3Client(credentials, configuration);
         s3.setRegion(Region.getRegion(Regions.AP_SOUTHEAST_2));
-        transferUtility = new TransferUtility(s3, SpectatorLiveOfflineUpload.this);
+        transferUtility = new TransferUtility(s3, SpectatorLiveOfflineUpload.this);*/
+
+        TransferUtility transferUtility =
+                TransferUtility.builder()
+                        .context(getApplicationContext())
+                        .awsConfiguration(AWSMobileClient.getInstance().getConfiguration())
+                        .s3Client(new AmazonS3Client(AWSMobileClient.getInstance().getCredentialsProvider()))
+                        .build();
 
         if (!video.exists()) {
             // Toast.makeText(ProfileUploadService.this, "File Not Found!", Toast.LENGTH_SHORT).show();
