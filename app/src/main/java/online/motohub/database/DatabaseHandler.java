@@ -15,14 +15,14 @@ import online.motohub.model.VideoUploadModel;
 import online.motohub.util.AppConstants;
 
 public class DatabaseHandler extends SQLiteOpenHelper {
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 3;
     private static final String DATABASE_NAME = "contactsManager";
 
     private String LOCAL_USER_TABLE = "LOCAL_USER_TABLE";
     private String ID = "ID";
     private String LOGIN_TYPE = "LOGIN_TYPE";
     private String EMAIL = "EMAIL";
-    private String PASWWORD = "PASWWORD";
+    private String PASSWORD = "PASSWORD";
     private String USER_IMG_URL = "USER_IMG_URL";
     private String USER_NAME = "USER_NAME";
 
@@ -64,7 +64,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         String CREATE_LOCAL_USER_TABLE = "CREATE TABLE " + LOCAL_USER_TABLE + "(" + ID + " TEXT PRIMARY KEY,"
                 + LOGIN_TYPE + " TEXT,"
                 + EMAIL + " TEXT,"
-                + PASWWORD + " TEXT,"
+                + PASSWORD + " TEXT,"
                 + USER_IMG_URL + " TEXT,"
                 + USER_NAME + " TEXT"
                 + ")";
@@ -230,7 +230,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         values.put(ID, mProfileModel.getEmail());
         values.put(LOGIN_TYPE, mProfileModel.getLoginType());
         values.put(EMAIL, mProfileModel.getEmail());
-        values.put(PASWWORD, mProfileModel.getPassword());
+        values.put(PASSWORD, mProfileModel.getPassword());
         values.put(USER_IMG_URL, mProfileModel.getProfilePicture());
         values.put(USER_NAME, mProfileModel.getUserName());
         db.insert(LOCAL_USER_TABLE, null, values);
