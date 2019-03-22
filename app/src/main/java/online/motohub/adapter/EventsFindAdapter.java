@@ -143,9 +143,10 @@ public class EventsFindAdapter extends RecyclerView.Adapter<EventsFindAdapter.Ho
 
     private void setEventCategory(ArrayList<EventCategoryModel> mCategoryNameList) {
         if (mCategoryNameList != null && !mCategoryNameList.isEmpty()) {
-
             AppDialogFragment.newInstance(AppDialogFragment.EVENT_CATEGORY_DIALOG, null, mCategoryNameList)
                     .show(((BaseActivity) mContext).getSupportFragmentManager(), AppDialogFragment.TAG);
+        } else {
+            Toast.makeText(mContext, "There are no categorie", Toast.LENGTH_LONG).show();
         }
     }
 
@@ -358,6 +359,8 @@ public class EventsFindAdapter extends RecyclerView.Adapter<EventsFindAdapter.Ho
                         }
                         setEventCategory(mFinalCategoryList);
                     }
+                } else {
+                    Toast.makeText(mContext, "Your are already booked", Toast.LENGTH_SHORT).show();
                 }
                 break;
             case R.id.time_table_btn:
