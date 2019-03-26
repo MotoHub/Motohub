@@ -1536,7 +1536,34 @@ public class RetrofitClient {
                 });
 
     }
+    public void callGetProfilePost(final BaseActivity activity, String filter, final int queryType, int limit, int offset) {
+//        filter = filter + " AND (Post_on<=" + activity.getCurrentDate() + ")";
+        String mOrderBy = "CreatedAt DESC";
+        // DialogManager.showProgress(activity);
+        activity.sysOut("API-TYPE: " + "GET");
+        activity.sysOut("API-OPERATION: " + UrlUtils.BASE_URL + UrlUtils.POSTS + "?filter=" +
+                filter + "&related=" + APIConstants.POST_FEED_RELATION + "&order=" + mOrderBy + "&limit=" + limit + "&offset=" + offset);
+        RetrofitClient.getRetrofitInstance().getRetrofitApiInterface().callGetProfilePosts(filter, APIConstants.POST_FEED_RELATION, mOrderBy, limit, offset, true)
+                .enqueue(new Callback<PostsModel>() {
+                    @Override
+                    public void onResponse(Call<PostsModel> call, Response<PostsModel> response) {
+                        if (response.isSuccessful()) {
+                            //  DialogManager.hideProgress();
+                            Object mResponseObj = response.body();
+                            activity.retrofitOnResponse(mResponseObj, queryType);
+                        } else {
+                            activity.retrofitOnError(response.code(), response.message());
+                        }
+                    }
 
+                    @Override
+                    public void onFailure(Call<PostsModel> call, Throwable t) {
+                        //  DialogManager.hideProgress();
+                        activity.retrofitOnFailure();
+                    }
+                });
+
+    }
     public void callGetProfilePosts(final BaseActivity activity, String filter, final int queryType, int limit, int offset) {
         filter = filter + " AND (Post_on<=" + activity.getCurrentDate() + ")";
         String mOrderBy = "CreatedAt DESC";
