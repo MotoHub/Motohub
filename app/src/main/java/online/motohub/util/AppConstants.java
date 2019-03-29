@@ -37,6 +37,8 @@ public class AppConstants {
     public static final String NOTIFICATION_PROFILE_PICTURE = "ProfilePicture";
     public static final String NOTIFICATION_SENDER_NAME = "SenderName";
     public static final String NOTIFICATION_PROFILE_ID = "ProfileID";
+    //Nez Time Zone
+    public static final String NZ_TIME_ZONE = "Europe/London";
 
     public static final String POST_ID = "PostID";
     public static final String REPORT_STRING = "ReportString";
