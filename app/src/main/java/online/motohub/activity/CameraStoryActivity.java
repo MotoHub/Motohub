@@ -215,17 +215,17 @@ public class CameraStoryActivity extends BaseActivity implements View.OnClickLis
 
     private void onVideo(File video) {
         mCapturingVideo = false;
-        Intent intent = new Intent(CameraStoryActivity.this, VideoStoryPreviewActivity.class);
+        /*Intent intent = new Intent(CameraStoryActivity.this, VideoStoryPreviewActivity.class);
         intent.putExtra("file_uri", Uri.fromFile(video));
         Bundle mBunlde = getIntent().getExtras();
         if (mBunlde != null)
             intent.putExtra("bundle_data", mBunlde);
         startActivity(intent);
-        finish();
+        finish();*/
 
-        /*Bitmap bMapScaled = BitmapFactory.decodeResource(getResources(), R.drawable.motohub_logo);
+        Bitmap bMapScaled = BitmapFactory.decodeResource(getResources(), R.drawable.motohub_logo);
         bitmap = Bitmap.createScaledBitmap(bMapScaled, 150, 150, true);
-        startCodec(video);*/
+        startCodec(video);
     }
 
     @OnClick({R.id.captureVideo, R.id.capturePhoto, R.id.toggleCamera, R.id.stopVideo, R.id.toolbar_back_img_btn})
@@ -367,10 +367,10 @@ public class CameraStoryActivity extends BaseActivity implements View.OnClickLis
                     @Override
                     public void onProgress(double progress) {
                         Log.d(TAG, "onProgress = " + progress);
-                        /*runOnUiThread(() -> {
+                        runOnUiThread(() -> {
                             double percen =  progress * 100;
                             pDialog.setTitle("Please wait " + (int) percen + "%");
-                        });*/
+                        });
                     }
 
                     @Override
