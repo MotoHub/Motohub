@@ -1,9 +1,5 @@
 package online.motohub.fcm;
 
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.support.v4.app.NotificationCompat;
-
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
@@ -40,10 +36,11 @@ public class MyFireBaseMessagingService extends FirebaseMessagingService {
     public static final String GROUP_SENDER_PIC = "SenderProfilePicture";
     public static final String GROUP_SENDER_NAME = "SenderName";
 
-    private static NotificationManager mNotificationManager;
-    private static Notification.Builder mNotificationBuilder;
-    private static NotificationCompat.Builder mNotificationCompatBuilder;
-    private static Notification mNotification;
+    @Override
+    public void onNewToken(String s) {
+        super.onNewToken(s);
+        System.out.println("Token1: " + s);
+    }
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
