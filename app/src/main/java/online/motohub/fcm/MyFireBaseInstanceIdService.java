@@ -36,13 +36,11 @@ public class MyFireBaseInstanceIdService extends FirebaseInstanceIdService imple
 
 
     public void sendRegistrationToken(String refreshedToken, int type) {
-
-        Integer mUserId = PreferenceUtils.getInstance(MotoHub.getApplicationInstance()).getIntData(PreferenceUtils.USER_ID);
-
+        System.out.println("Token: "+refreshedToken);
+        int mUserId = PreferenceUtils.getInstance(MotoHub.getApplicationInstance()).getIntData(PreferenceUtils.USER_ID);
         if (mUserId == 0) {
             return;
         }
-
         PushTokenModel mPushTokenModel = new PushTokenModel();
 
         List<PushTokenResModel> mPushTokenResModelList = new ArrayList<>();

@@ -56,7 +56,6 @@ import online.motohub.activity.promoter.PromotersListActivity;
 import online.motohub.activity.track.TrackProfileActivity;
 import online.motohub.adapter.VideoLikesAdapter;
 import online.motohub.adapter.VideoSharesAdapter;
-import online.motohub.application.MotoHub;
 import online.motohub.fragment.dialog.AppDialogFragment;
 import online.motohub.fragment.ondemand.PromoterOrUserFragment;
 import online.motohub.interfaces.CommonReturnInterface;
@@ -109,7 +108,6 @@ public class PromoterOrUserAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             ((BaseActivity) mContext).showToast(mContext, mContext.getString(R.string.internet_err));
         }
     };
-    private int ProfileID;
     private Activity mActivity;
     private Dialog mCommentListPopup;
     private int mDeleteLikeID;
@@ -117,7 +115,6 @@ public class PromoterOrUserAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     private ProfileResModel mCurrentProfileResModel;
     private ViewHolderPosts mViewHolderPost;
     private int mAdapterPosition = 0;
-    int count_post_position = 0;
     CommonReturnInterface mSaveMyVideoCallback = new CommonReturnInterface() {
         @Override
         public void onSuccess(int type) {
@@ -151,7 +148,7 @@ public class PromoterOrUserAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         this.mContext = ctx;
         this.mActivity = (Activity) ctx;
         this.mCurrentProfileResModel = mMyProfileResModel;
-        this.ProfileID = ProfileID;
+        int profileID = ProfileID;
         this.promoterOrUserFragment = promoterOrUserFragment;
     }
 

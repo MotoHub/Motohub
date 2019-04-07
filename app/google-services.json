@@ -1,43 +1,39 @@
 {
   "project_info": {
-    "project_number": "531718337983",
-    "firebase_url": "https://motohub-5da9b.firebaseio.com",
-    "project_id": "motohub-5da9b",
-    "storage_bucket": "motohub-5da9b.appspot.com"
+    "project_number": "584474902949",
+    "firebase_url": "https://motohub-8b829.firebaseio.com",
+    "project_id": "motohub-8b829",
+    "storage_bucket": "motohub-8b829.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:531718337983:android:76b10ab52c560950",
+        "mobilesdk_app_id": "1:584474902949:android:76b10ab52c560950",
         "android_client_info": {
           "package_name": "online.motohub"
         }
       },
-      "oauth_client": [
-        {
-          "client_id": "531718337983-ilm9r78apclu22vjvdboife79qn6p40a.apps.googleusercontent.com",
-          "client_type": 3
-        },
-        {
-          "client_id": "531718337983-c7mqhvrm6s5aik1n7rb7v9d59ucn41ip.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
+      "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyAbeiv2xj0jQBC198RM8PFl65EYHBrNu_c"
+          "current_key": "AIzaSyA0_Ua3UU1_X96x9wRcyoFoalHkbOkRiAY"
         }
       ],
       "services": {
-        "analytics_service": {
-          "status": 1
-        },
         "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
-        },
-        "ads_service": {
-          "status": 2
+          "other_platform_oauth_client": [
+            {
+              "client_id": "584474902949-t4ul1s6d6jfq9g0r76v5e6kcj1oiadmp.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "584474902949-0q014sj1pukc0o8p03odf5tnpps7dahr.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.motohub.production"
+              }
+            }
+          ]
         }
       }
     }
