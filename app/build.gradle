@@ -25,6 +25,15 @@ android {
             abiFilters "armeabi", "armeabi-v7a", "x86", "mips"
         }
     }
+
+    signingConfigs {
+        config {
+            keyAlias 'motohub'
+            keyPassword 'motohub'
+            storeFile file('../MotoHUB.jks')
+            storePassword 'motohub'
+        }
+    }
     buildTypes {
         release {
             minifyEnabled false

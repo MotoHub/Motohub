@@ -20,6 +20,8 @@ public class NotificationModel1 {
     private JSONObject Details;
     @SerializedName("forceNotification")
     private boolean forceNotification;
+    @SerializedName("testNotification")
+    private boolean testNotification;
 
     public JSONObject getMainObj() {
         return mainObj;
@@ -30,6 +32,9 @@ public class NotificationModel1 {
     }
 
     public String getMsg() {
+        if (testNotification) {
+            return "TestNotification";
+        }
         try {
             Msg = URLDecoder.decode(mainObj.getString("Msg"), "UTF-8");
         } catch (JSONException e) {
@@ -64,5 +69,13 @@ public class NotificationModel1 {
 
     public void setForceNotification(boolean forceNotification) {
         this.forceNotification = forceNotification;
+    }
+
+    public boolean isTestNotification() {
+        return testNotification;
+    }
+
+    public void setTestNotification(boolean testNotification) {
+        this.testNotification = testNotification;
     }
 }

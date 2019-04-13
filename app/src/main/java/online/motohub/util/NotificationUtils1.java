@@ -38,20 +38,20 @@ import online.motohub.retrofit.APIConstants;
 public class NotificationUtils1 {
 
     private Ringtone notificationTone;
-    private NotificationManager mNotificationManager;
-    private NotificationCompat.Builder mNotificationCompatBuilder;
-    private Notification mNotification;
     private Context mContext;
-    private NotificationModel1 notificationModel;
 
     private int mNotificationID;
     private String mIntentAction;
 
     public NotificationUtils1(Context mContext, NotificationModel1 model) {
         this.mContext = mContext;
-        this.notificationModel = model;
         notificationTone = RingtoneManager.getRingtone(mContext, RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION));
-        notificationAction();
+        if (model.isTestNotification()) {
+            generateNotification(model);
+        } else {
+            notificationAction(model);
+        }
+
     }
 
     // Playing notification sound
@@ -78,7 +78,7 @@ public class NotificationUtils1 {
             notificationManager.cancelAll();
     }
 
-    private PendingIntent getPendingIntent() {
+    private PendingIntent getPendingIntent(NotificationModel1 model) {
         //TODO default action="online.motohub.activity.ViewProfileActivity";
         if (TextUtils.isEmpty(mIntentAction)) {
             mIntentAction = "online.motohub.activity.ViewProfileActivity";
@@ -86,21 +86,23 @@ public class NotificationUtils1 {
         Intent intent = new Intent(mContext, ViewProfileActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.putExtra(AppConstants.PROFILE_ID, mProfileID);
-//        intent.putExtra(NOTIFICATION_BUNDLE, new Gson().toJson(notificationModel));
-        intent.putExtra(MyFireBaseMessagingService.ENTRY_JSON_OBJ, notificationModel.getMainObj().toString());
+//        intent.putExtra(NOTIFICATION_BUNDLE, new Gson().toJson(mNotificationModel));
+        if (model.getMainObj() != null) {
+            intent.putExtra(MyFireBaseMessagingService.ENTRY_JSON_OBJ, model.getMainObj().toString());
+        }
         intent.putExtra(MyFireBaseMessagingService.IS_FROM_NOTIFICATION_TRAY, true);
         return PendingIntent.getActivity(mContext, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_ONE_SHOT);
     }
 
-    private void generateNotification() {
+    private void generateNotification(NotificationModel1 model) {
         //If needed generate random number for notificationID
-        mNotificationManager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
+        NotificationManager mNotificationManager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
         try {
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
                 mNotificationManager.createNotificationChannel(getNotificationChannel());
             }
-            mNotificationCompatBuilder = getNotificationCompatBuilder();
-            mNotification = mNotificationCompatBuilder.build();
+            NotificationCompat.Builder mNotificationCompatBuilder = getNotificationCompatBuilder(model);
+            Notification mNotification = mNotificationCompatBuilder.build();
             mNotification.flags |= Notification.FLAG_AUTO_CANCEL;
             mNotification.defaults |= Notification.DEFAULT_LIGHTS;
             mNotificationManager.notify(mNotificationID, mNotification);
@@ -110,7 +112,7 @@ public class NotificationUtils1 {
     }
 
 
-    private NotificationCompat.Builder getNotificationCompatBuilder() {
+    private NotificationCompat.Builder getNotificationCompatBuilder(NotificationModel1 model) {
         boolean allow_sound_status = PreferenceUtils.getInstance(mContext).getBooleanData(PreferenceUtils.ALLOW_NOTIFICATION_Sound);
         boolean allow_sound_vib = PreferenceUtils.getInstance(mContext).getBooleanData(PreferenceUtils.ALLOW_NOTIFICATION_VIB);
         Uri uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
@@ -119,8 +121,8 @@ public class NotificationUtils1 {
                 .setLargeIcon(BitmapFactory.decodeResource(mContext.getResources(), R.mipmap.app_icon))
                 .setSmallIcon(R.drawable.notification_tray_icon)
                 .setContentTitle(mContext.getString(R.string.app_name))
-                .setContentText(notificationModel.getMsg())
-                .setContentIntent(getPendingIntent())
+                .setContentText(model.getMsg())
+                .setContentIntent(getPendingIntent(model))
                 .setPriority(NotificationCompat.PRIORITY_MAX)
                 .setWhen(System.currentTimeMillis())
                 .setColor(ContextCompat.getColor(mContext, R.color.colorOrange));
@@ -132,7 +134,7 @@ public class NotificationUtils1 {
         }
         if (mBitmap != null) {
             mNotificationBuilder.setStyle(new NotificationCompat.BigPictureStyle()
-                    .bigPicture(mBitmap).setSummaryText(notificationModel.getMsg()));
+                    .bigPicture(mBitmap).setSummaryText(model.getMsg()));
         }
         return mNotificationBuilder;
     }
@@ -181,165 +183,162 @@ public class NotificationUtils1 {
 
     private int mProfileID = 0;
 
-    private void notificationAction() {
+    private void notificationAction(NotificationModel1 model) {
         try {
             boolean allow_notification_status = PreferenceUtils.getInstance(mContext).getBooleanData(PreferenceUtils.ALLOW_NOTIFICATION);
             if (!allow_notification_status) {
                 return;
             }
-//Have to remove commented lines
-            String mContentTitle;
-            JSONObject mDetailsObj = notificationModel.getDetails();
-            //TODO this is default navigation screen if you need to redirect specific screen mention the package name in the specific type
+            JSONObject mDetailsObj = model.getDetails();
             mIntentAction = "online.motohub.activity.ViewProfileActivity";
-            switch (notificationModel.getType()) {
+            switch (model.getType()) {
                 case "LIVE_STREAM":
                     mNotificationID = Integer.parseInt(mDetailsObj.get(APIConstants.ID).toString());
-                    mProfileID = notificationModel.getDetails().getInt(APIConstants.StreamProfileID);
+                    mProfileID = model.getDetails().getInt(APIConstants.StreamProfileID);
                     //composeStreamNotification(mEntryObj, t his, mNotificationPostID, ViewLiveVideoViewScreen2.class);
-                    generateNotification();
+                    generateNotification(model);
                     break;
                 case "LIVE_REQUEST":
                     mNotificationID = Integer.parseInt(mDetailsObj.get(APIConstants.ID).toString());
-                    mProfileID = notificationModel.getDetails().getInt(APIConstants.StreamProfileID);
+                    mProfileID = model.getDetails().getInt(APIConstants.StreamProfileID);
                     //composeStreamNotification(mEntryObj, this, mNotificationPostID, ViewRequestUsersActivity.class);
-                    generateNotification();
+                    generateNotification(model);
                     break;
                 case "LIVE_ACCEPT":
                     mNotificationID = Integer.parseInt(mDetailsObj.get(APIConstants.ID).toString());
-                    mProfileID = notificationModel.getDetails().getInt(APIConstants.StreamProfileID);
+                    mProfileID = model.getDetails().getInt(APIConstants.StreamProfileID);
                     //composeStreamNotification(mEntryObj, this, mNotificationPostID, ViewStreamUsersActivity.class);
-                    generateNotification();
+                    generateNotification(model);
                     break;
                 case "FOLLOW":
                     mNotificationID = Integer.parseInt(mDetailsObj.get(PostsModel.PROFILE_ID).toString());
                     //composeNotification(mEntryObj, this, mNotificationPostID, OthersMotoFileActivity.class);
-                    generateNotification();
+                    generateNotification(model);
                     break;
                 case "FOLLOWER_POST":
                 case "TAGGED":
                     mNotificationID = Integer.parseInt(mDetailsObj.get("ID").toString());
                     //composeNotification(mEntryObj, this, mNotificationPostID, PostViewActivity.class);
-                    generateNotification();
+                    generateNotification(model);
                     break;
                 case "COMMENT_LIKE":
                     mNotificationID = Integer.parseInt(mDetailsObj.get("CommentID").toString());
                     //composeNotification(mEntryObj, this, mNotificationPostID, PostCommentLikeViewActivity.class);
-                    generateNotification();
+                    generateNotification(model);
                     break;
                 case "COMMENT_REPLY_LIKE":
                     mNotificationID = Integer.parseInt(mDetailsObj.get("ReplyID").toString());
                     //composeNotification(mEntryObj, this, mNotificationPostID, CommentReplyActivity.class);
-                    generateNotification();
+                    generateNotification(model);
                     break;
                 case "TAGGED_COMMENT_REPLY":
                 case "COMMENT_REPLY":
                     mNotificationID = Integer.parseInt(mDetailsObj.get("CommentID").toString());
                     //composeNotification(mEntryObj, this, mNotificationPostID, CommentReplyActivity.class);
-                    generateNotification();
+                    generateNotification(model);
                     break;
                 case "TAGGED_POST_COMMENTS":
                 case "POST_COMMENTS":
                 case "POST_LIKES":
                     mNotificationID = Integer.parseInt(mDetailsObj.get("PostID").toString());
                     //composeNotification(mEntryObj, this, mNotificationPostID, PostViewActivity.class);
-                    generateNotification();
+                    generateNotification(model);
                     break;
                 case "VIDEO_SHARE":
                     mNotificationID = Integer.parseInt(mDetailsObj.get("ID").toString());
                     //composeNotification(mEntryObj, this, mNotificationPostID, PostViewActivity.class);
-                    generateNotification();
+                    generateNotification(model);
                     break;
                 case "POST":
                 case "POST_SHARE":
                     mNotificationID = Integer.parseInt(mDetailsObj.get("ID").toString());
                     //composeNotification(mEntryObj, this, mNotificationPostID, PostViewActivity.class);
-                    generateNotification();
+                    generateNotification(model);
                     break;
                 case "VEHICLE_LIKE":
                     mNotificationID = Integer.parseInt(mDetailsObj.get(VehicleInfoLikeModel.LIKED_PROFILE_ID).toString());
                     //composeNotification(mEntryObj, this, mNotificationPostID, UpdateProfileActivity.class);
-                    generateNotification();
+                    generateNotification(model);
                     break;
                 case "EVENT_CREATION":
                     int mEventCreationID = Integer.parseInt((mDetailsObj.get("PromoterID").toString()) + (mDetailsObj.get("EventID").toString()));
                     //composeNotification(mEntryObj, this, mEventCreationID, NotificationEventCreatedActivity.class);
-                    generateNotification();
+                    generateNotification(model);
                     break;
                 case "VIDEO_COMMENT_LIKE":
                     mNotificationID = mDetailsObj.getInt("VideoCommentID");
                     //composeNotification(mEntryObj, this, mNotificationPostID, VideoCommentsActivity.class);
-                    generateNotification();
+                    generateNotification(model);
                     break;
                 case "TAGGED_VIDEO_COMMENT_REPLY":
                 case "VIDEO_COMMENT_REPLY":
                     mNotificationID = mDetailsObj.getInt("CommentID");
                     //composeNotification(mEntryObj, this, mNotificationPostID, VideoCommentReplyActivity.class);
-                    generateNotification();
+                    generateNotification(model);
                     break;
                 case "VIDEO_COMMENT_REPLY_LIKE":
                     mNotificationID = mDetailsObj.getInt("VideoCommentID");
                     //composeNotification(mEntryObj, this, mNotificationPostID, VideoCommentReplyActivity.class);
-                    generateNotification();
+                    generateNotification(model);
                     break;
                 case "TAGGED_POST_VIDEO_COMMENTS":
                 case "VIDEO_COMMENTS":
                 case "VIDEO_LIKES":
                     mNotificationID = mDetailsObj.getInt("VideoID");
                     //composeNotification(mEntryObj, this, mNotificationPostID, PromoterVideoGalleryActivity.class);
-                    generateNotification();
+                    generateNotification(model);
                     break;
 
                 case "EVENT_CHAT":
-                    if (!notificationModel.isForceNotification()&&MotoHub.getApplicationInstance().isEventGrpChatOnline()) {
+                    if (!model.isForceNotification() && MotoHub.getApplicationInstance().isEventGrpChatOnline()) {
                         Intent mIntent = new Intent(MyFireBaseMessagingService.PUSH_MSG_RECEIVER_ACTION);
-                        mIntent.putExtra(MyFireBaseMessagingService.ENTRY_JSON_OBJ, notificationModel.getMainObj().toString());
+                        mIntent.putExtra(MyFireBaseMessagingService.ENTRY_JSON_OBJ, model.getMainObj().toString());
                         mIntent.putExtra((EventsModel.EVENT_ID), (mDetailsObj.get("EventID").toString()));
                         mIntent.putExtra(AppConstants.IS_FROM_LIVE_EVENT_CHAT, false);
                         mContext.sendBroadcast(mIntent);
                     } else {
                         mNotificationID = Integer.parseInt(mDetailsObj.get("EventID").toString());
-                        generateNotification();
+                        generateNotification(model);
                     }
                     break;
                 case "EVENT_LIVE_CHAT":
-                    if (!notificationModel.isForceNotification()&&MotoHub.getApplicationInstance().isEventLiveGrpChatOnline()) {
+                    if (!model.isForceNotification() && MotoHub.getApplicationInstance().isEventLiveGrpChatOnline()) {
                         Intent mIntent = new Intent(MyFireBaseMessagingService.PUSH_MSG_RECEIVER_ACTION);
-                        mIntent.putExtra(MyFireBaseMessagingService.ENTRY_JSON_OBJ, notificationModel.getMainObj().toString());
+                        mIntent.putExtra(MyFireBaseMessagingService.ENTRY_JSON_OBJ, model.getMainObj().toString());
                         mIntent.putExtra((EventsModel.EVENT_ID), (mDetailsObj.get("EventID").toString()));
                         mIntent.putExtra(AppConstants.IS_FROM_LIVE_EVENT_CHAT, true);
                         mContext.sendBroadcast(mIntent);
                     } else {
                         mNotificationID = Integer.parseInt(mDetailsObj.get("EventID").toString());
-                        generateNotification();
+                        generateNotification(model);
                     }
 
                     break;
                 case "GROUP_CHAT_MSG":
-                    if (!notificationModel.isForceNotification()&&MotoHub.getApplicationInstance().isGrpChatOnline()) {
+                    if (!model.isForceNotification() && MotoHub.getApplicationInstance().isGrpChatOnline()) {
                         Intent mIntent = new Intent(MyFireBaseMessagingService.PUSH_MSG_RECEIVER_ACTION);
-                        mIntent.putExtra(MyFireBaseMessagingService.ENTRY_JSON_OBJ, notificationModel.getMainObj().toString());
+                        mIntent.putExtra(MyFireBaseMessagingService.ENTRY_JSON_OBJ, model.getMainObj().toString());
                         mIntent.putExtra((GroupChatRoomModel.GRP_CHAT_ROOM_ID), (mDetailsObj.get("GroupChatRoomID").toString()));
                         mIntent.putExtra(AppConstants.IS_FROM_GROUP_CHAT, true);
                         mContext.sendBroadcast(mIntent);
                     } else {
                         mNotificationID = Integer.parseInt(mDetailsObj.get("GroupChatRoomID").toString());
-                        generateNotification();
+                        generateNotification(model);
                     }
                     break;
                 case "SINGLE_CHAT":
-                    if (!notificationModel.isForceNotification()&&MotoHub.getApplicationInstance().isSingleChatOnline()) {
+                    if (!model.isForceNotification() && MotoHub.getApplicationInstance().isSingleChatOnline()) {
                         Intent mIntent = new Intent(MyFireBaseMessagingService.PUSH_MSG_RECEIVER_ACTION);
-                        mIntent.putExtra(MyFireBaseMessagingService.ENTRY_JSON_OBJ, notificationModel.getMainObj().toString());
+                        mIntent.putExtra(MyFireBaseMessagingService.ENTRY_JSON_OBJ, model.getMainObj().toString());
                         mContext.sendBroadcast(mIntent);
                     } else {
                         mNotificationID = Integer.parseInt(mDetailsObj.get("FromProfileID").toString());
-                        generateNotification();
+                        generateNotification(model);
                     }
                     break;
                 default:
                     mNotificationID = 1000;
-                    generateNotification();
+                    generateNotification(model);
                     break;
             }
         } catch (JSONException e) {
@@ -347,8 +346,8 @@ public class NotificationUtils1 {
         }
     }
 
-    private void setSound() {
-        switch (notificationModel.getType()) {
+    private void setSound(NotificationModel1 model) {
+        switch (model.getType()) {
             case "POST":
             case "FOLLOWER_POST":
             case "POST_SHARE":

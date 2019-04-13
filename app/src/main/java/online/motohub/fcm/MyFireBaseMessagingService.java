@@ -45,16 +45,19 @@ public class MyFireBaseMessagingService extends FirebaseMessagingService {
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
         if (remoteMessage.getData().size() > 0) {
+            NotificationModel1 model1 = new NotificationModel1();
             try {
                 JSONObject mJsonObject = new JSONObject(remoteMessage.getData());
                 if (mJsonObject.optString("title") != null && mJsonObject.optString("title").equals("Notification")) {
                     JSONObject mEntryObj = new JSONObject((String) mJsonObject.opt("message"));
-                    NotificationModel1 model1 = new NotificationModel1();
                     model1.setMainObj(mEntryObj);
+                    new NotificationUtils1(this, model1);
+                } else {
+                    model1.setTestNotification(true);
                     new NotificationUtils1(this, model1);
                 }
             } catch (Exception e) {
-
+                e.printStackTrace();
             }
         }
     }
