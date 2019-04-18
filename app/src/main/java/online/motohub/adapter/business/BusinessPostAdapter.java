@@ -58,7 +58,7 @@ public class BusinessPostAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     private static final int VIEW_TYPE_LOADING = 0;
     private static final int VIEW_TYPE_POSTS = 1;
-    ArrayList<NotificationBlockedUsersModel> notifications_blocked_users = new ArrayList<>();
+    private ArrayList<NotificationBlockedUsersModel> notifications_blocked_users = new ArrayList<>();
     private ArrayList<PostsResModel> mPostsList;
     private Context mContext;
     private Dialog mCommentListPopup;
@@ -351,7 +351,8 @@ public class BusinessPostAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                     @Override
                     public void onClick(View view) {
                         mTempPosition = position;
-                        ((BaseActivity) mContext).movePostCommentScreen(mContext, mPostsList.get(mTempPosition).getID(), mCurrentProfileResModel);
+                        if (mCurrentProfileResModel != null)
+                            ((BaseActivity) mContext).movePostCommentScreen(mContext, mPostsList.get(mTempPosition).getID(), mCurrentProfileResModel);
                     }
                 });
 
@@ -359,7 +360,8 @@ public class BusinessPostAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                     @Override
                     public void onClick(View view) {
                         mTempPosition = position;
-                        ((BaseActivity) mContext).movePostCommentScreen(mContext, mPostsList.get(mTempPosition).getID(), mCurrentProfileResModel);
+                        if (mCurrentProfileResModel != null)
+                            ((BaseActivity) mContext).movePostCommentScreen(mContext, mPostsList.get(mTempPosition).getID(), mCurrentProfileResModel);
                     }
                 });
 
@@ -389,7 +391,8 @@ public class BusinessPostAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                             mShareModel = new ArrayList<>();
                         }
                         showLikeListPopup(mContext.getString(R.string.shares));
-                        setFeedShareAdapter(mShareModel);
+                        if (mCurrentProfileResModel != null)
+                            setFeedShareAdapter(mShareModel);
 
                     }
                 });

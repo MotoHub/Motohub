@@ -2113,6 +2113,7 @@ public class BaseActivity extends AppCompatActivity {
     // Converts the number to K, M suffix
     // Ex: 5500 will be displayed as 5.5k
 
+    @SuppressLint("DefaultLocale")
     public static String convertToSuffix(long count) {
         if (count < 1000) return "" + count;
         int exp = (int) (Math.log(count) / Math.log(1000));

@@ -23,6 +23,8 @@ import android.widget.RelativeLayout;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.gson.JsonObject;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -91,6 +93,7 @@ public class LoginActivity extends BaseActivity {
     private String mLoginType = "0";
 
     private DatabaseHandler mDatabaseHandler;
+    private ProfileResModel localDBModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -110,6 +113,7 @@ public class LoginActivity extends BaseActivity {
 
     private void initView() {
         setupUI(mCoordinatorLayout);
+        EventBus.getDefault().removeAllStickyEvents();
         mDatabaseHandler = new DatabaseHandler(this);
         LinearLayoutManager manager = new LinearLayoutManager(this);
         manager.setOrientation(LinearLayoutManager.HORIZONTAL);
@@ -158,21 +162,21 @@ public class LoginActivity extends BaseActivity {
         mRecentList.addAll(mDatabaseHandler.getLocalUserList());
         if (mRecentList.size() > 0) {
             mRecentUsersLay.setVisibility(View.VISIBLE);
-            RecentUsersAdapter mAdapter = new RecentUsersAdapter(this, mRecentList,mCommonReturnInterface);
+            RecentUsersAdapter mAdapter = new RecentUsersAdapter(this, mRecentList, mCommonReturnInterface);
             mRecentUsersList.setAdapter(mAdapter);
         }
 
     }
 
-    CommonReturnInterface mCommonReturnInterface=new CommonReturnInterface() {
+    CommonReturnInterface mCommonReturnInterface = new CommonReturnInterface() {
         @Override
         public void onSuccess(int pos) {
 
-            if(mRecentList.get(pos).getLoginType().equals("1")){
+            if (mRecentList.get(pos).getLoginType().equals("1")) {
                 callFbLogin();
-            }else{
-                mEmail=mRecentList.get(pos).getEmail();
-                mPwd=mRecentList.get(pos).getPassword();
+            } else {
+                mEmail = mRecentList.get(pos).getEmail();
+                mPwd = mRecentList.get(pos).getPassword();
                 callEmailLogin();
             }
         }
@@ -326,7 +330,7 @@ public class LoginActivity extends BaseActivity {
 
     }
 
-    private ProfileResModel localDBModel;
+
 
     private void saveUserDataLocally(LoginModel loginModel) {
         localDBModel = new ProfileResModel();

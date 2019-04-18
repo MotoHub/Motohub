@@ -356,7 +356,7 @@ public class BusinessWritePostActivity extends BaseActivity {
                 postText = "";
             } else {
                 postText = mWritePostEt.getText().toString();
-                mPostText = URLEncoder.encode(postText, "UTF-8");
+                //mPostText = URLEncoder.encode(postText, "UTF-8");
             }
             DatabaseHandler databaseHandler = new DatabaseHandler(this);
             int count = databaseHandler.getPendingCount();
@@ -366,7 +366,7 @@ public class BusinessWritePostActivity extends BaseActivity {
             Intent service_intent = new Intent(this, UploadFileService.class);
             service_intent.putExtra("videofile", mVideoPathUri);
             service_intent.putExtra("imagefile", String.valueOf(imageFile));
-            service_intent.putExtra("posttext", mPostText);
+            service_intent.putExtra("posttext", postText);
             service_intent.putExtra("profileid", Integer.parseInt(getUserId()));
             service_intent.putExtra("dest_file", destFilePath);
             service_intent.putExtra("usertype", usertype);
