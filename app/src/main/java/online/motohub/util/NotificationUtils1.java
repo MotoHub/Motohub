@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.AudioAttributes;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
@@ -111,11 +112,13 @@ public class NotificationUtils1 {
         }
     }
 
-
+private Uri getNotificationSound(){
+    return Uri.parse("android.resource://" + mContext.getPackageName() + "/raw/notification_sound");
+}
     private NotificationCompat.Builder getNotificationCompatBuilder(NotificationModel1 model) {
         boolean allow_sound_status = PreferenceUtils.getInstance(mContext).getBooleanData(PreferenceUtils.ALLOW_NOTIFICATION_Sound);
         boolean allow_sound_vib = PreferenceUtils.getInstance(mContext).getBooleanData(PreferenceUtils.ALLOW_NOTIFICATION_VIB);
-        Uri uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+//        Uri uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         Bitmap mBitmap = getBitmapFromURL("");
         NotificationCompat.Builder mNotificationBuilder = new NotificationCompat.Builder(mContext, String.valueOf(mNotificationID))
                 .setLargeIcon(BitmapFactory.decodeResource(mContext.getResources(), R.mipmap.app_icon))
@@ -126,11 +129,13 @@ public class NotificationUtils1 {
                 .setPriority(NotificationCompat.PRIORITY_MAX)
                 .setWhen(System.currentTimeMillis())
                 .setColor(ContextCompat.getColor(mContext, R.color.colorOrange));
-        if (allow_sound_status) {
-            mNotificationBuilder.setSound(uri);
-        }
-        if (allow_sound_vib) {
-            mNotificationBuilder.setVibrate(new long[]{1000, 1000});
+        if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.O) {
+            if (allow_sound_status) {
+                mNotificationBuilder.setSound(getNotificationSound());
+            }
+            if (allow_sound_vib) {
+                mNotificationBuilder.setVibrate(new long[]{1000, 1000});
+            }
         }
         if (mBitmap != null) {
             mNotificationBuilder.setStyle(new NotificationCompat.BigPictureStyle()
@@ -146,6 +151,9 @@ public class NotificationUtils1 {
      * @return NotificationChannel
      */
     private NotificationChannel getNotificationChannel() {
+        boolean allow_sound_status = PreferenceUtils.getInstance(mContext).getBooleanData(PreferenceUtils.ALLOW_NOTIFICATION_Sound);
+        boolean allow_sound_vib = PreferenceUtils.getInstance(mContext).getBooleanData(PreferenceUtils.ALLOW_NOTIFICATION_VIB);
+
         CharSequence name = mContext.getString(R.string.notification_channel_id);
         NotificationChannel mNotificationChannel = null;
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
@@ -154,7 +162,18 @@ public class NotificationUtils1 {
             // Sets whether notifications posted to this channel sahould display notification lights
             mNotificationChannel.enableLights(true);
             // Sets whether notification posted to this channel should vibrate.
-            mNotificationChannel.enableVibration(true);
+
+            if (allow_sound_status) {
+                AudioAttributes att = new AudioAttributes.Builder()
+                        .setUsage(AudioAttributes.USAGE_NOTIFICATION)
+                        .setContentType(AudioAttributes.CONTENT_TYPE_SPEECH)
+                        .build();
+                mNotificationChannel.setSound(getNotificationSound(), att);
+            }
+            if (allow_sound_vib) {
+                mNotificationChannel.setVibrationPattern(new long[]{0, 1000, 500, 1000});
+                mNotificationChannel.enableVibration(true);
+            }
             // Sets the notification light color for notifications posted to this channel
 //            mNotificationChannel.setLightColor(Color.GREEN);
             // Sets whether notifications posted to this channel appear on the lockscreen or not
