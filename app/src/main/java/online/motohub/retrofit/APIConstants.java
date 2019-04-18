@@ -129,7 +129,8 @@ public class APIConstants {
             + "," + EventsModel.EVENT_REGISTRATION_ANSWER_BY_EVENT_ID
             + "," + EventsModel.PROMOTER_BY_USER_ID
             + "," + EventsModel.LIVESTREAM_BY_EVENTID
-            + "," + EventsModel.LIVESTREAMPAYMENT_BY_EVENTID;
+            + "," + EventsModel.LIVESTREAMPAYMENT_BY_EVENTID
+            + "," + EventsModel.EVENT_AD_BY_EVENTID;
 
 
     public static final String mVideoCommentRelated = VideoCommentsModel.COMMENT_LIKES_BY_COMMENT_ID + " , " +
