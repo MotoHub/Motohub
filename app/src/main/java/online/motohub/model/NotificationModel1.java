@@ -46,6 +46,9 @@ public class NotificationModel1 {
     }
 
     public String getType() {
+        if (testNotification) {
+            return "TestNotification";
+        }
         try {
             Type = mainObj.getString("Type");
         } catch (JSONException e) {

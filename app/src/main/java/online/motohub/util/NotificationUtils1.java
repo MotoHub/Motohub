@@ -100,7 +100,7 @@ public class NotificationUtils1 {
         NotificationManager mNotificationManager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
         try {
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-                mNotificationManager.createNotificationChannel(getNotificationChannel());
+                mNotificationManager.createNotificationChannel(getNotificationChannel(model));
             }
             NotificationCompat.Builder mNotificationCompatBuilder = getNotificationCompatBuilder(model);
             Notification mNotification = mNotificationCompatBuilder.build();
@@ -112,9 +112,6 @@ public class NotificationUtils1 {
         }
     }
 
-private Uri getNotificationSound(){
-    return Uri.parse("android.resource://" + mContext.getPackageName() + "/raw/notification_sound");
-}
     private NotificationCompat.Builder getNotificationCompatBuilder(NotificationModel1 model) {
         boolean allow_sound_status = PreferenceUtils.getInstance(mContext).getBooleanData(PreferenceUtils.ALLOW_NOTIFICATION_Sound);
         boolean allow_sound_vib = PreferenceUtils.getInstance(mContext).getBooleanData(PreferenceUtils.ALLOW_NOTIFICATION_VIB);
@@ -131,7 +128,7 @@ private Uri getNotificationSound(){
                 .setColor(ContextCompat.getColor(mContext, R.color.colorOrange));
         if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.O) {
             if (allow_sound_status) {
-                mNotificationBuilder.setSound(getNotificationSound());
+                mNotificationBuilder.setSound(getNotificationSound(model));
             }
             if (allow_sound_vib) {
                 mNotificationBuilder.setVibrate(new long[]{1000, 1000});
@@ -149,8 +146,9 @@ private Uri getNotificationSound(){
      * We must set the Channel ID while creating this NotificationChannel
      *
      * @return NotificationChannel
+     * @param model
      */
-    private NotificationChannel getNotificationChannel() {
+    private NotificationChannel getNotificationChannel(NotificationModel1 model) {
         boolean allow_sound_status = PreferenceUtils.getInstance(mContext).getBooleanData(PreferenceUtils.ALLOW_NOTIFICATION_Sound);
         boolean allow_sound_vib = PreferenceUtils.getInstance(mContext).getBooleanData(PreferenceUtils.ALLOW_NOTIFICATION_VIB);
 
@@ -168,7 +166,7 @@ private Uri getNotificationSound(){
                         .setUsage(AudioAttributes.USAGE_NOTIFICATION)
                         .setContentType(AudioAttributes.CONTENT_TYPE_SPEECH)
                         .build();
-                mNotificationChannel.setSound(getNotificationSound(), att);
+                mNotificationChannel.setSound(getNotificationSound(model), att);
             }
             if (allow_sound_vib) {
                 mNotificationChannel.setVibrationPattern(new long[]{0, 1000, 500, 1000});
@@ -365,13 +363,12 @@ private Uri getNotificationSound(){
         }
     }
 
-    private void setSound(NotificationModel1 model) {
+    private Uri getNotificationSound(NotificationModel1 model) {
         switch (model.getType()) {
             case "POST":
             case "FOLLOWER_POST":
+                return Uri.parse("android.resource://" + mContext.getPackageName() + "/raw/notification_sound");
             case "POST_SHARE":
-                //TODO don't want to set sound for notifications
-                break;
             case "LIVE_STREAM":
             case "LIVE_REQUEST":
             case "LIVE_ACCEPT":
@@ -399,8 +396,8 @@ private Uri getNotificationSound(){
             case "GROUP_CHAT_MSG":
             case "SINGLE_CHAT":
             default:
-                playNotificationSound();
-                break;
+                return Uri.parse("android.resource://" + mContext.getPackageName() + "/raw/notification_sound");
+//                return RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         }
     }
 
