@@ -240,6 +240,7 @@
 
     <!--Events Strings-->
     <string name="event">Event/LiveStreaming</string>
+    <string name="upcoming_events">Upcoming Events</string>
     <string name="find_event">Find an Event</string>
     <string name="event_results">View Event Results</string>
     <string name="who_is_going">Who\'s Going</string>
@@ -530,6 +531,7 @@
     <string name="empty_friends_live_streams">No Friend\'s Stream\'s are found!!!.</string>
     <string name="live_stream">Live Stream</string>
     <string name="on_demand">On Demand</string>
+    <string name="events_on_demand">Event On Demand</string>
     <!--TODO remove this-->
     <string name="username">Username</string>
     <string name="under_dev">Under Development</string>

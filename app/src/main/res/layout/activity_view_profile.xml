@@ -701,7 +701,7 @@
                         style="@style/LayoutMatchWrap"
                         android:layout_below="@+id/live_img_btn"
                         android:gravity="center"
-                        android:text="@string/on_demand"
+                        android:text="@string/events_on_demand"
                         android:textColor="@android:color/black"
                         android:textSize="@dimen/text12" />
 
@@ -730,7 +730,7 @@
                         style="@style/LayoutMatchWrap"
                         android:layout_below="@+id/events_img_btn"
                         android:gravity="center"
-                        android:text="@string/event"
+                        android:text="@string/upcoming_events"
                         android:textColor="@android:color/black"
                         android:textSize="@dimen/text12" />
 
