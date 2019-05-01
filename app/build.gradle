@@ -16,8 +16,8 @@ android {
         applicationId "online.motohub"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 82
-        versionName "1.21"
+        versionCode 83
+        versionName "1.22"
         multiDexEnabled true
         vectorDrawables.useSupportLibrary = true
         ndk {
