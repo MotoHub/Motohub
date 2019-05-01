@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
+import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
@@ -18,6 +19,16 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.load.model.GlideUrl;
+import com.bumptech.glide.load.model.LazyHeaders;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.target.Target;
+import com.bumptech.glide.request.transition.Transition;
 import com.daasuu.gpuv.composer.FillMode;
 import com.daasuu.gpuv.composer.GPUMp4Composer;
 import com.otaliastudios.cameraview.CameraListener;
@@ -26,6 +37,7 @@ import com.otaliastudios.cameraview.CameraOptions;
 import com.otaliastudios.cameraview.CameraView;
 import com.otaliastudios.cameraview.SessionType;
 import com.otaliastudios.cameraview.Size;
+import com.otaliastudios.cameraview.VideoCodec;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -33,6 +45,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -43,6 +56,7 @@ import online.motohub.model.EventsModel;
 import online.motohub.model.EventsResModel;
 import online.motohub.util.CustomWatermarkFilter;
 import online.motohub.util.DialogManager;
+import online.motohub.util.UrlUtils;
 import online.motohub.util.story.ControlView;
 
 public class CameraStoryActivity extends BaseActivity implements View.OnClickListener {
@@ -223,9 +237,37 @@ public class CameraStoryActivity extends BaseActivity implements View.OnClickLis
         startActivity(intent);
         finish();*/
 
-        Bitmap bMapScaled = BitmapFactory.decodeResource(getResources(), R.drawable.motohub_logo);
-        bitmap = Bitmap.createScaledBitmap(bMapScaled, 150, 150, true);
-        startCodec(video);
+        EventsResModel.EventadByEventID eventadByEventID = mEventResModel.getEventadByEventID().get(0);
+
+        GlideUrl glideUrl = new GlideUrl(UrlUtils.FILE_URL + eventadByEventID.getEventAd(), new LazyHeaders.Builder()
+                .addHeader("X-DreamFactory-Api-Key", getString(R.string.dream_factory_api_key))
+                .build());
+
+
+        Glide.with(getApplicationContext())
+                .asBitmap().load(glideUrl)
+                .apply(new RequestOptions().override(100, 100))
+                .listener(new RequestListener<Bitmap>() {
+                              @Override
+                              public boolean onLoadFailed(@Nullable GlideException e, Object o, Target<Bitmap> target, boolean b) {
+                                  Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_SHORT).show();
+                                  return false;
+                              }
+
+                              @Override
+                              public boolean onResourceReady(Bitmap bitmap1, Object o, Target<Bitmap> target, DataSource dataSource, boolean b) {
+                                  //zoomImage.setImage(ImageSource.bitmap(bitmap));
+                                  //bitmap = Bitmap.createScaledBitmap(bitmap1, 120, 120, true);
+                                  bitmap = bitmap1;
+                                  startCodec(video);
+                                  return false;
+                              }
+                          }
+                ).submit();
+
+
+        //Bitmap bMapScaled = BitmapFactory.decodeResource(getResources(), R.drawable.motohub_logo);
+
     }
 
     @OnClick({R.id.captureVideo, R.id.capturePhoto, R.id.toggleCamera, R.id.stopVideo, R.id.toolbar_back_img_btn})
@@ -366,20 +408,18 @@ public class CameraStoryActivity extends BaseActivity implements View.OnClickLis
                 .listener(new GPUMp4Composer.Listener() {
                     @Override
                     public void onProgress(double progress) {
-                        Log.d(TAG, "onProgress = " + progress);
                         runOnUiThread(() -> {
-                            double percen =  progress * 100;
-                            pDialog.setTitle("Please wait " + (int) percen + "%");
+                            double percen = progress * 100;
+                            pDialog.setTitle("Please wait... " + (int) percen + "%");
                         });
                     }
 
                     @Override
                     public void onCompleted() {
-                        Log.d(TAG, "onCompleted()");
                         hideDialog();
                         //exportMp4ToGallery(getApplicationContext(), videoPath);
                         runOnUiThread(() -> {
-                            Toast.makeText(CameraStoryActivity.this, "codec complete path =" + videoPath, Toast.LENGTH_SHORT).show();
+                            //Toast.makeText(CameraStoryActivity.this, "codec complete path =" + videoPath, Toast.LENGTH_SHORT).show();
                             Intent intent = new Intent(CameraStoryActivity.this, VideoStoryPreviewActivity.class);
                             intent.putExtra("file_uri", Uri.parse(videoPath));
                             Bundle mBunlde = getIntent().getExtras();
@@ -392,7 +432,6 @@ public class CameraStoryActivity extends BaseActivity implements View.OnClickLis
 
                     @Override
                     public void onCanceled() {
-                        Log.d(TAG, "Cancelled()");
                         runOnUiThread(() -> {
                             hideDialog();
                         });
@@ -400,7 +439,6 @@ public class CameraStoryActivity extends BaseActivity implements View.OnClickLis
 
                     @Override
                     public void onFailed(Exception exception) {
-                        Log.d(TAG, "onFailed()");
                         runOnUiThread(() -> {
                             hideDialog();
                         });
