@@ -250,7 +250,9 @@ public class CameraStoryActivity extends BaseActivity implements View.OnClickLis
                 .listener(new RequestListener<Bitmap>() {
                               @Override
                               public boolean onLoadFailed(@Nullable GlideException e, Object o, Target<Bitmap> target, boolean b) {
-                                  Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_SHORT).show();
+                                  Bitmap bMapScaled = BitmapFactory.decodeResource(getResources(), R.drawable.motohub_logo);
+                                  bitmap = Bitmap.createScaledBitmap(bMapScaled, 100, 100, true);
+                                  startCodec(video);
                                   return false;
                               }
 
