@@ -106,6 +106,9 @@ public class NotificationUtils1 {
             Notification mNotification = mNotificationCompatBuilder.build();
             mNotification.flags |= Notification.FLAG_AUTO_CANCEL;
             mNotification.defaults |= Notification.DEFAULT_LIGHTS;
+            if(mNotificationID==0){
+                mNotificationID=143;
+            }
             mNotificationManager.notify(mNotificationID, mNotification);
         } catch (Exception e) {
             e.printStackTrace();
