@@ -54,6 +54,7 @@
                             android:gravity="center"
                             android:paddingBottom="@dimen/size5"
                             android:paddingLeft="@dimen/size10"
+                            android:visibility="gone"
                             android:paddingRight="@dimen/size10"
                             android:paddingTop="@dimen/size5">
 
