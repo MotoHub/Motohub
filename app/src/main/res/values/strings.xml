@@ -173,8 +173,9 @@
     <string name="search">Search</string>
     <string name="notifications">Notifications</string>
     <string name="news_and_media">News &amp; Media</string>
+    <string name="news_and_media1">News &amp; \n Media</string>
     <string name="messages">Messages</string>
-    <string name="message">Message</string>
+    <string name="mainObj">Message</string>
     <string name="Tracks">Tracks</string>
     <string name="followers">Followers</string>
     <string name="following">Following</string>
@@ -240,6 +241,7 @@
 
     <!--Events Strings-->
     <string name="event">Event/LiveStreaming</string>
+    <string name="upcoming_events">Upcoming Events</string>
     <string name="find_event">Find an Event</string>
     <string name="event_results">View Event Results</string>
     <string name="who_is_going">Who\'s Going</string>
@@ -530,6 +532,7 @@
     <string name="empty_friends_live_streams">No Friend\'s Stream\'s are found!!!.</string>
     <string name="live_stream">Live Stream</string>
     <string name="on_demand">On Demand</string>
+    <string name="events_on_demand">Event On Demand</string>
     <!--TODO remove this-->
     <string name="username">Username</string>
     <string name="under_dev">Under Development</string>
@@ -649,4 +652,5 @@
     <string name="permission_request_denied">Permission request denied</string>
     <string name="error_gif">x or y bound size should be at least %1$dpx and file size should be no more than %2$sM</string>
     <string name="alert_share">Own post can not be share</string>
+    <string name="notification_channel_id">MotoHUB</string>
 </resources>

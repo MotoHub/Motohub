@@ -1,18 +1,15 @@
 package online.motohub.activity.ondemand;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
-import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.MediaController;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -50,8 +47,6 @@ import com.google.gson.JsonObject;
 import com.plattysoft.leonids.ParticleSystem;
 
 import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
 
 import java.net.URLDecoder;
 import java.util.ArrayList;
@@ -62,7 +57,6 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import online.motohub.R;
 import online.motohub.activity.BaseActivity;
-import online.motohub.application.MotoHub;
 import online.motohub.model.EventsResModel;
 import online.motohub.model.FollowProfileModel;
 import online.motohub.model.PostsModel;
@@ -170,11 +164,11 @@ public class EventVideosPlayingActivity extends BaseActivity {
         pos = checkPosition;
 
         if (isAlreadyLikedPost()) {
-            mLikeBtn.setBackground(ContextCompat.getDrawable(this, R.drawable.like_click_to_like_bg));
+            mLikeBtn.setBackground(ContextCompat.getDrawable(this, R.drawable.liked_icon));
             mLikeCountTxt.setText("unlike");
             mLikeBtn.setTag("unlike");
         } else {
-            mLikeBtn.setBackground(ContextCompat.getDrawable(this, R.drawable.like_to_like_click_bg));
+            mLikeBtn.setBackground(ContextCompat.getDrawable(this, R.drawable.like_icon));
             mLikeBtn.setTag("like");
             mLikeCountTxt.setText("like");
         }
@@ -381,7 +375,7 @@ public class EventVideosPlayingActivity extends BaseActivity {
             case R.id.likeBtn:
                 if (!isMultiClicked() && pos >= 0) {
                     if (view.getTag().toString().equals("like")) {
-                        new ParticleSystem(this, 50, R.drawable.like_click_to_like_bg, 1000)
+                        new ParticleSystem(this, 50, R.drawable.liked_icon, 1000)
                                 .setSpeedRange(0.2f, 0.5f)
                                 .oneShot(findViewById(R.id.likeBtn), 25);
                         try {
@@ -390,7 +384,7 @@ public class EventVideosPlayingActivity extends BaseActivity {
                             e.printStackTrace();
                         }
                     } else {
-                        mLikeBtn.setBackground(ContextCompat.getDrawable(this, R.drawable.like_to_like_click_bg));
+                        mLikeBtn.setBackground(ContextCompat.getDrawable(this, R.drawable.like_icon));
                         mLikeBtn.setTag("like");
                         callUnLikePost(mDeleteLikeID);
                     }
@@ -501,10 +495,10 @@ public class EventVideosPlayingActivity extends BaseActivity {
                     pos = pos + 1;
                     if (pos < mPostsList.size()) {
                         if (isAlreadyLikedPost()) {
-                            mLikeBtn.setBackground(ContextCompat.getDrawable(EventVideosPlayingActivity.this, R.drawable.like_click_to_like_bg));
+                            mLikeBtn.setBackground(ContextCompat.getDrawable(EventVideosPlayingActivity.this, R.drawable.liked_icon));
                             mLikeBtn.setTag("unlike");
                         } else {
-                            mLikeBtn.setBackground(ContextCompat.getDrawable(EventVideosPlayingActivity.this, R.drawable.like_to_like_click_bg));
+                            mLikeBtn.setBackground(ContextCompat.getDrawable(EventVideosPlayingActivity.this, R.drawable.like_icon));
                             mLikeBtn.setTag("like");
                         }
                         isAlreadyFollowed();
@@ -552,10 +546,10 @@ public class EventVideosPlayingActivity extends BaseActivity {
                         pos = pos - 1;
 
                         if (isAlreadyLikedPost()) {
-                            mLikeBtn.setBackground(ContextCompat.getDrawable(EventVideosPlayingActivity.this, R.drawable.like_click_to_like_bg));
+                            mLikeBtn.setBackground(ContextCompat.getDrawable(EventVideosPlayingActivity.this, R.drawable.liked_icon));
                             mLikeBtn.setTag("unlike");
                         } else {
-                            mLikeBtn.setBackground(ContextCompat.getDrawable(EventVideosPlayingActivity.this, R.drawable.like_to_like_click_bg));
+                            mLikeBtn.setBackground(ContextCompat.getDrawable(EventVideosPlayingActivity.this, R.drawable.like_icon));
                             mLikeBtn.setTag("like");
                         }
                         isAlreadyFollowed();
@@ -713,7 +707,7 @@ public class EventVideosPlayingActivity extends BaseActivity {
                 case RetrofitClient.VIDEO_LIKES:
                     mLikeList.add(mNewFeedLike.get(0));
                     mPostsList.get(pos).setVideolikes_by_VideoID(mLikeList);
-                    mLikeBtn.setBackground(ContextCompat.getDrawable(this, R.drawable.like_click_to_like_bg));
+                    mLikeBtn.setBackground(ContextCompat.getDrawable(this, R.drawable.liked_icon));
                     mLikeBtn.setTag("unlike");
                     mLikeCountTxt.setText("unlike");
                     setResult(RESULT_OK, new Intent().putExtra(AppConstants.VIDEO_LIST, mPostsList));
@@ -725,7 +719,7 @@ public class EventVideosPlayingActivity extends BaseActivity {
                             break;
                         }
                     }
-                    mLikeBtn.setBackground(ContextCompat.getDrawable(this, R.drawable.like_to_like_click_bg));
+                    mLikeBtn.setBackground(ContextCompat.getDrawable(this, R.drawable.like_icon));
                     mLikeBtn.setTag("like");
                     mLikeCountTxt.setText("like");
                     mPostsList.get(pos).setVideolikes_by_VideoID(mLikeList);

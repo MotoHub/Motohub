@@ -210,8 +210,9 @@ public class EventsFindActivity extends BaseActivity {
                 mEventsFindListData.clear();
                 mEventsFindListData.addAll(mEventsModel.getResource());
                 mEventsLoaded = true;
-                if (mEventsFindAdapter != null)
+                if (mEventsFindAdapter != null) {
                     mEventsFindAdapter.notifyDataSetChanged();
+                }
             } else {
                 showSnackBar(mCoordinatorLayout, mNoEventsErr);
             }

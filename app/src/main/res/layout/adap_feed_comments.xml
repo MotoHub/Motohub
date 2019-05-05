@@ -129,7 +129,7 @@
                         android:focusable="true"
                         android:gravity="center"
                         android:layout_gravity="center"
-                        app:srcCompat="@drawable/like_to_like_click_bg"
+                        app:srcCompat="@drawable/like_icon"
                         />
 
                     <TextView

@@ -41,7 +41,6 @@ import okhttp3.RequestBody;
 import online.motohub.BuildConfig;
 import online.motohub.R;
 import online.motohub.adapter.VehicleInfoLikeAdapter;
-import online.motohub.application.MotoHub;
 import online.motohub.fcm.MyFireBaseMessagingService;
 import online.motohub.fragment.dialog.AppDialogFragment;
 import online.motohub.model.ImageModel;
@@ -493,16 +492,16 @@ public class UpdateProfileActivity extends BaseActivity {
             for (final VehicleInfoLikeModel likesEntity : mFeedLikes) {
 
                 if ((likesEntity.getWhoLikedProfileID() == mMyProfileResModel.getID())) {
-                    mLikeBtn.setImageResource(R.drawable.like_click_to_like_bg);
+                    mLikeBtn.setImageResource(R.drawable.liked_icon);
                     mLikeBtn.setTag("unlike");
                     break;
                 } else {
-                    mLikeBtn.setImageResource(R.drawable.like_to_like_click_bg);
+                    mLikeBtn.setImageResource(R.drawable.like_icon);
                     mLikeBtn.setTag("like");
                 }
             }
         } else {
-            mLikeBtn.setImageResource(R.drawable.like_to_like_click_bg);
+            mLikeBtn.setImageResource(R.drawable.like_icon);
             mLikeBtn.setTag("like");
         }
         int mLikeCount = mFeedLikes.size();
@@ -1304,7 +1303,7 @@ public class UpdateProfileActivity extends BaseActivity {
 
     private void resetLikeCount(VehicleInfoLikeModel mLikeModel) {
 
-        mLikeBtn.setImageResource(R.drawable.like_click_to_like_bg);
+        mLikeBtn.setImageResource(R.drawable.liked_icon);
         mLikeBtn.setTag("unlike");
 
         ArrayList<VehicleInfoLikeModel> mVehicleInfoLikeList = mMyProfileResModel.getVehicleInfoLikesByID();
@@ -1326,7 +1325,7 @@ public class UpdateProfileActivity extends BaseActivity {
 
     private void resetUnLikeCount() {
 
-        mLikeBtn.setImageResource(R.drawable.like_to_like_click_bg);
+        mLikeBtn.setImageResource(R.drawable.like_icon);
         mLikeBtn.setTag("like");
 
         ArrayList<VehicleInfoLikeModel> mVehicleInfoLikeList = mMyProfileResModel.getVehicleInfoLikesByID();

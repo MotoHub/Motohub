@@ -750,8 +750,8 @@ public class ClubProfileActivity extends BaseActivity implements TabLayout.OnTab
             deleteSubsDataInTable();
         } else {
             String mErrorMsg = "Your card was declined.";
-            if (mResponse.getMessage() != null) {
-                mErrorMsg = mResponse.getMessage();
+            if (mResponse.getMainObj() != null) {
+                mErrorMsg = mResponse.getMainObj();
             }
             mErrorMsg = mErrorMsg + " " + getString(R.string.try_again);
             showToast(this, mErrorMsg);

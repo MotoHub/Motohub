@@ -42,6 +42,7 @@ import online.motohub.application.MotoHub;
 import online.motohub.fcm.MyFireBaseMessagingService;
 import online.motohub.fragment.dialog.AppDialogFragment;
 import online.motohub.model.ImageModel;
+import online.motohub.model.NotificationModel1;
 import online.motohub.model.ProfileModel;
 import online.motohub.model.ProfileResModel;
 import online.motohub.model.SessionModel;
@@ -52,6 +53,7 @@ import online.motohub.model.SingleChatRoomResModel;
 import online.motohub.retrofit.RetrofitClient;
 import online.motohub.util.CommonAPI;
 import online.motohub.util.DialogManager;
+import online.motohub.util.NotificationUtils1;
 import online.motohub.util.PreferenceUtils;
 import online.motohub.util.Utility;
 
@@ -206,12 +208,10 @@ public class ChatBoxSingleActivity extends BaseActivity implements ChatBoxSingle
             JSONObject mDetailsObj = mJsonObjectEntry.getJSONObject("Details");
             if ((mSingleChatRoomResModel.getFromProfileID() != Integer.parseInt(mDetailsObj.get(MyFireBaseMessagingService.TO_PROFILE_ID).toString()))
                     && (mSingleChatRoomResModel.getToProfileID() != Integer.parseInt(mDetailsObj.get(MyFireBaseMessagingService.FROM_PROFILE_ID).toString()))) {
-                JSONObject mNotificationJsonObject = new JSONObject();
-                mNotificationJsonObject.put(MyFireBaseMessagingService.ENTRY_JSON_OBJ, mJsonObjectEntry);
-                String mNotificationChatID = mMyProfileResModel.getID() + "_" + mSingleChatRoomResModel.getProfilesByToProfileID().getID();
-                int mNotificationID = (mSingleChatRoomResModel.getProfilesByToProfileID().getID());
-                String mContentTitle = "From : " + ((mDetailsObj.get(MyFireBaseMessagingService.SENDER_NAME).toString()));
-                MyFireBaseMessagingService.composeChatNotification(mNotificationJsonObject, this, mNotificationID, mNotificationChatID, mContentTitle, ChatBoxSingleActivity.class);
+                NotificationModel1 model1 = new NotificationModel1();
+                model1.setMainObj(mJsonObjectEntry);
+                model1.setForceNotification(true);
+                new NotificationUtils1(this, model1);
                 return;
             }
             SingleChatMsgResModel mSingleChatMsgResModel = new SingleChatMsgResModel();

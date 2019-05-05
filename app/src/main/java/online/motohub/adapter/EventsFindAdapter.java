@@ -26,6 +26,7 @@ import com.google.gson.JsonObject;
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -76,7 +77,7 @@ import online.motohub.util.Utility;
 
 import static android.app.Activity.RESULT_OK;
 
-public class EventsFindAdapter extends RecyclerView.Adapter<EventsFindAdapter.Holder> implements View.OnClickListener,EventsInterface {
+public class EventsFindAdapter extends RecyclerView.Adapter<EventsFindAdapter.Holder> implements View.OnClickListener, EventsInterface {
 
     private Context mContext;
     private List<EventsResModel> mOriginalEventsFindListData;
@@ -142,9 +143,10 @@ public class EventsFindAdapter extends RecyclerView.Adapter<EventsFindAdapter.Ho
 
     private void setEventCategory(ArrayList<EventCategoryModel> mCategoryNameList) {
         if (mCategoryNameList != null && !mCategoryNameList.isEmpty()) {
-
             AppDialogFragment.newInstance(AppDialogFragment.EVENT_CATEGORY_DIALOG, null, mCategoryNameList)
                     .show(((BaseActivity) mContext).getSupportFragmentManager(), AppDialogFragment.TAG);
+        } else {
+            Toast.makeText(mContext, "There are no categorie", Toast.LENGTH_LONG).show();
         }
     }
 
@@ -184,11 +186,11 @@ public class EventsFindAdapter extends RecyclerView.Adapter<EventsFindAdapter.Ho
             }
 
             mViewHolder.mPromoterNameTxt.setText(mEventsFindListData.get(position).getPromoterByUserID().getName());
-            ((BaseActivity) mContext).setImageWithGlide(mViewHolder.mPromoterProfileImg,mEventsFindListData.get(position).getPromoterByUserID().getProfileImage(), R.drawable.default_profile_icon);
-            if(!mEventsFindListData.get(position).getmEventImage().isEmpty())
-                ((BaseActivity) mContext).setImageWithGlide(mViewHolder.mCoverImg,mEventsFindListData.get(position).getmEventImage(), R.drawable.default_cover_img);
+            ((BaseActivity) mContext).setImageWithGlide(mViewHolder.mPromoterProfileImg, mEventsFindListData.get(position).getPromoterByUserID().getProfileImage(), R.drawable.default_profile_icon);
+            if (!mEventsFindListData.get(position).getmEventImage().isEmpty())
+                ((BaseActivity) mContext).setImageWithGlide(mViewHolder.mCoverImg, mEventsFindListData.get(position).getmEventImage(), R.drawable.default_cover_img);
             else
-                ((BaseActivity) mContext).setImageWithGlide(mViewHolder.mCoverImg,mEventsFindListData.get(position).getPromoterByUserID().getProfileImage(), R.drawable.default_cover_img);
+                ((BaseActivity) mContext).setImageWithGlide(mViewHolder.mCoverImg, mEventsFindListData.get(position).getPromoterByUserID().getProfileImage(), R.drawable.default_cover_img);
 
             mViewHolder.mCoverImg.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -219,7 +221,7 @@ public class EventsFindAdapter extends RecyclerView.Adapter<EventsFindAdapter.Ho
             mViewHolder.mLiveButton.setTag(position);
             mViewHolder.mLiveButton.setOnClickListener(this);
 
-            if(mMyProfileResModel == null){
+            if (mMyProfileResModel == null) {
                 mViewHolder.mBookNowBtn.setEnabled(false);
             }
 
@@ -357,6 +359,8 @@ public class EventsFindAdapter extends RecyclerView.Adapter<EventsFindAdapter.Ho
                         }
                         setEventCategory(mFinalCategoryList);
                     }
+                } else {
+                    Toast.makeText(mContext, "Your are already booked", Toast.LENGTH_SHORT).show();
                 }
                 break;
             case R.id.time_table_btn:
@@ -648,6 +652,13 @@ public class EventsFindAdapter extends RecyclerView.Adapter<EventsFindAdapter.Ho
     public void bookAnFreeEventRequest() {
         int mUserId = PreferenceUtils.getInstance(mContext).getIntData(PreferenceUtils.USER_ID);
 
+        ArrayList<Integer> listCategory = new ArrayList<>();
+        for (int k = 0; k < mSelectedCategory.size(); k++) {
+            listCategory.add(mSelectedCategory.get(k).getID());
+        }
+
+        String list = Arrays.toString(listCategory.toArray()).replace("[", "").replace("]", "");
+
         JsonObject mItem = new JsonObject();
         mItem.addProperty("EventID", mEventsFindListData.get(mAdapterPos).getID());
         mItem.addProperty("UserID", mUserId);
@@ -655,6 +666,7 @@ public class EventsFindAdapter extends RecyclerView.Adapter<EventsFindAdapter.Ho
         mItem.addProperty("Answers", String.valueOf(MotoHub.getApplicationInstance().getEventQuestionAnswerObject()));
         mItem.addProperty("transaction_token", "");
         mItem.addProperty("payment_details", mContext.getString(R.string.free_event));
+        mItem.addProperty("addons", list);
 
         JsonArray mJsonArray = new JsonArray();
         mJsonArray.add(mItem);
@@ -667,6 +679,13 @@ public class EventsFindAdapter extends RecyclerView.Adapter<EventsFindAdapter.Ho
 
         int mUserId = PreferenceUtils.getInstance(mContext).getIntData(PreferenceUtils.USER_ID);
 
+        ArrayList<Integer> listCategory = new ArrayList<>();
+        for (int k = 0; k < mSelectedCategory.size(); k++) {
+            listCategory.add(mSelectedCategory.get(k).getID());
+        }
+
+        String list = Arrays.toString(listCategory.toArray()).replace("[", "").replace("]", "");
+
         JsonObject mItem = new JsonObject();
         mItem.addProperty("EventID", mEventsFindListData.get(mAdapterPos).getID());
         mItem.addProperty("UserID", mUserId);
@@ -678,6 +697,7 @@ public class EventsFindAdapter extends RecyclerView.Adapter<EventsFindAdapter.Ho
         mItem.addProperty("Answers", String.valueOf(MotoHub.getApplicationInstance().getEventQuestionAnswerObject()));
         mItem.addProperty("transaction_token", mPaymentModel.getID());
         mItem.addProperty("payment_details", mPaymentModel.getMessage());
+        mItem.addProperty("addons", list);
 
 
         JsonArray mJsonArray = new JsonArray();

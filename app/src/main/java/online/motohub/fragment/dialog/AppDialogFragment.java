@@ -902,7 +902,7 @@ public class AppDialogFragment extends DialogFragment implements
 
                 mSharePhotoList.addAll(Arrays.asList(photo).subList(0, mShareImage.size()));
                 if (content != null) {
-                    content = content.replace(" ", "#");
+                    //content = content.replace(" ", "#");
                     String mShareTxt = "#" + content;
                     shareContent = new SharePhotoContent.Builder()
                             .addPhotos(mSharePhotoList)

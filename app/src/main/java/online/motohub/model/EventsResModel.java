@@ -85,6 +85,17 @@ public class EventsResModel implements Serializable {
     @Expose
     private Integer mTrackID;
 
+    @SerializedName("eventad_by_EventID")
+    @Expose
+    private ArrayList<EventadByEventID> eventadByEventID = null;
+
+    public ArrayList<EventadByEventID> getEventadByEventID() {
+        return eventadByEventID;
+    }
+
+    public void setEventadByEventID(ArrayList<EventadByEventID> eventadByEventID) {
+        this.eventadByEventID = eventadByEventID;
+    }
 
     @SerializedName("whosgoing_by_EventID")
     @Expose
@@ -100,7 +111,7 @@ public class EventsResModel implements Serializable {
 
     @SerializedName("event_registration_question_by_group_id")
     @Expose
-    private  ArrayList<EventRegistrationQuestionModel> mEventRegistrationQuestion;
+    private ArrayList<EventRegistrationQuestionModel> mEventRegistrationQuestion;
 
     @SerializedName("event_registration_answer_by_EventID")
     @Expose
@@ -140,7 +151,7 @@ public class EventsResModel implements Serializable {
     }
 
     public String getmEventImage() {
-        if(mEventImage == null)
+        if (mEventImage == null)
             mEventImage = "";
         return mEventImage;
     }
@@ -318,8 +329,8 @@ public class EventsResModel implements Serializable {
     }
 
     public ArrayList<LiveStreamEntity> getLivestream_by_EventID() {
-        if(livestream_by_EventID==null)
-            livestream_by_EventID=new ArrayList<>();
+        if (livestream_by_EventID == null)
+            livestream_by_EventID = new ArrayList<>();
         return livestream_by_EventID;
     }
 
@@ -328,8 +339,8 @@ public class EventsResModel implements Serializable {
     }
 
     public ArrayList<LiveStreamPaymentEntity> getLivestreampayment_by_EventID() {
-        if(livestreampayment_by_EventID==null)
-            livestreampayment_by_EventID=new ArrayList<>();
+        if (livestreampayment_by_EventID == null)
+            livestreampayment_by_EventID = new ArrayList<>();
         return livestreampayment_by_EventID;
     }
 
@@ -338,8 +349,68 @@ public class EventsResModel implements Serializable {
     }
 
     public Integer getStream_amount() {
-        if(stream_amount==null)
-            stream_amount=0;
+        if (stream_amount == null)
+            stream_amount = 0;
         return stream_amount;
+    }
+
+    public static class EventadByEventID implements Serializable {
+
+        @SerializedName("ID")
+        @Expose
+        private Integer iD;
+        @SerializedName("UserID")
+        @Expose
+        private Integer userID;
+        @SerializedName("EventID")
+        @Expose
+        private Integer eventID;
+        @SerializedName("EventAd")
+        @Expose
+        private String eventAd;
+        @SerializedName("CreatedAt")
+        @Expose
+        private String createdAt;
+
+        public Integer getID() {
+            return iD;
+        }
+
+        public void setID(Integer iD) {
+            this.iD = iD;
+        }
+
+        public Integer getUserID() {
+            return userID;
+        }
+
+        public void setUserID(Integer userID) {
+            this.userID = userID;
+        }
+
+        public Integer getEventID() {
+            return eventID;
+        }
+
+        public void setEventID(Integer eventID) {
+            this.eventID = eventID;
+        }
+
+        public String getEventAd() {
+            return eventAd;
+        }
+
+        public void setEventAd(String eventAd) {
+            this.eventAd = eventAd;
+        }
+
+        public String getCreatedAt() {
+            return createdAt;
+        }
+
+        public void setCreatedAt(String createdAt) {
+            this.createdAt = createdAt;
+        }
+
     }
 }

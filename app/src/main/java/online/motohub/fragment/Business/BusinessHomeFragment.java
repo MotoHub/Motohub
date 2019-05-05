@@ -148,10 +148,10 @@ public class BusinessHomeFragment extends BaseFragment implements SwipeRefreshLa
         mPromotersResModel = EventBus.getDefault().getStickyEvent(PromotersResModel.class);
         mSwipeRefreshLayout.setOnRefreshListener(this);
         mNewsFeedList = new ArrayList<>();
-        if (mMyProfileResModel != null && mMyProfileResModel.getID() != 0) {
+        //if (mMyProfileResModel != null && mMyProfileResModel.getID() != 0) {
             mPromoterPostsAdapter = new BusinessPostAdapter(mNewsFeedList, mMyProfileResModel, mActivity);
             mNewsFeedRecyclerView.setAdapter(mPromoterPostsAdapter);
-        }
+        //}
         if (mNewsFeedList.size() == 0 && mPromotersResModel != null && mPromotersResModel.getID() != 0)
             callGetEvents();
     }

@@ -16,6 +16,7 @@ import android.widget.Toast;
 import com.amazonaws.ClientConfiguration;
 import com.amazonaws.Protocol;
 import com.amazonaws.auth.BasicAWSCredentials;
+import com.amazonaws.mobile.client.AWSMobileClient;
 import com.amazonaws.mobileconnectors.s3.transferutility.TransferListener;
 import com.amazonaws.mobileconnectors.s3.transferutility.TransferObserver;
 import com.amazonaws.mobileconnectors.s3.transferutility.TransferState;
@@ -45,9 +46,9 @@ public class BusinnesPostFileUploadService extends IntentService implements Prog
 
     public static final String NOTIFY_POST_VIDEO_UPDATED = "online.motohub.NOTIFY_POST_VIDEO_UPDATED";
     //S3 server
-    AmazonS3Client s3;
+    /*AmazonS3Client s3;
     BasicAWSCredentials credentials;
-    TransferUtility transferUtility;
+    TransferUtility transferUtility;*/
     TransferObserver observer, observer1;
     private Integer flag;
     private String mUserType, mPostStr;
@@ -80,7 +81,7 @@ public class BusinnesPostFileUploadService extends IntentService implements Prog
 
             if (intent != null) {
                 flag = intent.getIntExtra("flag", 0);
-
+                AWSMobileClient.getInstance().initialize(this).execute();
                 int mNotificationID = intent.getIntExtra("running", 0);
                 String mVideoPath = intent.getStringExtra("videofile");
                 File mThumbImgFile = new File(intent.getStringExtra("imagefile"));
@@ -200,7 +201,7 @@ public class BusinnesPostFileUploadService extends IntentService implements Prog
         }
         startForeground(notificationid, mNotification);
 
-        ClientConfiguration configuration = new ClientConfiguration();
+       /* ClientConfiguration configuration = new ClientConfiguration();
         configuration.setMaxErrorRetry(3);
         configuration.setConnectionTimeout(501000);
         configuration.setSocketTimeout(501000);
@@ -209,7 +210,14 @@ public class BusinnesPostFileUploadService extends IntentService implements Prog
         credentials = new BasicAWSCredentials(AppConstants.KEY, AppConstants.SECRET);
         s3 = new AmazonS3Client(credentials, configuration);
         s3.setRegion(Region.getRegion(Regions.AP_SOUTHEAST_2));
-        transferUtility = new TransferUtility(s3, BusinnesPostFileUploadService.this);
+        transferUtility = new TransferUtility(s3, BusinnesPostFileUploadService.this);*/
+
+        TransferUtility transferUtility =
+                TransferUtility.builder()
+                        .context(getApplicationContext())
+                        .awsConfiguration(AWSMobileClient.getInstance().getConfiguration())
+                        .s3Client(new AmazonS3Client(AWSMobileClient.getInstance().getCredentialsProvider()))
+                        .build();
 
         if (!video.exists()) {
             Toast.makeText(BusinnesPostFileUploadService.this, "File Not Found!", Toast.LENGTH_SHORT).show();
@@ -363,7 +371,7 @@ public class BusinnesPostFileUploadService extends IntentService implements Prog
 
                     @Override
                     public void onFailure(Call<GalleryImgModel> call, Throwable t) {
-                        // onDownloadComplete(t.getMessage(), 0);
+                        // onDownloadComplete(t.getMainObj(), 0);
                     }
                 });
 

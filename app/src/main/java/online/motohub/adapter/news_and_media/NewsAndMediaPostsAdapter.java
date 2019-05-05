@@ -299,20 +299,20 @@ public class NewsAndMediaPostsAdapter extends RecyclerView.Adapter<RecyclerView.
                             for (final FeedLikesModel likesEntity : mFeedLikes) {
 
                                 if ((likesEntity.getOwnerID() == mCurrentProfileResModel.getID())) {
-                                    mViewHolderNewsAndMedia.mLikeBtn.setImageResource(R.drawable.like_click_to_like_bg);
+                                    mViewHolderNewsAndMedia.mLikeBtn.setImageResource(R.drawable.liked_icon);
                                     mViewHolderNewsAndMedia.mLikeBtn.setTag("unlike");
                                     break;
                                 } else {
-                                    mViewHolderNewsAndMedia.mLikeBtn.setImageResource(R.drawable.like_to_like_click_bg);
+                                    mViewHolderNewsAndMedia.mLikeBtn.setImageResource(R.drawable.like_icon);
                                     mViewHolderNewsAndMedia.mLikeBtn.setTag("like");
                                 }
                             }
                         } else {
-                            mViewHolderNewsAndMedia.mLikeBtn.setImageResource(R.drawable.like_to_like_click_bg);
+                            mViewHolderNewsAndMedia.mLikeBtn.setImageResource(R.drawable.like_icon);
                             mViewHolderNewsAndMedia.mLikeBtn.setTag("like");
                         }
                     } else {
-                        mViewHolderNewsAndMedia.mLikeBtn.setImageResource(R.drawable.like_to_like_click_bg);
+                        mViewHolderNewsAndMedia.mLikeBtn.setImageResource(R.drawable.like_icon);
                         mViewHolderNewsAndMedia.mLikeBtn.setTag("like");
                     }
 
@@ -602,7 +602,7 @@ public class NewsAndMediaPostsAdapter extends RecyclerView.Adapter<RecyclerView.
     //Notifications
     public void postNotificationDefault(ImageView img) {
         img.setVisibility(View.VISIBLE);
-        img.setImageResource(R.drawable.notificationunblock);
+        img.setImageResource(R.drawable.notify_active_icon);
         img.setTag(mContext.getString(R.string.notification_unblocked));
     }
 
@@ -611,12 +611,12 @@ public class NewsAndMediaPostsAdapter extends RecyclerView.Adapter<RecyclerView.
         for (final NotificationBlockedUsersModel mNotifications_post : notifications_blocked_users) {
             if (mCurrentProfileResModel.getID() == mNotifications_post.getmProfileID()) {
                 img.setVisibility(View.VISIBLE);
-                img.setImageResource(R.drawable.notificationblock);
+                img.setImageResource(R.drawable.notify_inactive_icon);
                 img.setTag(mContext.getString(R.string.notification_blocked));
                 break;
             } else {
                 img.setVisibility(View.VISIBLE);
-                img.setImageResource(R.drawable.notificationunblock);
+                img.setImageResource(R.drawable.notify_active_icon);
                 img.setTag(mContext.getString(R.string.notification_unblocked));
                 break;
             }

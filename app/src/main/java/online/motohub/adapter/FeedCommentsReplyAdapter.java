@@ -46,7 +46,6 @@ import online.motohub.activity.news_and_media.NewsAndMediaProfileActivity;
 import online.motohub.activity.performance_shop.PerformanceShopProfileActivity;
 import online.motohub.activity.promoter.PromoterProfileActivity;
 import online.motohub.activity.track.TrackProfileActivity;
-import online.motohub.application.MotoHub;
 import online.motohub.model.FeedCommentModel;
 import online.motohub.model.FeedCommentReplyModel;
 import online.motohub.model.ProfileResModel;
@@ -119,7 +118,7 @@ public class FeedCommentsReplyAdapter extends RecyclerView.Adapter<FeedCommentsR
             if (mFeedReplyList.get(pos).getReplyLikeByReplyID() != null) {
                 setLikeUnLikeForPost(mHolder, pos);
             } else {
-                mHolder.mLikeBtn.setImageResource(R.drawable.like_to_like_click_bg);
+                mHolder.mLikeBtn.setImageResource(R.drawable.like_icon);
                 mHolder.mLikeBtn.setTag("like");
                 mHolder.mLikeCountTxt.setText("like");
             }
@@ -390,16 +389,16 @@ public class FeedCommentsReplyAdapter extends RecyclerView.Adapter<FeedCommentsR
             for (final ReplyLikeModel likesEntity : mReplyLikes) {
 
                 if ((likesEntity.getProfileID() == mMyProfileResModel.getID())) {
-                    mViewHolder.mLikeBtn.setImageResource(R.drawable.like_click_to_like_bg);
+                    mViewHolder.mLikeBtn.setImageResource(R.drawable.liked_icon);
                     mViewHolder.mLikeBtn.setTag("unlike");
                     break;
                 } else {
-                    mViewHolder.mLikeBtn.setImageResource(R.drawable.like_to_like_click_bg);
+                    mViewHolder.mLikeBtn.setImageResource(R.drawable.like_icon);
                     mViewHolder.mLikeBtn.setTag("like");
                 }
             }
         } else {
-            mViewHolder.mLikeBtn.setImageResource(R.drawable.like_to_like_click_bg);
+            mViewHolder.mLikeBtn.setImageResource(R.drawable.like_icon);
             mViewHolder.mLikeBtn.setTag("like");
             mViewHolder.mLikeCountTxt.setText("like");
         }

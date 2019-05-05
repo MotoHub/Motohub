@@ -226,7 +226,7 @@ public class ChatBoxSingleAdapter extends RecyclerView.Adapter<RecyclerView.View
                         mViewHolderSender.mSenderMsgTv.setVisibility(View.VISIBLE);
                         try {
                             mViewHolderSender.mSenderMsgTv.setText(URLDecoder.decode(mSingleChatMsgList.get(position).getMessage(), "UTF-8"));
-                            //mViewHolderSender.mSenderMsgTv.setText(replacer(sb.append(mSingleChatMsgList.get(position).getMessage())));
+                            //mViewHolderSender.mSenderMsgTv.setText(replacer(sb.append(mSingleChatMsgList.get(position).getMainObj())));
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -276,7 +276,7 @@ public class ChatBoxSingleAdapter extends RecyclerView.Adapter<RecyclerView.View
                         mViewHolderReceiver.mReceiverMsgTv.setVisibility(View.VISIBLE);
                         try {
                             mViewHolderReceiver.mReceiverMsgTv.setText(URLDecoder.decode(mSingleChatMsgList.get(position).getMessage(), "UTF-8"));
-                            //mViewHolderReceiver.mReceiverMsgTv.setText(replacer(sb.append(mSingleChatMsgList.get(position).getMessage())));
+                            //mViewHolderReceiver.mReceiverMsgTv.setText(replacer(sb.append(mSingleChatMsgList.get(position).getMainObj())));
                         } catch (Exception e) {
                             e.printStackTrace();
                         }

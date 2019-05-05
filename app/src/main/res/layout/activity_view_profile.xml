@@ -54,6 +54,7 @@
                             android:gravity="center"
                             android:paddingBottom="@dimen/size5"
                             android:paddingLeft="@dimen/size10"
+                            android:visibility="gone"
                             android:paddingRight="@dimen/size10"
                             android:paddingTop="@dimen/size5">
 
@@ -204,7 +205,7 @@
                                     style="@style/LayoutMatch"
                                     android:layout_below="@+id/performance_shop_img_view"
                                     android:gravity="center"
-                                    android:text="@string/shop"
+                                    android:text="@string/performance_shop"
                                     android:textColor="@color/colorBlack"
                                     android:textSize="@dimen/text12" />
 
@@ -240,7 +241,7 @@
                                     style="@style/LayoutMatchWrap"
                                     android:layout_below="@+id/news_and_media_img_view"
                                     android:gravity="center"
-                                    android:text="@string/news_and_media"
+                                    android:text="@string/news_and_media1"
                                     android:textColor="@color/colorBlack"
                                     android:textSize="@dimen/text12" />
 
@@ -701,7 +702,7 @@
                         style="@style/LayoutMatchWrap"
                         android:layout_below="@+id/live_img_btn"
                         android:gravity="center"
-                        android:text="@string/on_demand"
+                        android:text="@string/events_on_demand"
                         android:textColor="@android:color/black"
                         android:textSize="@dimen/text12" />
 
@@ -730,7 +731,7 @@
                         style="@style/LayoutMatchWrap"
                         android:layout_below="@+id/events_img_btn"
                         android:gravity="center"
-                        android:text="@string/event"
+                        android:text="@string/upcoming_events"
                         android:textColor="@android:color/black"
                         android:textSize="@dimen/text12" />
 

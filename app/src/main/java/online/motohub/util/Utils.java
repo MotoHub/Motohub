@@ -39,17 +39,17 @@ import java.util.UUID;
  */
 public class Utils {
 
-    private AmazonS3Client sS3Client;
+    /*private AmazonS3Client sS3Client;
     private CognitoCachingCredentialsProvider sCredProvider;
     private TransferUtility sTransferUtility;
 
-    /**
+    *//**
      * Gets an instance of CognitoCachingCredentialsProvider which is
      * constructed using the given Context.
      *
      * @param context An Context instance.
      * @return A default credential provider.
-     */
+     *//*
     private CognitoCachingCredentialsProvider getCredProvider(Context context) {
         if (sCredProvider == null) {
             sCredProvider = new CognitoCachingCredentialsProvider(
@@ -60,13 +60,13 @@ public class Utils {
         return sCredProvider;
     }
 
-    /**
+    *//**
      * Gets an instance of a S3 client which is constructed using the given
      * Context.
      *
      * @param context An Context instance.
      * @return A default S3 client.
-     */
+     *//*
     public AmazonS3Client getS3Client(Context context) {
         if (sS3Client == null) {
             sS3Client = new AmazonS3Client(getCredProvider(context.getApplicationContext()));
@@ -75,13 +75,13 @@ public class Utils {
         return sS3Client;
     }
 
-    /**
+    *//**
      * Gets an instance of the TransferUtility which is constructed using the
      * given Context
      * 
      * @param context
      * @return a TransferUtility instance
-     */
+     *//*
     public TransferUtility getTransferUtility(Context context) {
         if (sTransferUtility == null) {
             sTransferUtility = TransferUtility.builder()
@@ -94,12 +94,12 @@ public class Utils {
         return sTransferUtility;
     }
 
-    /**
+    *//**
      * Converts number of bytes into proper scale.
      *
      * @param bytes number of bytes to be converted.
      * @return A string that represents the bytes in a proper scale.
-     */
+     *//*
     public String getBytesString(long bytes) {
         String[] quantifiers = new String[] {
                 "KB", "MB", "GB", "TB"
@@ -116,7 +116,7 @@ public class Utils {
         }
     }
 
-    /**
+    *//**
      * Copies the data from the passed in Uri, to a new file for use with the
      * Transfer Service
      * 
@@ -124,7 +124,7 @@ public class Utils {
      * @param uri
      * @return
      * @throws IOException
-     */
+     *//*
     public File copyContentUriToFile(Context context, Uri uri) throws IOException {
         InputStream is = context.getContentResolver().openInputStream(uri);
         File copiedData = new File(context.getDir("SampleImagesDir", Context.MODE_PRIVATE), UUID
@@ -144,10 +144,10 @@ public class Utils {
         return copiedData;
     }
 
-    /*
+    *//*
      * Fills in the map with information in the observer so that it can be used
      * with a SimpleAdapter to populate the UI
-     */
+     *//*
     public void fillMap(Map<String, Object> map, TransferObserver observer, boolean isChecked) {
         int progress = (int) ((double) observer.getBytesTransferred() * 100 / observer
                 .getBytesTotal());
@@ -161,6 +161,6 @@ public class Utils {
         map.put("state", observer.getState());
         map.put("percentage", progress + "%");
     }
-
+*/
 
 }

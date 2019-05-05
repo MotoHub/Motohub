@@ -115,7 +115,7 @@
                         android:focusable="true"
                         android:gravity="center"
                         android:paddingBottom="@dimen/size5"
-                        app:srcCompat="@drawable/like_to_like_click_bg" />
+                        app:srcCompat="@drawable/like_icon" />
 
                     <TextView
                         android:id="@+id/like_count_txt"

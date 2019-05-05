@@ -485,16 +485,16 @@ public class NotificationUpdateProfileActivity extends BaseActivity {
             for (final VehicleInfoLikeModel likesEntity : mFeedLikes) {
 
                 if ((likesEntity.getWhoLikedProfileID() == mMyProfileResModel.getID())) {
-                    mLikeBtn.setImageResource(R.drawable.like_click_to_like_bg);
+                    mLikeBtn.setImageResource(R.drawable.liked_icon);
                     mLikeBtn.setTag("unlike");
                     break;
                 } else {
-                    mLikeBtn.setImageResource(R.drawable.like_to_like_click_bg);
+                    mLikeBtn.setImageResource(R.drawable.like_icon);
                     mLikeBtn.setTag("like");
                 }
             }
         } else {
-            mLikeBtn.setImageResource(R.drawable.like_to_like_click_bg);
+            mLikeBtn.setImageResource(R.drawable.like_icon);
             mLikeBtn.setTag("like");
         }
         int mLikeCount = mFeedLikes.size();
@@ -1462,7 +1462,7 @@ public class NotificationUpdateProfileActivity extends BaseActivity {
 
     private void resetLikeCount(VehicleInfoLikeModel mLikeModel) {
 
-        mLikeBtn.setImageResource(R.drawable.like_click_to_like_bg);
+        mLikeBtn.setImageResource(R.drawable.liked_icon);
         mLikeBtn.setTag("unlike");
 
         ArrayList<VehicleInfoLikeModel> mVehicleInfoLikeList = mMyProfileResModel.getVehicleInfoLikesByID();
@@ -1483,7 +1483,7 @@ public class NotificationUpdateProfileActivity extends BaseActivity {
 
     private void resetUnLikeCount() {
 
-        mLikeBtn.setImageResource(R.drawable.like_to_like_click_bg);
+        mLikeBtn.setImageResource(R.drawable.like_icon);
         mLikeBtn.setTag("like");
 
         ArrayList<VehicleInfoLikeModel> mVehicleInfoLikeList = mMyProfileResModel.getVehicleInfoLikesByID();

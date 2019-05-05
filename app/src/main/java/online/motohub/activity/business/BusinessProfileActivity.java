@@ -42,6 +42,7 @@ import online.motohub.model.EventsWhoIsGoingModel;
 import online.motohub.model.GalleryImgModel;
 import online.motohub.model.GalleryVideoModel;
 import online.motohub.model.PostsModel;
+import online.motohub.model.ProfileResModel;
 import online.motohub.model.PromotersFollowers1;
 import online.motohub.model.PushTokenModel;
 import online.motohub.model.SessionModel;
@@ -91,6 +92,7 @@ public class BusinessProfileActivity extends BaseActivity implements
 
     private BusinessViewPagerAdapter mViewPagerAdapter;
     private PromotersResModel mPromotersResModel;
+    private ProfileResModel mMyProfileResModel;
     private PromotersFollowers1.Meta meta;
     private int mPromoterUserID;
 

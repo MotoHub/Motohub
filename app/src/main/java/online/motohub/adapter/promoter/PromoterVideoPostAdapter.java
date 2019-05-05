@@ -28,6 +28,7 @@ import com.bumptech.glide.load.model.LazyHeaders;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
+import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
@@ -245,7 +246,7 @@ public class PromoterVideoPostAdapter extends RecyclerView.Adapter<RecyclerView.
                     if (mPostsList.get(position).getVideolikes_by_VideoID().size() > 0) {
                         setLikeUnLikeForPost(mViewHolderPost, position);
                     } else {
-                        mViewHolderPost.mLikeBtn.setImageResource(R.drawable.like_to_like_click_bg);
+                        mViewHolderPost.mLikeBtn.setImageResource(R.drawable.like_icon);
                         mViewHolderPost.mLikeBtn.setTag("like");
                         mViewHolderPost.mLikeCountText.setText("");
                     }
@@ -313,16 +314,18 @@ public class PromoterVideoPostAdapter extends RecyclerView.Adapter<RecyclerView.
                     mViewHolderPost.mPostImageVideoBox.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            if (mPostsList != null && mModel.getVideoUrl() != null && mCurrentProfileResModel != null) {
-                                Bundle mBundle = new Bundle();
-                                mBundle.putSerializable(AppConstants.ONDEMAND_DATA, mPostsList);
-                                mBundle.putString("Filter", "EventID =" + ProfileID);
-                                mBundle.putInt(AppConstants.POSITION, position);
-                                //mBundle.putSerializable(AppConstants.MY_PROFILE_OBJ, mCurrentProfileResModel);
-                                //MotoHub.getApplicationInstance().setmProfileResModel(mCurrentProfileResModel);
-                                EventBus.getDefault().postSticky(mCurrentProfileResModel);
-                                if (mContext instanceof PromoterVideoGalleryActivity)
-                                    ((PromoterVideoGalleryActivity) mContext).startActivityForResult(new Intent(mContext, OnDemanAudoVideoView.class).putExtras(mBundle), AppConstants.ONDEMAND_REQUEST);
+                            try {
+                                if (mPostsList != null && mModel.getVideoUrl() != null && mCurrentProfileResModel != null) {
+                                    Intent intent = new Intent(mContext, OnDemanAudoVideoView.class);
+                                    intent.putExtra(AppConstants.POSITION, position);
+                                    intent.putExtra("Filter", "EventID =" + ProfileID);
+                                    String profile = new Gson().toJson(mCurrentProfileResModel);
+                                    MotoHub.getApplicationInstance().setmPostsList(mPostsList);
+                                    intent.putExtra("profile", profile);
+                                    ((PromoterVideoGalleryActivity) mContext).startActivityForResult(intent, AppConstants.ONDEMAND_REQUEST);
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
                             }
                         }
                     });
@@ -413,11 +416,10 @@ public class PromoterVideoPostAdapter extends RecyclerView.Adapter<RecyclerView.
                             String mMyFollowingsID = Utility.getInstance().getMyFollowersFollowingsID(mCurrentProfileResModel.getFollowprofile_by_ProfileID(), false);
                             if (mMyFollowingsID != null) {
                                 try {
-                                    if (mPostsList.get(position).getCaption().contains(" "))
+                                    /*if (mPostsList.get(position).getCaption().contains(" "))
                                         content = mPostsList.get(position).getCaption();
-                                    else
-                                        content = URLDecoder.decode(mPostsList.get(position).getCaption(), "UTF-8");
-                                    //content = replacer(sb.append(mPostsList.get(position).getCaption()));
+                                    else*/
+                                    content = URLDecoder.decode(mPostsList.get(position).getCaption(), "UTF-8");
                                 } catch (Exception e) {
                                     e.printStackTrace();
                                 }
@@ -457,7 +459,8 @@ public class PromoterVideoPostAdapter extends RecyclerView.Adapter<RecyclerView.
         String view_count;
         int val = 11;
         /*view_count = String.valueOf(mPostsList.get(position).getViewCount() * val) + " Views";
-        mViewHolderPost.mViewCount.setText(view_count);*/view_count = String.valueOf(mPostsList.get(position).getViewCount() * val);
+        mViewHolderPost.mViewCount.setText(view_count);*/
+        view_count = String.valueOf(mPostsList.get(position).getViewCount() * val);
         String count = BaseActivity.convertToSuffix(Long.parseLong(view_count));
         mViewHolderPost.mViewCount.setText(count + " Views");
     }
@@ -520,11 +523,11 @@ public class PromoterVideoPostAdapter extends RecyclerView.Adapter<RecyclerView.
         for (final VideoLikesModel likesEntity : mFeedLikes) {
             try {
                 if ((likesEntity.getOwnerID() == mCurrentProfileResModel.getID())) {
-                    mViewHolderPost.mLikeBtn.setImageResource(R.drawable.like_click_to_like_bg);
+                    mViewHolderPost.mLikeBtn.setImageResource(R.drawable.liked_icon);
                     mViewHolderPost.mLikeBtn.setTag("unlike");
                     break;
                 } else {
-                    mViewHolderPost.mLikeBtn.setImageResource(R.drawable.like_to_like_click_bg);
+                    mViewHolderPost.mLikeBtn.setImageResource(R.drawable.like_icon);
                     mViewHolderPost.mLikeBtn.setTag("like");
                 }
             } catch (Exception e) {
@@ -567,9 +570,7 @@ public class PromoterVideoPostAdapter extends RecyclerView.Adapter<RecyclerView.
                         return false;
                     }
                 })
-                .apply(new RequestOptions()
-                        .dontAnimate()
-                        .error(R.drawable.video_place_holder))
+                .apply(new RequestOptions().dontAnimate().error(R.drawable.video_place_holder).placeholder(R.drawable.video_place_holder))
                 .into(mViewHolderPost.mPostPic);
     }
 

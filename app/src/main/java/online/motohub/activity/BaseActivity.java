@@ -38,7 +38,6 @@ import android.text.SpannableString;
 import android.text.TextPaint;
 import android.text.style.ClickableSpan;
 import android.util.Base64;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -90,7 +89,6 @@ import butterknife.BindString;
 import butterknife.ButterKnife;
 import online.motohub.R;
 import online.motohub.adapter.EventsFindAdapter;
-import online.motohub.application.MotoHub;
 import online.motohub.fragment.dialog.AppDialogFragment;
 import online.motohub.interfaces.CommonInterface;
 import online.motohub.interfaces.PermissionCallback;
@@ -107,7 +105,6 @@ import online.motohub.util.AppConstants;
 import online.motohub.util.DialogManager;
 import online.motohub.util.PreferenceUtils;
 import online.motohub.util.UrlUtils;
-import online.motohub.util.Utils;
 import online.motohub.util.ZoomImageView;
 
 @SuppressLint("Registered")
@@ -523,6 +520,7 @@ public class BaseActivity extends AppCompatActivity {
 
     public String getCurrentDate() {
         DateFormat mDateFormat = new SimpleDateFormat("yyyy-MM-dd H:mm:ss", Locale.getDefault());
+//        mDateFormat.setTimeZone(TimeZone.getTimeZone(AppConstants.NZ_TIME_ZONE));
         return mDateFormat.format(new Date());
     }
 
@@ -2115,6 +2113,7 @@ public class BaseActivity extends AppCompatActivity {
     // Converts the number to K, M suffix
     // Ex: 5500 will be displayed as 5.5k
 
+    @SuppressLint("DefaultLocale")
     public static String convertToSuffix(long count) {
         if (count < 1000) return "" + count;
         int exp = (int) (Math.log(count) / Math.log(1000));

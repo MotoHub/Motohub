@@ -33,6 +33,7 @@ import android.widget.VideoView;
 import com.amazonaws.ClientConfiguration;
 import com.amazonaws.Protocol;
 import com.amazonaws.auth.BasicAWSCredentials;
+import com.amazonaws.mobile.client.AWSMobileClient;
 import com.amazonaws.mobileconnectors.s3.transferutility.TransferListener;
 import com.amazonaws.mobileconnectors.s3.transferutility.TransferObserver;
 import com.amazonaws.mobileconnectors.s3.transferutility.TransferState;
@@ -91,9 +92,9 @@ public class VideoStoryPreviewActivity extends BaseActivity implements MediaPlay
 
     @BindView(R.id.toolbar_back_img_btn)
     ImageButton mBackBtn;
-    AmazonS3Client s3;
+    /*AmazonS3Client s3;
     BasicAWSCredentials credentials;
-    TransferUtility transferUtility;
+    TransferUtility transferUtility;*/
     TransferObserver observerVideo, observerImage;
     private Uri videoUri;
     private EventsResModel mEventResModel;
@@ -110,6 +111,7 @@ public class VideoStoryPreviewActivity extends BaseActivity implements MediaPlay
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_video_preview);
         ButterKnife.bind(this);
+        AWSMobileClient.getInstance().initialize(this).execute();
         initialise();
         setUpVideoView();
         setImageWithGlide(mImageView, videoUri);
@@ -424,7 +426,7 @@ public class VideoStoryPreviewActivity extends BaseActivity implements MediaPlay
         pDialog.setMessage("Please wait video is uploading...");
         showDialog();
 
-        ClientConfiguration configuration = new ClientConfiguration();
+        /*ClientConfiguration configuration = new ClientConfiguration();
         configuration.setMaxErrorRetry(3);
         configuration.setConnectionTimeout(501000);
         configuration.setSocketTimeout(501000);
@@ -433,7 +435,14 @@ public class VideoStoryPreviewActivity extends BaseActivity implements MediaPlay
         credentials = new BasicAWSCredentials(AppConstants.KEY, AppConstants.SECRET);
         s3 = new AmazonS3Client(credentials, configuration);
         s3.setRegion(Region.getRegion(Regions.AP_SOUTHEAST_2));
-        transferUtility = new TransferUtility(s3, VideoStoryPreviewActivity.this);
+        transferUtility = new TransferUtility(s3, VideoStoryPreviewActivity.this);*/
+
+        TransferUtility transferUtility =
+                TransferUtility.builder()
+                        .context(getApplicationContext())
+                        .awsConfiguration(AWSMobileClient.getInstance().getConfiguration())
+                        .s3Client(new AmazonS3Client(AWSMobileClient.getInstance().getCredentialsProvider()))
+                        .build();
 
         if (!video.exists()) {
             Toast.makeText(VideoStoryPreviewActivity.this, "File Not Found!", Toast.LENGTH_SHORT).show();
@@ -473,7 +482,7 @@ public class VideoStoryPreviewActivity extends BaseActivity implements MediaPlay
             @Override
             public void onError(int id, Exception ex) {
                 hideDialog();
-                //Toast.makeText(VideoStoryPreviewActivity.this, "" + ex.getMessage(), Toast.LENGTH_SHORT).show();
+                //Toast.makeText(VideoStoryPreviewActivity.this, "" + ex.getMainObj(), Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -500,7 +509,7 @@ public class VideoStoryPreviewActivity extends BaseActivity implements MediaPlay
 
             @Override
             public void onError(int id, Exception ex) {
-                //Toast.makeText(VideoStoryPreviewActivity.this, "" + ex.getMessage(), Toast.LENGTH_SHORT).show();
+                //Toast.makeText(VideoStoryPreviewActivity.this, "" + ex.getMainObj(), Toast.LENGTH_SHORT).show();
             }
         });
     }

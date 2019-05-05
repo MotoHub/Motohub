@@ -24,7 +24,6 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import online.motohub.R;
 import online.motohub.adapter.PostViewAdapter;
-import online.motohub.application.MotoHub;
 import online.motohub.fcm.MyFireBaseMessagingService;
 import online.motohub.fragment.dialog.AppDialogFragment;
 import online.motohub.interfaces.SharePostInterface;
@@ -124,27 +123,21 @@ public class PostViewActivity extends BaseActivity implements PostViewAdapter.To
     }
 
     private void getMotoProfiles() {
-        AsyncTask.execute(new Runnable() {
-            @Override
-            public void run() {
-                //TODO your background code
-                int mUserID = PreferenceUtils.getInstance(PostViewActivity.this).getIntData(PreferenceUtils.USER_ID);
-                String mFilter = "UserID = " + mUserID;
-                RetrofitClient.getRetrofitInstance().callGetProfiles(PostViewActivity.this, mFilter, RetrofitClient.GET_PROFILE_RESPONSE);
-            }
+        AsyncTask.execute(() -> {
+            //TODO your background code
+            int mUserID = PreferenceUtils.getInstance(PostViewActivity.this).getIntData(PreferenceUtils.USER_ID);
+            String mFilter = "UserID = " + mUserID;
+            RetrofitClient.getRetrofitInstance().callGetProfiles(PostViewActivity.this, mFilter, RetrofitClient.GET_PROFILE_RESPONSE);
         });
 
     }
 
     private void getPost(final String mFilter) {
-        AsyncTask.execute(new Runnable() {
-            @Override
-            public void run() {
-                //TODO your background code
-                if (mCurrentProfileObj != null) {
-                    mPostsRvTotalCount = -1;
-                    RetrofitClient.getRetrofitInstance().callGetProfilePosts(PostViewActivity.this, mFilter, RetrofitClient.GET_FEED_POSTS_RESPONSE, mDataLimit, mPostsRvOffset);
-                }
+        AsyncTask.execute(() -> {
+            //TODO your background code
+            if (mCurrentProfileObj != null) {
+                mPostsRvTotalCount = -1;
+                RetrofitClient.getRetrofitInstance().callGetProfilePost(PostViewActivity.this, mFilter, RetrofitClient.GET_FEED_POSTS_RESPONSE, mDataLimit, mPostsRvOffset);
             }
         });
 

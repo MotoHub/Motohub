@@ -183,7 +183,7 @@ public class ChatBoxGroupMsgAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                         mViewHolderSender.mSenderMsgTv.setVisibility(View.VISIBLE);
                         try {
                             mViewHolderSender.mSenderMsgTv.setText(URLDecoder.decode(mGrpChatMsgList.get(position).getMessage(), "UTF-8"));
-                            //mViewHolderSender.mSenderMsgTv.setText(replacer(sb.append(mGrpChatMsgList.get(position).getMessage())));
+                            //mViewHolderSender.mSenderMsgTv.setText(replacer(sb.append(mGrpChatMsgList.get(position).getMainObj())));
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -278,7 +278,7 @@ public class ChatBoxGroupMsgAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                         mViewHolderOthers.mOthersMsgTv.setVisibility(View.VISIBLE);
                         try {
                             mViewHolderOthers.mOthersMsgTv.setText(URLDecoder.decode(mGrpChatMsgList.get(position).getMessage(), "UTF-8"));
-                            //mViewHolderOthers.mOthersMsgTv.setText(replacer(sb.append(mGrpChatMsgList.get(position).getMessage())));
+                            //mViewHolderOthers.mOthersMsgTv.setText(replacer(sb.append(mGrpChatMsgList.get(position).getMainObj())));
                         } catch (Exception e) {
                             e.printStackTrace();
                         }

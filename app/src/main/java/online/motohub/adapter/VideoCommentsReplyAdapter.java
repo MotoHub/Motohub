@@ -145,7 +145,7 @@ public class VideoCommentsReplyAdapter extends RecyclerView.Adapter<VideoComment
             if (mFeedReplyList.get(pos).getReplyLikeByReplyID().size() > 0) {
                 setLikeUnLikeForPost(mHolder, pos);
             } else {
-                mHolder.mLikeBtn.setImageResource(R.drawable.like_to_like_click_bg);
+                mHolder.mLikeBtn.setImageResource(R.drawable.like_icon);
                 mHolder.mLikeBtn.setTag("like");
                 mHolder.mLikeCountTxt.setText("like");
             }
@@ -369,16 +369,16 @@ public class VideoCommentsReplyAdapter extends RecyclerView.Adapter<VideoComment
             for (final VideoReplyLikeModel likesEntity : mReplyLikes) {
 
                 if ((likesEntity.getProfileID() == mMyProfileResModel.getID())) {
-                    mViewHolder.mLikeBtn.setImageResource(R.drawable.like_click_to_like_bg);
+                    mViewHolder.mLikeBtn.setImageResource(R.drawable.liked_icon);
                     mViewHolder.mLikeBtn.setTag("unlike");
                     break;
                 } else {
-                    mViewHolder.mLikeBtn.setImageResource(R.drawable.like_to_like_click_bg);
+                    mViewHolder.mLikeBtn.setImageResource(R.drawable.like_icon);
                     mViewHolder.mLikeBtn.setTag("like");
                 }
             }
         } else {
-            mViewHolder.mLikeBtn.setImageResource(R.drawable.like_to_like_click_bg);
+            mViewHolder.mLikeBtn.setImageResource(R.drawable.like_icon);
             mViewHolder.mLikeBtn.setTag("like");
             mViewHolder.mLikeCountTxt.setText("like");
         }

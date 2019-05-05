@@ -43,12 +43,14 @@ import online.motohub.model.GroupChatMsgResModel;
 import online.motohub.model.GroupChatRoomModel;
 import online.motohub.model.GroupChatRoomResModel;
 import online.motohub.model.ImageModel;
+import online.motohub.model.NotificationModel1;
 import online.motohub.model.ProfileModel;
 import online.motohub.model.ProfileResModel;
 import online.motohub.model.SessionModel;
 import online.motohub.retrofit.RetrofitClient;
 import online.motohub.util.AppConstants;
 import online.motohub.util.DialogManager;
+import online.motohub.util.NotificationUtils1;
 import online.motohub.util.PreferenceUtils;
 
 public class ChatBoxGroupActivity extends BaseActivity implements ChatBoxGroupMsgAdapter.TotalRetrofitMsgResultCount {
@@ -218,14 +220,10 @@ public class ChatBoxGroupActivity extends BaseActivity implements ChatBoxGroupMs
             }
         } else {
             try {
-                JSONObject mNotificationJsonObject = new JSONObject();
-                JSONObject mJsonObject = new JSONObject(intent.getStringExtra(MyFireBaseMessagingService.ENTRY_JSON_OBJ));
-                mNotificationJsonObject.put(MyFireBaseMessagingService.ENTRY_JSON_OBJ, mJsonObject);
-                String mGroupChatRoomID = (mJsonObject.getJSONObject("Details").get("GroupChatRoomID").toString());
-                int mNotificationID = Integer.parseInt((mJsonObject.getJSONObject("Details").get("GroupChatRoomID").toString()));
-                String mContentTitle = "Group : " + ((mJsonObject.getJSONObject("Details").get("GroupName").toString()));
-                MyFireBaseMessagingService.composeChatNotification(mNotificationJsonObject, this, mNotificationID,
-                        mGroupChatRoomID, mContentTitle, ChatBoxGroupActivity.class);
+                NotificationModel1 model1 = new NotificationModel1();
+                model1.setMainObj(new JSONObject(intent.getStringExtra(MyFireBaseMessagingService.ENTRY_JSON_OBJ)));
+                model1.setForceNotification(true);
+                new NotificationUtils1(this, model1);
             } catch (JSONException e) {
                 e.printStackTrace();
             }

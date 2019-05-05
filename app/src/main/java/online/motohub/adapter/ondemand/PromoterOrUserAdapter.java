@@ -56,7 +56,6 @@ import online.motohub.activity.promoter.PromotersListActivity;
 import online.motohub.activity.track.TrackProfileActivity;
 import online.motohub.adapter.VideoLikesAdapter;
 import online.motohub.adapter.VideoSharesAdapter;
-import online.motohub.application.MotoHub;
 import online.motohub.fragment.dialog.AppDialogFragment;
 import online.motohub.fragment.ondemand.PromoterOrUserFragment;
 import online.motohub.interfaces.CommonReturnInterface;
@@ -109,7 +108,6 @@ public class PromoterOrUserAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             ((BaseActivity) mContext).showToast(mContext, mContext.getString(R.string.internet_err));
         }
     };
-    private int ProfileID;
     private Activity mActivity;
     private Dialog mCommentListPopup;
     private int mDeleteLikeID;
@@ -117,7 +115,6 @@ public class PromoterOrUserAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     private ProfileResModel mCurrentProfileResModel;
     private ViewHolderPosts mViewHolderPost;
     private int mAdapterPosition = 0;
-    int count_post_position = 0;
     CommonReturnInterface mSaveMyVideoCallback = new CommonReturnInterface() {
         @Override
         public void onSuccess(int type) {
@@ -151,7 +148,7 @@ public class PromoterOrUserAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         this.mContext = ctx;
         this.mActivity = (Activity) ctx;
         this.mCurrentProfileResModel = mMyProfileResModel;
-        this.ProfileID = ProfileID;
+        int profileID = ProfileID;
         this.promoterOrUserFragment = promoterOrUserFragment;
     }
 
@@ -259,7 +256,7 @@ public class PromoterOrUserAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                     if (mPostsList.get(position).getVideolikes_by_VideoID().size() > 0) {
                         setLikeUnLikeForPost(mViewHolderPost, position);
                     } else {
-                        mViewHolderPost.mLikeBtn.setImageResource(R.drawable.like_to_like_click_bg);
+                        mViewHolderPost.mLikeBtn.setImageResource(R.drawable.like_icon);
                         mViewHolderPost.mLikeBtn.setTag("like");
                         mViewHolderPost.mLikeCountText.setText("");
                     }
@@ -420,11 +417,11 @@ public class PromoterOrUserAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                         String mMyFollowingsID = Utility.getInstance().getMyFollowersFollowingsID(mCurrentProfileResModel.getFollowprofile_by_ProfileID(), false);
                         if (mMyFollowingsID != null) {
                             try {
-                                if (mPostsList.get(position).getCaption().contains(" ")) {
+                                /*if (mPostsList.get(position).getCaption().contains(" ")) {
                                     content = mPostsList.get(position).getCaption();
-                                } else {
-                                    content = URLDecoder.decode(mPostsList.get(position).getCaption(), "UTF-8");
-                                }
+                                } else {*/
+                                content = URLDecoder.decode(mPostsList.get(position).getCaption(), "UTF-8");
+                                //}
 
                                 //content = replacer(sb.append(mPostsList.get(position).getCaption()));
                             } catch (Exception e) {
@@ -519,11 +516,11 @@ public class PromoterOrUserAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         for (final VideoLikesModel likesEntity : mFeedLikes) {
             try {
                 if ((likesEntity.getOwnerID() == mCurrentProfileResModel.getID())) {
-                    mViewHolderPost.mLikeBtn.setImageResource(R.drawable.like_click_to_like_bg);
+                    mViewHolderPost.mLikeBtn.setImageResource(R.drawable.liked_icon);
                     mViewHolderPost.mLikeBtn.setTag("unlike");
                     break;
                 } else {
-                    mViewHolderPost.mLikeBtn.setImageResource(R.drawable.like_to_like_click_bg);
+                    mViewHolderPost.mLikeBtn.setImageResource(R.drawable.like_icon);
                     mViewHolderPost.mLikeBtn.setTag("like");
                 }
             } catch (Exception e) {

@@ -721,12 +721,6 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
 
-        <activity
-            android:name="online.motohub.activity.business.BusinessWritePostActivity1"
-            android:configChanges="orientation"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme" />
-
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="68c43689443ecd5646028eddeb91b3cf2e440cb7" />

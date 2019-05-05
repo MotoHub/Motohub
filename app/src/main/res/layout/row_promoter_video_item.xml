@@ -366,7 +366,7 @@
                     android:focusable="true"
                     android:gravity="center"
                     android:padding="@dimen/size5"
-                    app:srcCompat="@drawable/like_to_like_click_bg" />
+                    app:srcCompat="@drawable/like_icon" />
 
                 <ImageView
                     android:id="@+id/commentBtn"
@@ -379,7 +379,7 @@
                     android:focusable="true"
                     android:gravity="center"
                     android:padding="@dimen/size5"
-                    app:srcCompat="@drawable/comments_icon_bg" />
+                    app:srcCompat="@drawable/comment_icon" />
 
                 <ImageView
                     android:id="@+id/shareBtn"
@@ -392,7 +392,7 @@
                     android:focusable="true"
                     android:gravity="center"
                     android:padding="@dimen/size5"
-                    app:srcCompat="@drawable/share_icon_bg" />
+                    app:srcCompat="@drawable/share_icon" />
 
             </LinearLayout>
 

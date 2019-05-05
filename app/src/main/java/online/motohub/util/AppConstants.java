@@ -7,11 +7,11 @@ public class AppConstants {
      * You should replace these values with your own. See the README for details
      * on what to fill in.
      */
-    public static final String COGNITO_POOL_ID = "ap-southeast-2:dea16175-0997-4e07-a686-19034fcc8232";
+   // public static final String COGNITO_POOL_ID = "ap-southeast-2:dea16175-0997-4e07-a686-19034fcc8232";
     /*
      * Region of your Cognito identity pool ID.
      */
-    public static final String COGNITO_POOL_REGION = "ap-southeast-2";
+   // public static final String COGNITO_POOL_REGION = "ap-southeast-2";
 
     /*
      * Note, you must first create a bucket using the S3 console before running
@@ -23,9 +23,9 @@ public class AppConstants {
     /*
      * Region of your bucket.
      */
-    public static final String BUCKET_REGION = "ap-southeast-2";
-    public static final String KEY = "AKIAJ3FKCRSJVJEUAN5A";
-    public static final String SECRET = "pqeAHtgxzI4OcfjztxxEF8aBvJsP5Oi4ElEcesZY";
+    //public static final String BUCKET_REGION = "ap-southeast-2";
+    //public static final String KEY = "AKIAJ3FKCRSJVJEUAN5A";
+    //public static final String SECRET = "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";
 
     public static final String ENCRYPT_KEY = "MotoHUB";
 
@@ -37,6 +37,8 @@ public class AppConstants {
     public static final String NOTIFICATION_PROFILE_PICTURE = "ProfilePicture";
     public static final String NOTIFICATION_SENDER_NAME = "SenderName";
     public static final String NOTIFICATION_PROFILE_ID = "ProfileID";
+    //Nez Time Zone
+    public static final String NZ_TIME_ZONE = "Europe/London";
 
     public static final String POST_ID = "PostID";
     public static final String REPORT_STRING = "ReportString";
