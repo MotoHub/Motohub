@@ -205,8 +205,8 @@
                                     style="@style/LayoutMatch"
                                     android:layout_below="@+id/performance_shop_img_view"
                                     android:gravity="center"
-                                    android:text="@string/shop"
-                                    android:textColor="@color/colorBlack"
+                                    android:text="@string/performance_shop"
+                                    android:textColor="@color/colorOrange"
                                     android:textSize="@dimen/text12" />
 
                             </RelativeLayout>
@@ -241,8 +241,8 @@
                                     style="@style/LayoutMatchWrap"
                                     android:layout_below="@+id/news_and_media_img_view"
                                     android:gravity="center"
-                                    android:text="@string/news_and_media"
-                                    android:textColor="@color/colorBlack"
+                                    android:text="@string/news_and_media1"
+                                    android:textColor="@color/colorOrange"
                                     android:textSize="@dimen/text12" />
 
                             </RelativeLayout>
@@ -277,7 +277,7 @@
                                     android:layout_below="@+id/tracks_img_view"
                                     android:gravity="center"
                                     android:text="@string/Tracks"
-                                    android:textColor="@color/colorBlack"
+                                    android:textColor="@color/colorOrange"
                                     android:textSize="@dimen/text12" />
 
                             </RelativeLayout>
@@ -312,7 +312,7 @@
                                     android:layout_below="@+id/clubs_img_view"
                                     android:gravity="center"
                                     android:text="@string/clubs"
-                                    android:textColor="@color/colorBlack"
+                                    android:textColor="@color/colorOrange"
                                     android:textSize="@dimen/text12" />
 
                             </RelativeLayout>
@@ -348,7 +348,7 @@
                                     android:gravity="center"
                                     android:paddingTop="@dimen/size2"
                                     android:text="@string/promoters"
-                                    android:textColor="@color/colorBlack"
+                                    android:textColor="@color/colorOrange"
                                     android:textSize="@dimen/text12" />
 
                             </RelativeLayout>

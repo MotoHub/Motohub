@@ -292,20 +292,20 @@ public class PromoterPostsAdapter extends RecyclerView.Adapter<RecyclerView.View
                             for (final FeedLikesModel likesEntity : mFeedLikes) {
 
                                 if ((likesEntity.getOwnerID() == mCurrentProfileResModel.getID())) {
-                                    mViewHolderPost.mLikeBtn.setImageResource(R.drawable.like_click_to_like_bg);
+                                    mViewHolderPost.mLikeBtn.setImageResource(R.drawable.liked_icon);
                                     mViewHolderPost.mLikeBtn.setTag("unlike");
                                     break;
                                 } else {
-                                    mViewHolderPost.mLikeBtn.setImageResource(R.drawable.like_to_like_click_bg);
+                                    mViewHolderPost.mLikeBtn.setImageResource(R.drawable.like_icon);
                                     mViewHolderPost.mLikeBtn.setTag("like");
                                 }
                             }
                         } else {
-                            mViewHolderPost.mLikeBtn.setImageResource(R.drawable.like_to_like_click_bg);
+                            mViewHolderPost.mLikeBtn.setImageResource(R.drawable.like_icon);
                             mViewHolderPost.mLikeBtn.setTag("like");
                         }
                     } else {
-                        mViewHolderPost.mLikeBtn.setImageResource(R.drawable.like_to_like_click_bg);
+                        mViewHolderPost.mLikeBtn.setImageResource(R.drawable.like_icon);
                         mViewHolderPost.mLikeBtn.setTag("like");
                     }
 
@@ -586,7 +586,7 @@ public class PromoterPostsAdapter extends RecyclerView.Adapter<RecyclerView.View
     //Notifications
     public void postNotificationDefault(ImageView img) {
         img.setVisibility(View.VISIBLE);
-        img.setImageResource(R.drawable.notificationunblock);
+        img.setImageResource(R.drawable.notify_active_icon);
         img.setTag(mContext.getString(R.string.notification_unblocked));
     }
 
@@ -595,12 +595,12 @@ public class PromoterPostsAdapter extends RecyclerView.Adapter<RecyclerView.View
         for (final NotificationBlockedUsersModel mNotifications_post : notifications_blocked_users) {
             if (mCurrentProfileResModel.getID() == mNotifications_post.getmProfileID()) {
                 img.setVisibility(View.VISIBLE);
-                img.setImageResource(R.drawable.notificationblock);
+                img.setImageResource(R.drawable.notify_inactive_icon);
                 img.setTag(mContext.getString(R.string.notification_blocked));
                 break;
             } else {
                 img.setVisibility(View.VISIBLE);
-                img.setImageResource(R.drawable.notificationunblock);
+                img.setImageResource(R.drawable.notify_active_icon);
                 img.setTag(mContext.getString(R.string.notification_unblocked));
                 break;
             }

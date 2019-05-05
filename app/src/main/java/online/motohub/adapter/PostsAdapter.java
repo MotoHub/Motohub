@@ -30,7 +30,6 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DataSource;
@@ -65,7 +64,6 @@ import online.motohub.activity.performance_shop.PerformanceShopProfileActivity;
 import online.motohub.activity.promoter.PromoterProfileActivity;
 import online.motohub.activity.promoter.PromotersImgListActivity;
 import online.motohub.activity.track.TrackProfileActivity;
-import online.motohub.application.MotoHub;
 import online.motohub.fragment.dialog.AppDialogFragment;
 import online.motohub.model.FeedCommentModel;
 import online.motohub.model.FeedLikesModel;
@@ -326,7 +324,7 @@ public class PostsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                     if (mPostsList.get(position).getPostLikes().size() > 0) {
                         setLikeUnLikeForPost(mViewHolderPost, position);
                     } else {
-                        mViewHolderPost.mLikeBtn.setImageResource(R.drawable.like_to_like_click_bg);
+                        mViewHolderPost.mLikeBtn.setImageResource(R.drawable.like_icon);
                         mViewHolderPost.mLikeBtn.setTag("like");
                         mViewHolderPost.mLikeCountText.setText("");
                     }
@@ -804,7 +802,7 @@ public class PostsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     public void postNotificationDefault(ImageView img) {
         img.setVisibility(View.VISIBLE);
-        img.setImageResource(R.drawable.notificationunblock);
+        img.setImageResource(R.drawable.notify_active_icon);
         img.setTag(mContext.getString(R.string.notification_unblocked));
     }
 
@@ -813,12 +811,12 @@ public class PostsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         for (final NotificationBlockedUsersModel mNotifications_post : notifications_blocked_users) {
             if (mCurrentProfileObj.getID() == mNotifications_post.getmProfileID()) {
                 img.setVisibility(View.VISIBLE);
-                img.setImageResource(R.drawable.notificationblock);
+                img.setImageResource(R.drawable.notify_inactive_icon);
                 img.setTag(mContext.getString(R.string.notification_blocked));
                 break;
             } else {
                 img.setVisibility(View.VISIBLE);
-                img.setImageResource(R.drawable.notificationunblock);
+                img.setImageResource(R.drawable.notify_active_icon);
                 img.setTag(mContext.getString(R.string.notification_unblocked));
                 break;
             }
@@ -1121,11 +1119,11 @@ public class PostsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         mViewHolderPost.mLikeCountText.setText(resLikes);
         for (final FeedLikesModel likesEntity : mFeedLikes) {
             if ((likesEntity.getOwnerID() == mCurrentProfileObj.getID())) {
-                mViewHolderPost.mLikeBtn.setImageResource(R.drawable.like_click_to_like_bg);
+                mViewHolderPost.mLikeBtn.setImageResource(R.drawable.liked_icon);
                 mViewHolderPost.mLikeBtn.setTag("unlike");
                 break;
             } else {
-                mViewHolderPost.mLikeBtn.setImageResource(R.drawable.like_to_like_click_bg);
+                mViewHolderPost.mLikeBtn.setImageResource(R.drawable.like_icon);
                 mViewHolderPost.mLikeBtn.setTag("like");
             }
         }

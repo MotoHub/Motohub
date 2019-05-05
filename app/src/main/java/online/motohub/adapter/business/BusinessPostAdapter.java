@@ -414,7 +414,7 @@ public class BusinessPostAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     public void postNotificationDefault(ImageView img) {
         img.setVisibility(View.VISIBLE);
-        img.setImageResource(R.drawable.notificationunblock);
+        img.setImageResource(R.drawable.notify_active_icon);
         img.setTag(mContext.getString(R.string.notification_unblocked));
     }
 
@@ -423,12 +423,12 @@ public class BusinessPostAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         for (final NotificationBlockedUsersModel mNotifications_post : notifications_blocked_users) {
             if (mCurrentProfileResModel.getID() == mNotifications_post.getmProfileID()) {
                 img.setVisibility(View.VISIBLE);
-                img.setImageResource(R.drawable.notificationblock);
+                img.setImageResource(R.drawable.notify_inactive_icon);
                 img.setTag(mContext.getString(R.string.notification_blocked));
                 break;
             } else {
                 img.setVisibility(View.VISIBLE);
-                img.setImageResource(R.drawable.notificationunblock);
+                img.setImageResource(R.drawable.notify_active_icon);
                 img.setTag(mContext.getString(R.string.notification_unblocked));
                 break;
             }

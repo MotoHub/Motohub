@@ -25,7 +25,7 @@
         android:id="@+id/likeBtn"
         android:layout_width="@dimen/size32"
         android:layout_height="@dimen/size32"
-        android:background="@drawable/like_to_like_click_bg"
+        android:background="@drawable/like_icon"
         android:contentDescription="@string/like"
         android:gravity="center"
         android:padding="@dimen/size5"

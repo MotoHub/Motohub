@@ -173,6 +173,7 @@
     <string name="search">Search</string>
     <string name="notifications">Notifications</string>
     <string name="news_and_media">News &amp; Media</string>
+    <string name="news_and_media1">News &amp; \n Media</string>
     <string name="messages">Messages</string>
     <string name="mainObj">Message</string>
     <string name="Tracks">Tracks</string>

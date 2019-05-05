@@ -256,7 +256,7 @@ public class PromoterOrUserAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                     if (mPostsList.get(position).getVideolikes_by_VideoID().size() > 0) {
                         setLikeUnLikeForPost(mViewHolderPost, position);
                     } else {
-                        mViewHolderPost.mLikeBtn.setImageResource(R.drawable.like_to_like_click_bg);
+                        mViewHolderPost.mLikeBtn.setImageResource(R.drawable.like_icon);
                         mViewHolderPost.mLikeBtn.setTag("like");
                         mViewHolderPost.mLikeCountText.setText("");
                     }
@@ -516,11 +516,11 @@ public class PromoterOrUserAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         for (final VideoLikesModel likesEntity : mFeedLikes) {
             try {
                 if ((likesEntity.getOwnerID() == mCurrentProfileResModel.getID())) {
-                    mViewHolderPost.mLikeBtn.setImageResource(R.drawable.like_click_to_like_bg);
+                    mViewHolderPost.mLikeBtn.setImageResource(R.drawable.liked_icon);
                     mViewHolderPost.mLikeBtn.setTag("unlike");
                     break;
                 } else {
-                    mViewHolderPost.mLikeBtn.setImageResource(R.drawable.like_to_like_click_bg);
+                    mViewHolderPost.mLikeBtn.setImageResource(R.drawable.like_icon);
                     mViewHolderPost.mLikeBtn.setTag("like");
                 }
             } catch (Exception e) {

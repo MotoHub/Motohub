@@ -187,7 +187,7 @@ public class FeedCommentsAdapter extends RecyclerView.Adapter<FeedCommentsAdapte
             if (mFeedCommentList.get(pos).getFeedCommentLikeModel() != null) {
                 setLikeUnLikeForPost(mHolder, pos);
             } else {
-                mHolder.mLikeBtn.setImageResource(R.drawable.like_to_like_click_bg);
+                mHolder.mLikeBtn.setImageResource(R.drawable.like_icon);
                 mHolder.mLikeBtn.setTag("like");
                 mHolder.mLikeCountTxt.setText("like");
             }
@@ -419,16 +419,16 @@ public class FeedCommentsAdapter extends RecyclerView.Adapter<FeedCommentsAdapte
             for (final FeedCommentLikeModel likesEntity : mFeedLikes) {
 
                 if ((likesEntity.getProfileID() == mMyProfileResModel.getID())) {
-                    mViewHolder.mLikeBtn.setImageResource(R.drawable.like_click_to_like_bg);
+                    mViewHolder.mLikeBtn.setImageResource(R.drawable.liked_icon);
                     mViewHolder.mLikeBtn.setTag("unlike");
                     break;
                 } else {
-                    mViewHolder.mLikeBtn.setImageResource(R.drawable.like_to_like_click_bg);
+                    mViewHolder.mLikeBtn.setImageResource(R.drawable.like_icon);
                     mViewHolder.mLikeBtn.setTag("like");
                 }
             }
         } else {
-            mViewHolder.mLikeBtn.setImageResource(R.drawable.like_to_like_click_bg);
+            mViewHolder.mLikeBtn.setImageResource(R.drawable.like_icon);
             mViewHolder.mLikeBtn.setTag("like");
             mViewHolder.mLikeCountTxt.setText("like");
         }

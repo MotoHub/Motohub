@@ -64,13 +64,11 @@ import online.motohub.activity.promoter.PromotersImgListActivity;
 import online.motohub.activity.track.TrackProfileActivity;
 import online.motohub.adapter.FeedLikesAdapter;
 import online.motohub.adapter.FeedSharesAdapter;
-import online.motohub.application.MotoHub;
 import online.motohub.fragment.dialog.AppDialogFragment;
 import online.motohub.model.FeedLikesModel;
 import online.motohub.model.FeedShareModel;
 import online.motohub.model.PostsModel;
 import online.motohub.model.PostsResModel;
-import online.motohub.model.ProfileModel;
 import online.motohub.model.ProfileResModel;
 import online.motohub.model.VideoShareModel;
 import online.motohub.model.promoter_club_news_media.PromotersModel;
@@ -340,7 +338,7 @@ public class PostCommentLikeViewAdapter extends RecyclerView.Adapter<RecyclerVie
                     if (mPostsList.get(position).getPostLikes() != null) {
                         setLikeUnLikeForPost(mViewHolderPost, position);
                     } else {
-                        mViewHolderPost.mLikeBtn.setImageResource(R.drawable.like_to_like_click_bg);
+                        mViewHolderPost.mLikeBtn.setImageResource(R.drawable.like_icon);
                         mViewHolderPost.mLikeBtn.setTag("like");
                         mViewHolderPost.mLikeCountText.setText("");
                     }
@@ -880,16 +878,16 @@ public class PostCommentLikeViewAdapter extends RecyclerView.Adapter<RecyclerVie
             for (final FeedLikesModel likesEntity : mFeedLikes) {
 
                 if ((likesEntity.getOwnerID() == mCurrentProfileResModel.getID())) {
-                    mViewHolderPost.mLikeBtn.setImageResource(R.drawable.like_click_to_like_bg);
+                    mViewHolderPost.mLikeBtn.setImageResource(R.drawable.liked_icon);
                     mViewHolderPost.mLikeBtn.setTag("unlike");
                     break;
                 } else {
-                    mViewHolderPost.mLikeBtn.setImageResource(R.drawable.like_to_like_click_bg);
+                    mViewHolderPost.mLikeBtn.setImageResource(R.drawable.like_icon);
                     mViewHolderPost.mLikeBtn.setTag("like");
                 }
             }
         } else {
-            mViewHolderPost.mLikeBtn.setImageResource(R.drawable.like_to_like_click_bg);
+            mViewHolderPost.mLikeBtn.setImageResource(R.drawable.like_icon);
             mViewHolderPost.mLikeBtn.setTag("like");
             mViewHolderPost.mLikeCountText.setText("");
         }

@@ -424,16 +424,16 @@ public class VehicleInfoOtherProfiles extends BaseActivity {
             for (final VehicleInfoLikeModel likesEntity : mFeedLikes) {
 
                 if ((likesEntity.getWhoLikedProfileID() == mMyProfileResModel.getID())) {
-                    mLikeBtn.setImageResource(R.drawable.like_click_to_like_bg);
+                    mLikeBtn.setImageResource(R.drawable.liked_icon);
                     mLikeBtn.setTag("unlike");
                     break;
                 } else {
-                    mLikeBtn.setImageResource(R.drawable.like_to_like_click_bg);
+                    mLikeBtn.setImageResource(R.drawable.like_icon);
                     mLikeBtn.setTag("like");
                 }
             }
         } else {
-            mLikeBtn.setImageResource(R.drawable.like_to_like_click_bg);
+            mLikeBtn.setImageResource(R.drawable.like_icon);
             mLikeBtn.setTag("like");
         }
     }
@@ -775,7 +775,7 @@ public class VehicleInfoOtherProfiles extends BaseActivity {
 
     private void resetLikeCount(VehicleInfoLikeModel mLikeModel) {
 
-        mLikeBtn.setImageResource(R.drawable.like_click_to_like_bg);
+        mLikeBtn.setImageResource(R.drawable.liked_icon);
         mLikeBtn.setTag("unlike");
 
         ArrayList<VehicleInfoLikeModel> mVehicleInfoLikeList = mOthersProfileResModel.getVehicleInfoLikesByID();
@@ -795,7 +795,7 @@ public class VehicleInfoOtherProfiles extends BaseActivity {
 
     private void resetUnLikeCount() {
 
-        mLikeBtn.setImageResource(R.drawable.like_to_like_click_bg);
+        mLikeBtn.setImageResource(R.drawable.like_icon);
         mLikeBtn.setTag("like");
 
         ArrayList<VehicleInfoLikeModel> mVehicleInfoLikeList = mOthersProfileResModel.getVehicleInfoLikesByID();
