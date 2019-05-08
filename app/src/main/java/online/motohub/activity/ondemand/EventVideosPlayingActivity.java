@@ -132,17 +132,6 @@ public class EventVideosPlayingActivity extends BaseActivity {
         initView();
     }
 
-   /* @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
-    public void OnEvent(ProfileResModel profileResModel) {
-        mMyProfileResModel = profileResModel;
-        if (mMyProfileResModel != null) {
-            mMyProfileID = mMyProfileResModel.getID();
-
-            EventBus.getDefault().removeStickyEvent(profileResModel);
-        }
-
-    }*/
-
     private void initView() {
 
         setSwipeListenerForVideoView();
@@ -150,15 +139,9 @@ public class EventVideosPlayingActivity extends BaseActivity {
         mPostsList = (ArrayList<PromoterVideoModel.Resource>) getIntent().getSerializableExtra(AppConstants.ONDEMAND_DATA);
         mOtherProfileID = Integer.parseInt(mPostsList.get(pos).getProfileID());
         mFilter = getIntent().getStringExtra("Filter");
-        //mMyProfileResModel = (ProfileResModel) getIntent().getSerializableExtra(AppConstants.MY_PROFILE_OBJ);
-        /*mMyProfileResModel = MotoHub.getApplicationInstance().getmProfileResModel();
-        if (mMyProfileResModel != null) {
-            mMyProfileID = mMyProfileResModel.getID();
-        }*/
         mMyProfileResModel = EventBus.getDefault().getStickyEvent(ProfileResModel.class);
         if (mMyProfileResModel != null) {
             mMyProfileID = mMyProfileResModel.getID();
-            //EventBus.getDefault().removeStickyEvent(mMyProfileResModel);
         }
 
         pos = checkPosition;
@@ -202,7 +185,7 @@ public class EventVideosPlayingActivity extends BaseActivity {
                         String mFollowRelation = mMyProfileID + "_" + mOtherProfileID;
                         RetrofitClient.getRetrofitInstance().callGetIsAlreadyFollowedPromoterWithoutBuffering(EventVideosPlayingActivity.this, mFollowRelation, RetrofitClient.PROMOTER_IS_ALREADY_FOLLOWED);
                     }
-                } else if (mOtherProfileID == mMyProfileID) {
+                } else {
                     mFollowBtn.setVisibility(View.GONE);
                     follow_unfollow_txt.setVisibility(View.GONE);
                 }
@@ -217,10 +200,10 @@ public class EventVideosPlayingActivity extends BaseActivity {
             @Override
             public void run() {
                 // Do whatever you want
-                if (mIsAlreadyFollowing == true) {
+                if (mIsAlreadyFollowing) {
                     follow_unfollow_txt.setText("UnFollow");
                     mFollowBtn.setBackground(ContextCompat.getDrawable(EventVideosPlayingActivity.this, R.drawable.ic_follow));
-                } else if (mIsAlreadyFollowing == false) {
+                } else {
                     follow_unfollow_txt.setText("Follow");
                     mFollowBtn.setBackground(ContextCompat.getDrawable(EventVideosPlayingActivity.this, R.drawable.ic_unfollow));
                 }
@@ -254,7 +237,7 @@ public class EventVideosPlayingActivity extends BaseActivity {
         mPostsList.removeAll(Collections.singleton(null));
         isNextVideo = true;
         mQuotient = mPostsList.size() / 10;
-        if (mPostsList != null && mPostsList.size() > 0)
+        if (mPostsList.size() > 0)
             playVideo();
         viewHideAfterload();
         updateVideoList();
@@ -351,6 +334,7 @@ public class EventVideosPlayingActivity extends BaseActivity {
         mExoPlayer.setPlayWhenReady(mExoPlayer.getPlayWhenReady());
         mExoPlayer.seekTo(0, 0);
 
+        @SuppressLint("UsableSpace")
         Cache mCache = new SimpleCache(getCacheDir(),
                 new LeastRecentlyUsedCacheEvictor(getCacheDir().getUsableSpace()));
         mCacheDataSrcFactory = new CacheDataSourceFactory(mCache,
@@ -528,7 +512,7 @@ public class EventVideosPlayingActivity extends BaseActivity {
             @Override
             public void run() {
                 //TODO your background code
-                if (mTotalCount != mPostsList.size() && isLoadedData == false) {
+                if (mTotalCount != mPostsList.size() && !isLoadedData) {
                     isLoadedData = true;
                     callGetPromoterVideosWhilePlaying(EventVideosPlayingActivity.this, mFilter, mPostsList.size(), true);
                 }
@@ -542,7 +526,7 @@ public class EventVideosPlayingActivity extends BaseActivity {
             public void run() {
                 //TODO your background code
                 if (pos >= 0) {
-                    if (pos < mPostsList.size() && pos >= 0) {
+                    if (pos < mPostsList.size()) {
                         pos = pos - 1;
 
                         if (isAlreadyLikedPost()) {

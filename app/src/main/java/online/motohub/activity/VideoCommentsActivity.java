@@ -122,6 +122,7 @@ public class VideoCommentsActivity extends BaseActivity implements TaggedProfile
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_comment_list);
         ButterKnife.bind(this);
+        initView();
     }
 
     @Override
