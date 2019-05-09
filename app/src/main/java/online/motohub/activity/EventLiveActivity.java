@@ -41,6 +41,7 @@ import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import online.motohub.R;
+import online.motohub.activity.ondemand.EventVideosPlayingActivity;
 import online.motohub.adapter.ChatBoxEventGrpAdapter;
 import online.motohub.application.MotoHub;
 import online.motohub.fcm.MyFireBaseMessagingService;
@@ -61,6 +62,7 @@ import online.motohub.model.NotificationModel1;
 import online.motohub.model.PaymentModel;
 import online.motohub.model.ProfileModel;
 import online.motohub.model.ProfileResModel;
+import online.motohub.model.PromoterVideoModel;
 import online.motohub.model.SessionModel;
 import online.motohub.model.promoter_club_news_media.PromoterFollowerResModel;
 import online.motohub.model.promoter_club_news_media.PromotersResModel;
@@ -71,6 +73,9 @@ import online.motohub.util.DialogManager;
 import online.motohub.util.NotificationUtils1;
 import online.motohub.util.PreferenceUtils;
 import online.motohub.util.Utility;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import static android.view.View.GONE;
 
@@ -124,6 +129,7 @@ public class EventLiveActivity extends BaseActivity implements ChatBoxEventGrpAd
     @BindView(R.id.replyChatView)
     View mReplyChatView;
 
+    private final ArrayList<PromoterVideoModel.Resource> mPostsList = new ArrayList<>();
     private LinearLayoutManager mLinearLayoutManager;
     private EventsResModel mEventResModel;
     private ProfileResModel mMyProfileResModel;
@@ -898,9 +904,11 @@ public class EventLiveActivity extends BaseActivity implements ChatBoxEventGrpAd
             startActivity(new Intent(this, CameraStoryActivity.class).putExtras(mBundle));
         } else {
             if (mEventResModel != null) {
-                mBundle.putSerializable(EventsModel.EVENTS_RES_MODEL, mEventResModel);
+               /* mBundle.putSerializable(EventsModel.EVENTS_RES_MODEL, mEventResModel);
                 mBundle.putString(AppConstants.TAG, TAG);
-                startActivity(new Intent(this, ViewSpecLiveActivity.class).putExtras(mBundle));
+                startActivity(new Intent(this, ViewSpecLiveActivity.class).putExtras(mBundle));*/
+                String mFilter = "EventID" + " = " + mEventResModel.getID();
+                callGetPromotersGalleryAdapter(EventLiveActivity.this, mFilter, 0);
             }
         }
     }
@@ -933,5 +941,38 @@ public class EventLiveActivity extends BaseActivity implements ChatBoxEventGrpAd
 
     public void hideReplyChatMsg() {
         mReplyChatLayout.setVisibility(GONE);
+    }
+
+    private void callGetPromotersGalleryAdapter(final Context context, final String filter, int mOffset) {
+        String fields = "*";
+        DialogManager.showProgress(context);
+        int mLimit = 10;
+        String mOrderBy = "CreatedAt ASC";
+
+        RetrofitClient.getRetrofitInstance().getRetrofitApiInterface().callGetPromotersVideosForAdapter(fields, filter, APIConstants.mPromoterGalleryRelated, mOrderBy, mLimit, mOffset, true)
+                .enqueue(new Callback<PromoterVideoModel>() {
+                    @Override
+                    public void onResponse(Call<PromoterVideoModel> call, Response<PromoterVideoModel> response) {
+                        DialogManager.hideProgress();
+                        if (response.isSuccessful()) {
+                            PromoterVideoModel mResponse = response.body();
+                            if (mResponse != null && mResponse.getResource().size() > 0) {
+                                mPostsList.addAll(mResponse.getResource());
+                                if (mPostsList.size() > 0) {
+                                    Bundle mBundle = new Bundle();
+                                    mBundle.putSerializable(AppConstants.ONDEMAND_DATA, mPostsList);
+                                    EventBus.getDefault().postSticky(mMyProfileResModel);
+                                    mBundle.putString("Filter", filter);
+                                    startActivityForResult(new Intent(EventLiveActivity.this, EventVideosPlayingActivity.class).putExtras(mBundle), AppConstants.ONDEMAND_REQUEST);
+                                }
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<PromoterVideoModel> call, Throwable t) {
+                        DialogManager.hideProgress();
+                    }
+                });
     }
 }
