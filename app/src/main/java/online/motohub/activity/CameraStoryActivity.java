@@ -229,15 +229,15 @@ public class CameraStoryActivity extends BaseActivity implements View.OnClickLis
 
     private void onVideo(File video) {
         mCapturingVideo = false;
-        /*Intent intent = new Intent(CameraStoryActivity.this, VideoStoryPreviewActivity.class);
+        Intent intent = new Intent(CameraStoryActivity.this, VideoStoryPreviewActivity.class);
         intent.putExtra("file_uri", Uri.fromFile(video));
         Bundle mBunlde = getIntent().getExtras();
         if (mBunlde != null)
             intent.putExtra("bundle_data", mBunlde);
         startActivity(intent);
-        finish();*/
+        finish();
 
-        EventsResModel.EventadByEventID eventadByEventID = mEventResModel.getEventadByEventID().get(0);
+        /*EventsResModel.EventadByEventID eventadByEventID = mEventResModel.getEventadByEventID().get(0);
 
         GlideUrl glideUrl = new GlideUrl(UrlUtils.FILE_URL + eventadByEventID.getEventAd(), new LazyHeaders.Builder()
                 .addHeader("X-DreamFactory-Api-Key", getString(R.string.dream_factory_api_key))
@@ -265,7 +265,7 @@ public class CameraStoryActivity extends BaseActivity implements View.OnClickLis
                                   return false;
                               }
                           }
-                ).submit();
+                ).submit();*/
 
 
         //Bitmap bMapScaled = BitmapFactory.decodeResource(getResources(), R.drawable.motohub_logo);

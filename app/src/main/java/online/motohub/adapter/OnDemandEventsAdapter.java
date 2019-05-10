@@ -125,7 +125,7 @@ public class OnDemandEventsAdapter extends RecyclerView.Adapter<OnDemandEventsAd
 
     @SuppressLint("SetTextI18n")
     @Override
-    public void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {
+    public void onBindViewHolder(@NonNull final ViewHolder holder, @SuppressLint("RecyclerView") final int position) {
         try {
             final OndemandNewResponse mOnDemandResponse = mDataList.get(position);
 
