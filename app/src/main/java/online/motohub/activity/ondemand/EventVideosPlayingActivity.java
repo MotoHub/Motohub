@@ -2,17 +2,29 @@ package online.motohub.activity.ondemand;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.load.model.GlideUrl;
+import com.bumptech.glide.load.model.LazyHeaders;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.request.target.Target;
 import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.DefaultRenderersFactory;
 import com.google.android.exoplayer2.ExoPlaybackException;
@@ -57,6 +69,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import online.motohub.R;
 import online.motohub.activity.BaseActivity;
+import online.motohub.model.EventsModel;
 import online.motohub.model.EventsResModel;
 import online.motohub.model.FollowProfileModel;
 import online.motohub.model.PostsModel;
@@ -105,6 +118,8 @@ public class EventVideosPlayingActivity extends BaseActivity {
     Button mFollowBtn;
     @BindView(R.id.like_count_txt)
     Button mLikeCountTxt;
+    @BindView(R.id.img_logo)
+    ImageView imgLogo;
 
     int remainder;
     private EventsResModel mEventResModel;
@@ -120,6 +135,7 @@ public class EventVideosPlayingActivity extends BaseActivity {
     private String usertype, replaceString;
     private int mOtherProfileID, mMyProfileID;
     private int mQuotient, mTotalCount;
+    private ArrayList<EventsResModel.EventadByEventID> imageList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -133,17 +149,19 @@ public class EventVideosPlayingActivity extends BaseActivity {
     }
 
     private void initView() {
-
+        imageList = new ArrayList<>();
         setSwipeListenerForVideoView();
         checkPosition = getIntent().getIntExtra(AppConstants.POSITION, 0);
         mPostsList = (ArrayList<PromoterVideoModel.Resource>) getIntent().getSerializableExtra(AppConstants.ONDEMAND_DATA);
         mOtherProfileID = Integer.parseInt(mPostsList.get(pos).getProfileID());
+        mEventResModel = mPostsList.get(pos).getEvent_by_EventID();
         mFilter = getIntent().getStringExtra("Filter");
         mMyProfileResModel = EventBus.getDefault().getStickyEvent(ProfileResModel.class);
         if (mMyProfileResModel != null) {
             mMyProfileID = mMyProfileResModel.getID();
         }
-
+        if (mEventResModel != null)
+            getEvent();
         pos = checkPosition;
 
         if (isAlreadyLikedPost()) {
@@ -156,7 +174,11 @@ public class EventVideosPlayingActivity extends BaseActivity {
             mLikeCountTxt.setText("like");
         }
         isAlreadyFollowed();
+    }
 
+    private void getEvent() {
+        String mFilter = "ID=" + mEventResModel.getID();
+        RetrofitClient.getRetrofitInstance().callGetEvents(this, mFilter, RetrofitClient.GET_EVENTS_RESPONSE);
     }
 
     private void viewHideAfterload() {
@@ -784,6 +806,15 @@ public class EventVideosPlayingActivity extends BaseActivity {
                     setResult(RESULT_OK, new Intent().putExtra(AppConstants.VIDEO_LIST, mPostsList));
                     break;
             }
+        } else if (responseObj instanceof EventsModel) {
+            EventsModel mEventModel = (EventsModel) responseObj;
+            if (mEventModel.getResource().size() > 0) {
+                mEventResModel = mEventModel.getResource().get(0);
+                imageList.addAll(mEventResModel.getEventadByEventID());
+                if (imageList.size() > 0) {
+                    showLogoOnVideo(R.drawable.motohub_logo);
+                }
+            }
         }
     }
 
@@ -809,6 +840,41 @@ public class EventVideosPlayingActivity extends BaseActivity {
     public void retrofitOnError(int code, String message, int responseType) {
         super.retrofitOnError(code, message, responseType);
         releasePlayer();
+    }
+
+    private void showLogoOnVideo(int drawable) {
+
+        int arraySize = imageList.size();
+
+        new Runnable() {
+            int currentIndex = 0;
+            int updateInterval = 7000; //=one second
+
+            @Override
+            public void run() {
+
+                currentIndex += 1;
+                if (currentIndex == arraySize) {
+                    currentIndex = 0;
+                }
+
+                GlideUrl glideUrl = new GlideUrl(UrlUtils.FILE_URL + imageList.get(currentIndex).getEventAd(), new LazyHeaders.Builder()
+                        .addHeader("X-DreamFactory-Api-Key", getString(R.string.dream_factory_api_key))
+                        .build());
+                Glide.with(getApplicationContext())
+                        .load(glideUrl)
+                        .apply(new RequestOptions()
+                                .override(120, 100)
+                                .dontAnimate()
+                                .error(drawable)
+                        )
+                        .into(imgLogo);
+
+                imgLogo.postDelayed(this, updateInterval);
+            }
+        }.run();
+
+
     }
 
 

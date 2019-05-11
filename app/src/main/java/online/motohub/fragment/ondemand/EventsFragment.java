@@ -81,12 +81,6 @@ public class EventsFragment extends BaseFragment implements SwipeRefreshLayout.O
                 }
             });
             mOffset = mListOndemand.size() - 1;
-            //Show loading item
-            if (mSearchStr.isEmpty()) {
-                //getVideoDataFromAPi(mFilter);
-            } else {
-                //getSearchDataFromAPi(mFilter);
-            }
 
         }
     };
