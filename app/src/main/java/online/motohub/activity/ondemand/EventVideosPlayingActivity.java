@@ -160,7 +160,8 @@ public class EventVideosPlayingActivity extends BaseActivity {
         if (mMyProfileResModel != null) {
             mMyProfileID = mMyProfileResModel.getID();
         }
-        getEvent();
+        if (mEventResModel != null)
+            getEvent();
         pos = checkPosition;
 
         if (isAlreadyLikedPost()) {
