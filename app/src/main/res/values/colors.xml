@@ -5,6 +5,7 @@
     <color name="colorLighterGrey">#80D3D3D3</color>
     <color name="colorLightGrey">#8CFFFFFF</color>
     <color name="colorGrey">#809E9E9E</color>
+    <color name="btnGrey">#80ADABAB</color>
     <color name="colorDarkGrey">#FF666666</color>
     <color name="colorLightOrange">#C38200</color>
     <color name="colorOrange">#FF6600</color>
