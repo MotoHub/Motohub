@@ -407,6 +407,7 @@ public class CameraStoryActivity extends BaseActivity implements View.OnClickLis
         GPUMp4Composer = new GPUMp4Composer(videoFile.toString(), videoPath)
                 .fillMode(FillMode.PRESERVE_ASPECT_CROP)
                 .filter(new CustomWatermarkFilter(bitmap, CustomWatermarkFilter.Position.RIGHT_BOTTOM))
+                .filter(new CustomWatermarkFilter(bitmap, CustomWatermarkFilter.Position.RIGHT_BOTTOM))
                 .listener(new GPUMp4Composer.Listener() {
                     @Override
                     public void onProgress(double progress) {
