@@ -228,7 +228,7 @@ public class PostCommentLikeViewActivity extends BaseActivity implements PostCom
 
         mPostsRvTotalCount = -1;
 
-        RetrofitClient.getRetrofitInstance().callGetProfilePosts(this, mFilter, RetrofitClient.GET_FEED_POSTS_RESPONSE, mDataLimit, mPostsRvOffset);
+        RetrofitClient.getRetrofitInstance().callGetProfilePost(this, mFilter, RetrofitClient.GET_FEED_POSTS_RESPONSE, mDataLimit, mPostsRvOffset);
 
     }
 
