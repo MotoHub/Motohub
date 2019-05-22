@@ -200,7 +200,7 @@ public class UploadFileService extends IntentService implements ProgressRequestB
 
                     @Override
                     public void onFailure(Call<GalleryImgModel> call, Throwable t) {
-                        // onDownloadComplete(t.getMainObj(), 0);
+                        onDownloadComplete(getString(R.string.internet_err), 0);
                     }
                 });
 
@@ -316,7 +316,7 @@ public class UploadFileService extends IntentService implements ProgressRequestB
         //  int count = databaseHandler.getPendingCount();
         videoUploadModel = new VideoUploadModel();
         String s = videoFile.toString();
-        videoUploadModel.setVideoURL(s.substring(s.lastIndexOf("/") + 1, s.length()));
+        videoUploadModel.setVideoURL(s.substring(s.lastIndexOf("/") + 1));
         videoUploadModel.setFlag(1);
         videoUploadModel.setThumbnailURl(mImageFile.toString());
         videoUploadModel.setPosts(mPostStr);
@@ -396,7 +396,8 @@ public class UploadFileService extends IntentService implements ProgressRequestB
             @Override
             public void onStateChanged(int id, TransferState state) {
 
-                if (state.COMPLETED.equals(observer.getState())) {
+
+                if (TransferState.COMPLETED.equals(observer.getState())) {
 
                     String imageFileName = image.getName().substring(image.getName().lastIndexOf("/") + 1);
                     String videoFileName = video.getName().substring(video.getName().lastIndexOf("/") + 1);
@@ -430,6 +431,8 @@ public class UploadFileService extends IntentService implements ProgressRequestB
                     obj.addProperty(GalleryImgModel.CAPTION, postText != null ? postText : " ");
                     jsonElements.add(obj);
                     callAddVideoToGallery(jsonElements);
+                }else{
+                    onDownloadComplete(getString(R.string.internet_err), 0);
                 }
             }
 
@@ -456,7 +459,7 @@ public class UploadFileService extends IntentService implements ProgressRequestB
             @Override
             public void onError(int id, Exception ex) {
 
-                Toast.makeText(UploadFileService.this, "" + ex.getMessage(), Toast.LENGTH_SHORT).show();
+                onDownloadComplete(ex.getMessage(), 0);
             }
         });
 
@@ -465,7 +468,7 @@ public class UploadFileService extends IntentService implements ProgressRequestB
             @Override
             public void onStateChanged(int id, TransferState state) {
 
-                if (state.COMPLETED.equals(observer1.getState())) {
+                if (TransferState.COMPLETED.equals(observer1.getState())) {
                     //Toast.makeText(ProfileUploadService.this, "File Upload Complete", Toast.LENGTH_SHORT).show();
                 }
             }
