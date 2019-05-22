@@ -24,6 +24,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.work.BackoffPolicy;
 import androidx.work.Constraints;
 import androidx.work.Data;
 import androidx.work.NetworkType;
@@ -44,6 +45,7 @@ import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
 import butterknife.BindString;
 import butterknife.BindView;
@@ -476,9 +478,9 @@ public class WritePostActivity extends BaseActivity implements TaggedProfilesAda
     private void startUploadVideoService() {
         try {
 
-            Constraints constraints = new Constraints.Builder()
+           /* Constraints constraints = new Constraints.Builder()
                     .setRequiredNetworkType(NetworkType.CONNECTED)
-                    .build();
+                    .build();*/
 
             Bitmap thumb = ThumbnailUtils.createVideoThumbnail(mVideoPathUri, MediaStore.Images.Thumbnails.MINI_KIND);
             File imageFile = compressedImgFromBitmap(thumb);
@@ -492,7 +494,7 @@ public class WritePostActivity extends BaseActivity implements TaggedProfilesAda
             int count = databaseHandler.getPendingCount();
             String destFilePath = Environment.getExternalStorageDirectory().getPath()
                     + getString(R.string.util_app_folder_root_path);
-            /*Intent service_intent = new Intent(this, UploadFileService.class);
+            Intent service_intent = new Intent(this, UploadFileService.class);
             service_intent.putExtra("videofile", mVideoPathUri);
             service_intent.putExtra("imagefile", String.valueOf(imageFile));
             service_intent.putExtra("posttext", postText);
@@ -513,10 +515,10 @@ public class WritePostActivity extends BaseActivity implements TaggedProfilesAda
                 mTaggedProfileID.deleteCharAt(mTaggedProfileID.length() - 1);
                 service_intent.putExtra(PostsModel.TAGGED_PROFILE_ID, mTaggedProfileID.toString());
             }
-            startService(service_intent);*/
+            startService(service_intent);
 
 
-            StringBuilder mTaggedProfileID = new StringBuilder();
+            /*StringBuilder mTaggedProfileID = new StringBuilder();
             if (mTaggedProfilesList.size() > 0) {
                 for (ProfileResModel mProfileResModel : mTaggedProfilesList) {
                     mTaggedProfileID.append(mProfileResModel.getID()).append(",");
@@ -540,9 +542,13 @@ public class WritePostActivity extends BaseActivity implements TaggedProfilesAda
             OneTimeWorkRequest oneTimeWorkRequest = new OneTimeWorkRequest.Builder(MyWorkWithData.class)
                     .setConstraints(constraints)
                     .setInputData(data)
+                    .setBackoffCriteria(
+                            BackoffPolicy.LINEAR,
+                            OneTimeWorkRequest.MIN_BACKOFF_MILLIS,
+                            TimeUnit.MILLISECONDS)
                     .build();
 
-            WorkManager.getInstance().enqueue(oneTimeWorkRequest);
+            WorkManager.getInstance().enqueue(oneTimeWorkRequest);*/
 
             mVideoPathUri = null;
             mPostImgUri = null;
