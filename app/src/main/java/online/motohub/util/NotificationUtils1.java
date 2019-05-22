@@ -109,6 +109,8 @@ public class NotificationUtils1 {
             if(mNotificationID==0){
                 mNotificationID=143;
             }
+            //TODO Temporary Fix
+            mNotificationID=143;
             mNotificationManager.notify(mNotificationID, mNotification);
         } catch (Exception e) {
             e.printStackTrace();

@@ -16,8 +16,8 @@ android {
         applicationId "online.motohub"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 84
-        versionName "1.23"
+        versionCode 88
+        versionName "1.27"
         multiDexEnabled true
         vectorDrawables.useSupportLibrary = true
         ndk {
@@ -131,5 +131,6 @@ dependencies {
 
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.8.0'
+    implementation "android.arch.work:work-runtime:1.0.1"
 }
 apply plugin: 'com.google.gms.google-services'

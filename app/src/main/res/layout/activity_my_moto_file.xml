@@ -411,17 +411,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/size35"
                     android:layout_below="@id/tabSeparator"
-                    android:layout_marginEnd="@dimen/size10"
-                    android:layout_marginLeft="@dimen/size10"
-                    android:layout_marginRight="@dimen/size10"
-                    android:layout_marginStart="@dimen/size10"
-                    android:background="@drawable/black_orange_btn_bg"
-                    android:drawablePadding="-110dp"
-                    android:drawableStart="@drawable/ic_write_post"
-                    android:paddingStart="@dimen/size110"
-                    android:text="@string/write_a_post"
+                    android:layout_margin="@dimen/size10"
+                    android:background="@drawable/grey_orange_btn_bg"
+                    android:text="@string/write_a_post1"
                     android:textAllCaps="false"
-                    android:textColor="@color/colorOrange"
+                    android:textColor="@color/colorBlack"
                     android:textSize="@dimen/text14" />
 
                 <View
