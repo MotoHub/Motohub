@@ -1535,6 +1535,7 @@ public class RetrofitClient {
                 });
 
     }
+
     public void callGetProfilePost(final BaseActivity activity, String filter, final int queryType, int limit, int offset) {
 //        filter = filter + " AND (Post_on<=" + activity.getCurrentDate() + ")";
         String mOrderBy = "CreatedAt DESC";
@@ -1563,6 +1564,7 @@ public class RetrofitClient {
                 });
 
     }
+
     public void callGetProfilePosts(final BaseActivity activity, String filter, final int queryType, int limit, int offset) {
         filter = filter + " AND (Post_on<=" + activity.getCurrentDate() + ")";
         String mOrderBy = "CreatedAt DESC";

@@ -56,13 +56,12 @@ public class BusinessEventFragment extends BaseFragment {
 
     @BindString(R.string.no_events_err)
     String mNoEventsErr;
-
+    ProfileResModel mMyProfileResModel;
+    PromotersResModel mPromotersResModel;
     private Activity mActivity;
     private Unbinder mUnBinder;
     private List<EventsResModel> mPromoterEventsListData;
     private EventsFindAdapter mPromoterEventsAdapter;
-    ProfileResModel mMyProfileResModel;
-    PromotersResModel mPromotersResModel;
     private boolean mRefresh = true;
     private PaymentModel mTempPaymentModel;
     private int mFailureResponseType;

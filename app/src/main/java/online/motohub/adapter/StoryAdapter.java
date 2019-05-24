@@ -51,7 +51,7 @@ public class StoryAdapter extends RecyclerView.Adapter<StoryAdapter.StoryHolder>
                 ((BaseActivity) mContext).setImageWithGlide(holder.mCheckBox, android.R.drawable.checkbox_on_background);
             else
                 ((BaseActivity) mContext).setImageWithGlide(holder.mCheckBox, android.R.drawable.checkbox_off_background);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

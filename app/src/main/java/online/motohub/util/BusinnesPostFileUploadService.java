@@ -55,14 +55,14 @@ public class BusinnesPostFileUploadService extends IntentService implements Prog
     private Notification mNotification;
     private int mSubscriptionID;
 
+    public BusinnesPostFileUploadService(String name) {
+        super(name);
+    }
+
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
         return null;
-    }
-
-    public BusinnesPostFileUploadService(String name) {
-        super(name);
     }
 
     @Override
@@ -155,26 +155,6 @@ public class BusinnesPostFileUploadService extends IntentService implements Prog
         startForeground(mNotificationID, mNotification);
         UploadAsync uploadAsync = new UploadAsync(mNotificationID, videoFile, mImageFile);
         uploadAsync.execute();
-    }
-
-    @SuppressLint("StaticFieldLeak")
-    private class UploadAsync extends AsyncTask<String, String, Void> {
-
-        private Integer notificationid;
-        private File imagfile;
-        private File videofile;
-
-        public UploadAsync(Integer notificationid, File videofile, File ImageFile) {
-            this.notificationid = notificationid;
-            imagfile = ImageFile;
-            this.videofile = videofile;
-        }
-
-        @Override
-        protected Void doInBackground(String... paths) {
-            amazoneUpload(videofile, imagfile, notificationid);
-            return null;
-        }
     }
 
     private void amazoneUpload(final File video, final File image, final int notificationid) {
@@ -400,13 +380,33 @@ public class BusinnesPostFileUploadService extends IntentService implements Prog
         }
     }
 
-    //Some Stuff
-
     protected String getHttpFilePath(String filePath) {
         return filePath;
     }
 
+    //Some Stuff
+
     protected String getUserId() {
         return String.valueOf(PreferenceUtils.getInstance(this).getIntData(PreferenceUtils.USER_ID));
+    }
+
+    @SuppressLint("StaticFieldLeak")
+    private class UploadAsync extends AsyncTask<String, String, Void> {
+
+        private Integer notificationid;
+        private File imagfile;
+        private File videofile;
+
+        public UploadAsync(Integer notificationid, File videofile, File ImageFile) {
+            this.notificationid = notificationid;
+            imagfile = ImageFile;
+            this.videofile = videofile;
+        }
+
+        @Override
+        protected Void doInBackground(String... paths) {
+            amazoneUpload(videofile, imagfile, notificationid);
+            return null;
+        }
     }
 }

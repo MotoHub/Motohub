@@ -7,6 +7,17 @@ import android.os.Parcelable;
 
 public class LocalVideoModel implements Parcelable {
 
+    public static final Creator<LocalVideoModel> CREATOR = new Creator<LocalVideoModel>() {
+        @Override
+        public LocalVideoModel createFromParcel(Parcel in) {
+            return new LocalVideoModel(in);
+        }
+
+        @Override
+        public LocalVideoModel[] newArray(int size) {
+            return new LocalVideoModel[size];
+        }
+    };
     private Uri videoFile;
     private String name;
     private String path;
@@ -22,18 +33,6 @@ public class LocalVideoModel implements Parcelable {
         thumbnail = in.readParcelable(Bitmap.class.getClassLoader());
 
     }
-
-    public static final Creator<LocalVideoModel> CREATOR = new Creator<LocalVideoModel>() {
-        @Override
-        public LocalVideoModel createFromParcel(Parcel in) {
-            return new LocalVideoModel(in);
-        }
-
-        @Override
-        public LocalVideoModel[] newArray(int size) {
-            return new LocalVideoModel[size];
-        }
-    };
 
     public Uri getVideoFile() {
         return videoFile;

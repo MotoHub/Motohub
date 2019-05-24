@@ -55,13 +55,12 @@ public class PerfEventsFragment extends BaseFragment {
 
     @BindString(R.string.no_events_err)
     String mNoEventsErr;
-
+    ProfileResModel mMyProfileResModel;
+    PromotersResModel mPromotersResModel;
     private Activity mActivity;
     private Unbinder mUnBinder;
     private List<EventsResModel> mClubEventsListData;
     private EventsFindAdapter mClubEventsAdapter;
-    ProfileResModel mMyProfileResModel;
-    PromotersResModel mPromotersResModel;
     private boolean mRefresh = true;
     private PaymentModel mTempPaymentModel;
     private int mFailureResponseType;
@@ -105,7 +104,7 @@ public class PerfEventsFragment extends BaseFragment {
             mEventsFindListView.setLayoutManager(new LinearLayoutManager(getContext()));
             mEventsFindListView.setAdapter(mClubEventsAdapter);
         }
-        ((BaseActivity)getActivity()).setUpPurchseSuccessUI();
+        ((BaseActivity) getActivity()).setUpPurchseSuccessUI();
     }
 
     @Override
@@ -205,7 +204,7 @@ public class PerfEventsFragment extends BaseFragment {
             if (mSelectedEventAddOn.size() > 0)
                 mClubEventsAdapter.callPostSelectedAddOns(mSelectedEventAddOn);
             else {
-                if(mClubEventsAdapter.mEventType.equals(AppConstants.FREE_EVENT)){
+                if (mClubEventsAdapter.mEventType.equals(AppConstants.FREE_EVENT)) {
                     showToast(getActivity(), "Successfully booked an event.");
                 } else {
                     if (((BaseActivity) getActivity()).mPurchaseSuccessDialog != null)
@@ -214,7 +213,7 @@ public class PerfEventsFragment extends BaseFragment {
             }
 
         } else if (responseObj instanceof PurchasedAddOnModel) {
-            if(mClubEventsAdapter.mEventType.equals(AppConstants.FREE_EVENT)){
+            if (mClubEventsAdapter.mEventType.equals(AppConstants.FREE_EVENT)) {
                 showToast(getActivity(), "Successfully booked an event.");
             } else {
                 if (((BaseActivity) getActivity()).mPurchaseSuccessDialog != null)

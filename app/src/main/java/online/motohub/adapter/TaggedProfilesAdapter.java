@@ -20,27 +20,10 @@ public class TaggedProfilesAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     private TaggedProfilesSizeInterface mTaggedProfilesSizeInterface;
     private Context mContext;
 
-    public interface TaggedProfilesSizeInterface {
-        void notifyEmptyTaggedProfilesList(ArrayList<ProfileResModel> mTaggedProfilesList);
-    }
-
     public TaggedProfilesAdapter(ArrayList<ProfileResModel> taggedProfilesList, Context ctx) {
         this.mTaggedProfilesList = taggedProfilesList;
         this.mTaggedProfilesSizeInterface = (TaggedProfilesSizeInterface) ctx;
         this.mContext = ctx;
-    }
-
-    private class viewHolderTaggedProfiles extends RecyclerView.ViewHolder {
-
-        private TextView mFollowerNameTv;
-        private ImageView mCloseBtn;
-
-        viewHolderTaggedProfiles(View view) {
-            super(view);
-            mFollowerNameTv = view.findViewById(R.id.name_of_tag);
-            mCloseBtn = view.findViewById(R.id.close_btn);
-        }
-
     }
 
     @Override
@@ -65,7 +48,7 @@ public class TaggedProfilesAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                     mTaggedProfilesSizeInterface.notifyEmptyTaggedProfilesList(mTaggedProfilesList);
                 }
             });
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -74,6 +57,23 @@ public class TaggedProfilesAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     @Override
     public int getItemCount() {
         return mTaggedProfilesList.size();
+    }
+
+    public interface TaggedProfilesSizeInterface {
+        void notifyEmptyTaggedProfilesList(ArrayList<ProfileResModel> mTaggedProfilesList);
+    }
+
+    private class viewHolderTaggedProfiles extends RecyclerView.ViewHolder {
+
+        private TextView mFollowerNameTv;
+        private ImageView mCloseBtn;
+
+        viewHolderTaggedProfiles(View view) {
+            super(view);
+            mFollowerNameTv = view.findViewById(R.id.name_of_tag);
+            mCloseBtn = view.findViewById(R.id.close_btn);
+        }
+
     }
 
 }

@@ -31,26 +31,22 @@ import online.motohub.retrofit.RetrofitClient;
 
 public class PerfVehiclesFragment extends BaseFragment {
 
+    private static final int mDataLimit = 15;
+    private static final String TAG = PerfVehiclesFragment.class.getName();
+    public boolean mRefresh = true;
     @BindView(R.id.shop_vehicles)
     RecyclerView mShopVehiclesRV;
-
     @BindString(R.string.no_vehicles_err)
     String mNoVehiclesSubscribed;
-
-    private Activity mActivity;
-    private Unbinder mUnBinder;
-    public boolean mRefresh = true;
-    private boolean mIsPostsRvLoading = true;
-    private static final int mDataLimit = 15;
-    private int mPostsRvOffset = 0, mPostsRvTotalCount = 0;
     LinearLayoutManager mShopLayout;
-
     ClubSubscribedUsersAdapter mShopVehiclesAdapter;
     PromotersResModel mPromotersResModel;
     ProfileResModel mMyProfileResModel;
     ArrayList<PromoterSubs> mShopVehiclesList = new ArrayList<>();
-
-    private static final String TAG = PerfVehiclesFragment.class.getName();
+    private Activity mActivity;
+    private Unbinder mUnBinder;
+    private boolean mIsPostsRvLoading = true;
+    private int mPostsRvOffset = 0, mPostsRvTotalCount = 0;
 
     @Override
     public void onAttach(Context context) {
@@ -107,7 +103,7 @@ public class PerfVehiclesFragment extends BaseFragment {
         });
     }
 
-    public void updateVehicles(){
+    public void updateVehicles() {
         mPostsRvOffset = 0;
         callGetVehicles();
     }

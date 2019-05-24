@@ -32,24 +32,6 @@ public class ClubSubscribedUsersAdapter extends RecyclerView.Adapter<RecyclerVie
         this.TAG_Name = TAG;
     }
 
-    public class Holder extends RecyclerView.ViewHolder {
-
-        @BindView(R.id.club_sub_users)
-        CircleImageView mUserImg;
-        @BindView(R.id.club_sub_user_name)
-        TextView mUserNameTxt;
-        @BindView(R.id.vehicle_model)
-        TextView mVehiclename;
-        @BindView(R.id.shop_user_name)
-        TextView mshopUsername;
-
-        public Holder(View view) {
-            super(view);
-            ButterKnife.bind(this, view);
-        }
-
-    }
-
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -62,7 +44,7 @@ public class ClubSubscribedUsersAdapter extends RecyclerView.Adapter<RecyclerVie
 
         final Holder mHolder = (Holder) holder;
 
-        if(mClubUsersList.get(position).getMprofiles_by_ProfileID()!=null) {
+        if (mClubUsersList.get(position).getMprofiles_by_ProfileID() != null) {
             String imgstr = mClubUsersList.get(position).getMprofiles_by_ProfileID().getProfilePicture();
             ((BaseActivity) mContext).setImageWithGlide(mHolder.mUserImg, imgstr, R.drawable.default_profile_icon);
             if (TAG_Name.equals(ClubSubscribedUsersFragment.class.getName())) {
@@ -88,6 +70,24 @@ public class ClubSubscribedUsersAdapter extends RecyclerView.Adapter<RecyclerVie
     @Override
     public int getItemViewType(int pos) {
         return pos;
+    }
+
+    public class Holder extends RecyclerView.ViewHolder {
+
+        @BindView(R.id.club_sub_users)
+        CircleImageView mUserImg;
+        @BindView(R.id.club_sub_user_name)
+        TextView mUserNameTxt;
+        @BindView(R.id.vehicle_model)
+        TextView mVehiclename;
+        @BindView(R.id.shop_user_name)
+        TextView mshopUsername;
+
+        public Holder(View view) {
+            super(view);
+            ButterKnife.bind(this, view);
+        }
+
     }
 
 }

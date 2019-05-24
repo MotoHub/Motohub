@@ -24,7 +24,7 @@ public class ClubViewPagerAdapter extends FragmentPagerAdapter {
     private List<Fragment> mFragments = new ArrayList<>();
     private Context ctx;
 
-    public ClubViewPagerAdapter(FragmentManager fm,Context ctx,PromotersResModel promotersResModel,
+    public ClubViewPagerAdapter(FragmentManager fm, Context ctx, PromotersResModel promotersResModel,
                                 ProfileResModel profileResModel) {
         super(fm);
         this.ctx = ctx;
@@ -85,7 +85,6 @@ public class ClubViewPagerAdapter extends FragmentPagerAdapter {
     public int getCount() {
         return mFragments.size();
     }
-
 
 
 }

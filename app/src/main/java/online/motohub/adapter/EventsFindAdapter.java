@@ -78,25 +78,131 @@ import static android.app.Activity.RESULT_OK;
 
 public class EventsFindAdapter extends RecyclerView.Adapter<EventsFindAdapter.Holder> implements View.OnClickListener, EventsInterface {
 
+    public static final int EVENT_PAYMENT_REQ_CODE = 500;
+    public static final int EVENT_QUESTIONS_REQ_CODE = 501;
+    public static final int EVENT_LIVE_PAYMENT_REQ_CODE = 505;
+    public String mEventType = "";
     private Context mContext;
     private List<EventsResModel> mOriginalEventsFindListData;
     private List<EventsResModel> mEventsFindListData;
-
     private ProfileResModel mMyProfileResModel;
     private int mAdapterPos;
     private ArrayList<EventCategoryModel> mSelectedCategory = new ArrayList<>();
-
-    public static final int EVENT_PAYMENT_REQ_CODE = 500;
-
-    public static final int EVENT_QUESTIONS_REQ_CODE = 501;
     private int mStreamAmount;
-    public static final int EVENT_LIVE_PAYMENT_REQ_CODE = 505;
+    CommonInterface mPaymentAlertInterface = new CommonInterface() {
+        @Override
+        public void onSuccess() {
+            Intent paymentActivity = new Intent(mContext, PaymentActivity.class);
+            paymentActivity.putExtra(EventsModel.EVENT_AMOUNT, mStreamAmount).putExtra(AppConstants.PROFILE_ID, mMyProfileResModel.getID());
+            ((Activity) mContext).startActivityForResult(paymentActivity, EVENT_LIVE_PAYMENT_REQ_CODE);
+        }
+    };
     private String mToken = "";
     private boolean isUpdatePayment = false;
     private String mTransactionID = "";
+    CommonInterface mCommonInterface = new CommonInterface() {
+        @Override
+        public void onSuccess() {
+            if (isUpdatePayment) {
+                callUpdateLiveStreamPayment();
+            } else {
+                callPayViewLiveStream();
+            }
+        }
+    };
     private ArrayList<PromoterFollowerResModel> mPromoterFollowerList = new ArrayList<>();
+    RetrofitResInterface mRetrofitResInterface = new RetrofitResInterface() {
+        @Override
+        public void retrofitOnResponse(Object responseObj, int responseType) {
+
+            if (responseObj instanceof PaymentModel) {
+                ((BaseActivity) mContext).sysOut(responseObj.toString());
+                PaymentModel mResponse = (PaymentModel) responseObj;
+                if (mResponse.getStatus() != null && mResponse.getStatus().equals("succeeded")) {
+                    mTransactionID = mResponse.getID();
+                    callUpdateLiveStreamPayment();
+                } else {
+                    String mErrorMsg = "Your card was declined.";
+                    if (mResponse.getMessage() != null) {
+                        mErrorMsg = mResponse.getMessage();
+                    }
+                    mErrorMsg = mErrorMsg + " " + mContext.getString(R.string.try_again);
+                    ((BaseActivity) mContext).showToast(mContext, mErrorMsg);
+                }
+            } else if (responseObj instanceof LiveStreamPaymentResponse) {
+                LiveStreamPaymentResponse mResponse = (LiveStreamPaymentResponse) responseObj;
+                if (mResponse.getResource().size() > 0) {
+                    updateList(mResponse.getResource().get(0));
+                    ((BaseActivity) mContext).showToast(mContext, "Payment Succeeded");
+                } else {
+                    DialogManager.showRetryAlertDialogWithCallback(mContext, mCommonInterface, mContext.getString(R.string.payment_must_update));
+                }
+
+            } else if (responseObj instanceof SessionModel) {
+                SessionModel mSessionModel = (SessionModel) responseObj;
+                if (mSessionModel.getSessionToken() == null) {
+                    PreferenceUtils.getInstance(mContext).saveStrData(PreferenceUtils.SESSION_TOKEN, mSessionModel.getSessionId());
+                } else {
+                    PreferenceUtils.getInstance(mContext).saveStrData(PreferenceUtils.SESSION_TOKEN, mSessionModel.getSessionToken());
+                }
+                if (isUpdatePayment) {
+                    callUpdateLiveStreamPayment();
+                } else {
+                    callPayViewLiveStream();
+                }
+            } else if (responseObj instanceof PromoterFollowerModel) {
+                PromoterFollowerModel mPromoterFollowerModel = (PromoterFollowerModel) responseObj;
+                switch (responseType) {
+                    case RetrofitClient.GET_PROMOTER_FOLLOW_RESPONSE:
+                        mPromoterFollowerList.add(mPromoterFollowerModel.getResource().get(0));
+                        mMyProfileResModel.setPromoterFollowerByProfileID(mPromoterFollowerList);
+                        notifyDataSetChanged();
+                        break;
+                    case RetrofitClient.GET_PROMOTER_UN_FOLLOW_RESPONSE:
+                        for (int i = 0; i < mPromoterFollowerList.size(); i++) {
+                            if (mPromoterFollowerList.get(i).getID() == mPromoterFollowerModel.getResource().get(0).getID()) {
+                                mPromoterFollowerList.remove(i);
+                                break;
+                            }
+                        }
+                        mMyProfileResModel.setPromoterFollowerByProfileID(mPromoterFollowerList);
+                        notifyDataSetChanged();
+                        break;
+                }
+                setResult();
+
+            }
+        }
+
+        @Override
+        public void retrofitOnError(int code, String message) {
+            if (message.equals("Unauthorized") || code == 401) {
+                RetrofitClient.getRetrofitInstance().callUpdateSession(mContext, mRetrofitResInterface, RetrofitClient.UPDATE_SESSION_RESPONSE);
+            } else {
+                String mErrorMsg;
+                if (!isUpdatePayment) {
+                    mErrorMsg = mContext.getString(R.string.internet_err);
+                } else {
+                    mErrorMsg = mContext.getString(R.string.payment_must_update);
+                }
+                ((BaseActivity) mContext).showToast(mContext, mContext.getString(R.string.internet_err));
+//                DialogManager.showRetryAlertDialogWithCallback(mContext, mCommonInterface, mErrorMsg);
+            }
+
+        }
+
+        @Override
+        public void retrofitOnSessionError(int code, String message) {
+            ((BaseActivity) mContext).retrofitOnSessionError(code, message);
+        }
+
+        @Override
+        public void retrofitOnFailure() {
+            ((BaseActivity) mContext).showToast(mContext, mContext.getString(R.string.internet_err));
+//            DialogManager.showRetryAlertDialogWithCallback(mContext, mCommonInterface, mContext.getString(R.string.internet_err));
+        }
+    };
     private boolean isFromEventList = false;
-    public String mEventType = "";
 
     public EventsFindAdapter(@NonNull Context context, List<EventsResModel> eventsFindListData, ProfileResModel myProfileResModel, PromotersResModel mPromoterResModel, boolean isFromEventList) {
         this.mContext = context;
@@ -105,7 +211,6 @@ public class EventsFindAdapter extends RecyclerView.Adapter<EventsFindAdapter.Ho
         this.mEventsFindListData = eventsFindListData;
         this.isFromEventList = isFromEventList;
     }
-
 
     private void callEventAnswer(int mProfileID, int mEventID) {
         String mFilter = "(EventID=" + mEventID + ") AND (ProfileID=" + mProfileID + ")";
@@ -138,7 +243,6 @@ public class EventsFindAdapter extends RecyclerView.Adapter<EventsFindAdapter.Ho
             ((Activity) mContext).startActivityForResult(eventQuestionAnswerActivity, EVENT_QUESTIONS_REQ_CODE);
         }
     }
-
 
     private void setEventCategory(ArrayList<EventCategoryModel> mCategoryNameList) {
         if (mCategoryNameList != null && !mCategoryNameList.isEmpty()) {
@@ -248,41 +352,6 @@ public class EventsFindAdapter extends RecyclerView.Adapter<EventsFindAdapter.Ho
     public int getItemCount() {
         return mEventsFindListData.size();
     }
-
-
-    public static class Holder extends RecyclerView.ViewHolder {
-
-        @BindView(R.id.starts_in_tv)
-        TextView mStartInDaysTv;
-        @BindView(R.id.moto_event_name_tv)
-        TextView mEventNameTv;
-        @BindView(R.id.who_is_going_btn)
-        Button mWhoIsGoingBtn;
-        @BindView(R.id.book_now_img_btn)
-        Button mBookNowBtn;
-        @BindView(R.id.time_table_btn)
-        Button mTimeTableBtn;
-        @BindView(R.id.grp_chat_img_btn)
-        Button mEventGrpChatBtn;
-        @BindView(R.id.live_btn)
-        Button mLiveButton;
-        @BindView(R.id.promoter_follow_btn)
-        Button mPromoterFollowBtn;
-        @BindView(R.id.promoter_profile_img)
-        CircleImageView mPromoterProfileImg;
-        @BindView(R.id.promoter_name_txt)
-        TextView mPromoterNameTxt;
-        @BindView(R.id.coverImg)
-        ImageView mCoverImg;
-        @BindView(R.id.promoter_lay)
-        RelativeLayout mPromoterLay;
-
-        public Holder(View itemView) {
-            super(itemView);
-            ButterKnife.bind(this, itemView);
-        }
-    }
-
 
     private boolean isAlreadyFollowed(int pos, ArrayList<PromoterFollowerResModel> mPromoterFollowerList) {
         boolean isAlreadyFollowed = false;
@@ -445,15 +514,6 @@ public class EventsFindAdapter extends RecyclerView.Adapter<EventsFindAdapter.Ho
         RetrofitClient.getRetrofitInstance().callFollowPromoter(mContext, mRetrofitResInterface, mJsonArray, RetrofitClient.GET_PROMOTER_FOLLOW_RESPONSE);
     }
 
-    CommonInterface mPaymentAlertInterface = new CommonInterface() {
-        @Override
-        public void onSuccess() {
-            Intent paymentActivity = new Intent(mContext, PaymentActivity.class);
-            paymentActivity.putExtra(EventsModel.EVENT_AMOUNT, mStreamAmount).putExtra(AppConstants.PROFILE_ID, mMyProfileResModel.getID());
-            ((Activity) mContext).startActivityForResult(paymentActivity, EVENT_LIVE_PAYMENT_REQ_CODE);
-        }
-    };
-
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
         switch (requestCode) {
@@ -514,108 +574,6 @@ public class EventsFindAdapter extends RecyclerView.Adapter<EventsFindAdapter.Ho
         String mAcctNo = mPromoterResModel.getStripeUserId();
         RetrofitClient.getRetrofitInstance().postPayForViewLiveStream(mContext, mRetrofitResInterface, mToken, mAcctNo, mStreamAmount, AppConstants.LIVE_STREAM_PAYMENT);
     }
-
-    RetrofitResInterface mRetrofitResInterface = new RetrofitResInterface() {
-        @Override
-        public void retrofitOnResponse(Object responseObj, int responseType) {
-
-            if (responseObj instanceof PaymentModel) {
-                ((BaseActivity) mContext).sysOut(responseObj.toString());
-                PaymentModel mResponse = (PaymentModel) responseObj;
-                if (mResponse.getStatus() != null && mResponse.getStatus().equals("succeeded")) {
-                    mTransactionID = mResponse.getID();
-                    callUpdateLiveStreamPayment();
-                } else {
-                    String mErrorMsg = "Your card was declined.";
-                    if (mResponse.getMessage() != null) {
-                        mErrorMsg = mResponse.getMessage();
-                    }
-                    mErrorMsg = mErrorMsg + " " + mContext.getString(R.string.try_again);
-                    ((BaseActivity) mContext).showToast(mContext, mErrorMsg);
-                }
-            } else if (responseObj instanceof LiveStreamPaymentResponse) {
-                LiveStreamPaymentResponse mResponse = (LiveStreamPaymentResponse) responseObj;
-                if (mResponse.getResource().size() > 0) {
-                    updateList(mResponse.getResource().get(0));
-                    ((BaseActivity) mContext).showToast(mContext, "Payment Succeeded");
-                } else {
-                    DialogManager.showRetryAlertDialogWithCallback(mContext, mCommonInterface, mContext.getString(R.string.payment_must_update));
-                }
-
-            } else if (responseObj instanceof SessionModel) {
-                SessionModel mSessionModel = (SessionModel) responseObj;
-                if (mSessionModel.getSessionToken() == null) {
-                    PreferenceUtils.getInstance(mContext).saveStrData(PreferenceUtils.SESSION_TOKEN, mSessionModel.getSessionId());
-                } else {
-                    PreferenceUtils.getInstance(mContext).saveStrData(PreferenceUtils.SESSION_TOKEN, mSessionModel.getSessionToken());
-                }
-                if (isUpdatePayment) {
-                    callUpdateLiveStreamPayment();
-                } else {
-                    callPayViewLiveStream();
-                }
-            } else if (responseObj instanceof PromoterFollowerModel) {
-                PromoterFollowerModel mPromoterFollowerModel = (PromoterFollowerModel) responseObj;
-                switch (responseType) {
-                    case RetrofitClient.GET_PROMOTER_FOLLOW_RESPONSE:
-                        mPromoterFollowerList.add(mPromoterFollowerModel.getResource().get(0));
-                        mMyProfileResModel.setPromoterFollowerByProfileID(mPromoterFollowerList);
-                        notifyDataSetChanged();
-                        break;
-                    case RetrofitClient.GET_PROMOTER_UN_FOLLOW_RESPONSE:
-                        for (int i = 0; i < mPromoterFollowerList.size(); i++) {
-                            if (mPromoterFollowerList.get(i).getID() == mPromoterFollowerModel.getResource().get(0).getID()) {
-                                mPromoterFollowerList.remove(i);
-                                break;
-                            }
-                        }
-                        mMyProfileResModel.setPromoterFollowerByProfileID(mPromoterFollowerList);
-                        notifyDataSetChanged();
-                        break;
-                }
-                setResult();
-
-            }
-        }
-
-        @Override
-        public void retrofitOnError(int code, String message) {
-            if (message.equals("Unauthorized") || code == 401) {
-                RetrofitClient.getRetrofitInstance().callUpdateSession(mContext, mRetrofitResInterface, RetrofitClient.UPDATE_SESSION_RESPONSE);
-            } else {
-                String mErrorMsg;
-                if (!isUpdatePayment) {
-                    mErrorMsg = mContext.getString(R.string.internet_err);
-                } else {
-                    mErrorMsg = mContext.getString(R.string.payment_must_update);
-                }
-                ((BaseActivity) mContext).showToast(mContext, mContext.getString(R.string.internet_err));
-//                DialogManager.showRetryAlertDialogWithCallback(mContext, mCommonInterface, mErrorMsg);
-            }
-
-        }
-
-        @Override
-        public void retrofitOnSessionError(int code, String message) {
-            ((BaseActivity) mContext).retrofitOnSessionError(code, message);
-        }
-
-        @Override
-        public void retrofitOnFailure() {
-            ((BaseActivity) mContext).showToast(mContext, mContext.getString(R.string.internet_err));
-//            DialogManager.showRetryAlertDialogWithCallback(mContext, mCommonInterface, mContext.getString(R.string.internet_err));
-        }
-    };
-    CommonInterface mCommonInterface = new CommonInterface() {
-        @Override
-        public void onSuccess() {
-            if (isUpdatePayment) {
-                callUpdateLiveStreamPayment();
-            } else {
-                callPayViewLiveStream();
-            }
-        }
-    };
 
     private void setResult() {
         //TODO
@@ -874,6 +832,39 @@ public class EventsFindAdapter extends RecyclerView.Adapter<EventsFindAdapter.Ho
 
             }
         };
+    }
+
+    public static class Holder extends RecyclerView.ViewHolder {
+
+        @BindView(R.id.starts_in_tv)
+        TextView mStartInDaysTv;
+        @BindView(R.id.moto_event_name_tv)
+        TextView mEventNameTv;
+        @BindView(R.id.who_is_going_btn)
+        Button mWhoIsGoingBtn;
+        @BindView(R.id.book_now_img_btn)
+        Button mBookNowBtn;
+        @BindView(R.id.time_table_btn)
+        Button mTimeTableBtn;
+        @BindView(R.id.grp_chat_img_btn)
+        Button mEventGrpChatBtn;
+        @BindView(R.id.live_btn)
+        Button mLiveButton;
+        @BindView(R.id.promoter_follow_btn)
+        Button mPromoterFollowBtn;
+        @BindView(R.id.promoter_profile_img)
+        CircleImageView mPromoterProfileImg;
+        @BindView(R.id.promoter_name_txt)
+        TextView mPromoterNameTxt;
+        @BindView(R.id.coverImg)
+        ImageView mCoverImg;
+        @BindView(R.id.promoter_lay)
+        RelativeLayout mPromoterLay;
+
+        public Holder(View itemView) {
+            super(itemView);
+            ButterKnife.bind(this, itemView);
+        }
     }
 
 

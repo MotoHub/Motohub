@@ -28,26 +28,23 @@ public class NotificationSettingsActivity extends BaseActivity {
         showToolbarBtn(mToolbar, R.id.toolbar_back_img_btn);
         Switch allow_notification = findViewById(R.id.switch_allow);
         final Switch allow_sound = findViewById(R.id.switch_sound);
-        final Switch allow_vib=findViewById(R.id.switch_vib);
-        boolean allow_noticiation_status= PreferenceUtils.getInstance(this).getBooleanData(PreferenceUtils.ALLOW_NOTIFICATION);
-        boolean allow_sound_status=PreferenceUtils.getInstance(this).getBooleanData(PreferenceUtils.ALLOW_NOTIFICATION_Sound);
-        boolean allow_vib_status=PreferenceUtils.getInstance(this).getBooleanData(PreferenceUtils.ALLOW_NOTIFICATION_VIB);
-        if(allow_sound_status){
+        final Switch allow_vib = findViewById(R.id.switch_vib);
+        boolean allow_noticiation_status = PreferenceUtils.getInstance(this).getBooleanData(PreferenceUtils.ALLOW_NOTIFICATION);
+        boolean allow_sound_status = PreferenceUtils.getInstance(this).getBooleanData(PreferenceUtils.ALLOW_NOTIFICATION_Sound);
+        boolean allow_vib_status = PreferenceUtils.getInstance(this).getBooleanData(PreferenceUtils.ALLOW_NOTIFICATION_VIB);
+        if (allow_sound_status) {
             allow_sound.setChecked(true);
-        }
-        else {
+        } else {
             allow_sound.setChecked(false);
         }
-        if(allow_vib_status){
+        if (allow_vib_status) {
             allow_vib.setChecked(true);
-        }
-        else {
+        } else {
             allow_vib.setChecked(false);
         }
-        if(allow_noticiation_status){
+        if (allow_noticiation_status) {
             allow_notification.setChecked(true);
-        }
-        else {
+        } else {
             allow_sound.setEnabled(false);
             allow_vib.setEnabled(false);
             allow_notification.setChecked(false);
@@ -57,11 +54,10 @@ public class NotificationSettingsActivity extends BaseActivity {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 PreferenceUtils.getInstance(NotificationSettingsActivity.this).saveBooleanData(PreferenceUtils.ALLOW_NOTIFICATION, isChecked);
-                if(!isChecked){
+                if (!isChecked) {
                     allow_sound.setEnabled(false);
                     allow_vib.setEnabled(false);
-                }
-                else {
+                } else {
                     allow_sound.setEnabled(true);
                     allow_vib.setEnabled(true);
                 }
@@ -82,6 +78,7 @@ public class NotificationSettingsActivity extends BaseActivity {
             }
         });
     }
+
     @OnClick(R.id.toolbar_back_img_btn)
     public void onClick(View v) {
         switch (v.getId()) {

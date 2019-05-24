@@ -7,7 +7,7 @@ import java.util.List;
 
 public class GroupChatMsgModel {
 
-    public static final String PROFILES_BY_SENDER_PROFILE_ID =  "profiles_by_SenderProfileID";
+    public static final String PROFILES_BY_SENDER_PROFILE_ID = "profiles_by_SenderProfileID";
 
     @SerializedName("resource")
     @Expose

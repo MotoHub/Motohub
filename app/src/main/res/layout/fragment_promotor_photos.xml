@@ -15,11 +15,11 @@
         android:id="@+id/txt_no_data"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/size150"
         android:layout_gravity="center"
+        android:layout_marginTop="@dimen/size150"
         android:gravity="center"
-        android:visibility="gone"
         android:text="@string/picture_not_found"
-        android:textColor="@color/colorBlack" />
+        android:textColor="@color/colorBlack"
+        android:visibility="gone" />
 
 </LinearLayout>

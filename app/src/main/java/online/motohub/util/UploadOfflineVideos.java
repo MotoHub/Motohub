@@ -36,6 +36,7 @@ import retrofit2.Response;
 
 public class UploadOfflineVideos extends IntentService implements ProgressRequestBody.UploadCallbacks {
 
+    DatabaseHandler handler = new DatabaseHandler(this);
     /*private AmazonS3Client s3;
     private BasicAWSCredentials credentials;K
     private TransferUtility transferUtility;*/
@@ -54,7 +55,6 @@ public class UploadOfflineVideos extends IntentService implements ProgressReques
     private int mEventId;
     private String mEventFinishDate;
     private int mLivePostProfileID;
-    DatabaseHandler handler = new DatabaseHandler(this);
     private ArrayList<SpectatorLiveEntity> list;
 
     public UploadOfflineVideos(String name) {

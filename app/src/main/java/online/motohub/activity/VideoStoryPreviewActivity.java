@@ -67,18 +67,15 @@ import online.motohub.util.UrlUtils;
 
 public class VideoStoryPreviewActivity extends BaseActivity implements MediaPlayer.OnPreparedListener, MediaPlayer.OnCompletionListener {
 
+    private static final String TAG = "SpectorLive";
     @BindView(R.id.video)
     VideoView mVideoView;
-
     @BindView(R.id.iv_video)
     ImageView mImageView;
-
     @BindView(R.id.edit_caption)
     EditText mEditStory;
-
     @BindView(R.id.iv_video_play)
     ImageView mIvPlay;
-
     @BindView(R.id.toolbar_back_img_btn)
     ImageButton mBackBtn;
     /*AmazonS3Client s3;
@@ -89,7 +86,6 @@ public class VideoStoryPreviewActivity extends BaseActivity implements MediaPlay
     private EventsResModel mEventResModel;
     private ProfileResModel mMyProfileResModel;
     private ProgressDialog pDialog;
-    private static final String TAG = "SpectorLive";
     private String COMPRESSED_VIDEO_FOLDER = "MotoHUB";
     private String mCompressedVideoPath;
     private DatabaseHandler databaseHandler = new DatabaseHandler(this);

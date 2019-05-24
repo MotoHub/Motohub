@@ -25,27 +25,6 @@ public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.ViewHolder
 
     private Context context;
 
-    class ViewHolder extends RecyclerView.ViewHolder{
-        // each data item is just a string in this case
-        @BindView(R.id.textViewReportContent)
-        TextView mContent;
-        @BindView(R.id.radioButtonReport)
-        RadioButton mRadioButtonReport;
-
-        @BindView(R.id.viewRowSeparator)
-        View mRowSeparator;
-
-        @BindView(R.id.reportRowLinearLayout)
-        LinearLayout mReportRowLinearLayout;
-
-        public ViewHolder(View reportItemView) {
-            super(reportItemView);
-            ButterKnife.bind(this, reportItemView);
-        }
-
-    }
-
-
     public ReportAdapter(Context context) {
         this.context = context;
         reportContent = context.getResources().getStringArray(R.array.report_array);
@@ -90,7 +69,7 @@ public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.ViewHolder
                     setReportOption(position, holder);
                 }
             });
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -98,7 +77,7 @@ public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.ViewHolder
 
     private void setReportOption(int position, ViewHolder holder) {
         notifyDataSetChanged();
-        if(context instanceof ReportActivity) {
+        if (context instanceof ReportActivity) {
             if (position == (reportContent.length - 1)) {
                 holder.mRadioButtonReport.setChecked(false);
                 ((BaseActivity) context).moveToReportWritePostScreen(context);
@@ -112,6 +91,26 @@ public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.ViewHolder
     @Override
     public int getItemCount() {
         return reportContent.length;
+    }
+
+    class ViewHolder extends RecyclerView.ViewHolder {
+        // each data item is just a string in this case
+        @BindView(R.id.textViewReportContent)
+        TextView mContent;
+        @BindView(R.id.radioButtonReport)
+        RadioButton mRadioButtonReport;
+
+        @BindView(R.id.viewRowSeparator)
+        View mRowSeparator;
+
+        @BindView(R.id.reportRowLinearLayout)
+        LinearLayout mReportRowLinearLayout;
+
+        public ViewHolder(View reportItemView) {
+            super(reportItemView);
+            ButterKnife.bind(this, reportItemView);
+        }
+
     }
 
 }

@@ -121,7 +121,7 @@ public class PromotersListActivity extends BaseActivity {
                     /*PromotersResModel mPromotersResModel = MotoHub.getApplicationInstance().getmPromoterResModel();
                     ProfileResModel mMyProfileResModel=MotoHub.getApplicationInstance().getmProfileResModel();*/
                     PromotersResModel mPromotersResModel = EventBus.getDefault().getStickyEvent(PromotersResModel.class);
-                    ProfileResModel mMyProfileResModel=EventBus.getDefault().getStickyEvent(ProfileResModel.class);
+                    ProfileResModel mMyProfileResModel = EventBus.getDefault().getStickyEvent(ProfileResModel.class);
                     mPromotersListAdapter.updatePromoterFollowResponse(mPromotersResModel);
 
                     //MotoHub.getApplicationInstance().setmProfileResModel(mMyProfileResModel);

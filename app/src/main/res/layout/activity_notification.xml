@@ -10,28 +10,28 @@
             layout="@layout/widget_toolbar" />
 
         <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/notification_refresh_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@+id/include"
-            android:id="@+id/notification_refresh_layout">
+            android:layout_below="@+id/include">
 
-        <RelativeLayout
-            style="@style/LayoutMatch"
-            android:layout_margin="@dimen/size10"
-            android:background="@drawable/orange_border_bg"
-            android:theme="@style/Theme.AppCompat.Light">
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/notification_recycler_view"
+            <RelativeLayout
                 style="@style/LayoutMatch"
-                android:divider="@android:color/transparent"
-                android:dividerHeight="@dimen/size5"
-                android:clickable="true"
-                android:padding="@dimen/size2"
-                android:scrollbars="none"
-                android:focusable="true" />
+                android:layout_margin="@dimen/size10"
+                android:background="@drawable/orange_border_bg"
+                android:theme="@style/Theme.AppCompat.Light">
 
-        </RelativeLayout>
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/notification_recycler_view"
+                    style="@style/LayoutMatch"
+                    android:clickable="true"
+                    android:divider="@android:color/transparent"
+                    android:dividerHeight="@dimen/size5"
+                    android:focusable="true"
+                    android:padding="@dimen/size2"
+                    android:scrollbars="none" />
+
+            </RelativeLayout>
         </android.support.v4.widget.SwipeRefreshLayout>
     </RelativeLayout>
 

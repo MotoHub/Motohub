@@ -59,7 +59,9 @@ public class TrackProfileTabPagerAdapter extends FragmentStatePagerAdapter {
     }
 
     @Override
-    public Fragment getItem(int position) {return mFragmentList.get(position);}
+    public Fragment getItem(int position) {
+        return mFragmentList.get(position);
+    }
 
     @Override
     public CharSequence getPageTitle(int position) {

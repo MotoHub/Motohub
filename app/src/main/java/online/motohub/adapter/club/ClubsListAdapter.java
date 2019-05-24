@@ -90,8 +90,8 @@ public class ClubsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                     PromotersListActivity.PROMOTER_FOLLOW_RESPONSE);*/
            /* MotoHub.getApplicationInstance().setmProfileResModel(mMyProfileResModel);
             MotoHub.getApplicationInstance().setmPromoterResModel(mClubsList.get(getLayoutPosition()));*/
-           EventBus.getDefault().postSticky(mMyProfileResModel);
-           EventBus.getDefault().postSticky(mClubsList.get(getLayoutPosition()));
+            EventBus.getDefault().postSticky(mMyProfileResModel);
+            EventBus.getDefault().postSticky(mClubsList.get(getLayoutPosition()));
             ((BaseActivity) mContext).startActivityForResult(
                     new Intent(mContext, ClubProfileActivity.class),
                     PromotersListActivity.PROMOTER_FOLLOW_RESPONSE);

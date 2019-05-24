@@ -36,12 +36,12 @@
         android:id="@+id/tv_timer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
         android:layout_below="@+id/toolbarLayout"
-        android:layout_marginEnd="@dimen/size5"
-        android:layout_marginTop="@dimen/size15"
-        android:text="0:0"
+        android:layout_alignParentStart="true"
         android:layout_marginStart="@dimen/size10"
+        android:layout_marginTop="@dimen/size15"
+        android:layout_marginEnd="@dimen/size5"
+        android:text="0:0"
         android:textColor="@color/colorRed"
         android:visibility="gone" />
 
@@ -49,13 +49,13 @@
         android:id="@+id/toggleCamera"
         android:layout_width="56dp"
         android:layout_height="56dp"
-        android:background="@drawable/green_background"
-        app:srcCompat="@drawable/ic_switch"
-        android:layout_alignParentEnd="true"
         android:layout_below="@+id/toolbarLayout"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="@dimen/size5"
         android:layout_marginEnd="@dimen/size5"
+        android:background="@drawable/green_background"
         android:contentDescription="@string/app_name"
-        android:layout_marginTop="@dimen/size5"/>
+        app:srcCompat="@drawable/ic_switch" />
 
     <!-- Controls -->
     <LinearLayout
@@ -71,15 +71,15 @@
             android:id="@+id/capturePhoto"
             android:layout_width="56dp"
             android:layout_height="56dp"
-            android:visibility="gone"
-            android:contentDescription="@string/app_name"
             android:background="@drawable/green_background"
+            android:contentDescription="@string/app_name"
+            android:visibility="gone"
             app:srcCompat="@drawable/ic_photo" />
 
         <Space
             android:layout_width="0dp"
             android:layout_height="1dp"
-            android:layout_weight="1"/>
+            android:layout_weight="1" />
 
         <FrameLayout
             android:layout_width="wrap_content"
@@ -89,8 +89,8 @@
                 android:id="@+id/stopVideo"
                 android:layout_width="56dp"
                 android:layout_height="56dp"
-                android:contentDescription="@string/app_name"
                 android:background="@drawable/red_background"
+                android:contentDescription="@string/app_name"
                 app:srcCompat="@drawable/ic_stop_record" />
 
             <ImageButton
@@ -98,8 +98,8 @@
                 android:layout_width="56dp"
                 android:layout_height="56dp"
                 android:background="@drawable/green_background"
-                app:srcCompat="@drawable/ic_video"
-                android:contentDescription="@string/app_name" />
+                android:contentDescription="@string/app_name"
+                app:srcCompat="@drawable/ic_video" />
 
         </FrameLayout>
 

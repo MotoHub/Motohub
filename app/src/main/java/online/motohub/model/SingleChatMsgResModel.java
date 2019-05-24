@@ -52,8 +52,8 @@ public class SingleChatMsgResModel {
     private Boolean IsDateVisible = false;
 
     public String getmChatRelation() {
-        if(mChatRelation == null)
-            mChatRelation  = "";
+        if (mChatRelation == null)
+            mChatRelation = "";
         return mChatRelation;
     }
 

@@ -6,7 +6,7 @@ import com.google.gson.annotations.SerializedName;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-public class NotificationBlockedUsersModel implements Serializable{
+public class NotificationBlockedUsersModel implements Serializable {
 
     public static String UserID = "UserID";
     public static String ProfileID = "ProfileID";
@@ -29,7 +29,7 @@ public class NotificationBlockedUsersModel implements Serializable{
     private ArrayList<NotificationBlockedUsersModel> mResource = null;
 
     public ArrayList<NotificationBlockedUsersModel> getResource() {
-        if(mResource == null)
+        if (mResource == null)
             mResource = new ArrayList<>();
 
         return mResource;

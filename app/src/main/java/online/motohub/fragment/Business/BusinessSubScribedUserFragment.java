@@ -32,26 +32,22 @@ import online.motohub.retrofit.RetrofitClient;
 
 public class BusinessSubScribedUserFragment extends BaseFragment {
 
+    private static final int mDataLimit = 15;
+    private static final String TAG = ClubSubscribedUsersFragment.class.getName();
+    public boolean mRefresh = true;
     @BindView(R.id.club_users)
     RecyclerView mClubUsersRV;
-
     @BindString(R.string.no_users_err)
     String mNoUsersSubscribed;
-
-    private Activity mActivity;
-    private Unbinder mUnBinder;
-    public boolean mRefresh = true;
-    private boolean mIsPostsRvLoading = true;
-    private static final int mDataLimit = 15;
-    private int mPostsRvOffset = 0, mPostsRvTotalCount = 0;
     LinearLayoutManager mClubLayout;
-
     ClubSubscribedUsersAdapter mClubSubsUserAdapter;
     PromotersResModel mPromotersResModel;
     ProfileResModel mMyProfileResModel;
     ArrayList<PromoterSubs> mClubsubusersList = new ArrayList<>();
-
-    private static final String TAG = ClubSubscribedUsersFragment.class.getName();
+    private Activity mActivity;
+    private Unbinder mUnBinder;
+    private boolean mIsPostsRvLoading = true;
+    private int mPostsRvOffset = 0, mPostsRvTotalCount = 0;
 
     @Override
     public void onAttach(Context context) {
@@ -153,15 +149,15 @@ public class BusinessSubScribedUserFragment extends BaseFragment {
                     mClubSubsUserAdapter.notifyDataSetChanged();
                     break;
                 case RetrofitClient.UPDATE_SUBSCRIPTION:
-                    if(mClubSubscribedUsers.getResource().size() > 0) {
+                    if (mClubSubscribedUsers.getResource().size() > 0) {
                         mClubsubusersList.add(mClubSubscribedUsers.getResource().get(0));
                         mClubSubsUserAdapter.notifyDataSetChanged();
                     }
                     break;
                 case RetrofitClient.CALL_REMOVE_PROMOTER_SUBS:
-                    if(mClubSubscribedUsers.getResource().size() > 0) {
+                    if (mClubSubscribedUsers.getResource().size() > 0) {
                         for (int i = 0; i < mClubsubusersList.size(); i++) {
-                            if(mClubsubusersList.contains(mClubSubscribedUsers.getResource().get(0))){
+                            if (mClubsubusersList.contains(mClubSubscribedUsers.getResource().get(0))) {
                                 mClubsubusersList.remove(i);
                                 mClubSubsUserAdapter.notifyDataSetChanged();
                                 break;
@@ -177,7 +173,7 @@ public class BusinessSubScribedUserFragment extends BaseFragment {
     @Override
     public void retrofitOnError(int code, String message) {
         super.retrofitOnError(code, message);
-        if (code == RetrofitClient.GET_CLUB_USERS){
+        if (code == RetrofitClient.GET_CLUB_USERS) {
             mPostsRvTotalCount = 0;
         }
     }
@@ -199,7 +195,7 @@ public class BusinessSubScribedUserFragment extends BaseFragment {
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
-        if (isVisibleToUser && mClubsubusersList.size() == 0){
+        if (isVisibleToUser && mClubsubusersList.size() == 0) {
             callGetSubscribedusers();
         }
     }

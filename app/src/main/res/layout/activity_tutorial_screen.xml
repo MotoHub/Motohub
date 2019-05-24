@@ -24,8 +24,8 @@
 
         <RelativeLayout
             style="@style/LayoutMatch"
-            android:layout_alignBottom="@+id/pager"
-            android:layout_alignTop="@+id/pager">
+            android:layout_alignTop="@+id/pager"
+            android:layout_alignBottom="@+id/pager">
 
             <ImageView
                 android:id="@+id/left_arrow"

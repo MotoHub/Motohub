@@ -62,14 +62,15 @@ import online.motohub.util.PreferenceUtils;
 import online.motohub.util.UrlUtils;
 import online.motohub.util.Utility;
 
-public class CommentReplyActivity extends BaseActivity implements TaggedProfilesAdapter.TaggedProfilesSizeInterface{
+public class CommentReplyActivity extends BaseActivity implements TaggedProfilesAdapter.TaggedProfilesSizeInterface {
+    private static final int mDataLimit = 15;
+    private static String mSearchStr = "";
+    private static ArrayList<ProfileResModel> mSearchProfilesList = new ArrayList<>();
+    private final long DELAY = 800;
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
-
     @BindString(R.string.replies)
     String mToolbarTitle;
-
-
     @BindView(R.id.feeds_comments_list_view)
     RecyclerView mFeedCommentsListView;
     @BindView(R.id.user_img)
@@ -78,7 +79,6 @@ public class CommentReplyActivity extends BaseActivity implements TaggedProfiles
     TextView mUsernameTxt;
     @BindView(R.id.comment_edt)
     EditText mCommentEdt;
-
     @BindView(R.id.comment_user_img)
     CircleImageView mCommentUserImg;
     @BindView(R.id.comment_user_name_txt)
@@ -87,56 +87,41 @@ public class CommentReplyActivity extends BaseActivity implements TaggedProfiles
     TextView mCommentTxt;
     @BindView(R.id.main_lay)
     RelativeLayout mParentLay;
-
     @BindView(R.id.imageConstraintLay)
     ConstraintLayout mImageConstraintLay;
-
     @BindView(R.id.iv_post_image)
     ImageView mIvPostImage;
     @BindView(R.id.ivPost)
     ImageView mIvPost;
-
     @BindView(R.id.ivCommentImg)
     ImageView mIvCommentImg;
     @BindView(R.id.rvTagList)
     RecyclerView mRvTagList;
-
     private String mPostImgUri = null;
-
     private String imgUrl = "";
-
     private ArrayList<ProfileResModel> mFullMPList = new ArrayList<>();
-
     private String mReplyFilter, mCommentFilter;
     private FeedCommentModel mFeedCommentModel;
     private FeedCommentsReplyAdapter mFeedCommentsReplyAdapter;
     private ArrayList<FeedCommentReplyModel> mFeedCommentReplyList = new ArrayList<>();
     private ProfileResModel mMyProfileResModel;
     private int mCommentID;
-
     private ArrayList<String> mCommentTaggedUserList = new ArrayList<>();
     private ArrayList<Integer> mCommentTaggedUserIDs = new ArrayList<Integer>();
-    private HashMap<Integer,String> mCommentTaggedUserDetails = new HashMap<>();
-
+    private HashMap<Integer, String> mCommentTaggedUserDetails = new HashMap<>();
     private ArrayList<ProfileResModel> mTaggedProfilesList = new ArrayList<>();
     private CommentTagAdapter mSearchProfileAdapter;
-    private static String mSearchStr = "";
     private LinearLayoutManager mHorLayoutManager;
-    private static ArrayList<ProfileResModel> mSearchProfilesList = new ArrayList<>();
     private int mTagRvOffset = 0, mTagRvTotalCount = 0;
-    private static final int mDataLimit = 15;
     private boolean mIsTagRvLoading;
-
-
     private String mTagSearchString = "";
     private int mSearchTextIndex;
     private String mCommentTaggedUserNames = "", mCommentUserIDs = "";
-    private boolean isBackspaceClicked  =  false;
+    private boolean isBackspaceClicked = false;
     private boolean isSelected = false;
     private int mCurrentIndexOfCommentTag;
     private boolean mSearchFriendList = false;
     private Timer timer = new Timer();
-    private final long DELAY = 800;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -203,7 +188,6 @@ public class CommentReplyActivity extends BaseActivity implements TaggedProfiles
         setToolbar(mToolbar, mToolbarTitle);
 
         showToolbarBtn(mToolbar, R.id.toolbar_back_img_btn);
-
 
 
         if (getIntent().getExtras() != null && getIntent().getExtras().getBoolean(MyFireBaseMessagingService.IS_FROM_NOTIFICATION_TRAY)) {
@@ -281,19 +265,19 @@ public class CommentReplyActivity extends BaseActivity implements TaggedProfiles
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 try {
-                    if(isBackspaceClicked){
-                        if(s.toString().length() > 0) {
+                    if (isBackspaceClicked) {
+                        if (s.toString().length() > 0) {
                             if ((s.toString().charAt(mSearchTextIndex - 1)) == '@') {
                                 mSearchFriendList = true;
                                 mCurrentIndexOfCommentTag = mSearchTextIndex;
                                 mTagSearchString = "";
                             }
-                        } else{
+                        } else {
                             mSearchFriendList = false;
                             mRvTagList.setVisibility(View.GONE);
                         }
                     } else {
-                        if(s.toString().length() > 0) {
+                        if (s.toString().length() > 0) {
                             if ((s.toString().charAt(mSearchTextIndex)) == '@' && !isSelected) {
                                 mSearchFriendList = true;
                                 mCurrentIndexOfCommentTag = mSearchTextIndex;
@@ -303,7 +287,7 @@ public class CommentReplyActivity extends BaseActivity implements TaggedProfiles
                             }
                         }
                     }
-                }catch (Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
@@ -311,7 +295,7 @@ public class CommentReplyActivity extends BaseActivity implements TaggedProfiles
             @Override
             public void afterTextChanged(Editable editable) {
 
-                if(mSearchFriendList) {
+                if (mSearchFriendList) {
 
                     int length = mCommentEdt.getSelectionStart();
                     String tagSearch = "";
@@ -345,9 +329,7 @@ public class CommentReplyActivity extends BaseActivity implements TaggedProfiles
         });
 
 
-
     }
-
 
 
     private void findFriendsOrVehicles(final String searchStr) {
@@ -409,6 +391,7 @@ public class CommentReplyActivity extends BaseActivity implements TaggedProfiles
             mRvTagList.setVisibility(View.GONE);
         }
     }
+
     void clearFields() {
         mCommentEdt.setText("");
         mImageConstraintLay.setVisibility(View.GONE);
@@ -418,7 +401,7 @@ public class CommentReplyActivity extends BaseActivity implements TaggedProfiles
 
     }
 
-    @OnClick({R.id.toolbar_back_img_btn, R.id.post_btn, R.id.ivPost, R.id.iv_remove_image,R.id.comment_user_img_lay})
+    @OnClick({R.id.toolbar_back_img_btn, R.id.post_btn, R.id.ivPost, R.id.iv_remove_image, R.id.comment_user_img_lay})
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.toolbar_back_img_btn:
@@ -456,7 +439,7 @@ public class CommentReplyActivity extends BaseActivity implements TaggedProfiles
     private void profileClick() {
         if (mMyProfileResModel != null) {
             if (mFeedCommentModel.getmProfileId() == mMyProfileResModel.getID()) {
-                      moveMyProfileScreenWithResult(this, 0, AppConstants.FOLLOWERS_FOLLOWING_RESULT);
+                moveMyProfileScreenWithResult(this, 0, AppConstants.FOLLOWERS_FOLLOWING_RESULT);
             } else {
                 moveOtherProfileScreen(this, mMyProfileResModel.getID(),
                         mFeedCommentModel.getmProfileId());
@@ -499,7 +482,7 @@ public class CommentReplyActivity extends BaseActivity implements TaggedProfiles
         if (!mFeedCommentModel.getmComment().trim().isEmpty()) {
             try {
                 mCommentTxt.setVisibility(View.VISIBLE);
-                mCommentTxt.setText(setTextEdt(this,URLDecoder.decode(mFeedCommentModel.getmComment(), "UTF-8"),mFeedCommentModel.getCommentTaggedUserNames(), mFeedCommentModel.getCommentTaggedUserNames(), mMyProfileResModel.getID()));
+                mCommentTxt.setText(setTextEdt(this, URLDecoder.decode(mFeedCommentModel.getmComment(), "UTF-8"), mFeedCommentModel.getCommentTaggedUserNames(), mFeedCommentModel.getCommentTaggedUserNames(), mMyProfileResModel.getID()));
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
             }
@@ -517,7 +500,7 @@ public class CommentReplyActivity extends BaseActivity implements TaggedProfiles
         mIvCommentImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                moveLoadImageScreen(CommentReplyActivity.this, UrlUtils.FILE_URL+mFeedCommentModel.getCommentImages());
+                moveLoadImageScreen(CommentReplyActivity.this, UrlUtils.FILE_URL + mFeedCommentModel.getCommentImages());
             }
         });
 
@@ -553,12 +536,12 @@ public class CommentReplyActivity extends BaseActivity implements TaggedProfiles
             mCommentTaggedUserIDs.add(entry.getKey());
             mCommentTaggedUserList.add(entry.getValue());
         }
-        for(int i = 0 ; i < mCommentTaggedUserIDs.size(); i++){
-            if(i == 0){
-                mCommentUserIDs =  String.valueOf(mCommentTaggedUserIDs.get(i));
+        for (int i = 0; i < mCommentTaggedUserIDs.size(); i++) {
+            if (i == 0) {
+                mCommentUserIDs = String.valueOf(mCommentTaggedUserIDs.get(i));
                 mCommentTaggedUserNames = mCommentTaggedUserList.get(i);
             } else {
-                mCommentUserIDs = mCommentUserIDs + "," +  String.valueOf(mCommentTaggedUserIDs.get(i));
+                mCommentUserIDs = mCommentUserIDs + "," + String.valueOf(mCommentTaggedUserIDs.get(i));
                 mCommentTaggedUserNames = mCommentTaggedUserNames + "," + mCommentTaggedUserList.get(i);
             }
         }
@@ -814,22 +797,21 @@ public class CommentReplyActivity extends BaseActivity implements TaggedProfiles
             mTempCommentTxt2 = "";
         }
         String mResCommentTxt, mResCommentTxt1;
-        mCommentTaggedUserList.add("@"+Utility.getInstance().getUserName(profileResModel));
-        mCommentTaggedUserDetails.put(profileResModel.getUserID(),"@"+Utility.getInstance().getUserName(profileResModel));
-        if(mCommentTaggedUserNames.trim().isEmpty()){
+        mCommentTaggedUserList.add("@" + Utility.getInstance().getUserName(profileResModel));
+        mCommentTaggedUserDetails.put(profileResModel.getUserID(), "@" + Utility.getInstance().getUserName(profileResModel));
+        if (mCommentTaggedUserNames.trim().isEmpty()) {
             mCommentTaggedUserNames = "@" + Utility.getInstance().getUserName(profileResModel);
-        }else {
+        } else {
             mCommentTaggedUserNames = mCommentTaggedUserNames + ",@" + Utility.getInstance().getUserName(profileResModel);
         }
 
         mResCommentTxt = mTempCommentTxt1 + " @" + Utility.getInstance().getUserName(profileResModel);
         mResCommentTxt1 = mResCommentTxt + " " + mTempCommentTxt2;
         int mCursorPosition = mResCommentTxt.length();
-        mCommentEdt.setText(setTextEdt(this,mResCommentTxt1, mCommentTaggedUserNames, mCommentUserIDs, mMyProfileResModel.getID()));
+        mCommentEdt.setText(setTextEdt(this, mResCommentTxt1, mCommentTaggedUserNames, mCommentUserIDs, mMyProfileResModel.getID()));
         mCommentEdt.setSelection(mCursorPosition + 1);
         mSearchTextIndex = mCursorPosition + 1;
     }
-
 
 
 }

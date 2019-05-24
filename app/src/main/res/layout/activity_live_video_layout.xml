@@ -53,8 +53,8 @@
             <RelativeLayout
                 android:id="@+id/progress_lay"
                 style="@style/LayoutMatch"
-                android:layout_alignBottom="@+id/surface_view"
                 android:layout_alignTop="@+id/surface_view"
+                android:layout_alignBottom="@+id/surface_view"
                 android:background="@color/transparent50"
                 android:clickable="false"
                 android:visibility="gone">

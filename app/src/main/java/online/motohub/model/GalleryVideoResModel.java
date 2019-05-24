@@ -7,33 +7,6 @@ import com.google.gson.annotations.SerializedName;
 
 public class GalleryVideoResModel implements Parcelable {
 
-    @SerializedName("ID")
-    private int id;
-
-    @SerializedName("UserID")
-    private int userId;
-
-    @SerializedName("ProfileID")
-    private int profileId;
-
-    @SerializedName("Thumbnail")
-    private String thumbnail;
-
-    @SerializedName("VideoUrl")
-    private String videoUrl;
-
-    @SerializedName("Caption")
-    private String caption;
-
-    private GalleryVideoResModel(Parcel in) {
-        id = in.readInt();
-        userId = in.readInt();
-        profileId = in.readInt();
-        thumbnail = in.readString();
-        videoUrl = in.readString();
-        caption = in.readString();
-    }
-
     public static final Creator<GalleryVideoResModel> CREATOR = new Creator<GalleryVideoResModel>() {
         @Override
         public GalleryVideoResModel createFromParcel(Parcel in) {
@@ -45,6 +18,27 @@ public class GalleryVideoResModel implements Parcelable {
             return new GalleryVideoResModel[size];
         }
     };
+    @SerializedName("ID")
+    private int id;
+    @SerializedName("UserID")
+    private int userId;
+    @SerializedName("ProfileID")
+    private int profileId;
+    @SerializedName("Thumbnail")
+    private String thumbnail;
+    @SerializedName("VideoUrl")
+    private String videoUrl;
+    @SerializedName("Caption")
+    private String caption;
+
+    private GalleryVideoResModel(Parcel in) {
+        id = in.readInt();
+        userId = in.readInt();
+        profileId = in.readInt();
+        thumbnail = in.readString();
+        videoUrl = in.readString();
+        caption = in.readString();
+    }
 
     public int getId() {
         return id;

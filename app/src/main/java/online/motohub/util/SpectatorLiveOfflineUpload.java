@@ -190,26 +190,6 @@ public class SpectatorLiveOfflineUpload extends IntentService implements Progres
         uploadAsync.execute();
     }
 
-    @SuppressLint("StaticFieldLeak")
-    private class UploadAsync extends AsyncTask<String, String, Void> {
-
-        private Integer notificationid;
-        private File imagfile;
-        private File videofile;
-
-        UploadAsync(Integer notificationid, File videofile, File ImageFile) {
-            this.notificationid = notificationid;
-            imagfile = ImageFile;
-            this.videofile = videofile;
-        }
-
-        @Override
-        protected Void doInBackground(String... paths) {
-            amazoneUpload(videofile, imagfile, notificationid);
-            return null;
-        }
-    }
-
     @SuppressWarnings("deprecation")
     private void amazoneUpload(final File video, final File image, final int notificationid) {
 
@@ -378,6 +358,26 @@ public class SpectatorLiveOfflineUpload extends IntentService implements Progres
             sendBroadcast(new Intent().setAction("UPLOAD_STATUS").putExtra("status", value));
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    @SuppressLint("StaticFieldLeak")
+    private class UploadAsync extends AsyncTask<String, String, Void> {
+
+        private Integer notificationid;
+        private File imagfile;
+        private File videofile;
+
+        UploadAsync(Integer notificationid, File videofile, File ImageFile) {
+            this.notificationid = notificationid;
+            imagfile = ImageFile;
+            this.videofile = videofile;
+        }
+
+        @Override
+        protected Void doInBackground(String... paths) {
+            amazoneUpload(videofile, imagfile, notificationid);
+            return null;
         }
     }
 }

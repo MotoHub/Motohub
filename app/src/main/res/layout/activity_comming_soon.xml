@@ -4,23 +4,25 @@
     android:id="@+id/create_profile_co_layout"
     style="@style/LayoutMatch"
     tools:context="online.motohub.activity.ComingSoonActivity">
+
     <include
         android:id="@+id/include"
         layout="@layout/widget_toolbar" />
+
     <RelativeLayout
         style="@style/LayoutMatch"
         android:layout_marginTop="?attr/actionBarSize">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="@dimen/text25"
-        android:textStyle="italic|bold"
-        android:text="@string/coming_soon"
-        android:textColor="@color/colorOrange"
-        android:layout_centerInParent="true"
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="@string/coming_soon"
+            android:textColor="@color/colorOrange"
+            android:textSize="@dimen/text25"
+            android:textStyle="italic|bold"
 
-        />
+            />
 
     </RelativeLayout>
 </android.support.design.widget.CoordinatorLayout>

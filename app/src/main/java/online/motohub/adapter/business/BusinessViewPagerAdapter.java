@@ -10,13 +10,13 @@ import java.util.ArrayList;
 import online.motohub.R;
 import online.motohub.util.AppConstants;
 
-public class BusinessViewPagerAdapter  extends FragmentStatePagerAdapter {
+public class BusinessViewPagerAdapter extends FragmentStatePagerAdapter {
 
     private ArrayList<Fragment> mFragmentList = new ArrayList<>();
     private Context ctx;
     private String mUserType;
 
-    public BusinessViewPagerAdapter(FragmentManager fm, Context ctx,ArrayList<Fragment> fragmentList, String userType) {
+    public BusinessViewPagerAdapter(FragmentManager fm, Context ctx, ArrayList<Fragment> fragmentList, String userType) {
         super(fm);
         this.ctx = ctx;
         this.mFragmentList = fragmentList;
@@ -40,9 +40,9 @@ public class BusinessViewPagerAdapter  extends FragmentStatePagerAdapter {
             case 3:
                 return ctx.getResources().getString(R.string.videos);
             case 4:
-                if(mUserType.equals(AppConstants.CLUB))
+                if (mUserType.equals(AppConstants.CLUB))
                     return ctx.getString(R.string.clubs);
-                else if(mUserType.equals(AppConstants.SHOP))
+                else if (mUserType.equals(AppConstants.SHOP))
                     return ctx.getString(R.string.vehicles);
             default:
                 return null;

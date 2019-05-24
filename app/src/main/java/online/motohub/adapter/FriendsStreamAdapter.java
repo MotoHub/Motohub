@@ -26,16 +26,15 @@ import online.motohub.model.ProfileResModel;
 import online.motohub.util.AppConstants;
 
 
-public class FriendsStreamAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>  {
+public class FriendsStreamAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
+    private static final int VIEW_TYPE_LOADING = 0;
+    private static final int VIEW_TYPE_ITEM = 1;
     private Context mContext;
     private ArrayList<LiveStreamEntity> mStreamUserList;
     private int selPos;
     private LayoutInflater mInflater;
     private int mCurrentProfileID;
-
-    private static final int VIEW_TYPE_LOADING = 0;
-    private static final int VIEW_TYPE_ITEM = 1;
 
 
     public FriendsStreamAdapter(Context context, int currentProfileID, ArrayList<LiveStreamEntity> streamUserList) {
@@ -43,34 +42,6 @@ public class FriendsStreamAdapter extends RecyclerView.Adapter<RecyclerView.View
         mStreamUserList = streamUserList;
         mInflater = LayoutInflater.from(mContext);
         mCurrentProfileID = currentProfileID;
-    }
-
-    public class Holder extends RecyclerView.ViewHolder {
-
-        @BindView(R.id.user_img)
-        CircleImageView mUserImg;
-        @BindView(R.id.user_name_txt)
-        TextView mUserNameTxt;
-        @BindView(R.id.accept_btn)
-        TextView mStartStreamBtn;
-        @BindView(R.id.decline_btn)
-        TextView mViewStreamBtn;
-
-        public Holder(View view) {
-            super(view);
-            ButterKnife.bind(this, view);
-        }
-    }
-
-    public class ViewHolderLoader extends RecyclerView.ViewHolder {
-
-        @BindView(R.id.progress_bar)
-        ProgressBar mProgressBar;
-
-        public ViewHolderLoader(View v) {
-            super(v);
-            ButterKnife.bind(this, v);
-        }
     }
 
     @Override
@@ -87,7 +58,6 @@ public class FriendsStreamAdapter extends RecyclerView.Adapter<RecyclerView.View
                 return null;
         }
     }
-
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int pos) {
@@ -138,7 +108,7 @@ public class FriendsStreamAdapter extends RecyclerView.Adapter<RecyclerView.View
                     } else {
                         mHolder.mUserNameTxt.setText(mEntity.getProfiles_by_StreamProfileID().getDriver());
                     }
-                }catch (Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
                 break;
@@ -152,12 +122,10 @@ public class FriendsStreamAdapter extends RecyclerView.Adapter<RecyclerView.View
         }
     }
 
-
     public void filterList(ArrayList<LiveStreamEntity> filteredNames) {
         this.mStreamUserList = filteredNames;
         notifyDataSetChanged();
     }
-
 
     @Override
     public int getItemCount() {
@@ -170,6 +138,34 @@ public class FriendsStreamAdapter extends RecyclerView.Adapter<RecyclerView.View
             return VIEW_TYPE_LOADING;
         } else {
             return VIEW_TYPE_ITEM;
+        }
+    }
+
+    public class Holder extends RecyclerView.ViewHolder {
+
+        @BindView(R.id.user_img)
+        CircleImageView mUserImg;
+        @BindView(R.id.user_name_txt)
+        TextView mUserNameTxt;
+        @BindView(R.id.accept_btn)
+        TextView mStartStreamBtn;
+        @BindView(R.id.decline_btn)
+        TextView mViewStreamBtn;
+
+        public Holder(View view) {
+            super(view);
+            ButterKnife.bind(this, view);
+        }
+    }
+
+    public class ViewHolderLoader extends RecyclerView.ViewHolder {
+
+        @BindView(R.id.progress_bar)
+        ProgressBar mProgressBar;
+
+        public ViewHolderLoader(View v) {
+            super(v);
+            ButterKnife.bind(this, v);
         }
     }
 

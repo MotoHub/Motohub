@@ -30,12 +30,12 @@ public class LiveStreamPaymentEntity implements Serializable {
     @Expose
     private String TransactionID;
 
-    public void setID(int ID) {
-        this.ID = ID;
-    }
-
     public int getID() {
         return ID;
+    }
+
+    public void setID(int ID) {
+        this.ID = ID;
     }
 
     public int getViewUserID() {

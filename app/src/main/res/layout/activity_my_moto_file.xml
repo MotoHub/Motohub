@@ -16,10 +16,10 @@
         layout="@layout/widget_toolbar" />
 
     <android.support.v4.widget.NestedScrollView
+        android:id="@+id/nestedScrollView"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_below="@+id/include"
-        android:id="@+id/nestedScrollView"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <android.support.design.widget.CoordinatorLayout
@@ -43,8 +43,8 @@
                     android:layout_width="@dimen/size32"
                     android:layout_height="@dimen/size32"
                     android:layout_alignParentEnd="true"
-                    android:layout_marginEnd="@dimen/size10"
                     android:layout_marginTop="@dimen/size10"
+                    android:layout_marginEnd="@dimen/size10"
                     android:background="@drawable/bg_add_photo"
                     android:contentDescription="@string/camera"
                     android:padding="@dimen/size7"
@@ -62,8 +62,8 @@
                     android:id="@+id/user_box"
                     style="@style/LayoutMatchWrap"
                     android:layout_below="@+id/cover_line"
-                    android:layout_marginBottom="@dimen/size10"
                     android:layout_marginTop="@dimen/size10"
+                    android:layout_marginBottom="@dimen/size10"
                     android:baselineAligned="false"
                     android:orientation="horizontal">
 
@@ -83,19 +83,19 @@
 
                         <com.facebook.shimmer.ShimmerFrameLayout
                             android:id="@+id/shimmer_myprofile"
-                            android:layout_alignBottom="@id/profile_img"
+                            style="@style/LayoutWrap"
                             android:layout_alignTop="@id/profile_img"
-                            android:layout_marginLeft="@dimen/size5"
+                            android:layout_alignBottom="@id/profile_img"
                             android:layout_marginStart="@dimen/size5"
+                            android:layout_marginLeft="@dimen/size5"
                             android:layout_toEndOf="@id/profile_img"
-                            android:layout_toRightOf="@id/profile_img"
-                            style="@style/LayoutWrap">
+                            android:layout_toRightOf="@id/profile_img">
 
                             <LinearLayout
-                                android:layout_height="match_parent"
-                                android:layout_width="match_parent">
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent">
 
-                                <include layout="@layout/profiledetails_placeholder_item"/>
+                                <include layout="@layout/profiledetails_placeholder_item" />
 
                             </LinearLayout>
 
@@ -103,15 +103,15 @@
 
                         <LinearLayout
                             android:id="@+id/user_details"
-                            android:visibility="gone"
                             style="@style/LayoutWrap"
-                            android:layout_alignBottom="@id/profile_img"
                             android:layout_alignTop="@id/profile_img"
-                            android:layout_marginLeft="@dimen/size5"
+                            android:layout_alignBottom="@id/profile_img"
                             android:layout_marginStart="@dimen/size5"
+                            android:layout_marginLeft="@dimen/size5"
                             android:layout_toEndOf="@id/profile_img"
                             android:layout_toRightOf="@id/profile_img"
-                            android:orientation="vertical">
+                            android:orientation="vertical"
+                            android:visibility="gone">
 
                             <TextView
                                 android:id="@+id/name_of_moto_tv"
@@ -143,8 +143,8 @@
                     <LinearLayout
                         android:id="@+id/followers_box"
                         style="@style/LayoutWrapMatch"
-                        android:layout_marginLeft="@dimen/size5"
                         android:layout_marginStart="@dimen/size5"
+                        android:layout_marginLeft="@dimen/size5"
                         android:layout_weight="1"
                         android:clickable="true"
                         android:focusable="true"
@@ -235,14 +235,14 @@
                     android:id="@+id/tab_box"
                     style="@style/LayoutMatchWrap"
                     android:layout_below="@id/userBoxSeparator"
-                    android:layout_marginBottom="@dimen/size5"
                     android:layout_marginTop="@dimen/size5"
+                    android:layout_marginBottom="@dimen/size5"
                     android:baselineAligned="false"
                     android:orientation="horizontal"
-                    android:paddingEnd="@dimen/size10"
+                    android:paddingStart="@dimen/size10"
                     android:paddingLeft="@dimen/size10"
-                    android:paddingRight="@dimen/size10"
-                    android:paddingStart="@dimen/size10">
+                    android:paddingEnd="@dimen/size10"
+                    android:paddingRight="@dimen/size10">
 
                     <RelativeLayout
                         android:id="@+id/your_build_box"
@@ -278,8 +278,8 @@
                     <View
                         android:layout_width="@dimen/size1"
                         android:layout_height="match_parent"
-                        android:layout_marginBottom="@dimen/size5"
                         android:layout_marginTop="@dimen/size10"
+                        android:layout_marginBottom="@dimen/size5"
                         android:background="@color/colorGrey" />
 
                     <RelativeLayout
@@ -316,8 +316,8 @@
                     <View
                         android:layout_width="@dimen/size1"
                         android:layout_height="match_parent"
-                        android:layout_marginBottom="@dimen/size5"
                         android:layout_marginTop="@dimen/size10"
+                        android:layout_marginBottom="@dimen/size5"
                         android:background="@color/colorGrey" />
 
                     <RelativeLayout
@@ -354,8 +354,8 @@
                     <View
                         android:layout_width="@dimen/size1"
                         android:layout_height="match_parent"
-                        android:layout_marginBottom="@dimen/size5"
                         android:layout_marginTop="@dimen/size10"
+                        android:layout_marginBottom="@dimen/size5"
                         android:background="@color/colorGrey" />
 
                     <RelativeLayout
@@ -427,13 +427,12 @@
 
                 <com.facebook.shimmer.ShimmerFrameLayout
                     android:id="@+id/shimmer_myfeeds"
-                    android:layout_below="@+id/writePostSeparator"
-                    style="@style/LayoutMatchWrap">
+                    style="@style/LayoutMatchWrap"
+                    android:layout_below="@+id/writePostSeparator">
 
-                    <LinearLayout
-                        style="@style/LayoutMatchWrap">
+                    <LinearLayout style="@style/LayoutMatchWrap">
 
-                        <include layout="@layout/posts_placeholder_item"/>
+                        <include layout="@layout/posts_placeholder_item" />
 
                     </LinearLayout>
 
@@ -444,8 +443,8 @@
                     style="@style/LayoutMatchWrap"
                     android:layout_below="@+id/writePostSeparator"
                     android:background="@color/colorLighterGrey"
-                    android:scrollbars="none"
                     android:nestedScrollingEnabled="false"
+                    android:scrollbars="none"
                     app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
             </RelativeLayout>

@@ -71,11 +71,6 @@ public class CameraStoryActivity extends BaseActivity implements View.OnClickLis
     private Handler mHandler;
     private Runnable mRunnable;
     private boolean isExit = false;
-    private com.daasuu.gpuv.composer.GPUMp4Composer GPUMp4Composer;
-    private Bitmap bitmap;
-
-    private ProgressDialog pDialog;
-    private EventsResModel mEventResModel;
     //private String videoPath;
     PermissionCallback mPermissionCallBack = new PermissionCallback() {
         @Override
@@ -83,6 +78,10 @@ public class CameraStoryActivity extends BaseActivity implements View.OnClickLis
             initView();
         }
     };
+    private com.daasuu.gpuv.composer.GPUMp4Composer GPUMp4Composer;
+    private Bitmap bitmap;
+    private ProgressDialog pDialog;
+    private EventsResModel mEventResModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

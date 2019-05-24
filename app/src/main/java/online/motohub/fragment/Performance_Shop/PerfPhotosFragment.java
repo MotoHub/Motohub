@@ -70,12 +70,12 @@ public class PerfPhotosFragment extends BaseFragment {
         mGalleryResModels = new ArrayList<>();
         mAdapter = new GalleryImgAdapter(getActivity(), mGalleryResModels);
         mGalleryRv.setAdapter(mAdapter);
-       // mAdapter.setOnItemClickListener(mOnItemClickListener);
+        // mAdapter.setOnItemClickListener(mOnItemClickListener);
 
         mGalleryRv.addOnItemTouchListener(new RecyclerTouchListener(getActivity(), mGalleryRv, new RecyclerClick_Listener() {
             @Override
             public void onClick(View view, int position) {
-                ((BaseActivity) getActivity()).moveLoadImageScreen(getActivity(), UrlUtils.AWS_S3_BASE_URL+mGalleryResModels.get(position).getGalleryImage());
+                ((BaseActivity) getActivity()).moveLoadImageScreen(getActivity(), UrlUtils.AWS_S3_BASE_URL + mGalleryResModels.get(position).getGalleryImage());
             }
 
             @Override

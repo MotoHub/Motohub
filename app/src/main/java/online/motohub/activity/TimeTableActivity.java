@@ -34,31 +34,25 @@ import online.motohub.util.PreferenceUtils;
 
 public class TimeTableActivity extends BaseActivity {
 
+    public static final String EXTRA_EVENT_DATA = "extra_event_data";
     @BindView(R.id.time_table_parent)
     RelativeLayout mParentView;
-
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
-
     @BindView(R.id.time_table_event_name_text_view)
     TextView mEventNameTv;
-
     @BindView(R.id.time_table_event_date_text_view)
     TextView mEventDateTv;
-
     @BindView(R.id.time_table_event_session_rv)
     RecyclerView mEventRv;
-
     LinearLayoutManager mLayoutManager;
     TimeTableAdapter mAdapter;
     List<Date> mAdapterIndex;
     Map<Date, List<EventCategoryModel>> mAdapterModel;
     private int mEventID;
-
-    public static final String EXTRA_EVENT_DATA = "extra_event_data";
-
     private Date mCurrentDate, mStartDate, mEndDate;
     private EventsResModel mEventsResModel;
+    private Map<Date, List<EventCategoryModel>> modelMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,15 +65,17 @@ public class TimeTableActivity extends BaseActivity {
 
     }
 
-    private void getData(){
-        mEventID =  getIntent().getIntExtra(EventsModel.EVENT_ID,0);
+    private void getData() {
+        mEventID = getIntent().getIntExtra(EventsModel.EVENT_ID, 0);
         getEvent();
     }
+
     @Override
     protected void onDestroy() {
         DialogManager.hideProgress();
         super.onDestroy();
     }
+
     private void initView() {
 
         setToolbar(mToolbar, getString(R.string.time_table));
@@ -121,15 +117,13 @@ public class TimeTableActivity extends BaseActivity {
     private void getEvent() {
 
         String mFilter = "ID=" + mEventID;
-        RetrofitClient.getRetrofitInstance().callGetEvents(this,mFilter,RetrofitClient.GET_EVENTS_RESPONSE);
+        RetrofitClient.getRetrofitInstance().callGetEvents(this, mFilter, RetrofitClient.GET_EVENTS_RESPONSE);
     }
-
 
     @Override
     public void onBackPressed() {
         finish();
     }
-
 
     @OnClick({R.id.toolbar_back_img_btn, R.id.time_table_event_before_iv, R.id.time_table_event_next_iv})
     public void onClick(View v) {
@@ -228,8 +222,6 @@ public class TimeTableActivity extends BaseActivity {
         }
     }
 
-    private Map<Date, List<EventCategoryModel>> modelMap;
-
     private void filterSessions(List<EventCategoryModel> models) throws Exception {
 
         modelMap = new HashMap<>();
@@ -299,28 +291,28 @@ public class TimeTableActivity extends BaseActivity {
 
         boolean isLast = true;
 
-        Date lastDate ;
+        Date lastDate;
 
-        Date previousDate ;
+        Date previousDate;
 
         for (int i = 0; i < 18; i++) {
 
             if (isFirst) {
                 isFirst = false;
-                mAdapterIndex.add(i,DateUtil.getFirstHourOfDay(sessionDate));
+                mAdapterIndex.add(i, DateUtil.getFirstHourOfDay(sessionDate));
 
-            }else{
+            } else {
                 lastDate = mAdapterIndex.get(mAdapterIndex.size() - 1);
-                mAdapterIndex.add(i,DateUtil.nextHour(lastDate));
+                mAdapterIndex.add(i, DateUtil.nextHour(lastDate));
             }
         }
 
-        for(int i = 18; i < 24; i++){
+        for (int i = 18; i < 24; i++) {
 
-            if(isLast){
+            if (isLast) {
                 isLast = false;
                 mAdapterIndex.add(i, DateUtil.getFirstPreviousHour(sessionDate));
-            }else {
+            } else {
                 previousDate = mAdapterIndex.get(mAdapterIndex.size() - 1);
                 mAdapterIndex.add(i, DateUtil.nextHour(previousDate));
             }
@@ -422,9 +414,10 @@ public class TimeTableActivity extends BaseActivity {
 
                 break;
 
-        }    if ( responseObj instanceof EventsModel){
+        }
+        if (responseObj instanceof EventsModel) {
 
-            EventsModel mEventModel = (EventsModel)responseObj;
+            EventsModel mEventModel = (EventsModel) responseObj;
 
             mEventsResModel = mEventModel.getResource().get(0);
 

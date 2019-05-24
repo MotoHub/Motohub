@@ -202,7 +202,6 @@ public class CompleteProfileActivity extends BaseActivity {
     }
 
 
-
     private void showHideWidgets(int visibility) {
         if (visibility == View.GONE) {
             mDriverOrNameTv.setText(mNameStr);
@@ -575,7 +574,6 @@ public class CompleteProfileActivity extends BaseActivity {
             submitMotoProfileData(mProfilePicImgUri, mCoverImgUri);
         }
     }*/
-
 
 
     @Override

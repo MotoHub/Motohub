@@ -48,10 +48,10 @@
             android:id="@+id/add_users_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:visibility="gone"
             android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
             android:layout_margin="@dimen/size15"
+            android:visibility="gone"
             app:fabSize="normal"
             app:srcCompat="@drawable/add_img_icon" />
     </RelativeLayout>

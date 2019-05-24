@@ -14,10 +14,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/include"
-        android:layout_marginBottom="@dimen/size5"
         android:layout_marginLeft="@dimen/size10"
-        android:layout_marginRight="@dimen/size10"
         android:layout_marginTop="@dimen/size15"
+        android:layout_marginRight="@dimen/size10"
+        android:layout_marginBottom="@dimen/size5"
         android:orientation="horizontal"
         android:weightSum="4">
 
@@ -46,7 +46,7 @@
             android:textAllCaps="false"
             android:textColor="@color/text_color"
             android:textSize="@dimen/text16"
-            android:visibility="visible"/>
+            android:visibility="visible" />
 
     </LinearLayout>
 
@@ -55,10 +55,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/livelinearlay"
-        android:layout_marginBottom="@dimen/size5"
         android:layout_marginLeft="@dimen/size10"
-        android:layout_marginRight="@dimen/size10"
         android:layout_marginTop="@dimen/size5"
+        android:layout_marginRight="@dimen/size10"
+        android:layout_marginBottom="@dimen/size5"
         android:background="@color/colorGrey">
 
         <android.support.v7.widget.CardView
@@ -94,8 +94,8 @@
                     android:id="@+id/event_start_time_txt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
                     android:layout_below="@+id/liveTimeTableTxt"
+                    android:layout_alignParentEnd="true"
                     android:textColor="@color/colorBlack"
                     android:textSize="@dimen/text16" />
 
@@ -113,8 +113,8 @@
                     android:id="@+id/event_end_time_txt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
                     android:layout_below="@+id/event_start_time_txt"
+                    android:layout_alignParentEnd="true"
                     android:layout_marginTop="@dimen/size10"
                     android:textColor="@color/colorBlack"
                     android:textSize="@dimen/text16" />
@@ -129,18 +129,18 @@
         android:layout_height="wrap_content"
         android:layout_above="@+id/lChat"
         android:layout_below="@+id/liveTimeTableRelativeLay"
-        android:layout_marginBottom="@dimen/size5"
         android:layout_marginLeft="@dimen/size10"
-        android:layout_marginRight="@dimen/size10"
         android:layout_marginTop="@dimen/size5"
+        android:layout_marginRight="@dimen/size10"
+        android:layout_marginBottom="@dimen/size5"
         android:background="@drawable/orange_border_bg">
 
         <android.support.v7.widget.CardView
             android:id="@+id/promoterCardView"
             style="@style/LayoutMatchWrap"
-            android:layout_marginEnd="@dimen/size5"
             android:layout_marginStart="@dimen/size5"
             android:layout_marginTop="@dimen/size5"
+            android:layout_marginEnd="@dimen/size5"
             android:background="@color/colorWhite"
             android:visibility="gone"
             app:cardCornerRadius="@dimen/size5">
@@ -169,15 +169,15 @@
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
                     android:layout_marginEnd="@dimen/size5"
+                    android:contentDescription="@string/app_name"
                     android:scaleType="centerCrop"
-                    android:src="@drawable/drop_down_icon"
-                    android:contentDescription="@string/app_name"/>
+                    android:src="@drawable/drop_down_icon" />
 
                 <LinearLayout
                     style="@style/LayoutMatchWrap"
                     android:layout_centerVertical="true"
-                    android:layout_toEndOf="@+id/profileImgView"
                     android:layout_toStartOf="@+id/drop_down"
+                    android:layout_toEndOf="@+id/profileImgView"
                     android:gravity="center|start"
                     android:orientation="vertical">
 
@@ -314,8 +314,8 @@
                 android:layout_width="@dimen/size150"
                 android:layout_height="@dimen/size150"
                 android:contentDescription="@string/app_name"
-                android:scaleType="centerCrop"
                 android:padding="@dimen/size2"
+                android:scaleType="centerCrop"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
@@ -331,15 +331,16 @@
                 app:srcCompat="@drawable/cancel_orange_circle_icon" />
 
         </android.support.constraint.ConstraintLayout>
-	
-	 <include layout="@layout/reply_chat_layout"
+
+        <include
             android:id="@+id/replyChatLayout"
+            layout="@layout/reply_chat_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/size5"
-            android:visibility="gone"
             android:layout_marginStart="@dimen/size5"
-            android:layout_marginEnd="@dimen/size5"/>
+            android:layout_marginTop="@dimen/size5"
+            android:layout_marginEnd="@dimen/size5"
+            android:visibility="gone" />
 
         <RelativeLayout
             android:id="@+id/sendBox"
@@ -360,20 +361,20 @@
                 <EditText
                     android:id="@+id/writeChatEt"
                     style="@style/LayoutWrap"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentRight="true"
                     android:layout_alignParentStart="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
                     android:background="@null"
                     android:gravity="top"
                     android:inputType="textMultiLine"
                     android:minHeight="@dimen/size30"
-                    android:paddingBottom="@dimen/size5"
-                    android:paddingEnd="@dimen/size5"
-                    android:paddingLeft="@dimen/size5"
-                    android:paddingRight="@dimen/size5"
                     android:paddingStart="@dimen/size5"
+                    android:paddingLeft="@dimen/size5"
                     android:paddingTop="@dimen/size5"
+                    android:paddingEnd="@dimen/size5"
+                    android:paddingRight="@dimen/size5"
+                    android:paddingBottom="@dimen/size5"
                     android:textColor="@color/colorBlack"
                     android:textSize="@dimen/text14" />
 
@@ -399,12 +400,12 @@
                 android:clickable="true"
                 android:gravity="center"
                 android:minHeight="@dimen/size30"
-                android:paddingBottom="@dimen/size5"
-                android:paddingEnd="@dimen/size16"
-                android:paddingLeft="@dimen/size16"
-                android:paddingRight="@dimen/size16"
                 android:paddingStart="@dimen/size16"
+                android:paddingLeft="@dimen/size16"
                 android:paddingTop="@dimen/size5"
+                android:paddingEnd="@dimen/size16"
+                android:paddingRight="@dimen/size16"
+                android:paddingBottom="@dimen/size5"
                 android:text="@string/send"
                 android:textAlignment="center"
                 android:textColor="@color/text_color"

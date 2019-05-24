@@ -3,32 +3,32 @@
  * Portions Copyright 2002-2008 Sun Microsystems, Inc.
  * Portions Copyright 2002-2008 Mitsubishi Electric Research Laboratories.
  * Portions Copyright 2013-2015 Alpha Cephei, Inc.
- *
+ * <p>
  * All Rights Reserved.  Use is subject to license terms.
- *
+ * <p>
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
  * are met:
- *
+ * <p>
  * 1. Redistributions of source code must retain the above copyright
  * notice, this list of conditions and the following disclaimer.
- *
+ * <p>
  * 2. Redistributions in binary form must reproduce the above copyright
  * notice, this list of conditions and the following disclaimer in
  * the documentation and/or other materials provided with the
  * distribution.
- *
+ * <p>
  * 3. Original authors' names are not deleted.
- *
+ * <p>
  * 4. The authors' names are not used to endorse or promote products
  * derived from this software without specific prior written
  * permission.
- *
+ * <p>
  * This work was supported in part by funding from the Defense Advanced
  * Research Projects Agency and the National Science Foundation of the
  * United States of America, the CMU Sphinx Speech Consortium, and
  * Sun Microsystems, Inc.
- *
+ * <p>
  * CARNEGIE MELLON UNIVERSITY, SUN MICROSYSTEMS, INC., MITSUBISHI
  * ELECTRONIC RESEARCH LABORATORIES AND THE CONTRIBUTORS TO THIS WORK
  * DISCLAIM ALL WARRANTIES WITH REGARD TO THIS SOFTWARE, INCLUDING ALL
@@ -45,23 +45,18 @@ package online.motohub.audio;
 
 public class VUMeter {
 
-    private double rms;
-    private double average;
-    private double peak;
-
     private static final double log10 = Math.log(10.0);
     private static final double maxDB = Math.max(0.0, 20.0 * Math.log(Short.MAX_VALUE) / log10);
-
     private final int peakHoldTime = 1000;
-    private long then = System.currentTimeMillis();
-
     private final float a2 = -1.9556f;
     private final float a3 = 0.9565f;
-
     private final float b1 = 0.9780f;
     private final float b2 = -1.9561f;
     private final float b3 = 0.9780f;
-
+    private double rms;
+    private double average;
+    private double peak;
+    private long then = System.currentTimeMillis();
 
     public final synchronized double getRmsDB() {
         return Math.max(0.0, 20.0 * Math.log(rms) / log10);

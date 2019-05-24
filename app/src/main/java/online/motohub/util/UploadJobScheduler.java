@@ -101,39 +101,6 @@ public class UploadJobScheduler extends JobService implements ProgressRequestBod
 
     }
 
-    @SuppressLint("StaticFieldLeak")
-    private class JobTask extends AsyncTask<JobParameters, Void, JobParameters> {
-        private SpectatorLiveEntity myObj;
-
-        JobTask(SpectatorLiveEntity myObj) {
-            this.myObj = myObj;
-        }
-
-        @Override
-        protected JobParameters doInBackground(final JobParameters... params) {
-            /*Runnable r = new Runnable() {
-                public void run() {
-                    synchronized (this) {
-                        try {
-                            amazoneUpload(UploadJobScheduler.this, myObj, params[0]);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }
-            };
-            Thread t = new Thread(r);
-            t.start();*/
-
-            uploadFileNotification(UploadJobScheduler.this, myObj, params[0]);
-            return params[0];
-        }
-
-        @Override
-        protected void onPostExecute(JobParameters jobParameters) {
-        }
-    }
-
     private void uploadFileNotification(Context mContext, SpectatorLiveEntity entity, final JobParameters param) {
         //SpectatorLiveEntity entity = list.get(mFinalValue);
         mProfileID = Integer.parseInt(entity.getProfileID());
@@ -310,6 +277,39 @@ public class UploadJobScheduler extends JobService implements ProgressRequestBod
 
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    @SuppressLint("StaticFieldLeak")
+    private class JobTask extends AsyncTask<JobParameters, Void, JobParameters> {
+        private SpectatorLiveEntity myObj;
+
+        JobTask(SpectatorLiveEntity myObj) {
+            this.myObj = myObj;
+        }
+
+        @Override
+        protected JobParameters doInBackground(final JobParameters... params) {
+            /*Runnable r = new Runnable() {
+                public void run() {
+                    synchronized (this) {
+                        try {
+                            amazoneUpload(UploadJobScheduler.this, myObj, params[0]);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            };
+            Thread t = new Thread(r);
+            t.start();*/
+
+            uploadFileNotification(UploadJobScheduler.this, myObj, params[0]);
+            return params[0];
+        }
+
+        @Override
+        protected void onPostExecute(JobParameters jobParameters) {
         }
     }
 }

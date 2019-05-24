@@ -61,21 +61,21 @@
                 android:id="@+id/savedCardRecyclerView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:visibility="visible"
                 android:layout_marginTop="@dimen/size10"
                 android:layout_marginBottom="@dimen/size10"
+                android:visibility="visible"
                 app:layout_constraintBottom_toTopOf="@+id/newCardView" />
 
             <android.support.v7.widget.CardView
                 android:id="@+id/newCardView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_below="@+id/savedCardRecyclerView"
                 android:layout_marginLeft="@dimen/size10"
                 android:layout_marginTop="@dimen/size5"
                 android:layout_marginRight="@dimen/size10"
                 android:layout_marginBottom="@dimen/size5"
                 android:foreground="?android:attr/selectableItemBackground"
-                android:layout_below="@+id/savedCardRecyclerView"
                 app:cardBackgroundColor="@color/colorGrey"
                 app:cardCornerRadius="5dp"
                 app:cardElevation="10dp"

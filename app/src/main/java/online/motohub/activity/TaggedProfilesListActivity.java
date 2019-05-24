@@ -28,20 +28,15 @@ import online.motohub.util.PreferenceUtils;
 
 public class TaggedProfilesListActivity extends BaseActivity {
 
+    public static final String TAGGED_PROFILES_ID = "TaggedProfilesID";
     @BindView(R.id.list_view_co_layout)
     CoordinatorLayout mCoordinatorLayout;
-
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
-
     @BindView(R.id.widget_list_view)
     ListView mTaggedProfilesListView;
-
     @BindString(R.string.tagged_profile)
     String mToolbarTitle;
-
-    public static final String TAGGED_PROFILES_ID = "TaggedProfilesID";
-
     private ArrayList<ProfileResModel> mTaggedProfilesList;
     private TaggedProfilesListAdapter mTaggedProfilesListAdapter;
     private String mTaggedProfilesIDStr;

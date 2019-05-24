@@ -43,8 +43,6 @@ public class MotoVideoScreen extends BaseActivity {
     }
 
 
-
-
     private void initVideoView() {
         mVideoFilePath = "android.resource://" + getPackageName() + "/" + R.raw.motohub_video;
         mVideoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {

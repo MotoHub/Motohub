@@ -143,13 +143,13 @@ public class BusinessHomeFragment extends BaseFragment implements SwipeRefreshLa
 
         /*ProfileResModel mMyProfileResModel = MotoHub.getApplicationInstance().getmProfileResModel();
         mPromotersResModel = MotoHub.getApplicationInstance().getmPromoterResModel();*/
-        ProfileResModel mMyProfileResModel= EventBus.getDefault().getStickyEvent(ProfileResModel.class);
+        ProfileResModel mMyProfileResModel = EventBus.getDefault().getStickyEvent(ProfileResModel.class);
         mPromotersResModel = EventBus.getDefault().getStickyEvent(PromotersResModel.class);
         mSwipeRefreshLayout.setOnRefreshListener(this);
         mNewsFeedList = new ArrayList<>();
         //if (mMyProfileResModel != null && mMyProfileResModel.getID() != 0) {
-            mPromoterPostsAdapter = new BusinessPostAdapter(mNewsFeedList, mMyProfileResModel, mActivity);
-            mNewsFeedRecyclerView.setAdapter(mPromoterPostsAdapter);
+        mPromoterPostsAdapter = new BusinessPostAdapter(mNewsFeedList, mMyProfileResModel, mActivity);
+        mNewsFeedRecyclerView.setAdapter(mPromoterPostsAdapter);
         //}
         if (mNewsFeedList.size() == 0 && mPromotersResModel != null && mPromotersResModel.getID() != 0)
             callGetEvents();
@@ -249,7 +249,7 @@ public class BusinessHomeFragment extends BaseFragment implements SwipeRefreshLa
                         mShimmer_feeds.setVisibility(View.GONE);
                         mSwipeRefreshLayout.setVisibility(View.VISIBLE);
                         mPromoterPostsAdapter.notifyDataSetChanged();
-                    }catch (Exception e){
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
                     break;

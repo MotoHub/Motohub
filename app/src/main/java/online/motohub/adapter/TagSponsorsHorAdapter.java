@@ -22,20 +22,19 @@ import online.motohub.model.promoter_club_news_media.PromotersResModel;
 
 public class TagSponsorsHorAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private final TagSponsorsInterface mTagSponsorsInterface;
-    private  List<PromotersResModel> mTagSponsorsList;
-    private Context mContext;
-
-    private boolean mShowProgressBar = false;
-    private boolean mShowNoSponsorsFoundText = false;
-
     private static final int VIEW_TYPE_LOADING = 0;
     private static final int VIEW_TYPE_USER = 1;
     private static final int VIEW_TYPE_NO_SPONSOR_FOUND = 2;
+    private final TagSponsorsInterface mTagSponsorsInterface;
+    private List<PromotersResModel> mTagSponsorsList;
+    private Context mContext;
+    private boolean mShowProgressBar = false;
+    private boolean mShowNoSponsorsFoundText = false;
 
-    public interface TagSponsorsInterface {
-        void addSelectedSponsorsToTaggedList(int adapterPosition);
-        void removeCancelledSponsorsFromTaggedList(int adapterPosition);
+    public TagSponsorsHorAdapter(@NonNull AppDialogFragment appDialogFragment, @NonNull List<PromotersResModel> tagSponsorsList) {
+        this.mTagSponsorsInterface = appDialogFragment;
+        this.mContext = appDialogFragment.getContext();
+        this.mTagSponsorsList = tagSponsorsList;
     }
 
     public void setShowProgressBar(boolean showProgressBar) {
@@ -46,15 +45,9 @@ public class TagSponsorsHorAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         this.mShowNoSponsorsFoundText = showNoSponsorsFoundText;
     }
 
-    public TagSponsorsHorAdapter(@NonNull AppDialogFragment appDialogFragment, @NonNull List<PromotersResModel> tagSponsorsList) {
-        this.mTagSponsorsInterface = appDialogFragment;
-        this.mContext = appDialogFragment.getContext();
-        this.mTagSponsorsList = tagSponsorsList;
-    }
-
     @Override
     public int getItemCount() {
-        return mTagSponsorsList.size()+1;
+        return mTagSponsorsList.size() + 1;
     }
 
     @Override
@@ -72,69 +65,7 @@ public class TagSponsorsHorAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
     @Override
     public long getItemId(int position) {
-        return (getItemViewType(position) == VIEW_TYPE_USER) ? position : - 1;
-    }
-
-    private class ViewHolderTagSponsors extends RecyclerView.ViewHolder implements View.OnClickListener {
-
-        RelativeLayout mRelativeLayout;
-        CircleImageView mUserImgView;
-        TextView mPromoterNameTv;
-        ImageButton mAddOrRemoveImgBtn;
-
-        ViewHolderTagSponsors(View view) {
-
-            super(view);
-
-            mRelativeLayout = view.findViewById(R.id.rowAddSponsorLayout);
-            mUserImgView = view.findViewById(R.id.profile_img);
-            mPromoterNameTv = view.findViewById(R.id.promoter_name_tv);
-            mAddOrRemoveImgBtn = view.findViewById(R.id.add_remove_img_btn);
-
-            mRelativeLayout.setOnClickListener(this);
-            mUserImgView.setOnClickListener(this);
-            mPromoterNameTv.setOnClickListener(this);
-            mAddOrRemoveImgBtn.setOnClickListener(this);
-
-        }
-
-        @Override
-        public void onClick(View view) {
-
-            if(mTagSponsorsList.get(getLayoutPosition()).getIsSelected()) {
-                mTagSponsorsList.get(getLayoutPosition()).setIsSelected(false);
-                mTagSponsorsInterface.removeCancelledSponsorsFromTaggedList(getLayoutPosition());
-                notifyDataSetChanged();
-            } else {
-                mTagSponsorsList.get(getLayoutPosition()).setIsSelected(true);
-                mTagSponsorsInterface.addSelectedSponsorsToTaggedList(getLayoutPosition());
-                notifyDataSetChanged();
-            }
-
-        }
-
-    }
-
-    private class ViewHolderLoader extends RecyclerView.ViewHolder {
-
-        ProgressBar mProgressBar;
-
-        ViewHolderLoader(View view) {
-            super(view);
-            mProgressBar = view.findViewById(R.id.smallProgressBar);
-        }
-
-    }
-
-    private class ViewHolderNoSponsorFoundText extends RecyclerView.ViewHolder {
-
-        TextView mTextView;
-
-        ViewHolderNoSponsorFoundText(View view) {
-            super(view);
-            mTextView = view.findViewById(R.id.textViewErr);
-        }
-
+        return (getItemViewType(position) == VIEW_TYPE_USER) ? position : -1;
     }
 
     @Override
@@ -195,7 +126,7 @@ public class TagSponsorsHorAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                         mViewHolderTagSponsors.mRelativeLayout.setBackgroundColor(ContextCompat.getColor(mContext, R.color.colorWhite));
                     }
 
-                }catch (Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
                 break;
@@ -204,7 +135,7 @@ public class TagSponsorsHorAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
                 final ViewHolderLoader mViewHolderLoader = (ViewHolderLoader) holder;
 
-                if(mShowProgressBar) {
+                if (mShowProgressBar) {
                     mViewHolderLoader.mProgressBar.setVisibility(View.VISIBLE);
                 } else {
                     mViewHolderLoader.mProgressBar.setVisibility(View.GONE);
@@ -222,6 +153,74 @@ public class TagSponsorsHorAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             default:
                 break;
 
+        }
+
+    }
+
+    public interface TagSponsorsInterface {
+        void addSelectedSponsorsToTaggedList(int adapterPosition);
+
+        void removeCancelledSponsorsFromTaggedList(int adapterPosition);
+    }
+
+    private class ViewHolderTagSponsors extends RecyclerView.ViewHolder implements View.OnClickListener {
+
+        RelativeLayout mRelativeLayout;
+        CircleImageView mUserImgView;
+        TextView mPromoterNameTv;
+        ImageButton mAddOrRemoveImgBtn;
+
+        ViewHolderTagSponsors(View view) {
+
+            super(view);
+
+            mRelativeLayout = view.findViewById(R.id.rowAddSponsorLayout);
+            mUserImgView = view.findViewById(R.id.profile_img);
+            mPromoterNameTv = view.findViewById(R.id.promoter_name_tv);
+            mAddOrRemoveImgBtn = view.findViewById(R.id.add_remove_img_btn);
+
+            mRelativeLayout.setOnClickListener(this);
+            mUserImgView.setOnClickListener(this);
+            mPromoterNameTv.setOnClickListener(this);
+            mAddOrRemoveImgBtn.setOnClickListener(this);
+
+        }
+
+        @Override
+        public void onClick(View view) {
+
+            if (mTagSponsorsList.get(getLayoutPosition()).getIsSelected()) {
+                mTagSponsorsList.get(getLayoutPosition()).setIsSelected(false);
+                mTagSponsorsInterface.removeCancelledSponsorsFromTaggedList(getLayoutPosition());
+                notifyDataSetChanged();
+            } else {
+                mTagSponsorsList.get(getLayoutPosition()).setIsSelected(true);
+                mTagSponsorsInterface.addSelectedSponsorsToTaggedList(getLayoutPosition());
+                notifyDataSetChanged();
+            }
+
+        }
+
+    }
+
+    private class ViewHolderLoader extends RecyclerView.ViewHolder {
+
+        ProgressBar mProgressBar;
+
+        ViewHolderLoader(View view) {
+            super(view);
+            mProgressBar = view.findViewById(R.id.smallProgressBar);
+        }
+
+    }
+
+    private class ViewHolderNoSponsorFoundText extends RecyclerView.ViewHolder {
+
+        TextView mTextView;
+
+        ViewHolderNoSponsorFoundText(View view) {
+            super(view);
+            mTextView = view.findViewById(R.id.textViewErr);
         }
 
     }

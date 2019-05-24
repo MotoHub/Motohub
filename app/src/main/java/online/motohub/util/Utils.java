@@ -61,7 +61,7 @@ public class Utils {
     *//**
      * Gets an instance of the TransferUtility which is constructed using the
      * given Context
-     * 
+     *
      * @param context
      * @return a TransferUtility instance
      *//*
@@ -102,7 +102,7 @@ public class Utils {
     *//**
      * Copies the data from the passed in Uri, to a new file for use with the
      * Transfer Service
-     * 
+     *
      * @param context
      * @param uri
      * @return

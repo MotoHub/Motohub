@@ -1,22 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/reportLayout"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/reportLayout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
     android:background="@color/colorWhite"
     android:gravity="start|center"
-    android:paddingBottom="@dimen/size10"
+    android:orientation="horizontal"
     android:paddingTop="@dimen/size10"
+    android:paddingBottom="@dimen/size10"
     tools:context="online.motohub.fragment.dialog.AppDialogFragment">
+
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/size10"
         android:contentDescription="@string/app_name"
         app:srcCompat="@drawable/edit_icon" />
+
     <TextView
         style="@style/LayoutWrap"
         android:gravity="center_vertical"

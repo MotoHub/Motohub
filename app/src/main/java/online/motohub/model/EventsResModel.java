@@ -87,6 +87,33 @@ public class EventsResModel implements Serializable {
     @SerializedName("eventad_by_EventID")
     @Expose
     private ArrayList<EventadByEventID> eventadByEventID = null;
+    @SerializedName("whosgoing_by_EventID")
+    @Expose
+    private ArrayList<EventsWhoIsGoingResModel> mWhoIsGoingByEventID;
+    @SerializedName("event_groups_by_EventID")
+    @Expose
+    private ArrayList<EventCategoryModel> mEventGroupsByEventID;
+    @SerializedName("racing_by_EventID")
+    @Expose
+    private ArrayList<RacingModel> mRacingList;
+    @SerializedName("event_registration_question_by_group_id")
+    @Expose
+    private ArrayList<EventRegistrationQuestionModel> mEventRegistrationQuestion;
+    @SerializedName("event_registration_answer_by_EventID")
+    @Expose
+    private ArrayList<EventAnswersModel> mEventAnswerList;
+    @SerializedName("promoter_by_UserID")
+    @Expose
+    private PromotersResModel mPromoterByUserID;
+    @SerializedName("livestream_by_EventID")
+    @Expose
+    private ArrayList<LiveStreamEntity> livestream_by_EventID;
+    @SerializedName("livestreampayment_by_EventID")
+    @Expose
+    private ArrayList<LiveStreamPaymentEntity> livestreampayment_by_EventID;
+    @SerializedName("stream_amount")
+    @Expose
+    private Integer stream_amount;
 
     public ArrayList<EventadByEventID> getEventadByEventID() {
         return eventadByEventID;
@@ -95,43 +122,6 @@ public class EventsResModel implements Serializable {
     public void setEventadByEventID(ArrayList<EventadByEventID> eventadByEventID) {
         this.eventadByEventID = eventadByEventID;
     }
-
-    @SerializedName("whosgoing_by_EventID")
-    @Expose
-    private ArrayList<EventsWhoIsGoingResModel> mWhoIsGoingByEventID;
-
-    @SerializedName("event_groups_by_EventID")
-    @Expose
-    private ArrayList<EventCategoryModel> mEventGroupsByEventID;
-
-    @SerializedName("racing_by_EventID")
-    @Expose
-    private ArrayList<RacingModel> mRacingList;
-
-    @SerializedName("event_registration_question_by_group_id")
-    @Expose
-    private ArrayList<EventRegistrationQuestionModel> mEventRegistrationQuestion;
-
-    @SerializedName("event_registration_answer_by_EventID")
-    @Expose
-    private ArrayList<EventAnswersModel> mEventAnswerList;
-
-    @SerializedName("promoter_by_UserID")
-    @Expose
-    private PromotersResModel mPromoterByUserID;
-
-    @SerializedName("livestream_by_EventID")
-    @Expose
-    private ArrayList<LiveStreamEntity> livestream_by_EventID;
-
-
-    @SerializedName("livestreampayment_by_EventID")
-    @Expose
-    private ArrayList<LiveStreamPaymentEntity> livestreampayment_by_EventID;
-
-    @SerializedName("stream_amount")
-    @Expose
-    private Integer stream_amount;
 
     public ArrayList<RacingModel> getRacingList() {
         return mRacingList;

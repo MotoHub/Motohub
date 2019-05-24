@@ -45,11 +45,13 @@ public class TermsAndConActivity extends BaseActivity {
         initView();
 
     }
+
     @Override
     protected void onDestroy() {
         DialogManager.hideProgress();
         super.onDestroy();
     }
+
     private void initView() {
 
         setToolbar(mToolbar, mToolbarTitle);
@@ -65,7 +67,7 @@ public class TermsAndConActivity extends BaseActivity {
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
-                 DialogManager.hideProgress();
+                DialogManager.hideProgress();
             }
         });
 

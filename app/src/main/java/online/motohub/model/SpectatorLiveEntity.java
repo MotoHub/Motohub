@@ -27,6 +27,7 @@ public class SpectatorLiveEntity {
     String UserType;
 
     String EventFinishDate;
+    String LivePostProfileID;
 
     public String getVideoUrl() {
         return VideoUrl;
@@ -75,8 +76,6 @@ public class SpectatorLiveEntity {
     public void setLivePostProfileID(String livePostProfileID) {
         LivePostProfileID = livePostProfileID;
     }
-
-    String LivePostProfileID;
 
     public String getCaption() {
         return Caption;

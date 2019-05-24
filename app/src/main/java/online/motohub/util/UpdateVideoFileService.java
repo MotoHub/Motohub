@@ -255,26 +255,6 @@ public class UpdateVideoFileService extends IntentService implements ProgressReq
     public void onFinish() {
     }
 
-    private class UploadAsync extends AsyncTask<String, String, Void> {
-
-        private Integer notificationid;
-        private File imagfile;
-        private File videofile;
-
-        public UploadAsync(Integer notificationid, File videofile, File ImageFile) {
-            this.notificationid = notificationid;
-            imagfile = ImageFile;
-            this.videofile = videofile;
-
-        }
-
-        @Override
-        protected Void doInBackground(String... paths) {
-            uploadImgAndVidToServer(notificationid, videofile, imagfile);
-            return null;
-        }
-    }
-
     private void UploadVideo(String compressedFilePath, Context mContext) {
         File videoFile = new File(compressedFilePath);
         DatabaseHandler databaseHandler = new DatabaseHandler(mContext);
@@ -309,6 +289,26 @@ public class UpdateVideoFileService extends IntentService implements ProgressReq
                 mNotification);
         UploadAsync uploadAsync = new UploadAsync(notificationid, videoFile, imagfile);
         uploadAsync.execute();
+    }
+
+    private class UploadAsync extends AsyncTask<String, String, Void> {
+
+        private Integer notificationid;
+        private File imagfile;
+        private File videofile;
+
+        public UploadAsync(Integer notificationid, File videofile, File ImageFile) {
+            this.notificationid = notificationid;
+            imagfile = ImageFile;
+            this.videofile = videofile;
+
+        }
+
+        @Override
+        protected Void doInBackground(String... paths) {
+            uploadImgAndVidToServer(notificationid, videofile, imagfile);
+            return null;
+        }
     }
 
 

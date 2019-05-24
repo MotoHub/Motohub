@@ -3,21 +3,20 @@
   "IdentityManager": {
     "Default": {}
   },
-"CredentialsProvider": {
-  "CognitoIdentity": {
-    "Default": {
-      "PoolId": "ap-southeast-2:dea16175-0997-4e07-a686-19034fcc8232",
-      "Region": "ap-southeast-2"
+  "CredentialsProvider": {
+    "CognitoIdentity": {
+      "Default": {
+        "PoolId": "ap-southeast-2:dea16175-0997-4e07-a686-19034fcc8232",
+        "Region": "ap-southeast-2"
+      }
     }
-  }
-},
+  },
   "S3TransferUtility": {
     "Default": {
       "Bucket": "motohub",
       "Region": "ap-southeast-2"
     }
   },
-
   "UserFileManager": {
     "Default": {
       "Bucket": "ap-southeast-2:dea16175-0997-4e07-a686-19034fcc8232",

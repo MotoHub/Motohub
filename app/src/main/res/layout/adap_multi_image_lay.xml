@@ -180,8 +180,8 @@
                     <LinearLayout
                         android:id="@+id/more_lay"
                         style="@style/LayoutMatch"
-                        android:layout_alignBottom="@id/img4"
                         android:layout_alignTop="@+id/img4"
+                        android:layout_alignBottom="@id/img4"
                         android:background="@color/transparent50"
                         android:gravity="center"
                         android:orientation="vertical"

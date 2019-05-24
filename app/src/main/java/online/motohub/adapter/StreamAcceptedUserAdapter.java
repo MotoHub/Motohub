@@ -36,114 +36,16 @@ import online.motohub.util.StringUtils;
 
 public class StreamAcceptedUserAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements CommonInterface {
 
+    private static final int VIEW_TYPE_LOADING = 0;
+    private static final int VIEW_TYPE_ITEM = 1;
     private Context mContext;
     private ArrayList<LiveStreamRequestEntity> mStreamUserList;
     private int mCurrentProfileID, mCurrentUserID;
     private int selPos;
     private LayoutInflater mInflater;
-
-    private static final int VIEW_TYPE_LOADING = 0;
-    private static final int VIEW_TYPE_ITEM = 1;
     private boolean isDelete = false;
     private int liveStreamID = 0;
     private String mLiveStreamName = "";
-
-    public StreamAcceptedUserAdapter(Context context, int currentProfileID, ArrayList<LiveStreamRequestEntity> streamUserList) {
-        AppConstants.LIVE_STREAM_CALL_BACK = this;
-        mContext = context;
-        mCurrentProfileID = currentProfileID;
-        mCurrentUserID = PreferenceUtils.getInstance(mContext).getIntData(PreferenceUtils.USER_ID);
-        mStreamUserList = streamUserList;
-        mInflater = LayoutInflater.from(mContext);
-    }
-
-    public class Holder extends RecyclerView.ViewHolder {
-
-        @BindView(R.id.user_img)
-        CircleImageView mUserImg;
-        @BindView(R.id.user_name_txt)
-        TextView mUserNameTxt;
-        @BindView(R.id.send_request_btn)
-        Button mSendRequestBtn;
-
-        public Holder(View view) {
-            super(view);
-            ButterKnife.bind(this, view);
-        }
-    }
-
-    public class ViewHolderLoader extends RecyclerView.ViewHolder {
-
-        @BindView(R.id.progress_bar)
-        ProgressBar mProgressBar;
-        public ViewHolderLoader(View v) {
-            super(v);
-            ButterKnife.bind(this, v);
-        }
-    }
-
-    @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View mView;
-        switch (viewType) {
-            case VIEW_TYPE_ITEM:
-                mView = mInflater.inflate(R.layout.adap_stream_users, parent, false);
-                return new Holder(mView);
-            case VIEW_TYPE_LOADING:
-                mView = mInflater.inflate(R.layout.adap_loading_item, parent, false);
-                return new ViewHolderLoader(mView);
-            default:
-                return null;
-        }
-    }
-
-
-    @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int pos) {
-        switch (getItemViewType(pos)) {
-            case VIEW_TYPE_ITEM:
-                try {
-                    final Holder mHolder = (Holder) holder;
-                    LiveStreamRequestEntity mEntity = mStreamUserList.get(pos);
-                    String imgStr = mEntity.getProfiles_by_ReceiverProfileID().getProfilePicture();
-                    if (!imgStr.isEmpty()) {
-                        ((BaseActivity) mContext).setImageWithGlide(mHolder.mUserImg, imgStr, R.drawable.default_profile_icon);
-                    } else {
-                        mHolder.mUserImg.setImageResource(R.drawable.default_profile_icon);
-                    }
-                    mHolder.mSendRequestBtn.setText(mContext.getString(R.string.start_live_stream));
-                    mHolder.mSendRequestBtn.setVisibility(View.GONE);
-                    mHolder.mUserImg.setTag(pos);
-                    mHolder.mUserImg.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            int selPos = (int) v.getTag();
-
-                        }
-                    });
-                    mHolder.mSendRequestBtn.setTag(pos);
-                    mHolder.mSendRequestBtn.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            selPos = (int) v.getTag();
-                            int receiverProfileID = mStreamUserList.get(selPos).getReceiverProfileID();
-                            startSingleStream(receiverProfileID);
-                        }
-                    });
-                    mHolder.mUserNameTxt.setText(mEntity.getProfiles_by_ReceiverProfileID().getDriver());
-                }catch (Exception e){
-                    e.printStackTrace();
-                }
-                break;
-            case VIEW_TYPE_LOADING:
-                ViewHolderLoader mViewHolderLoader = (ViewHolderLoader) holder;
-                mViewHolderLoader.mProgressBar.setIndeterminate(true);
-                break;
-            default:
-                break;
-
-        }
-    }
     RetrofitResInterface mApiInterface = new RetrofitResInterface() {
         @Override
         public void retrofitOnResponse(Object responseObj, int responseType) {
@@ -183,6 +85,77 @@ public class StreamAcceptedUserAdapter extends RecyclerView.Adapter<RecyclerView
             ((BaseActivity) mContext).showAppDialog(AppDialogFragment.ALERT_INTERNET_FAILURE_DIALOG, null);
         }
     };
+
+    public StreamAcceptedUserAdapter(Context context, int currentProfileID, ArrayList<LiveStreamRequestEntity> streamUserList) {
+        AppConstants.LIVE_STREAM_CALL_BACK = this;
+        mContext = context;
+        mCurrentProfileID = currentProfileID;
+        mCurrentUserID = PreferenceUtils.getInstance(mContext).getIntData(PreferenceUtils.USER_ID);
+        mStreamUserList = streamUserList;
+        mInflater = LayoutInflater.from(mContext);
+    }
+
+    @Override
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View mView;
+        switch (viewType) {
+            case VIEW_TYPE_ITEM:
+                mView = mInflater.inflate(R.layout.adap_stream_users, parent, false);
+                return new Holder(mView);
+            case VIEW_TYPE_LOADING:
+                mView = mInflater.inflate(R.layout.adap_loading_item, parent, false);
+                return new ViewHolderLoader(mView);
+            default:
+                return null;
+        }
+    }
+
+    @Override
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, int pos) {
+        switch (getItemViewType(pos)) {
+            case VIEW_TYPE_ITEM:
+                try {
+                    final Holder mHolder = (Holder) holder;
+                    LiveStreamRequestEntity mEntity = mStreamUserList.get(pos);
+                    String imgStr = mEntity.getProfiles_by_ReceiverProfileID().getProfilePicture();
+                    if (!imgStr.isEmpty()) {
+                        ((BaseActivity) mContext).setImageWithGlide(mHolder.mUserImg, imgStr, R.drawable.default_profile_icon);
+                    } else {
+                        mHolder.mUserImg.setImageResource(R.drawable.default_profile_icon);
+                    }
+                    mHolder.mSendRequestBtn.setText(mContext.getString(R.string.start_live_stream));
+                    mHolder.mSendRequestBtn.setVisibility(View.GONE);
+                    mHolder.mUserImg.setTag(pos);
+                    mHolder.mUserImg.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            int selPos = (int) v.getTag();
+
+                        }
+                    });
+                    mHolder.mSendRequestBtn.setTag(pos);
+                    mHolder.mSendRequestBtn.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            selPos = (int) v.getTag();
+                            int receiverProfileID = mStreamUserList.get(selPos).getReceiverProfileID();
+                            startSingleStream(receiverProfileID);
+                        }
+                    });
+                    mHolder.mUserNameTxt.setText(mEntity.getProfiles_by_ReceiverProfileID().getDriver());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                break;
+            case VIEW_TYPE_LOADING:
+                ViewHolderLoader mViewHolderLoader = (ViewHolderLoader) holder;
+                mViewHolderLoader.mProgressBar.setIndeterminate(true);
+                break;
+            default:
+                break;
+
+        }
+    }
 
     public void filterList(ArrayList<LiveStreamRequestEntity> filteredNames) {
         this.mStreamUserList = filteredNames;
@@ -224,5 +197,31 @@ public class StreamAcceptedUserAdapter extends RecyclerView.Adapter<RecyclerView
         isDelete = true;
         String mLiveStreamName = "ID=" + liveStreamID;
         RetrofitClient.getRetrofitInstance().callDeleteLiveStream(mContext, mApiInterface, mLiveStreamName);
+    }
+
+    public class Holder extends RecyclerView.ViewHolder {
+
+        @BindView(R.id.user_img)
+        CircleImageView mUserImg;
+        @BindView(R.id.user_name_txt)
+        TextView mUserNameTxt;
+        @BindView(R.id.send_request_btn)
+        Button mSendRequestBtn;
+
+        public Holder(View view) {
+            super(view);
+            ButterKnife.bind(this, view);
+        }
+    }
+
+    public class ViewHolderLoader extends RecyclerView.ViewHolder {
+
+        @BindView(R.id.progress_bar)
+        ProgressBar mProgressBar;
+
+        public ViewHolderLoader(View v) {
+            super(v);
+            ButterKnife.bind(this, v);
+        }
     }
 }

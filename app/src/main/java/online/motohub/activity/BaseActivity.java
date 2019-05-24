@@ -223,6 +223,15 @@ public class BaseActivity extends AppCompatActivity {
         }
     }
 
+    @SuppressLint("DefaultLocale")
+    public static String convertToSuffix(long count) {
+        if (count < 1000) return "" + count;
+        int exp = (int) (Math.log(count) / Math.log(1000));
+        return String.format("%.1f%c",
+                count / Math.pow(1000, exp),
+                "kmgtpe".charAt(exp - 1));
+    }
+
     public String getProfileTypeStr(String profileType) {
         switch (profileType) {
             case BIKE:
@@ -255,7 +264,6 @@ public class BaseActivity extends AppCompatActivity {
         super.onResume();
         mActivity = this;
     }
-
 
     public BaseActivity getActivity() {
         return this;
@@ -1804,6 +1812,15 @@ public class BaseActivity extends AppCompatActivity {
         return true;
     }
 
+   /* public String getCompressedVideoPath() {
+        CreateCompressedVideoPath();
+        mCompressedVideoPath = Environment.getExternalStorageDirectory()
+                + File.separator
+                + COMPRESSED_VIDEO_FOLDER + System.currentTimeMillis() + "COMPRESSED_VIDEO.mp4";
+        return mCompressedVideoPath;
+
+    }*/
+
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         switch (requestCode) {
@@ -1857,15 +1874,6 @@ public class BaseActivity extends AppCompatActivity {
             }
         }
     }
-
-   /* public String getCompressedVideoPath() {
-        CreateCompressedVideoPath();
-        mCompressedVideoPath = Environment.getExternalStorageDirectory()
-                + File.separator
-                + COMPRESSED_VIDEO_FOLDER + System.currentTimeMillis() + "COMPRESSED_VIDEO.mp4";
-        return mCompressedVideoPath;
-
-    }*/
 
     public void CreateCompressedVideoPath() {
         File f = new File(Environment.getExternalStorageDirectory(), File.separator + COMPRESSED_VIDEO_FOLDER);
@@ -2023,6 +2031,10 @@ public class BaseActivity extends AppCompatActivity {
         return resStrTxt;
     }
 
+    // https://stackoverflow.com/questions/9769554/how-to-convert-number-into-k-thousands-m-million-and-b-billion-suffix-in-jsp
+    // Converts the number to K, M suffix
+    // Ex: 5500 will be displayed as 5.5k
+
     public SpannableString setCommentTagText(final Context mContext, String mCommentTagString, String mTagList, final String mTaggedUserIds) {
         SpannableString mWordToSpan = new SpannableString(mCommentTagString);
         if (mTagList.trim().isEmpty())
@@ -2107,18 +2119,5 @@ public class BaseActivity extends AppCompatActivity {
 
         }, 0, mCommentTagString.length(), 0);*/
         return mWordToSpan;
-    }
-
-    // https://stackoverflow.com/questions/9769554/how-to-convert-number-into-k-thousands-m-million-and-b-billion-suffix-in-jsp
-    // Converts the number to K, M suffix
-    // Ex: 5500 will be displayed as 5.5k
-
-    @SuppressLint("DefaultLocale")
-    public static String convertToSuffix(long count) {
-        if (count < 1000) return "" + count;
-        int exp = (int) (Math.log(count) / Math.log(1000));
-        return String.format("%.1f%c",
-                count / Math.pow(1000, exp),
-                "kmgtpe".charAt(exp - 1));
     }
 }

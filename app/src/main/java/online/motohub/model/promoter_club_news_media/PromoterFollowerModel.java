@@ -25,7 +25,7 @@ public class PromoterFollowerModel {
     }
 
     public ArrayList<PromoterFollowerResModel> getResource() {
-        if(resource == null)
+        if (resource == null)
             resource = new ArrayList<>();
         return resource;
     }

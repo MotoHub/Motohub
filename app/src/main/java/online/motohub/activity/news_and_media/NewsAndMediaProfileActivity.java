@@ -263,8 +263,8 @@ public class NewsAndMediaProfileActivity extends BaseActivity implements
                     this.mMyProfileResModel = mMyProfileResModel;
                    /* MotoHub.getApplicationInstance().setmProfileResModel(this.mMyProfileResModel);
                     MotoHub.getApplicationInstance().setmPromoterResModel(mPromotersResModel);*/
-                   EventBus.getDefault().postSticky(this.mMyProfileResModel);
-                   EventBus.getDefault().postSticky(mPromotersResModel);
+                    EventBus.getDefault().postSticky(this.mMyProfileResModel);
+                    EventBus.getDefault().postSticky(mPromotersResModel);
                     setResult(RESULT_OK, new Intent()
                             /*.putExtra(ProfileModel.MY_PROFILE_RES_MODEL, this.mMyProfileResModel)
                             .putExtra(PromotersModel.PROMOTERS_RES_MODEL, mPromotersResModel)*/);

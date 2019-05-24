@@ -11,9 +11,9 @@
         android:id="@+id/check_box_layout"
         style="@style/LayoutWrap"
         android:layout_alignEnd="@+id/done_btn"
-        android:layout_alignParentLeft="true"
+        android:layout_alignRight="@+id/done_btn"
         android:layout_alignParentStart="true"
-        android:layout_alignRight="@+id/done_btn">
+        android:layout_alignParentLeft="true">
 
         <CheckBox
             android:id="@+id/bike_cb"

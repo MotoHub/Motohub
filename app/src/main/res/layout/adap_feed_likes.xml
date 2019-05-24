@@ -45,8 +45,8 @@
                     <TextView
                         android:id="@+id/comment_user_name_txt"
                         style="@style/LayoutWrap"
-                        android:layout_marginLeft="@dimen/size5"
                         android:layout_marginStart="@dimen/size5"
+                        android:layout_marginLeft="@dimen/size5"
                         android:padding="@dimen/size1"
                         android:textColor="@color/colorBlack"
                         android:textSize="@dimen/text12"

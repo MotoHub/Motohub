@@ -55,22 +55,22 @@ public class ReportActivity extends BaseActivity {
 
     private void getDataFromBundle() {
 
-        if(getIntent().hasExtra(ProfileModel.PROFILE_ID))
-            mProfileID = getIntent().getIntExtra(ProfileModel.PROFILE_ID,0);
+        if (getIntent().hasExtra(ProfileModel.PROFILE_ID))
+            mProfileID = getIntent().getIntExtra(ProfileModel.PROFILE_ID, 0);
 
-        if(getIntent().hasExtra(ProfileModel.USER_ID))
-            mUserID = getIntent().getIntExtra(ProfileModel.USER_ID,0);
+        if (getIntent().hasExtra(ProfileModel.USER_ID))
+            mUserID = getIntent().getIntExtra(ProfileModel.USER_ID, 0);
 
-        if(getIntent().hasExtra(PostsModel.POST_ID))
-            mPostID = getIntent().getIntExtra(PostsModel.POST_ID,0);
+        if (getIntent().hasExtra(PostsModel.POST_ID))
+            mPostID = getIntent().getIntExtra(PostsModel.POST_ID, 0);
 
-        if(getIntent().hasExtra(AppConstants.REPORT))
+        if (getIntent().hasExtra(AppConstants.REPORT))
             REPORT_STRING = getIntent().getStringExtra(AppConstants.REPORT);
 
     }
 
     private void initViews() {
-        setToolbar(mToolbar,getString(R.string.report));
+        setToolbar(mToolbar, getString(R.string.report));
         setToolbarLeftBtn(mToolbar);
         LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(this);
         mLinearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -92,13 +92,13 @@ public class ReportActivity extends BaseActivity {
         }
     }
 
-    public void setReportString(String reportString){
+    public void setReportString(String reportString) {
         mReportString = reportString;
     }
 
     private void reportPost() {
-        if(mReportString.trim().isEmpty())
-            showToast(this,getString(R.string.report_err));
+        if (mReportString.trim().isEmpty())
+            showToast(this, getString(R.string.report_err));
         else
             CommonAPI.getInstance().callPostReportpost(this, mUserID, mProfileID, mPostID, mReportString, mStatus);
     }
@@ -106,15 +106,15 @@ public class ReportActivity extends BaseActivity {
     @Override
     public void retrofitOnResponse(Object responseObj, int responseType) {
         super.retrofitOnResponse(responseObj, responseType);
-        if(responseObj instanceof PostReportModel){
-            if(REPORT_STRING.trim().equals(AppConstants.REPORT_POST))
+        if (responseObj instanceof PostReportModel) {
+            if (REPORT_STRING.trim().equals(AppConstants.REPORT_POST))
                 updatePost();
-            else if(REPORT_STRING.trim().equals(AppConstants.REPORT_VIDEO))
+            else if (REPORT_STRING.trim().equals(AppConstants.REPORT_VIDEO))
                 updateVideoPost();
-        } else if(responseObj instanceof PostsModel){
+        } else if (responseObj instanceof PostsModel) {
             setResult(RESULT_OK);
             finish();
-        } else if(responseType == RetrofitClient.UPDATE_VIDEO_POST_RESPONSE){
+        } else if (responseType == RetrofitClient.UPDATE_VIDEO_POST_RESPONSE) {
             setResult(RESULT_OK);
             finish();
         }
@@ -128,7 +128,7 @@ public class ReportActivity extends BaseActivity {
 
         JsonArray mJsonArray = new JsonArray();
         mJsonArray.add(mJsonObject);
-        RetrofitClient.getRetrofitInstance().callUpdateOnDemandProfilePosts(this, mJsonArray,RetrofitClient.UPDATE_VIDEO_POST_RESPONSE);
+        RetrofitClient.getRetrofitInstance().callUpdateOnDemandProfilePosts(this, mJsonArray, RetrofitClient.UPDATE_VIDEO_POST_RESPONSE);
     }
 
     private void updatePost() {
@@ -139,7 +139,7 @@ public class ReportActivity extends BaseActivity {
 
         JsonArray mJsonArray = new JsonArray();
         mJsonArray.add(mJsonObject);
-        RetrofitClient.getRetrofitInstance().callUpdateProfilePosts(this, mJsonArray,RetrofitClient.UPDATE_PROFILE_POSTS_RESPONSE);
+        RetrofitClient.getRetrofitInstance().callUpdateProfilePosts(this, mJsonArray, RetrofitClient.UPDATE_PROFILE_POSTS_RESPONSE);
     }
 
     @Override
@@ -160,9 +160,9 @@ public class ReportActivity extends BaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(resultCode == RESULT_OK){
+        if (resultCode == RESULT_OK) {
             assert data.getExtras() != null;
-            if(data.hasExtra(AppConstants.REPORT_STRING)){
+            if (data.hasExtra(AppConstants.REPORT_STRING)) {
                 setReportString(data.getStringExtra(AppConstants.REPORT_STRING));
                 reportPost();
             }

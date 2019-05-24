@@ -55,11 +55,13 @@ public class ViewRequestUsersActivity extends BaseActivity {
         ButterKnife.bind(this);
         initView();
     }
+
     @Override
     protected void onDestroy() {
         DialogManager.hideProgress();
         super.onDestroy();
     }
+
     private void initView() {
 
         Bundle mBundle = getIntent().getExtras();

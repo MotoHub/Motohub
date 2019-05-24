@@ -245,8 +245,8 @@ public class ClubVideosFragment extends BaseFragment {
                 if (videoModel != null && videoModel.getResModelList().size() > 0) {
                     videoResModels.clear();
                     videoResModels.addAll(videoModel.getResModelList());
-                        mRv.setVisibility(View.VISIBLE);
-                        txtNoData.setVisibility(View.GONE);
+                    mRv.setVisibility(View.VISIBLE);
+                    txtNoData.setVisibility(View.GONE);
                 } else {
                     /*((BaseActivity) getActivity()).showToast(getActivity(), getString(R.string.video_not_found));*/
                     mRv.setVisibility(View.GONE);

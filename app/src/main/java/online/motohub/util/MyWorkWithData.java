@@ -43,11 +43,10 @@ import static online.motohub.util.UploadFileService.NOTIFY_POST_VIDEO_UPDATED;
 
 public class MyWorkWithData extends Worker implements ProgressRequestBody.UploadCallbacks {
 
-    private static final String TAB = MyWorkWithData.class.getSimpleName();
     public static final String EXTRA_TITLE = "title";
     public static final String EXTRA_TEXT = "text";
     public static final String EXTRA_OUTPUT_MESSAGE = "output_message";
-
+    private static final String TAB = MyWorkWithData.class.getSimpleName();
     TransferObserver observer, observer1;
     private Integer flag;
     private String mUserType, mPostStr;

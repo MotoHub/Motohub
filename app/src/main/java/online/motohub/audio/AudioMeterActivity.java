@@ -1,16 +1,16 @@
 /**
- *  This is sample code provided by Wowza Media Systems, LLC.  All sample code is intended to be a reference for the
- *  purpose of educating developers, and is not intended to be used in any production environment.
- *
- *  IN NO EVENT SHALL WOWZA MEDIA SYSTEMS, LLC BE LIABLE TO YOU OR ANY PARTY FOR DIRECT, INDIRECT, SPECIAL, INCIDENTAL,
- *  OR CONSEQUENTIAL DAMAGES, INCLUDING LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE AND ITS DOCUMENTATION,
- *  EVEN IF WOWZA MEDIA SYSTEMS, LLC HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *
- *  WOWZA MEDIA SYSTEMS, LLC SPECIFICALLY DISCLAIMS ANY WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
- *  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE. ALL CODE PROVIDED HEREUNDER IS PROVIDED "AS IS".
- *  WOWZA MEDIA SYSTEMS, LLC HAS NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS, OR MODIFICATIONS.
- *
- *  Copyright © 2015 Wowza Media Systems, LLC. All rights reserved.
+ * This is sample code provided by Wowza Media Systems, LLC.  All sample code is intended to be a reference for the
+ * purpose of educating developers, and is not intended to be used in any production environment.
+ * <p>
+ * IN NO EVENT SHALL WOWZA MEDIA SYSTEMS, LLC BE LIABLE TO YOU OR ANY PARTY FOR DIRECT, INDIRECT, SPECIAL, INCIDENTAL,
+ * OR CONSEQUENTIAL DAMAGES, INCLUDING LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE AND ITS DOCUMENTATION,
+ * EVEN IF WOWZA MEDIA SYSTEMS, LLC HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * <p>
+ * WOWZA MEDIA SYSTEMS, LLC SPECIFICALLY DISCLAIMS ANY WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+ * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE. ALL CODE PROVIDED HEREUNDER IS PROVIDED "AS IS".
+ * WOWZA MEDIA SYSTEMS, LLC HAS NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS, OR MODIFICATIONS.
+ * <p>
+ * Copyright © 2015 Wowza Media Systems, LLC. All rights reserved.
  */
 
 package online.motohub.audio;
@@ -38,22 +38,22 @@ import online.motohub.util.MultiStateButton;
  */
 public class AudioMeterActivity extends CameraActivityBase {
 
-    protected MultiStateButton mBtnMic                 = null;
-    protected AudioLevelMeter mAudioLevelMeter        = null;
-    private boolean             mRestartAudioSampler    = false;
+    protected MultiStateButton mBtnMic = null;
+    protected AudioLevelMeter mAudioLevelMeter = null;
+    private boolean mRestartAudioSampler = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_audio_meter);
 
-        mRequiredPermissions = new String[] {
+        mRequiredPermissions = new String[]{
                 Manifest.permission.CAMERA,
                 Manifest.permission.RECORD_AUDIO
         };
 
-        mBtnMic             = findViewById(R.id.ic_mic);
-        mAudioLevelMeter    = findViewById(R.id.audioLevelMeter);
+        mBtnMic = findViewById(R.id.ic_mic);
+        mAudioLevelMeter = findViewById(R.id.audioLevelMeter);
     }
 
     /**
@@ -115,7 +115,8 @@ public class AudioMeterActivity extends CameraActivityBase {
             else
                 mWZAudioDevice.stopAudioSampler();
         }
-   }
+    }
+
     @Override
     protected synchronized WZStreamingError startBroadcast() {
         mRestartAudioSampler = (mWZAudioDevice != null && mWZAudioDevice.isSamplingAudio());
@@ -156,7 +157,7 @@ public class AudioMeterActivity extends CameraActivityBase {
             boolean isStreamingAudio = (isStreaming && getBroadcastConfig().isAudioEnabled());
             boolean isSamplingAudio = (mRestartAudioSampler || mWZAudioDevice.isSamplingAudio() || isStreamingAudio);
 
-            mBtnMic.setEnabled((!isStreaming)||isStreamingAudio);
+            mBtnMic.setEnabled((!isStreaming) || isStreamingAudio);
             mBtnMic.setState(isSamplingAudio);
             mAudioLevelMeter.setVisibility(isSamplingAudio ? View.VISIBLE : View.GONE);
         } else {

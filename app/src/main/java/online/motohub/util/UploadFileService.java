@@ -426,7 +426,7 @@ public class UploadFileService extends IntentService implements ProgressRequestB
                     obj.addProperty(GalleryImgModel.CAPTION, postText != null ? postText : " ");
                     jsonElements.add(obj);
                     callAddVideoToGallery(jsonElements);
-                }else{
+                } else {
                     onDownloadComplete(getString(R.string.internet_err), 0);
                 }
             }

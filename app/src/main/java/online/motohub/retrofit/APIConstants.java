@@ -63,18 +63,6 @@ public class APIConstants {
     public static final String livestreampayment_by_PromoterID = "livestreampayment_by_PromoterID";
     public static final String livestreamrequest_by_ReceiverProfileID = "livestreamrequest_by_ReceiverProfileID";
     public static final String livestreamrequest_by_RequestedProfileID = "livestreamrequest_by_RequestedProfileID";
-
-    /**
-     * Profile Relation
-     */
-    private static final String pushtoken_by_UserID = "pushtoken_by_UserID";
-    private static final String vehicleinfolikes_by_LikedProfileID = "vehicleinfolikes_by_LikedProfileID";
-    private static final String promoterfollower_by_ProfileID = "promoterfollower_by_ProfileID";
-    private static final String followprofile_by_FollowProfileID = "followprofile_by_FollowProfileID";
-    private static final String followprofile_by_ProfileID = "followprofile_by_ProfileID";
-    private static final String blockeduserprofiles_by_ProfileID = "blockeduserprofiles_by_ProfileID";
-    private static final String blockeduserprofiles_by_BlockedProfileID = "blockeduserprofiles_by_BlockedProfileID";
-
     /**
      * Feed Post Relation
      */
@@ -89,28 +77,6 @@ public class APIConstants {
     public static final String VIDEO_SHARES_BY_NEW_SHARED_POST_ID = "videoshares_by_NewSharedPostID";
     public static final String PROFILES_BY_PROFILE_ID = "profiles_by_ProfileID";
     public static final String PROMOTER_RELATION = "clubgroup_by_ClubUserID,promoterfollower_by_PromoterUserID,track_by_user_id";
-
-    /**
-     * Event Relation
-     */
-
-    public static final String PROFILE_RELATION_PUSH = pushtoken_by_UserID;
-
-    public static final String PROFILE_RELATION_FOLLOW = followprofile_by_FollowProfileID
-            + "," + followprofile_by_ProfileID;
-
-    public static final String PROFILE_RELATION_FOLLOW_BLOCK = followprofile_by_FollowProfileID
-            + "," + followprofile_by_ProfileID
-            + "," + blockeduserprofiles_by_ProfileID
-            + "," + blockeduserprofiles_by_BlockedProfileID;
-
-    public static final String PROFILE_RELATION_ALL = vehicleinfolikes_by_LikedProfileID
-            + "," + followprofile_by_FollowProfileID
-            + "," + followprofile_by_ProfileID
-            + "," + promoterfollower_by_ProfileID
-            + "," + blockeduserprofiles_by_ProfileID
-            + "," + blockeduserprofiles_by_BlockedProfileID;
-
     public static final String POST_FEED_RELATION = PROFILES_BY_WHO_POSTED_PROFILE_ID
             + "," + COMMENTS_BY_POSTID
             + "," + LIKES_BY_POSTID
@@ -121,7 +87,6 @@ public class APIConstants {
             + "," + VIDEO_SHARES_BY_NEW_SHARED_POST_ID
             + "," + PROMOTER_RELATION
             + "," + PROFILES_BY_PROFILE_ID;
-
     public static final String EVENT_RELATION = EventsModel.WHO_IS_GOING_BY_EVENT_ID
             + "," + EventsModel.EVENT_GROUPS_BY_EVENT_ID
             + "," + EventsModel.RACING_BY_EVENT_ID
@@ -131,20 +96,42 @@ public class APIConstants {
             + "," + EventsModel.LIVESTREAM_BY_EVENTID
             + "," + EventsModel.LIVESTREAMPAYMENT_BY_EVENTID
             + "," + EventsModel.EVENT_AD_BY_EVENTID;
-
-
     public static final String mVideoCommentRelated = VideoCommentsModel.COMMENT_LIKES_BY_COMMENT_ID + " , " +
             VideoCommentsModel.COMMENT_REPLY_BY_COMMENT_ID + " , " + VideoCommentsModel.PROFILES_BY_PROFILE_ID;
-
     public static final String mProfileRelated = "blockeduserprofiles_by_BlockedProfileID,followprofile_by_FollowProfileID," +
             "followprofile_by_ProfileID,promoterfollower_by_ProfileID,vehicleinfolikes_by_LikedProfileID";
     public static final String mVideoCommentReplyRelated = "profiles_by_ProfileID,promoter_by_ProfileID,videoreplylike_by_ReplyID,videocomments_by_CommentID";
+    public static final String mPromoterGalleryRelated = "promoter_by_UserID,videocomments_by_VideoID,videolikes_by_VideoID,videoshares_by_OriginalVideoID,profiles_by_ProfileID,event_by_EventID";
+    public static final String mPostCommentReplyRelated = "postcomments_by_CommentID,Profiles By ProfileID,promoter_by_ProfileID,replylike_by_ReplyID";
+    /**
+     * Profile Relation
+     */
+    private static final String pushtoken_by_UserID = "pushtoken_by_UserID";
+    /**
+     * Event Relation
+     */
+
+    public static final String PROFILE_RELATION_PUSH = pushtoken_by_UserID;
+    private static final String vehicleinfolikes_by_LikedProfileID = "vehicleinfolikes_by_LikedProfileID";
+    private static final String promoterfollower_by_ProfileID = "promoterfollower_by_ProfileID";
+    private static final String followprofile_by_FollowProfileID = "followprofile_by_FollowProfileID";
+    private static final String followprofile_by_ProfileID = "followprofile_by_ProfileID";
+    public static final String PROFILE_RELATION_FOLLOW = followprofile_by_FollowProfileID
+            + "," + followprofile_by_ProfileID;
+    private static final String blockeduserprofiles_by_ProfileID = "blockeduserprofiles_by_ProfileID";
+    private static final String blockeduserprofiles_by_BlockedProfileID = "blockeduserprofiles_by_BlockedProfileID";
 
   /*  public static final String mPromoterGalleryRelated = PromotersModel.PROMOTER_BY_USERID + "," + PromotersModel.VIDEO_COMMENTS_BY_VIDEO_ID +
             "," + PromotersModel.VIDEO_LIKES_BY_VIDEO_ID + "," + PromotersModel.VIDEO_SHARES_BY_ORIGINAL_VIDEO_ID + "," + profiles_by_ProfileID + ",event_by_EventID";*/
-
-    public static final String mPromoterGalleryRelated = "promoter_by_UserID,videocomments_by_VideoID,videolikes_by_VideoID,videoshares_by_OriginalVideoID,profiles_by_ProfileID,event_by_EventID";
-
-    public static final String mPostCommentReplyRelated = "postcomments_by_CommentID,Profiles By ProfileID,promoter_by_ProfileID,replylike_by_ReplyID";
+    public static final String PROFILE_RELATION_FOLLOW_BLOCK = followprofile_by_FollowProfileID
+            + "," + followprofile_by_ProfileID
+            + "," + blockeduserprofiles_by_ProfileID
+            + "," + blockeduserprofiles_by_BlockedProfileID;
+    public static final String PROFILE_RELATION_ALL = vehicleinfolikes_by_LikedProfileID
+            + "," + followprofile_by_FollowProfileID
+            + "," + followprofile_by_ProfileID
+            + "," + promoterfollower_by_ProfileID
+            + "," + blockeduserprofiles_by_ProfileID
+            + "," + blockeduserprofiles_by_BlockedProfileID;
 
 }

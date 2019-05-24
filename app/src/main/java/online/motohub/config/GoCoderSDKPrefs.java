@@ -1,16 +1,16 @@
 /**
- *  This is sample code provided by Wowza Media Systems, LLC.  All sample code is intended to be a reference for the
- *  purpose of educating developers, and is not intended to be used in any production environment.
- *
- *  IN NO EVENT SHALL WOWZA MEDIA SYSTEMS, LLC BE LIABLE TO YOU OR ANY PARTY FOR DIRECT, INDIRECT, SPECIAL, INCIDENTAL,
- *  OR CONSEQUENTIAL DAMAGES, INCLUDING LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE AND ITS DOCUMENTATION,
- *  EVEN IF WOWZA MEDIA SYSTEMS, LLC HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *
- *  WOWZA MEDIA SYSTEMS, LLC SPECIFICALLY DISCLAIMS ANY WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
- *  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE. ALL CODE PROVIDED HEREUNDER IS PROVIDED "AS IS".
- *  WOWZA MEDIA SYSTEMS, LLC HAS NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS, OR MODIFICATIONS.
- *
- *  Copyright © 2015 Wowza Media Systems, LLC. All rights reserved.
+ * This is sample code provided by Wowza Media Systems, LLC.  All sample code is intended to be a reference for the
+ * purpose of educating developers, and is not intended to be used in any production environment.
+ * <p>
+ * IN NO EVENT SHALL WOWZA MEDIA SYSTEMS, LLC BE LIABLE TO YOU OR ANY PARTY FOR DIRECT, INDIRECT, SPECIAL, INCIDENTAL,
+ * OR CONSEQUENTIAL DAMAGES, INCLUDING LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE AND ITS DOCUMENTATION,
+ * EVEN IF WOWZA MEDIA SYSTEMS, LLC HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * <p>
+ * WOWZA MEDIA SYSTEMS, LLC SPECIFICALLY DISCLAIMS ANY WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+ * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE. ALL CODE PROVIDED HEREUNDER IS PROVIDED "AS IS".
+ * WOWZA MEDIA SYSTEMS, LLC HAS NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS, OR MODIFICATIONS.
+ * <p>
+ * Copyright © 2015 Wowza Media Systems, LLC. All rights reserved.
  */
 
 package online.motohub.config;
@@ -129,17 +129,18 @@ public class GoCoderSDKPrefs {
 
     public static class PrefsFragment extends PreferenceFragment {
 
-        private boolean  mShowConnectionPrefs    = true;
-        private boolean  mShowAudioPrefs         = true;
-        private boolean  mShowVideoPrefs         = true;
+        private boolean mShowConnectionPrefs = true;
+        private boolean mShowAudioPrefs = true;
+        private boolean mShowVideoPrefs = true;
 
-        private boolean  mFixedVideoSource      = false;
-        private boolean  mForPlayback           = false;
-        private boolean  mFixedAudioSource      = false;
+        private boolean mFixedVideoSource = false;
+        private boolean mForPlayback = false;
+        private boolean mFixedAudioSource = false;
 
-        private WZCamera mActiveCamera           = null;
+        private WZCamera mActiveCamera = null;
 
-        private int mPriorUIIVisibilityFlags    = -1;
+        private int mPriorUIIVisibilityFlags = -1;
+        private HashMap<String, String> mSummaryTexts = new HashMap<String, String>();
 
         public void setShowConnectionPrefs(boolean showConnectionPrefs) {
             mShowConnectionPrefs = showConnectionPrefs;
@@ -173,8 +174,6 @@ public class GoCoderSDKPrefs {
         public void setActiveCamera(WZCamera camera) {
             mActiveCamera = camera;
         }
-
-        private HashMap<String, String> mSummaryTexts = new HashMap<String, String>();
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -212,7 +211,7 @@ public class GoCoderSDKPrefs {
 
             /**** Connection preferences ****/
 
-            PreferenceCategory prefsCategory = (PreferenceCategory)findPreference("prefs_category_connection");
+            PreferenceCategory prefsCategory = (PreferenceCategory) findPreference("prefs_category_connection");
             if (!mShowConnectionPrefs) {
                 prefsScreen.removePreference(prefsCategory);
             } else {
@@ -243,7 +242,7 @@ public class GoCoderSDKPrefs {
                         if (hostAddress instanceof String) {
 
                             //SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-                            WZStreamConfig hostConfig = AutoCompletePreference.loadAutoCompleteHostConfig(mSharedPreferences, (String)hostAddress);
+                            WZStreamConfig hostConfig = AutoCompletePreference.loadAutoCompleteHostConfig(mSharedPreferences, (String) hostAddress);
 
                             if (hostConfig != null) {
 
@@ -254,19 +253,19 @@ public class GoCoderSDKPrefs {
                                 editor.putString("wz_live_username", hostConfig.getUsername());
                                 editor.apply();
 
-                                AutoCompletePreference pref = (AutoCompletePreference)findPreference("wz_live_host_address");
-                                setSummaryText(pref, (String)hostAddress);
+                                AutoCompletePreference pref = (AutoCompletePreference) findPreference("wz_live_host_address");
+                                setSummaryText(pref, (String) hostAddress);
 
-                                pref = (AutoCompletePreference)findPreference("wz_live_port_number");
+                                pref = (AutoCompletePreference) findPreference("wz_live_port_number");
                                 setSummaryText(mSharedPreferences, pref);
 
-                                pref = (AutoCompletePreference)findPreference("wz_live_app_name");
+                                pref = (AutoCompletePreference) findPreference("wz_live_app_name");
                                 setSummaryText(mSharedPreferences, pref);
 
-                                pref = (AutoCompletePreference)findPreference("wz_live_stream_name");
+                                pref = (AutoCompletePreference) findPreference("wz_live_stream_name");
                                 setSummaryText(mSharedPreferences, pref);
 
-                                pref = (AutoCompletePreference)findPreference("wz_live_username");
+                                pref = (AutoCompletePreference) findPreference("wz_live_username");
                                 setSummaryText(mSharedPreferences, pref);
                             }
                         }
@@ -278,7 +277,7 @@ public class GoCoderSDKPrefs {
 
             /**** Video preferences ****/
 
-            prefsCategory = (PreferenceCategory)findPreference("prefs_category_video");
+            prefsCategory = (PreferenceCategory) findPreference("prefs_category_video");
 
             if (!mShowVideoPrefs) {
                 prefsScreen.removePreference(prefsCategory);
@@ -331,7 +330,7 @@ public class GoCoderSDKPrefs {
 
                         String[] presetLabels = new String[presetConfigs.length];
                         String[] presetValues = new String[presetConfigs.length];
-                        for(int i=0; i < presetConfigs.length; i++) {
+                        for (int i = 0; i < presetConfigs.length; i++) {
                             presetLabels[i] = presetConfigs[i].getLabel(true, true, true, true);
                             presetValues[i] = String.valueOf(i);
                         }
@@ -339,7 +338,7 @@ public class GoCoderSDKPrefs {
                         videoPresetPref.setEntries(presetLabels);
                         videoPresetPref.setEntryValues(presetValues);
 
-                        final EditTextPreference bitRatePref = (EditTextPreference)findPreference("wz_video_bitrate");
+                        final EditTextPreference bitRatePref = (EditTextPreference) findPreference("wz_video_bitrate");
                         videoPresetPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                             @Override
                             public boolean onPreferenceChange(Preference preference, Object o) {
@@ -385,7 +384,7 @@ public class GoCoderSDKPrefs {
 
                         String[] frameSizeLabels = new String[frameSizes.length];
                         String[] frameSizeValues = new String[frameSizes.length];
-                        for(int i=0; i < frameSizes.length; i++) {
+                        for (int i = 0; i < frameSizes.length; i++) {
                             frameSizeLabels[i] = frameSizes[i].toString();
                             frameSizeValues[i] = String.valueOf(i);
                             if (frameSizes[i].equals(currentFrameSize))
@@ -435,8 +434,7 @@ public class GoCoderSDKPrefs {
                         prefsEditor.putInt("wz_video_profile_level_profile", -1);
                         prefsEditor.putInt("wz_video_profile_level_level", -1);
                         prefsEditor.apply();
-                    }
-                    else {
+                    } else {
                         int profile = mSharedPreferences.getInt("wz_video_profile_level_profile", -1);
                         int level = mSharedPreferences.getInt("wz_video_profile_level_level", -1);
 
@@ -524,7 +522,7 @@ public class GoCoderSDKPrefs {
                                             String[] prefKeys,
                                             boolean isPassword) {
 
-            for(String prefKey : prefKeys) {
+            for (String prefKey : prefKeys) {
                 Preference pref = prefCategory.findPreference(prefKey);
 
                 pref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
@@ -533,13 +531,13 @@ public class GoCoderSDKPrefs {
                         if (o instanceof String) {
                             SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(prefFragment.getActivity());
                             SharedPreferences.Editor prefsEditor = sharedPreferences.edit();
-                            prefsEditor.putString(preference.getKey(), (String)o);
+                            prefsEditor.putString(preference.getKey(), (String) o);
                             prefsEditor.apply();
 
                             boolean isPasswordField = ((preference instanceof EditTextPreference) &&
-                                    ((EditTextPreference)preference).getEditText().getInputType() == (InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD));
+                                    ((EditTextPreference) preference).getEditText().getInputType() == (InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD));
 
-                            setSummaryText(preference, (String)o, isPasswordField);
+                            setSummaryText(preference, (String) o, isPasswordField);
                         }
                         return true;
                     }
@@ -553,7 +551,7 @@ public class GoCoderSDKPrefs {
         public void onPause() {
             Activity parentActivity = getActivity();
             if (parentActivity != null && parentActivity instanceof GoCoderSDKActivityBase)
-                ((GoCoderSDKActivityBase)parentActivity).syncPreferences();
+                ((GoCoderSDKActivityBase) parentActivity).syncPreferences();
 
             super.onPause();
         }
@@ -570,7 +568,7 @@ public class GoCoderSDKPrefs {
             PreferenceCategory prefsCategory = (PreferenceCategory) findPreference(categoryKey);
 
             int nPrefs = prefsCategory.getPreferenceCount();
-            for(int i=0;i<nPrefs;i++) {
+            for (int i = 0; i < nPrefs; i++) {
                 Preference pref = prefsCategory.getPreference(i);
                 summaryTexts.put(pref.getKey(), pref.getSummary().toString());
             }
@@ -585,7 +583,7 @@ public class GoCoderSDKPrefs {
             if (prefValueText == null || prefValueText.trim().length() == 0) {
                 pref.setSummary(getStoredSummaryText(prefKey, mSummaryTexts));
             } else {
-                Spannable prefSummary ;
+                Spannable prefSummary;
                 int color = ContextCompat.getColor(getActivity(), android.R.color.holo_blue_light);
 
                 if (isPasswordPref) {

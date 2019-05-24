@@ -6,7 +6,7 @@ import com.google.gson.annotations.SerializedName;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-public class FeedCommentModel implements Serializable{
+public class FeedCommentModel implements Serializable {
 
     public static final String COMMENT_ID = "CommentID";
     public static final String COMMENT_LIST = "CommentList";
@@ -49,9 +49,18 @@ public class FeedCommentModel implements Serializable{
     @SerializedName("profiles_by_ProfileID")
     @Expose
     private ProfileResModel mProfilesByProfileID;
+    @SerializedName("commentreply_by_CommentID")
+    @Expose
+    private ArrayList<FeedCommentReplyModel> mFeedCommentReplyModel;
+    @SerializedName("commentlikes_by_CommentID")
+    @Expose
+    private ArrayList<FeedCommentLikeModel> mFeedCommentLikeModel;
+    @SerializedName("resource")
+    @Expose
+    private ArrayList<FeedCommentModel> mResource;
 
     public String getCommentTaggedUserNames() {
-        if(mCommentTaggedUserNames == null)
+        if (mCommentTaggedUserNames == null)
             mCommentTaggedUserNames = "";
         return mCommentTaggedUserNames;
     }
@@ -60,9 +69,8 @@ public class FeedCommentModel implements Serializable{
         this.mCommentTaggedUserNames = mCommentTaggedUserNames;
     }
 
-
     public String getCommentTaggedUserID() {
-        if(mCommentTaggedUserID == null)
+        if (mCommentTaggedUserID == null)
             mCommentTaggedUserID = "";
         return mCommentTaggedUserID;
     }
@@ -70,18 +78,6 @@ public class FeedCommentModel implements Serializable{
     public void setCommentTaggedUserID(String mCommentTaggedUserID) {
         this.mCommentTaggedUserID = mCommentTaggedUserID;
     }
-
-    @SerializedName("commentreply_by_CommentID")
-    @Expose
-    private ArrayList<FeedCommentReplyModel> mFeedCommentReplyModel;
-
-    @SerializedName("commentlikes_by_CommentID")
-    @Expose
-    private ArrayList<FeedCommentLikeModel> mFeedCommentLikeModel;
-
-    @SerializedName("resource")
-    @Expose
-    private ArrayList<FeedCommentModel> mResource;
 
     public ArrayList<FeedCommentModel> getResource() {
         return mResource;
@@ -101,7 +97,7 @@ public class FeedCommentModel implements Serializable{
     }
 
     public String getmComment() {
-        if(mComment == null)
+        if (mComment == null)
             mComment = "";
         return mComment;
     }
@@ -143,7 +139,7 @@ public class FeedCommentModel implements Serializable{
     }
 
     public ArrayList<FeedCommentReplyModel> getFeedCommentReplyModel() {
-        if(mFeedCommentReplyModel==null)
+        if (mFeedCommentReplyModel == null)
             mFeedCommentReplyModel = new ArrayList<>();
         return mFeedCommentReplyModel;
     }
@@ -153,7 +149,7 @@ public class FeedCommentModel implements Serializable{
     }
 
     public ArrayList<FeedCommentLikeModel> getFeedCommentLikeModel() {
-        if(mFeedCommentLikeModel == null)
+        if (mFeedCommentLikeModel == null)
             mFeedCommentLikeModel = new ArrayList<>();
         return mFeedCommentLikeModel;
     }
@@ -163,7 +159,7 @@ public class FeedCommentModel implements Serializable{
     }
 
     public String getCommentImages() {
-        if(mCommentImages == null)
+        if (mCommentImages == null)
             mCommentImages = "";
         return mCommentImages;
     }

@@ -86,7 +86,6 @@ public class SingleChatRoomAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     }
 
 
-
     public static String getTimeAgo(Date date, Context ctx) {
         if (date == null) {
             return null;
@@ -163,7 +162,7 @@ public class SingleChatRoomAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                 if (mSingleChatMsg.getMsinglechatmsg_by_Order().getmFromProfileID() == mProfileResModel.getID()
                         || mSingleChatMsg.getMsinglechatmsg_by_Order().getmToProfileID() == mProfileResModel.getID()) {
                     String last_msg = mSingleChatMsg.getMsinglechatmsg_by_Order().getmMessage();
-                    String enc_last_msg = URLDecoder.decode(last_msg,"UTF-8");
+                    String enc_last_msg = URLDecoder.decode(last_msg, "UTF-8");
                     //String enc_last_msg = replacer(sb.append(last_msg));
                     String createdAt = mSingleChatMsg.getMsinglechatmsg_by_Order().getmCreatedAt();
 

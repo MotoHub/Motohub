@@ -12,22 +12,15 @@ import okhttp3.RequestBody;
 import okio.BufferedSink;
 
 public class ProgressRequestBody extends RequestBody {
+    private static final int DEFAULT_BUFFER_SIZE = 2048;
     private File mFile;
-    private Integer  NotificationID;
+    private Integer NotificationID;
     private UploadCallbacks mListener;
 
-    private static final int DEFAULT_BUFFER_SIZE = 2048;
-
-    public interface UploadCallbacks {
-        void onProgressUpdate(int percentage, int notificationID);
-        void onError();
-        void onFinish();
-    }
-
-    public ProgressRequestBody(final File file, final  UploadCallbacks listener,final int NotificationID) {
+    public ProgressRequestBody(final File file, final UploadCallbacks listener, final int NotificationID) {
         mFile = file;
         mListener = listener;
-        this.NotificationID=NotificationID;
+        this.NotificationID = NotificationID;
     }
 
     @Override
@@ -53,7 +46,7 @@ public class ProgressRequestBody extends RequestBody {
             while ((read = in.read(buffer)) != -1) {
 
                 // update progress on UI thread
-                handler.post(new ProgressUpdater(uploaded, fileLength,NotificationID));
+                handler.post(new ProgressUpdater(uploaded, fileLength, NotificationID));
 
                 uploaded += read;
                 sink.write(buffer, 0, read);
@@ -63,21 +56,30 @@ public class ProgressRequestBody extends RequestBody {
         }
     }
 
+    public interface UploadCallbacks {
+        void onProgressUpdate(int percentage, int notificationID);
+
+        void onError();
+
+        void onFinish();
+    }
+
     private class ProgressUpdater implements Runnable {
         private long mUploaded;
         private long mTotal;
         private Integer notificationID;
-        public ProgressUpdater(long uploaded, long total,int NotificationID) {
+
+        public ProgressUpdater(long uploaded, long total, int NotificationID) {
             mUploaded = uploaded;
             mTotal = total;
-            this.notificationID=NotificationID;
+            this.notificationID = NotificationID;
         }
 
         @Override
         public void run() {
             try {
-                mListener.onProgressUpdate((int)(100 * mUploaded / mTotal),notificationID);
-            }catch (Exception ex){
+                mListener.onProgressUpdate((int) (100 * mUploaded / mTotal), notificationID);
+            } catch (Exception ex) {
                 ex.printStackTrace();
             }
         }

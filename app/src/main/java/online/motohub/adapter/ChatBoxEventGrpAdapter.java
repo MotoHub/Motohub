@@ -263,7 +263,7 @@ public class ChatBoxEventGrpAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                         mViewHolderSender.mSenderMsgTv.setVisibility(View.VISIBLE);
                         try {
                             mViewHolderSender.mSenderMsgTv.setText(URLDecoder.decode(mEventGrpChatMsgList.get(position).getMessage(), "UTF-8"));
-                           // mViewHolderSender.mSenderMsgTv.setText(replacer(sb.append(mEventGrpChatMsgList.get(position).getMainObj())));
+                            // mViewHolderSender.mSenderMsgTv.setText(replacer(sb.append(mEventGrpChatMsgList.get(position).getMainObj())));
                         } catch (Exception e) {
                             e.printStackTrace();
                         }

@@ -3,32 +3,32 @@
     android:id="@+id/events_list_co_layout"
     style="@style/LayoutMatch">
 
-        <include
-            android:id="@+id/include"
-            layout="@layout/widget_toolbar" />
+    <include
+        android:id="@+id/include"
+        layout="@layout/widget_toolbar" />
 
-        <Spinner
-            android:id="@+id/moto_type_spinner"
-            style="@style/MySpinnerTheme"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/size30"
-            android:layout_below="@+id/include"
-            android:layout_centerHorizontal="true"
-            android:layout_marginLeft="@dimen/size10"
-            android:layout_marginRight="@dimen/size10"
-            android:layout_marginTop="@dimen/size10"
-            android:entries="@array/moto_type"
-            android:gravity="center"
-            android:minWidth="@dimen/size80" />
+    <Spinner
+        android:id="@+id/moto_type_spinner"
+        style="@style/MySpinnerTheme"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/size30"
+        android:layout_below="@+id/include"
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="@dimen/size10"
+        android:layout_marginTop="@dimen/size10"
+        android:layout_marginRight="@dimen/size10"
+        android:entries="@array/moto_type"
+        android:gravity="center"
+        android:minWidth="@dimen/size80" />
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/events_list_view"
-            style="@style/LayoutMatch"
-            android:layout_below="@+id/moto_type_spinner"
-            android:divider="@android:color/transparent"
-            android:dividerHeight="@dimen/size10"
-            android:paddingBottom="@dimen/size10"
-            android:paddingTop="@dimen/size10"
-            android:scrollbars="none" />
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/events_list_view"
+        style="@style/LayoutMatch"
+        android:layout_below="@+id/moto_type_spinner"
+        android:divider="@android:color/transparent"
+        android:dividerHeight="@dimen/size10"
+        android:paddingTop="@dimen/size10"
+        android:paddingBottom="@dimen/size10"
+        android:scrollbars="none" />
 
 </RelativeLayout>

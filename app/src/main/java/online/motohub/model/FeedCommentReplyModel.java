@@ -70,6 +70,9 @@ public class FeedCommentReplyModel implements Serializable {
     @Expose
     private FeedCommentModel mPostCommentsByCommentID;
 
+    public static String getReplyList() {
+        return REPLY_LIST;
+    }
 
     public int getID() {
         return mID;
@@ -96,7 +99,7 @@ public class FeedCommentReplyModel implements Serializable {
     }
 
     public String getReplyText() {
-        if(mReplyText == null)
+        if (mReplyText == null)
             mReplyText = "";
         return mReplyText;
     }
@@ -121,12 +124,8 @@ public class FeedCommentReplyModel implements Serializable {
         this.mProfilesByProfileID = mProfilesByProfileID;
     }
 
-    public static String getReplyList() {
-        return REPLY_LIST;
-    }
-
     public String getReplyTaggedUserNames() {
-        if(mReplyTaggedUserNames ==  null)
+        if (mReplyTaggedUserNames == null)
             mReplyTaggedUserNames = "";
         return mReplyTaggedUserNames;
     }
@@ -136,7 +135,7 @@ public class FeedCommentReplyModel implements Serializable {
     }
 
     public String getReplyTaggedUserIDs() {
-        if(mReplyTaggedUserID == null)
+        if (mReplyTaggedUserID == null)
             mReplyTaggedUserID = "";
         return mReplyTaggedUserID;
     }
@@ -146,7 +145,7 @@ public class FeedCommentReplyModel implements Serializable {
     }
 
     public ArrayList<ReplyLikeModel> getReplyLikeByReplyID() {
-        if(mReplyLikeByReplyID==null)
+        if (mReplyLikeByReplyID == null)
             mReplyLikeByReplyID = new ArrayList<>();
         return mReplyLikeByReplyID;
     }
@@ -156,7 +155,7 @@ public class FeedCommentReplyModel implements Serializable {
     }
 
     public String getReplyImages() {
-        if(mReplyImages == null)
+        if (mReplyImages == null)
             mReplyImages = "";
         return mReplyImages;
     }
@@ -174,7 +173,7 @@ public class FeedCommentReplyModel implements Serializable {
     }
 
     public String getUserType() {
-        if(mUserType == null)
+        if (mUserType == null)
             mUserType = "";
         return mUserType;
     }

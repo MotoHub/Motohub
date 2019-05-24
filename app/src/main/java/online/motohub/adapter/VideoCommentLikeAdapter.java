@@ -25,7 +25,7 @@ import static online.motohub.activity.BaseActivity.SPECTATOR;
  * Created by pyd10 on 3/9/2018.
  */
 
-public class VideoCommentLikeAdapter extends RecyclerView.Adapter<VideoCommentLikeAdapter.Holder>{
+public class VideoCommentLikeAdapter extends RecyclerView.Adapter<VideoCommentLikeAdapter.Holder> {
 
     private Context mContext;
     private List<VideoCommentLikeModel> mFeedLikesList;
@@ -36,25 +36,6 @@ public class VideoCommentLikeAdapter extends RecyclerView.Adapter<VideoCommentLi
         this.mContext = mContext;
         this.mFeedLikesList = mFeedLikeList;
         this.mMyProfileResModel = mMyProfileResModel;
-    }
-
-
-    public class Holder extends RecyclerView.ViewHolder {
-
-        @BindView(R.id.comment_user_img)
-        CircleImageView mUserImg;
-
-        @BindView(R.id.comment_user_img_lay)
-        RelativeLayout mCommentImgLay;
-
-        @BindView(R.id.comment_user_name_txt)
-        TextView mUserNameTxt;
-
-        public Holder(View view) {
-            super(view);
-            ButterKnife.bind(this, view);
-        }
-
     }
 
     @Override
@@ -88,7 +69,7 @@ public class VideoCommentLikeAdapter extends RecyclerView.Adapter<VideoCommentLi
             } else {
                 mHolder.mUserNameTxt.setText(mEntity.getProfileByProfileID().getDriver());
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -100,12 +81,30 @@ public class VideoCommentLikeAdapter extends RecyclerView.Adapter<VideoCommentLi
 
     private void profileClick(VideoCommentLikeModel feedCommentLikeModel) {
         if (mMyProfileResModel.getID() == feedCommentLikeModel.getProfileID()) {
-            ((BaseActivity)mContext).moveMyProfileScreen(mContext,mMyProfileResModel.getID());
+            ((BaseActivity) mContext).moveMyProfileScreen(mContext, mMyProfileResModel.getID());
         } else {
-            ((BaseActivity)mContext).moveOtherProfileScreen(mContext,mMyProfileResModel.getID(),
+            ((BaseActivity) mContext).moveOtherProfileScreen(mContext, mMyProfileResModel.getID(),
                     feedCommentLikeModel.getProfileByProfileID().getID());
 
         }
+    }
+
+    public class Holder extends RecyclerView.ViewHolder {
+
+        @BindView(R.id.comment_user_img)
+        CircleImageView mUserImg;
+
+        @BindView(R.id.comment_user_img_lay)
+        RelativeLayout mCommentImgLay;
+
+        @BindView(R.id.comment_user_name_txt)
+        TextView mUserNameTxt;
+
+        public Holder(View view) {
+            super(view);
+            ButterKnife.bind(this, view);
+        }
+
     }
 
 }

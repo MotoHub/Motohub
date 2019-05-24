@@ -31,26 +31,22 @@ import online.motohub.retrofit.RetrofitClient;
 
 public class ClubSubscribedUsersFragment extends BaseFragment {
 
+    private static final int mDataLimit = 15;
+    private static final String TAG = ClubSubscribedUsersFragment.class.getName();
+    public boolean mRefresh = true;
     @BindView(R.id.club_users)
     RecyclerView mClubUsersRV;
-
     @BindString(R.string.no_users_err)
     String mNoUsersSubscribed;
-
-    private Activity mActivity;
-    private Unbinder mUnBinder;
-    public boolean mRefresh = true;
-    private boolean mIsPostsRvLoading = true;
-    private static final int mDataLimit = 15;
-    private int mPostsRvOffset = 0, mPostsRvTotalCount = 0;
     LinearLayoutManager mClubLayout;
-
     ClubSubscribedUsersAdapter mClubSubsUserAdapter;
     PromotersResModel mPromotersResModel;
     ProfileResModel mMyProfileResModel;
     ArrayList<PromoterSubs> mClubsubusersList = new ArrayList<>();
-
-    private static final String TAG = ClubSubscribedUsersFragment.class.getName();
+    private Activity mActivity;
+    private Unbinder mUnBinder;
+    private boolean mIsPostsRvLoading = true;
+    private int mPostsRvOffset = 0, mPostsRvTotalCount = 0;
 
     @Override
     public void onAttach(Context context) {

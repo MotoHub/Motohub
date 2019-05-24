@@ -31,7 +31,7 @@ public class GroupChatMsgResModel {
 
     @SerializedName("IsChecked")
     @Expose
-    private Boolean IsDateVisible=false;
+    private Boolean IsDateVisible = false;
 
     @SerializedName("msg_type")
     @Expose
@@ -40,6 +40,9 @@ public class GroupChatMsgResModel {
     @SerializedName("photo_message")
     @Expose
     private String photoMessage;
+    @SerializedName("profiles_by_SenderProfileID")
+    @Expose
+    private ProfileResModel mProfilesBySenderProfileID;
 
     public Boolean getDateVisible() {
         return IsDateVisible;
@@ -48,10 +51,6 @@ public class GroupChatMsgResModel {
     public void setDateVisible(Boolean dateVisible) {
         IsDateVisible = dateVisible;
     }
-
-    @SerializedName("profiles_by_SenderProfileID")
-    @Expose
-    private ProfileResModel mProfilesBySenderProfileID;
 
     public Integer getID() {
         return mID;
@@ -118,7 +117,7 @@ public class GroupChatMsgResModel {
     }
 
     public String getPhotoMessage() {
-        if(photoMessage == null)
+        if (photoMessage == null)
             photoMessage = "";
         return photoMessage;
     }

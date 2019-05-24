@@ -76,7 +76,7 @@ public class GalleryImgAdapter extends RecyclerView.Adapter<GalleryImgAdapter.Ho
                 }
             }
         });*/
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -87,37 +87,20 @@ public class GalleryImgAdapter extends RecyclerView.Adapter<GalleryImgAdapter.Ho
         return models.size();
     }
 
-    class Holder extends RecyclerView.ViewHolder {
-
-        ImageView mImgView, iv_check;
-
-        Holder(View v) {
-            super(v);
-            mImgView = v.findViewById(R.id.row_gallery_image_view);
-            iv_check = v.findViewById(R.id.iv_check);
-            ViewGroup.LayoutParams params = mImgView.getLayoutParams();
-            params.width = ScreenSize.getWidth(50);
-            params.height = ScreenSize.getWidth(50);
-            mImgView.setLayoutParams(params);
-        }
+    //Toggle selection methods
+    public void toggleSelection(int position) {
+        selectView(position, !mSelectedItemsIds.get(position));
     }
 
     /*public interface OnItemClickListener {
         void onItemClick(int position);
     }*/
 
-    //Toggle selection methods
-    public void toggleSelection(int position) {
-        selectView(position, !mSelectedItemsIds.get(position));
-    }
-
-
     //Remove selected selections
     public void removeSelection() {
         mSelectedItemsIds = new SparseBooleanArray();
         notifyDataSetChanged();
     }
-
 
     //Put or delete selected position into SparseBooleanArray
     public void selectView(int position, boolean value) {
@@ -137,6 +120,21 @@ public class GalleryImgAdapter extends RecyclerView.Adapter<GalleryImgAdapter.Ho
     //Return all selected ids
     public SparseBooleanArray getSelectedIds() {
         return mSelectedItemsIds;
+    }
+
+    class Holder extends RecyclerView.ViewHolder {
+
+        ImageView mImgView, iv_check;
+
+        Holder(View v) {
+            super(v);
+            mImgView = v.findViewById(R.id.row_gallery_image_view);
+            iv_check = v.findViewById(R.id.iv_check);
+            ViewGroup.LayoutParams params = mImgView.getLayoutParams();
+            params.width = ScreenSize.getWidth(50);
+            params.height = ScreenSize.getWidth(50);
+            mImgView.setLayoutParams(params);
+        }
     }
 
 

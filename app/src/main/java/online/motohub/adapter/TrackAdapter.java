@@ -106,7 +106,7 @@ public class TrackAdapter extends RecyclerView.Adapter<TrackAdapter.Holder> {
             EventBus.getDefault().postSticky(mMyProfileResModel);
             EventBus.getDefault().postSticky(mTrackResModelsList.get(getLayoutPosition()));
 
-            ((BaseActivity)mContext).startActivityForResult(
+            ((BaseActivity) mContext).startActivityForResult(
                     new Intent(mContext, TrackProfileActivity.class),
                     PromotersListActivity.PROMOTER_FOLLOW_RESPONSE);
         }

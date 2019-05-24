@@ -23,10 +23,10 @@
 
         <LinearLayout
             style="@style/LayoutMatchWrap"
-            android:layout_marginBottom="@dimen/size10"
             android:layout_marginLeft="@dimen/size30"
-            android:layout_marginRight="@dimen/size30"
             android:layout_marginTop="@dimen/size10"
+            android:layout_marginRight="@dimen/size30"
+            android:layout_marginBottom="@dimen/size10"
             android:gravity="center"
             android:orientation="horizontal">
 

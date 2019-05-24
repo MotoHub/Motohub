@@ -7,9 +7,10 @@ public class LiveStreamRequestResponse {
 
     private ArrayList<LiveStreamRequestEntity> resource;
     private MetaModel meta;
+
     public ArrayList<LiveStreamRequestEntity> getResource() {
-        if(resource==null)
-            resource=new ArrayList<>();
+        if (resource == null)
+            resource = new ArrayList<>();
         return resource;
     }
 

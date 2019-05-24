@@ -95,50 +95,6 @@ public class UploadJobService extends JobService implements ProgressRequestBody.
 
     }
 
-    @SuppressLint("StaticFieldLeak")
-    private class JobTask extends AsyncTask<JobParameters, Void, JobParameters> {
-        @SuppressLint("StaticFieldLeak")
-        private final JobService jobService;
-        private DatabaseHandler databaseHandler;
-
-        JobTask(JobService jobService, DatabaseHandler databaseHandler) {
-            this.jobService = jobService;
-            this.databaseHandler = databaseHandler;
-        }
-
-        @Override
-        protected JobParameters doInBackground(JobParameters... params) {
-            PreferenceUtils.getInstance(UploadJobService.this).saveBooleanData(PreferenceUtils.IS_JOB_SCHEDULER, false);
-            list = databaseHandler.getSpectatorLiveVideos();
-            if (list.size() > 0) {
-                Runnable r = new Runnable() {
-                    public void run() {
-                        for (int mFinalValue = 0; mFinalValue < list.size(); mFinalValue++) {
-                            synchronized (this) {
-                                try {
-                                    amazoneUpload(UploadJobService.this, mFinalValue);
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                        }
-                    }
-                };
-                Thread t = new Thread(r);
-                t.start();
-            }
-
-            return params[0];
-        }
-
-        @Override
-        protected void onPostExecute(JobParameters jobParameters) {
-            jobService.jobFinished(jobParameters, false);
-            PreferenceUtils.getInstance(UploadJobService.this).saveBooleanData(PreferenceUtils.IS_JOB_SCHEDULER, false);
-            databaseHandler.deleteSpectator();
-        }
-    }
-
     @SuppressWarnings("deprecation")
     private void amazoneUpload(final Context mContext, int mFinalValue) {
         uploadFileNotification(mContext, mFinalValue);
@@ -320,6 +276,50 @@ public class UploadJobService extends JobService implements ProgressRequestBody.
 
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    @SuppressLint("StaticFieldLeak")
+    private class JobTask extends AsyncTask<JobParameters, Void, JobParameters> {
+        @SuppressLint("StaticFieldLeak")
+        private final JobService jobService;
+        private DatabaseHandler databaseHandler;
+
+        JobTask(JobService jobService, DatabaseHandler databaseHandler) {
+            this.jobService = jobService;
+            this.databaseHandler = databaseHandler;
+        }
+
+        @Override
+        protected JobParameters doInBackground(JobParameters... params) {
+            PreferenceUtils.getInstance(UploadJobService.this).saveBooleanData(PreferenceUtils.IS_JOB_SCHEDULER, false);
+            list = databaseHandler.getSpectatorLiveVideos();
+            if (list.size() > 0) {
+                Runnable r = new Runnable() {
+                    public void run() {
+                        for (int mFinalValue = 0; mFinalValue < list.size(); mFinalValue++) {
+                            synchronized (this) {
+                                try {
+                                    amazoneUpload(UploadJobService.this, mFinalValue);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }
+                    }
+                };
+                Thread t = new Thread(r);
+                t.start();
+            }
+
+            return params[0];
+        }
+
+        @Override
+        protected void onPostExecute(JobParameters jobParameters) {
+            jobService.jobFinished(jobParameters, false);
+            PreferenceUtils.getInstance(UploadJobService.this).saveBooleanData(PreferenceUtils.IS_JOB_SCHEDULER, false);
+            databaseHandler.deleteSpectator();
         }
     }
 }

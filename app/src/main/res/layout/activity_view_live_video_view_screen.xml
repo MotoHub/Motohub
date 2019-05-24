@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/live_stream_co_layout"
     style="@style/LayoutMatch"
     tools:context="online.motohub.activity.LiveStreamingActivity">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical" >
+        android:orientation="vertical">
 
         <include
             android:id="@+id/include"
@@ -17,59 +18,60 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:background="@android:color/white">
+            android:background="@android:color/white"
+            android:orientation="vertical">
 
             <VideoView
                 android:id="@+id/video_view"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:layout_centerInParent="true">
-            </VideoView>
+                android:layout_centerInParent="true"
+                android:layout_gravity="center"></VideoView>
 
             <TextView
+                android:id="@+id/no_broadcast_txt"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
                 android:gravity="center"
-                android:id="@+id/no_broadcast_txt"
-                android:textSize="@dimen/text20"
                 android:text="@string/no_broadcast"
-                android:visibility="gone"/>
+                android:textSize="@dimen/text20"
+                android:visibility="gone" />
 
             <ImageView
+                android:id="@+id/snapImage"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:id="@+id/snapImage"
-                android:contentDescription="@string/app_name"/>
+                android:contentDescription="@string/app_name" />
+
             <Button
                 android:id="@+id/btnRetry"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:text="@string/retry"
-                android:textSize="@dimen/text16"
                 android:gravity="center"
+                android:text="@string/retry"
                 android:textColor="@android:color/white"
-                android:visibility="gone"
-                />
+                android:textSize="@dimen/text16"
+                android:visibility="gone" />
+
             <ImageView
+                android:id="@+id/vlc_button_play_pause"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:id="@+id/vlc_button_play_pause"
-                app:srcCompat="@drawable/play_icon"
                 android:layout_centerInParent="true"
-                android:visibility="gone"/>
+                android:visibility="gone"
+                app:srcCompat="@drawable/play_icon" />
+
             <android.support.design.widget.FloatingActionButton
                 android:id="@+id/camera_floating_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
+                android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
+                android:layout_alignParentBottom="true"
                 android:layout_margin="@dimen/size20"
-                android:src="@android:drawable/ic_menu_camera"
-                android:layout_alignParentEnd="true" />
+                android:src="@android:drawable/ic_menu_camera" />
         </RelativeLayout>
     </LinearLayout>
 </android.support.design.widget.CoordinatorLayout>

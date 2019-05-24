@@ -67,8 +67,8 @@
                                 android:id="@+id/profileDetailsBox"
                                 style="@style/LayoutWrap"
                                 android:layout_marginStart="@dimen/size5"
-                                android:layout_toEndOf="@id/profile_img"
-                                android:layout_toStartOf="@id/followers_box">
+                                android:layout_toStartOf="@id/followers_box"
+                                android:layout_toEndOf="@id/profile_img">
 
                                 <TextView
                                     android:id="@+id/promoterName"
@@ -93,8 +93,8 @@
                                     android:background="@drawable/black_orange_btn_bg"
                                     android:clickable="true"
                                     android:focusable="true"
-                                    android:paddingBottom="@dimen/size5"
                                     android:paddingTop="@dimen/size5"
+                                    android:paddingBottom="@dimen/size5"
                                     android:text="@string/follow"
                                     android:textAlignment="center"
                                     android:textColor="@color/text_color"
@@ -153,17 +153,17 @@
 
             </android.support.design.widget.AppBarLayout>
 
-<!--            <android.support.v4.widget.SwipeRefreshLayout
-                android:id="@+id/swipeRefreshLayout"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:layout_behavior="@string/appbar_scrolling_view_behavior">
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/recycler_view"
-                    style="@style/LayoutMatch"
-                    android:background="@color/colorLighterGrey"
-                    tools:listitem="@layout/row_profile_post_item" />
-            </android.support.v4.widget.SwipeRefreshLayout>-->
+            <!--            <android.support.v4.widget.SwipeRefreshLayout
+                            android:id="@+id/swipeRefreshLayout"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+                            <android.support.v7.widget.RecyclerView
+                                android:id="@+id/recycler_view"
+                                style="@style/LayoutMatch"
+                                android:background="@color/colorLighterGrey"
+                                tools:listitem="@layout/row_profile_post_item" />
+                        </android.support.v4.widget.SwipeRefreshLayout>-->
 
             <android.support.v4.view.ViewPager
                 android:id="@+id/perf_profile_view_pager"

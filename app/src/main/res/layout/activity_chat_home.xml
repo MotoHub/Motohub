@@ -30,9 +30,9 @@
         <android.support.design.widget.TabLayout
             android:id="@+id/chat_tab_layout"
             style="@style/LayoutMatchWrap"
+            android:background="@color/colorBlack"
             app:tabGravity="fill"
-            app:tabMode="fixed"
-            android:background="@color/colorBlack" />
+            app:tabMode="fixed" />
 
     </android.support.v4.view.ViewPager>
 
@@ -41,9 +41,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
+        android:layout_margin="@dimen/size16"
         android:clickable="true"
         app:fabSize="normal"
-        android:layout_margin="@dimen/size16"
         app:srcCompat="@drawable/add_person_icon" />
 
 </android.support.design.widget.CoordinatorLayout>

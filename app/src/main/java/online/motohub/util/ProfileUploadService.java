@@ -220,29 +220,6 @@ public class ProfileUploadService extends IntentService implements ProgressReque
         uploadAsync.execute();
     }
 
-    @SuppressLint("StaticFieldLeak")
-    private class UploadAsync extends AsyncTask<String, String, Void> {
-
-        private Integer notificationid;
-        private File imagfile;
-        private File videofile;
-
-        public UploadAsync(Integer notificationid, File videofile, File ImageFile) {
-            this.notificationid = notificationid;
-            imagfile = ImageFile;
-            this.videofile = videofile;
-
-        }
-
-
-        @Override
-        protected Void doInBackground(String... paths) {
-            //uploadImgAndVidToServer(notificationid, videofile, imagfile);
-            amazoneUpload(videofile, imagfile, notificationid);
-            return null;
-        }
-    }
-
     private void amazoneUpload(final File video, final File image, final int notificationid) {
 
         mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
@@ -415,6 +392,29 @@ public class ProfileUploadService extends IntentService implements ProgressReque
             sendBroadcast(new Intent().setAction("UPLOAD_STATUS").putExtra("status", value));
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    @SuppressLint("StaticFieldLeak")
+    private class UploadAsync extends AsyncTask<String, String, Void> {
+
+        private Integer notificationid;
+        private File imagfile;
+        private File videofile;
+
+        public UploadAsync(Integer notificationid, File videofile, File ImageFile) {
+            this.notificationid = notificationid;
+            imagfile = ImageFile;
+            this.videofile = videofile;
+
+        }
+
+
+        @Override
+        protected Void doInBackground(String... paths) {
+            //uploadImgAndVidToServer(notificationid, videofile, imagfile);
+            amazoneUpload(videofile, imagfile, notificationid);
+            return null;
         }
     }
 }

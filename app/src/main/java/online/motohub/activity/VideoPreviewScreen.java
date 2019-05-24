@@ -45,6 +45,7 @@ public class VideoPreviewScreen extends BaseActivity {
     @BindView(R.id.right_arrow)
     ImageView mRightArrow;
     private MediaController mMediaController;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,11 +61,10 @@ public class VideoPreviewScreen extends BaseActivity {
         initVideoView();
         if (uri != null) {
             playVideo(uri);
-        }else{
-            showToast(this,"Oops!!! Something went wrong! Please try again.");
+        } else {
+            showToast(this, "Oops!!! Something went wrong! Please try again.");
         }
     }
-
 
 
     private void initVideoView() {
@@ -76,14 +76,14 @@ public class VideoPreviewScreen extends BaseActivity {
                     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
                     @Override
                     public void onVideoSizeChanged(MediaPlayer mp, int width, int height) {
-                /*
-                 * add media controller
-                 */
+                        /*
+                         * add media controller
+                         */
                         mMediaController = new MediaController(VideoPreviewScreen.this);
                         mVideoView.setMediaController(mMediaController);
-                /*
-                 * and set its position on screen
-                 */
+                        /*
+                         * and set its position on screen
+                         */
                         mMediaController.setAnchorView(mVideoView);
                     }
                 });

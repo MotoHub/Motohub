@@ -75,36 +75,56 @@ public class BaseFragment extends Fragment {
 
 //    public void callGetEvents(ArrayList<ProfileResModel> fullMPList) {}
 
-    public void callFeedPost(ProfileResModel mProfileResModel) {}
+    public void callFeedPost(ProfileResModel mProfileResModel) {
+    }
 
-    public void callGetEvents() {}
+    public void callGetEvents() {
+    }
 
-    public void setRefresh(boolean refresh) {}
+    public void setRefresh(boolean refresh) {
+    }
 
-    public void callGetChatRoom(ProfileResModel myProfileModel) {}
+    public void callGetChatRoom(ProfileResModel myProfileModel) {
+    }
 
-    public void getaddedChat(ProfileResModel myProfileModel,boolean addedchat){}
+    public void getaddedChat(ProfileResModel myProfileModel, boolean addedchat) {
+    }
 
-    public void launchSingleChatAddActivity() {}
+    public void launchSingleChatAddActivity() {
+    }
 
-    public void launchCreateGroupChatActivity() {}
+    public void launchCreateGroupChatActivity() {
+    }
 
-    public void callUpdateSingleChatRoom(SingleChatRoomResModel singleChatRoomResModel) {}
+    public void callUpdateSingleChatRoom(SingleChatRoomResModel singleChatRoomResModel) {
+    }
 
-    public void callUpdateGroupChatRoom(GroupChatRoomResModel groupChatRoomResModel) {}
+    public void callUpdateGroupChatRoom(GroupChatRoomResModel groupChatRoomResModel) {
+    }
 
-    public void alertDialogPositiveBtnClick(String dialogType, int position) {}
+    public void alertDialogPositiveBtnClick(String dialogType, int position) {
+    }
 
-    public void retrofitOnFailure(int responseType) {}
-    public void retrofitOnFailure() {}
+    public void retrofitOnFailure(int responseType) {
+    }
 
-    public void retrofitOnError(int responseType, String errorMessage){}
-    public void retrofitOnError(int responseType, String errorMessage,int code){}
-    public void retrofitOnError(){}
+    public void retrofitOnFailure() {
+    }
 
-    public void retrofitOnSessionError(int type,String code){}
+    public void retrofitOnError(int responseType, String errorMessage) {
+    }
 
-    public void retrofitOnResponse(Object responseObj, int responseType) {}
+    public void retrofitOnError(int responseType, String errorMessage, int code) {
+    }
+
+    public void retrofitOnError() {
+    }
+
+    public void retrofitOnSessionError(int type, String code) {
+    }
+
+    public void retrofitOnResponse(Object responseObj, int responseType) {
+    }
 
     public void retrofitOnResponse(ArrayList<OndemandNewResponse> list, int responseType) {
 
@@ -141,6 +161,7 @@ public class BaseFragment extends Fragment {
         DateFormat mDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss", Locale.getDefault());
         return mDateFormat.format(new Date());
     }
+
     public void showToast(Context ctx, String msg) {
         Toast.makeText(ctx, msg, Toast.LENGTH_SHORT).show();
     }

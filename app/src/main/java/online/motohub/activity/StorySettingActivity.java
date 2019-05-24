@@ -102,7 +102,7 @@ public class StorySettingActivity extends BaseActivity {
         mEventResModel = (EventsResModel) getIntent().getBundleExtra("bundle_data").getSerializable(EventsModel.EVENTS_RES_MODEL);
         //mMyProfileResModel = (ProfileResModel) getIntent().getBundleExtra("bundle_data").getSerializable(ProfileModel.MY_PROFILE_RES_MODEL);
         //mMyProfileResModel= MotoHub.getApplicationInstance().getmProfileResModel();
-        mMyProfileResModel= EventBus.getDefault().getStickyEvent(ProfileResModel.class);
+        mMyProfileResModel = EventBus.getDefault().getStickyEvent(ProfileResModel.class);
     }
 
     private void setPlayIconVisiblity(String mFileType) {

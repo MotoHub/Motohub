@@ -24,7 +24,7 @@ import online.motohub.model.PaymentCardDetailsModel;
 import online.motohub.util.AppConstants;
 import online.motohub.util.CryptLib;
 
-public class PaymentCardDetailsAdapter extends RecyclerView.Adapter<PaymentCardDetailsAdapter.ViewHolder>  {
+public class PaymentCardDetailsAdapter extends RecyclerView.Adapter<PaymentCardDetailsAdapter.ViewHolder> {
 
     private Context mContext;
     private ArrayList<PaymentCardDetailsModel> mPaymentCardDetailsList = new ArrayList<>();
@@ -33,7 +33,7 @@ public class PaymentCardDetailsAdapter extends RecyclerView.Adapter<PaymentCardD
 
 
     public PaymentCardDetailsAdapter(Context context, ArrayList<PaymentCardDetailsModel> paymentCardDetailsList, boolean isFromCardManagement) {
-        mContext =  context;
+        mContext = context;
         mPaymentCardDetailsList = paymentCardDetailsList;
         mIsFromCardManagement = isFromCardManagement;
     }
@@ -60,9 +60,9 @@ public class PaymentCardDetailsAdapter extends RecyclerView.Adapter<PaymentCardD
         } catch (Exception e) {
             e.printStackTrace();
         }
-        holder.mPaymentCardNumber.setText(((BaseActivity)mContext).setPaymentCardNumber(mDecryptCardNumber));
+        holder.mPaymentCardNumber.setText(((BaseActivity) mContext).setPaymentCardNumber(mDecryptCardNumber));
         holder.mPaymentCardName.setText(mPaymentCardDetailsList.get(position).getCardName());
-        if(!mIsFromCardManagement) {
+        if (!mIsFromCardManagement) {
             holder.mCardDetailsConstraintLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -111,7 +111,7 @@ public class PaymentCardDetailsAdapter extends RecyclerView.Adapter<PaymentCardD
 
         public ViewHolder(View v) {
             super(v);
-            ButterKnife.bind(this,v);
+            ButterKnife.bind(this, v);
         }
     }
 }

@@ -26,12 +26,12 @@ public class ChatTabPagerAdapter extends FragmentPagerAdapter {
 
         switch (position) {
             case 0:
-                if(mFragments[position] == null) {
+                if (mFragments[position] == null) {
                     setFragment(new ChatSingleFragment(), position);
                 }
                 return mFragments[position];
             case 1:
-                if(mFragments[position] == null) {
+                if (mFragments[position] == null) {
                     setFragment(new ChatGroupFragment(), position);
                 }
                 return mFragments[position];

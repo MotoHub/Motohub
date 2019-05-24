@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorWhite"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:background="@color/colorWhite">
 
     <RelativeLayout
         android:id="@+id/title_box"
@@ -13,21 +13,21 @@
         <TextView
             android:id="@+id/title_tv"
             style="@style/LayoutMatchWrap"
+            android:gravity="center"
             android:padding="@dimen/size10"
             android:text="@string/category_list"
-            android:gravity="center"
-            android:textStyle="bold"
             android:textColor="@color/colorBlack"
-            android:textSize="@dimen/text16" />
+            android:textSize="@dimen/text16"
+            android:textStyle="bold" />
 
         <ImageButton
             android:id="@+id/close_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/title_tv"
             android:layout_alignBottom="@+id/title_tv"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
-            android:layout_alignTop="@+id/title_tv"
             android:background="@null"
             android:contentDescription="@string/app_name"
             android:padding="@dimen/size10"
@@ -36,27 +36,26 @@
     </RelativeLayout>
 
     <android.support.v7.widget.RecyclerView
-        android:layout_below="@+id/title_box"
+        android:id="@+id/rvEventCategory"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/title_box"
+        android:layout_centerHorizontal="true"
         android:layout_marginTop="@dimen/size20"
         android:layout_marginBottom="@dimen/size20"
-        android:layout_centerHorizontal="true"
-        android:id="@+id/rvEventCategory"
-        android:background="@color/colorWhite"
-        />
+        android:background="@color/colorWhite" />
 
     <Button
+        android:id="@+id/doneCategoryBtn"
         android:layout_width="wrap_content"
         android:layout_height="@dimen/size30"
-        android:id="@+id/doneCategoryBtn"
-        android:background="@drawable/black_orange_btn_bg"
-        android:text="@string/done"
-        android:textSize="@dimen/text14"
-        android:gravity="center"
-        android:layout_centerHorizontal="true"
-        android:textColor="@color/text_color"
         android:layout_below="@+id/rvEventCategory"
-        android:layout_marginBottom="@dimen/size20"/>
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="@dimen/size20"
+        android:background="@drawable/black_orange_btn_bg"
+        android:gravity="center"
+        android:text="@string/done"
+        android:textColor="@color/text_color"
+        android:textSize="@dimen/text14" />
 
 </RelativeLayout>
