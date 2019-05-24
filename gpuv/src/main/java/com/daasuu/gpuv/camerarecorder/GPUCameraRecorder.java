@@ -6,6 +6,7 @@ import android.opengl.GLSurfaceView;
 import android.os.Handler;
 import android.util.Log;
 import android.util.Size;
+
 import com.daasuu.gpuv.camerarecorder.capture.MediaAudioEncoder;
 import com.daasuu.gpuv.camerarecorder.capture.MediaEncoder;
 import com.daasuu.gpuv.camerarecorder.capture.MediaMuxerCaptureWrapper;
@@ -15,21 +16,10 @@ import com.daasuu.gpuv.egl.filter.GlFilter;
 
 
 public class GPUCameraRecorder {
-    private GlPreviewRenderer glPreviewRenderer;
-
-    private final CameraRecordListener cameraRecordListener;
     private static final String TAG = "GPUCameraRecorder";
-
-    private boolean started = false;
-    private CameraHandler cameraHandler = null;
-    private GLSurfaceView glSurfaceView;
-
-    private boolean flashSupport = false;
-
-    private MediaMuxerCaptureWrapper muxer;
+    private final CameraRecordListener cameraRecordListener;
     private final int fileWidth;
     private final int fileHeight;
-
     private final int cameraWidth;
     private final int cameraHeight;
     private final LensFacing lensFacing;
@@ -40,6 +30,38 @@ public class GPUCameraRecorder {
     private final boolean isLandscapeDevice;
     private final int degrees;
     private final boolean recordNoFilter;
+    private GlPreviewRenderer glPreviewRenderer;
+    /**
+     * callback methods from encoder
+     */
+    private final MediaEncoder.MediaEncoderListener mediaEncoderListener = new MediaEncoder.MediaEncoderListener() {
+        @Override
+        public void onPrepared(final MediaEncoder encoder) {
+            Log.v("TAG", "onPrepared:encoder=" + encoder);
+            if (encoder instanceof MediaVideoEncoder) {
+                if (glPreviewRenderer != null) {
+                    glPreviewRenderer.setVideoEncoder((MediaVideoEncoder) encoder);
+                }
+            }
+
+        }
+
+        @Override
+        public void onStopped(final MediaEncoder encoder) {
+            Log.v("TAG", "onStopped:encoder=" + encoder);
+            if (encoder instanceof MediaVideoEncoder) {
+                if (glPreviewRenderer != null) {
+                    glPreviewRenderer.setVideoEncoder(null);
+                }
+            }
+        }
+    };
+    private boolean started = false;
+    private CameraHandler cameraHandler = null;
+    private GLSurfaceView glSurfaceView;
+    private boolean flashSupport = false;
+    private MediaMuxerCaptureWrapper muxer;
+
 
     GPUCameraRecorder(
             CameraRecordListener cameraRecordListener,
@@ -90,7 +112,6 @@ public class GPUCameraRecorder {
         });
     }
 
-
     private synchronized void startPreview(SurfaceTexture surfaceTexture) {
         if (cameraHandler == null) {
             final CameraThread thread = new CameraThread(cameraRecordListener, new CameraThread.OnStartPreviewListener() {
@@ -132,7 +153,6 @@ public class GPUCameraRecorder {
         cameraHandler.startPreview(cameraWidth, cameraHeight);
     }
 
-
     public void setFilter(final GlFilter filter) {
         if (filter == null) return;
         glPreviewRenderer.setGlFilter(filter);
@@ -153,7 +173,6 @@ public class GPUCameraRecorder {
         }
     }
 
-
     public void switchFlashMode() {
         if (!flashSupport) return;
         if (cameraHandler != null) {
@@ -171,7 +190,6 @@ public class GPUCameraRecorder {
         return flashSupport;
     }
 
-
     private void destroyPreview() {
         if (glPreviewRenderer != null) {
             glPreviewRenderer.release();
@@ -182,32 +200,6 @@ public class GPUCameraRecorder {
             cameraHandler.stopPreview(false);
         }
     }
-
-    /**
-     * callback methods from encoder
-     */
-    private final MediaEncoder.MediaEncoderListener mediaEncoderListener = new MediaEncoder.MediaEncoderListener() {
-        @Override
-        public void onPrepared(final MediaEncoder encoder) {
-            Log.v("TAG", "onPrepared:encoder=" + encoder);
-            if (encoder instanceof MediaVideoEncoder) {
-                if (glPreviewRenderer != null) {
-                    glPreviewRenderer.setVideoEncoder((MediaVideoEncoder) encoder);
-                }
-            }
-
-        }
-
-        @Override
-        public void onStopped(final MediaEncoder encoder) {
-            Log.v("TAG", "onStopped:encoder=" + encoder);
-            if (encoder instanceof MediaVideoEncoder) {
-                if (glPreviewRenderer != null) {
-                    glPreviewRenderer.setVideoEncoder(null);
-                }
-            }
-        }
-    };
 
     /**
      * Start data processing

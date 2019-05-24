@@ -26,10 +26,10 @@
                 <RelativeLayout
                     android:id="@+id/user_box"
                     style="@style/LayoutMatchWrap"
-                    android:paddingBottom="@dimen/size5"
                     android:paddingLeft="@dimen/size10"
+                    android:paddingTop="@dimen/size5"
                     android:paddingRight="@dimen/size10"
-                    android:paddingTop="@dimen/size5">
+                    android:paddingBottom="@dimen/size5">
 
                     <de.hdodenhof.circleimageview.CircleImageView
                         android:id="@+id/profile_img"

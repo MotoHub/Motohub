@@ -28,7 +28,6 @@ import online.motohub.activity.club.ClubProfileActivity;
 import online.motohub.activity.news_and_media.NewsAndMediaProfileActivity;
 import online.motohub.activity.promoter.PromoterProfileActivity;
 import online.motohub.activity.track.TrackProfileActivity;
-import online.motohub.application.MotoHub;
 import online.motohub.interfaces.CommonInterface;
 import online.motohub.interfaces.RetrofitResInterface;
 import online.motohub.model.LiveStreamPaymentEntity;

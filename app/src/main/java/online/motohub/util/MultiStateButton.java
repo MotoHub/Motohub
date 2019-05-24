@@ -1,16 +1,16 @@
 /**
- *  This is sample code provided by Wowza Media Systems, LLC.  All sample code is intended to be a reference for the
- *  purpose of educating developers, and is not intended to be used in any production environment.
- *
- *  IN NO EVENT SHALL WOWZA MEDIA SYSTEMS, LLC BE LIABLE TO YOU OR ANY PARTY FOR DIRECT, INDIRECT, SPECIAL, INCIDENTAL,
- *  OR CONSEQUENTIAL DAMAGES, INCLUDING LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE AND ITS DOCUMENTATION,
- *  EVEN IF WOWZA MEDIA SYSTEMS, LLC HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *
- *  WOWZA MEDIA SYSTEMS, LLC SPECIFICALLY DISCLAIMS ANY WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
- *  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE. ALL CODE PROVIDED HEREUNDER IS PROVIDED "AS IS".
- *  WOWZA MEDIA SYSTEMS, LLC HAS NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS, OR MODIFICATIONS.
- *
- *  Copyright © 2015 Wowza Media Systems, LLC. All rights reserved.
+ * This is sample code provided by Wowza Media Systems, LLC.  All sample code is intended to be a reference for the
+ * purpose of educating developers, and is not intended to be used in any production environment.
+ * <p>
+ * IN NO EVENT SHALL WOWZA MEDIA SYSTEMS, LLC BE LIABLE TO YOU OR ANY PARTY FOR DIRECT, INDIRECT, SPECIAL, INCIDENTAL,
+ * OR CONSEQUENTIAL DAMAGES, INCLUDING LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE AND ITS DOCUMENTATION,
+ * EVEN IF WOWZA MEDIA SYSTEMS, LLC HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * <p>
+ * WOWZA MEDIA SYSTEMS, LLC SPECIFICALLY DISCLAIMS ANY WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+ * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE. ALL CODE PROVIDED HEREUNDER IS PROVIDED "AS IS".
+ * WOWZA MEDIA SYSTEMS, LLC HAS NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS, OR MODIFICATIONS.
+ * <p>
+ * Copyright © 2015 Wowza Media Systems, LLC. All rights reserved.
  */
 
 package online.motohub.util;
@@ -31,16 +31,16 @@ import online.motohub.R;
  */
 public class MultiStateButton extends android.support.v7.widget.AppCompatImageView {
 
-    private Drawable mOnDrawable     = null;
-    private Drawable mOffDrawable    = null;
-    private boolean     mIsOn           = false;
-    private int         mPressedColor;
-    private int         mDisabledColor;
+    private Drawable mOnDrawable = null;
+    private Drawable mOffDrawable = null;
+    private boolean mIsOn = false;
+    private int mPressedColor;
+    private int mDisabledColor;
 
     public MultiStateButton(Context context, AttributeSet attrs) {
         super(context, attrs);
 
-        mDisabledColor  = context.getResources().getColor(R.color.multiStateButtonDisabled);
+        mDisabledColor = context.getResources().getColor(R.color.multiStateButtonDisabled);
 
         TypedArray a = context.getTheme().obtainStyledAttributes(
                 attrs,
@@ -65,9 +65,9 @@ public class MultiStateButton extends android.support.v7.widget.AppCompatImageVi
     }
 
     private void init(boolean isOn, Drawable offDrawable, int pressedColor) {
-        mOnDrawable     = getDrawable();
-        mOffDrawable    = (offDrawable == null ? mOnDrawable : offDrawable);
-        mPressedColor   = pressedColor;
+        mOnDrawable = getDrawable();
+        mOffDrawable = (offDrawable == null ? mOnDrawable : offDrawable);
+        mPressedColor = pressedColor;
 
 
         setOnTouchListener(new View.OnTouchListener() {

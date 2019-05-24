@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/parent"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/parent"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -67,9 +67,9 @@
         <RelativeLayout
             android:id="@+id/cb_layout"
             android:layout_width="match_parent"
+            android:layout_height="@dimen/size70"
             android:layout_marginTop="@dimen/size2"
-            android:layout_marginBottom="@dimen/size2"
-            android:layout_height="@dimen/size70">
+            android:layout_marginBottom="@dimen/size2">
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/iv_user"
@@ -85,8 +85,8 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_marginStart="@dimen/size10"
-                android:layout_toEndOf="@+id/iv_user"
                 android:layout_toStartOf="@+id/iv_check"
+                android:layout_toEndOf="@+id/iv_user"
                 android:text="@string/my_story"
                 android:textColor="@color/colorBlack" />
 

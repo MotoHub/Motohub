@@ -37,17 +37,17 @@ public class ZoomImageView extends ImageView implements View.OnTouchListener {
     boolean blockImageInTheMiddle;
 
     float oldDistance = 1f;
-   
+
     PointF start = new PointF();
-    
+
     PointF mid = new PointF();
 
     boolean areValuesInitialized = false;
     int imageWidth = 0, imageHeight = 0, width, height;
 
-    
+
     Matrix matrix = new Matrix();
-    
+
     Matrix savedMatrix = new Matrix();
     private long lastClickTimeInMillis = 0;
     private float[] initialMatrixValues;
@@ -57,20 +57,20 @@ public class ZoomImageView extends ImageView implements View.OnTouchListener {
         setOnTouchListener(this);
     }
 
-    public ZoomImageView( Context context, AttributeSet attrs) {
+    public ZoomImageView(Context context, AttributeSet attrs) {
         super(context, attrs);
         setOnTouchListener(this);
         parseAttributes(context, attrs);
     }
 
 
-    public ZoomImageView( Context context, AttributeSet attrs, int defStyle) {
+    public ZoomImageView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         setOnTouchListener(this);
         parseAttributes(context, attrs);
     }
 
-    private void parseAttributes( Context context, AttributeSet attrs) {
+    private void parseAttributes(Context context, AttributeSet attrs) {
         TypedArray a = context.getTheme().obtainStyledAttributes(
                 attrs, R.styleable.ZoomImageView, 0, 0);
         try {
@@ -90,7 +90,7 @@ public class ZoomImageView extends ImageView implements View.OnTouchListener {
     }
 
     @Override
-    public boolean onTouch(View view,  MotionEvent event) {
+    public boolean onTouch(View view, MotionEvent event) {
         if (!areValuesInitialized) {
             initializeValues();
         }
@@ -170,7 +170,7 @@ public class ZoomImageView extends ImageView implements View.OnTouchListener {
         mode = (mode == CENTERING_IMAGE) || (mode == ADJUSTING) ? mode : NONE;
     }
 
-    private void checkClick( MotionEvent event) {
+    private void checkClick(MotionEvent event) {
         int xDiff = (int) Math.abs(event.getX() - start.x);
         int yDiff = (int) Math.abs(event.getY() - start.y);
         if (xDiff < 8 && yDiff < 8) {
@@ -191,13 +191,13 @@ public class ZoomImageView extends ImageView implements View.OnTouchListener {
     private void doubleClick() {
         if (!doubleClickAdjust)
             return;
-        float f[] = new float[9];
+        float[] f = new float[9];
         matrix.getValues(f);
         mode = CENTERING_IMAGE;
         if (!areTheSameValues(f, initialMatrixValues)) {
             interpolateMatrixToValue(initialMatrixValues);
         } else { // centering to double zoom
-            float centeredValuesWithZoom[] = calculateMatrixValuesAfterAdjustingWindowZoom(doubleClickZoomLevel);
+            float[] centeredValuesWithZoom = calculateMatrixValuesAfterAdjustingWindowZoom(doubleClickZoomLevel);
             interpolateMatrixToValue(centeredValuesWithZoom);
         }
     }
@@ -211,7 +211,7 @@ public class ZoomImageView extends ImageView implements View.OnTouchListener {
     private void click() {
     }
 
-    private void moveImage( MotionEvent event) {
+    private void moveImage(MotionEvent event) {
         if (spacing(event.getX(), start.x, event.getY(), start.y) < MIN_DISTANCE_TO_MOVE) {
             return;
         }
@@ -220,7 +220,7 @@ public class ZoomImageView extends ImageView implements View.OnTouchListener {
         setImageMatrix(matrix);
     }
 
-    private void scaleImage( MotionEvent event) {
+    private void scaleImage(MotionEvent event) {
         float newDistance = spacing(event);
         if (newDistance > MIN_SEPARATION_TO_ZOOM) {
             matrix.set(savedMatrix);
@@ -246,9 +246,9 @@ public class ZoomImageView extends ImageView implements View.OnTouchListener {
         }
     }
 
-    
+
     private float[] calculateObjectiveMatrix() {
-        float objectiveMatrixValues[] = calculateMatrixValuesAfterAdjustingWindowZoom();
+        float[] objectiveMatrixValues = calculateMatrixValuesAfterAdjustingWindowZoom();
         PointF imagePosition = new PointF(objectiveMatrixValues[2], objectiveMatrixValues[5]);
         float horizontalMargin = calculateWidthMargin(objectiveMatrixValues);
         float verticalMargin = calculateHeightMargin(objectiveMatrixValues);
@@ -297,9 +297,9 @@ public class ZoomImageView extends ImageView implements View.OnTouchListener {
         return objectiveMatrixValues;
     }
 
-    
+
     private float[] calculateMatrixValuesAfterAdjustingWindowZoom() {
-        float f[] = new float[9];
+        float[] f = new float[9];
         Matrix aux = new Matrix();
         aux.set(matrix);
         aux.getValues(f);
@@ -314,9 +314,9 @@ public class ZoomImageView extends ImageView implements View.OnTouchListener {
         return f;
     }
 
-    
+
     private float[] calculateMatrixValuesAfterAdjustingWindowZoom(float scale) {
-        float f[] = new float[9];
+        float[] f = new float[9];
         Matrix aux = new Matrix();
         aux.set(matrix);
         aux.getValues(f);
@@ -342,8 +342,8 @@ public class ZoomImageView extends ImageView implements View.OnTouchListener {
         return (imageHeight * objectiveMatrixValues[0] - height);
     }
 
-    private void interpolateMatrixToValue(final float destinyMatrixValues[]) {
-        final float originMatrixValues[] = new float[9];
+    private void interpolateMatrixToValue(final float[] destinyMatrixValues) {
+        final float[] originMatrixValues = new float[9];
         matrix.getValues(originMatrixValues);
 
         final Interpolator interpolator = new AccelerateDecelerateInterpolator();
@@ -352,7 +352,7 @@ public class ZoomImageView extends ImageView implements View.OnTouchListener {
         post(new Runnable() {
             @Override
             public void run() {
-                float tempMatrix[] = new float[9];
+                float[] tempMatrix = new float[9];
 
                 float t = (float) (System.currentTimeMillis() - startTime) / duration;
                 t = t > 1.0f ? 1.0f : t;
@@ -377,7 +377,7 @@ public class ZoomImageView extends ImageView implements View.OnTouchListener {
         });
     }
 
-    private float spacing( MotionEvent event) {
+    private float spacing(MotionEvent event) {
         float x = event.getX(0) - event.getX(1);
         float y = event.getY(0) - event.getY(1);
         return spacing(event.getX(0), event.getX(1),
@@ -390,7 +390,7 @@ public class ZoomImageView extends ImageView implements View.OnTouchListener {
         return (float) Math.sqrt(a * a + b * b);
     }
 
-    private void midPoint( PointF point,  MotionEvent event) {
+    private void midPoint(PointF point, MotionEvent event) {
         float x = event.getX(0) + event.getX(1);
         float y = event.getY(0) + event.getY(1);
         point.set(x / 2, y / 2);

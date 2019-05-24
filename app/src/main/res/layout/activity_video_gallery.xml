@@ -4,8 +4,8 @@
     android:id="@+id/video_gallery_parent_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:focusable="true"
-    android:background="@color/colorLighterGrey">
+    android:background="@color/colorLighterGrey"
+    android:focusable="true">
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -46,13 +46,13 @@
                 android:layout_height="wrap_content">
 
                 <LinearLayout
-                    android:orientation="vertical"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
 
-                    <include layout="@layout/posts_placeholder_item"/>
+                    <include layout="@layout/posts_placeholder_item" />
 
-                    <include layout="@layout/posts_placeholder_item"/>
+                    <include layout="@layout/posts_placeholder_item" />
 
                 </LinearLayout>
 

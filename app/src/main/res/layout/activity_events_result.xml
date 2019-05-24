@@ -9,12 +9,12 @@
 
     <RelativeLayout
         style="@style/LayoutMatch"
-        android:layout_marginBottom="@dimen/size20"
-        android:layout_marginEnd="@dimen/size20"
-        android:layout_marginLeft="@dimen/size20"
-        android:layout_marginRight="@dimen/size20"
         android:layout_marginStart="@dimen/size20"
-        android:layout_marginTop="@dimen/size56">
+        android:layout_marginLeft="@dimen/size20"
+        android:layout_marginTop="@dimen/size56"
+        android:layout_marginEnd="@dimen/size20"
+        android:layout_marginRight="@dimen/size20"
+        android:layout_marginBottom="@dimen/size20">
 
         <EditText
             android:id="@+id/search_et"
@@ -26,12 +26,12 @@
             android:hint="@string/search"
             android:inputType="text"
             android:maxLines="1"
-            android:paddingBottom="@dimen/size3"
-            android:paddingEnd="@dimen/size5"
-            android:paddingLeft="@dimen/size5"
-            android:paddingRight="@dimen/size5"
             android:paddingStart="@dimen/size5"
+            android:paddingLeft="@dimen/size5"
             android:paddingTop="@dimen/size3"
+            android:paddingEnd="@dimen/size5"
+            android:paddingRight="@dimen/size5"
+            android:paddingBottom="@dimen/size3"
             android:textColor="@color/colorBlack"
             android:textColorHint="@color/colorGrey"
             android:textSize="@dimen/text14" />
@@ -61,8 +61,8 @@
                     android:id="@+id/winner_profile_img"
                     android:layout_width="@dimen/size60"
                     android:layout_height="@dimen/size60"
-                    android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
+                    android:layout_alignParentLeft="true"
                     android:clickable="true"
                     android:scaleType="centerCrop"
                     android:src="@drawable/default_profile_icon" />
@@ -71,10 +71,10 @@
                     android:id="@+id/winner_name_box"
                     style="@style/LayoutMatchWrap"
                     android:layout_centerInParent="true"
-                    android:layout_toEndOf="@+id/winner_profile_img"
+                    android:layout_toStartOf="@+id/winner_profile_img_two"
                     android:layout_toLeftOf="@+id/winner_profile_img_two"
-                    android:layout_toRightOf="@+id/winner_profile_img"
-                    android:layout_toStartOf="@+id/winner_profile_img_two">
+                    android:layout_toEndOf="@+id/winner_profile_img"
+                    android:layout_toRightOf="@+id/winner_profile_img">
 
                     <TextView
                         android:id="@+id/winner_name_tv"
@@ -114,12 +114,12 @@
             <RelativeLayout
                 android:id="@+id/runner_box"
                 style="@style/LayoutWrap"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
                 android:layout_below="@+id/winner_box"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentLeft="true"
                 android:layout_marginTop="@dimen/size10"
-                android:layout_toLeftOf="@+id/runner_third_box"
                 android:layout_toStartOf="@+id/runner_third_box"
+                android:layout_toLeftOf="@+id/runner_third_box"
                 android:background="@drawable/orange_border_bg"
                 android:padding="@dimen/size10">
 
@@ -127,10 +127,10 @@
                     android:id="@+id/runner_profile_img"
                     android:layout_width="@dimen/size60"
                     android:layout_height="@dimen/size60"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentRight="true"
                     android:layout_alignParentStart="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
                     android:clickable="true"
                     android:scaleType="centerCrop"
                     android:src="@drawable/default_profile_icon" />
@@ -164,16 +164,16 @@
                 android:id="@+id/runner_third_box"
                 android:layout_width="@dimen/size10"
                 android:layout_height="match_parent"
-                android:layout_alignBottom="@id/runner_box"
                 android:layout_alignTop="@id/runner_box"
+                android:layout_alignBottom="@id/runner_box"
                 android:layout_centerInParent="true" />
 
             <RelativeLayout
                 android:id="@+id/third_box"
                 style="@style/LayoutWrap"
+                android:layout_below="@+id/winner_box"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
-                android:layout_below="@+id/winner_box"
                 android:layout_marginTop="@dimen/size10"
                 android:layout_toEndOf="@+id/runner_third_box"
                 android:layout_toRightOf="@+id/runner_third_box"
@@ -184,10 +184,10 @@
                     android:id="@+id/third_profile_img"
                     android:layout_width="@dimen/size60"
                     android:layout_height="@dimen/size60"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentRight="true"
                     android:layout_alignParentStart="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
                     android:clickable="true"
                     android:scaleType="centerCrop"
                     android:src="@drawable/default_profile_icon" />
@@ -226,10 +226,10 @@
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
             android:background="@drawable/black_orange_btn_bg"
-            android:paddingEnd="@dimen/size30"
-            android:paddingLeft="@dimen/size30"
-            android:paddingRight="@dimen/size30"
             android:paddingStart="@dimen/size30"
+            android:paddingLeft="@dimen/size30"
+            android:paddingEnd="@dimen/size30"
+            android:paddingRight="@dimen/size30"
             android:text="@string/more_inf"
             android:textAllCaps="false"
             android:textColor="@color/text_color"

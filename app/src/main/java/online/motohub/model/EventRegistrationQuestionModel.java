@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-public class EventRegistrationQuestionModel implements Serializable{
+public class EventRegistrationQuestionModel implements Serializable {
 
     @SerializedName("question")
     private String mQuestion;

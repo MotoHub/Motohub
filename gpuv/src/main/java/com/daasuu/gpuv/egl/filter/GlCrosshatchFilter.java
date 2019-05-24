@@ -45,13 +45,11 @@ public class GlCrosshatchFilter extends GlFilter {
             "}\n" +
             "gl_FragColor = colorToDisplay;\n" +
             "}\n";
-
+    private float crossHatchSpacing = 0.03f;
+    private float lineWidth = 0.003f;
     public GlCrosshatchFilter() {
         super(DEFAULT_VERTEX_SHADER, CROSSHATCH_FRAGMENT_SHADER);
     }
-
-    private float crossHatchSpacing = 0.03f;
-    private float lineWidth = 0.003f;
 
     @Override
     public void onDraw() {

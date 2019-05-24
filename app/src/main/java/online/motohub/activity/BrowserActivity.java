@@ -38,11 +38,13 @@ public class BrowserActivity extends BaseActivity {
         initView();
 
     }
+
     @Override
     protected void onDestroy() {
         DialogManager.hideProgress();
         super.onDestroy();
     }
+
     private void initView() {
 
         setToolbar(mToolbar, mToolbarTitle);

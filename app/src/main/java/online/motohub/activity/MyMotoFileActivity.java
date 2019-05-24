@@ -150,11 +150,16 @@ public class MyMotoFileActivity extends BaseActivity implements PostsAdapter.Tot
     ShimmerFrameLayout mShimmer_myprofiledet;
     @BindString(R.string.update_profile_success)
     String mUpdateProfileSuccessStr;
+    int DELETE_LIVE_STREAM = 2;
+    String mCoverImgUri, mUploadedServerCoverImgFileUrl;
     private ArrayList<ProfileResModel> mFullMPList = new ArrayList<>();
     private ArrayList<PostsResModel> mPostsList = new ArrayList<>();
     private PostsAdapter mPostsAdapter;
     private ArrayList<String> mMPSpinnerList = new ArrayList<>();
     private int mPostPos = 0;
+    private ArrayList<ProfileResModel> mFollowingListData = new ArrayList<>();
+    private ArrayList<ProfileResModel> mTaggedProfilesList = new ArrayList<>();
+    private ProfileResModel mCurrentProfileObj;
     BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -166,10 +171,6 @@ public class MyMotoFileActivity extends BaseActivity implements PostsAdapter.Tot
                 updatePost(intent);
         }
     };
-    int DELETE_LIVE_STREAM = 2;
-    private ArrayList<ProfileResModel> mFollowingListData = new ArrayList<>();
-    private ArrayList<ProfileResModel> mTaggedProfilesList = new ArrayList<>();
-    private ProfileResModel mCurrentProfileObj;
     private TaggedProfilesAdapter mTaggedProfilesAdapter;
     private LinearLayoutManager mPostsLayoutManager;
     private int mPostsRvOffset = 0, mPostsRvTotalCount = 0;
@@ -179,7 +180,6 @@ public class MyMotoFileActivity extends BaseActivity implements PostsAdapter.Tot
     private int mCurrentProfileID = 0;
     private String mMyFollowings;
     private int LIVE_STREAM_RES_TYPE = 0;
-    private String mShareTxt = "";
     CommonReturnInterface mCommonReturnInterface = new CommonReturnInterface() {
         @Override
         public void onSuccess(int type) {
@@ -191,17 +191,7 @@ public class MyMotoFileActivity extends BaseActivity implements PostsAdapter.Tot
             }
         }
     };
-    private int liveStreamID = 0;
-    private String mLiveStreamName = "";
-    private boolean isExtraProfile = false;
-    private boolean isCoverPicture;
-    private int selProfileID = 0;
-    private int prevProfilePos = 0;
-
-    String mCoverImgUri, mUploadedServerCoverImgFileUrl;
-
-    private FragmentManager fragmentManager;
-    private ContextMenuDialogFragment mMenuDialogFragment;
+    private String mShareTxt = "";
     SharePostInterface mShareTextWithPostInterface = new SharePostInterface() {
         @Override
         public void onSuccess(String shareMessage) {
@@ -209,6 +199,14 @@ public class MyMotoFileActivity extends BaseActivity implements PostsAdapter.Tot
             CommonAPI.getInstance().callPostShare(MyMotoFileActivity.this, mPostsList.get(mCurrentPostPosition), mCurrentProfileObj.getID());
         }
     };
+    private int liveStreamID = 0;
+    private String mLiveStreamName = "";
+    private boolean isExtraProfile = false;
+    private boolean isCoverPicture;
+    private int selProfileID = 0;
+    private int prevProfilePos = 0;
+    private FragmentManager fragmentManager;
+    private ContextMenuDialogFragment mMenuDialogFragment;
 
     private void updatePost(Intent intent) {
         PostsResModel mPostsModel =

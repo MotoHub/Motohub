@@ -17,12 +17,11 @@ public class GlPosterizeFilter extends GlFilter {
             "   \n" +
             "   gl_FragColor = floor((textureColor * colorLevels) + vec4(0.5)) / colorLevels;\n" +
             "}";
+    private int colorLevels = 10;
 
     public GlPosterizeFilter() {
         super(DEFAULT_VERTEX_SHADER, POSTERIZE_FRAGMENT_SHADER);
     }
-
-    private int colorLevels = 10;
 
     public void setColorLevels(int colorLevels) {
         if (colorLevels < 0) {

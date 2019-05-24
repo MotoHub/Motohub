@@ -36,13 +36,13 @@
                     android:layout_width="@dimen/size32"
                     android:layout_height="@dimen/size32"
                     android:layout_alignParentEnd="true"
-                    app:srcCompat="@drawable/ic_add_photo"
-                    android:scaleType="fitCenter"
                     android:layout_marginTop="@dimen/size10"
                     android:layout_marginEnd="@dimen/size10"
-                    android:padding="@dimen/size7"
+                    android:background="@drawable/bg_add_photo"
                     android:contentDescription="@string/camera"
-                    android:background="@drawable/bg_add_photo" />
+                    android:padding="@dimen/size7"
+                    android:scaleType="fitCenter"
+                    app:srcCompat="@drawable/ic_add_photo" />
 
                 <View
                     android:id="@+id/cover_line"
@@ -316,13 +316,15 @@
                         android:textStyle="bold" />
 
                 </RelativeLayout>
-                <TextView android:id="@+id/phoneAlertMsgTv"
-                    android:text="@string/phoneAlertMsg"
+
+                <TextView
+                    android:id="@+id/phoneAlertMsgTv"
+                    style="@style/LayoutMatchWrap"
                     android:layout_below="@+id/upgrade_box"
                     android:layout_marginTop="@dimen/size10"
+                    android:text="@string/phoneAlertMsg"
                     android:textColor="@color/colorOrange"
-                    style="@style/LayoutMatchWrap"
-                    android:textSize="@dimen/text16"/>
+                    android:textSize="@dimen/text16" />
 
             </RelativeLayout>
 

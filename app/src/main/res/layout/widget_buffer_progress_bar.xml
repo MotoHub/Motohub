@@ -17,20 +17,20 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:theme="@style/MyProgressBarTheme"
             android:indeterminate="true"
-            android:max="100" />
+            android:max="100"
+            android:theme="@style/MyProgressBarTheme" />
 
         <TextView
             android:layout_width="match_parent"
-            android:text="@string/buffering"
-            android:textSize="@dimen/text20"
-            android:gravity="center"
-            android:textColor="@color/colorOrange"
-            android:layout_margin="@dimen/size5"
             android:layout_height="wrap_content"
-            android:textStyle="bold"
-            android:layout_gravity="center"/>
+            android:layout_gravity="center"
+            android:layout_margin="@dimen/size5"
+            android:gravity="center"
+            android:text="@string/buffering"
+            android:textColor="@color/colorOrange"
+            android:textSize="@dimen/text20"
+            android:textStyle="bold" />
     </LinearLayout>
 
 

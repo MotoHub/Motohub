@@ -36,24 +36,6 @@ public class VideoSharesAdapter extends RecyclerView.Adapter<VideoSharesAdapter.
         this.mMyProfileResModel = mMyProfileResModel;
     }
 
-    public class Holder extends RecyclerView.ViewHolder {
-
-        @BindView(R.id.comment_user_img)
-        CircleImageView mUserImg;
-
-        @BindView(R.id.comment_user_img_lay)
-        RelativeLayout mCommentImgLay;
-
-        @BindView(R.id.comment_user_name_txt)
-        TextView mUserNameTxt;
-
-        public Holder(View view) {
-            super(view);
-            ButterKnife.bind(this, view);
-        }
-
-    }
-
     @Override
     public Holder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.adap_feed_likes, parent, false);
@@ -85,25 +67,43 @@ public class VideoSharesAdapter extends RecyclerView.Adapter<VideoSharesAdapter.
             } else {
                 mHolder.mUserNameTxt.setText(mEntity.getProfiles_by_ProfileID().getDriver());
             }
-        }catch ( Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-
     private void profileClick(VideoShareModel feedShareModel) {
 
         if (mMyProfileResModel.getID() == feedShareModel.getProfileID()) {
-            ((BaseActivity)mContext).moveMyProfileScreen(mContext,mMyProfileResModel.getID());
+            ((BaseActivity) mContext).moveMyProfileScreen(mContext, mMyProfileResModel.getID());
         } else {
-            ((BaseActivity)mContext).moveOtherProfileScreen(mContext,mMyProfileResModel.getID(),
+            ((BaseActivity) mContext).moveOtherProfileScreen(mContext, mMyProfileResModel.getID(),
                     feedShareModel.getProfiles_by_ProfileID().getID());
 
         }
     }
+
     @Override
     public int getItemCount() {
         return mFeedSharesList.size();
+    }
+
+    public class Holder extends RecyclerView.ViewHolder {
+
+        @BindView(R.id.comment_user_img)
+        CircleImageView mUserImg;
+
+        @BindView(R.id.comment_user_img_lay)
+        RelativeLayout mCommentImgLay;
+
+        @BindView(R.id.comment_user_name_txt)
+        TextView mUserNameTxt;
+
+        public Holder(View view) {
+            super(view);
+            ButterKnife.bind(this, view);
+        }
+
     }
 
 }

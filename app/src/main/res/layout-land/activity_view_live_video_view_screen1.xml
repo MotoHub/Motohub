@@ -27,12 +27,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_centerInParent="true"
-                android:layout_gravity="center"/>
+                android:layout_gravity="center" />
 
             <RelativeLayout
                 style="@style/LayoutMatch"
-                android:layout_alignBottom="@+id/video_view"
-                android:layout_alignTop="@+id/video_view">
+                android:layout_alignTop="@+id/video_view"
+                android:layout_alignBottom="@+id/video_view">
 
                 <ImageView
                     android:id="@+id/left_arrow"

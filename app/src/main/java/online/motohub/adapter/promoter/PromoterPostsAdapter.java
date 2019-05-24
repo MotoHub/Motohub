@@ -339,9 +339,9 @@ public class PromoterPostsAdapter extends RecyclerView.Adapter<RecyclerView.View
 
                             if (mPostsList.get(position).getPostLikes().size() == 1) {
 
-                                resLikes = String.valueOf(mPostsList.get(position).getPostLikes().size()) + " Like";
+                                resLikes = mPostsList.get(position).getPostLikes().size() + " Like";
                             } else {
-                                resLikes = String.valueOf(mPostsList.get(position).getPostLikes().size()) + " Likes";
+                                resLikes = mPostsList.get(position).getPostLikes().size() + " Likes";
 
                             }
 
@@ -431,8 +431,8 @@ public class PromoterPostsAdapter extends RecyclerView.Adapter<RecyclerView.View
                 mViewHolderPost.mPostImageVideoBox.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        String mVideosList[] = ((BaseActivity) mContext).getImgVideoList(mPostsList.get(position).getPostVideoURL());
-                        String mImgList[] = ((BaseActivity) mContext).getImgVideoList(mPostsList.get(position).getPostPicture());
+                        String[] mVideosList = ((BaseActivity) mContext).getImgVideoList(mPostsList.get(position).getPostVideoURL());
+                        String[] mImgList = ((BaseActivity) mContext).getImgVideoList(mPostsList.get(position).getPostPicture());
                         if (mVideosList != null && mVideosList.length > 0) {
                             mAdapterPosition = position;
                             getViewCount(mAdapterPosition);
@@ -544,7 +544,7 @@ public class PromoterPostsAdapter extends RecyclerView.Adapter<RecyclerView.View
                         boolean mIsOtherMotoProfile;
 
                         mIsOtherMotoProfile = mPostsList.get(position).getProfileID() != mCurrentProfileResModel.getID();
-                        String mVideosList[] = ((BaseActivity) mContext).getImgVideoList(mPostsList.get(position).getPostVideoURL());
+                        String[] mVideosList = ((BaseActivity) mContext).getImgVideoList(mPostsList.get(position).getPostVideoURL());
                         if (mVideosList != null && mVideosList.length > 0) {
 
                             ((BaseActivity) mContext).showFBShareDialog(AppDialogFragment.BOTTOM_SHARE_DIALOG, content, null, mVideosList, position, mIsOtherMotoProfile);

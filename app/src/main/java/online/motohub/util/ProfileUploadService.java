@@ -13,16 +13,11 @@ import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.amazonaws.ClientConfiguration;
-import com.amazonaws.Protocol;
-import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.mobile.client.AWSMobileClient;
 import com.amazonaws.mobileconnectors.s3.transferutility.TransferListener;
 import com.amazonaws.mobileconnectors.s3.transferutility.TransferObserver;
 import com.amazonaws.mobileconnectors.s3.transferutility.TransferState;
 import com.amazonaws.mobileconnectors.s3.transferutility.TransferUtility;
-import com.amazonaws.regions.Region;
-import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -196,7 +191,7 @@ public class ProfileUploadService extends IntentService implements ProgressReque
         int count = databaseHandler.getPendingCount();
         int notificationid = count + 1;
         String s = videoFile.toString();
-        videoUploadModel.setVideoURL(s.substring(s.lastIndexOf("/") + 1, s.length()));
+        videoUploadModel.setVideoURL(s.substring(s.lastIndexOf("/") + 1));
         videoUploadModel.setFlag(1);
         videoUploadModel.setThumbnailURl(mImageFile.toString());
         videoUploadModel.setProfileID(mProfileID);
@@ -223,29 +218,6 @@ public class ProfileUploadService extends IntentService implements ProgressReque
 
         UploadAsync uploadAsync = new UploadAsync(notificationid, videoFile, mImageFile);
         uploadAsync.execute();
-    }
-
-    @SuppressLint("StaticFieldLeak")
-    private class UploadAsync extends AsyncTask<String, String, Void> {
-
-        private Integer notificationid;
-        private File imagfile;
-        private File videofile;
-
-        public UploadAsync(Integer notificationid, File videofile, File ImageFile) {
-            this.notificationid = notificationid;
-            imagfile = ImageFile;
-            this.videofile = videofile;
-
-        }
-
-
-        @Override
-        protected Void doInBackground(String... paths) {
-            //uploadImgAndVidToServer(notificationid, videofile, imagfile);
-            amazoneUpload(videofile, imagfile, notificationid);
-            return null;
-        }
     }
 
     private void amazoneUpload(final File video, final File image, final int notificationid) {
@@ -298,7 +270,7 @@ public class ProfileUploadService extends IntentService implements ProgressReque
             @Override
             public void onStateChanged(int id, TransferState state) {
 
-                if (state.COMPLETED.equals(observerVideo.getState())) {
+                if (TransferState.COMPLETED.equals(observerVideo.getState())) {
 
                     String imageFileName = image.getName().substring(image.getName().lastIndexOf("/") + 1);
                     String videoFileName = video.getName().substring(video.getName().lastIndexOf("/") + 1);
@@ -352,7 +324,7 @@ public class ProfileUploadService extends IntentService implements ProgressReque
             @Override
             public void onStateChanged(int id, TransferState state) {
 
-                if (state.COMPLETED.equals(observerImage.getState())) {
+                if (TransferState.COMPLETED.equals(observerImage.getState())) {
                     //Toast.makeText(ProfileUploadService.this, "File Upload Complete", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -420,6 +392,29 @@ public class ProfileUploadService extends IntentService implements ProgressReque
             sendBroadcast(new Intent().setAction("UPLOAD_STATUS").putExtra("status", value));
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    @SuppressLint("StaticFieldLeak")
+    private class UploadAsync extends AsyncTask<String, String, Void> {
+
+        private Integer notificationid;
+        private File imagfile;
+        private File videofile;
+
+        public UploadAsync(Integer notificationid, File videofile, File ImageFile) {
+            this.notificationid = notificationid;
+            imagfile = ImageFile;
+            this.videofile = videofile;
+
+        }
+
+
+        @Override
+        protected Void doInBackground(String... paths) {
+            //uploadImgAndVidToServer(notificationid, videofile, imagfile);
+            amazoneUpload(videofile, imagfile, notificationid);
+            return null;
         }
     }
 }

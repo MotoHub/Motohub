@@ -11,7 +11,7 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
-public class ToolbarBehavior extends AppBarLayout.Behavior{
+public class ToolbarBehavior extends AppBarLayout.Behavior {
 
     private boolean scrollableRecyclerView = false;
     private int count;
@@ -44,7 +44,7 @@ public class ToolbarBehavior extends AppBarLayout.Behavior{
             RecyclerView recyclerView = (RecyclerView) directTargetChild;
             RecyclerView.Adapter adapter = recyclerView.getAdapter();
             if (adapter != null) {
-                if (adapter.getItemCount()!= count) {
+                if (adapter.getItemCount() != count) {
                     scrollableRecyclerView = false;
                     count = adapter.getItemCount();
                     RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();

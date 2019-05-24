@@ -1,6 +1,10 @@
 package com.daasuu.gpuv.camerarecorder.capture;
 
-import android.opengl.*;
+import android.opengl.EGL14;
+import android.opengl.EGLConfig;
+import android.opengl.EGLContext;
+import android.opengl.EGLDisplay;
+import android.opengl.EGLSurface;
 import android.util.Log;
 
 

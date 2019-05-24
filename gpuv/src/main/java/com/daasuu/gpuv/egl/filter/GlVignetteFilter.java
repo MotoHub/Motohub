@@ -3,7 +3,6 @@ package com.daasuu.gpuv.egl.filter;
 import android.opengl.GLES20;
 
 
-
 public class GlVignetteFilter extends GlFilter {
 
     private static final String FRAGMENT_SHADER =

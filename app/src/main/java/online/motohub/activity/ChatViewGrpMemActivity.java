@@ -20,7 +20,6 @@ import butterknife.OnClick;
 import de.hdodenhof.circleimageview.CircleImageView;
 import online.motohub.R;
 import online.motohub.adapter.GrpChatMemAdapter;
-import online.motohub.application.MotoHub;
 import online.motohub.model.GroupChatRoomModel;
 import online.motohub.model.GroupChatRoomResModel;
 import online.motohub.model.ProfileModel;

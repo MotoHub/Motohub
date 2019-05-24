@@ -29,7 +29,6 @@ import online.motohub.activity.BaseActivity;
 import online.motohub.activity.PostEditActivity;
 import online.motohub.activity.ReportActivity;
 import online.motohub.adapter.club.ClubPostsAdapter;
-import online.motohub.application.MotoHub;
 import online.motohub.fragment.BaseFragment;
 import online.motohub.fragment.dialog.AppDialogFragment;
 import online.motohub.interfaces.SharePostInterface;

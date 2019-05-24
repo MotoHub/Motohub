@@ -20,7 +20,7 @@ public class FeedShareModel implements Serializable {
 
     @SerializedName("ProfileID")
     @Expose
-    private  int mProfileID;
+    private int mProfileID;
 
     @SerializedName("SharedAt")
     @Expose
@@ -42,7 +42,6 @@ public class FeedShareModel implements Serializable {
     @SerializedName("promoter_by_ProfileID")
     @Expose
     private PromotersResModel mPromoterByProfileID;
-
 
 
     @SerializedName("resource")

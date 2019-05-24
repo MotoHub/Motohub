@@ -1,16 +1,16 @@
 /**
- *  This is sample code provided by Wowza Media Systems, LLC.  All sample code is intended to be a reference for the
- *  purpose of educating developers, and is not intended to be used in any production environment.
- *
- *  IN NO EVENT SHALL WOWZA MEDIA SYSTEMS, LLC BE LIABLE TO YOU OR ANY PARTY FOR DIRECT, INDIRECT, SPECIAL, INCIDENTAL,
- *  OR CONSEQUENTIAL DAMAGES, INCLUDING LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE AND ITS DOCUMENTATION,
- *  EVEN IF WOWZA MEDIA SYSTEMS, LLC HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *
- *  WOWZA MEDIA SYSTEMS, LLC SPECIFICALLY DISCLAIMS ANY WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
- *  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE. ALL CODE PROVIDED HEREUNDER IS PROVIDED "AS IS".
- *  WOWZA MEDIA SYSTEMS, LLC HAS NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS, OR MODIFICATIONS.
- *
- *  Copyright © 2015 Wowza Media Systems, LLC. All rights reserved.
+ * This is sample code provided by Wowza Media Systems, LLC.  All sample code is intended to be a reference for the
+ * purpose of educating developers, and is not intended to be used in any production environment.
+ * <p>
+ * IN NO EVENT SHALL WOWZA MEDIA SYSTEMS, LLC BE LIABLE TO YOU OR ANY PARTY FOR DIRECT, INDIRECT, SPECIAL, INCIDENTAL,
+ * OR CONSEQUENTIAL DAMAGES, INCLUDING LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE AND ITS DOCUMENTATION,
+ * EVEN IF WOWZA MEDIA SYSTEMS, LLC HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * <p>
+ * WOWZA MEDIA SYSTEMS, LLC SPECIFICALLY DISCLAIMS ANY WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+ * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE. ALL CODE PROVIDED HEREUNDER IS PROVIDED "AS IS".
+ * WOWZA MEDIA SYSTEMS, LLC HAS NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS, OR MODIFICATIONS.
+ * <p>
+ * Copyright © 2015 Wowza Media Systems, LLC. All rights reserved.
  */
 
 package online.motohub.config;
@@ -43,6 +43,18 @@ public class AutoCompletePreference extends EditTextPreference {
 
     private AutoCompleteTextView mAutoCompleteEditText = null;
 
+    public AutoCompletePreference(Context context) {
+        super(context);
+    }
+
+    public AutoCompletePreference(Context context, AttributeSet attrs) {
+        super(context, attrs);
+    }
+
+    public AutoCompletePreference(Context context, AttributeSet attrs, int defStyle) {
+        super(context, attrs, defStyle);
+    }
+
     private static String autoCompleteKey(String prefKey) {
         if (prefKey == null || prefKey.trim().length() == 0) return null;
         return prefKey + AUTO_COMPLETE_SUFFIX;
@@ -69,8 +81,8 @@ public class AutoCompletePreference extends EditTextPreference {
         Set<String> currentSet = sharedPrefs.getStringSet(autoCompleteKey(prefKey), null);
         TreeSet<String> curValues = currentSet != null ? new TreeSet<String>(currentSet) : new TreeSet<String>();
 
-        for(String str: curValues) {
-            if(str.equalsIgnoreCase(newValue.trim()))
+        for (String str : curValues) {
+            if (str.equalsIgnoreCase(newValue.trim()))
                 return;
         }
         curValues.add(newValue.trim());
@@ -100,7 +112,7 @@ public class AutoCompletePreference extends EditTextPreference {
         clearAutoCompleteList(sharedPrefs, "wz_live_host_address");
 
         SharedPreferences.Editor editor = sharedPrefs.edit();
-        for(String hostAddress: hosts) {
+        for (String hostAddress : hosts) {
             String hostConfigKey = hostConfigKey(hostAddress);
             if (sharedPrefs.contains(hostConfigKey))
                 editor.remove(hostConfigKey);
@@ -117,7 +129,7 @@ public class AutoCompletePreference extends EditTextPreference {
         String storedConfig = sharedPrefs.getString(hostConfigKey, null);
         if (storedConfig == null) return null;
 
-        String storedValues[] = TextUtils.split(storedConfig, ";");
+        String[] storedValues = TextUtils.split(storedConfig, ";");
         if (storedValues.length != 4) {
             removeAutoCompleteHostConfig(sharedPrefs, hostAddress);
             return null;
@@ -129,9 +141,9 @@ public class AutoCompletePreference extends EditTextPreference {
             WZStreamConfig hostConfig = new WZStreamConfig();
             hostConfig.setHostAddress(hostAddress);
             hostConfig.setPortNumber(port_number);
-            if (storedValues[1].trim().length()>0) hostConfig.setApplicationName(storedValues[1]);
-            if (storedValues[2].trim().length()>0) hostConfig.setStreamName(storedValues[2]);
-            if (storedValues[3].trim().length()>0) hostConfig.setUsername(storedValues[3]);
+            if (storedValues[1].trim().length() > 0) hostConfig.setApplicationName(storedValues[1]);
+            if (storedValues[2].trim().length() > 0) hostConfig.setStreamName(storedValues[2]);
+            if (storedValues[3].trim().length() > 0) hostConfig.setUsername(storedValues[3]);
 
             return hostConfig;
         } catch (NumberFormatException e) {
@@ -171,11 +183,11 @@ public class AutoCompletePreference extends EditTextPreference {
         if (hostAddress == null || hostAddress.trim().length() == 0) return false;
 
         Set<String> currentSet = sharedPrefs.getStringSet(autoCompleteKey("wz_live_host_address"), null);
-        ArrayList<String> currentList = (currentSet != null ?  new ArrayList<String>(currentSet) : new ArrayList<String>());
+        ArrayList<String> currentList = (currentSet != null ? new ArrayList<String>(currentSet) : new ArrayList<String>());
 
         String currentEntry = null;
-        for(String storedHost: currentList) {
-            if(storedHost.equalsIgnoreCase(hostAddress.trim()))
+        for (String storedHost : currentList) {
+            if (storedHost.equalsIgnoreCase(hostAddress.trim()))
                 currentEntry = storedHost;
         }
         if (currentEntry != null) currentSet.remove(currentEntry);
@@ -211,25 +223,13 @@ public class AutoCompletePreference extends EditTextPreference {
                         "wz_live_stream_name  = " + Arrays.toString(getAutoCompleteList(sharedPrefs, "wz_live_stream_name")) + "\n" +
                         "wz_live_username     = " + Arrays.toString(getAutoCompleteList(sharedPrefs, "wz_live_username")) + "\n");
 
-        for(String hostAddress: hosts) {
+        for (String hostAddress : hosts) {
             logData.append("\nhostConfig for " + hostAddress + ":\n\n");
             WZStreamConfig hostConfig = loadAutoCompleteHostConfig(sharedPrefs, hostAddress);
             logData.append(hostConfig.toString() + "\n");
         }
 
         WZLog.debug(TAG, logData.toString());
-    }
-
-    public AutoCompletePreference(Context context) {
-        super(context);
-    }
-
-    public AutoCompletePreference(Context context, AttributeSet attrs) {
-        super(context, attrs);
-    }
-
-    public AutoCompletePreference(Context context, AttributeSet attrs, int defStyle) {
-        super(context, attrs, defStyle);
     }
 
     @Override
@@ -275,7 +275,7 @@ public class AutoCompletePreference extends EditTextPreference {
         mAutoCompleteEditText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (((AutoCompleteTextView)view).getText().length() == 0)
+                if (((AutoCompleteTextView) view).getText().length() == 0)
                     mAutoCompleteEditText.showDropDown();
             }
         });

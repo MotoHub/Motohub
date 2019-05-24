@@ -8,7 +8,6 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
-
 import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.util.ArrayList;
@@ -22,7 +21,7 @@ import okhttp3.ResponseBody;
 import online.motohub.R;
 import online.motohub.activity.BaseActivity;
 import online.motohub.application.MotoHub;
-import online.motohub.fcm.MyFireBaseInstanceIdService;
+import online.motohub.fcm.MyFireBaseMessagingService;
 import online.motohub.fragment.BaseFragment;
 import online.motohub.fragment.dialog.AppDialogFragment;
 import online.motohub.interfaces.RetrofitApiInterface;
@@ -667,7 +666,7 @@ public class RetrofitClient {
 
     }
 
-    public void callCreatePushToken(final MyFireBaseInstanceIdService context, final PushTokenModel pushTokenModel, final int responseType) {
+    public void callCreatePushToken(final MyFireBaseMessagingService context, final PushTokenModel pushTokenModel, final int responseType) {
 
         RetrofitClient.getRetrofitInstance().getRetrofitApiInterface().callCreatePushToken(pushTokenModel)
                 .enqueue(new Callback<PushTokenModel>() {
@@ -690,7 +689,7 @@ public class RetrofitClient {
     }
 
 
-    public void callUpdatePushToken(final MyFireBaseInstanceIdService context, final PushTokenModel pushTokenModel, final String filter, final int responseType) {
+    public void callUpdatePushToken(final MyFireBaseMessagingService context, final PushTokenModel pushTokenModel, final String filter, final int responseType) {
 
         RetrofitClient.getRetrofitInstance().getRetrofitApiInterface().callUpdatePushToken(filter, pushTokenModel)
                 .enqueue(new Callback<PushTokenModel>() {
@@ -1536,6 +1535,7 @@ public class RetrofitClient {
                 });
 
     }
+
     public void callGetProfilePost(final BaseActivity activity, String filter, final int queryType, int limit, int offset) {
 //        filter = filter + " AND (Post_on<=" + activity.getCurrentDate() + ")";
         String mOrderBy = "CreatedAt DESC";
@@ -1564,6 +1564,7 @@ public class RetrofitClient {
                 });
 
     }
+
     public void callGetProfilePosts(final BaseActivity activity, String filter, final int queryType, int limit, int offset) {
         filter = filter + " AND (Post_on<=" + activity.getCurrentDate() + ")";
         String mOrderBy = "CreatedAt DESC";
@@ -1705,7 +1706,7 @@ public class RetrofitClient {
 
     }
 
-    public void callGetPushToken(final MyFireBaseInstanceIdService context, String filter, final int responseType) {
+    public void callGetPushToken(final MyFireBaseMessagingService context, String filter, final int responseType) {
 
         RetrofitClient.getRetrofitInstance().getRetrofitApiInterface().callGetPushToken(filter)
                 .enqueue(new Callback<PushTokenModel>() {

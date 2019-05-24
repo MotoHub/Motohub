@@ -111,9 +111,10 @@ public class AppDialogFragment extends DialogFragment implements
             BOTTOM_SHARED_POST_ACTION_DIALOG = "33", ALERT_TRIAL_DIALOG = "34", LOG_OUT_DIALOG = "35", DIALOG_PROMOTER_PROFILE_VIEW = "36",
             BOTTOM_REPORT_ACTION_DIALOG = "37", ACCESS_CONTACT_ALERT_DIALOG = "38", SET_CONTACT_PERMISSION = "39",
             BOTTOM_ADD_IMG_DIALOG_BUSINESS = "40";
-
+    public static AppDialogFragment mAppDialogFragment = new AppDialogFragment();
     private static String mDialogType;
     private static ArrayList<Bitmap> mShareImage;
+    private static String[] mVideoUrl;
     //private static AppDialogFragment mAppDialogFragment;
     public ShareDialog shareFBDialog;
     private Unbinder mUnBinder;
@@ -128,9 +129,22 @@ public class AppDialogFragment extends DialogFragment implements
     private EditText mSponsorEmailEt;
     private SingleChatRoomResModel singleChatMsgResModel;
     private EventCategoryAdapter mEventCategoryAdapter;
-    private static String[] mVideoUrl;
-    public static AppDialogFragment mAppDialogFragment = new AppDialogFragment();
+    private FacebookCallback<Sharer.Result> callback = new FacebookCallback<Sharer.Result>() {
+        @Override
+        public void onSuccess(Sharer.Result result) {
+            // Write some code to do some operations when you shared content successfully.
+        }
 
+        @Override
+        public void onCancel() {
+            // Write some code to do some operations when you cancel sharing content.
+        }
+
+        @Override
+        public void onError(FacebookException error) {
+            // Write some code to do some operations when some error occurs while sharing content.
+        }
+    };
 
     public static AppDialogFragment getInstance() {
         return mAppDialogFragment;
@@ -1092,7 +1106,6 @@ public class AppDialogFragment extends DialogFragment implements
         }
     }
 
-
     private void searchSponsors() {
         String mSearchSponsorStr = mSearchSponsorEt.getText().toString().trim();
         if (!mSearchSponsorStr.isEmpty()) {
@@ -1229,23 +1242,6 @@ public class AppDialogFragment extends DialogFragment implements
         ((BaseActivity) getActivity()).showToast(getActivity(), getString(R.string.internet_failure));
     }
 
-    private FacebookCallback<Sharer.Result> callback = new FacebookCallback<Sharer.Result>() {
-        @Override
-        public void onSuccess(Sharer.Result result) {
-            // Write some code to do some operations when you shared content successfully.
-        }
-
-        @Override
-        public void onCancel() {
-            // Write some code to do some operations when you cancel sharing content.
-        }
-
-        @Override
-        public void onError(FacebookException error) {
-            // Write some code to do some operations when some error occurs while sharing content.
-        }
-    };
-
 
     /*public void getUriVideo(final String[] videoUrl) {
         mShareVideoUrl = videoUrl;
@@ -1346,7 +1342,6 @@ public class AppDialogFragment extends DialogFragment implements
             }.execute();
         }
     }*/
-
 
     @Override
     public void SendData(Uri uri, Context context) {

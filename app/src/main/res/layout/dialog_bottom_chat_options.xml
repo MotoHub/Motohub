@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     style="@style/LayoutMatchWrap"
     android:background="@color/colorWhite"
-    android:paddingBottom="@dimen/size10"
     android:paddingTop="@dimen/size10"
+    android:paddingBottom="@dimen/size10"
     tools:context="online.motohub.fragment.dialog.AppDialogFragment">
 
     <RelativeLayout
@@ -20,8 +20,8 @@
             android:id="@+id/delete_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
             android:layout_margin="@dimen/size10"
             android:contentDescription="@string/app_name"
             app:srcCompat="@drawable/delete_icon" />
@@ -30,8 +30,8 @@
         <TextView
             android:id="@+id/delete_txt"
             style="@style/LayoutWrap"
-            android:layout_alignBottom="@+id/delete_icon"
             android:layout_alignTop="@+id/delete_icon"
+            android:layout_alignBottom="@+id/delete_icon"
             android:layout_toEndOf="@+id/delete_icon"
             android:layout_toRightOf="@+id/delete_icon"
             android:gravity="center_vertical"
@@ -53,8 +53,8 @@
             android:id="@+id/gallery_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
             android:layout_margin="@dimen/size10"
             android:contentDescription="@string/app_name"
             app:srcCompat="@drawable/ic_block_recyclerview" />
@@ -62,8 +62,8 @@
         <TextView
             android:id="@+id/gallery_tv"
             style="@style/LayoutWrap"
-            android:layout_alignBottom="@+id/gallery_icon"
             android:layout_alignTop="@+id/gallery_icon"
+            android:layout_alignBottom="@+id/gallery_icon"
             android:layout_toEndOf="@id/gallery_icon"
             android:layout_toRightOf="@+id/gallery_icon"
             android:gravity="center_vertical"
@@ -86,8 +86,8 @@
             android:id="@+id/review_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
             android:layout_margin="@dimen/size10"
             android:contentDescription="@string/app_name"
             app:srcCompat="@drawable/ic_rate_review_recyclerview" />
@@ -95,8 +95,8 @@
         <TextView
             android:id="@+id/review_txt"
             style="@style/LayoutWrap"
-            android:layout_alignBottom="@+id/review_icon"
             android:layout_alignTop="@+id/review_icon"
+            android:layout_alignBottom="@+id/review_icon"
             android:layout_toEndOf="@id/review_icon"
             android:layout_toRightOf="@+id/review_icon"
             android:gravity="center_vertical"

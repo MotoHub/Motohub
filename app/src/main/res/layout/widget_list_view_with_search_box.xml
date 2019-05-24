@@ -27,12 +27,12 @@
                 android:hint="@string/search"
                 android:inputType="text"
                 android:maxLines="1"
-                android:paddingBottom="@dimen/size3"
-                android:paddingEnd="@dimen/size5"
-                android:paddingLeft="@dimen/size5"
-                android:paddingRight="@dimen/size5"
                 android:paddingStart="@dimen/size5"
+                android:paddingLeft="@dimen/size5"
                 android:paddingTop="@dimen/size3"
+                android:paddingEnd="@dimen/size5"
+                android:paddingRight="@dimen/size5"
+                android:paddingBottom="@dimen/size3"
                 android:textColor="@color/colorBlack"
                 android:textColorHint="@color/colorGrey"
                 android:textSize="@dimen/text14" />
@@ -43,8 +43,8 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
-                android:layout_marginRight="@dimen/size10"
                 android:layout_centerVertical="true"
+                android:layout_marginRight="@dimen/size10"
                 android:background="@drawable/white_orange_bg"
                 android:contentDescription="@string/app_name"
                 android:padding="@dimen/size5"
@@ -63,12 +63,12 @@
             <ListView
                 android:id="@+id/widget_list_view"
                 style="@style/LayoutMatch"
+                android:clickable="true"
                 android:divider="@android:color/transparent"
                 android:dividerHeight="@dimen/size5"
-                android:clickable="true"
+                android:focusable="true"
                 android:padding="@dimen/size2"
-                android:scrollbars="none"
-                android:focusable="true" />
+                android:scrollbars="none" />
 
         </RelativeLayout>
 

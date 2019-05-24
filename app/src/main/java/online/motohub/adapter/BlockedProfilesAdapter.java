@@ -35,7 +35,57 @@ public class BlockedProfilesAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     private ArrayList<ProfileResModel> mBlockedProfileList;
     private LayoutInflater mInflater;
     private ProfileResModel mMyProfileResModel;
+    RetrofitResInterface mRetrofitResInterface = new RetrofitResInterface() {
+        @Override
+        public void retrofitOnResponse(Object responseObj, int responseType) {
+            ((BaseActivity) mContext).sysOut(responseObj.toString());
+            if (responseObj instanceof BlockedUserModel) {
+                BlockedUserModel mResponse = (BlockedUserModel) responseObj;
+                if (mResponse.getResource().size() > 0) {
+                    switch (responseType) {
+                        case RetrofitClient.CALL_BLOCK_USER_PROFILE:
+                            updateBlockProfile(mResponse.getResource().get(0));
+                            break;
+                        case RetrofitClient.CALL_UN_BLOCK_USER_PROFILE:
+                            updateUnBlockProfile(mResponse.getResource().get(0));
+                            break;
+                    }
+                    setResult();
+                } else {
+                    ((BaseActivity) mContext).showToast(mContext, mContext.getString(R.string.something_wrong));
+                }
 
+            } else if (responseObj instanceof SessionModel) {
+                SessionModel mSessionModel = (SessionModel) responseObj;
+                if (mSessionModel.getSessionToken() == null) {
+                    PreferenceUtils.getInstance(mContext).saveStrData(PreferenceUtils.SESSION_TOKEN, mSessionModel.getSessionId());
+                } else {
+                    PreferenceUtils.getInstance(mContext).saveStrData(PreferenceUtils.SESSION_TOKEN, mSessionModel.getSessionToken());
+                }
+                ((BaseActivity) mContext).showToast(mContext, mContext.getString(R.string.session_updated));
+            }
+        }
+
+        @Override
+        public void retrofitOnError(int code, String message) {
+            if (message.equals("Unauthorized") || code == 401) {
+                RetrofitClient.getRetrofitInstance().callUpdateSession(mContext, mRetrofitResInterface, RetrofitClient.UPDATE_SESSION_RESPONSE);
+            } else {
+                ((BaseActivity) mContext).showToast(mContext, mContext.getString(R.string.internet_err));
+            }
+
+        }
+
+        @Override
+        public void retrofitOnSessionError(int code, String message) {
+            retrofitOnSessionError(code, message);
+        }
+
+        @Override
+        public void retrofitOnFailure() {
+            ((BaseActivity) mContext).showToast(mContext, mContext.getString(R.string.internet_err));
+        }
+    };
     private int mAdapterPos;
     private int mMyProfileID = 0;
 
@@ -47,22 +97,8 @@ public class BlockedProfilesAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         mMyProfileID = mMyProfileResModel.getID();
     }
 
-    public void updateProfile( ProfileResModel myProfileResModel){
+    public void updateProfile(ProfileResModel myProfileResModel) {
         mMyProfileResModel = myProfileResModel;
-    }
-    public class Holder extends RecyclerView.ViewHolder {
-
-        @BindView(R.id.user_img)
-        CircleImageView mUserImg;
-        @BindView(R.id.user_name_txt)
-        TextView mUserNameTxt;
-        @BindView(R.id.follow_btn)
-        TextView mBlockBtn;
-
-        public Holder(View view) {
-            super(view);
-            ButterKnife.bind(this, view);
-        }
     }
 
     @Override
@@ -121,64 +157,11 @@ public class BlockedProfilesAdapter extends RecyclerView.Adapter<RecyclerView.Vi
 
                 }
             });
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
     }
-
-
-    RetrofitResInterface mRetrofitResInterface = new RetrofitResInterface() {
-        @Override
-        public void retrofitOnResponse(Object responseObj, int responseType) {
-            ((BaseActivity) mContext).sysOut(responseObj.toString());
-            if (responseObj instanceof BlockedUserModel) {
-                BlockedUserModel mResponse = (BlockedUserModel) responseObj;
-                if (mResponse.getResource().size() > 0) {
-                    switch (responseType) {
-                        case RetrofitClient.CALL_BLOCK_USER_PROFILE:
-                            updateBlockProfile(mResponse.getResource().get(0));
-                            break;
-                        case RetrofitClient.CALL_UN_BLOCK_USER_PROFILE:
-                            updateUnBlockProfile(mResponse.getResource().get(0));
-                            break;
-                    }
-                    setResult();
-                } else {
-                    ((BaseActivity) mContext).showToast(mContext, mContext.getString(R.string.something_wrong));
-                }
-
-            } else if (responseObj instanceof SessionModel) {
-                SessionModel mSessionModel = (SessionModel) responseObj;
-                if (mSessionModel.getSessionToken() == null) {
-                    PreferenceUtils.getInstance(mContext).saveStrData(PreferenceUtils.SESSION_TOKEN, mSessionModel.getSessionId());
-                } else {
-                    PreferenceUtils.getInstance(mContext).saveStrData(PreferenceUtils.SESSION_TOKEN, mSessionModel.getSessionToken());
-                }
-                ((BaseActivity) mContext).showToast(mContext, mContext.getString(R.string.session_updated));
-            }
-        }
-
-        @Override
-        public void retrofitOnError(int code, String message) {
-            if (message.equals("Unauthorized") || code == 401) {
-                RetrofitClient.getRetrofitInstance().callUpdateSession(mContext, mRetrofitResInterface, RetrofitClient.UPDATE_SESSION_RESPONSE);
-            } else {
-                ((BaseActivity) mContext).showToast(mContext, mContext.getString(R.string.internet_err));
-            }
-
-        }
-
-        @Override
-        public void retrofitOnSessionError(int code, String message) {
-            retrofitOnSessionError(code, message);
-        }
-
-        @Override
-        public void retrofitOnFailure() {
-            ((BaseActivity) mContext).showToast(mContext, mContext.getString(R.string.internet_err));
-        }
-    };
 
     private void setResult() {
         ((BaseActivity) mContext).setResult(RESULT_OK, new Intent().putExtra(AppConstants.IS_FOLLOW_RESULT, true));
@@ -211,6 +194,21 @@ public class BlockedProfilesAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     @Override
     public int getItemViewType(int pos) {
         return pos;
+    }
+
+    public class Holder extends RecyclerView.ViewHolder {
+
+        @BindView(R.id.user_img)
+        CircleImageView mUserImg;
+        @BindView(R.id.user_name_txt)
+        TextView mUserNameTxt;
+        @BindView(R.id.follow_btn)
+        TextView mBlockBtn;
+
+        public Holder(View view) {
+            super(view);
+            ButterKnife.bind(this, view);
+        }
     }
 
 }

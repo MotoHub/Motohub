@@ -42,38 +42,31 @@ import online.motohub.util.DialogManager;
 public class LiveStreamingActivity extends BaseActivity implements IVLCVout.Callback, LiveCamerasAdapter.CameraListener {
 
 
-    private BaseActivity mBaseActivity;
-
     public final static String TAG = "LiveStreamingActivity";
+    @BindView(R.id.no_broadcast_txt)
+    TextView mNoBroadcast;
+    @BindView(R.id.toolbar)
+    Toolbar mToolbar;
+    @BindString(R.string.live_stream)
+    String mToolbarTitle;
+    @BindView(R.id.live_stream_co_layout)
+    CoordinatorLayout mCoordinatorLayout;
+    @BindView(R.id.btnRetry)
+    Button mRetry;
+    private BaseActivity mBaseActivity;
     private SurfaceView mSurface;
     private SurfaceHolder holder;
     private LibVLC libvlc;
     private MediaPlayer mMediaPlayer = null;
     private int mVideoWidth;
     private int mVideoHeight;
-
-
-    @BindView(R.id.no_broadcast_txt)
-    TextView mNoBroadcast;
-
-    @BindView(R.id.toolbar)
-    Toolbar mToolbar;
-
-    @BindString(R.string.live_stream)
-    String mToolbarTitle;
-
-    @BindView(R.id.live_stream_co_layout)
-    CoordinatorLayout mCoordinatorLayout;
-
-
-    @BindView(R.id.btnRetry)
-    Button mRetry;
-
-
     private Dialog customdialog;
 
     private ArrayList<LiveStreamEntity> mLiveStreamList;
-
+    /**
+     * Registering callbacks
+     */
+    private MediaPlayer.EventListener mPlayerListener = new MyPlayerListener(this);
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -111,7 +104,6 @@ public class LiveStreamingActivity extends BaseActivity implements IVLCVout.Call
         super.onDestroy();
         releasePlayer();
     }
-
 
     private void setSize(int width, int height) {
         mVideoWidth = width;
@@ -194,11 +186,6 @@ public class LiveStreamingActivity extends BaseActivity implements IVLCVout.Call
         mVideoWidth = 0;
         mVideoHeight = 0;
     }
-
-    /**
-     * Registering callbacks
-     */
-    private MediaPlayer.EventListener mPlayerListener = new MyPlayerListener(this);
 //
 //    @Override
 //    public void onNewLayout(IVLCVout vout, int width, int height, int visibleWidth, int visibleHeight, int sarNum, int sarDen) {
@@ -237,40 +224,11 @@ public class LiveStreamingActivity extends BaseActivity implements IVLCVout.Call
         // RetrofitClient.getRetrofitInstance().getDeviceInfo(this,mDeviceID, RetrofitClient.GET_DEVICE_INFO_RESPONSE);
     }
 
-
-    private static class MyPlayerListener implements MediaPlayer.EventListener {
-        private WeakReference<LiveStreamingActivity> mOwner;
-
-        MyPlayerListener(LiveStreamingActivity owner) {
-            mOwner = new WeakReference<>(owner);
-        }
-
-        @Override
-        public void onEvent(MediaPlayer.Event event) {
-            LiveStreamingActivity player = mOwner.get();
-
-            switch (event.type) {
-                case MediaPlayer.Event.EndReached:
-                    player.releasePlayer();
-                    break;
-                case MediaPlayer.Event.Buffering:
-                    break;
-                case MediaPlayer.Event.Playing:
-                case MediaPlayer.Event.Paused:
-                case MediaPlayer.Event.Stopped:
-
-
-                default:
-                    break;
-            }
-        }
-    }
-
     private void initView() {
         setToolbar(mToolbar, mToolbarTitle);
         showToolbarBtn(mToolbar, R.id.toolbar_back_img_btn);
         mLiveStreamList = new ArrayList<>();
-        RetrofitClient.getRetrofitInstance().callGetLiveStream(this,"");
+        RetrofitClient.getRetrofitInstance().callGetLiveStream(this, "");
 
         // Create LibVLC
         ArrayList<String> options = new ArrayList<>();
@@ -280,7 +238,6 @@ public class LiveStreamingActivity extends BaseActivity implements IVLCVout.Call
         options.add("-vvv"); // verbosity
         libvlc = new LibVLC(this, options);
     }
-
 
     @OnClick({R.id.toolbar_back_img_btn, R.id.camera_floating_btn})
     public void onClick(View v) {
@@ -315,7 +272,6 @@ public class LiveStreamingActivity extends BaseActivity implements IVLCVout.Call
                 break;
         }
     }
-
 
     @Override
     public void retrofitOnResponse(Object responseObj, final int responseType) {
@@ -456,6 +412,34 @@ public class LiveStreamingActivity extends BaseActivity implements IVLCVout.Call
 
         Toast.makeText(getApplicationContext(), mInternetFailed, Toast.LENGTH_SHORT).show();
         showSnackBar(mCoordinatorLayout, mInternetFailed);
+    }
+
+    private static class MyPlayerListener implements MediaPlayer.EventListener {
+        private WeakReference<LiveStreamingActivity> mOwner;
+
+        MyPlayerListener(LiveStreamingActivity owner) {
+            mOwner = new WeakReference<>(owner);
+        }
+
+        @Override
+        public void onEvent(MediaPlayer.Event event) {
+            LiveStreamingActivity player = mOwner.get();
+
+            switch (event.type) {
+                case MediaPlayer.Event.EndReached:
+                    player.releasePlayer();
+                    break;
+                case MediaPlayer.Event.Buffering:
+                    break;
+                case MediaPlayer.Event.Playing:
+                case MediaPlayer.Event.Paused:
+                case MediaPlayer.Event.Stopped:
+
+
+                default:
+                    break;
+            }
+        }
     }
 /*
     public void retryAPI(int responseType){

@@ -18,13 +18,14 @@ import online.motohub.model.ProfileResModel;
 public class RecentUsersAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements
         View.OnClickListener {
 
+    CommonReturnInterface mCommonReturnInterface;
     private ArrayList<ProfileResModel> mRecentUsersList;
     private Context mContext;
-    CommonReturnInterface mCommonReturnInterface;
+
     public RecentUsersAdapter(Context ctx, ArrayList<ProfileResModel> recentUsersList, CommonReturnInterface mCommonReturnInterface) {
         this.mRecentUsersList = recentUsersList;
         this.mContext = ctx;
-        this.mCommonReturnInterface=mCommonReturnInterface;
+        this.mCommonReturnInterface = mCommonReturnInterface;
     }
 
     @Override
@@ -62,7 +63,7 @@ public class RecentUsersAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     @Override
     public void onClick(View view) {
-        int selPos=(int)view.getTag();
+        int selPos = (int) view.getTag();
         switch (view.getId()) {
             case R.id.profile_img:
             case R.id.name_of_driver_tv:

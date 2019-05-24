@@ -158,11 +158,7 @@ public class OthersMotoFileActivity extends BaseActivity
                 if (mResponse.getResource().size() > 0) {
                     switch (responseType) {
                         case RetrofitClient.PROFILE_IS_ALREADY_FOLLOWED:
-                            if (mResponse.getResource().size() > 0) {
-                                mIsAlreadyFollowing = true;
-                            } else {
-                                mIsAlreadyFollowing = false;
-                            }
+                            mIsAlreadyFollowing = mResponse.getResource().size() > 0;
                             setFollowUnFollowContent();
                             break;
                         case RetrofitClient.FOLLOW_PROFILE_RESPONSE:
@@ -905,11 +901,7 @@ public class OthersMotoFileActivity extends BaseActivity
             if (mResponse.getResource().size() > 0) {
                 switch (responseType) {
                     case RetrofitClient.PROFILE_IS_ALREADY_FOLLOWED:
-                        if (mResponse.getResource().size() > 0) {
-                            mIsAlreadyFollowing = true;
-                        } else {
-                            mIsAlreadyFollowing = false;
-                        }
+                        mIsAlreadyFollowing = mResponse.getResource().size() > 0;
                         setFollowUnFollowContent();
                         break;
                 }

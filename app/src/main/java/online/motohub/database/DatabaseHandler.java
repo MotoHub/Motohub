@@ -217,8 +217,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.execSQL("DELETE FROM " + SpectatorLiveModel.TABLE); //delete all rows in a table
         db.close();
     }
-	
-	public void deleteRow(String value) {
+
+    public void deleteRow(String value) {
         SQLiteDatabase db = this.getWritableDatabase();
         db.execSQL("DELETE FROM " + SpectatorLiveModel.TABLE + " WHERE " + SpectatorLiveModel.ID + "='" + value + "'");
         db.close();
@@ -237,7 +237,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.close();
     }
 
-    public ArrayList<ProfileResModel> getLocalUserList(){
+    public ArrayList<ProfileResModel> getLocalUserList() {
         ArrayList<ProfileResModel> mProfileList = new ArrayList<>();
         SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
         String queryTaxMaster = "SELECT * FROM " + LOCAL_USER_TABLE;

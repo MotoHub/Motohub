@@ -11,22 +11,22 @@
         android:layout_width="@dimen/size50"
         android:layout_height="@dimen/size50"
         android:layout_centerVertical="true"
-        android:layout_marginLeft="@dimen/size5"
         android:layout_marginStart="@dimen/size5"
+        android:layout_marginLeft="@dimen/size5"
         android:scaleType="centerCrop"
         android:src="@drawable/default_profile_icon" />
 
     <LinearLayout
         android:id="@+id/text_view_box"
         style="@style/LayoutWrapMatch"
-        android:layout_marginEnd="@dimen/size10"
-        android:layout_marginLeft="@dimen/size10"
-        android:layout_marginRight="@dimen/size10"
         android:layout_marginStart="@dimen/size10"
-        android:layout_toEndOf="@+id/circular_img_view"
-        android:layout_toLeftOf="@+id/tag_cb"
-        android:layout_toRightOf="@+id/circular_img_view"
+        android:layout_marginLeft="@dimen/size10"
+        android:layout_marginEnd="@dimen/size10"
+        android:layout_marginRight="@dimen/size10"
         android:layout_toStartOf="@+id/tag_cb"
+        android:layout_toLeftOf="@+id/tag_cb"
+        android:layout_toEndOf="@+id/circular_img_view"
+        android:layout_toRightOf="@+id/circular_img_view"
         android:gravity="center_vertical"
         android:orientation="vertical">
 
@@ -46,10 +46,10 @@
     <CheckBox
         android:id="@+id/tag_cb"
         style="@style/LayoutWrapMatch"
+        android:layout_alignTop="@+id/circular_img_view"
         android:layout_alignBottom="@+id/circular_img_view"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-        android:layout_alignTop="@+id/circular_img_view"
         android:padding="@dimen/size5"
         android:theme="@style/MyCheckBox" />
 

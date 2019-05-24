@@ -72,13 +72,13 @@ public class VideoCommentsModel implements Serializable {
     }
 
     public void setResource(ArrayList<VideoCommentsModel> resource) {
-        if(mResource == null)
+        if (mResource == null)
             mResource = new ArrayList<>();
         this.mResource = resource;
     }
 
     public String getCommentTaggedUserID() {
-        if(mCommentTaggedUserID == null)
+        if (mCommentTaggedUserID == null)
             mCommentTaggedUserID = "";
         return mCommentTaggedUserID;
     }
@@ -96,7 +96,7 @@ public class VideoCommentsModel implements Serializable {
     }
 
     public String getmComment() {
-        if(mComment == null)
+        if (mComment == null)
             mComment = "";
         return mComment;
     }
@@ -138,7 +138,7 @@ public class VideoCommentsModel implements Serializable {
     }
 
     public ArrayList<VideoCommentReplyModel> getFeedCommentReplyModel() {
-        if(mFeedCommentReplyModel==null)
+        if (mFeedCommentReplyModel == null)
             mFeedCommentReplyModel = new ArrayList<>();
         return mFeedCommentReplyModel;
     }
@@ -148,7 +148,7 @@ public class VideoCommentsModel implements Serializable {
     }
 
     public ArrayList<VideoCommentLikeModel> getFeedCommentLikeModel() {
-        if(mFeedCommentLikeModel == null)
+        if (mFeedCommentLikeModel == null)
             mFeedCommentLikeModel = new ArrayList<>();
         return mFeedCommentLikeModel;
     }
@@ -158,7 +158,7 @@ public class VideoCommentsModel implements Serializable {
     }
 
     public String getCommentImages() {
-        if(mCommentImages == null)
+        if (mCommentImages == null)
             mCommentImages = "";
         return mCommentImages;
     }
@@ -168,7 +168,7 @@ public class VideoCommentsModel implements Serializable {
     }
 
     public String getCommentTaggedUserNames() {
-        if(mCommentTaggedUserNames == null)
+        if (mCommentTaggedUserNames == null)
             mCommentTaggedUserNames = "";
         return mCommentTaggedUserNames;
     }

@@ -6,7 +6,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 
-public class EventAddOnModel implements Serializable{
+public class EventAddOnModel implements Serializable {
 
     @SerializedName("ID")
     private int mID;
@@ -24,7 +24,7 @@ public class EventAddOnModel implements Serializable{
     private ArrayList<EventAddOnModel> mResource;
 
     public ArrayList<EventAddOnModel> getResource() {
-        if(mResource == null)
+        if (mResource == null)
             mResource = new ArrayList<>();
         return mResource;
     }

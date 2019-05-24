@@ -181,6 +181,7 @@
     <string name="following">Following</string>
     <string name="UnFollow">UnFollow</string>
     <string name="my_moto_file">My Profile</string>
+    <string name="my_profile">My\nProfile</string>
     <string name="create_new_profile">Create a New Profile</string>
     <string name="other_profiles">Other Profiles</string>
     <string name="blocked_users">Blocked Users</string>
@@ -198,7 +199,7 @@
     <string name="no_notification_found">There\'s no notifications found!</string>
 
     <!--My Moto File Strings-->
-    <string name="find_friends">Find friends (or) vehicles</string>
+    <string name="find_friends">Find friends, vehicles &amp; more</string>
     <string name="your_build">Your Build</string>
     <string name="photos">Photos</string>
     <string name="videos">Videos</string>
@@ -209,7 +210,8 @@
     <string name="photos_and_videos">Photos/Videos</string>
     <string name="vehicle_info">Vehicle Information</string>
     <string name="vehicle_information">Vehicle Information</string>
-    <string name="write_a_post">Write a post&#8230;</string>
+    <string name="write_a_post">Write a Post&#8230;</string>
+    <string name="write_a_post1">Write a Post</string>
     <string name="follow">Follow</string>
     <string name="un_follow">UnFollow</string>
     <string name="block">Block</string>
@@ -532,7 +534,7 @@
     <string name="empty_friends_live_streams">No Friend\'s Stream\'s are found!!!.</string>
     <string name="live_stream">Live Stream</string>
     <string name="on_demand">On Demand</string>
-    <string name="events_on_demand">Event On Demand</string>
+    <string name="events_on_demand">On Demand\nEvent Videos</string>
     <!--TODO remove this-->
     <string name="username">Username</string>
     <string name="under_dev">Under Development</string>
@@ -607,7 +609,7 @@
     <string name="subscribe_err_shop">No subscription plan found for this shop.</string>
     <string name="free_event">Free Event</string>
 
-    <string name="connect_with_friends">Connect With Friends</string>
+    <string name="connect_with_friends">Connect with Friends</string>
     <string name="access_contact_alert">MotoHUB wants to access your contact details.</string>
     <string name="allow">Allow</string>
     <string name="set_contact_alert">Open Settings, then tap Permissions and turn on Contacts.</string>

@@ -16,7 +16,7 @@
             android:id="@+id/img"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:contentDescription="@string/app_name"/>
+            android:contentDescription="@string/app_name" />
 
         <ImageView
             android:id="@+id/playicon"

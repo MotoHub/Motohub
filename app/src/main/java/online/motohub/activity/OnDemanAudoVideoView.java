@@ -10,9 +10,14 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.model.GlideUrl;
+import com.bumptech.glide.load.model.LazyHeaders;
+import com.bumptech.glide.request.RequestOptions;
 import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.DefaultRenderersFactory;
 import com.google.android.exoplayer2.ExoPlaybackException;
@@ -58,6 +63,8 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import online.motohub.R;
 import online.motohub.application.MotoHub;
+import online.motohub.model.EventsModel;
+import online.motohub.model.EventsResModel;
 import online.motohub.model.FollowProfileModel;
 import online.motohub.model.PostsModel;
 import online.motohub.model.ProfileModel;
@@ -101,6 +108,8 @@ public class OnDemanAudoVideoView extends BaseActivity {
     Button mFollowBtn;
     @BindView(R.id.like_count_txt)
     Button mLikeCountTxt;
+    @BindView(R.id.img_logo)
+    ImageView imgLogo;
 
     private SimpleExoPlayer mExoPlayer;
     private ProfileResModel mMyProfileResModel, mOtherProfileResModel;
@@ -111,6 +120,8 @@ public class OnDemanAudoVideoView extends BaseActivity {
     private String usertype, replaceString, mFilter;
     private int mOtherProfileID, mMyProfileID, mDeleteLikeID;
     private int mQuotient, mTotalCount;
+    private ArrayList<EventsResModel.EventadByEventID> imageList;
+    private EventsResModel mEventResModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -125,6 +136,7 @@ public class OnDemanAudoVideoView extends BaseActivity {
 
     private void initView() {
         try {
+            imageList = new ArrayList<>();
             setSwipeListenerForVideoView();
             checkPosition = getIntent().getIntExtra(AppConstants.POSITION, 0);
             mFilter = getIntent().getStringExtra("Filter");
@@ -132,9 +144,12 @@ public class OnDemanAudoVideoView extends BaseActivity {
             mMyProfileResModel = new Gson().fromJson(profile, ProfileResModel.class);
             mPostsList = MotoHub.getApplicationInstance().getmPostsList();
             mOtherProfileID = Integer.parseInt(mPostsList.get(pos).getProfileID());
+            mEventResModel = mPostsList.get(pos).getEvent_by_EventID();
             if (mMyProfileResModel != null) {
                 mMyProfileID = mMyProfileResModel.getID();
             }
+            if (mEventResModel != null)
+                getEvent();
             pos = checkPosition;
 
             if (isAlreadyLikedPost()) {
@@ -150,6 +165,11 @@ public class OnDemanAudoVideoView extends BaseActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private void getEvent() {
+        String mFilter = "ID=" + mEventResModel.getID();
+        RetrofitClient.getRetrofitInstance().callGetEvents(this, mFilter, RetrofitClient.GET_EVENTS_RESPONSE);
     }
 
     @Override
@@ -593,7 +613,7 @@ public class OnDemanAudoVideoView extends BaseActivity {
     }
 
     public void getViewCount(int pos) {
-        String mFilter = "ID = " + String.valueOf(mPostsList.get(pos).getID());
+        String mFilter = "ID = " + mPostsList.get(pos).getID();
         RetrofitClient.getRetrofitInstance().getViewCountOnDemand(this, mFilter, RetrofitClient.FEED_VIDEO_COUNT);
     }
 
@@ -704,11 +724,7 @@ public class OnDemanAudoVideoView extends BaseActivity {
             FollowProfileModel mFollowProfileModel = (FollowProfileModel) responseObj;
             switch (responseType) {
                 case RetrofitClient.PROFILE_IS_ALREADY_FOLLOWED:
-                    if (mFollowProfileModel.getResource().size() > 0) {
-                        mIsAlreadyFollowing = true;
-                    } else {
-                        mIsAlreadyFollowing = false;
-                    }
+                    mIsAlreadyFollowing = mFollowProfileModel.getResource().size() > 0;
                     setFollowUnfollow();
                     //callGetProfile(mOtherProfileID, RetrofitClient.GET_OTHER_PROFILE_RESPONSE);
                     break;
@@ -725,11 +741,7 @@ public class OnDemanAudoVideoView extends BaseActivity {
             PromoterFollowerModel mPromoterFollowerModel = (PromoterFollowerModel) responseObj;
             switch (responseType) {
                 case RetrofitClient.PROMOTER_IS_ALREADY_FOLLOWED:
-                    if (mPromoterFollowerModel.getResource() != null && mPromoterFollowerModel.getResource().size() > 0) {
-                        mIsAlreadyFollowing = true;
-                    } else {
-                        mIsAlreadyFollowing = false;
-                    }
+                    mIsAlreadyFollowing = mPromoterFollowerModel.getResource() != null && mPromoterFollowerModel.getResource().size() > 0;
                     setFollowUnfollow();
                     callGetProfile(mOtherProfileID, RetrofitClient.GET_OTHER_PROFILE_RESPONSE);
                     break;
@@ -774,6 +786,15 @@ public class OnDemanAudoVideoView extends BaseActivity {
                     }
                     break;
             }
+        } else if (responseObj instanceof EventsModel) {
+            EventsModel mEventModel = (EventsModel) responseObj;
+            if (mEventModel.getResource().size() > 0) {
+                mEventResModel = mEventModel.getResource().get(0);
+                imageList.addAll(mEventResModel.getEventadByEventID());
+                if (imageList.size() > 0) {
+                    showLogoOnVideo(R.drawable.motohub_logo);
+                }
+            }
         }
     }
 
@@ -799,6 +820,39 @@ public class OnDemanAudoVideoView extends BaseActivity {
     public void retrofitOnError(int code, String message, int responseType) {
         super.retrofitOnError(code, message, responseType);
         releasePlayer();
+    }
+
+    private void showLogoOnVideo(int drawable) {
+
+        int arraySize = imageList.size();
+
+        new Runnable() {
+            int currentIndex = 0;
+            int updateInterval = 7000; //=one second
+
+            @Override
+            public void run() {
+
+                currentIndex += 1;
+                if (currentIndex == arraySize) {
+                    currentIndex = 0;
+                }
+
+                GlideUrl glideUrl = new GlideUrl(UrlUtils.FILE_URL + imageList.get(currentIndex).getEventAd(), new LazyHeaders.Builder()
+                        .addHeader("X-DreamFactory-Api-Key", getString(R.string.dream_factory_api_key))
+                        .build());
+                Glide.with(getApplicationContext())
+                        .load(glideUrl)
+                        .apply(new RequestOptions()
+                                .override(120, 100)
+                                .dontAnimate()
+                                .error(drawable)
+                        )
+                        .into(imgLogo);
+
+                imgLogo.postDelayed(this, updateInterval);
+            }
+        }.run();
     }
 
 }

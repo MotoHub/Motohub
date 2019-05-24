@@ -116,9 +116,139 @@ public class ProfileResModel implements Serializable {
     @SerializedName("UserName")
     @Expose
     private String UserName;
+    @SerializedName("Email")
+    @Expose
+    private String mEmail;
+    @SerializedName("blockeduserprofiles_by_ProfileID")
+    @Expose
+    private ArrayList<BlockedUserResModel> mBlockedUserProfilesByProfileID;
+    @SerializedName("blockeduserprofiles_by_BlockedProfileID")
+    @Expose
+    private ArrayList<BlockedUserResModel> blockeduserprofiles_by_BlockedProfileID;
+    @SerializedName("promoterfollower_by_ProfileID")
+    @Expose
+    private ArrayList<PromoterFollowerResModel> mPromoterFollowerByProfileID;
+    @SerializedName("livestreamrequest_by_ReceiverProfileID")
+    @Expose
+    private ArrayList<LiveStreamRequestEntity> livestreamrequest_by_ReceiverProfileID;
+    @SerializedName("livestreamrequest_by_RequestedProfileID")
+    @Expose
+    private ArrayList<LiveStreamRequestEntity> livestreamrequest_by_RequestedProfileID;
+    @SerializedName("vehicleinfolikes_by_LikedProfileID")
+    @Expose
+    private ArrayList<VehicleInfoLikeModel> mVehicleInfoLikesByID;
+    @SerializedName("followprofile_by_ProfileID")
+    @Expose
+    private ArrayList<FollowProfileEntity> followprofile_by_ProfileID;
+    @SerializedName("followprofile_by_FollowProfileID")
+    @Expose
+    private ArrayList<FollowProfileEntity> followprofile_by_FollowProfileID;
+    @SerializedName("ECU")
+    @Expose
+    private String mECU;
+    @SerializedName("Trailer")
+    @Expose
+    private String mTrailer;
+    @SerializedName("GearBox")
+    @Expose
+    private String mGearBox;
+    @SerializedName("Injection")
+    @Expose
+    private String mInjection;
+    @SerializedName("Clutch")
+    @Expose
+    private String mClutch;
+    @SerializedName("FuelSystem")
+    @Expose
+    private String mFuelSystem;
+    @SerializedName("Turbo")
+    @Expose
+    private String mTurbo;
+    @SerializedName("Suspension")
+    @Expose
+    private String mSuspension;
+    @SerializedName("Subscription")
+    @Expose
+    private String Subscription;
+    @SerializedName("Differencial")
+    @Expose
+    private String mDifferencial;
+    @SerializedName("Tyres")
+    @Expose
+    private String mTyres;
+    @SerializedName("Exhaust")
+    @Expose
+    private String mExhaust;
+    @SerializedName("Forks")
+    @Expose
+    private String mForks;
+    @SerializedName("RearSets")
+    @Expose
+    private String mRearSets;
+    @SerializedName("LapTimer")
+    @Expose
+    private String mLapTimer;
+    @SerializedName("Shock")
+    @Expose
+    private String mShock;
+    @SerializedName("Chain")
+    @Expose
+    private String mChain;
+    @SerializedName("EngineCovers")
+    @Expose
+    private String mEngineCovers;
+    @SerializedName("Sprockets")
+    @Expose
+    private String mSprockets;
+    @SerializedName("Fairings")
+    @Expose
+    private String mFairings;
+    @SerializedName("BrakeMaster")
+    @Expose
+    private String mBrakeMaster;
+    @SerializedName("BrakeFluid")
+    @Expose
+    private String mBrakeFluid;
+    @SerializedName("BrakePads")
+    @Expose
+    private String mBrakePad;
+    @SerializedName("ChainLube")
+    @Expose
+    private String mChainLube;
+    @SerializedName("HandleBars")
+    @Expose
+    private String mHandleBars;
+    @SerializedName("Filter")
+    @Expose
+    private String mFilter;
+    @SerializedName("EngineOil")
+    @Expose
+    private String mEngineOil;
+    @SerializedName("Boots")
+    @Expose
+    private String mBoots;
+    @SerializedName("Suit")
+    @Expose
+    private String mSuit;
+    @SerializedName("Helmet")
+    @Expose
+    private String mHelmet;
+    @SerializedName("Gloves")
+    @Expose
+    private String mGloves;
+    @SerializedName("BackProtection")
+    @Expose
+    private String mBackProtection;
+    @SerializedName("ChestProtection")
+    @Expose
+    private String mChestProtection;
+    private boolean mIsFollowing;
+    private boolean mIsProfileTagged;
+    private boolean mIsFollowingChecked;
+    private boolean mIsSelected;
 
     public String getUserName() {
-        if(TextUtils.isEmpty(UserName)){
+        if (TextUtils.isEmpty(UserName)) {
             return (getDriver() == null || getDriver().equals("") ? getSpectatorName() : getDriver());
         }
         return UserName;
@@ -145,8 +275,8 @@ public class ProfileResModel implements Serializable {
     }
 
     public String getPassword() {
-        if(Password==null)
-            Password="";
+        if (Password == null)
+            Password = "";
         return Password;
     }
 
@@ -155,7 +285,7 @@ public class ProfileResModel implements Serializable {
     }
 
     public String getEmail() {
-        if(mEmail == null)
+        if (mEmail == null)
             mEmail = "";
         return mEmail;
     }
@@ -164,187 +294,11 @@ public class ProfileResModel implements Serializable {
         this.mEmail = mEmail;
     }
 
-    @SerializedName("Email")
-    @Expose
-    private String mEmail;
-
-    @SerializedName("blockeduserprofiles_by_ProfileID")
-    @Expose
-    private ArrayList<BlockedUserResModel> mBlockedUserProfilesByProfileID;
-
-    @SerializedName("blockeduserprofiles_by_BlockedProfileID")
-    @Expose
-    private ArrayList<BlockedUserResModel> blockeduserprofiles_by_BlockedProfileID;
-
-    @SerializedName("promoterfollower_by_ProfileID")
-    @Expose
-    private ArrayList<PromoterFollowerResModel> mPromoterFollowerByProfileID;
-
-    @SerializedName("livestreamrequest_by_ReceiverProfileID")
-    @Expose
-    private ArrayList<LiveStreamRequestEntity> livestreamrequest_by_ReceiverProfileID;
-
-    @SerializedName("livestreamrequest_by_RequestedProfileID")
-    @Expose
-    private ArrayList<LiveStreamRequestEntity> livestreamrequest_by_RequestedProfileID;
-
-    @SerializedName("vehicleinfolikes_by_LikedProfileID")
-    @Expose
-    private ArrayList<VehicleInfoLikeModel> mVehicleInfoLikesByID;
-
-    @SerializedName("followprofile_by_ProfileID")
-    @Expose
-    private ArrayList<FollowProfileEntity> followprofile_by_ProfileID;
-
-    @SerializedName("followprofile_by_FollowProfileID")
-    @Expose
-    private ArrayList<FollowProfileEntity> followprofile_by_FollowProfileID;
-
-    @SerializedName("ECU")
-    @Expose
-    private String mECU;
-
-    @SerializedName("Trailer")
-    @Expose
-    private String mTrailer;
-
-    @SerializedName("GearBox")
-    @Expose
-    private String mGearBox;
-
-    @SerializedName("Injection")
-    @Expose
-    private String mInjection;
-
-    @SerializedName("Clutch")
-    @Expose
-    private String mClutch;
-
-    @SerializedName("FuelSystem")
-    @Expose
-    private String mFuelSystem;
-
-    @SerializedName("Turbo")
-    @Expose
-    private String mTurbo;
-
-    @SerializedName("Suspension")
-    @Expose
-    private String mSuspension;
-
-    @SerializedName("Subscription")
-    @Expose
-    private String Subscription;
-
     public String getSubscription() {
         if (Subscription == null)
             Subscription = "";
         return Subscription;
     }
-
-    @SerializedName("Differencial")
-    @Expose
-    private String mDifferencial;
-
-    @SerializedName("Tyres")
-    @Expose
-    private String mTyres;
-
-    @SerializedName("Exhaust")
-    @Expose
-    private String mExhaust;
-
-    @SerializedName("Forks")
-    @Expose
-    private String mForks;
-
-    @SerializedName("RearSets")
-    @Expose
-    private String mRearSets;
-
-    @SerializedName("LapTimer")
-    @Expose
-    private String mLapTimer;
-
-    @SerializedName("Shock")
-    @Expose
-    private String mShock;
-
-    @SerializedName("Chain")
-    @Expose
-    private String mChain;
-
-    @SerializedName("EngineCovers")
-    @Expose
-    private String mEngineCovers;
-
-    @SerializedName("Sprockets")
-    @Expose
-    private String mSprockets;
-
-    @SerializedName("Fairings")
-    @Expose
-    private String mFairings;
-
-    @SerializedName("BrakeMaster")
-    @Expose
-    private String mBrakeMaster;
-
-    @SerializedName("BrakeFluid")
-    @Expose
-    private String mBrakeFluid;
-
-    @SerializedName("BrakePads")
-    @Expose
-    private String mBrakePad;
-
-    @SerializedName("ChainLube")
-    @Expose
-    private String mChainLube;
-
-    @SerializedName("HandleBars")
-    @Expose
-    private String mHandleBars;
-
-    @SerializedName("Filter")
-    @Expose
-    private String mFilter;
-
-    @SerializedName("EngineOil")
-    @Expose
-    private String mEngineOil;
-
-    @SerializedName("Boots")
-    @Expose
-    private String mBoots;
-
-    @SerializedName("Suit")
-    @Expose
-    private String mSuit;
-
-    @SerializedName("Helmet")
-    @Expose
-    private String mHelmet;
-
-    @SerializedName("Gloves")
-    @Expose
-    private String mGloves;
-
-    @SerializedName("BackProtection")
-    @Expose
-    private String mBackProtection;
-
-    @SerializedName("ChestProtection")
-    @Expose
-    private String mChestProtection;
-
-    private boolean mIsFollowing;
-
-    private boolean mIsProfileTagged;
-
-    private boolean mIsFollowingChecked;
-
-    private boolean mIsSelected;
 
     public boolean isSelected() {
         return isSelected;

@@ -20,12 +20,11 @@ public class GlBrightnessFilter extends GlFilter {
             "     \n" +
             "     gl_FragColor = vec4((textureColor.rgb + vec3(brightness)), textureColor.w);\n" +
             " }";
+    private float brightness = 0f;
 
     public GlBrightnessFilter() {
         super(DEFAULT_VERTEX_SHADER, BRIGHTNESS_FRAGMENT_SHADER);
     }
-
-    private float brightness = 0f;
 
     public void setBrightness(float brightness) {
         this.brightness = brightness;

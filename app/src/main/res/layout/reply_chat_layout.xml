@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_height="wrap_content">
 
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
@@ -11,59 +11,60 @@
         app:cardElevation="@dimen/size2">
 
         <RelativeLayout
+            android:id="@+id/replyChatLayout"
             style="@style/LayoutMatchWrap"
-            android:orientation="horizontal"
             android:background="@color/transparentColor"
-            android:id="@+id/replyChatLayout">
+            android:orientation="horizontal">
+
             <View
+                android:id="@+id/replyChatView"
                 android:layout_width="@dimen/size3"
                 android:layout_height="0dp"
-                android:background="@color/colorOrange"
-                android:id="@+id/replyChatView"
-                />
+                android:background="@color/colorOrange" />
+
             <TextView
-                style="@style/LayoutWrap"
                 android:id="@+id/replyChatUserNameTv"
+                style="@style/LayoutWrap"
+                android:layout_marginStart="@dimen/size10"
                 android:layout_toEndOf="@+id/replyChatView"
-                android:textSize="@dimen/text16"
-                android:textStyle="bold"
                 android:textColor="@color/colorDarkGrey"
-                android:layout_marginStart="@dimen/size10"/>
+                android:textSize="@dimen/text16"
+                android:textStyle="bold" />
+
             <ImageView
+                android:id="@+id/replyChatImageIv"
                 android:layout_width="@dimen/size150"
                 android:layout_height="@dimen/size150"
-                android:id="@+id/replyChatImageIv"
-                android:background="@drawable/default_cover_img"
-                android:scaleType="centerCrop"
-                android:layout_marginStart="@dimen/size10"
                 android:layout_below="@+id/replyChatUserNameTv"
+                android:layout_marginStart="@dimen/size10"
                 android:layout_marginTop="@dimen/size5"
+                android:background="@drawable/default_cover_img"
                 android:contentDescription="@string/app_name"
-                android:visibility="gone"/>
+                android:scaleType="centerCrop"
+                android:visibility="gone" />
 
             <TextView
-                style="@style/LayoutWrap"
                 android:id="@+id/replyChatMsgTv"
+                style="@style/LayoutWrap"
+                android:layout_below="@+id/replyChatImageIv"
+                android:layout_marginStart="@dimen/size10"
+                android:layout_marginTop="@dimen/size5"
                 android:layout_toEndOf="@+id/replyChatView"
-                android:textSize="@dimen/text16"
-                android:textColor="@color/colorDarkGrey"
                 android:maxLines="3"
                 android:text="@string/app_name"
-                android:layout_marginStart="@dimen/size10"
-                android:layout_below="@+id/replyChatImageIv"
-                android:layout_marginTop="@dimen/size5"
-                android:visibility="gone"
-                />
+                android:textColor="@color/colorDarkGrey"
+                android:textSize="@dimen/text16"
+                android:visibility="gone" />
 
             <ImageView
+                android:id="@+id/replyChatCloseIv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/replyChatCloseIv"
-                android:background="@drawable/close_icon"
                 android:layout_alignParentEnd="true"
                 android:layout_margin="@dimen/size5"
+                android:background="@drawable/close_icon"
                 android:contentDescription="@string/app_name"
-                android:visibility="gone"/>
+                android:visibility="gone" />
 
         </RelativeLayout>
 

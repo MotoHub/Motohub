@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import online.motohub.R;
-import online.motohub.application.MotoHub;
 import online.motohub.fragment.track.TrackContactFragment;
 import online.motohub.fragment.track.TrackEventFragment;
 import online.motohub.fragment.track.TrackNewsFeedFragment;
@@ -60,7 +59,9 @@ public class TrackProfileTabPagerAdapter extends FragmentStatePagerAdapter {
     }
 
     @Override
-    public Fragment getItem(int position) {return mFragmentList.get(position);}
+    public Fragment getItem(int position) {
+        return mFragmentList.get(position);
+    }
 
     @Override
     public CharSequence getPageTitle(int position) {

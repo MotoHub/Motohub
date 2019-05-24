@@ -53,8 +53,8 @@
                 android:layout_width="@dimen/size150"
                 android:layout_height="@dimen/size150"
                 android:contentDescription="@string/app_name"
-                android:scaleType="centerCrop"
                 android:padding="@dimen/size2"
+                android:scaleType="centerCrop"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
@@ -71,14 +71,15 @@
 
         </android.support.constraint.ConstraintLayout>
 
-        <include layout="@layout/reply_chat_layout"
+        <include
             android:id="@+id/replyChatLayout"
+            layout="@layout/reply_chat_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/size5"
-            android:visibility="gone"
             android:layout_marginStart="@dimen/size5"
-            android:layout_marginEnd="@dimen/size5"/>
+            android:layout_marginTop="@dimen/size5"
+            android:layout_marginEnd="@dimen/size5"
+            android:visibility="gone" />
 
         <RelativeLayout
             android:id="@+id/sendBox"
@@ -99,18 +100,18 @@
                 <EditText
                     android:id="@+id/writeChatEt"
                     style="@style/LayoutWrap"
-                    android:layout_alignParentEnd="true"
                     android:layout_alignParentStart="true"
+                    android:layout_alignParentEnd="true"
                     android:background="@null"
                     android:gravity="top"
                     android:inputType="textMultiLine"
                     android:minHeight="@dimen/size30"
-                    android:paddingBottom="@dimen/size5"
-                    android:paddingEnd="@dimen/size5"
-                    android:paddingLeft="@dimen/size5"
-                    android:paddingRight="@dimen/size5"
                     android:paddingStart="@dimen/size5"
+                    android:paddingLeft="@dimen/size5"
                     android:paddingTop="@dimen/size5"
+                    android:paddingEnd="@dimen/size5"
+                    android:paddingRight="@dimen/size5"
+                    android:paddingBottom="@dimen/size5"
                     android:textColor="@color/colorBlack"
                     android:textSize="@dimen/text14" />
 
@@ -148,12 +149,12 @@
                 android:focusable="true"
                 android:gravity="center"
                 android:minHeight="@dimen/size30"
-                android:paddingBottom="@dimen/size5"
-                android:paddingEnd="@dimen/size16"
-                android:paddingLeft="@dimen/size16"
-                android:paddingRight="@dimen/size16"
                 android:paddingStart="@dimen/size16"
+                android:paddingLeft="@dimen/size16"
                 android:paddingTop="@dimen/size5"
+                android:paddingEnd="@dimen/size16"
+                android:paddingRight="@dimen/size16"
+                android:paddingBottom="@dimen/size5"
                 android:text="@string/send"
                 android:textAlignment="center"
                 android:textColor="@color/text_color"

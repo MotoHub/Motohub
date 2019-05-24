@@ -10,7 +10,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -49,7 +48,6 @@ import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import online.motohub.R;
 import online.motohub.adapter.TaggedProfilesAdapter;
-import online.motohub.application.MotoHub;
 import online.motohub.database.DatabaseHandler;
 import online.motohub.fragment.dialog.AppDialogFragment;
 import online.motohub.model.GalleryImgModel;
@@ -468,6 +466,11 @@ public class WritePostActivity extends BaseActivity implements TaggedProfilesAda
 
     private void startUploadVideoService() {
         try {
+
+           /* Constraints constraints = new Constraints.Builder()
+                    .setRequiredNetworkType(NetworkType.CONNECTED)
+                    .build();*/
+
             Bitmap thumb = ThumbnailUtils.createVideoThumbnail(mVideoPathUri, MediaStore.Images.Thumbnails.MINI_KIND);
             File imageFile = compressedImgFromBitmap(thumb);
             String postText;
@@ -502,6 +505,40 @@ public class WritePostActivity extends BaseActivity implements TaggedProfilesAda
                 service_intent.putExtra(PostsModel.TAGGED_PROFILE_ID, mTaggedProfileID.toString());
             }
             startService(service_intent);
+
+
+            /*StringBuilder mTaggedProfileID = new StringBuilder();
+            if (mTaggedProfilesList.size() > 0) {
+                for (ProfileResModel mProfileResModel : mTaggedProfilesList) {
+                    mTaggedProfileID.append(mProfileResModel.getID()).append(",");
+                }
+                mTaggedProfileID.deleteCharAt(mTaggedProfileID.length() - 1);
+            }
+
+            Data data = new Data.Builder()
+                    .putString("videofile", mVideoPathUri)
+                    .putString("imagefile", String.valueOf(imageFile))
+                    .putString("posttext", postText)
+                    .putInt("profileid", getCurrentProfile().getID())
+                    .putString("dest_file", destFilePath)
+                    .putString("usertype", usertype)
+                    .putInt("running", count + 1)
+                    .putInt("flag", 1)
+                    .putInt(AppConstants.TO_SUBSCRIBED_USER_ID, mSubscribedID)
+                    .putString(PostsModel.TAGGED_PROFILE_ID, mTaggedProfileID.toString())
+                    .build();
+
+            OneTimeWorkRequest oneTimeWorkRequest = new OneTimeWorkRequest.Builder(MyWorkWithData.class)
+                    .setConstraints(constraints)
+                    .setInputData(data)
+                    .setBackoffCriteria(
+                            BackoffPolicy.LINEAR,
+                            OneTimeWorkRequest.MIN_BACKOFF_MILLIS,
+                            TimeUnit.MILLISECONDS)
+                    .build();
+
+            WorkManager.getInstance().enqueue(oneTimeWorkRequest);*/
+
             mVideoPathUri = null;
             mPostImgUri = null;
             mWritePostEt.setText("");
@@ -516,6 +553,7 @@ public class WritePostActivity extends BaseActivity implements TaggedProfilesAda
             } else {
                 mTagProfilesRecyclerView.setVisibility(View.GONE);
             }
+
             finish();
         } catch (Exception e) {
             e.printStackTrace();

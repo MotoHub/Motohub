@@ -31,7 +31,7 @@ import online.motohub.util.PreferenceUtils;
  * @version 1.0, 27/04/2017
  * @since 1.0
  */
-public class CreateProfileActivity extends BaseActivity implements  PopupMenu.OnMenuItemClickListener{
+public class CreateProfileActivity extends BaseActivity implements PopupMenu.OnMenuItemClickListener {
 
     @BindView(R.id.create_profile_co_layout)
     CoordinatorLayout mCoordinatorLayout;
@@ -41,19 +41,6 @@ public class CreateProfileActivity extends BaseActivity implements  PopupMenu.On
     ToggleButton mBikeToggleBtn;
     @BindView(R.id.boat_toggle_btn)
     ToggleButton mBoatToggleBtn;
-
-    @Override
-    public void retrofitOnResponse(Object responseObj, int responseType) {
-        super.retrofitOnResponse(responseObj, responseType);
-        if (responseObj instanceof PushTokenModel) {
-            clearBeforeLogout();
-            Intent loginActivity = new Intent(this, LoginActivity.class);
-            loginActivity.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(loginActivity);
-            finish();
-        }
-    }
-
     @BindView(R.id.car_toggle_btn)
     ToggleButton mCarToggleBtn;
     @BindView(R.id.kart_toggle_btn)
@@ -74,6 +61,18 @@ public class CreateProfileActivity extends BaseActivity implements  PopupMenu.On
     private boolean mCreateProfAfterReg = false;
 
     @Override
+    public void retrofitOnResponse(Object responseObj, int responseType) {
+        super.retrofitOnResponse(responseObj, responseType);
+        if (responseObj instanceof PushTokenModel) {
+            clearBeforeLogout();
+            Intent loginActivity = new Intent(this, LoginActivity.class);
+            loginActivity.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(loginActivity);
+            finish();
+        }
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_profile);
@@ -83,7 +82,7 @@ public class CreateProfileActivity extends BaseActivity implements  PopupMenu.On
 
     private void initView() {
         setToolbar(mToolbar, mToolbarTitle);
-        showToolbarBtn(mToolbar,  R.id.toolbar_settings_img_btn);
+        showToolbarBtn(mToolbar, R.id.toolbar_settings_img_btn);
         mCreateProfAfterReg = getIntent().getBooleanExtra(CREATE_PROF_AFTER_REG, false);
         if (mCreateProfAfterReg) {
             clearProfileTypePreferences();
@@ -97,7 +96,7 @@ public class CreateProfileActivity extends BaseActivity implements  PopupMenu.On
         super.onDestroy();
     }
 
-    @OnClick({R.id.toolbar_back_img_btn, R.id.enter_btn,  R.id.toolbar_settings_img_btn})
+    @OnClick({R.id.toolbar_back_img_btn, R.id.enter_btn, R.id.toolbar_settings_img_btn})
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.toolbar_back_img_btn:
@@ -247,7 +246,7 @@ public class CreateProfileActivity extends BaseActivity implements  PopupMenu.On
 
     @Override
     public boolean onMenuItemClick(MenuItem item) {
-         logout();
+        logout();
         return true;
     }
 

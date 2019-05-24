@@ -18,10 +18,6 @@ import online.motohub.R;
 
 public class ControlView<Value> extends LinearLayout implements Spinner.OnItemSelectedListener {
 
-    interface Callback {
-        boolean onValueChanged(Control control, Object value, String name);
-    }
-
     private Value value;
     private ArrayList<Value> values;
     private ArrayList<String> valuesStrings;
@@ -64,7 +60,7 @@ public class ControlView<Value> extends LinearLayout implements Spinner.OnItemSe
             spinner.setEnabled(false);
             spinner.setAlpha(0.8f);
             spinner.setAdapter(new ArrayAdapter(getContext(),
-                    R.layout.spinner_text, new String[]{ "Not supported." }));
+                    R.layout.spinner_text, new String[]{"Not supported."}));
             spinner.setSelection(0, false);
         } else {
             spinner.setEnabled(true);
@@ -88,7 +84,8 @@ public class ControlView<Value> extends LinearLayout implements Spinner.OnItemSe
     }
 
     @Override
-    public void onNothingSelected(AdapterView<?> adapterView) {}
+    public void onNothingSelected(AdapterView<?> adapterView) {
+    }
 
     private String stringify(Value value) {
         if (value instanceof Integer) {
@@ -96,5 +93,9 @@ public class ControlView<Value> extends LinearLayout implements Spinner.OnItemSe
             if ((Integer) value == ViewGroup.LayoutParams.WRAP_CONTENT) return "wrap content";
         }
         return String.valueOf(value).replace("_", " ").toLowerCase();
+    }
+
+    interface Callback {
+        boolean onValueChanged(Control control, Object value, String name);
     }
 }

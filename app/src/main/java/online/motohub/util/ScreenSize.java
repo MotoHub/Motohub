@@ -6,11 +6,12 @@ import android.view.WindowManager;
 
 public class ScreenSize {
 
-    private ScreenSize() {}
-
     private static ScreenSize instance;
     private static DisplayMetrics metrics;
     private static float scale;
+
+    private ScreenSize() {
+    }
 
     public static ScreenSize getInstance(Context context) {
         WindowManager window = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);

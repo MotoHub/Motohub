@@ -8,18 +8,7 @@ import android.opengl.GLUtils;
 import android.util.Size;
 
 
-
 public abstract class GlOverlayFilter extends GlFilter {
-
-    private int[] textures = new int[1];
-
-    private Bitmap bitmap = null;
-
-    protected Size inputResolution = new Size(1280, 720);
-
-    public GlOverlayFilter() {
-        super(DEFAULT_VERTEX_SHADER, FRAGMENT_SHADER);
-    }
 
     private final static String FRAGMENT_SHADER =
             "precision mediump float;\n" +
@@ -32,6 +21,20 @@ public abstract class GlOverlayFilter extends GlFilter {
                     "   \n" +
                     "   gl_FragColor = mix(textureColor, textureColor2, textureColor2.a);\n" +
                     "}\n";
+    protected Size inputResolution = new Size(1280, 720);
+    private int[] textures = new int[1];
+    private Bitmap bitmap = null;
+
+    public GlOverlayFilter() {
+        super(DEFAULT_VERTEX_SHADER, FRAGMENT_SHADER);
+    }
+
+    public static void releaseBitmap(Bitmap bitmap) {
+        if (bitmap != null && !bitmap.isRecycled()) {
+            bitmap.recycle();
+            bitmap = null;
+        }
+    }
 
     public void setResolution(Size resolution) {
         this.inputResolution = resolution;
@@ -89,11 +92,4 @@ public abstract class GlOverlayFilter extends GlFilter {
     }
 
     protected abstract void drawCanvas(Canvas canvas);
-
-    public static void releaseBitmap(Bitmap bitmap) {
-        if (bitmap != null && !bitmap.isRecycled()) {
-            bitmap.recycle();
-            bitmap = null;
-        }
-    }
 }

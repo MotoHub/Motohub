@@ -42,13 +42,11 @@ import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import online.motohub.R;
 import online.motohub.adapter.GalleryImgAdapter;
-import online.motohub.application.MotoHub;
 import online.motohub.model.DeleteProfileImagesResponse;
 import online.motohub.model.GalleryImgModel;
 import online.motohub.model.GalleryImgResModel;
 import online.motohub.model.ImageModel;
 import online.motohub.model.ImageResModel;
-import online.motohub.model.ProfileResModel;
 import online.motohub.model.SessionModel;
 import online.motohub.retrofit.RetrofitClient;
 import online.motohub.util.AppConstants;
@@ -67,38 +65,26 @@ import static online.motohub.retrofit.RetrofitClient.DELETE_MY_PROFILE_IMAGE;
 
 public class ProfileImgGalleryActivity extends BaseActivity {
 
+    public static final String EXTRA_PROFILE = "extra_profile_data";
+    private static final int IMAGE_PICKER_REQUEST_CODE = 121;
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
-
     @BindView(R.id.parent_view)
     LinearLayout mParentLayout;
-
     @BindView(R.id.profile_gallery_rv)
     RecyclerView mGalleryRv;
-
     @BindView(R.id.profile_gallery_pager)
     ViewPager mViewPager;
-
     @BindView(R.id.view_pager_lay)
     RelativeLayout mViewPagerLay;
-
     @BindView(R.id.profile_gallery_upload_image_view)
     FloatingActionButton mUpdateFAB;
-
     private GalleryImgAdapter mAdapter;
     private List<GalleryImgResModel> mGalleryResModels;
     private ProfileImgGalleryActivity.CustomPagerAdapter mCustomPagerAdapter;
-
-    public static final String EXTRA_PROFILE = "extra_profile_data";
-
     private int mProfileID;
     private ActionMode mActionMode;
     private ArrayList<Integer> deleteList;
-
-    private enum UpdateTask {
-        NONE, FILE_UPLOAD, DATA_ENTRY_UPLOAD
-    }
-
     private UpdateTask mUpdateTask = UpdateTask.NONE;
 
 
@@ -120,6 +106,8 @@ public class ProfileImgGalleryActivity extends BaseActivity {
             }
         }
     };
+    private File mSelectedFile;
+    private ImageResModel mImageResModel = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -130,6 +118,14 @@ public class ProfileImgGalleryActivity extends BaseActivity {
         getGalleryImages();
 
     }
+
+    /*private final GalleryImgAdapter.OnItemClickListener mOnItemClickListener = new GalleryImgAdapter.OnItemClickListener() {
+        @Override
+        public void onItemClick(int position) {
+            mViewPager.setCurrentItem(position);
+            visibleViewPager(true);
+        }
+    };*/
 
     @Override
     protected void onDestroy() {
@@ -186,20 +182,10 @@ public class ProfileImgGalleryActivity extends BaseActivity {
         }));
     }
 
-    /*private final GalleryImgAdapter.OnItemClickListener mOnItemClickListener = new GalleryImgAdapter.OnItemClickListener() {
-        @Override
-        public void onItemClick(int position) {
-            mViewPager.setCurrentItem(position);
-            visibleViewPager(true);
-        }
-    };*/
-
     private void visibleViewPager(boolean isViewpager) {
         mViewPagerLay.setVisibility(isViewpager ? View.VISIBLE : View.GONE);
         mGalleryRv.setVisibility(isViewpager ? View.GONE : View.VISIBLE);
     }
-
-    private static final int IMAGE_PICKER_REQUEST_CODE = 121;
 
     @OnClick({R.id.profile_gallery_upload_image_view, R.id.toolbar_back_img_btn, R.id.cancel_btn})
     public void onClick(View v) {
@@ -224,7 +210,7 @@ public class ProfileImgGalleryActivity extends BaseActivity {
     private void getGalleryImages() {
 
         mUpdateTask = UpdateTask.NONE;
-        RetrofitClient.getRetrofitInstance().callGetImageGallery(ProfileImgGalleryActivity.this, "MotoID = " + String.valueOf(mProfileID),
+        RetrofitClient.getRetrofitInstance().callGetImageGallery(ProfileImgGalleryActivity.this, "MotoID = " + mProfileID,
                 RetrofitClient.GET_GALLERY_DATA_RESPONSE);
 
     }
@@ -264,8 +250,6 @@ public class ProfileImgGalleryActivity extends BaseActivity {
         }
     }
 
-    private File mSelectedFile;
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -290,8 +274,6 @@ public class ProfileImgGalleryActivity extends BaseActivity {
             }
         }
     }
-
-    private ImageResModel mImageResModel = null;
 
     @Override
     public void retrofitOnResponse(Object responseObj, int responseType) {
@@ -386,57 +368,6 @@ public class ProfileImgGalleryActivity extends BaseActivity {
         showSnackBar(mParentLayout, message);
     }
 
-
-    private class CustomPagerAdapter extends PagerAdapter {
-
-        private final Context mContext;
-        private final List<GalleryImgResModel> mImgUriList;
-        private final LayoutInflater mInflater;
-
-
-        CustomPagerAdapter(Context context, List<GalleryImgResModel> imgUriList) {
-            mContext = context;
-            mImgUriList = imgUriList;
-            mInflater = LayoutInflater.from(mContext);
-        }
-
-        @Override
-        public Object instantiateItem(ViewGroup parent, int pos) {
-            View convertView = mInflater.inflate(R.layout.row_picker_img_pager_thumbnail, parent, false);
-            ZoomImageView mImageView = convertView.findViewById(R.id.row_picker_img_pager_thumbnail_image_view);
-
-            Glide.with(mContext)
-                    .load(UrlUtils.AWS_S3_BASE_URL + mImgUriList.get(pos).getGalleryImage())
-                    .apply(new RequestOptions()
-                            .error(R.drawable.img_place_holder))
-                    .into(mImageView);
-
-            parent.addView(convertView);
-            return convertView;
-        }
-
-        @Override
-        public int getItemPosition(Object object) {
-            return POSITION_NONE;
-        }
-
-        @Override
-        public void destroyItem(ViewGroup collection, int position, Object view) {
-            collection.removeView((View) view);
-        }
-
-        @Override
-        public int getCount() {
-            return mImgUriList.size();
-        }
-
-        @Override
-        public boolean isViewFromObject(View view, Object object) {
-            return view == object;
-        }
-
-    }
-
     @Override
     protected void onResume() {
         super.onResume();
@@ -458,7 +389,6 @@ public class ProfileImgGalleryActivity extends BaseActivity {
         }
     }
 
-
     //List item select method
     private void onListItemSelect(int position) {
         mAdapter.toggleSelection(position);//Toggle the selection
@@ -474,7 +404,7 @@ public class ProfileImgGalleryActivity extends BaseActivity {
 
         if (mActionMode != null)
             //set action mode title on item selection
-            mActionMode.setTitle(String.valueOf(mAdapter.getSelectedCount()) + " selected");
+            mActionMode.setTitle(mAdapter.getSelectedCount() + " selected");
     }
 
     //Set action mode null after use
@@ -535,5 +465,59 @@ public class ProfileImgGalleryActivity extends BaseActivity {
                         retrofitOnFailure();
                     }
                 });
+    }
+
+    private enum UpdateTask {
+        NONE, FILE_UPLOAD, DATA_ENTRY_UPLOAD
+    }
+
+    private class CustomPagerAdapter extends PagerAdapter {
+
+        private final Context mContext;
+        private final List<GalleryImgResModel> mImgUriList;
+        private final LayoutInflater mInflater;
+
+
+        CustomPagerAdapter(Context context, List<GalleryImgResModel> imgUriList) {
+            mContext = context;
+            mImgUriList = imgUriList;
+            mInflater = LayoutInflater.from(mContext);
+        }
+
+        @Override
+        public Object instantiateItem(ViewGroup parent, int pos) {
+            View convertView = mInflater.inflate(R.layout.row_picker_img_pager_thumbnail, parent, false);
+            ZoomImageView mImageView = convertView.findViewById(R.id.row_picker_img_pager_thumbnail_image_view);
+
+            Glide.with(mContext)
+                    .load(UrlUtils.AWS_S3_BASE_URL + mImgUriList.get(pos).getGalleryImage())
+                    .apply(new RequestOptions()
+                            .error(R.drawable.img_place_holder))
+                    .into(mImageView);
+
+            parent.addView(convertView);
+            return convertView;
+        }
+
+        @Override
+        public int getItemPosition(Object object) {
+            return POSITION_NONE;
+        }
+
+        @Override
+        public void destroyItem(ViewGroup collection, int position, Object view) {
+            collection.removeView((View) view);
+        }
+
+        @Override
+        public int getCount() {
+            return mImgUriList.size();
+        }
+
+        @Override
+        public boolean isViewFromObject(View view, Object object) {
+            return view == object;
+        }
+
     }
 }

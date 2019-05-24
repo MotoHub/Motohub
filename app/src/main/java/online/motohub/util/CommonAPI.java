@@ -51,12 +51,12 @@ public class CommonAPI {
         mInputObj.addProperty(APIConstants.FollowRelation, mFollowRelation);
         JsonArray mInputArray = new JsonArray();
         mInputArray.add(mInputObj);
-        RetrofitClient.getRetrofitInstance().callFollowProfile(mContext,  mInputArray, RetrofitClient.FOLLOW_PROFILE_RESPONSE);
+        RetrofitClient.getRetrofitInstance().callFollowProfile(mContext, mInputArray, RetrofitClient.FOLLOW_PROFILE_RESPONSE);
     }
 
-    public void callUnFollowProfile(Context mContext,int mFollowRowID) {
+    public void callUnFollowProfile(Context mContext, int mFollowRowID) {
         String mFilter = APIConstants.ID + "=" + mFollowRowID;
-        RetrofitClient.getRetrofitInstance().callUnFollowProfile(mContext,  mFilter, RetrofitClient.UN_FOLLOW_PROFILE_RESPONSE);
+        RetrofitClient.getRetrofitInstance().callUnFollowProfile(mContext, mFilter, RetrofitClient.UN_FOLLOW_PROFILE_RESPONSE);
     }
 
     public void callUnFollowMyProfile(Context mContext, RetrofitResInterface mRetrofitResInterface, int mMyProfileID, int mOtherProfileID) {
@@ -108,7 +108,7 @@ public class CommonAPI {
         mJsonObject.addProperty(PostsModel.PostVideoThumbnailurl, mPostResModel.getPostVideoThumbnailURL());
         mJsonObject.addProperty(PostsModel.PostVideoURL, mPostResModel.getPostVideoURL());
         try {
-            mJsonObject.addProperty(PostsModel.SHARED_TEXT, URLEncoder.encode(mShareTxt,"UTF-8"));
+            mJsonObject.addProperty(PostsModel.SHARED_TEXT, URLEncoder.encode(mShareTxt, "UTF-8"));
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
@@ -169,8 +169,8 @@ public class CommonAPI {
                 mJsonArray, RetrofitClient.GET_PROMOTER_FOLLOW_RESPONSE);
     }
 
-    public void callSendSingleChatMsg(Context context,int fromProfileId,int fromUserID,int toProfileID,
-                                      int toUserID,String msg,String chatrelation,String media, String imageUrl) {
+    public void callSendSingleChatMsg(Context context, int fromProfileId, int fromUserID, int toProfileID,
+                                      int toUserID, String msg, String chatrelation, String media, String imageUrl) {
 
         JsonArray mJsonArray = new JsonArray();
         JsonObject mJsonObject = new JsonObject();
@@ -178,13 +178,13 @@ public class CommonAPI {
         mJsonObject.addProperty(APIConstants.ToProfileID, toProfileID);
         mJsonObject.addProperty(APIConstants.FromUserID, fromUserID);
         mJsonObject.addProperty(APIConstants.ToUserID, toUserID);
-        mJsonObject.addProperty(APIConstants.ChatRelation,chatrelation);
+        mJsonObject.addProperty(APIConstants.ChatRelation, chatrelation);
         mJsonObject.addProperty(APIConstants.Message, msg);
         mJsonObject.addProperty(APIConstants.Message_Type, media);
         mJsonObject.addProperty(APIConstants.Image_Url, imageUrl);
         mJsonArray.add(mJsonObject);
 
-        RetrofitClient.getRetrofitInstance().callSendSingleChatMsg(context,mJsonArray,RetrofitClient.SEND_SINGLE_CHAT_MSG);
+        RetrofitClient.getRetrofitInstance().callSendSingleChatMsg(context, mJsonArray, RetrofitClient.SEND_SINGLE_CHAT_MSG);
 
     }
 
@@ -195,14 +195,14 @@ public class CommonAPI {
         mInputObj.addProperty(ProfileModel.PROFILE_ID, mProfileID);
         mInputObj.addProperty(AppConstants.POST_ID, mPostID);
         try {
-            mInputObj.addProperty(AppConstants.REPORT_STRING, URLEncoder.encode(mReportString,"UTF-8"));
+            mInputObj.addProperty(AppConstants.REPORT_STRING, URLEncoder.encode(mReportString, "UTF-8"));
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
         JsonArray mInputArray = new JsonArray();
         mInputArray.add(mInputObj);
 
-        RetrofitClient.getRetrofitInstance().callPostReportpost((BaseActivity)mContext,  mInputArray,
+        RetrofitClient.getRetrofitInstance().callPostReportpost((BaseActivity) mContext, mInputArray,
                 RetrofitClient.REPORT_POST_RESPONSE);
     }
 }

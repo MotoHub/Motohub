@@ -46,372 +46,367 @@
                         android:theme="@style/ThemeOverlay.AppCompat.Light"
                         app:layout_scrollFlags="scroll">-->
 
-                    <RelativeLayout style="@style/LayoutMatchWrap">
+                <RelativeLayout style="@style/LayoutMatchWrap">
 
-                        <RelativeLayout
-                            android:id="@+id/user_box"
-                            style="@style/LayoutMatchWrap"
-                            android:gravity="center"
-                            android:paddingBottom="@dimen/size5"
-                            android:paddingLeft="@dimen/size10"
-                            android:visibility="gone"
-                            android:paddingRight="@dimen/size10"
-                            android:paddingTop="@dimen/size5">
+                    <RelativeLayout
+                        android:id="@+id/user_box"
+                        style="@style/LayoutMatchWrap"
+                        android:gravity="center"
+                        android:paddingLeft="@dimen/size10"
+                        android:paddingTop="@dimen/size5"
+                        android:paddingRight="@dimen/size10"
+                        android:paddingBottom="@dimen/size5"
+                        android:visibility="gone">
 
-                            <RelativeLayout style="@style/LayoutMatchWrap">
+                        <RelativeLayout style="@style/LayoutMatchWrap">
 
-                                <de.hdodenhof.circleimageview.CircleImageView
-                                    android:id="@+id/profile_img"
-                                    android:layout_width="@dimen/size60"
-                                    android:layout_height="@dimen/size60"
-                                    android:layout_centerVertical="true"
-                                    android:clickable="true"
-                                    android:focusable="true"
-                                    android:scaleType="centerCrop"
-                                    android:src="@drawable/default_profile_icon" />
+                            <de.hdodenhof.circleimageview.CircleImageView
+                                android:id="@+id/profile_img"
+                                android:layout_width="@dimen/size60"
+                                android:layout_height="@dimen/size60"
+                                android:layout_centerVertical="true"
+                                android:clickable="true"
+                                android:focusable="true"
+                                android:scaleType="centerCrop"
+                                android:src="@drawable/default_profile_icon" />
 
                             <com.facebook.shimmer.ShimmerFrameLayout
                                 android:id="@+id/shimmer_profile"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_alignBottom="@+id/profile_img"
                                 android:layout_alignTop="@id/profile_img"
+                                android:layout_alignBottom="@+id/profile_img"
                                 android:layout_toEndOf="@id/profile_img">
 
-                                    <LinearLayout
-                                        android:layout_width="match_parent"
-                                        android:layout_height="wrap_content">
-
-                                        <include layout="@layout/profiledetails_placeholder_item"/>
-
-                                    </LinearLayout>
-
-                                </com.facebook.shimmer.ShimmerFrameLayout>
-
                                 <LinearLayout
-                                    style="@style/LayoutWrap"
-                                    android:layout_centerVertical="true"
-                                    android:layout_marginStart="@dimen/size5"
-                                    android:layout_toEndOf="@id/profile_img"
-                                    android:layout_toStartOf="@+id/btn_lay"
-                                    android:gravity="start|center"
-                                    android:orientation="vertical">
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content">
 
-                                    <TextView
-                                        android:id="@+id/name_of_moto_tv"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_margin="@dimen/size5"
-                                        android:clickable="true"
-                                        android:focusable="true"
-                                        android:gravity="center_vertical"
-                                        android:textColor="@color/colorBlack"
-                                        android:textSize="@dimen/text12"
-                                        android:textStyle="bold" />
-
-                                    <TextView
-                                        android:id="@+id/name_of_driver_tv"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_margin="@dimen/size5"
-                                        android:clickable="true"
-                                        android:focusable="true"
-                                        android:gravity="center_vertical"
-                                        android:textColor="@color/colorBlack"
-                                        android:textSize="@dimen/text12"
-                                        android:textStyle="bold" />
+                                    <include layout="@layout/profiledetails_placeholder_item" />
 
                                 </LinearLayout>
 
-                                <LinearLayout
-                                    android:id="@+id/btn_lay"
+                            </com.facebook.shimmer.ShimmerFrameLayout>
+
+                            <LinearLayout
+                                style="@style/LayoutWrap"
+                                android:layout_centerVertical="true"
+                                android:layout_marginStart="@dimen/size5"
+                                android:layout_toStartOf="@+id/btn_lay"
+                                android:layout_toEndOf="@id/profile_img"
+                                android:gravity="start|center"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:id="@+id/name_of_moto_tv"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_margin="@dimen/size5"
+                                    android:clickable="true"
+                                    android:focusable="true"
+                                    android:gravity="center_vertical"
+                                    android:textColor="@color/colorBlack"
+                                    android:textSize="@dimen/text12"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:id="@+id/name_of_driver_tv"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_margin="@dimen/size5"
+                                    android:clickable="true"
+                                    android:focusable="true"
+                                    android:gravity="center_vertical"
+                                    android:textColor="@color/colorBlack"
+                                    android:textSize="@dimen/text12"
+                                    android:textStyle="bold" />
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:id="@+id/btn_lay"
+                                style="@style/LayoutWrap"
+                                android:layout_alignParentEnd="true"
+                                android:layout_centerVertical="true"
+                                android:orientation="vertical"
+                                android:visibility="gone">
+
+                                <TextView
+                                    android:id="@+id/win_car_btn"
                                     style="@style/LayoutWrap"
-                                    android:layout_alignParentEnd="true"
-                                    android:layout_centerVertical="true"
-                                    android:orientation="vertical"
-                                    android:visibility="gone">
+                                    android:layout_width="@dimen/size100"
+                                    android:layout_margin="@dimen/size2"
+                                    android:background="@drawable/black_orange_btn_bg"
+                                    android:clickable="true"
+                                    android:focusable="true"
+                                    android:padding="@dimen/size5"
+                                    android:text="@string/win_car"
+                                    android:textAlignment="center"
+                                    android:textColor="@color/colorOrange"
+                                    android:textSize="@dimen/text12" />
 
-                                    <TextView
-                                        android:id="@+id/win_car_btn"
-                                        style="@style/LayoutWrap"
-                                        android:layout_width="@dimen/size100"
-                                        android:layout_margin="@dimen/size2"
-                                        android:background="@drawable/black_orange_btn_bg"
-                                        android:clickable="true"
-                                        android:focusable="true"
-                                        android:padding="@dimen/size5"
-                                        android:text="@string/win_car"
-                                        android:textAlignment="center"
-                                        android:textColor="@color/colorOrange"
-                                        android:textSize="@dimen/text12" />
+                                <TextView
+                                    android:id="@+id/view_request_btn"
+                                    style="@style/LayoutWrap"
+                                    android:layout_width="@dimen/size100"
+                                    android:layout_margin="@dimen/size2"
+                                    android:background="@drawable/orange_tab_bg"
+                                    android:clickable="true"
+                                    android:focusable="true"
+                                    android:padding="@dimen/size5"
+                                    android:text="@string/view_stream_request"
+                                    android:textAlignment="center"
+                                    android:textColor="@color/colorBlack"
+                                    android:textSize="@dimen/text12"
+                                    android:visibility="gone" />
 
-                                    <TextView
-                                        android:id="@+id/view_request_btn"
-                                        style="@style/LayoutWrap"
-                                        android:layout_width="@dimen/size100"
-                                        android:layout_margin="@dimen/size2"
-                                        android:background="@drawable/orange_tab_bg"
-                                        android:clickable="true"
-                                        android:focusable="true"
-                                        android:padding="@dimen/size5"
-                                        android:text="@string/view_stream_request"
-                                        android:textAlignment="center"
-                                        android:textColor="@color/colorBlack"
-                                        android:textSize="@dimen/text12"
-                                        android:visibility="gone" />
+                            </LinearLayout>
+                        </RelativeLayout>
+                    </RelativeLayout>
 
-                                </LinearLayout>
-                            </RelativeLayout>
+                    <View
+                        android:id="@+id/userBoxSeparator"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/size10"
+                        android:layout_below="@+id/user_box"
+                        android:background="@color/colorLighterGrey"
+                        android:visibility="gone" />
+
+                    <LinearLayout
+                        android:id="@+id/tab_box"
+                        style="@style/LayoutMatchWrap"
+                        android:layout_below="@id/userBoxSeparator"
+                        android:layout_marginTop="@dimen/size10"
+                        android:layout_marginBottom="@dimen/size10"
+                        android:baselineAligned="false"
+                        android:orientation="horizontal"
+                        android:paddingLeft="@dimen/size5"
+                        android:paddingRight="@dimen/size10">
+
+                        <RelativeLayout
+                            android:id="@+id/performance_box"
+                            android:layout_width="@dimen/size0"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:background="@drawable/white_orange_bg"
+                            android:clickable="true"
+                            android:focusable="true">
+
+                            <ImageView
+                                android:id="@+id/performance_shop_img_view"
+                                android:layout_width="@dimen/size24"
+                                android:layout_height="@dimen/size24"
+                                android:layout_centerHorizontal="true"
+                                android:background="@null"
+                                android:contentDescription="@string/app_name"
+                                android:src="@drawable/ic_performance_shop" />
+
+                            <TextView
+                                android:id="@+id/performance_shop_tv"
+                                style="@style/LayoutMatch"
+                                android:layout_below="@+id/performance_shop_img_view"
+                                android:gravity="center"
+                                android:text="@string/performance_shop"
+                                android:textColor="@color/colorBlack"
+                                android:textSize="@dimen/text12" />
+
                         </RelativeLayout>
 
                         <View
-                            android:id="@+id/userBoxSeparator"
-                            android:layout_width="match_parent"
-                            android:layout_height="@dimen/size10"
-                            android:layout_below="@+id/user_box"
-                            android:background="@color/colorLighterGrey" />
-
-                        <LinearLayout
-                            android:id="@+id/tab_box"
-                            style="@style/LayoutMatchWrap"
-                            android:layout_below="@id/userBoxSeparator"
-                            android:layout_marginBottom="@dimen/size10"
+                            android:layout_width="@dimen/size1"
+                            android:layout_height="match_parent"
                             android:layout_marginTop="@dimen/size10"
-                            android:baselineAligned="false"
-                            android:orientation="horizontal"
-                            android:paddingLeft="@dimen/size5"
-                            android:paddingRight="@dimen/size10">
-
-                            <RelativeLayout
-                                android:id="@+id/performance_box"
-                                android:layout_width="@dimen/size0"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:background="@drawable/white_orange_bg"
-                                android:clickable="true"
-                                android:focusable="true">
-
-                                <ImageView
-                                    android:id="@+id/performance_shop_img_view"
-                                    android:layout_width="@dimen/size24"
-                                    android:layout_height="@dimen/size24"
-                                    android:layout_centerHorizontal="true"
-                                    android:background="@null"
-                                    android:contentDescription="@string/app_name"
-                                    android:src="@drawable/ic_performance_shop" />
-
-                                <TextView
-                                    android:id="@+id/performance_shop_tv"
-                                    style="@style/LayoutMatch"
-                                    android:layout_below="@+id/performance_shop_img_view"
-                                    android:gravity="center"
-                                    android:text="@string/performance_shop"
-                                    android:textColor="@color/colorBlack"
-                                    android:textSize="@dimen/text12" />
-
-                            </RelativeLayout>
-
-                            <View
-                                android:layout_width="@dimen/size1"
-                                android:layout_height="match_parent"
-                                android:layout_marginBottom="@dimen/size5"
-                                android:layout_marginTop="@dimen/size10"
-                                android:background="@color/colorGrey" />
-
-                            <RelativeLayout
-                                android:id="@+id/news_and_media_box"
-                                android:layout_width="@dimen/size0"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:background="@drawable/white_orange_bg"
-                                android:clickable="true"
-                                android:focusable="true">
-
-                                <ImageView
-                                    android:id="@+id/news_and_media_img_view"
-                                    android:layout_width="@dimen/size24"
-                                    android:layout_height="@dimen/size24"
-                                    android:layout_centerHorizontal="true"
-                                    android:background="@null"
-                                    android:contentDescription="@string/app_name"
-                                    android:src="@drawable/news_and_media_icon" />
-
-                                <TextView
-                                    android:id="@+id/news_and_media_tv"
-                                    style="@style/LayoutMatchWrap"
-                                    android:layout_below="@+id/news_and_media_img_view"
-                                    android:gravity="center"
-                                    android:text="@string/news_and_media1"
-                                    android:textColor="@color/colorBlack"
-                                    android:textSize="@dimen/text12" />
-
-                            </RelativeLayout>
-
-                            <View
-                                android:layout_width="@dimen/size1"
-                                android:layout_height="@dimen/size30"
-                                android:layout_gravity="center"
-                                android:background="@color/colorGrey" />
-
-                            <RelativeLayout
-                                android:id="@+id/tracks_container"
-                                android:layout_width="@dimen/size0"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:background="@drawable/white_orange_bg"
-                                android:clickable="true"
-                                android:focusable="true">
-
-                                <ImageView
-                                    android:id="@+id/tracks_img_view"
-                                    android:layout_width="@dimen/size24"
-                                    android:layout_height="@dimen/size24"
-                                    android:layout_centerHorizontal="true"
-                                    android:background="@null"
-                                    android:contentDescription="@string/app_name"
-                                    android:src="@drawable/tracks_icon" />
-
-                                <TextView
-                                    android:id="@+id/tracks_tv"
-                                    style="@style/LayoutMatchWrap"
-                                    android:layout_below="@+id/tracks_img_view"
-                                    android:gravity="center"
-                                    android:text="@string/Tracks"
-                                    android:textColor="@color/colorBlack"
-                                    android:textSize="@dimen/text12" />
-
-                            </RelativeLayout>
-
-                            <View
-                                android:layout_width="@dimen/size1"
-                                android:layout_height="@dimen/size30"
-                                android:layout_gravity="center"
-                                android:background="@color/colorGrey" />
-
-                            <RelativeLayout
-                                android:id="@+id/clubs_box"
-                                android:layout_width="@dimen/size0"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:background="@drawable/white_orange_bg"
-                                android:clickable="true"
-                                android:focusable="true">
-
-                                <ImageView
-                                    android:id="@+id/clubs_img_view"
-                                    android:layout_width="@dimen/size24"
-                                    android:layout_height="@dimen/size24"
-                                    android:layout_centerHorizontal="true"
-                                    android:background="@null"
-                                    android:contentDescription="@string/app_name"
-                                    android:src="@drawable/clubs_icon" />
-
-                                <TextView
-                                    android:id="@+id/clubs_tv"
-                                    style="@style/LayoutMatchWrap"
-                                    android:layout_below="@+id/clubs_img_view"
-                                    android:gravity="center"
-                                    android:text="@string/clubs"
-                                    android:textColor="@color/colorBlack"
-                                    android:textSize="@dimen/text12" />
-
-                            </RelativeLayout>
-
-                            <View
-                                android:layout_width="@dimen/size1"
-                                android:layout_height="@dimen/size30"
-                                android:layout_gravity="center"
-                                android:background="@color/colorGrey" />
-
-                            <RelativeLayout
-                                android:id="@+id/promoter_box"
-                                android:layout_width="@dimen/size0"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:background="@drawable/white_orange_bg"
-                                android:clickable="true"
-                                android:focusable="true">
-
-                                <ImageView
-                                    android:id="@+id/promoter_img_view"
-                                    android:layout_width="@dimen/size24"
-                                    android:layout_height="@dimen/size24"
-                                    android:layout_centerHorizontal="true"
-                                    android:background="@null"
-                                    android:contentDescription="@string/app_name"
-                                    android:src="@drawable/promoters_icon" />
-
-                                <TextView
-                                    android:id="@+id/promoter_tv"
-                                    style="@style/LayoutMatchWrap"
-                                    android:layout_below="@+id/promoter_img_view"
-                                    android:gravity="center"
-                                    android:paddingTop="@dimen/size2"
-                                    android:text="@string/promoters"
-                                    android:textColor="@color/colorBlack"
-                                    android:textSize="@dimen/text12" />
-
-                            </RelativeLayout>
-
-                        </LinearLayout>
-
-                        <View
-                            android:id="@+id/tabSeparator"
-                            android:layout_width="match_parent"
-                            android:layout_height="@dimen/size10"
-                            android:layout_below="@+id/tab_box"
-                            android:background="@color/colorLighterGrey" />
-
-                        <com.facebook.shimmer.ShimmerFrameLayout
-                            android:id="@+id/shimmer_findfriends"
-                            android:layout_width="match_parent"
-                            android:layout_height="@dimen/size100"
-                            android:layout_below="@+id/tabSeparator"
-                            android:layout_centerHorizontal="true"
-                            android:layout_marginBottom="@dimen/size10"
-                            android:layout_marginStart="@dimen/size20"
-                            android:layout_marginTop="@dimen/size10">
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:orientation="horizontal">
-
-                                <include layout="@layout/profiles_placeholder_item" />
-
-                            </LinearLayout>
-                        </com.facebook.shimmer.ShimmerFrameLayout>
-
-                        <android.support.v7.widget.RecyclerView
-                            android:id="@+id/hor_recycler_view"
-                            android:layout_width="wrap_content"
-                            android:layout_height="@dimen/size100"
-                            android:layout_below="@+id/tabSeparator"
-                            android:layout_centerHorizontal="true"
-                            android:layout_marginBottom="@dimen/size10"
-                            android:layout_marginStart="@dimen/size20"
-                            android:layout_marginTop="@dimen/size10"
-                            android:orientation="horizontal"
-                            app:layoutManager="android.support.v7.widget.LinearLayoutManager" />
-
-                        <View
-                            android:id="@+id/horRvSeparator"
-                            android:layout_width="match_parent"
-                            android:layout_height="@dimen/size10"
-                            android:layout_below="@+id/hor_recycler_view"
-                            android:background="@color/colorLighterGrey" />
+                            android:layout_marginBottom="@dimen/size5"
+                            android:background="@color/colorGrey" />
 
                         <RelativeLayout
-                            android:id="@+id/searchBox"
+                            android:id="@+id/news_and_media_box"
+                            android:layout_width="@dimen/size0"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:background="@drawable/white_orange_bg"
+                            android:clickable="true"
+                            android:focusable="true">
+
+                            <ImageView
+                                android:id="@+id/news_and_media_img_view"
+                                android:layout_width="@dimen/size24"
+                                android:layout_height="@dimen/size24"
+                                android:layout_centerHorizontal="true"
+                                android:background="@null"
+                                android:contentDescription="@string/app_name"
+                                android:src="@drawable/news_and_media_icon" />
+
+                            <TextView
+                                android:id="@+id/news_and_media_tv"
+                                style="@style/LayoutMatchWrap"
+                                android:layout_below="@+id/news_and_media_img_view"
+                                android:gravity="center"
+                                android:text="@string/news_and_media1"
+                                android:textColor="@color/colorBlack"
+                                android:textSize="@dimen/text12" />
+
+                        </RelativeLayout>
+
+                        <View
+                            android:layout_width="@dimen/size1"
+                            android:layout_height="@dimen/size30"
+                            android:layout_gravity="center"
+                            android:background="@color/colorGrey" />
+
+                        <RelativeLayout
+                            android:id="@+id/tracks_container"
+                            android:layout_width="@dimen/size0"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:background="@drawable/white_orange_bg"
+                            android:clickable="true"
+                            android:focusable="true">
+
+                            <ImageView
+                                android:id="@+id/tracks_img_view"
+                                android:layout_width="@dimen/size24"
+                                android:layout_height="@dimen/size24"
+                                android:layout_centerHorizontal="true"
+                                android:background="@null"
+                                android:contentDescription="@string/app_name"
+                                android:src="@drawable/tracks_icon" />
+
+                            <TextView
+                                android:id="@+id/tracks_tv"
+                                style="@style/LayoutMatchWrap"
+                                android:layout_below="@+id/tracks_img_view"
+                                android:gravity="center"
+                                android:text="@string/Tracks"
+                                android:textColor="@color/colorBlack"
+                                android:textSize="@dimen/text12" />
+
+                        </RelativeLayout>
+
+                        <View
+                            android:layout_width="@dimen/size1"
+                            android:layout_height="@dimen/size30"
+                            android:layout_gravity="center"
+                            android:background="@color/colorGrey" />
+
+                        <RelativeLayout
+                            android:id="@+id/clubs_box"
+                            android:layout_width="@dimen/size0"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:background="@drawable/white_orange_bg"
+                            android:clickable="true"
+                            android:focusable="true">
+
+                            <ImageView
+                                android:id="@+id/clubs_img_view"
+                                android:layout_width="@dimen/size24"
+                                android:layout_height="@dimen/size24"
+                                android:layout_centerHorizontal="true"
+                                android:background="@null"
+                                android:contentDescription="@string/app_name"
+                                android:src="@drawable/clubs_icon" />
+
+                            <TextView
+                                android:id="@+id/clubs_tv"
+                                style="@style/LayoutMatchWrap"
+                                android:layout_below="@+id/clubs_img_view"
+                                android:gravity="center"
+                                android:text="@string/clubs"
+                                android:textColor="@color/colorBlack"
+                                android:textSize="@dimen/text12" />
+
+                        </RelativeLayout>
+
+                        <View
+                            android:layout_width="@dimen/size1"
+                            android:layout_height="@dimen/size30"
+                            android:layout_gravity="center"
+                            android:background="@color/colorGrey" />
+
+                        <RelativeLayout
+                            android:id="@+id/promoter_box"
+                            android:layout_width="@dimen/size0"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:background="@drawable/white_orange_bg"
+                            android:clickable="true"
+                            android:focusable="true">
+
+                            <ImageView
+                                android:id="@+id/promoter_img_view"
+                                android:layout_width="@dimen/size24"
+                                android:layout_height="@dimen/size24"
+                                android:layout_centerHorizontal="true"
+                                android:background="@null"
+                                android:contentDescription="@string/app_name"
+                                android:src="@drawable/promoters_icon" />
+
+                            <TextView
+                                android:id="@+id/promoter_tv"
+                                style="@style/LayoutMatchWrap"
+                                android:layout_below="@+id/promoter_img_view"
+                                android:gravity="center"
+                                android:paddingTop="@dimen/size2"
+                                android:text="@string/promoters"
+                                android:textColor="@color/colorBlack"
+                                android:textSize="@dimen/text12" />
+
+                        </RelativeLayout>
+
+                    </LinearLayout>
+
+                    <View
+                        android:id="@+id/tabSeparator"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/size10"
+                        android:layout_below="@+id/tab_box"
+                        android:background="@color/colorLighterGrey" />
+
+                    <com.facebook.shimmer.ShimmerFrameLayout
+                        android:id="@+id/shimmer_findfriends"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/size100"
+                        android:layout_below="@+id/tabSeparator"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginStart="@dimen/size20"
+                        android:layout_marginTop="@dimen/size10"
+                        android:layout_marginBottom="@dimen/size10">
+
+                        <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_below="@id/horRvSeparator"
-                            android:layout_marginEnd="@dimen/size10"
-                            android:layout_marginLeft="@dimen/size10"
-                            android:layout_marginRight="@dimen/size10"
-                            android:layout_marginStart="@dimen/size10"
-                            android:paddingBottom="@dimen/size10"
-                            android:paddingTop="@dimen/size10">
+                            android:orientation="horizontal">
+
+                            <include layout="@layout/profiles_placeholder_item" />
+
+                        </LinearLayout>
+                    </com.facebook.shimmer.ShimmerFrameLayout>
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/hor_recycler_view"
+                        android:layout_width="wrap_content"
+                        android:layout_height="@dimen/size100"
+                        android:layout_below="@+id/tabSeparator"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginStart="@dimen/size20"
+                        android:layout_marginTop="@dimen/size10"
+                        android:layout_marginBottom="@dimen/size10"
+                        android:orientation="horizontal"
+                        app:layoutManager="android.support.v7.widget.LinearLayoutManager" />
+
+
+                    <RelativeLayout
+                        android:id="@+id/searchBox"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/hor_recycler_view"
+                        android:layout_marginStart="@dimen/size10"
+                        android:layout_marginLeft="@dimen/size10"
+                        android:layout_marginEnd="@dimen/size10"
+                        android:layout_marginRight="@dimen/size10"
+                        android:paddingTop="@dimen/size10"
+                        android:paddingBottom="@dimen/size10">
 
                         <EditText
                             android:id="@+id/search_et"
@@ -423,129 +418,132 @@
                             android:imeOptions="actionDone"
                             android:inputType="text"
                             android:maxLines="1"
-                            android:paddingBottom="@dimen/size3"
-                            android:paddingEnd="@dimen/size5"
                             android:paddingLeft="@dimen/size5"
-                            android:paddingRight="@dimen/size5"
                             android:paddingTop="@dimen/size3"
+                            android:paddingEnd="@dimen/size5"
+                            android:paddingRight="@dimen/size5"
+                            android:paddingBottom="@dimen/size3"
                             android:textColor="@color/colorBlack"
                             android:textColorHint="@color/colorGrey"
                             android:textSize="@dimen/text14"
                             android:visibility="gone" />
 
-                        </RelativeLayout>
+                    </RelativeLayout>
 
-                        <View
-                            android:id="@+id/searchBoxSeparator"
-                            android:layout_width="match_parent"
-                            android:layout_height="@dimen/size10"
-                            android:layout_below="@+id/searchBox"
-                            android:background="@color/colorLighterGrey" />
+                    <View
+                        android:id="@+id/horRvSeparator"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/size10"
+                        android:layout_below="@id/searchBox"
+                        android:background="@color/colorLighterGrey" />
 
-                        <include
-                            android:id="@+id/include"
-                            layout="@layout/write_a_post_layout"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_below="@+id/searchBoxSeparator"
-                            android:visibility="gone" />
+                    <View
+                        android:id="@+id/searchBoxSeparator"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/size10"
+                        android:layout_below="@+id/searchBox"
+                        android:background="@color/colorLighterGrey"
+                        android:visibility="gone" />
 
-                        <Button
-                            android:id="@+id/btn_write_post"
-                            android:layout_width="match_parent"
-                            android:layout_height="@dimen/size35"
-                            android:layout_below="@+id/searchBoxSeparator"
-                            android:layout_marginEnd="@dimen/size10"
-                            android:layout_marginLeft="@dimen/size10"
-                            android:layout_marginRight="@dimen/size10"
-                            android:layout_marginStart="@dimen/size10"
-                            android:background="@drawable/black_orange_btn_bg"
-                            android:drawablePadding="-110dp"
-                            android:drawableStart="@drawable/ic_write_post"
-                            android:paddingStart="@dimen/size110"
-                            android:text="@string/write_a_post"
-                            android:textAllCaps="false"
-                            android:textColor="@color/text_color"
-                            android:textSize="@dimen/text14" />
+                    <include
+                        android:id="@+id/include"
+                        layout="@layout/write_a_post_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/searchBoxSeparator"
+                        android:visibility="gone" />
 
-                        <Button
-                            android:id="@+id/btn_connect_with_friends"
+                    <Button
+                        android:id="@+id/btn_write_post"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/size35"
+                        android:layout_below="@+id/horRvSeparator"
+                        android:layout_margin="@dimen/size10"
+                        android:background="@drawable/grey_orange_btn_bg"
+                        android:text="@string/write_a_post1"
+                        android:textAllCaps="false"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="@dimen/text14" />
+
+                    <Button
+                        android:id="@+id/btn_connect_with_friends"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/size35"
+                        android:layout_below="@+id/btn_write_post"
+                        android:layout_marginStart="@dimen/size10"
+                        android:layout_marginLeft="@dimen/size10"
+                        android:layout_marginEnd="@dimen/size10"
+                        android:layout_marginRight="@dimen/size10"
+                        android:layout_marginBottom="@dimen/size10"
+                        android:background="@drawable/grey_orange_btn_bg"
+                        android:gravity="center"
+                        android:text="@string/connect_with_friends"
+                        android:textAllCaps="false"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="@dimen/text14"
+                        android:visibility="gone" />
+
+                    <View
+                        android:id="@+id/writePostSeparator"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/size10"
+                        android:layout_below="@+id/btn_connect_with_friends"
+                        android:background="@color/colorLighterGrey" />
+
+                    <RelativeLayout
+                        android:id="@+id/relative_layout_phone_email_friends"
+                        style="@style/LayoutMatchWrap"
+                        android:layout_below="@+id/writePostSeparator"
+                        android:visibility="visible">
+
+                        <com.facebook.shimmer.ShimmerFrameLayout
+                            android:id="@+id/shimmer_phonecontacts"
                             android:layout_width="match_parent"
-                            android:layout_height="@dimen/size35"
-                            android:layout_below="@+id/btn_write_post"
-                            android:layout_marginEnd="@dimen/size10"
-                            android:layout_marginLeft="@dimen/size10"
-                            android:layout_marginRight="@dimen/size10"
-                            android:layout_marginStart="@dimen/size10"
+                            android:layout_height="@dimen/size100"
+                            android:layout_centerHorizontal="true"
+                            android:layout_marginStart="@dimen/size20"
                             android:layout_marginTop="@dimen/size10"
-                            android:background="@drawable/black_orange_btn_bg"
-                            android:gravity="center"
-                            android:text="@string/connect_with_friends"
-                            android:textAllCaps="false"
-                            android:textColor="@color/text_color"
-                            android:textSize="@dimen/text14" />
+                            android:layout_marginBottom="@dimen/size10">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent">
+
+                                <include layout="@layout/profiles_placeholder_item" />
+
+                            </LinearLayout>
+
+                        </com.facebook.shimmer.ShimmerFrameLayout>
+
+                        <android.support.v7.widget.RecyclerView
+                            android:id="@+id/hor_phone_email_friends_recycler_view"
+                            android:layout_width="wrap_content"
+                            android:layout_height="@dimen/size100"
+                            android:layout_centerHorizontal="true"
+                            android:layout_marginStart="@dimen/size20"
+                            android:layout_marginTop="@dimen/size10"
+                            android:layout_marginBottom="@dimen/size10"
+                            android:orientation="horizontal"
+                            app:layoutManager="android.support.v7.widget.LinearLayoutManager" />
 
                         <View
-                            android:id="@+id/writePostSeparator"
+                            android:id="@+id/hor_phone_email_friends_view"
                             android:layout_width="match_parent"
                             android:layout_height="@dimen/size10"
-                            android:layout_below="@+id/btn_connect_with_friends"
+                            android:layout_below="@+id/hor_phone_email_friends_recycler_view"
                             android:background="@color/colorLighterGrey" />
 
                         <RelativeLayout
-                            android:id="@+id/relative_layout_phone_email_friends"
-                            style="@style/LayoutMatchWrap"
-                            android:layout_below="@+id/writePostSeparator"
-                            android:visibility="visible">
-
-                            <com.facebook.shimmer.ShimmerFrameLayout
-                                android:id="@+id/shimmer_phonecontacts"
-                                android:layout_width="match_parent"
-                                android:layout_height="@dimen/size100"
-                                android:layout_centerHorizontal="true"
-                                android:layout_marginBottom="@dimen/size10"
-                                android:layout_marginStart="@dimen/size20"
-                                android:layout_marginTop="@dimen/size10">
-
-                                <LinearLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="match_parent">
-
-                                    <include layout="@layout/profiles_placeholder_item"/>
-
-                                </LinearLayout>
-
-                            </com.facebook.shimmer.ShimmerFrameLayout>
-
-                            <android.support.v7.widget.RecyclerView
-                                android:id="@+id/hor_phone_email_friends_recycler_view"
-                                android:layout_width="wrap_content"
-                                android:layout_height="@dimen/size100"
-                                android:layout_centerHorizontal="true"
-                                android:layout_marginBottom="@dimen/size10"
-                                android:layout_marginStart="@dimen/size20"
-                                android:layout_marginTop="@dimen/size10"
-                                android:orientation="horizontal"
-                                app:layoutManager="android.support.v7.widget.LinearLayoutManager" />
-
-                            <View
-                                android:id="@+id/hor_phone_email_friends_view"
-                                android:layout_width="match_parent"
-                                android:layout_height="@dimen/size10"
-                                android:layout_below="@+id/hor_phone_email_friends_recycler_view"
-                                android:background="@color/colorLighterGrey" />
-
-                            <RelativeLayout
-                                android:id="@+id/searchPhoneEmailBox"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_below="@id/hor_phone_email_friends_view"
-                                android:layout_marginEnd="@dimen/size10"
-                                android:layout_marginLeft="@dimen/size10"
-                                android:layout_marginRight="@dimen/size10"
-                                android:layout_marginStart="@dimen/size10"
-                                android:paddingBottom="@dimen/size10"
-                                android:paddingTop="@dimen/size10">
+                            android:id="@+id/searchPhoneEmailBox"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/hor_phone_email_friends_view"
+                            android:layout_marginStart="@dimen/size10"
+                            android:layout_marginLeft="@dimen/size10"
+                            android:layout_marginEnd="@dimen/size10"
+                            android:layout_marginRight="@dimen/size10"
+                            android:paddingTop="@dimen/size10"
+                            android:paddingBottom="@dimen/size10">
 
                             <EditText
                                 android:id="@+id/search_phone_email_et"
@@ -556,25 +554,25 @@
                                 android:hint="@string/find_friends"
                                 android:imeOptions="actionDone"
                                 android:maxLines="1"
-                                android:paddingBottom="@dimen/size3"
-                                android:paddingEnd="@dimen/size5"
                                 android:paddingLeft="@dimen/size5"
-                                android:paddingRight="@dimen/size5"
                                 android:paddingTop="@dimen/size3"
+                                android:paddingEnd="@dimen/size5"
+                                android:paddingRight="@dimen/size5"
+                                android:paddingBottom="@dimen/size3"
                                 android:textColor="@color/colorBlack"
                                 android:textColorHint="@color/colorGrey"
                                 android:textSize="@dimen/text14"
                                 android:visibility="gone" />
 
-                            </RelativeLayout>
-
-                            <View
-                                android:id="@+id/searchPhoneEmailView"
-                                android:layout_width="match_parent"
-                                android:layout_height="@dimen/size10"
-                                android:layout_below="@+id/searchPhoneEmailBox"
-                                android:background="@color/colorLighterGrey" />
                         </RelativeLayout>
+
+                        <View
+                            android:id="@+id/searchPhoneEmailView"
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/size10"
+                            android:layout_below="@+id/searchPhoneEmailBox"
+                            android:background="@color/colorLighterGrey" />
+                    </RelativeLayout>
 
 
                     <LinearLayout
@@ -591,23 +589,23 @@
                             android:visibility="gone"
                             app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
-                    <com.facebook.shimmer.ShimmerFrameLayout
-                        android:id="@+id/shimmer_posts"
-                        style="@style/LayoutMatchWrap"
-                        android:background="@color/colorLighterGrey">
+                        <com.facebook.shimmer.ShimmerFrameLayout
+                            android:id="@+id/shimmer_posts"
+                            style="@style/LayoutMatchWrap"
+                            android:background="@color/colorLighterGrey">
 
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:orientation="vertical">
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:orientation="vertical">
 
-                            <include layout="@layout/posts_placeholder_item" />
+                                <include layout="@layout/posts_placeholder_item" />
 
-                            <include layout="@layout/posts_placeholder_item" />
+                                <include layout="@layout/posts_placeholder_item" />
 
-                        </LinearLayout>
+                            </LinearLayout>
 
-                    </com.facebook.shimmer.ShimmerFrameLayout>
+                        </com.facebook.shimmer.ShimmerFrameLayout>
 
                         <android.support.v7.widget.RecyclerView
                             android:id="@+id/news_feed_recycler_view"
@@ -647,8 +645,8 @@
                 android:baselineAligned="false"
                 android:gravity="center_horizontal"
                 android:orientation="horizontal"
-                android:paddingBottom="@dimen/size2"
-                android:paddingTop="@dimen/size4">
+                android:paddingTop="@dimen/size4"
+                android:paddingBottom="@dimen/size2">
 
                 <RelativeLayout
                     android:id="@+id/my_moto_file_box"
@@ -666,7 +664,7 @@
                         android:background="@null"
                         android:clickable="false"
                         android:contentDescription="@string/app_name"
-                        android:src="@drawable/moto_file_icon" />
+                        android:src="@drawable/user_icon" />
 
                     <TextView
                         android:id="@+id/txt_motoFile"
@@ -674,8 +672,9 @@
                         android:layout_below="@+id/my_moto_file_img_btn"
                         android:gravity="center"
                         android:text="@string/my_moto_file"
-                        android:textColor="@android:color/black"
-                        android:textSize="@dimen/text12" />
+                        android:textColor="@color/colorDarkGrey"
+                        android:textSize="@dimen/text12"
+                        android:visibility="gone" />
 
                 </RelativeLayout>
 
@@ -695,7 +694,7 @@
                         android:background="@null"
                         android:clickable="false"
                         android:contentDescription="@string/app_name"
-                        android:src="@drawable/ic_ondemand_home" />
+                        android:src="@drawable/event_ondemand_icon" />
 
                     <TextView
                         android:id="@+id/txt_live"
@@ -703,8 +702,9 @@
                         android:layout_below="@+id/live_img_btn"
                         android:gravity="center"
                         android:text="@string/events_on_demand"
-                        android:textColor="@android:color/black"
-                        android:textSize="@dimen/text12" />
+                        android:textColor="@color/colorDarkGrey"
+                        android:textSize="@dimen/text12"
+                        android:visibility="gone" />
 
                 </RelativeLayout>
 
@@ -724,7 +724,7 @@
                         android:background="@null"
                         android:clickable="false"
                         android:contentDescription="@string/app_name"
-                        android:src="@drawable/event" />
+                        android:src="@drawable/upcoming_events_icon" />
 
                     <TextView
                         android:id="@+id/txt_Event"
@@ -732,8 +732,9 @@
                         android:layout_below="@+id/events_img_btn"
                         android:gravity="center"
                         android:text="@string/upcoming_events"
-                        android:textColor="@android:color/black"
-                        android:textSize="@dimen/text12" />
+                        android:textColor="@color/colorDarkGrey"
+                        android:textSize="@dimen/text12"
+                        android:visibility="gone" />
 
                 </RelativeLayout>
 

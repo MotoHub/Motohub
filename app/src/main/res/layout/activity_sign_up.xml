@@ -23,8 +23,8 @@
                 android:layout_height="match_parent"
                 android:layout_alignParentTop="true"
                 android:layout_centerHorizontal="true"
-                android:layout_marginBottom="@dimen/size10"
                 android:layout_marginTop="@dimen/size10"
+                android:layout_marginBottom="@dimen/size10"
                 android:contentDescription="@string/app_name"
                 android:src="@drawable/app_logo" />
 
@@ -45,8 +45,8 @@
                 android:background="@null"
                 android:hint="@string/first_name"
                 android:inputType="textPersonName|textCapSentences"
-                android:paddingEnd="@dimen/size5"
                 android:paddingStart="@dimen/size5"
+                android:paddingEnd="@dimen/size5"
                 android:textColor="@color/colorBlack"
                 android:textColorHint="@color/colorGrey"
                 android:textSize="@dimen/text14" />
@@ -63,8 +63,8 @@
                 android:background="@null"
                 android:hint="@string/last_name"
                 android:inputType="textPersonName|textCapSentences"
-                android:paddingEnd="@dimen/size5"
                 android:paddingStart="@dimen/size5"
+                android:paddingEnd="@dimen/size5"
                 android:textColor="@color/colorBlack"
                 android:textColorHint="@color/colorGrey"
                 android:textSize="@dimen/text14" />
@@ -81,8 +81,8 @@
                 android:background="@null"
                 android:hint="@string/phone_number"
                 android:inputType="number"
-                android:paddingEnd="@dimen/size5"
                 android:paddingStart="@dimen/size5"
+                android:paddingEnd="@dimen/size5"
                 android:textColor="@color/colorBlack"
                 android:textColorHint="@color/colorGrey"
                 android:textSize="@dimen/text14"
@@ -101,8 +101,8 @@
                 android:background="@null"
                 android:hint="@string/email"
                 android:inputType="textEmailAddress"
-                android:paddingEnd="@dimen/size5"
                 android:paddingStart="@dimen/size5"
+                android:paddingEnd="@dimen/size5"
                 android:textColor="@color/colorBlack"
                 android:textColorHint="@color/colorGrey"
                 android:textSize="@dimen/text14" />
@@ -119,8 +119,8 @@
                 android:background="@null"
                 android:hint="@string/pwd"
                 android:inputType="textPassword"
-                android:paddingEnd="@dimen/size5"
                 android:paddingStart="@dimen/size5"
+                android:paddingEnd="@dimen/size5"
                 android:textColor="@color/colorBlack"
                 android:textColorHint="@color/colorGrey"
                 android:textSize="@dimen/text14" />
@@ -137,8 +137,8 @@
                 android:background="@null"
                 android:hint="@string/confirm_pwd"
                 android:inputType="textPassword"
-                android:paddingEnd="@dimen/size5"
                 android:paddingStart="@dimen/size5"
+                android:paddingEnd="@dimen/size5"
                 android:textColor="@color/colorBlack"
                 android:textColorHint="@color/colorGrey"
                 android:textSize="@dimen/text14" />

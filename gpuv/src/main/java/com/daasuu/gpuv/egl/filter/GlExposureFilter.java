@@ -20,12 +20,11 @@ public class GlExposureFilter extends GlFilter {
             "     \n" +
             "     gl_FragColor = vec4(textureColor.rgb * pow(2.0, exposure), textureColor.w);\n" +
             " } ";
+    private float exposure = 1f;
 
     public GlExposureFilter() {
         super(DEFAULT_VERTEX_SHADER, EXPOSURE_FRAGMENT_SHADER);
     }
-
-    private float exposure = 1f;
 
     public void setExposure(float exposure) {
         this.exposure = exposure;

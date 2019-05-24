@@ -25,7 +25,6 @@ import online.motohub.R;
 import online.motohub.activity.BaseActivity;
 import online.motohub.activity.ReportActivity;
 import online.motohub.adapter.promoter.PromoterPostsAdapter;
-import online.motohub.application.MotoHub;
 import online.motohub.fragment.BaseFragment;
 import online.motohub.fragment.dialog.AppDialogFragment;
 import online.motohub.interfaces.SharePostInterface;
@@ -48,16 +47,13 @@ import static android.app.Activity.RESULT_OK;
 
 public class PromoterHomeFragment extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener {
 
+    private static final int mDataLimit = 15;
     @BindView(R.id.swipeRefreshLayout)
     SwipeRefreshLayout mSwipeRefreshLayout;
-
     @BindView(R.id.recycler_view)
     RecyclerView mNewsFeedRecyclerView;
-
     @BindView(R.id.shimmer_feeds)
     ShimmerFrameLayout mShimmer_feeds;
-
-    private static final int mDataLimit = 15;
     private Activity mActivity;
     private Unbinder mUnBinder;
     private LinearLayoutManager mNewsFeedLayoutManager;

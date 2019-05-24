@@ -33,16 +33,13 @@ public class PreferenceUtils {
     public static final String BUSINESS_PROFILE_COMPLETED = "BUSINESS_PROFILE_COMPLETED";
     public static final String CURRENT_PROFILE_MODEL = "CURRENT_PROFILE_MODEL";
     public static final String FULL_PROFILE_LIST = "FULL_PROFILE_LIST";
-
-    private static PreferenceUtils mPreferenceUtils = new PreferenceUtils();
-
-    private static SharedPreferences mSharedPrefInstance;
-    public static String ALLOW_NOTIFICATION="allow_notification";
-    public static String ALLOW_NOTIFICATION_Sound="allow_sound";
-    public static String ALLOW_NOTIFICATION_VIB="allow_vib";
-
     public static final String IS_TUTORIAL_FIRST = "IS_TUTORIAL_FIRST";
     public static final String IS_JOB_SCHEDULER = "IS_JOB_SCHEDULER";
+    public static String ALLOW_NOTIFICATION = "allow_notification";
+    public static String ALLOW_NOTIFICATION_Sound = "allow_sound";
+    public static String ALLOW_NOTIFICATION_VIB = "allow_vib";
+    private static PreferenceUtils mPreferenceUtils = new PreferenceUtils();
+    private static SharedPreferences mSharedPrefInstance;
 
     /**
      * PreferenceUtils default constructor.

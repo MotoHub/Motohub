@@ -27,7 +27,7 @@ public class RacingModel implements Serializable {
     private int mProfileID;
 
     @SerializedName("RaceName")
-    private  int mRaceName;
+    private int mRaceName;
 
     @SerializedName("car_number")
     private String mCarNumber;

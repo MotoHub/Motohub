@@ -26,8 +26,8 @@
                     android:id="@+id/row_adapter_picker_video_thumbnail_iv"
                     style="@style/LayoutMatchWrap"
                     android:layout_height="150dp"
-                    android:scaleType="centerCrop"
-                    android:contentDescription="@null" />
+                    android:contentDescription="@null"
+                    android:scaleType="centerCrop" />
 
                 <ImageView
                     android:id="@+id/playBtn"

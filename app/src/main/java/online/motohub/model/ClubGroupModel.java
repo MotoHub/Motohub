@@ -6,11 +6,11 @@ import java.io.Serializable;
 
 public class ClubGroupModel implements Serializable {
 
-    public static final String CLUB_USER_ID ="ClubUserID";
-    public static final String ID ="ID";
-    public static final String MEMBER_PROFILE_ID ="MemberProfileID";
-    public static final String MEMBER_USER_ID ="MemberUserID";
-    public static final String STATUS ="Status";
+    public static final String CLUB_USER_ID = "ClubUserID";
+    public static final String ID = "ID";
+    public static final String MEMBER_PROFILE_ID = "MemberProfileID";
+    public static final String MEMBER_USER_ID = "MemberUserID";
+    public static final String STATUS = "Status";
 
     @SerializedName("ID")
     private int mID;

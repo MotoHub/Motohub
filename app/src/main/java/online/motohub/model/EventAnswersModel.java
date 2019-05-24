@@ -40,8 +40,8 @@ public class EventAnswersModel implements Serializable {
     private ArrayList<EventAnswersModel> mResource = null;
 
     public ArrayList<EventAnswersModel> getResource() {
-        if(mResource==null)
-            mResource =  new ArrayList<>();
+        if (mResource == null)
+            mResource = new ArrayList<>();
         return mResource;
     }
 

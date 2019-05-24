@@ -1,12 +1,10 @@
 package online.motohub.fragment.ondemand;
 
-import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.annotation.Nullable;
@@ -61,7 +59,6 @@ import online.motohub.model.VideoLikesModel;
 import online.motohub.model.VideoShareModel;
 import online.motohub.retrofit.RetrofitClient;
 import online.motohub.util.AppConstants;
-import online.motohub.util.DialogManager;
 import online.motohub.util.PreferenceUtils;
 import online.motohub.util.Utility;
 import rx.Observer;
@@ -355,7 +352,7 @@ public class PromoterOrUserFragment extends BaseFragment implements SwipeRefresh
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.video_gallery_fab:
-                assert ((BaseActivity) getActivity()) != null;
+                assert getActivity() != null;
                 ((BaseActivity) getActivity()).showAppDialog(AppDialogFragment.BOTTOM_ADD_VIDEO_DIALOG, null);
                 break;
         }
@@ -394,7 +391,7 @@ public class PromoterOrUserFragment extends BaseFragment implements SwipeRefresh
                     Uri videoUri = data.getData();
                     // mVideoPathUri = data.getStringExtra(EXTRA_RESULT_DATA);
                     if (videoUri != null) {
-                        assert ((BaseActivity) getActivity()) != null;
+                        assert getActivity() != null;
                         mVideoPathUri = ((BaseActivity) getActivity()).getRealPathFromURI(videoUri);
                         getSelectedVideoPath();
                         startVideoPreviewOnDemandActivity();

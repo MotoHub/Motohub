@@ -22,12 +22,11 @@ public class GlSolarizeFilter extends GlFilter {
             "    \n" +
             "    gl_FragColor = vec4(finalColor, textureColor.w);\n" +
             "}";
+    private float threshold = 0.5f;
 
     public GlSolarizeFilter() {
         super(DEFAULT_VERTEX_SHADER, SOLATIZE_FRAGMENT_SHADER);
     }
-
-    private float threshold = 0.5f;
 
     public void setThreshold(float threshold) {
         this.threshold = threshold;

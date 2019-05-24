@@ -127,7 +127,7 @@ public class CreateNewPaymentActivity extends BaseActivity {
         finish();
     }
 
-    @OnClick({R.id.pay_btn, R.id.toolbar_back_img_btn,R.id.txt_card_management})
+    @OnClick({R.id.pay_btn, R.id.toolbar_back_img_btn, R.id.txt_card_management})
     public void onClick(View v) {
 
         switch (v.getId()) {
@@ -170,7 +170,7 @@ public class CreateNewPaymentActivity extends BaseActivity {
             mCardNameTxt = mCardName.getText().toString();
             mCardNumberTxt = mCardNumber.getText().toString().trim();
             if (mCardExpDate.getText().toString().contains("/")) {
-                String date[] = mCardExpDate.getText().toString().split("/");
+                String[] date = mCardExpDate.getText().toString().split("/");
                 mCardExpMonthVal = Integer.parseInt(date[0]);
                 mCardExpYearVal = Integer.parseInt(date[1]);
             } else {
@@ -186,7 +186,7 @@ public class CreateNewPaymentActivity extends BaseActivity {
             } else if (mCardExpYearVal < mCurrentYear) {
                 showToast(this, "Expiry year should not below the current year");
             } else {
-               purchase();
+                purchase();
             }
         }
     }
@@ -203,7 +203,7 @@ public class CreateNewPaymentActivity extends BaseActivity {
             e.printStackTrace();
         }
         try {
-             mEncryptCardNumber =cryptLib.encryptPlainTextWithRandomIV(mCardNumberTxt, AppConstants.ENCRYPT_KEY) ;
+            mEncryptCardNumber = cryptLib.encryptPlainTextWithRandomIV(mCardNumberTxt, AppConstants.ENCRYPT_KEY);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -211,7 +211,7 @@ public class CreateNewPaymentActivity extends BaseActivity {
         String mRelation = mUserID + "_" + mEncryptCardNumber;
         mJsonObject.addProperty("UserID", mUserID);
         mJsonObject.addProperty("ProfileID", mProfileID);
-        mJsonObject.addProperty("CardNumber", mEncryptCardNumber );
+        mJsonObject.addProperty("CardNumber", mEncryptCardNumber);
         mJsonObject.addProperty("CardName", mCardNameTxt);
         mJsonObject.addProperty("CardExpiryMonth", mCardExpMonthVal);
         mJsonObject.addProperty("CardExpiryYear", mCardExpYearVal);
@@ -223,28 +223,122 @@ public class CreateNewPaymentActivity extends BaseActivity {
 
     }
 
-    private class DateEntryWatcher implements TextWatcher{
+    public void hideSoftKeyboard() {
+        try {
+            InputMethodManager mInputMethodManager = (InputMethodManager) CreateNewPaymentActivity.this.getSystemService(INPUT_METHOD_SERVICE);
+            if (getCurrentFocus() != null
+                    && getCurrentFocus().getWindowToken() != null) {
+                mInputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void retrofitOnResponse(Object responseObj, int responseType) {
+        super.retrofitOnResponse(responseObj, responseType);
+        if (responseObj instanceof PaymentCardDetailsModel) {
+            PaymentCardDetailsModel mPaymentCardDetailsModel = (PaymentCardDetailsModel) responseObj;
+            if (mPaymentCardDetailsModel.getResource().size() > 0) {
+                finish();
+            }
+        } else if (responseObj instanceof SessionModel) {
+
+            SessionModel mSessionModel = (SessionModel) responseObj;
+            if (mSessionModel.getSessionToken() == null) {
+                PreferenceUtils.getInstance(this).saveStrData(PreferenceUtils.SESSION_TOKEN, mSessionModel.getSessionId());
+            } else {
+                PreferenceUtils.getInstance(this).saveStrData(PreferenceUtils.SESSION_TOKEN, mSessionModel.getSessionToken());
+            }
+
+
+        }
+    }
+
+    private void purchase() {
+        Card card = new Card(mCardNumberTxt, mCardExpMonthVal, mCardExpYearVal, mCardCvcTxt);
+        Stripe stripe = new Stripe(this, getString(R.string.stripe_publishable_key));
+
+        if (card.validateCard()) {
+            DialogManager.showProgress(this);
+            stripe.createToken(card, new TokenCallback() {
+                @Override
+                public void onError(Exception error) {
+                    Toast.makeText(CreateNewPaymentActivity.this, error.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                    finishDialog();
+                }
+
+                @Override
+                public void onSuccess(Token token) {
+                    String mToken = token.getId();
+                    Intent resultIntent = new Intent();
+                    resultIntent.putExtra("TOKEN", mToken);
+                    resultIntent.putExtra(EventsModel.EVENT_AMOUNT, mAmount);
+                    setResult(Activity.RESULT_OK, resultIntent);
+                    finishDialog();
+                    callAddPaymentCardDetails();
+                }
+            });
+        } else {
+            showToast(this, "The given card is not valid");
+        }
+
+    }
+
+    private void finishDialog() {
+        DialogManager.hideProgress();
+
+    }
+
+    @Override
+    public void retrofitOnFailure(int code, String message) {
+        super.retrofitOnFailure(code, message);
+    }
+
+    @Override
+    public void retrofitOnError(int code, String message, int responseType) {
+        super.retrofitOnError(code, message, responseType);
+        if (responseType == RetrofitClient.CALL_ADD_PAYMENT_CARD_DETAILS) {
+            showSnackBar(mNewCardLayout, getString(R.string.new_card_err));
+        }
+        if (message.equals("Unauthorized") || code == 401) {
+            if (isNetworkConnected(this))
+                RetrofitClient.getRetrofitInstance().callUpdateSession(this, RetrofitClient.UPDATE_SESSION_RESPONSE);
+            else
+                showAppDialog(AppDialogFragment.ALERT_INTERNET_FAILURE_DIALOG, null);
+        } else {
+            String mErrorMsg = code + " - " + message;
+            showSnackBar(mNewCardLayout, mErrorMsg);
+        }
+    }
+
+    @Override
+    public void retrofitOnSessionError(int code, String message) {
+        super.retrofitOnSessionError(code, message);
+    }
+
+    private class DateEntryWatcher implements TextWatcher {
 
         @Override
         public void onTextChanged(CharSequence s, int start, int before, int count) {
             String working = s.toString();
             boolean isValid = true;
-            if (working.length()==2 && before ==0) {
-                if (Integer.parseInt(working) < 1 || Integer.parseInt(working)>12) {
+            if (working.length() == 2 && before == 0) {
+                if (Integer.parseInt(working) < 1 || Integer.parseInt(working) > 12) {
                     isValid = false;
                 } else {
-                    working+="/";
+                    working += "/";
                     mCardExpDate.setText(working);
                     mCardExpDate.setSelection(working.length());
                 }
-            }
-            else if (working.length()==7 && before ==0) {
+            } else if (working.length() == 7 && before == 0) {
                 String enteredYear = working.substring(3);
                 int currentYear = Calendar.getInstance().get(Calendar.YEAR);
                 if (Integer.parseInt(enteredYear) < currentYear) {
                     isValid = false;
                 }
-            } else if (working.length()!=7) {
+            } else if (working.length() != 7) {
                 isValid = false;
             }
 
@@ -257,12 +351,14 @@ public class CreateNewPaymentActivity extends BaseActivity {
         }
 
         @Override
-        public void afterTextChanged(Editable s) {}
+        public void afterTextChanged(Editable s) {
+        }
 
         @Override
-        public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+        }
 
-    };
+    }
 
     private class CreditCardNumberFormattingTextWatcher implements TextWatcher {
         String temp;
@@ -337,7 +433,7 @@ public class CreateNewPaymentActivity extends BaseActivity {
         @Override
         public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
             boolean flag = true;
-            String eachBlock[] = mCardExpDate.getText().toString().split("/");
+            String[] eachBlock = mCardExpDate.getText().toString().split("/");
             for (String anEachBlock : eachBlock) {
                 if (anEachBlock.length() > 2) {
                     flag = false;
@@ -382,101 +478,5 @@ public class CreateNewPaymentActivity extends BaseActivity {
         public void afterTextChanged(Editable editable) {
 
         }
-    }
-
-    public void hideSoftKeyboard() {
-        try {
-            InputMethodManager mInputMethodManager = (InputMethodManager) CreateNewPaymentActivity.this.getSystemService(INPUT_METHOD_SERVICE);
-            if (getCurrentFocus() != null
-                    && getCurrentFocus().getWindowToken() != null) {
-                mInputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    public void retrofitOnResponse(Object responseObj, int responseType) {
-        super.retrofitOnResponse(responseObj, responseType);
-        if(responseObj instanceof PaymentCardDetailsModel){
-            PaymentCardDetailsModel mPaymentCardDetailsModel = (PaymentCardDetailsModel) responseObj;
-            if(mPaymentCardDetailsModel.getResource().size() > 0){
-           finish();
-            }
-        }else if (responseObj instanceof SessionModel) {
-
-            SessionModel mSessionModel = (SessionModel) responseObj;
-            if (mSessionModel.getSessionToken() == null) {
-                PreferenceUtils.getInstance(this).saveStrData(PreferenceUtils.SESSION_TOKEN, mSessionModel.getSessionId());
-            } else {
-                PreferenceUtils.getInstance(this).saveStrData(PreferenceUtils.SESSION_TOKEN, mSessionModel.getSessionToken());
-            }
-
-
-
-        }
-    }
-
-    private void purchase() {
-        Card card = new Card(mCardNumberTxt, mCardExpMonthVal, mCardExpYearVal, mCardCvcTxt);
-        Stripe stripe = new Stripe(this, getString(R.string.stripe_publishable_key));
-
-        if (card.validateCard()) {
-            DialogManager.showProgress(this);
-            stripe.createToken(card, new TokenCallback() {
-                @Override
-                public void onError(Exception error) {
-                    Toast.makeText(CreateNewPaymentActivity.this, error.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
-                    finishDialog();
-                }
-
-                @Override
-                public void onSuccess(Token token) {
-                    String mToken = token.getId();
-                    Intent resultIntent = new Intent();
-                    resultIntent.putExtra("TOKEN", mToken);
-                    resultIntent.putExtra(EventsModel.EVENT_AMOUNT, mAmount);
-                    setResult(Activity.RESULT_OK, resultIntent);
-                    finishDialog();
-                    callAddPaymentCardDetails();
-                }
-            });
-        } else {
-            showToast(this, "The given card is not valid");
-        }
-
-    }
-
-    private void finishDialog() {
-        DialogManager.hideProgress();
-
-    }
-
-
-    @Override
-    public void retrofitOnFailure(int code, String message) {
-        super.retrofitOnFailure(code, message);
-    }
-
-    @Override
-    public void retrofitOnError(int code, String message, int responseType) {
-        super.retrofitOnError(code, message,responseType);
-        if(responseType == RetrofitClient.CALL_ADD_PAYMENT_CARD_DETAILS){
-            showSnackBar(mNewCardLayout, getString(R.string.new_card_err));
-        }if (message.equals("Unauthorized") || code == 401) {
-            if (isNetworkConnected(this))
-                RetrofitClient.getRetrofitInstance().callUpdateSession(this, RetrofitClient.UPDATE_SESSION_RESPONSE);
-            else
-                showAppDialog(AppDialogFragment.ALERT_INTERNET_FAILURE_DIALOG, null);
-        } else {
-            String mErrorMsg = code + " - " + message;
-            showSnackBar(mNewCardLayout, mErrorMsg);
-        }
-    }
-
-    @Override
-    public void retrofitOnSessionError(int code, String message) {
-        super.retrofitOnSessionError(code, message);
     }
 }

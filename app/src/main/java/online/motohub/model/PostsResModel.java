@@ -98,6 +98,33 @@ public class PostsResModel implements Serializable {
     @SerializedName("profiles_by_WhoPostedProfileID")
     @Expose
     private ProfileResModel mProfilesByWhoPostedProfileID;
+    @SerializedName("profiles_by_ProfileID")
+    @Expose
+    private ProfileResModel mProfilesByProfileID;
+    @SerializedName("postcomments_by_PostID")
+    @Expose
+    private ArrayList<FeedCommentModel> mPostComments;
+    @SerializedName("postlikes_by_PostID")
+    @Expose
+    private ArrayList<FeedLikesModel> mPostLikes;
+    @SerializedName("postshares_by_OriginalPostID")
+    @Expose
+    private ArrayList<FeedShareModel> mPostSharesList;
+    @SerializedName("postshares_by_NewSharedPostID")
+    @Expose
+    private FeedShareModel mNewSharedPost;
+    @SerializedName("promoter_by_ProfileID")
+    @Expose
+    private PromotersResModel mPromoterByProfileID;
+    @SerializedName("promoter_by_WhoPostedProfileID")
+    @Expose
+    private PromotersResModel mPromoterByWhoPostedProfileID;
+    @SerializedName("videoshares_by_NewSharedPostID")
+    @Expose
+    private VideoShareModel mVideoSharesByNewSharedPostID;
+    @SerializedName("postnotificationblockedusers_by_PostID")
+    @Expose
+    private ArrayList<NotificationBlockedUsersModel> mNotificationBlockedUsersID;
 
     public String getSharedTxt() {
         if (mSharedTxt == null)
@@ -108,43 +135,6 @@ public class PostsResModel implements Serializable {
     public void setSharedTxt(String mSharedTxt) {
         this.mSharedTxt = mSharedTxt;
     }
-
-    @SerializedName("profiles_by_ProfileID")
-    @Expose
-    private ProfileResModel mProfilesByProfileID;
-
-    @SerializedName("postcomments_by_PostID")
-    @Expose
-    private ArrayList<FeedCommentModel> mPostComments;
-
-    @SerializedName("postlikes_by_PostID")
-    @Expose
-    private ArrayList<FeedLikesModel> mPostLikes;
-
-    @SerializedName("postshares_by_OriginalPostID")
-    @Expose
-    private ArrayList<FeedShareModel> mPostSharesList;
-
-    @SerializedName("postshares_by_NewSharedPostID")
-    @Expose
-    private FeedShareModel mNewSharedPost;
-
-    @SerializedName("promoter_by_ProfileID")
-    @Expose
-    private PromotersResModel mPromoterByProfileID;
-
-    @SerializedName("promoter_by_WhoPostedProfileID")
-    @Expose
-    private PromotersResModel mPromoterByWhoPostedProfileID;
-
-
-    @SerializedName("videoshares_by_NewSharedPostID")
-    @Expose
-    private VideoShareModel mVideoSharesByNewSharedPostID;
-
-    @SerializedName("postnotificationblockedusers_by_PostID")
-    @Expose
-    private ArrayList<NotificationBlockedUsersModel> mNotificationBlockedUsersID;
 
     public ArrayList<NotificationBlockedUsersModel> getmNotificationBlockedUsersID() {
         if (mNotificationBlockedUsersID == null)
@@ -217,8 +207,8 @@ public class PostsResModel implements Serializable {
     }
 
     public String getDateCreatedAt() {
-        if(is_scheduled){
-            mDateCreatedAt=getPost_on();
+        if (is_scheduled) {
+            mDateCreatedAt = getPost_on();
         }
         return mDateCreatedAt;
     }
@@ -249,11 +239,6 @@ public class PostsResModel implements Serializable {
         return this.mPostComments;
     }
 
-    public void setPostLikes(ArrayList<FeedLikesModel> likes) {
-
-        this.mPostLikes = likes;
-    }
-
     public void setFeedComments(ArrayList<FeedCommentModel> comments) {
 
         this.mPostComments = comments;
@@ -263,6 +248,11 @@ public class PostsResModel implements Serializable {
         if (mPostLikes == null)
             mPostLikes = new ArrayList<>();
         return this.mPostLikes;
+    }
+
+    public void setPostLikes(ArrayList<FeedLikesModel> likes) {
+
+        this.mPostLikes = likes;
     }
 
     public ArrayList<FeedShareModel> getPostShares() {

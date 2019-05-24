@@ -126,7 +126,7 @@ public class EventQuestionAnswerActivity extends BaseActivity {
     }
 
     private void saveAnswers() {
-        String mAnswers[] = mEventQuestionAdapter.getAnswers();
+        String[] mAnswers = mEventQuestionAdapter.getAnswers();
         JsonArray mJsonArray = new JsonArray();
 
         for (int i = 0; i < mEventQuestionList.size(); i++) {

@@ -1,16 +1,16 @@
 /**
- *  This is sample code provided by Wowza Media Systems, LLC.  All sample code is intended to be a reference for the
- *  purpose of educating developers, and is not intended to be used in any production environment.
- *
- *  IN NO EVENT SHALL WOWZA MEDIA SYSTEMS, LLC BE LIABLE TO YOU OR ANY PARTY FOR DIRECT, INDIRECT, SPECIAL, INCIDENTAL,
- *  OR CONSEQUENTIAL DAMAGES, INCLUDING LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE AND ITS DOCUMENTATION,
- *  EVEN IF WOWZA MEDIA SYSTEMS, LLC HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *
- *  WOWZA MEDIA SYSTEMS, LLC SPECIFICALLY DISCLAIMS ANY WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
- *  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE. ALL CODE PROVIDED HEREUNDER IS PROVIDED "AS IS".
- *  WOWZA MEDIA SYSTEMS, LLC HAS NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS, OR MODIFICATIONS.
- *
- *  Copyright © 2015 Wowza Media Systems, LLC. All rights reserved.
+ * This is sample code provided by Wowza Media Systems, LLC.  All sample code is intended to be a reference for the
+ * purpose of educating developers, and is not intended to be used in any production environment.
+ * <p>
+ * IN NO EVENT SHALL WOWZA MEDIA SYSTEMS, LLC BE LIABLE TO YOU OR ANY PARTY FOR DIRECT, INDIRECT, SPECIAL, INCIDENTAL,
+ * OR CONSEQUENTIAL DAMAGES, INCLUDING LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE AND ITS DOCUMENTATION,
+ * EVEN IF WOWZA MEDIA SYSTEMS, LLC HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * <p>
+ * WOWZA MEDIA SYSTEMS, LLC SPECIFICALLY DISCLAIMS ANY WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+ * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE. ALL CODE PROVIDED HEREUNDER IS PROVIDED "AS IS".
+ * WOWZA MEDIA SYSTEMS, LLC HAS NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS, OR MODIFICATIONS.
+ * <p>
+ * Copyright © 2015 Wowza Media Systems, LLC. All rights reserved.
  */
 
 package online.motohub.audio;
@@ -38,21 +38,19 @@ import online.motohub.R;
  * This activity class demonstrates how to use a Bluetooth mic as the audio input device
  * for the GoCoder SDK's WZAudioDevice audio device interface and broadcasting class
  */
-public class BluetoothActivity  extends AudioMeterActivity {
+public class BluetoothActivity extends AudioMeterActivity {
+    protected final static int BLUETOOTH_CHANNELS = WZMediaConfig.AUDIO_CHANNELS_MONO; // mono
+    protected final static int BLUETOOTH_SAMPLE_RATE = 8000; // 8kHz
     private final static String TAG = BluetoothActivity.class.getSimpleName();
+    protected ImageView mBluetoothIcon = null;
 
-    protected final static int BLUETOOTH_CHANNELS       = WZMediaConfig.AUDIO_CHANNELS_MONO; // mono
-    protected final static int BLUETOOTH_SAMPLE_RATE    = 8000; // 8kHz
+    protected AudioManager mAudioManager = null;
+    protected BroadcastReceiver mBroadcastReceiver = null;
 
-    protected ImageView mBluetoothIcon      = null;
+    protected WZBroadcastConfig mSamplerConfig = null;
 
-    protected AudioManager mAudioManager       = null;
-    protected BroadcastReceiver mBroadcastReceiver  = null;
-
-    protected WZBroadcastConfig mSamplerConfig      = null;
-
-    private int mStoredChannels     = WZMediaConfig.AUDIO_CHANNELS_STEREO;
-    private int mStoredSampleRate   = WZMediaConfig.DEFAULT_AUDIO_SAMPLE_RATE;
+    private int mStoredChannels = WZMediaConfig.AUDIO_CHANNELS_STEREO;
+    private int mStoredSampleRate = WZMediaConfig.DEFAULT_AUDIO_SAMPLE_RATE;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,8 +85,8 @@ public class BluetoothActivity  extends AudioMeterActivity {
         if (mWZAudioDevice == null) return;
 
         // Save the values that are persisted with the shared preferences
-        mStoredChannels     = getBroadcastConfig().getAudioChannels();
-        mStoredSampleRate   = getBroadcastConfig().getAudioSampleRate();
+        mStoredChannels = getBroadcastConfig().getAudioChannels();
+        mStoredSampleRate = getBroadcastConfig().getAudioSampleRate();
 
         if (mSamplerConfig == null) {
             mSamplerConfig = new WZBroadcastConfig(getBroadcastConfig());
@@ -146,14 +144,15 @@ public class BluetoothActivity  extends AudioMeterActivity {
 
     /**
      * Process the Bluetooth connectivity state received via the intent
+     *
      * @param state the AudioManager intent
      */
     protected void processBluetoothState(int state) {
 
-        int currentDevice   = mWZAudioDevice.getAudioSource();
-        int newDevice       = currentDevice;
+        int currentDevice = mWZAudioDevice.getAudioSource();
+        int newDevice = currentDevice;
 
-        switch(state) {
+        switch (state) {
             case AudioManager.SCO_AUDIO_STATE_CONNECTING:
                 WZLog.debug(TAG, "ACTION_SCO_AUDIO_STATE_UPDATED: SCO_AUDIO_STATE_CONNECTING");
                 break;
@@ -214,7 +213,7 @@ public class BluetoothActivity  extends AudioMeterActivity {
             // configuration for the newly selected audio input device
             if (mBtnMic.isOn())
                 mWZAudioDevice.startAudioSampler(mSamplerConfig);
-       }
+        }
     }
 
     /**
@@ -226,6 +225,7 @@ public class BluetoothActivity  extends AudioMeterActivity {
 
     /**
      * Ensure broadcast config meets Bluetooth requirements
+     *
      * @return Any synchronous error that may have occurred starting the broadcast, null otherwise
      */
     @Override

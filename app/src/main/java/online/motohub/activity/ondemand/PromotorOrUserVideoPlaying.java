@@ -600,7 +600,7 @@ public class PromotorOrUserVideoPlaying extends BaseActivity {
     }
 
     public void getViewCount(int pos) {
-        String mFilter = "ID = " + String.valueOf(mPostsList.get(pos).getID());
+        String mFilter = "ID = " + mPostsList.get(pos).getID();
         RetrofitClient.getRetrofitInstance().getViewCountOnDemand(this, mFilter, RetrofitClient.FEED_VIDEO_COUNT);
     }
 
@@ -711,11 +711,7 @@ public class PromotorOrUserVideoPlaying extends BaseActivity {
             FollowProfileModel mFollowProfileModel = (FollowProfileModel) responseObj;
             switch (responseType) {
                 case RetrofitClient.PROFILE_IS_ALREADY_FOLLOWED:
-                    if (mFollowProfileModel.getResource().size() > 0) {
-                        mIsAlreadyFollowing = true;
-                    } else {
-                        mIsAlreadyFollowing = false;
-                    }
+                    mIsAlreadyFollowing = mFollowProfileModel.getResource().size() > 0;
                     setFollowUnfollow();
                     //callGetProfile(mOtherProfileID, RetrofitClient.GET_OTHER_PROFILE_RESPONSE);
                     break;
@@ -732,11 +728,7 @@ public class PromotorOrUserVideoPlaying extends BaseActivity {
             PromoterFollowerModel mPromoterFollowerModel = (PromoterFollowerModel) responseObj;
             switch (responseType) {
                 case RetrofitClient.PROMOTER_IS_ALREADY_FOLLOWED:
-                    if (mPromoterFollowerModel.getResource() != null && mPromoterFollowerModel.getResource().size() > 0) {
-                        mIsAlreadyFollowing = true;
-                    } else {
-                        mIsAlreadyFollowing = false;
-                    }
+                    mIsAlreadyFollowing = mPromoterFollowerModel.getResource() != null && mPromoterFollowerModel.getResource().size() > 0;
                     setFollowUnfollow();
                     callGetProfile(mOtherProfileID, RetrofitClient.GET_OTHER_PROFILE_RESPONSE);
                     break;

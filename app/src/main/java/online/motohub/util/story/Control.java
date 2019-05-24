@@ -73,14 +73,22 @@ public enum Control {
                     list.add(i);
                 }
                 return list;
-            case CROP_OUTPUT: return Arrays.asList(true, false);
-            case SESSION: return options.getSupportedControls(SessionType.class);
-            case FLASH: return options.getSupportedControls(Flash.class);
-            case WHITE_BALANCE: return options.getSupportedControls(WhiteBalance.class);
-            case HDR: return options.getSupportedControls(Hdr.class);
-            case GRID: return options.getSupportedControls(Grid.class);
-            case VIDEO_QUALITY: return options.getSupportedControls(VideoQuality.class);
-            case AUDIO: return options.getSupportedControls(Audio.class);
+            case CROP_OUTPUT:
+                return Arrays.asList(true, false);
+            case SESSION:
+                return options.getSupportedControls(SessionType.class);
+            case FLASH:
+                return options.getSupportedControls(Flash.class);
+            case WHITE_BALANCE:
+                return options.getSupportedControls(WhiteBalance.class);
+            case HDR:
+                return options.getSupportedControls(Hdr.class);
+            case GRID:
+                return options.getSupportedControls(Grid.class);
+            case VIDEO_QUALITY:
+                return options.getSupportedControls(VideoQuality.class);
+            case AUDIO:
+                return options.getSupportedControls(Audio.class);
             case PINCH:
             case HSCROLL:
             case VSCROLL:
@@ -108,21 +116,36 @@ public enum Control {
 
     public Object getCurrentValue(CameraView view) {
         switch (this) {
-            case WIDTH: return view.getLayoutParams().width;
-            case HEIGHT: return view.getLayoutParams().height;
-            case SESSION: return view.getSessionType();
-            case CROP_OUTPUT: return view.getCropOutput();
-            case FLASH: return view.getFlash();
-            case WHITE_BALANCE: return view.getWhiteBalance();
-            case GRID: return view.getGrid();
-            case VIDEO_QUALITY: return view.getVideoQuality();
-            case AUDIO: return view.getAudio();
-            case HDR: return view.getHdr();
-            case PINCH: return view.getGestureAction(Gesture.PINCH);
-            case HSCROLL: return view.getGestureAction(Gesture.SCROLL_HORIZONTAL);
-            case VSCROLL: return view.getGestureAction(Gesture.SCROLL_VERTICAL);
-            case TAP: return view.getGestureAction(Gesture.TAP);
-            case LONG_TAP: return view.getGestureAction(Gesture.LONG_TAP);
+            case WIDTH:
+                return view.getLayoutParams().width;
+            case HEIGHT:
+                return view.getLayoutParams().height;
+            case SESSION:
+                return view.getSessionType();
+            case CROP_OUTPUT:
+                return view.getCropOutput();
+            case FLASH:
+                return view.getFlash();
+            case WHITE_BALANCE:
+                return view.getWhiteBalance();
+            case GRID:
+                return view.getGrid();
+            case VIDEO_QUALITY:
+                return view.getVideoQuality();
+            case AUDIO:
+                return view.getAudio();
+            case HDR:
+                return view.getHdr();
+            case PINCH:
+                return view.getGestureAction(Gesture.PINCH);
+            case HSCROLL:
+                return view.getGestureAction(Gesture.SCROLL_HORIZONTAL);
+            case VSCROLL:
+                return view.getGestureAction(Gesture.SCROLL_VERTICAL);
+            case TAP:
+                return view.getGestureAction(Gesture.TAP);
+            case LONG_TAP:
+                return view.getGestureAction(Gesture.LONG_TAP);
         }
         return null;
     }

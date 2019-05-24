@@ -15,7 +15,8 @@
         <item name="actionModeBackground">@color/colorOrange</item>
         <item name="android:windowAnimationStyle">@style/MyActivityAnimation</item>
         <item name="android:popupMenuStyle">@style/PopupMenu</item>
-        <item name="android:textAppearanceLargePopupMenu">@style/myPopupMenuTextAppearanceLarge</item>
+        <item name="android:textAppearanceLargePopupMenu">@style/myPopupMenuTextAppearanceLarge
+        </item>
         <item name="android:textAppearanceSmallPopupMenu">@style/myPopupMenuTextAppearanceSmall
         </item>
     </style>

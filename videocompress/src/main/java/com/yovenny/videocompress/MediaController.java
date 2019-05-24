@@ -25,11 +25,12 @@ public class MediaController {
     private final static int PROCESSOR_TYPE_SEC = 4;
     private final static int PROCESSOR_TYPE_TI = 5;
     private static volatile MediaController Instance = null;
-    private boolean videoConvertFirstWrite = true;
 
     static {
         System.loadLibrary("compress");
     }
+
+    private boolean videoConvertFirstWrite = true;
 
     public static MediaController getInstance() {
         MediaController localInstance = Instance;
@@ -73,12 +74,27 @@ public class MediaController {
         }
     }
 
-
-    private void didWriteData(final boolean last, final boolean error) {
-        final boolean firstWrite = videoConvertFirstWrite;
-        if (firstWrite) {
-            videoConvertFirstWrite = false;
+    public static MediaCodecInfo selectCodec(String mimeType) {
+        int numCodecs = MediaCodecList.getCodecCount();
+        MediaCodecInfo lastCodecInfo = null;
+        for (int i = 0; i < numCodecs; i++) {
+            MediaCodecInfo codecInfo = MediaCodecList.getCodecInfoAt(i);
+            if (!codecInfo.isEncoder()) {
+                continue;
+            }
+            String[] types = codecInfo.getSupportedTypes();
+            for (String type : types) {
+                if (type.equalsIgnoreCase(mimeType)) {
+                    lastCodecInfo = codecInfo;
+                    if (!lastCodecInfo.getName().equals("OMX.SEC.avc.enc")) {
+                        return lastCodecInfo;
+                    } else if (lastCodecInfo.getName().equals("OMX.SEC.AVC.Encoder")) {
+                        return lastCodecInfo;
+                    }
+                }
+            }
         }
+        return lastCodecInfo;
     }
 //
 //    public static class VideoConvertRunnable implements Runnable {
@@ -111,27 +127,11 @@ public class MediaController {
 //        }
 //    }
 
-    public static MediaCodecInfo selectCodec(String mimeType) {
-        int numCodecs = MediaCodecList.getCodecCount();
-        MediaCodecInfo lastCodecInfo = null;
-        for (int i = 0; i < numCodecs; i++) {
-            MediaCodecInfo codecInfo = MediaCodecList.getCodecInfoAt(i);
-            if (!codecInfo.isEncoder()) {
-                continue;
-            }
-            String[] types = codecInfo.getSupportedTypes();
-            for (String type : types) {
-                if (type.equalsIgnoreCase(mimeType)) {
-                    lastCodecInfo = codecInfo;
-                    if (!lastCodecInfo.getName().equals("OMX.SEC.avc.enc")) {
-                        return lastCodecInfo;
-                    } else if (lastCodecInfo.getName().equals("OMX.SEC.AVC.Encoder")) {
-                        return lastCodecInfo;
-                    }
-                }
-            }
+    private void didWriteData(final boolean last, final boolean error) {
+        final boolean firstWrite = videoConvertFirstWrite;
+        if (firstWrite) {
+            videoConvertFirstWrite = false;
         }
-        return lastCodecInfo;
     }
 
 //    public void scheduleVideoConvert(String path) {
@@ -241,8 +241,8 @@ public class MediaController {
 //        int bitrate = 921600;//450000; 921600 1843200
         int b = Integer.parseInt(bit);
         int bitrate = b / 3;
-        System.out.println("Initial Bit Rate = "+b);
-        System.out.println("After Bit Rate = "+bitrate);
+        System.out.println("Initial Bit Rate = " + b);
+        System.out.println("After Bit Rate = " + bitrate);
         int rotateRender = 0;
 
         File cacheFile = new File(outPath);

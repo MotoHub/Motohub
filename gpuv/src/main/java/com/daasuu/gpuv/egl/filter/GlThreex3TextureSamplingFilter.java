@@ -3,7 +3,6 @@ package com.daasuu.gpuv.egl.filter;
 import android.opengl.GLES20;
 
 
-
 public class GlThreex3TextureSamplingFilter extends GlFilter {
     private static final String THREE_X_THREE_TEXTURE_SAMPLING_VERTEX_SHADER =
             "attribute vec4 aPosition;" +

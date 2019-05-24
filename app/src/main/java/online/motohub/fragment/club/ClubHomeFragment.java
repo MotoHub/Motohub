@@ -29,7 +29,6 @@ import online.motohub.activity.BaseActivity;
 import online.motohub.activity.PostEditActivity;
 import online.motohub.activity.ReportActivity;
 import online.motohub.adapter.club.ClubPostsAdapter;
-import online.motohub.application.MotoHub;
 import online.motohub.fragment.BaseFragment;
 import online.motohub.fragment.dialog.AppDialogFragment;
 import online.motohub.interfaces.SharePostInterface;
@@ -154,7 +153,7 @@ public class ClubHomeFragment extends BaseFragment implements SwipeRefreshLayout
         try {
             mClubPostsAdapter = new ClubPostsAdapter(mNewsFeedList, mPromotersResModel, mMyProfileResModel, mActivity);
             mNewsFeedRecyclerView.setAdapter(mClubPostsAdapter);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         if (mNewsFeedList.size() == 0)

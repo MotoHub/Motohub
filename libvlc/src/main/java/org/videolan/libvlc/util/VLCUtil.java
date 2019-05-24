@@ -34,7 +34,6 @@ import org.videolan.libvlc.Media;
 import java.io.BufferedReader;
 import java.io.Closeable;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.RandomAccessFile;
@@ -44,9 +43,25 @@ import java.util.Locale;
 
 public class VLCUtil {
     public final static String TAG = "VLC/LibVLC/Util";
-
+    private static final int EM_386 = 3;
+    private static final int EM_MIPS = 8;
+    private static final int EM_ARM = 40;
+    private static final int EM_X86_64 = 62;
+    private static final int EM_AARCH64 = 183;
+    private static final int ELF_HEADER_SIZE = 52;
+    private static final int SECTION_HEADER_SIZE = 40;
+    private static final int SHT_ARM_ATTRIBUTES = 0x70000003;
+    /**
+     * '*' prefix means it's unsupported
+     */
+    private final static String[] CPU_archs = {"*Pre-v4", "*v4", "*v4T",
+            "v5T", "v5TE", "v5TEJ",
+            "v6", "v6KZ", "v6T2", "v6K", "v7",
+            "*v6-M", "*v6S-M", "*v7E-M", "*v8"};
+    private static final String URI_AUTHORIZED_CHARS = "'()*";
     private static String errorMsg = null;
     private static boolean isCompatible = false;
+    private static MachineSpecs machineSpecs = null;
 
     public static String getErrorMsg() {
         return errorMsg;
@@ -263,42 +278,6 @@ public class VLCUtil {
         return machineSpecs;
     }
 
-    private static MachineSpecs machineSpecs = null;
-
-    public static class MachineSpecs {
-        public boolean hasNeon;
-        public boolean hasFpu;
-        public boolean hasArmV6;
-        public boolean hasArmV7;
-        public boolean hasMips;
-        public boolean hasX86;
-        public boolean is64bits;
-        public float bogoMIPS;
-        public int processors;
-        public float frequency; /* in MHz */
-    }
-
-    private static final int EM_386 = 3;
-    private static final int EM_MIPS = 8;
-    private static final int EM_ARM = 40;
-    private static final int EM_X86_64 = 62;
-    private static final int EM_AARCH64 = 183;
-    private static final int ELF_HEADER_SIZE = 52;
-    private static final int SECTION_HEADER_SIZE = 40;
-    private static final int SHT_ARM_ATTRIBUTES = 0x70000003;
-
-    private static class ElfData {
-        ByteOrder order;
-        boolean is64bits;
-        int e_machine;
-        int e_shoff;
-        int e_shnum;
-        int sh_offset;
-        int sh_size;
-        String att_arch;
-        boolean att_fpu;
-    }
-
     @TargetApi(Build.VERSION_CODES.GINGERBREAD)
     private static File searchLibrary(ApplicationInfo applicationInfo) {
         // Search for library path
@@ -325,12 +304,6 @@ public class VLCUtil {
         Log.e(TAG, "WARNING: Can't find shared library");
         return null;
     }
-
-    /** '*' prefix means it's unsupported */
-    private final static String[] CPU_archs = {"*Pre-v4", "*v4", "*v4T",
-            "v5T", "v5TE", "v5TEJ",
-            "v6", "v6KZ", "v6T2", "v6K", "v7",
-            "*v6-M", "*v6S-M", "*v7E-M", "*v8"};
 
     private static ElfData readLib(File file) {
         RandomAccessFile in = null;
@@ -501,15 +474,13 @@ public class VLCUtil {
         return ret;
     }
 
-    private static final String URI_AUTHORIZED_CHARS = "'()*";
-
     /**
      * VLC authorize only "-._~" in Mrl format, android Uri authorize "_-!.~'()*".
      * Therefore, decode the characters authorized by Android Uri when creating an Uri from VLC.
      */
     public static Uri UriFromMrl(String mrl) {
         final char array[] = mrl.toCharArray();
-        final StringBuilder sb = new StringBuilder(array.length*2);
+        final StringBuilder sb = new StringBuilder(array.length * 2);
         for (int i = 0; i < array.length; ++i) {
             final char c = array[i];
             if (c == '%') {
@@ -554,6 +525,7 @@ public class VLCUtil {
 
     /**
      * Get a media thumbnail.
+     *
      * @return a bytearray with the RGBA thumbnail data inside.
      */
     public static byte[] getThumbnail(LibVLC libVLC, Uri uri, int i_width, int i_height) {
@@ -578,8 +550,34 @@ public class VLCUtil {
         if (closeable != null)
             try {
                 closeable.close();
-            } catch (IOException ignored) {}
+            } catch (IOException ignored) {
+            }
     }
 
     private static native byte[] nativeGetThumbnail(Media media, int i_width, int i_height);
+
+    public static class MachineSpecs {
+        public boolean hasNeon;
+        public boolean hasFpu;
+        public boolean hasArmV6;
+        public boolean hasArmV7;
+        public boolean hasMips;
+        public boolean hasX86;
+        public boolean is64bits;
+        public float bogoMIPS;
+        public int processors;
+        public float frequency; /* in MHz */
+    }
+
+    private static class ElfData {
+        ByteOrder order;
+        boolean is64bits;
+        int e_machine;
+        int e_shoff;
+        int e_shnum;
+        int sh_offset;
+        int sh_size;
+        String att_arch;
+        boolean att_fpu;
+    }
 }

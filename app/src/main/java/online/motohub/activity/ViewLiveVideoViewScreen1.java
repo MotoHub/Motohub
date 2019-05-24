@@ -71,7 +71,6 @@ public class ViewLiveVideoViewScreen1 extends BaseActivity {
     }
 
 
-
     private void initView() {
         Bundle mBundle = getIntent().getExtras();
         if (mBundle != null) {
@@ -113,7 +112,7 @@ public class ViewLiveVideoViewScreen1 extends BaseActivity {
     }
 
     private void initVideoView(final VideoView videoView) {
-            releasePlayer();
+        releasePlayer();
         mVideoView = videoView;
         mVideoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
             @Override

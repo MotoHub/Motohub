@@ -8,112 +8,118 @@
         android:id="@+id/include"
         layout="@layout/widget_toolbar" />
 
-    <RelativeLayout
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        xmlns:android="http://schemas.android.com/apk/res/android"
         android:orientation="vertical">
+
         <TextView
-            android:layout_width="wrap_content"
-            android:text="@string/notifications"
-            android:layout_marginTop="10dp"
-            android:layout_marginLeft="10dp"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:layout_marginRight="10dp"
-            android:textColor="@color/colorBlack"
             android:id="@+id/notification_text"
-            android:layout_height="wrap_content" />
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="10dp"
+            android:text="@string/notifications"
+            android:textColor="@color/colorBlack"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
         <Switch
+            android:id="@+id/switch_allow"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/switch_allow"
             android:layout_below="@+id/notification_text"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginRight="10dp"
             android:checked="true"
             android:text="@string/enable_notificaton"
-            android:theme="@style/SwitchTheme"
             android:textColor="@color/ash"
-            android:layout_marginTop="5dp"
             android:textSize="14sp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp" />
+            android:theme="@style/SwitchTheme" />
+
         <View
+            android:id="@+id/notification_view"
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/ash"
-            android:layout_marginTop="10dp"
             android:layout_below="@+id/switch_allow"
-            android:id="@+id/notification_view"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:text="@string/notification_sound"
             android:layout_marginTop="10dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_below="@+id/notification_view"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:textColor="@color/colorBlack"
+            android:background="@color/ash" />
+
+        <TextView
             android:id="@+id/noti_sound_text"
-            android:layout_height="wrap_content" />
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/notification_view"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="10dp"
+            android:text="@string/notification_sound"
+            android:textColor="@color/colorBlack"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
         <Switch
+            android:id="@+id/switch_sound"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/noti_sound_text"
-            android:id="@+id/switch_sound"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginRight="10dp"
             android:checked="true"
-            android:textSize="14sp"
             android:text="@string/on_off_sound"
             android:textColor="@color/ash"
-            android:layout_marginTop="5dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
+            android:textSize="14sp"
             android:theme="@style/SwitchTheme"
 
             />
+
         <View
+            android:id="@+id/sound_view"
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/ash"
-            android:layout_marginTop="10dp"
-            android:id="@+id/sound_view"
             android:layout_below="@+id/switch_sound"
-           />
-        <TextView
-            android:layout_width="wrap_content"
-            android:text="@string/notification_vibration"
             android:layout_marginTop="10dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_below="@+id/sound_view"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:textColor="@color/colorBlack"
+            android:background="@color/ash" />
+
+        <TextView
             android:id="@+id/noti_vib_text"
-            android:layout_height="wrap_content" />
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/sound_view"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="10dp"
+            android:text="@string/notification_vibration"
+            android:textColor="@color/colorBlack"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
         <Switch
+            android:id="@+id/switch_vib"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/noti_vib_text"
-            android:id="@+id/switch_vib"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginRight="10dp"
             android:checked="true"
-            android:textSize="14sp"
             android:text="@string/on_off_vib"
             android:textColor="@color/ash"
-            android:layout_marginTop="5dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
+            android:textSize="14sp"
             android:theme="@style/SwitchTheme"
 
             />
+
         <View
+            android:id="@+id/vib_view"
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/ash"
-            android:layout_marginTop="10dp"
-            android:id="@+id/vib_view"
             android:layout_below="@+id/switch_vib"
-            />
+            android:layout_marginTop="10dp"
+            android:background="@color/ash" />
 
     </RelativeLayout>
 

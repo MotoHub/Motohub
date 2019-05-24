@@ -1,7 +1,6 @@
 package com.daasuu.gpuv.egl.filter;
 
 
-
 public class GlWeakPixelInclusionFilter extends GlThreex3TextureSamplingFilter {
 
     private static final String FRAGMENT_SHADER =

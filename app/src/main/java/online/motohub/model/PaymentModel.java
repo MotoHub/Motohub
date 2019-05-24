@@ -4,51 +4,40 @@ import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 
-public class PaymentModel implements Serializable{
-
-    public class source{
-        @SerializedName("name")
-        private String mName;
-
-        public String getName() {
-            return mName;
-        }
-
-        public void setName(String mName) {
-            this.mName = mName;
-        }
-    }
-
-    public class outcome{
-        @SerializedName("seller_message")
-        private String mSellerMessage;
-
-        public String getSellerMessage() {
-            return mSellerMessage;
-        }
-
-        public void setSellerMessage(String mSellerMessage) {
-            this.mSellerMessage = mSellerMessage;
-        }
-    }
+public class PaymentModel implements Serializable {
 
     @SerializedName("id")
     private String mID;
-
     @SerializedName("amount")
     private int mAmount;
-
     @SerializedName("customer")
     private String customer;
-
     @SerializedName("status")
     private String mStatus;
-
     @SerializedName("transfer")
     private String mTransfer;
-
     @SerializedName("currency")
     private String mCurrency;
+    @SerializedName("destination")
+    private String mDestination;
+    @SerializedName("failure_message")
+    private String mFailureMessage;
+    @SerializedName("source")
+    private source mSource;
+    @SerializedName("outcome")
+    private outcome mOutcome;
+    @SerializedName("message")
+    private String message;
+    @SerializedName("type")
+    private String type;
+    @SerializedName("code")
+    private String code;
+    @SerializedName("decline_code")
+    private String decline_code;
+    @SerializedName("charge")
+    private String charge;
+    @SerializedName("error")
+    private int error;
 
     public String getCustomer() {
         return customer;
@@ -57,36 +46,6 @@ public class PaymentModel implements Serializable{
     public void setCustomer(String customer) {
         this.customer = customer;
     }
-
-    @SerializedName("destination")
-    private String mDestination;
-
-    @SerializedName("failure_message")
-    private String mFailureMessage;
-
-    @SerializedName("source")
-    private source mSource;
-
-    @SerializedName("outcome")
-    private outcome mOutcome;
-
-    @SerializedName("message")
-    private String message;
-
-    @SerializedName("type")
-    private String type;
-
-    @SerializedName("code")
-    private String code;
-
-    @SerializedName("decline_code")
-    private String decline_code;
-
-    @SerializedName("charge")
-    private String charge;
-
-    @SerializedName("error")
-    private int error;
 
     public String getID() {
         return mID;
@@ -175,5 +134,31 @@ public class PaymentModel implements Serializable{
     public int getError() {
         return error;
     }
-	
+
+    public class source {
+        @SerializedName("name")
+        private String mName;
+
+        public String getName() {
+            return mName;
+        }
+
+        public void setName(String mName) {
+            this.mName = mName;
+        }
+    }
+
+    public class outcome {
+        @SerializedName("seller_message")
+        private String mSellerMessage;
+
+        public String getSellerMessage() {
+            return mSellerMessage;
+        }
+
+        public void setSellerMessage(String mSellerMessage) {
+            this.mSellerMessage = mSellerMessage;
+        }
+    }
+
 }

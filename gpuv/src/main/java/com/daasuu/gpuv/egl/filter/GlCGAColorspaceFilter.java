@@ -1,7 +1,6 @@
 package com.daasuu.gpuv.egl.filter;
 
 
-
 public class GlCGAColorspaceFilter extends GlFilter {
 
     private static final String FRAGMENT_SHADER =

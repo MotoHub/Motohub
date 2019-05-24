@@ -493,7 +493,7 @@ public class PostCommentLikeViewAdapter extends RecyclerView.Adapter<RecyclerVie
 
                             } else if (isVideoFile) {
 
-                                String mVideosList[] = ((BaseActivity) mContext).getImgVideoList(mPostsList.get(mViewHolderPost
+                                String[] mVideosList = ((BaseActivity) mContext).getImgVideoList(mPostsList.get(mViewHolderPost
                                         .getLayoutPosition()).getPostVideoURL());
 
                                 ((BaseActivity) mContext).showFBShareDialog(AppDialogFragment.BOTTOM_SHARE_DIALOG, content, null, mVideosList, position, mIsOtherMotoProfile);
@@ -509,8 +509,8 @@ public class PostCommentLikeViewAdapter extends RecyclerView.Adapter<RecyclerVie
                     mViewHolderPost.mPostImageVideoBox.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            String mVideosList[] = ((BaseActivity) mContext).getImgVideoList(mPostsList.get(position).getPostVideoURL());
-                            String mImgList[] = ((BaseActivity) mContext).getImgVideoList(mPostsList.get(position).getPostPicture());
+                            String[] mVideosList = ((BaseActivity) mContext).getImgVideoList(mPostsList.get(position).getPostVideoURL());
+                            String[] mImgList = ((BaseActivity) mContext).getImgVideoList(mPostsList.get(position).getPostPicture());
                             if (mVideosList != null && mVideosList.length > 0) {
                                 ((BaseActivity) mContext).moveLoadVideoScreen(mContext, UrlUtils.AWS_S3_BASE_URL + mVideosList[0]);
                             } else if (mImgList != null && mImgList.length > 0) {
@@ -869,9 +869,9 @@ public class PostCommentLikeViewAdapter extends RecyclerView.Adapter<RecyclerVie
 
             if (mPostsList.get(position).getPostLikes().size() == 1) {
 
-                resLikes = String.valueOf(mPostsList.get(position).getPostLikes().size()) + " Like";
+                resLikes = mPostsList.get(position).getPostLikes().size() + " Like";
             } else {
-                resLikes = String.valueOf(mPostsList.get(position).getPostLikes().size()) + " Likes";
+                resLikes = mPostsList.get(position).getPostLikes().size() + " Likes";
 
             }
             mViewHolderPost.mLikeCountText.setText(resLikes);

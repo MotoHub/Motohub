@@ -35,6 +35,14 @@ public class VolumeChangeObserver extends ContentObserver {
     Context mContext = null;
     private VolumeChangeListener mVolumeChangeListener = null;
 
+    public VolumeChangeObserver(Context c, Handler handler) {
+        super(handler);
+        mContext = c;
+
+        AudioManager audio = (AudioManager) mContext.getSystemService(Context.AUDIO_SERVICE);
+        previousVolume = normalizedLevel(audio, audio.getStreamVolume(mStreamType), mStreamType);
+    }
+
     public int getStreamType() {
         return mStreamType;
     }
@@ -51,18 +59,6 @@ public class VolumeChangeObserver extends ContentObserver {
         mVolumeChangeListener = null;
     }
 
-    public interface VolumeChangeListener {
-        void onVolumeChanged(int previousLevel, int currentLevel);
-    }
-
-    public VolumeChangeObserver(Context c, Handler handler) {
-        super(handler);
-        mContext = c;
-
-        AudioManager audio = (AudioManager) mContext.getSystemService(Context.AUDIO_SERVICE);
-        previousVolume = normalizedLevel(audio, audio.getStreamVolume(mStreamType), mStreamType);
-    }
-
     @Override
     public boolean deliverSelfNotifications() {
         return super.deliverSelfNotifications();
@@ -75,7 +71,7 @@ public class VolumeChangeObserver extends ContentObserver {
         AudioManager audio = (AudioManager) mContext.getSystemService(Context.AUDIO_SERVICE);
         int currentVolume = normalizedLevel(audio, audio.getStreamVolume(mStreamType), mStreamType);
 
-        int delta=previousVolume-currentVolume;
+        int delta = previousVolume - currentVolume;
         if (delta != 0) {
             previousVolume = currentVolume;
             if (mVolumeChangeListener != null) {
@@ -83,15 +79,19 @@ public class VolumeChangeObserver extends ContentObserver {
             }
         }
 
-        previousVolume=currentVolume;
+        previousVolume = currentVolume;
     }
 
     private int normalizedLevel(AudioManager audioManager, int level, int streamType) {
-        float maxLevel = (float)audioManager.getStreamMaxVolume(streamType);
+        float maxLevel = (float) audioManager.getStreamMaxVolume(streamType);
         if (maxLevel != 0f)
-            return Math.round(((float)audioManager.getStreamVolume(streamType) / maxLevel) * 100f);
+            return Math.round(((float) audioManager.getStreamVolume(streamType) / maxLevel) * 100f);
 
         return level;
+    }
+
+    public interface VolumeChangeListener {
+        void onVolumeChanged(int previousLevel, int currentLevel);
     }
 
 }

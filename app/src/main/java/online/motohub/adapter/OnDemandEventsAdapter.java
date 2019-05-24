@@ -32,7 +32,6 @@ import online.motohub.activity.BaseActivity;
 import online.motohub.activity.PromoterVideoGalleryActivity;
 import online.motohub.activity.ondemand.EventVideosPlayingActivity;
 import online.motohub.activity.ondemand.OnDemandActivity;
-import online.motohub.application.MotoHub;
 import online.motohub.interfaces.RetrofitResInterface;
 import online.motohub.model.OndemandNewResponse;
 import online.motohub.model.ProfileResModel;
@@ -125,7 +124,7 @@ public class OnDemandEventsAdapter extends RecyclerView.Adapter<OnDemandEventsAd
 
     @SuppressLint("SetTextI18n")
     @Override
-    public void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {
+    public void onBindViewHolder(@NonNull final ViewHolder holder, @SuppressLint("RecyclerView") final int position) {
         try {
             final OndemandNewResponse mOnDemandResponse = mDataList.get(position);
 
@@ -145,7 +144,7 @@ public class OnDemandEventsAdapter extends RecyclerView.Adapter<OnDemandEventsAd
                 ((BaseActivity) mContext).setImageWithGlide(holder.imageURL, mOnDemandResponse.getProfilePicture(), R.drawable.default_profile_icon);
             //}
             holder.txt_event_name.setText(String.valueOf(mOnDemandResponse.getName()));
-            holder.txt_no_videos.setText("No of videos: " + String.valueOf(mOnDemandResponse.getCount()));
+            holder.txt_no_videos.setText("No of videos: " + mOnDemandResponse.getCount());
             mPromoterFollowerList = mMyProfileResModel.getPromoterFollowerByProfileID();
             if (mOnDemandResponse.getViewCount() == 0) {
                 holder.view_count.setVisibility(View.GONE);

@@ -60,10 +60,9 @@ public abstract class BasePreviewActivity extends AppCompatActivity implements V
     protected TextView mSize;
 
     protected int mPreviousPos = -1;
-
+    protected boolean mOriginalEnable;
     private LinearLayout mOriginalLayout;
     private CheckRadioView mOriginal;
-    protected boolean mOriginalEnable;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

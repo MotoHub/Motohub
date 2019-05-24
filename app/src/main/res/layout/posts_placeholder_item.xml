@@ -30,8 +30,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/thumbnail"
-        android:layout_marginBottom="40dp"
         android:layout_marginTop="20dp"
+        android:layout_marginBottom="40dp"
         android:orientation="vertical">
 
         <View
@@ -43,15 +43,15 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="@dimen/placeholder_text_height"
-            android:layout_marginEnd="50dp"
             android:layout_marginTop="10dp"
+            android:layout_marginEnd="50dp"
             android:background="@color/placeholder_bg" />
 
         <View
             android:layout_width="match_parent"
             android:layout_height="@dimen/placeholder_text_height"
-            android:layout_marginEnd="160dp"
             android:layout_marginTop="10dp"
+            android:layout_marginEnd="160dp"
             android:background="@color/placeholder_bg" />
 
     </LinearLayout>

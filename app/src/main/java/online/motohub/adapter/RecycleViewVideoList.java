@@ -21,16 +21,12 @@ import online.motohub.model.VideoListInFolder;
 
 public class RecycleViewVideoList extends RecyclerView.Adapter<RecycleViewVideoList.ViewHolder> {
 
-    List<VideoListInFolder> data = Collections.emptyList();
-
-
-    private LayoutInflater inflater;
-
     private static Activity activity;
-
+    List<VideoListInFolder> data = Collections.emptyList();
+    private LayoutInflater inflater;
     private int lastPosition = -1;
 
-    public RecycleViewVideoList(Activity activity, List<VideoListInFolder> data){
+    public RecycleViewVideoList(Activity activity, List<VideoListInFolder> data) {
 
         RecycleViewVideoList.activity = activity;
         this.data = data;
@@ -62,11 +58,11 @@ public class RecycleViewVideoList extends RecyclerView.Adapter<RecycleViewVideoL
             if (minutes < 1) {
 
                 minutes = TimeUnit.MILLISECONDS.toSeconds(Long.parseLong(current.getVideo_Duration()));
-                viewHolder.textSecond.setText(String.valueOf(minutes) + " sec");
+                viewHolder.textSecond.setText(minutes + " sec");
             } else {
-                viewHolder.textSecond.setText(String.valueOf(minutes) + " min");
+                viewHolder.textSecond.setText(minutes + " min");
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -75,27 +71,6 @@ public class RecycleViewVideoList extends RecyclerView.Adapter<RecycleViewVideoL
     public int getItemCount() {
         return data.size();
     }
-
-
-    class ViewHolder extends RecyclerView.ViewHolder{
-
-
-        ImageView videoView;
-        TextView textTitle, textSecond;
-
-
-
-
-        public ViewHolder(View itemView) {
-            super(itemView);
-
-            videoView = itemView.findViewById(R.id.videoView);
-            textTitle  = itemView.findViewById(R.id.textTitle);
-            textSecond = itemView.findViewById(R.id.textSecond);
-
-        }
-    }
-
 
     private static class ImageLoader extends AsyncTask<Object, String, Bitmap> {
 
@@ -109,7 +84,7 @@ public class RecycleViewVideoList extends RecyclerView.Adapter<RecycleViewVideoL
 
             // Get the passed arguments here
             view = (ImageView) parameters[1];
-           String uri = (String)parameters[0];
+            String uri = (String) parameters[0];
 
             Bitmap b = MediaStore.Video.Thumbnails.getThumbnail(activity.getContentResolver(),
                     Long.parseLong(uri), MediaStore.Video.Thumbnails.MINI_KIND, null);
@@ -124,6 +99,23 @@ public class RecycleViewVideoList extends RecyclerView.Adapter<RecycleViewVideoL
                 view.setImageBitmap(bitmap);
 
             }
+        }
+    }
+
+    class ViewHolder extends RecyclerView.ViewHolder {
+
+
+        ImageView videoView;
+        TextView textTitle, textSecond;
+
+
+        public ViewHolder(View itemView) {
+            super(itemView);
+
+            videoView = itemView.findViewById(R.id.videoView);
+            textTitle = itemView.findViewById(R.id.textTitle);
+            textSecond = itemView.findViewById(R.id.textSecond);
+
         }
     }
 }

@@ -25,14 +25,12 @@ public class GlRGBFilter extends GlFilter {
             "      \n" +
             "      gl_FragColor = vec4(textureColor.r * red, textureColor.g * green, textureColor.b * blue, 1.0);\n" +
             "  }\n";
-
-    public GlRGBFilter() {
-        super(DEFAULT_VERTEX_SHADER, RGB_FRAGMENT_SHADER);
-    }
-
     private float red = 1f;
     private float green = 1f;
     private float blue = 1f;
+    public GlRGBFilter() {
+        super(DEFAULT_VERTEX_SHADER, RGB_FRAGMENT_SHADER);
+    }
 
     public void setRed(float red) {
         this.red = red;

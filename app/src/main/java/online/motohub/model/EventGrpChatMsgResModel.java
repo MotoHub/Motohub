@@ -7,66 +7,51 @@ import online.motohub.model.promoter_club_news_media.PromotersResModel;
 
 public class EventGrpChatMsgResModel {
 
-    @SerializedName("ID")
-    @Expose
-    private Integer mID;
-
-    @SerializedName("EventID")
-    @Expose
-    private Integer mEventID;
-
-    @SerializedName("Message")
-    @Expose
-    private String mMessage;
-
-    @SerializedName("user_type")
-    @Expose
-    private String mUserType;
-
-    @SerializedName("SenderUserID")
-    @Expose
-    private Integer mSenderUserID;
-
-    @SerializedName("SenderProfileID")
-    @Expose
-    private Integer mSenderProfileID;
-
-    @SerializedName("CreatedAt")
-    @Expose
-    private String mCreatedAt;
-
-    @SerializedName("sender_name")
-    @Expose
-    private String mSenderName;
-
-    @SerializedName("msg_type")
-    @Expose
-    private String msgType;
-
-    @SerializedName("photo_message")
-    @Expose
-    private String photoMessage;
-
-    @SerializedName("profiles_by_SenderProfileID")
-    @Expose
-    private ProfileResModel mProfilesBySenderProfileID;
-
-    @SerializedName("promoter_by_SenderUserID")
-    @Expose
-    private PromotersResModel mPromoterBySenderUserID;
-
-    @SerializedName("IsChecked")
-    @Expose
-    private Boolean IsDateVisible = false;
-
-    @SerializedName("IsRepliedMsg")
-    @Expose
-    private Boolean mIsRepliedMsg;
-
     @SerializedName("ReplyUserProfileID")
     @Expose
     int mReplyUserProfileID;
-
+    @SerializedName("ID")
+    @Expose
+    private Integer mID;
+    @SerializedName("EventID")
+    @Expose
+    private Integer mEventID;
+    @SerializedName("Message")
+    @Expose
+    private String mMessage;
+    @SerializedName("user_type")
+    @Expose
+    private String mUserType;
+    @SerializedName("SenderUserID")
+    @Expose
+    private Integer mSenderUserID;
+    @SerializedName("SenderProfileID")
+    @Expose
+    private Integer mSenderProfileID;
+    @SerializedName("CreatedAt")
+    @Expose
+    private String mCreatedAt;
+    @SerializedName("sender_name")
+    @Expose
+    private String mSenderName;
+    @SerializedName("msg_type")
+    @Expose
+    private String msgType;
+    @SerializedName("photo_message")
+    @Expose
+    private String photoMessage;
+    @SerializedName("profiles_by_SenderProfileID")
+    @Expose
+    private ProfileResModel mProfilesBySenderProfileID;
+    @SerializedName("promoter_by_SenderUserID")
+    @Expose
+    private PromotersResModel mPromoterBySenderUserID;
+    @SerializedName("IsChecked")
+    @Expose
+    private Boolean IsDateVisible = false;
+    @SerializedName("IsRepliedMsg")
+    @Expose
+    private Boolean mIsRepliedMsg;
     @SerializedName("Profiles By ReplyUserProfileID")
     @Expose
     private ProfileResModel mProfilesByReplyUserProfileID;
@@ -184,12 +169,13 @@ public class EventGrpChatMsgResModel {
     public String getMsgType() {
         return msgType;
     }
-	    public void setMsgType(String msgType) {
+
+    public void setMsgType(String msgType) {
         this.msgType = msgType;
     }
 
     public String getPhotoMessage() {
-        if(photoMessage == null)
+        if (photoMessage == null)
             photoMessage = "";
         return photoMessage;
     }
@@ -197,6 +183,7 @@ public class EventGrpChatMsgResModel {
     public void setPhotoMessage(String photoMessage) {
         this.photoMessage = photoMessage;
     }
+
     public Boolean getIsSelectedMsg() {
         return IsSelectedMsg;
     }
@@ -206,7 +193,7 @@ public class EventGrpChatMsgResModel {
     }
 
     public Boolean getIsRepliedMsg() {
-        if(mIsRepliedMsg == null)
+        if (mIsRepliedMsg == null)
             mIsRepliedMsg = false;
         return mIsRepliedMsg;
     }
@@ -256,7 +243,7 @@ public class EventGrpChatMsgResModel {
     }
 
     public String getReplyImage() {
-        if(mReplyImage == null)
+        if (mReplyImage == null)
             mReplyImage = "";
         return mReplyImage;
     }

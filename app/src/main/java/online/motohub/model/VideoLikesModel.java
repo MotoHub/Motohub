@@ -21,23 +21,22 @@ public class VideoLikesModel implements Serializable {
     private int mVideoID;
 
     @SerializedName("ProfileID")
-    private  int mProfileID;
+    private int mProfileID;
 
     @SerializedName("profiles_by_ProfileID")
     @Expose
     private ProfileResModel mProfilesByProfileID;
+    @SerializedName("resource")
+    @Expose
+    private ArrayList<VideoLikesModel> mResource = null;
+
 
     public VideoLikesModel(int postID, int profileID) {
         this.mVideoID = postID;
         this.mProfileID = profileID;
     }
 
-
-    @SerializedName("resource")
-    @Expose
-    private  ArrayList<VideoLikesModel> mResource = null;
-
-    public  ArrayList<VideoLikesModel> getResource() {
+    public ArrayList<VideoLikesModel> getResource() {
         return mResource;
     }
 
@@ -58,7 +57,7 @@ public class VideoLikesModel implements Serializable {
     }
 
     public ProfileResModel getProfiles_by_ProfileID() {
-        if(mProfilesByProfileID == null)
+        if (mProfilesByProfileID == null)
             mProfilesByProfileID = new ProfileResModel();
         return mProfilesByProfileID;
     }

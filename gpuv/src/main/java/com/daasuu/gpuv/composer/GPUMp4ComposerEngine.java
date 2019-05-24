@@ -1,8 +1,13 @@
 package com.daasuu.gpuv.composer;
 
-import android.media.*;
+import android.media.MediaCodecInfo;
+import android.media.MediaExtractor;
+import android.media.MediaFormat;
+import android.media.MediaMetadataRetriever;
+import android.media.MediaMuxer;
 import android.util.Log;
 import android.util.Size;
+
 import com.daasuu.gpuv.egl.filter.GlFilter;
 
 import java.io.FileDescriptor;

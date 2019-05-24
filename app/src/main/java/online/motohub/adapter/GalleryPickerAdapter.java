@@ -29,15 +29,13 @@ import online.motohub.model.LocalVideoModel;
 
 public class GalleryPickerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
+    public static final int IMAGE_TYPE = 1, VIDEO_TYPE = 2, IMAGE_FOLDER_TYPE = 3, VIEW_PROGRESS = 4;
     private Context mContext;
     private List<LocalImgModel> mImgList;
     private List<LocalFolderModel> mImgFolderList;
     private List<LocalVideoModel> mVideoList;
     private OnItemClickListener mOnItemClickListener;
     private LayoutInflater mInflater;
-
-    public static final int IMAGE_TYPE = 1, VIDEO_TYPE = 2, IMAGE_FOLDER_TYPE = 3, VIEW_PROGRESS = 4;
-
     private int galleryType;
 
     private int visibleThreshold = 5;
@@ -204,7 +202,7 @@ public class GalleryPickerAdapter extends RecyclerView.Adapter<RecyclerView.View
             } else {
                 ((ProgressViewHolder) holder).progressBar.setIndeterminate(true);
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -275,6 +273,19 @@ public class GalleryPickerAdapter extends RecyclerView.Adapter<RecyclerView.View
         });
     }
 
+    public interface OnItemClickListener {
+        void onItemClick(boolean isFolder, int position);
+    }
+
+    public static class ProgressViewHolder extends RecyclerView.ViewHolder {
+        public ProgressBar progressBar;
+
+        public ProgressViewHolder(View v) {
+            super(v);
+            progressBar = v.findViewById(R.id.progressBar1);
+        }
+    }
+
     class ImageHolder extends RecyclerView.ViewHolder {
 
         @BindView(R.id.row_picker_img_pager_thumbnail_image_view)
@@ -308,7 +319,6 @@ public class GalleryPickerAdapter extends RecyclerView.Adapter<RecyclerView.View
         }
     }
 
-
     class ImageFolderHolder extends RecyclerView.ViewHolder {
 
         @BindView(R.id.row_picker_img_folder_name_tv)
@@ -324,19 +334,6 @@ public class GalleryPickerAdapter extends RecyclerView.Adapter<RecyclerView.View
 
             ButterKnife.bind(this, v);
 
-        }
-    }
-
-    public interface OnItemClickListener {
-        void onItemClick(boolean isFolder, int position);
-    }
-
-    public static class ProgressViewHolder extends RecyclerView.ViewHolder {
-        public ProgressBar progressBar;
-
-        public ProgressViewHolder(View v) {
-            super(v);
-            progressBar = v.findViewById(R.id.progressBar1);
         }
     }
 

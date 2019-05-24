@@ -38,11 +38,9 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import online.motohub.R;
 import online.motohub.adapter.GalleryVideoAdapter;
-import online.motohub.application.MotoHub;
 import online.motohub.model.DeleteProfileImagesResponse;
 import online.motohub.model.GalleryVideoModel;
 import online.motohub.model.GalleryVideoResModel;
-import online.motohub.model.ProfileResModel;
 import online.motohub.model.SessionModel;
 import online.motohub.retrofit.RetrofitClient;
 import online.motohub.util.AppConstants;
@@ -352,7 +350,7 @@ public class ProfileVideoGalleryActivity extends BaseActivity {
 
         if (mActionMode != null)
             //set action mode title on item selection
-            mActionMode.setTitle(String.valueOf(mAdapter.getSelectedCount()) + " selected");
+            mActionMode.setTitle(mAdapter.getSelectedCount() + " selected");
     }
 
     //Set action mode null after use

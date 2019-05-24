@@ -5,8 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/colorWhite"
-    android:paddingBottom="@dimen/size10"
     android:paddingTop="@dimen/size10"
+    android:paddingBottom="@dimen/size10"
     tools:context="online.motohub.fragment.dialog.AppDialogFragment">
 
     <RelativeLayout
@@ -29,8 +29,8 @@
         <TextView
             android:id="@+id/edit_tv"
             style="@style/LayoutWrap"
-            android:layout_alignBottom="@+id/edit_icon"
             android:layout_alignTop="@+id/edit_icon"
+            android:layout_alignBottom="@+id/edit_icon"
             android:layout_toEndOf="@+id/edit_icon"
             android:gravity="center_vertical"
             android:text="@string/edit"
@@ -60,8 +60,8 @@
         <TextView
             android:id="@+id/delete_tv"
             style="@style/LayoutWrap"
-            android:layout_alignBottom="@+id/delete_icon"
             android:layout_alignTop="@+id/delete_icon"
+            android:layout_alignBottom="@+id/delete_icon"
             android:layout_toEndOf="@+id/delete_icon"
             android:gravity="center_vertical"
             android:text="@string/delete"

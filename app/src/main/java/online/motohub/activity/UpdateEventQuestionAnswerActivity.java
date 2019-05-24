@@ -12,7 +12,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
@@ -114,7 +113,7 @@ public class UpdateEventQuestionAnswerActivity extends BaseActivity {
                 break;
 
             case R.id.save_answers_btn:
-                String mAnswers[] = mEventQuestionAdapter.getAnswers();
+                String[] mAnswers = mEventQuestionAdapter.getAnswers();
                 JsonArray mJsonArray = new JsonArray();
 
                 for (int i = 0; i < mEventQuestionList.size(); i++) {

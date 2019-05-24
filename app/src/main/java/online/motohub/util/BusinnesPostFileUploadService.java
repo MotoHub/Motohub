@@ -13,16 +13,11 @@ import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.amazonaws.ClientConfiguration;
-import com.amazonaws.Protocol;
-import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.mobile.client.AWSMobileClient;
 import com.amazonaws.mobileconnectors.s3.transferutility.TransferListener;
 import com.amazonaws.mobileconnectors.s3.transferutility.TransferObserver;
 import com.amazonaws.mobileconnectors.s3.transferutility.TransferState;
 import com.amazonaws.mobileconnectors.s3.transferutility.TransferUtility;
-import com.amazonaws.regions.Region;
-import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -60,14 +55,14 @@ public class BusinnesPostFileUploadService extends IntentService implements Prog
     private Notification mNotification;
     private int mSubscriptionID;
 
+    public BusinnesPostFileUploadService(String name) {
+        super(name);
+    }
+
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
         return null;
-    }
-
-    public BusinnesPostFileUploadService(String name) {
-        super(name);
     }
 
     @Override
@@ -133,7 +128,7 @@ public class BusinnesPostFileUploadService extends IntentService implements Prog
         //  int count = databaseHandler.getPendingCount();
         videoUploadModel = new VideoUploadModel();
         String s = videoFile.toString();
-        videoUploadModel.setVideoURL(s.substring(s.lastIndexOf("/") + 1, s.length()));
+        videoUploadModel.setVideoURL(s.substring(s.lastIndexOf("/") + 1));
         videoUploadModel.setFlag(1);
         videoUploadModel.setThumbnailURl(mImageFile.toString());
         videoUploadModel.setPosts(mPostStr);
@@ -160,26 +155,6 @@ public class BusinnesPostFileUploadService extends IntentService implements Prog
         startForeground(mNotificationID, mNotification);
         UploadAsync uploadAsync = new UploadAsync(mNotificationID, videoFile, mImageFile);
         uploadAsync.execute();
-    }
-
-    @SuppressLint("StaticFieldLeak")
-    private class UploadAsync extends AsyncTask<String, String, Void> {
-
-        private Integer notificationid;
-        private File imagfile;
-        private File videofile;
-
-        public UploadAsync(Integer notificationid, File videofile, File ImageFile) {
-            this.notificationid = notificationid;
-            imagfile = ImageFile;
-            this.videofile = videofile;
-        }
-
-        @Override
-        protected Void doInBackground(String... paths) {
-            amazoneUpload(videofile, imagfile, notificationid);
-            return null;
-        }
     }
 
     private void amazoneUpload(final File video, final File image, final int notificationid) {
@@ -232,7 +207,7 @@ public class BusinnesPostFileUploadService extends IntentService implements Prog
             @Override
             public void onStateChanged(int id, TransferState state) {
 
-                if (state.COMPLETED.equals(observer.getState())) {
+                if (TransferState.COMPLETED.equals(observer.getState())) {
 
                     String imageFileName = image.getName().substring(image.getName().lastIndexOf("/") + 1);
                     String videoFileName = video.getName().substring(video.getName().lastIndexOf("/") + 1);
@@ -288,7 +263,7 @@ public class BusinnesPostFileUploadService extends IntentService implements Prog
             @Override
             public void onStateChanged(int id, TransferState state) {
 
-                if (state.COMPLETED.equals(observer1.getState())) {
+                if (TransferState.COMPLETED.equals(observer1.getState())) {
                     //Toast.makeText(ProfileUploadService.this, "File Upload Complete", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -405,13 +380,33 @@ public class BusinnesPostFileUploadService extends IntentService implements Prog
         }
     }
 
-    //Some Stuff
-
     protected String getHttpFilePath(String filePath) {
         return filePath;
     }
 
+    //Some Stuff
+
     protected String getUserId() {
         return String.valueOf(PreferenceUtils.getInstance(this).getIntData(PreferenceUtils.USER_ID));
+    }
+
+    @SuppressLint("StaticFieldLeak")
+    private class UploadAsync extends AsyncTask<String, String, Void> {
+
+        private Integer notificationid;
+        private File imagfile;
+        private File videofile;
+
+        public UploadAsync(Integer notificationid, File videofile, File ImageFile) {
+            this.notificationid = notificationid;
+            imagfile = ImageFile;
+            this.videofile = videofile;
+        }
+
+        @Override
+        protected Void doInBackground(String... paths) {
+            amazoneUpload(videofile, imagfile, notificationid);
+            return null;
+        }
     }
 }

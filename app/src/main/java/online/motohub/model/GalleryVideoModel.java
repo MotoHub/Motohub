@@ -10,25 +10,6 @@ import java.util.List;
 
 public class GalleryVideoModel implements Parcelable {
 
-    @SerializedName("resource")
-    private List<GalleryVideoResModel> resModelList;
-
-    @SerializedName("meta")
-    @Expose
-    private MetaModel meta;
-
-    public MetaModel getMeta() {
-        return meta;
-    }
-
-    public void setMeta(MetaModel meta) {
-        this.meta = meta;
-    }
-
-    private GalleryVideoModel(Parcel in) {
-        resModelList = in.createTypedArrayList(GalleryVideoResModel.CREATOR);
-    }
-
     public static final Creator<GalleryVideoModel> CREATOR = new Creator<GalleryVideoModel>() {
         @Override
         public GalleryVideoModel createFromParcel(Parcel in) {
@@ -40,6 +21,23 @@ public class GalleryVideoModel implements Parcelable {
             return new GalleryVideoModel[size];
         }
     };
+    @SerializedName("resource")
+    private List<GalleryVideoResModel> resModelList;
+    @SerializedName("meta")
+    @Expose
+    private MetaModel meta;
+
+    private GalleryVideoModel(Parcel in) {
+        resModelList = in.createTypedArrayList(GalleryVideoResModel.CREATOR);
+    }
+
+    public MetaModel getMeta() {
+        return meta;
+    }
+
+    public void setMeta(MetaModel meta) {
+        this.meta = meta;
+    }
 
     public List<GalleryVideoResModel> getResModelList() {
         return resModelList;

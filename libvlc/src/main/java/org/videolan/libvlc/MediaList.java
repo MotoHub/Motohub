@@ -26,55 +26,12 @@ import android.util.SparseArray;
 @SuppressWarnings("unused, JniMissingFunction")
 public class MediaList extends VLCObject<MediaList.Event> {
     private final static String TAG = "LibVLC/MediaList";
-
-    public static class Event extends VLCEvent {
-
-        public static final int ItemAdded              = 0x200;
-        //public static final int WillAddItem            = 0x201;
-        public static final int ItemDeleted            = 0x202;
-        //public static final int WillDeleteItem         = 0x203;
-        public static final int EndReached             = 0x204;
-
-        /**
-         * In case of ItemDeleted, the media will be already released. If it's released, cached
-         * attributes are still available (like {@link Media#getUri()}}).
-         */
-        public final Media media;
-        private final boolean retain;
-        public final int index;
-
-        protected Event(int type, Media media, boolean retain, int index) {
-            super(type);
-            if (retain && (media == null || !media.retain()))
-                throw new IllegalStateException("invalid media reference");
-            this.media = media;
-            this.retain = retain;
-            this.index = index;
-        }
-
-        @Override
-        void release() {
-            if (retain)
-                media.release();
-        }
-    }
-
-    public interface EventListener extends VLCEvent.Listener<Event> {}
-
-    private int mCount = 0;
     private final SparseArray<Media> mMediaArray = new SparseArray<Media>();
+    private int mCount = 0;
     private boolean mLocked = false;
-
-    private void init() {
-        lock();
-        mCount = nativeGetCount();
-        for (int i = 0; i < mCount; ++i)
-            mMediaArray.put(i, new Media(this, i));
-        unlock();
-    }
-
     /**
      * Create a MediaList from libVLC
+     *
      * @param libVLC a valid libVLC
      */
     public MediaList(LibVLC libVLC) {
@@ -82,9 +39,7 @@ public class MediaList extends VLCObject<MediaList.Event> {
         nativeNewFromLibVlc(libVLC);
         init();
     }
-
     /**
-     *
      * @param md Should not be released
      */
     protected MediaList(MediaDiscoverer md) {
@@ -94,13 +49,20 @@ public class MediaList extends VLCObject<MediaList.Event> {
     }
 
     /**
-     *
      * @param m Should not be released
      */
     protected MediaList(Media m) {
         super(m);
         nativeNewFromMedia(m);
         init();
+    }
+
+    private void init() {
+        lock();
+        mCount = nativeGetCount();
+        for (int i = 0; i < mCount; ++i)
+            mMediaArray.put(i, new Media(this, i));
+        unlock();
     }
 
     private synchronized Media insertMediaFromEvent(int index) {
@@ -129,7 +91,7 @@ public class MediaList extends VLCObject<MediaList.Event> {
     }
 
     @Override
-    protected synchronized Event onEventNative(int eventType, long arg1, long arg2, float  argf1) {
+    protected synchronized Event onEventNative(int eventType, long arg1, long arg2, float argf1) {
         if (mLocked)
             throw new IllegalStateException("already locked from event callback");
         mLocked = true;
@@ -137,23 +99,23 @@ public class MediaList extends VLCObject<MediaList.Event> {
         int index;
 
         switch (eventType) {
-        case Event.ItemAdded:
-            index = (int) arg1;
-            if (index != -1) {
-                final Media media = insertMediaFromEvent(index);
-                event = new Event(eventType, media, true, index);
-            }
-            break;
-        case Event.ItemDeleted:
-            index = (int) arg1;
-            if (index != -1) {
-                final Media media = removeMediaFromEvent(index);
-                event = new Event(eventType, media, false, index);
-            }
-            break;
-        case Event.EndReached:
-            event = new Event(eventType, null, false, -1);
-            break;
+            case Event.ItemAdded:
+                index = (int) arg1;
+                if (index != -1) {
+                    final Media media = insertMediaFromEvent(index);
+                    event = new Event(eventType, media, true, index);
+                }
+                break;
+            case Event.ItemDeleted:
+                index = (int) arg1;
+                if (index != -1) {
+                    final Media media = removeMediaFromEvent(index);
+                    event = new Event(eventType, media, false, index);
+                }
+                break;
+            case Event.EndReached:
+                event = new Event(eventType, null, false, -1);
+                break;
         }
         mLocked = false;
         return event;
@@ -211,10 +173,51 @@ public class MediaList extends VLCObject<MediaList.Event> {
 
     /* JNI */
     private native void nativeNewFromLibVlc(LibVLC libvlc);
+
     private native void nativeNewFromMediaDiscoverer(MediaDiscoverer md);
+
     private native void nativeNewFromMedia(Media m);
+
     private native void nativeRelease();
+
     private native int nativeGetCount();
+
     private native void nativeLock();
+
     private native void nativeUnlock();
+
+    public interface EventListener extends VLCEvent.Listener<Event> {
+    }
+
+    public static class Event extends VLCEvent {
+
+        public static final int ItemAdded = 0x200;
+        //public static final int WillAddItem            = 0x201;
+        public static final int ItemDeleted = 0x202;
+        //public static final int WillDeleteItem         = 0x203;
+        public static final int EndReached = 0x204;
+
+        /**
+         * In case of ItemDeleted, the media will be already released. If it's released, cached
+         * attributes are still available (like {@link Media#getUri()}}).
+         */
+        public final Media media;
+        public final int index;
+        private final boolean retain;
+
+        protected Event(int type, Media media, boolean retain, int index) {
+            super(type);
+            if (retain && (media == null || !media.retain()))
+                throw new IllegalStateException("invalid media reference");
+            this.media = media;
+            this.retain = retain;
+            this.index = index;
+        }
+
+        @Override
+        void release() {
+            if (retain)
+                media.release();
+        }
+    }
 }

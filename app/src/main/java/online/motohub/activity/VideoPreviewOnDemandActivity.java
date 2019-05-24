@@ -24,7 +24,6 @@ import android.widget.TextView;
 import android.widget.VideoView;
 
 import java.io.File;
-import java.net.URLEncoder;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -192,7 +191,7 @@ public class VideoPreviewOnDemandActivity extends BaseActivity implements MediaP
 
     private void uploadVideoFile() {
         try {
-            String text = URLEncoder.encode(editCaption.getText().toString(), "UTF-8");
+            String text = editCaption.getText().toString();
             Bitmap thumb = ThumbnailUtils.createVideoThumbnail(mVideoPathUri, MediaStore.Images.Thumbnails.MINI_KIND);
             File imageFile = compressedImgFromBitmap(thumb);
             Intent service_intent = new Intent(this, ProfileUploadService.class);
@@ -205,7 +204,6 @@ public class VideoPreviewOnDemandActivity extends BaseActivity implements MediaP
             service_intent.putExtra(AppConstants.USER_TYPE, AppConstants.ONDEMAND);
             service_intent.setAction("ProfileUploadService");
             startService(service_intent);
-            //mCompressedVideoPath = "";
             mVideoPathUri = "";
             parent.setVisibility(View.GONE);
             finish();

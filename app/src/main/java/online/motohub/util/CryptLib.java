@@ -3,6 +3,7 @@ package online.motohub.util;
 import android.util.Base64;
 
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.MessageDigest;
@@ -18,16 +19,8 @@ import javax.crypto.spec.SecretKeySpec;
 
 public class CryptLib {
 
-    /**
-     * Encryption mode enumeration
-     */
-    private enum EncryptMode {
-        ENCRYPT, DECRYPT
-    }
-
     // cipher to be used for encryption and decryption
     private Cipher _cx;
-
     // encryption key and initialization vector
     private byte[] _key, _iv;
 
@@ -38,13 +31,42 @@ public class CryptLib {
         _iv = new byte[16]; //128 bit IV
     }
 
+    /***
+     * This function computes the SHA256 hash of input string
+     * @param text input text whose SHA256 hash has to be computed
+     * @param length length of the text to be returned
+     * @return returns SHA256 hash of input text
+     * @throws NoSuchAlgorithmException
+     * @throws UnsupportedEncodingException
+     */
+    private static String SHA256(String text, int length) throws NoSuchAlgorithmException, UnsupportedEncodingException {
+
+        String resultString;
+        MessageDigest md = MessageDigest.getInstance("SHA-256");
+
+        md.update(text.getBytes(StandardCharsets.UTF_8));
+        byte[] digest = md.digest();
+
+        StringBuilder result = new StringBuilder();
+        for (byte b : digest) {
+            result.append(String.format("%02x", b)); //convert to hex
+        }
+
+        if (length > result.toString().length()) {
+            resultString = result.toString();
+        } else {
+            resultString = result.toString().substring(0, length);
+        }
+
+        return resultString;
+
+    }
 
     /**
-     *
-     * @param inputText Text to be encrypted or decrypted
+     * @param inputText     Text to be encrypted or decrypted
      * @param encryptionKey Encryption key to used for encryption / decryption
-     * @param mode specify the mode encryption / decryption
-     * @param initVector Initialization vector
+     * @param mode          specify the mode encryption / decryption
+     * @param initVector    Initialization vector
      * @return encrypted or decrypted bytes based on the mode
      * @throws UnsupportedEncodingException
      * @throws InvalidKeyException
@@ -57,18 +79,18 @@ public class CryptLib {
             InvalidKeyException, InvalidAlgorithmParameterException,
             IllegalBlockSizeException, BadPaddingException {
 
-        int len = encryptionKey.getBytes("UTF-8").length; // length of the key	provided
+        int len = encryptionKey.getBytes(StandardCharsets.UTF_8).length; // length of the key	provided
 
-        if (encryptionKey.getBytes("UTF-8").length > _key.length)
+        if (encryptionKey.getBytes(StandardCharsets.UTF_8).length > _key.length)
             len = _key.length;
 
-        int ivlength = initVector.getBytes("UTF-8").length;
+        int ivlength = initVector.getBytes(StandardCharsets.UTF_8).length;
 
-        if(initVector.getBytes("UTF-8").length > _iv.length)
+        if (initVector.getBytes(StandardCharsets.UTF_8).length > _iv.length)
             ivlength = _iv.length;
 
-        System.arraycopy(encryptionKey.getBytes("UTF-8"), 0, _key, 0, len);
-        System.arraycopy(initVector.getBytes("UTF-8"), 0, _iv, 0, ivlength);
+        System.arraycopy(encryptionKey.getBytes(StandardCharsets.UTF_8), 0, _key, 0, len);
+        System.arraycopy(initVector.getBytes(StandardCharsets.UTF_8), 0, _iv, 0, ivlength);
 
 
         SecretKeySpec keySpec = new SecretKeySpec(_key, "AES"); // Create a new SecretKeySpec for the specified key data and algorithm name.
@@ -80,7 +102,7 @@ public class CryptLib {
             // Potentially insecure random numbers on Android 4.3 and older. Read for more info.
             // https://android-developers.blogspot.com/2013/08/some-securerandom-thoughts.html
             _cx.init(Cipher.ENCRYPT_MODE, keySpec, ivSpec);// Initialize this cipher instance
-            return _cx.doFinal(inputText.getBytes("UTF-8")); // Finish multi-part transformation (encryption)
+            return _cx.doFinal(inputText.getBytes(StandardCharsets.UTF_8)); // Finish multi-part transformation (encryption)
         } else {
             _cx.init(Cipher.DECRYPT_MODE, keySpec, ivSpec);// Initialize this cipher instance
 
@@ -88,38 +110,6 @@ public class CryptLib {
             return _cx.doFinal(decodedValue); // Finish multi-part transformation (decryption)
         }
     }
-
-    /***
-     * This function computes the SHA256 hash of input string
-     * @param text input text whose SHA256 hash has to be computed
-     * @param length length of the text to be returned
-     * @return returns SHA256 hash of input text
-     * @throws NoSuchAlgorithmException
-     * @throws UnsupportedEncodingException
-     */
-    private static String SHA256 (String text, int length) throws NoSuchAlgorithmException, UnsupportedEncodingException {
-
-        String resultString;
-        MessageDigest md = MessageDigest.getInstance("SHA-256");
-
-        md.update(text.getBytes("UTF-8"));
-        byte[] digest = md.digest();
-
-        StringBuilder result = new StringBuilder();
-        for (byte b : digest) {
-            result.append(String.format("%02x", b)); //convert to hex
-        }
-
-        if(length > result.toString().length()) {
-            resultString = result.toString();
-        } else {
-            resultString = result.toString().substring(0, length);
-        }
-
-        return resultString;
-
-    }
-
 
     public String encryptPlainText(String plainText, String key, String iv) throws Exception {
         byte[] bytes = encryptDecrypt(plainText, CryptLib.SHA256(key, 32), EncryptMode.ENCRYPT, iv);
@@ -131,7 +121,6 @@ public class CryptLib {
         return new String(bytes);
     }
 
-
     public String encryptPlainTextWithRandomIV(String plainText, String key) throws Exception {
         byte[] bytes = encryptDecrypt(generateRandomIV16() + plainText, CryptLib.SHA256(key, 32), EncryptMode.ENCRYPT, generateRandomIV16());
         return Base64.encodeToString(bytes, Base64.DEFAULT);
@@ -140,13 +129,12 @@ public class CryptLib {
     public String decryptCipherTextWithRandomIV(String cipherText, String key) throws Exception {
         byte[] bytes = encryptDecrypt(cipherText, CryptLib.SHA256(key, 32), EncryptMode.DECRYPT, generateRandomIV16());
         String out = new String(bytes);
-        return out.substring(16, out.length());
+        return out.substring(16);
     }
-
-
 
     /**
      * Generate IV with 16 bytes
+     *
      * @return
      */
     public String generateRandomIV16() {
@@ -162,6 +150,14 @@ public class CryptLib {
         } else {
             return result.toString().substring(0, 16);
         }
+    }
+
+
+    /**
+     * Encryption mode enumeration
+     */
+    private enum EncryptMode {
+        ENCRYPT, DECRYPT
     }
 
 }

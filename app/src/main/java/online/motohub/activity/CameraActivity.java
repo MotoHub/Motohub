@@ -24,21 +24,17 @@ import online.motohub.util.TimerView;
 
 public class CameraActivity extends CameraActivityBase {
 
-    @BindView(R.id.toolbar)
-    Toolbar mToolbar;
-
-    @BindString(R.string.live_stream)
-    String mToolbarTitle;
-
     private final static String TAG = CameraActivity.class.getSimpleName();
-
     // UI controls
-    protected MultiStateButton mBtnSwitchCamera  = null;
-    protected MultiStateButton      mBtnTorch         = null;
-    protected TimerView mTimerView        = null;
-
+    protected MultiStateButton mBtnSwitchCamera = null;
+    protected MultiStateButton mBtnTorch = null;
+    protected TimerView mTimerView = null;
     // Gestures are used to toggle the focus modes
     protected GestureDetectorCompat mAutoFocusDetector = null;
+    @BindView(R.id.toolbar)
+    Toolbar mToolbar;
+    @BindString(R.string.live_stream)
+    String mToolbarTitle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,15 +42,15 @@ public class CameraActivity extends CameraActivityBase {
         setContentView(R.layout.activity_camera);
         ButterKnife.bind(this);
 
-        mRequiredPermissions = new String[] {
+        mRequiredPermissions = new String[]{
                 Manifest.permission.CAMERA,
                 Manifest.permission.RECORD_AUDIO
         };
 
         // Initialize the UI controls
-        mBtnTorch           = findViewById(R.id.ic_torch);
-        mBtnSwitchCamera    = findViewById(R.id.ic_switch_camera);
-        mTimerView          = findViewById(R.id.txtTimer);
+        mBtnTorch = findViewById(R.id.ic_torch);
+        mBtnSwitchCamera = findViewById(R.id.ic_switch_camera);
+        mTimerView = findViewById(R.id.txtTimer);
 
         setToolbar(mToolbar, mToolbarTitle);
 
@@ -72,7 +68,6 @@ public class CameraActivity extends CameraActivityBase {
     }
 
 
-
     @Override
     public void onBackPressed() {
         finish();
@@ -82,7 +77,7 @@ public class CameraActivity extends CameraActivityBase {
     protected void onDestroy() {
         super.onDestroy();
         DialogManager.hideProgress();
-        if(AppConstants.LIVE_STREAM_CALL_BACK!=null){
+        if (AppConstants.LIVE_STREAM_CALL_BACK != null) {
             AppConstants.LIVE_STREAM_CALL_BACK.onSuccess();
         }
     }

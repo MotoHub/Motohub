@@ -19,12 +19,11 @@ public class GlVibranceFilter extends GlFilter {
             "    color.rgb = mix(color.rgb, vec3(mx), amt);\n" +
             "    gl_FragColor = color;\n" +
             "}";
+    private float vibrance = 0f;
 
     public GlVibranceFilter() {
         super(DEFAULT_VERTEX_SHADER, VIBRANCE_FRAGMENT_SHADER);
     }
-
-    private float vibrance = 0f;
 
     public void setVibrance(float vibrance) {
         this.vibrance = vibrance;

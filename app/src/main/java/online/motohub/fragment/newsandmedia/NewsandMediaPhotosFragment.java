@@ -19,7 +19,6 @@ import butterknife.ButterKnife;
 import online.motohub.R;
 import online.motohub.activity.BaseActivity;
 import online.motohub.adapter.GalleryImgAdapter;
-import online.motohub.application.MotoHub;
 import online.motohub.fragment.BaseFragment;
 import online.motohub.model.GalleryImgModel;
 import online.motohub.model.GalleryImgResModel;
@@ -72,12 +71,12 @@ public class NewsandMediaPhotosFragment extends BaseFragment {
         mGalleryResModels = new ArrayList<>();
         mAdapter = new GalleryImgAdapter(getActivity(), mGalleryResModels);
         mGalleryRv.setAdapter(mAdapter);
-      //  mAdapter.setOnItemClickListener(mOnItemClickListener);
+        //  mAdapter.setOnItemClickListener(mOnItemClickListener);
 
         mGalleryRv.addOnItemTouchListener(new RecyclerTouchListener(getActivity(), mGalleryRv, new RecyclerClick_Listener() {
             @Override
             public void onClick(View view, int position) {
-                ((BaseActivity) getActivity()).moveLoadImageScreen(getActivity(), UrlUtils.AWS_S3_BASE_URL+mGalleryResModels.get(position).getGalleryImage());
+                ((BaseActivity) getActivity()).moveLoadImageScreen(getActivity(), UrlUtils.AWS_S3_BASE_URL + mGalleryResModels.get(position).getGalleryImage());
             }
 
             @Override
@@ -89,13 +88,13 @@ public class NewsandMediaPhotosFragment extends BaseFragment {
 
     }
 
-  /*  private final GalleryImgAdapter.OnItemClickListener mOnItemClickListener = new GalleryImgAdapter.OnItemClickListener() {
-        @Override
-        public void onItemClick(int position) {
-            ((BaseActivity) getActivity()).moveLoadImageScreen(getActivity(), mGalleryResModels.get(position).getGalleryImage());
-        }
-    };
-*/
+    /*  private final GalleryImgAdapter.OnItemClickListener mOnItemClickListener = new GalleryImgAdapter.OnItemClickListener() {
+          @Override
+          public void onItemClick(int position) {
+              ((BaseActivity) getActivity()).moveLoadImageScreen(getActivity(), mGalleryResModels.get(position).getGalleryImage());
+          }
+      };
+  */
     private void getGalleryImages() {
         String mFilter = "(UserID=" + mPromotersResModel.getUserId() + ") AND (" + APIConstants.UserType + "=newsmedia)";
         RetrofitClient.getRetrofitInstance().callGetImageGallery((BaseActivity) getActivity(), mFilter,

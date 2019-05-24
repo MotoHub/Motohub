@@ -65,13 +65,13 @@
                 android:id="@+id/left_box"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignLeft="@null"
                 android:layout_alignStart="@null"
+                android:layout_alignLeft="@null"
+                android:layout_marginTop="@dimen/size55"
                 android:layout_marginEnd="@dimen/sizeMinus20"
                 android:layout_marginRight="@dimen/sizeMinus20"
-                android:layout_marginTop="@dimen/size55"
-                android:layout_toLeftOf="@+id/spectator_toggle_btn"
-                android:layout_toStartOf="@+id/spectator_toggle_btn">
+                android:layout_toStartOf="@+id/spectator_toggle_btn"
+                android:layout_toLeftOf="@+id/spectator_toggle_btn">
 
                 <ToggleButton
                     android:id="@+id/car_toggle_btn"
@@ -104,8 +104,8 @@
             <RelativeLayout
                 android:id="@+id/right_box"
                 style="@style/LayoutWrap"
-                android:layout_marginLeft="@dimen/sizeMinus20"
                 android:layout_marginStart="@dimen/sizeMinus20"
+                android:layout_marginLeft="@dimen/sizeMinus20"
                 android:layout_marginTop="@dimen/size55"
                 android:layout_toEndOf="@+id/spectator_toggle_btn"
                 android:layout_toRightOf="@+id/spectator_toggle_btn">
