@@ -2,12 +2,9 @@ package online.motohub.activity.ondemand;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.view.Window;
@@ -18,13 +15,9 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.DataSource;
-import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.load.model.GlideUrl;
 import com.bumptech.glide.load.model.LazyHeaders;
-import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
-import com.bumptech.glide.request.target.Target;
 import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.DefaultRenderersFactory;
 import com.google.android.exoplayer2.ExoPlaybackException;

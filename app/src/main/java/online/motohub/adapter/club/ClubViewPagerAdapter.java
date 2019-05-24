@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import online.motohub.R;
-import online.motohub.application.MotoHub;
 import online.motohub.fragment.club.ClubEventsFragment;
 import online.motohub.fragment.club.ClubHomeFragment;
 import online.motohub.fragment.club.ClubPhotosFragment;

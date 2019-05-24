@@ -17,7 +17,6 @@ import online.motohub.R;
 import online.motohub.activity.BaseActivity;
 import online.motohub.activity.club.ClubProfileActivity;
 import online.motohub.activity.promoter.PromotersListActivity;
-import online.motohub.application.MotoHub;
 import online.motohub.model.ProfileResModel;
 import online.motohub.model.promoter_club_news_media.PromotersResModel;
 

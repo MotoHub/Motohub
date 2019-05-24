@@ -6,7 +6,6 @@ import com.google.gson.annotations.SerializedName;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-import online.motohub.model.promoter_club_news_media.PromoterFollowerResModel;
 import online.motohub.model.promoter_club_news_media.PromotersResModel;
 
 public class EventsResModel implements Serializable {

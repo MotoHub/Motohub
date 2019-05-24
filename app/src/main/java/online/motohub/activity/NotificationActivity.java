@@ -20,7 +20,6 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import online.motohub.R;
 import online.motohub.adapter.NotificationAdapter;
-import online.motohub.application.MotoHub;
 import online.motohub.model.NotificationModel;
 import online.motohub.model.NotificationResModel;
 import online.motohub.model.ProfileResModel;

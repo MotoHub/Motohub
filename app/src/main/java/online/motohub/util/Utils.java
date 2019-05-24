@@ -15,24 +15,7 @@
 
 package online.motohub.util;
 
-import android.content.Context;
-import android.graphics.Bitmap;
-import android.net.Uri;
-
-import com.amazonaws.auth.CognitoCachingCredentialsProvider;
-import com.amazonaws.mobileconnectors.s3.transferutility.TransferObserver;
-import com.amazonaws.mobileconnectors.s3.transferutility.TransferUtility;
-import com.amazonaws.regions.Region;
-import com.amazonaws.regions.Regions;
-import com.amazonaws.services.s3.AmazonS3Client;
-
-
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.util.Map;
-import java.util.UUID;
 
 /*
  * Handles basic helper functions used throughout the app.

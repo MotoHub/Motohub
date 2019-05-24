@@ -20,8 +20,6 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.File;
 import java.net.URLEncoder;
@@ -42,7 +40,6 @@ import online.motohub.R;
 import online.motohub.adapter.CommentTagAdapter;
 import online.motohub.adapter.FeedCommentsAdapter;
 import online.motohub.adapter.TaggedProfilesAdapter;
-import online.motohub.application.MotoHub;
 import online.motohub.fragment.dialog.AppDialogFragment;
 import online.motohub.model.FeedCommentLikeModel;
 import online.motohub.model.FeedCommentModel;

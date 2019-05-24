@@ -38,7 +38,6 @@ import online.motohub.activity.news_and_media.NewsAndMediaProfileActivity;
 import online.motohub.activity.performance_shop.PerformanceShopProfileActivity;
 import online.motohub.activity.promoter.PromoterProfileActivity;
 import online.motohub.activity.track.TrackProfileActivity;
-import online.motohub.application.MotoHub;
 import online.motohub.model.EventGrpChatMsgResModel;
 import online.motohub.model.ProfileResModel;
 import online.motohub.model.promoter_club_news_media.PromotersModel;

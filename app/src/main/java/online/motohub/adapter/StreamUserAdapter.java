@@ -31,7 +31,6 @@ import online.motohub.interfaces.RetrofitResInterface;
 import online.motohub.model.LiveStreamRequestEntity;
 import online.motohub.model.LiveStreamRequestResponse;
 import online.motohub.model.LiveStreamResponse;
-import online.motohub.model.ProfileModel;
 import online.motohub.model.ProfileResModel;
 import online.motohub.retrofit.APIConstants;
 import online.motohub.retrofit.RetrofitClient;

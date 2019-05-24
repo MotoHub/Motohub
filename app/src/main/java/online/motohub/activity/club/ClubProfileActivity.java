@@ -35,7 +35,6 @@ import online.motohub.activity.WritePostActivity;
 import online.motohub.adapter.EventsFindAdapter;
 import online.motohub.adapter.club.ClubPostsAdapter;
 import online.motohub.adapter.club.ClubViewPagerAdapter;
-import online.motohub.application.MotoHub;
 import online.motohub.fragment.BaseFragment;
 import online.motohub.fragment.club.ClubHomeFragment;
 import online.motohub.fragment.club.ClubSubscribedUsersFragment;

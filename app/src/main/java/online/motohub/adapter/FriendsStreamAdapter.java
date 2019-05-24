@@ -22,7 +22,6 @@ import online.motohub.activity.BaseActivity;
 import online.motohub.activity.ViewLiveVideoViewScreen2;
 import online.motohub.application.MotoHub;
 import online.motohub.model.LiveStreamEntity;
-import online.motohub.model.ProfileModel;
 import online.motohub.model.ProfileResModel;
 import online.motohub.util.AppConstants;
 

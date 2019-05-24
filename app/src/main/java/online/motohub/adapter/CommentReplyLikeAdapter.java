@@ -1,7 +1,6 @@
 package online.motohub.adapter;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,7 +16,6 @@ import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
 import online.motohub.R;
 import online.motohub.activity.BaseActivity;
-import online.motohub.activity.MyMotoFileActivity;
 import online.motohub.model.ProfileResModel;
 import online.motohub.model.ReplyLikeModel;
 import online.motohub.util.Utility;

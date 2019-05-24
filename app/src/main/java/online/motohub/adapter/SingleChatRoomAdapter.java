@@ -23,7 +23,6 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import online.motohub.R;
 import online.motohub.activity.BaseActivity;
 import online.motohub.activity.ChatBoxSingleActivity;
-import online.motohub.application.MotoHub;
 import online.motohub.fcm.MyFireBaseMessagingService;
 import online.motohub.fragment.dialog.AppDialogFragment;
 import online.motohub.model.ProfileResModel;

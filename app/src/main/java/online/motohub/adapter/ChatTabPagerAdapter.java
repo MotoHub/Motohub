@@ -7,7 +7,6 @@ import android.support.v4.app.FragmentPagerAdapter;
 
 import org.greenrobot.eventbus.EventBus;
 
-import online.motohub.application.MotoHub;
 import online.motohub.fragment.ChatGroupFragment;
 import online.motohub.fragment.ChatSingleFragment;
 import online.motohub.model.ProfileResModel;

@@ -22,7 +22,6 @@ import online.motohub.model.EventAddOnModel;
 import online.motohub.model.EventCategoryModel;
 import online.motohub.model.ProfileResModel;
 import online.motohub.model.PromoterVideoModel;
-import online.motohub.model.promoter_club_news_media.PromotersResModel;
 import online.motohub.util.CommonAPI;
 import online.motohub.util.DateUtil;
 import online.motohub.util.ScreenSize;

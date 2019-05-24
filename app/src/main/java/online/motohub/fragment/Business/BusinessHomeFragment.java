@@ -26,7 +26,6 @@ import butterknife.Unbinder;
 import online.motohub.R;
 import online.motohub.activity.BaseActivity;
 import online.motohub.adapter.business.BusinessPostAdapter;
-import online.motohub.application.MotoHub;
 import online.motohub.fragment.BaseFragment;
 import online.motohub.model.FeedCommentModel;
 import online.motohub.model.PostsModel;

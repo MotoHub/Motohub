@@ -19,7 +19,6 @@ import butterknife.ButterKnife;
 import online.motohub.R;
 import online.motohub.activity.BaseActivity;
 import online.motohub.adapter.GalleryImgAdapter;
-import online.motohub.application.MotoHub;
 import online.motohub.fragment.BaseFragment;
 import online.motohub.model.GalleryImgModel;
 import online.motohub.model.GalleryImgResModel;

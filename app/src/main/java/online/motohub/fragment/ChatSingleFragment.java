@@ -21,7 +21,6 @@ import online.motohub.R;
 import online.motohub.activity.BaseActivity;
 import online.motohub.activity.ChatSingleAddActivity;
 import online.motohub.adapter.SingleChatRoomAdapter;
-import online.motohub.application.MotoHub;
 import online.motohub.model.ProfileResModel;
 import online.motohub.model.SingleChatCountModel;
 import online.motohub.model.SingleChatMsg;

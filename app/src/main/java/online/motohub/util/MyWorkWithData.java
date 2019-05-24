@@ -2,7 +2,6 @@ package online.motohub.util;
 
 import android.annotation.SuppressLint;
 import android.app.Notification;
-import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
@@ -12,8 +11,6 @@ import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.widget.Toast;
 
-import androidx.work.Data;
-import androidx.work.ListenableWorker;
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 
@@ -31,7 +28,6 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.Objects;
 
-import online.motohub.R;
 import online.motohub.database.DatabaseHandler;
 import online.motohub.model.GalleryImgModel;
 import online.motohub.model.PostsModel;

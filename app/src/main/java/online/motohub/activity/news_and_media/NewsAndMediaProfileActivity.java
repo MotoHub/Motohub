@@ -28,7 +28,6 @@ import online.motohub.R;
 import online.motohub.activity.BaseActivity;
 import online.motohub.adapter.NewsandMediaProfileTabPagerAdapter;
 import online.motohub.adapter.news_and_media.NewsAndMediaPostsAdapter;
-import online.motohub.application.MotoHub;
 import online.motohub.fragment.BaseFragment;
 import online.motohub.fragment.dialog.AppDialogFragment;
 import online.motohub.fragment.newsandmedia.NewsandMediaVideosFragment;

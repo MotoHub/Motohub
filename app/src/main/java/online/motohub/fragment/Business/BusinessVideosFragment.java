@@ -33,7 +33,6 @@ import online.motohub.R;
 import online.motohub.activity.BaseActivity;
 import online.motohub.activity.ViewSpecLiveActivity;
 import online.motohub.adapter.GalleryVideoAdapter;
-import online.motohub.application.MotoHub;
 import online.motohub.fragment.BaseFragment;
 import online.motohub.fragment.promoter.PromoterVideosFragment;
 import online.motohub.model.GalleryVideoModel;

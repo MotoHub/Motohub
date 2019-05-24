@@ -5,30 +5,17 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
-import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.DataSource;
-import com.bumptech.glide.load.engine.GlideException;
-import com.bumptech.glide.load.model.GlideUrl;
-import com.bumptech.glide.load.model.LazyHeaders;
-import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.RequestOptions;
-import com.bumptech.glide.request.target.SimpleTarget;
-import com.bumptech.glide.request.target.Target;
-import com.bumptech.glide.request.transition.Transition;
 import com.daasuu.gpuv.composer.FillMode;
 import com.daasuu.gpuv.composer.GPUMp4Composer;
 import com.otaliastudios.cameraview.CameraListener;
@@ -37,7 +24,6 @@ import com.otaliastudios.cameraview.CameraOptions;
 import com.otaliastudios.cameraview.CameraView;
 import com.otaliastudios.cameraview.SessionType;
 import com.otaliastudios.cameraview.Size;
-import com.otaliastudios.cameraview.VideoCodec;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -45,7 +31,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -56,7 +41,6 @@ import online.motohub.model.EventsModel;
 import online.motohub.model.EventsResModel;
 import online.motohub.util.CustomWatermarkFilter;
 import online.motohub.util.DialogManager;
-import online.motohub.util.UrlUtils;
 import online.motohub.util.story.ControlView;
 
 public class CameraStoryActivity extends BaseActivity implements View.OnClickListener {

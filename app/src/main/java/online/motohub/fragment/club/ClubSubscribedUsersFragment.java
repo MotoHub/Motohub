@@ -21,14 +21,11 @@ import butterknife.Unbinder;
 import online.motohub.R;
 import online.motohub.activity.BaseActivity;
 import online.motohub.adapter.club.ClubSubscribedUsersAdapter;
-import online.motohub.application.MotoHub;
 import online.motohub.fragment.BaseFragment;
 import online.motohub.fragment.dialog.AppDialogFragment;
-import online.motohub.model.ProfileModel;
 import online.motohub.model.ProfileResModel;
 import online.motohub.model.PromoterSubsResModel;
 import online.motohub.model.promoter_club_news_media.PromoterSubs;
-import online.motohub.model.promoter_club_news_media.PromotersModel;
 import online.motohub.model.promoter_club_news_media.PromotersResModel;
 import online.motohub.retrofit.RetrofitClient;
 

@@ -7,7 +7,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import java.util.ArrayList;
+
 import online.motohub.R;
 import online.motohub.model.ProfileResModel;
 import online.motohub.util.Utility;

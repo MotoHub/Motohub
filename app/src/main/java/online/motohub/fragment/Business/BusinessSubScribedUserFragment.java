@@ -21,7 +21,6 @@ import butterknife.Unbinder;
 import online.motohub.R;
 import online.motohub.activity.BaseActivity;
 import online.motohub.adapter.club.ClubSubscribedUsersAdapter;
-import online.motohub.application.MotoHub;
 import online.motohub.fragment.BaseFragment;
 import online.motohub.fragment.club.ClubSubscribedUsersFragment;
 import online.motohub.fragment.dialog.AppDialogFragment;

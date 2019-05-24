@@ -24,7 +24,6 @@ import android.widget.TextView;
 import android.widget.VideoView;
 
 import java.io.File;
-import java.net.URLEncoder;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

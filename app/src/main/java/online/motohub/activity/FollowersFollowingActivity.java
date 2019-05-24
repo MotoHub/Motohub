@@ -22,7 +22,6 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import online.motohub.R;
 import online.motohub.adapter.FollowersFollowingsAdapter;
-import online.motohub.application.MotoHub;
 import online.motohub.fragment.dialog.AppDialogFragment;
 import online.motohub.model.ProfileModel;
 import online.motohub.model.ProfileResModel;

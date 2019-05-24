@@ -14,16 +14,11 @@ import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.amazonaws.ClientConfiguration;
-import com.amazonaws.Protocol;
-import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.mobile.client.AWSMobileClient;
 import com.amazonaws.mobileconnectors.s3.transferutility.TransferListener;
 import com.amazonaws.mobileconnectors.s3.transferutility.TransferObserver;
 import com.amazonaws.mobileconnectors.s3.transferutility.TransferState;
 import com.amazonaws.mobileconnectors.s3.transferutility.TransferUtility;
-import com.amazonaws.regions.Region;
-import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;

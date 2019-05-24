@@ -10,6 +10,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+
 import de.hdodenhof.circleimageview.CircleImageView;
 import online.motohub.R;
 import online.motohub.activity.BaseActivity;
