@@ -55,6 +55,7 @@ public class ViewLiveVideoViewScreen3 extends BaseActivity {
     private int mCurrentProfileID = 0;
     private int mCurrentPos = 0;
     private android.widget.MediaController mMediaController;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -84,14 +85,14 @@ public class ViewLiveVideoViewScreen3 extends BaseActivity {
                     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
                     @Override
                     public void onVideoSizeChanged(MediaPlayer mp, int width, int height) {
-                /*
-                 * add media controller
-                 */
+                        /*
+                         * add media controller
+                         */
                         mMediaController = new android.widget.MediaController(ViewLiveVideoViewScreen3.this);
                         mVideoView.setMediaController(mMediaController);
-                /*
-                 * and set its position on screen
-                 */
+                        /*
+                         * and set its position on screen
+                         */
                         mMediaController.setAnchorView(mVideoView);
                     }
                 });

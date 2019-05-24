@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    
+
     <string-array name="moto_type">
         <item>All</item>
-       <!-- <item>CLUB MEET</item>
-        <item>SHOW AND SHINE/HARD PARK EVENTS</item>-->
+        <!-- <item>CLUB MEET</item>
+         <item>SHOW AND SHINE/HARD PARK EVENTS</item>-->
         <item>BIKE</item>
         <item>BOAT</item>
         <item>CAR</item>
@@ -60,5 +60,5 @@
         <item>It\'s spam</item>
         <item>Something else</item>
     </string-array>
-    
+
 </resources>

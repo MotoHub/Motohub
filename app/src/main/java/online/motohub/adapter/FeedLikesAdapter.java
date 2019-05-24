@@ -34,24 +34,6 @@ public class FeedLikesAdapter extends RecyclerView.Adapter<FeedLikesAdapter.Hold
         this.mMyProfileResModel = myProfileResModel;
     }
 
-    public class Holder extends RecyclerView.ViewHolder {
-
-        @BindView(R.id.comment_user_img)
-        CircleImageView mUserImg;
-
-        @BindView(R.id.comment_user_img_lay)
-        RelativeLayout mCommentImgLay;
-
-        @BindView(R.id.comment_user_name_txt)
-        TextView mUserNameTxt;
-
-        public Holder(View view) {
-            super(view);
-            ButterKnife.bind(this, view);
-        }
-
-    }
-
     @Override
     public FeedLikesAdapter.Holder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.adap_feed_likes, parent, false);
@@ -95,6 +77,24 @@ public class FeedLikesAdapter extends RecyclerView.Adapter<FeedLikesAdapter.Hold
             ((BaseActivity) mContext).moveOtherProfileScreenWithResult(mContext, mMyProfileResModel.getID(),
                     feedLikeModel.getOwnerID(), AppConstants.FOLLOWERS_FOLLOWING_RESULT);
         }
+    }
+
+    public class Holder extends RecyclerView.ViewHolder {
+
+        @BindView(R.id.comment_user_img)
+        CircleImageView mUserImg;
+
+        @BindView(R.id.comment_user_img_lay)
+        RelativeLayout mCommentImgLay;
+
+        @BindView(R.id.comment_user_name_txt)
+        TextView mUserNameTxt;
+
+        public Holder(View view) {
+            super(view);
+            ButterKnife.bind(this, view);
+        }
+
     }
 
 }

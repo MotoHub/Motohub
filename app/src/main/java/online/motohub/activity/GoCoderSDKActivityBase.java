@@ -1,16 +1,16 @@
 /**
- *  This is sample code provided by Wowza Media Systems, LLC.  All sample code is intended to be a reference for the
- *  purpose of educating developers, and is not intended to be used in any production environment.
- *
- *  IN NO EVENT SHALL WOWZA MEDIA SYSTEMS, LLC BE LIABLE TO YOU OR ANY PARTY FOR DIRECT, INDIRECT, SPECIAL, INCIDENTAL,
- *  OR CONSEQUENTIAL DAMAGES, INCLUDING LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE AND ITS DOCUMENTATION,
- *  EVEN IF WOWZA MEDIA SYSTEMS, LLC HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *
- *  WOWZA MEDIA SYSTEMS, LLC SPECIFICALLY DISCLAIMS ANY WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
- *  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE. ALL CODE PROVIDED HEREUNDER IS PROVIDED "AS IS".
- *  WOWZA MEDIA SYSTEMS, LLC HAS NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS, OR MODIFICATIONS.
- *
- *  Copyright © 2015 Wowza Media Systems, LLC. All rights reserved.
+ * This is sample code provided by Wowza Media Systems, LLC.  All sample code is intended to be a reference for the
+ * purpose of educating developers, and is not intended to be used in any production environment.
+ * <p>
+ * IN NO EVENT SHALL WOWZA MEDIA SYSTEMS, LLC BE LIABLE TO YOU OR ANY PARTY FOR DIRECT, INDIRECT, SPECIAL, INCIDENTAL,
+ * OR CONSEQUENTIAL DAMAGES, INCLUDING LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE AND ITS DOCUMENTATION,
+ * EVEN IF WOWZA MEDIA SYSTEMS, LLC HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * <p>
+ * WOWZA MEDIA SYSTEMS, LLC SPECIFICALLY DISCLAIMS ANY WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+ * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE. ALL CODE PROVIDED HEREUNDER IS PROVIDED "AS IS".
+ * WOWZA MEDIA SYSTEMS, LLC HAS NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS, OR MODIFICATIONS.
+ * <p>
+ * Copyright © 2015 Wowza Media Systems, LLC. All rights reserved.
  */
 
 package online.motohub.activity;
@@ -48,40 +48,31 @@ import online.motohub.config.GoCoderSDKPrefs;
 
 
 public abstract class GoCoderSDKActivityBase extends BaseActivity
-    implements WZStatusCallback {
+        implements WZStatusCallback {
 
     private final static String TAG = GoCoderSDKActivityBase.class.getSimpleName();
 
     private static final String SDK_SAMPLE_APP_LICENSE_KEY = "GOSK-8044-0103-5C69-FD49-FE24";
     private static final int PERMISSIONS_REQUEST_CODE = 0x1;
-
-    protected String[] mRequiredPermissions = {};
-
-    private static Object sBroadcastLock = new Object();
-    private static boolean sBroadcastEnded = true;
-
     // indicates whether this is a full screen activity or note
     protected static boolean sFullScreenActivity = true;
-
     // GoCoder SDK top level interface
     protected static WowzaGoCoder sGoCoderSDK = null;
-
+    private static Object sBroadcastLock = new Object();
+    private static boolean sBroadcastEnded = true;
+    protected String[] mRequiredPermissions = {};
     protected boolean mPermissionsGranted = false;
-    private boolean hasRequestedPermissions = false;
-
     protected WZBroadcast mWZBroadcast = null;
-
     protected int mWZNetworkLogLevel = WZLog.LOG_LEVEL_DEBUG;
+    protected GoCoderSDKPrefs mGoCoderSDKPrefs;
+    protected WZBroadcastConfig mWZBroadcastConfig = null;
+    private boolean hasRequestedPermissions = false;
+    private CameraActivityBase.PermissionCallbackInterface callbackFunction = null;
 
     public WZBroadcast getBroadcast() {
         return mWZBroadcast;
     }
 
-    protected GoCoderSDKPrefs mGoCoderSDKPrefs;
-
-    private CameraActivityBase.PermissionCallbackInterface callbackFunction = null;
-
-    protected WZBroadcastConfig mWZBroadcastConfig = null;
     public WZBroadcastConfig getBroadcastConfig() {
         return mWZBroadcastConfig;
     }
@@ -115,7 +106,7 @@ public abstract class GoCoderSDKActivityBase extends BaseActivity
         }
     }
 
-    protected void hasDevicePermissionToAccess(CameraActivityBase.PermissionCallbackInterface callback){
+    protected void hasDevicePermissionToAccess(CameraActivityBase.PermissionCallbackInterface callback) {
         this.callbackFunction = callback;
         if (mWZBroadcast != null) {
             boolean result = true;
@@ -124,20 +115,18 @@ public abstract class GoCoderSDKActivityBase extends BaseActivity
                 if (!result && !hasRequestedPermissions) {
                     ActivityCompat.requestPermissions(this, mRequiredPermissions, PERMISSIONS_REQUEST_CODE);
                     hasRequestedPermissions = true;
-                }
-                else {
+                } else {
                     this.callbackFunction.onPermissionResult(result);
                 }
-            }
-            else {
+            } else {
                 this.callbackFunction.onPermissionResult(result);
             }
         }
     }
 
-    protected boolean hasDevicePermissionToAccess(String source){
+    protected boolean hasDevicePermissionToAccess(String source) {
 
-        String[] permissionRequestArr = new String[] {
+        String[] permissionRequestArr = new String[]{
                 source
         };
         boolean result = false;
@@ -150,7 +139,7 @@ public abstract class GoCoderSDKActivityBase extends BaseActivity
         return result;
     }
 
-    protected boolean hasDevicePermissionToAccess(){
+    protected boolean hasDevicePermissionToAccess() {
         boolean result = false;
         if (mWZBroadcast != null) {
             result = true;
@@ -174,7 +163,7 @@ public abstract class GoCoderSDKActivityBase extends BaseActivity
         super.onResume();
 
         mPermissionsGranted = this.hasDevicePermissionToAccess();
-        if (mPermissionsGranted){
+        if (mPermissionsGranted) {
             syncPreferences();
         }
     }
@@ -189,7 +178,9 @@ public abstract class GoCoderSDKActivityBase extends BaseActivity
         super.onPause();
     }
 
- /*   *//**
+    /*   */
+
+    /**
      * Click handler for the in button
      *//*
     public void onAbout(View v) {
@@ -203,7 +194,7 @@ public abstract class GoCoderSDKActivityBase extends BaseActivity
 */
     // Return correctly from any fragments launched and placed on the back stack
     @Override
-    public void onBackPressed(){
+    public void onBackPressed() {
         FragmentManager fm = getFragmentManager();
         if (fm.getBackStackEntryCount() > 0) {
             fm.popBackStack();
@@ -217,14 +208,14 @@ public abstract class GoCoderSDKActivityBase extends BaseActivity
         mPermissionsGranted = true;
         switch (requestCode) {
             case PERMISSIONS_REQUEST_CODE: {
-                for(int grantResult : grantResults) {
+                for (int grantResult : grantResults) {
                     if (grantResult != PackageManager.PERMISSION_GRANTED) {
                         mPermissionsGranted = false;
                     }
                 }
             }
         }
-        if(this.callbackFunction!=null)
+        if (this.callbackFunction != null)
             this.callbackFunction.onPermissionResult(mPermissionsGranted);
     }
 
@@ -256,9 +247,9 @@ public abstract class GoCoderSDKActivityBase extends BaseActivity
         View rootView = getWindow().getDecorView().findViewById(android.R.id.content);
         if (rootView != null)
             rootView.setSystemUiVisibility(
-                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                            | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                            | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
 
     }
 
@@ -347,7 +338,7 @@ public abstract class GoCoderSDKActivityBase extends BaseActivity
 
             WZLog.info(TAG, "=============== Broadcast Configuration ===============\n"
                     + mWZBroadcastConfig.toString()
-                        + "\n=======================================================");
+                    + "\n=======================================================");
 
             configValidationError = mWZBroadcastConfig.validateForBroadcast();
             if (configValidationError == null) {
@@ -372,6 +363,7 @@ public abstract class GoCoderSDKActivityBase extends BaseActivity
                             sBroadcastLock.notifyAll();
                         }
                     }
+
                     @Override
                     public void onWZError(WZStatus wzStatus) {
                         WZLog.error(TAG, wzStatus.getLastError());
@@ -382,15 +374,16 @@ public abstract class GoCoderSDKActivityBase extends BaseActivity
                     }
                 });
 
-                while(!sBroadcastEnded) {
-                    try{
+                while (!sBroadcastEnded) {
+                    try {
                         sBroadcastLock.wait();
-                    } catch (InterruptedException e) {}
+                    } catch (InterruptedException e) {
+                    }
                 }
             } else {
                 mWZBroadcast.endBroadcast(this);
             }
-        }  else {
+        } else {
             WZLog.error(TAG, "endBroadcast() called without an active broadcast");
         }
     }

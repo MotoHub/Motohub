@@ -7,33 +7,32 @@ import android.opengl.GLSurfaceView;
 import android.opengl.Matrix;
 import android.os.Handler;
 import android.util.Size;
+
 import com.daasuu.gpuv.camerarecorder.capture.MediaVideoEncoder;
 import com.daasuu.gpuv.egl.filter.GlFilter;
 
 import javax.microedition.khronos.egl.EGLConfig;
 
-import static android.opengl.GLES20.*;
-
+import static android.opengl.GLES20.GL_COLOR_BUFFER_BIT;
+import static android.opengl.GLES20.GL_LINEAR;
+import static android.opengl.GLES20.GL_MAX_TEXTURE_SIZE;
+import static android.opengl.GLES20.GL_NEAREST;
+import static android.opengl.GLES20.GL_TEXTURE_2D;
+import static android.opengl.GLES20.glClearColor;
 
 
 public class GlPreviewRenderer extends GlFrameBufferObjectRenderer implements SurfaceTexture.OnFrameAvailableListener {
 
     private final Handler handler = new Handler();
-
+    private final GLSurfaceView glView;
     private GlSurfaceTexture previewTexture;
-
     // private final Camera camera;
     private int texName;
-
     private float[] MVPMatrix = new float[16];
     private float[] ProjMatrix = new float[16];
     private float[] MMatrix = new float[16];
     private float[] VMatrix = new float[16];
     private float[] STMatrix = new float[16];
-
-
-    private final GLSurfaceView glView;
-
     private GlFramebufferObject filterFramebufferObject;
     private GlPreview previewShader;
 
@@ -305,12 +304,12 @@ public class GlPreviewRenderer extends GlFrameBufferObjectRenderer implements Su
         });
     }
 
-    public interface SurfaceCreateListener {
-        void onCreated(SurfaceTexture surface);
-    }
-
     public void setSurfaceCreateListener(SurfaceCreateListener surfaceCreateListener) {
         this.surfaceCreateListener = surfaceCreateListener;
+    }
+
+    public interface SurfaceCreateListener {
+        void onCreated(SurfaceTexture surface);
     }
 }
 

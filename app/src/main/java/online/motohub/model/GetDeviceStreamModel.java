@@ -10,7 +10,10 @@ import java.io.Serializable;
 
 public class GetDeviceStreamModel implements Serializable {
 
-    public class Body{
+    @SerializedName("EasyDarwin")
+    public EasyDarwin mEasyDarwin;
+
+    public class Body {
         public String Protocol;
         public String URL;
 
@@ -30,15 +33,13 @@ public class GetDeviceStreamModel implements Serializable {
             this.URL = URL;
         }
     }
-    public class EasyDarwin{
+
+    public class EasyDarwin {
         @SerializedName("Body")
         public Body mBody;
         @SerializedName("Header")
         public Header mHeader;
     }
-
-    @SerializedName("EasyDarwin")
-    public EasyDarwin mEasyDarwin;
 
 
 }

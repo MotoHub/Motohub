@@ -9,18 +9,18 @@
 
 
     <ImageView
+        android:id="@+id/videoView"
         android:layout_width="match_parent"
         android:layout_height="150dp"
-        android:scaleType="centerCrop"
-        android:id="@+id/videoView"/>
+        android:scaleType="centerCrop" />
 
     <ImageView
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
         android:contentDescription="@string/todo"
         android:src="@drawable/playbutton"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -29,15 +29,15 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
+        android:id="@+id/textTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/textTitle"
-        android:textStyle="bold"
-        android:textColor="@android:color/white"
-        android:gravity="center"
-        android:text="TITLE OF THE MOVIES"
         android:ellipsize="end"
+        android:gravity="center"
         android:maxLines="1"
+        android:text="TITLE OF THE MOVIES"
+        android:textColor="@android:color/white"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -46,8 +46,8 @@
         android:id="@+id/textSecond"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
         android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
         android:gravity="center"
         android:text="25 "
         android:textColor="@android:color/white"

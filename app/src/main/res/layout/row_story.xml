@@ -31,8 +31,8 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_marginStart="@dimen/size10"
-                android:layout_toEndOf="@+id/iv_user"
                 android:layout_toStartOf="@+id/iv_check"
+                android:layout_toEndOf="@+id/iv_user"
                 android:text="@string/app_name"
                 android:textColor="@color/colorBlack" />
 

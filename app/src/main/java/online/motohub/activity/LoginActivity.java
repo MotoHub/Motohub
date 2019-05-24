@@ -94,6 +94,20 @@ public class LoginActivity extends BaseActivity {
 
     private DatabaseHandler mDatabaseHandler;
     private ProfileResModel localDBModel;
+    private ArrayList<ProfileResModel> mRecentList = new ArrayList<>();
+    CommonReturnInterface mCommonReturnInterface = new CommonReturnInterface() {
+        @Override
+        public void onSuccess(int pos) {
+
+            if (mRecentList.get(pos).getLoginType().equals("1")) {
+                callFbLogin();
+            } else {
+                mEmail = mRecentList.get(pos).getEmail();
+                mPwd = mRecentList.get(pos).getPassword();
+                callEmailLogin();
+            }
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -155,8 +169,6 @@ public class LoginActivity extends BaseActivity {
 
     }
 
-    private ArrayList<ProfileResModel> mRecentList = new ArrayList<>();
-
     private void setRecentUserAdapter() {
         mRecentList.clear();
         mRecentList.addAll(mDatabaseHandler.getLocalUserList());
@@ -167,20 +179,6 @@ public class LoginActivity extends BaseActivity {
         }
 
     }
-
-    CommonReturnInterface mCommonReturnInterface = new CommonReturnInterface() {
-        @Override
-        public void onSuccess(int pos) {
-
-            if (mRecentList.get(pos).getLoginType().equals("1")) {
-                callFbLogin();
-            } else {
-                mEmail = mRecentList.get(pos).getEmail();
-                mPwd = mRecentList.get(pos).getPassword();
-                callEmailLogin();
-            }
-        }
-    };
 
     @OnClick({R.id.fb_login_btn, R.id.register_btn, R.id.email_login_btn, R.id.forgot_pwd_btn})
     public void onClick(View v) {
@@ -329,7 +327,6 @@ public class LoginActivity extends BaseActivity {
         }
 
     }
-
 
 
     private void saveUserDataLocally(LoginModel loginModel) {

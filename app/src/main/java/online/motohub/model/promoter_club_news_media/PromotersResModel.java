@@ -187,7 +187,7 @@ public class PromotersResModel implements Serializable {
     }
 
     public String getUserType() {
-        if(userType == null)
+        if (userType == null)
             userType = "";
         return userType;
     }
@@ -247,7 +247,7 @@ public class PromotersResModel implements Serializable {
     }
 
     public String getStripeUserId() {
-        if(stripeUserId == null)
+        if (stripeUserId == null)
             stripeUserId = "";
         return stripeUserId;
     }
@@ -332,7 +332,7 @@ public class PromotersResModel implements Serializable {
     }
 
     public String getSubscription_planID() {
-        if(subscription_planID == null)
+        if (subscription_planID == null)
             subscription_planID = "";
         return subscription_planID;
     }

@@ -1,16 +1,16 @@
 /**
- *  This is sample code provided by Wowza Media Systems, LLC.  All sample code is intended to be a reference for the
- *  purpose of educating developers, and is not intended to be used in any production environment.
- *
- *  IN NO EVENT SHALL WOWZA MEDIA SYSTEMS, LLC BE LIABLE TO YOU OR ANY PARTY FOR DIRECT, INDIRECT, SPECIAL, INCIDENTAL,
- *  OR CONSEQUENTIAL DAMAGES, INCLUDING LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE AND ITS DOCUMENTATION,
- *  EVEN IF WOWZA MEDIA SYSTEMS, LLC HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *
- *  WOWZA MEDIA SYSTEMS, LLC SPECIFICALLY DISCLAIMS ANY WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
- *  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE. ALL CODE PROVIDED HEREUNDER IS PROVIDED "AS IS".
- *  WOWZA MEDIA SYSTEMS, LLC HAS NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS, OR MODIFICATIONS.
- *
- *  Copyright © 2015 Wowza Media Systems, LLC. All rights reserved.
+ * This is sample code provided by Wowza Media Systems, LLC.  All sample code is intended to be a reference for the
+ * purpose of educating developers, and is not intended to be used in any production environment.
+ * <p>
+ * IN NO EVENT SHALL WOWZA MEDIA SYSTEMS, LLC BE LIABLE TO YOU OR ANY PARTY FOR DIRECT, INDIRECT, SPECIAL, INCIDENTAL,
+ * OR CONSEQUENTIAL DAMAGES, INCLUDING LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE AND ITS DOCUMENTATION,
+ * EVEN IF WOWZA MEDIA SYSTEMS, LLC HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * <p>
+ * WOWZA MEDIA SYSTEMS, LLC SPECIFICALLY DISCLAIMS ANY WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+ * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE. ALL CODE PROVIDED HEREUNDER IS PROVIDED "AS IS".
+ * WOWZA MEDIA SYSTEMS, LLC HAS NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS, OR MODIFICATIONS.
+ * <p>
+ * Copyright © 2015 Wowza Media Systems, LLC. All rights reserved.
  */
 
 package online.motohub.fragment;
@@ -107,7 +107,7 @@ public class DataTableFragment extends Fragment {
         TextView dataLabel = new TextView(getActivity());
         dataLabel.setText(label);
         dataLabel.setTextAppearance(getActivity(), R.style.DataTableLabelAppearance);
-        dataLabel.setPadding( 15, 15, 15, 15);
+        dataLabel.setPadding(15, 15, 15, 15);
         TableRow.LayoutParams labelParams = new TableRow.LayoutParams(1);
         labelParams.weight = 1.0f;
         labelParams.gravity = Gravity.END;
@@ -116,7 +116,7 @@ public class DataTableFragment extends Fragment {
         TextView dataValue = new TextView(getActivity());
         dataValue.setText(dataItem.toString());
         dataValue.setTextAppearance(getActivity(), R.style.DataTableValueAppearance);
-        dataValue.setPadding( 15, 15, 15, 15);
+        dataValue.setPadding(15, 15, 15, 15);
         TableRow.LayoutParams valueParams = new TableRow.LayoutParams(2);
         valueParams.weight = 1.0f;
         dataValue.setLayoutParams(valueParams);
@@ -138,7 +138,7 @@ public class DataTableFragment extends Fragment {
             TextView dataLabel = new TextView(getActivity());
             dataLabel.setText(label);
             dataLabel.setTextAppearance(getActivity(), R.style.DataTableSubHeaderAppearance);
-            dataLabel.setPadding( 15, 15, 15, 15);
+            dataLabel.setPadding(15, 15, 15, 15);
 
             //TableRow.LayoutParams labelParams = new TableRow.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             TableRow.LayoutParams labelParams = new TableRow.LayoutParams(1);
@@ -158,7 +158,7 @@ public class DataTableFragment extends Fragment {
                 TextView dataValue = new TextView(getActivity());
                 dataValue.setText("{");
                 dataValue.setTextAppearance(getActivity(), R.style.DataTableLabelAppearance);
-                dataValue.setPadding( 15, 15, 15, 15);
+                dataValue.setPadding(15, 15, 15, 15);
                 TableRow.LayoutParams valueParams = new TableRow.LayoutParams(2);
                 valueParams.weight = 1.0f;
                 dataValue.setLayoutParams(valueParams);
@@ -183,7 +183,7 @@ public class DataTableFragment extends Fragment {
         TextView dataLabel = new TextView(getActivity());
         //dataLabel.setText(label);
         //dataLabel.setTextAppearance(getActivity(), R.style.DataTableLabelAppearance);
-        dataLabel.setPadding( 15, 15, 15, 15);
+        dataLabel.setPadding(15, 15, 15, 15);
 
         //TableRow.LayoutParams labelParams = new TableRow.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         //TableRow.LayoutParams labelParams = new TableRow.LayoutParams(1);
@@ -194,7 +194,7 @@ public class DataTableFragment extends Fragment {
         TextView dataValue = new TextView(getActivity());
         dataValue.setText("}" + (label != null ? " (" + label + ")" : ""));
         dataValue.setTextAppearance(getActivity(), R.style.DataTableLabelAppearance);
-        dataValue.setPadding( 15, 15, 15, 15);
+        dataValue.setPadding(15, 15, 15, 15);
         TableRow.LayoutParams valueParams = new TableRow.LayoutParams(2);
         valueParams.weight = 1.0f;
         dataValue.setLayoutParams(valueParams);
@@ -236,7 +236,7 @@ public class DataTableFragment extends Fragment {
     }
 
     private void buildTableRows(WZDataList tableData, TableLayout table, String key, boolean sortKeyNames, boolean annotateCollections) {
-        for(int rowNum = 0; rowNum < tableData.size(); rowNum++) {
+        for (int rowNum = 0; rowNum < tableData.size(); rowNum++) {
             WZDataType dataType = tableData.get(rowNum).getDataType();
 
             switch (dataType) {

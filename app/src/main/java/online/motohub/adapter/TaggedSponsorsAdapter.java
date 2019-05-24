@@ -19,26 +19,9 @@ public class TaggedSponsorsAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
     private final List<PromotersResModel> mTaggedSponsorsList;
 
-    public interface TaggedSponsorsInterface {
-        void deselectTagSponsorItemFromTagSponsorsList(int adapterPosition);
-    }
-
     public TaggedSponsorsAdapter(AppDialogFragment appDialogFragment, List<PromotersResModel> taggedSponsorsList) {
         this.mTaggedSponsorsInterface = appDialogFragment;
         this.mTaggedSponsorsList = taggedSponsorsList;
-    }
-
-    private class viewHolderTaggedSponsors extends RecyclerView.ViewHolder {
-
-        private TextView mFollowerNameTv;
-        private ImageView mCloseBtn;
-
-        viewHolderTaggedSponsors(View view) {
-            super(view);
-            mFollowerNameTv = view.findViewById(R.id.name_of_tag);
-            mCloseBtn = view.findViewById(R.id.close_btn);
-        }
-
     }
 
     @Override
@@ -62,7 +45,7 @@ public class TaggedSponsorsAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                     notifyDataSetChanged();
                 }
             });
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -71,6 +54,23 @@ public class TaggedSponsorsAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     @Override
     public int getItemCount() {
         return mTaggedSponsorsList.size();
+    }
+
+    public interface TaggedSponsorsInterface {
+        void deselectTagSponsorItemFromTagSponsorsList(int adapterPosition);
+    }
+
+    private class viewHolderTaggedSponsors extends RecyclerView.ViewHolder {
+
+        private TextView mFollowerNameTv;
+        private ImageView mCloseBtn;
+
+        viewHolderTaggedSponsors(View view) {
+            super(view);
+            mFollowerNameTv = view.findViewById(R.id.name_of_tag);
+            mCloseBtn = view.findViewById(R.id.close_btn);
+        }
+
     }
 
 

@@ -1,17 +1,29 @@
 package com.daasuu.gpuv.composer;
 
 import android.graphics.SurfaceTexture;
-import android.opengl.*;
+import android.opengl.EGL14;
+import android.opengl.EGLContext;
+import android.opengl.EGLDisplay;
+import android.opengl.EGLSurface;
+import android.opengl.GLES20;
+import android.opengl.Matrix;
 import android.util.Log;
 import android.util.Size;
 import android.view.Surface;
+
 import com.daasuu.gpuv.egl.EglUtil;
 import com.daasuu.gpuv.egl.GlFramebufferObject;
 import com.daasuu.gpuv.egl.GlPreviewFilter;
 import com.daasuu.gpuv.egl.GlSurfaceTexture;
 import com.daasuu.gpuv.egl.filter.GlFilter;
 
-import static android.opengl.GLES20.*;
+import static android.opengl.GLES20.GL_COLOR_BUFFER_BIT;
+import static android.opengl.GLES20.GL_DEPTH_BUFFER_BIT;
+import static android.opengl.GLES20.GL_FRAMEBUFFER;
+import static android.opengl.GLES20.GL_LINEAR;
+import static android.opengl.GLES20.GL_MAX_TEXTURE_SIZE;
+import static android.opengl.GLES20.GL_NEAREST;
+import static android.opengl.GLES20.GL_TEXTURE_2D;
 
 
 // Refer : https://android.googlesource.com/platform/cts/+/lollipop-release/tests/tests/media/src/android/media/cts/OutputSurface.java

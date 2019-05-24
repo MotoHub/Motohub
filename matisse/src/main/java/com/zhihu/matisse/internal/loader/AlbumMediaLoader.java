@@ -57,12 +57,6 @@ public class AlbumMediaLoader extends CursorLoader {
     private static final String SELECTION_ALL_FOR_SINGLE_MEDIA_TYPE =
             MediaStore.Files.FileColumns.MEDIA_TYPE + "=?"
                     + " AND " + MediaStore.MediaColumns.SIZE + ">0";
-
-    private static String[] getSelectionArgsForSingleMediaType(int mediaType) {
-        return new String[]{String.valueOf(mediaType)};
-    }
-    // =========================================================
-
     // === params for ordinary album && showSingleMediaType: false ===
     private static final String SELECTION_ALBUM =
             "(" + MediaStore.Files.FileColumns.MEDIA_TYPE + "=?"
@@ -71,6 +65,26 @@ public class AlbumMediaLoader extends CursorLoader {
                     + " AND "
                     + " bucket_id=?"
                     + " AND " + MediaStore.MediaColumns.SIZE + ">0";
+    // =========================================================
+    // === params for ordinary album && showSingleMediaType: true ===
+    private static final String SELECTION_ALBUM_FOR_SINGLE_MEDIA_TYPE =
+            MediaStore.Files.FileColumns.MEDIA_TYPE + "=?"
+                    + " AND "
+                    + " bucket_id=?"
+                    + " AND " + MediaStore.MediaColumns.SIZE + ">0";
+    private static final String ORDER_BY = MediaStore.Images.Media.DATE_TAKEN + " DESC";
+    // ===============================================================
+    private final boolean mEnableCapture;
+
+    private AlbumMediaLoader(Context context, String selection, String[] selectionArgs, boolean capture) {
+        super(context, QUERY_URI, PROJECTION, selection, selectionArgs, ORDER_BY);
+        mEnableCapture = capture;
+    }
+    // ===============================================================
+
+    private static String[] getSelectionArgsForSingleMediaType(int mediaType) {
+        return new String[]{String.valueOf(mediaType)};
+    }
 
     private static String[] getSelectionAlbumArgs(String albumId) {
         return new String[]{
@@ -79,26 +93,9 @@ public class AlbumMediaLoader extends CursorLoader {
                 albumId
         };
     }
-    // ===============================================================
-
-    // === params for ordinary album && showSingleMediaType: true ===
-    private static final String SELECTION_ALBUM_FOR_SINGLE_MEDIA_TYPE =
-            MediaStore.Files.FileColumns.MEDIA_TYPE + "=?"
-                    + " AND "
-                    + " bucket_id=?"
-                    + " AND " + MediaStore.MediaColumns.SIZE + ">0";
 
     private static String[] getSelectionAlbumArgsForSingleMediaType(int mediaType, String albumId) {
         return new String[]{String.valueOf(mediaType), albumId};
-    }
-    // ===============================================================
-
-    private static final String ORDER_BY = MediaStore.Images.Media.DATE_TAKEN + " DESC";
-    private final boolean mEnableCapture;
-
-    private AlbumMediaLoader(Context context, String selection, String[] selectionArgs, boolean capture) {
-        super(context, QUERY_URI, PROJECTION, selection, selectionArgs, ORDER_BY);
-        mEnableCapture = capture;
     }
 
     public static CursorLoader newInstance(Context context, Album album, boolean capture) {

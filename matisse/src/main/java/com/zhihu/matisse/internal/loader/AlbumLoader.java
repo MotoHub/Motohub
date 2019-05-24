@@ -64,16 +64,15 @@ public class AlbumLoader extends CursorLoader {
             MediaStore.Files.FileColumns.MEDIA_TYPE + "=?"
                     + " AND " + MediaStore.MediaColumns.SIZE + ">0"
                     + ") GROUP BY (bucket_id";
-
-    private static String[] getSelectionArgsForSingleMediaType(int mediaType) {
-        return new String[]{String.valueOf(mediaType)};
-    }
-    // =============================================
-
     private static final String BUCKET_ORDER_BY = "datetaken DESC";
+    // =============================================
 
     private AlbumLoader(Context context, String selection, String[] selectionArgs) {
         super(context, QUERY_URI, PROJECTION, selection, selectionArgs, BUCKET_ORDER_BY);
+    }
+
+    private static String[] getSelectionArgsForSingleMediaType(int mediaType) {
+        return new String[]{String.valueOf(mediaType)};
     }
 
     public static CursorLoader newInstance(Context context) {

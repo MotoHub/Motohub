@@ -7,24 +7,6 @@ import com.google.gson.annotations.SerializedName;
 
 public class ImageResModel implements Parcelable {
 
-    @SerializedName("name")
-    private String name;
-
-    @SerializedName("path")
-    private String path;
-
-    @SerializedName("type")
-    private String type;
-
-    public ImageResModel() {
-    }
-
-    private ImageResModel(Parcel in) {
-        name = in.readString();
-        path = in.readString();
-        type = in.readString();
-    }
-
     public static final Creator<ImageResModel> CREATOR = new Creator<ImageResModel>() {
         @Override
         public ImageResModel createFromParcel(Parcel in) {
@@ -36,6 +18,21 @@ public class ImageResModel implements Parcelable {
             return new ImageResModel[size];
         }
     };
+    @SerializedName("name")
+    private String name;
+    @SerializedName("path")
+    private String path;
+    @SerializedName("type")
+    private String type;
+
+    public ImageResModel() {
+    }
+
+    private ImageResModel(Parcel in) {
+        name = in.readString();
+        path = in.readString();
+        type = in.readString();
+    }
 
     public String getName() {
         return name;

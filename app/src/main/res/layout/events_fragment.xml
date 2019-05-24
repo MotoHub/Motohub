@@ -22,10 +22,10 @@
     <EditText
         android:id="@+id/search_edt"
         style="@style/LayoutMatchWrap"
-        android:layout_marginBottom="@dimen/size5"
-        android:layout_marginTop="@dimen/size110"
         android:layout_marginLeft="@dimen/size5"
+        android:layout_marginTop="@dimen/size110"
         android:layout_marginRight="@dimen/size5"
+        android:layout_marginBottom="@dimen/size5"
         android:background="@drawable/orange_border_bg"
         android:hint="@string/search_here"
         android:padding="5dp"

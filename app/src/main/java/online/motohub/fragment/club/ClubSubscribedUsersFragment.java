@@ -21,39 +21,32 @@ import butterknife.Unbinder;
 import online.motohub.R;
 import online.motohub.activity.BaseActivity;
 import online.motohub.adapter.club.ClubSubscribedUsersAdapter;
-import online.motohub.application.MotoHub;
 import online.motohub.fragment.BaseFragment;
 import online.motohub.fragment.dialog.AppDialogFragment;
-import online.motohub.model.ProfileModel;
 import online.motohub.model.ProfileResModel;
 import online.motohub.model.PromoterSubsResModel;
 import online.motohub.model.promoter_club_news_media.PromoterSubs;
-import online.motohub.model.promoter_club_news_media.PromotersModel;
 import online.motohub.model.promoter_club_news_media.PromotersResModel;
 import online.motohub.retrofit.RetrofitClient;
 
 public class ClubSubscribedUsersFragment extends BaseFragment {
 
+    private static final int mDataLimit = 15;
+    private static final String TAG = ClubSubscribedUsersFragment.class.getName();
+    public boolean mRefresh = true;
     @BindView(R.id.club_users)
     RecyclerView mClubUsersRV;
-
     @BindString(R.string.no_users_err)
     String mNoUsersSubscribed;
-
-    private Activity mActivity;
-    private Unbinder mUnBinder;
-    public boolean mRefresh = true;
-    private boolean mIsPostsRvLoading = true;
-    private static final int mDataLimit = 15;
-    private int mPostsRvOffset = 0, mPostsRvTotalCount = 0;
     LinearLayoutManager mClubLayout;
-
     ClubSubscribedUsersAdapter mClubSubsUserAdapter;
     PromotersResModel mPromotersResModel;
     ProfileResModel mMyProfileResModel;
     ArrayList<PromoterSubs> mClubsubusersList = new ArrayList<>();
-
-    private static final String TAG = ClubSubscribedUsersFragment.class.getName();
+    private Activity mActivity;
+    private Unbinder mUnBinder;
+    private boolean mIsPostsRvLoading = true;
+    private int mPostsRvOffset = 0, mPostsRvTotalCount = 0;
 
     @Override
     public void onAttach(Context context) {

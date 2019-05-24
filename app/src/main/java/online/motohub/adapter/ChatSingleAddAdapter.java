@@ -30,12 +30,6 @@ public class ChatSingleAddAdapter extends ArrayAdapter<ProfileResModel> {
         this.mFollowingListData = followingListData;
     }
 
-    private static class ViewHolder {
-        CircleImageView mUserImgView;
-        TextView mUsernameTv;
-        ImageView mRightArrow;
-    }
-
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
@@ -69,6 +63,12 @@ public class ChatSingleAddAdapter extends ArrayAdapter<ProfileResModel> {
         mViewHolder.mRightArrow.setVisibility(View.GONE);
         return convertView;
 
+    }
+
+    private static class ViewHolder {
+        CircleImageView mUserImgView;
+        TextView mUsernameTv;
+        ImageView mRightArrow;
     }
 
 }

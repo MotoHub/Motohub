@@ -31,10 +31,10 @@
             layout="@layout/widget_small_progress_bar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
             android:layout_centerInParent="true"
-            android:layout_marginBottom="@dimen/size5"
+            android:layout_centerHorizontal="true"
             android:layout_marginTop="@dimen/size5"
+            android:layout_marginBottom="@dimen/size5"
             android:visibility="gone" />
 
         <RelativeLayout

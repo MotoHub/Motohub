@@ -12,16 +12,16 @@ public enum Rotation {
         this.rotation = rotation;
     }
 
-    public int getRotation() {
-        return rotation;
-    }
-
     public static Rotation fromInt(int rotate) {
         for (Rotation rotation : Rotation.values()) {
             if (rotate == rotation.getRotation()) return rotation;
         }
 
         return NORMAL;
+    }
+
+    public int getRotation() {
+        return rotation;
     }
 
 }

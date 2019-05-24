@@ -43,13 +43,13 @@ public class ViewStreamUsersActivity extends BaseActivity {
     EditText mSearchEdt;
     @BindString(R.string.send_stream_request)
     String mToolbarTitle;
+    boolean isFromNotification;
     private ArrayList<ProfileResModel> mUsersList = new ArrayList<>();
     private StreamUserAdapter mAdapter;
     private int mCurrentProfileID = 0;
     private String mMyFollowings = "";
     private LinearLayoutManager mLayoutManager;
     private int MY_PROFILE_TYPE = 999;
-    boolean isFromNotification;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,7 +90,7 @@ public class ViewStreamUsersActivity extends BaseActivity {
         });
         if (isFromNotification) {
             callGetMyProfile(mCurrentProfileID, MY_PROFILE_TYPE);
-        }else{
+        } else {
             callGetUsersList();
         }
 

@@ -47,11 +47,13 @@ public class ReportWritePostActivity extends BaseActivity {
         setToolbar(mToolbar, mToolbarTitle);
         initView();
     }
+
     @Override
     protected void onDestroy() {
         DialogManager.hideProgress();
         super.onDestroy();
     }
+
     private void initView() {
         setupUI(mReportWritePostLayout);
         toolBack.setVisibility(VISIBLE);
@@ -65,8 +67,8 @@ public class ReportWritePostActivity extends BaseActivity {
                 break;
             case R.id.submitBtn:
                 Intent resultIntent = new Intent();
-                resultIntent.putExtra(AppConstants.REPORT_STRING,mWritePostEt.getText().toString());
-                setResult(RESULT_OK,resultIntent);
+                resultIntent.putExtra(AppConstants.REPORT_STRING, mWritePostEt.getText().toString());
+                setResult(RESULT_OK, resultIntent);
                 finish();
                 break;
         }

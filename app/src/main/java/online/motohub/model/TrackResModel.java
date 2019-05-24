@@ -139,7 +139,7 @@ public class TrackResModel implements Serializable {
     }
 
     public String getCoverImg() {
-        if(coverImg == null)
+        if (coverImg == null)
             coverImg = "";
         return coverImg;
     }

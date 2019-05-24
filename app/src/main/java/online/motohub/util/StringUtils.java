@@ -11,10 +11,11 @@ public class StringUtils {
 
     private static StringUtils mStringUtils;
 
-    private StringUtils() {}
+    private StringUtils() {
+    }
 
     public static StringUtils getInstance() {
-        if(mStringUtils == null) {
+        if (mStringUtils == null) {
             mStringUtils = new StringUtils();
         }
         return mStringUtils;
@@ -41,6 +42,7 @@ public class StringUtils {
         }
         return mDecodedText;
     }
+
     public static String genRandomStreamName(Context mContext) {
         int passwordSize = 5;
         char[] chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789".toCharArray();

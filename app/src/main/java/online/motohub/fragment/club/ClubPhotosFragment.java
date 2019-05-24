@@ -19,7 +19,6 @@ import butterknife.ButterKnife;
 import online.motohub.R;
 import online.motohub.activity.BaseActivity;
 import online.motohub.adapter.GalleryImgAdapter;
-import online.motohub.application.MotoHub;
 import online.motohub.fragment.BaseFragment;
 import online.motohub.model.GalleryImgModel;
 import online.motohub.model.GalleryImgResModel;
@@ -77,7 +76,7 @@ public class ClubPhotosFragment extends BaseFragment {
         mGalleryRv.addOnItemTouchListener(new RecyclerTouchListener(getActivity(), mGalleryRv, new RecyclerClick_Listener() {
             @Override
             public void onClick(View view, int position) {
-                ((BaseActivity) getActivity()).moveLoadImageScreen(getActivity(), UrlUtils.AWS_S3_BASE_URL+mGalleryResModels.get(position).getGalleryImage());
+                ((BaseActivity) getActivity()).moveLoadImageScreen(getActivity(), UrlUtils.AWS_S3_BASE_URL + mGalleryResModels.get(position).getGalleryImage());
             }
 
             @Override

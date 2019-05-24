@@ -7,7 +7,8 @@ public class ErrorMessage implements Serializable {
 
     private Error error = new Error();
 
-    public ErrorMessage() {}
+    public ErrorMessage() {
+    }
 
     public ErrorMessage(String message) {
         this.error = new Error(message);
@@ -35,7 +36,8 @@ public class ErrorMessage implements Serializable {
 
         private Context context;
 
-        public Error() {}
+        public Error() {
+        }
 
         public Error(String message) {
             this.message = message;
@@ -79,7 +81,8 @@ public class ErrorMessage implements Serializable {
 
             private String[] password = new String[0];
 
-            public Context() { }
+            public Context() {
+            }
 
             public String[] getEmail() {
                 return email;

@@ -26,12 +26,12 @@
                 android:layout_width="@dimen/size20"
                 android:layout_height="@dimen/size20"
                 android:layout_gravity="bottom|end"
-                android:src="@drawable/ic_check_white"
-                android:layout_marginBottom="@dimen/size2"
                 android:layout_marginEnd="@dimen/size2"
                 android:layout_marginRight="@dimen/size2"
-                android:visibility="gone"
-                android:background="@drawable/circle_green_send_btn" />
+                android:layout_marginBottom="@dimen/size2"
+                android:background="@drawable/circle_green_send_btn"
+                android:src="@drawable/ic_check_white"
+                android:visibility="gone" />
         </FrameLayout>
 
     </RelativeLayout>

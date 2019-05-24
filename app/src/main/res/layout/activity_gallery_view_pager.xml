@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout android:id="@+id/view_pager_lay"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/view_pager_lay"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorBlack"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    android:background="@color/colorBlack">
 
-    <include layout="@layout/widget_toolbar"
-        android:id="@+id/include" />
+    <include
+        android:id="@+id/include"
+        layout="@layout/widget_toolbar" />
 
     <android.support.v4.view.ViewPager
         android:id="@+id/promoter_viewpager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/include"
-       />
+        android:layout_below="@+id/include" />
 
 
 </RelativeLayout>

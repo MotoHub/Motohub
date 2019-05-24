@@ -26,8 +26,8 @@
                         android:id="@+id/promoters_live_streams_txt"
                         style="@style/LayoutMatchWrap"
                         android:layout_margin="@dimen/size5"
-                        android:padding="@dimen/size5"
                         android:background="@color/colorWhite"
+                        android:padding="@dimen/size5"
                         android:text="@string/on_demand"
                         android:textAllCaps="true"
                         android:textColor="@color/colorOrange"
@@ -47,31 +47,31 @@
                     <View
                         style="@style/LayoutMatchWrap"
                         android:layout_height="@dimen/size2"
-                        android:visibility="gone"
-                        android:background="@color/colorOrange" />
+                        android:background="@color/colorOrange"
+                        android:visibility="gone" />
 
                     <TextView
                         android:id="@+id/friends_live_streams_txt"
                         style="@style/LayoutMatchWrap"
                         android:layout_margin="@dimen/size5"
-                        android:padding="@dimen/size5"
                         android:background="@color/colorWhite"
+                        android:padding="@dimen/size5"
                         android:text="@string/friends_live_streams"
-                        android:visibility="gone"
                         android:textAllCaps="true"
                         android:textColor="@color/colorOrange"
                         android:textSize="@dimen/text16"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        android:visibility="gone" />
 
                     <android.support.v7.widget.RecyclerView
                         android:id="@+id/friends_stream_list_view"
                         style="@style/LayoutMatchWrap"
-                        android:visibility="gone"
                         android:background="@android:color/transparent"
                         android:divider="@android:color/transparent"
                         android:listSelector="@android:color/transparent"
                         android:nestedScrollingEnabled="false"
                         android:scrollbars="none"
+                        android:visibility="gone"
                         tools:targetApi="lollipop" />
                 </LinearLayout>
             </android.support.v4.widget.NestedScrollView>
@@ -86,11 +86,11 @@
             android:background="@drawable/black_orange_btn_bg"
             android:padding="@dimen/size5"
             android:text="@string/go_live"
-            android:visibility="gone"
             android:textAllCaps="true"
             android:textColor="@color/text_color"
             android:textSize="@dimen/text16"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:visibility="gone" />
     </RelativeLayout>
 
 </android.support.design.widget.CoordinatorLayout>

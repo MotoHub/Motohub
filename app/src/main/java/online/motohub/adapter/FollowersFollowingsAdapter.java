@@ -44,140 +44,6 @@ public class FollowersFollowingsAdapter extends RecyclerView.Adapter<RecyclerVie
     private int mMyProfileID = 0;
     private boolean isFollowers;
     private boolean isBlockAPI;
-
-    public FollowersFollowingsAdapter(Context context, ArrayList<ProfileResModel> followersFollowingsList, boolean isfollowers, ProfileResModel myProfileResModel) {
-        mContext = context;
-        mFollowersFollowingsList = followersFollowingsList;
-        isFollowers = isfollowers;
-        mInflater = LayoutInflater.from(mContext);
-        mMyProfileResModel = myProfileResModel;
-        mMyProfileID = mMyProfileResModel.getID();
-    }
-
-    public class Holder extends RecyclerView.ViewHolder {
-
-        @BindView(R.id.user_img)
-        CircleImageView mUserImg;
-        @BindView(R.id.user_name_txt)
-        TextView mUserNameTxt;
-        @BindView(R.id.follow_btn)
-        TextView mFollowBtn;
-
-        public Holder(View view) {
-            super(view);
-            ButterKnife.bind(this, view);
-        }
-    }
-
-    public class ViewHolderLoader extends RecyclerView.ViewHolder {
-
-        @BindView(R.id.progress_bar)
-        ProgressBar mProgressBar;
-
-        public ViewHolderLoader(View v) {
-            super(v);
-            ButterKnife.bind(this, v);
-        }
-    }
-
-    @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View mView = mInflater.inflate(R.layout.adap_followers_followings, parent, false);
-        return new Holder(mView);
-    }
-
-    public void filterList(ArrayList<ProfileResModel> filteredNames) {
-        this.mFollowersFollowingsList = filteredNames;
-        notifyDataSetChanged();
-    }
-
-    @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int pos) {
-        try {
-            final Holder mHolder = (Holder) holder;
-            ProfileResModel mEntity = mFollowersFollowingsList.get(pos);
-
-            String imgStr = mEntity.getProfilePicture();
-            if (!imgStr.isEmpty()) {
-                ((BaseActivity) mContext).setImageWithGlide(mHolder.mUserImg, imgStr, R.drawable.default_profile_icon);
-            } else {
-                mHolder.mUserImg.setImageResource(R.drawable.default_profile_icon);
-            }
-            mHolder.mUserNameTxt.setText(Utility.getInstance().getUserName(mEntity));
-
-            mFollowersFollowingsList.get(pos).setIsFollowing(Utility.getInstance().
-                    isAlreadyFollowed(mFollowersFollowingsList.get(pos).getFollowprofile_by_FollowProfileID(), mMyProfileID));
-
-            if (mFollowersFollowingsList.get(pos).getIsFollowing()) {
-                mHolder.mFollowBtn.setText(mContext.getString(R.string.un_follow));
-            } else {
-                mHolder.mFollowBtn.setText(mContext.getString(R.string.follow));
-            }
-            mHolder.mUserImg.setTag(pos);
-            mHolder.mUserImg.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mAdapterPos = (int) v.getTag();
-                    ((BaseActivity) mContext).moveOtherProfileScreenWithResult(mContext, mMyProfileResModel.getID(),
-                            mFollowersFollowingsList.get(mAdapterPos).getID(), AppConstants.FOLLOWERS_FOLLOWING_RESULT);
-
-                }
-            });
-            mHolder.mFollowBtn.setTag(pos);
-            mHolder.mFollowBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mAdapterPos = (int) v.getTag();
-                    ProfileResModel mEntity = mFollowersFollowingsList.get(mAdapterPos);
-                    if (mFollowersFollowingsList.get(mAdapterPos).getIsFollowing()) {
-                        //TODO show alert then call Unfollow API
-                        DialogManager.showUnFollowBlockDialogWithCallback(mContext, mUnFollowBlockCallback, mEntity);
-
-                    } else {
-                        //TODO call Follow API
-                        CommonAPI.getInstance().callFollowProfile(mContext, mRetrofitResInterface,
-                                mMyProfileID, mEntity.getID());
-
-                    }
-
-                }
-            });
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-
-    }
-
-    CommonReturnInterface mUnFollowBlockCallback = new CommonReturnInterface() {
-        @Override
-        public void onSuccess(int type) {
-            ProfileResModel mEntity = mFollowersFollowingsList.get(mAdapterPos);
-            if (type == 1) {
-                CommonAPI.getInstance().callUnFollowProfile(mContext, mRetrofitResInterface, Utility.getInstance().getUnFollowRowID(
-                        mEntity.getFollowprofile_by_FollowProfileID(), mMyProfileID, mEntity.getID()));
-            } else {
-                isBlockAPI = true;
-                int mOtherProfileID = mEntity.getID();
-                int rowID = Utility.getInstance().getUnFollowRowID(mEntity.getFollowprofile_by_FollowProfileID(),
-                        mMyProfileID, mOtherProfileID);
-                boolean isFollowed = Utility.getInstance().isAlreadyFollowed(mEntity.getFollowprofile_by_FollowProfileID(), mMyProfileID);
-                boolean isFollowedMe = Utility.getInstance().isAlreadyFollowedMe(mMyProfileResModel.getFollowprofile_by_FollowProfileID(), mOtherProfileID);
-                if (isFollowed && isFollowedMe) {
-                    CommonAPI.getInstance().callUnFollowBothProfile(mContext, mRetrofitResInterface, rowID, mMyProfileID, mOtherProfileID);
-                } else if (isFollowed) {
-                    CommonAPI.getInstance().callUnFollowProfile(mContext, mRetrofitResInterface,
-                            Utility.getInstance().getUnFollowRowID(mEntity.getFollowprofile_by_FollowProfileID(),
-                                    mMyProfileID, mOtherProfileID));
-                } else if (isFollowedMe) {
-                    CommonAPI.getInstance().callUnFollowMyProfile(mContext, mRetrofitResInterface, mMyProfileID, mOtherProfileID);
-                } else {
-                    CommonAPI.getInstance().callBlockProfile(mContext, mRetrofitResInterface,
-                            mMyProfileID, mOtherProfileID);
-                }
-            }
-        }
-    };
-
     RetrofitResInterface mRetrofitResInterface = new RetrofitResInterface() {
         @Override
         public void retrofitOnResponse(Object responseObj, int responseType) {
@@ -266,6 +132,112 @@ public class FollowersFollowingsAdapter extends RecyclerView.Adapter<RecyclerVie
             ((BaseActivity) mContext).showToast(mContext, mContext.getString(R.string.internet_err));
         }
     };
+    CommonReturnInterface mUnFollowBlockCallback = new CommonReturnInterface() {
+        @Override
+        public void onSuccess(int type) {
+            ProfileResModel mEntity = mFollowersFollowingsList.get(mAdapterPos);
+            if (type == 1) {
+                CommonAPI.getInstance().callUnFollowProfile(mContext, mRetrofitResInterface, Utility.getInstance().getUnFollowRowID(
+                        mEntity.getFollowprofile_by_FollowProfileID(), mMyProfileID, mEntity.getID()));
+            } else {
+                isBlockAPI = true;
+                int mOtherProfileID = mEntity.getID();
+                int rowID = Utility.getInstance().getUnFollowRowID(mEntity.getFollowprofile_by_FollowProfileID(),
+                        mMyProfileID, mOtherProfileID);
+                boolean isFollowed = Utility.getInstance().isAlreadyFollowed(mEntity.getFollowprofile_by_FollowProfileID(), mMyProfileID);
+                boolean isFollowedMe = Utility.getInstance().isAlreadyFollowedMe(mMyProfileResModel.getFollowprofile_by_FollowProfileID(), mOtherProfileID);
+                if (isFollowed && isFollowedMe) {
+                    CommonAPI.getInstance().callUnFollowBothProfile(mContext, mRetrofitResInterface, rowID, mMyProfileID, mOtherProfileID);
+                } else if (isFollowed) {
+                    CommonAPI.getInstance().callUnFollowProfile(mContext, mRetrofitResInterface,
+                            Utility.getInstance().getUnFollowRowID(mEntity.getFollowprofile_by_FollowProfileID(),
+                                    mMyProfileID, mOtherProfileID));
+                } else if (isFollowedMe) {
+                    CommonAPI.getInstance().callUnFollowMyProfile(mContext, mRetrofitResInterface, mMyProfileID, mOtherProfileID);
+                } else {
+                    CommonAPI.getInstance().callBlockProfile(mContext, mRetrofitResInterface,
+                            mMyProfileID, mOtherProfileID);
+                }
+            }
+        }
+    };
+
+    public FollowersFollowingsAdapter(Context context, ArrayList<ProfileResModel> followersFollowingsList, boolean isfollowers, ProfileResModel myProfileResModel) {
+        mContext = context;
+        mFollowersFollowingsList = followersFollowingsList;
+        isFollowers = isfollowers;
+        mInflater = LayoutInflater.from(mContext);
+        mMyProfileResModel = myProfileResModel;
+        mMyProfileID = mMyProfileResModel.getID();
+    }
+
+    @Override
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View mView = mInflater.inflate(R.layout.adap_followers_followings, parent, false);
+        return new Holder(mView);
+    }
+
+    public void filterList(ArrayList<ProfileResModel> filteredNames) {
+        this.mFollowersFollowingsList = filteredNames;
+        notifyDataSetChanged();
+    }
+
+    @Override
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, int pos) {
+        try {
+            final Holder mHolder = (Holder) holder;
+            ProfileResModel mEntity = mFollowersFollowingsList.get(pos);
+
+            String imgStr = mEntity.getProfilePicture();
+            if (!imgStr.isEmpty()) {
+                ((BaseActivity) mContext).setImageWithGlide(mHolder.mUserImg, imgStr, R.drawable.default_profile_icon);
+            } else {
+                mHolder.mUserImg.setImageResource(R.drawable.default_profile_icon);
+            }
+            mHolder.mUserNameTxt.setText(Utility.getInstance().getUserName(mEntity));
+
+            mFollowersFollowingsList.get(pos).setIsFollowing(Utility.getInstance().
+                    isAlreadyFollowed(mFollowersFollowingsList.get(pos).getFollowprofile_by_FollowProfileID(), mMyProfileID));
+
+            if (mFollowersFollowingsList.get(pos).getIsFollowing()) {
+                mHolder.mFollowBtn.setText(mContext.getString(R.string.un_follow));
+            } else {
+                mHolder.mFollowBtn.setText(mContext.getString(R.string.follow));
+            }
+            mHolder.mUserImg.setTag(pos);
+            mHolder.mUserImg.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mAdapterPos = (int) v.getTag();
+                    ((BaseActivity) mContext).moveOtherProfileScreenWithResult(mContext, mMyProfileResModel.getID(),
+                            mFollowersFollowingsList.get(mAdapterPos).getID(), AppConstants.FOLLOWERS_FOLLOWING_RESULT);
+
+                }
+            });
+            mHolder.mFollowBtn.setTag(pos);
+            mHolder.mFollowBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mAdapterPos = (int) v.getTag();
+                    ProfileResModel mEntity = mFollowersFollowingsList.get(mAdapterPos);
+                    if (mFollowersFollowingsList.get(mAdapterPos).getIsFollowing()) {
+                        //TODO show alert then call Unfollow API
+                        DialogManager.showUnFollowBlockDialogWithCallback(mContext, mUnFollowBlockCallback, mEntity);
+
+                    } else {
+                        //TODO call Follow API
+                        CommonAPI.getInstance().callFollowProfile(mContext, mRetrofitResInterface,
+                                mMyProfileID, mEntity.getID());
+
+                    }
+
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
 
     private void setResult() {
         ((BaseActivity) mContext).setResult(RESULT_OK, new Intent().putExtra(AppConstants.IS_FOLLOW_RESULT, true));
@@ -275,7 +247,6 @@ public class FollowersFollowingsAdapter extends RecyclerView.Adapter<RecyclerVie
         mFollowersFollowingsList.remove(mAdapterPos);
         notifyDataSetChanged();
     }
-
 
     private void updateFollowProfile(FollowProfileEntity mEntity) {
         ArrayList<FollowProfileEntity> mList = mFollowersFollowingsList.get(mAdapterPos).getFollowprofile_by_FollowProfileID();
@@ -303,7 +274,7 @@ public class FollowersFollowingsAdapter extends RecyclerView.Adapter<RecyclerVie
 
     private void updateUnFollowMyProfile(FollowProfileEntity mEntity) {
         ArrayList<FollowProfileEntity> mOtherFollowingsList = mFollowersFollowingsList.get(mAdapterPos).getFollowprofile_by_ProfileID();
-        ArrayList<FollowProfileEntity> mMyFollowersList =mMyProfileResModel.getFollowprofile_by_FollowProfileID();
+        ArrayList<FollowProfileEntity> mMyFollowersList = mMyProfileResModel.getFollowprofile_by_FollowProfileID();
         for (int i = 0; i < mOtherFollowingsList.size(); i++) {
             if (mOtherFollowingsList.get(i).getID() == mEntity.getID()) {
                 mOtherFollowingsList.remove(i);
@@ -347,7 +318,6 @@ public class FollowersFollowingsAdapter extends RecyclerView.Adapter<RecyclerVie
         updateUnFollowMyProfile(mMyFollowerEntity);
     }
 
-
     @Override
     public int getItemCount() {
         return mFollowersFollowingsList.size();
@@ -356,6 +326,32 @@ public class FollowersFollowingsAdapter extends RecyclerView.Adapter<RecyclerVie
     @Override
     public int getItemViewType(int pos) {
         return pos;
+    }
+
+    public class Holder extends RecyclerView.ViewHolder {
+
+        @BindView(R.id.user_img)
+        CircleImageView mUserImg;
+        @BindView(R.id.user_name_txt)
+        TextView mUserNameTxt;
+        @BindView(R.id.follow_btn)
+        TextView mFollowBtn;
+
+        public Holder(View view) {
+            super(view);
+            ButterKnife.bind(this, view);
+        }
+    }
+
+    public class ViewHolderLoader extends RecyclerView.ViewHolder {
+
+        @BindView(R.id.progress_bar)
+        ProgressBar mProgressBar;
+
+        public ViewHolderLoader(View v) {
+            super(v);
+            ButterKnife.bind(this, v);
+        }
     }
 
 }

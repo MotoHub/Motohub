@@ -90,7 +90,7 @@ public class ProfileModel implements Serializable {
     private MetaModel meta;
 
     public ArrayList<ProfileResModel> getResource() {
-        if(mResource == null)
+        if (mResource == null)
             mResource = new ArrayList<>();
         return mResource;
     }

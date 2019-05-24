@@ -33,22 +33,6 @@ public class EventAddOnAdapter extends RecyclerView.Adapter<EventAddOnAdapter.Ho
 
     }
 
-
-    public class Holder extends RecyclerView.ViewHolder {
-
-        @BindView(R.id.addOnDescTxt)
-        TextView mAddOnDescTxt;
-
-        @BindView(R.id.addOnToggleBtn)
-        ToggleButton mAddOnToggleBtn;
-
-        public Holder(View view) {
-            super(view);
-            ButterKnife.bind(this, view);
-        }
-
-    }
-
     @Override
     public Holder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_add_on_list_item, parent, false);
@@ -80,18 +64,33 @@ public class EventAddOnAdapter extends RecyclerView.Adapter<EventAddOnAdapter.Ho
                     }
                 }
             });
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public ArrayList<EventAddOnModel> getSelectedEventAddOn(){
+    public ArrayList<EventAddOnModel> getSelectedEventAddOn() {
         return mSelectedEventAddOn;
     }
 
     @Override
     public int getItemCount() {
         return mEventAddOnList.size();
+    }
+
+    public class Holder extends RecyclerView.ViewHolder {
+
+        @BindView(R.id.addOnDescTxt)
+        TextView mAddOnDescTxt;
+
+        @BindView(R.id.addOnToggleBtn)
+        ToggleButton mAddOnToggleBtn;
+
+        public Holder(View view) {
+            super(view);
+            ButterKnife.bind(this, view);
+        }
+
     }
 
 }

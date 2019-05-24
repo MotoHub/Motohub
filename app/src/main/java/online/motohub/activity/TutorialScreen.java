@@ -38,7 +38,6 @@ public class TutorialScreen extends BaseActivity {
     Toolbar mToolbar;
     @BindView(R.id.pager)
     ViewPager mViewPager;
-    private List<ImageView> dots;
     @BindView(R.id.left_arrow)
     ImageView mLeftArrow;
     @BindView(R.id.right_arrow)
@@ -47,6 +46,7 @@ public class TutorialScreen extends BaseActivity {
     Button mGetStartedBtn;
     @BindView(R.id.dot_lay)
     LinearLayout mDotsLay;
+    private List<ImageView> dots;
     private boolean isTutorial = false;
     private CustomPagerAdapter mPageradapter;
     private ArrayList<TutorialEntity> mSlidesList = new ArrayList<>();
@@ -102,7 +102,7 @@ public class TutorialScreen extends BaseActivity {
                         } else {
                             mRightArrow.setVisibility(View.VISIBLE);
                         }
-                        if (position == mSlidesList.size()-1) {
+                        if (position == mSlidesList.size() - 1) {
                             mGetStartedBtn.setText(getString(R.string.get_started));
                         } else {
                             mGetStartedBtn.setText(getString(R.string.skip));
@@ -174,6 +174,31 @@ public class TutorialScreen extends BaseActivity {
 
     }
 
+    @OnClick({R.id.toolbar_back_img_btn, R.id.left_arrow, R.id.right_arrow, R.id.get_started_btn})
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.toolbar_back_img_btn:
+                onBackPressed();
+                break;
+            case R.id.left_arrow:
+                mViewPager.setCurrentItem(mViewPager.getCurrentItem() - 1);
+                break;
+            case R.id.right_arrow:
+                mViewPager.setCurrentItem(mViewPager.getCurrentItem() + 1);
+                break;
+            case R.id.get_started_btn:
+                PreferenceUtils.getInstance(getApplicationContext()).saveBooleanData(PreferenceUtils.IS_TUTORIAL_FIRST, true);
+                startActivity(new Intent(this, LoginActivity.class));
+                finish();
+                break;
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        finish();
+    }
+
     class CustomPagerAdapter extends PagerAdapter {
         Context mContext;
         LayoutInflater mLayoutInflater;
@@ -217,32 +242,6 @@ public class TutorialScreen extends BaseActivity {
         public void destroyItem(ViewGroup container, int position, Object object) {
             container.removeView((RelativeLayout) object);
         }
-    }
-
-    @OnClick({R.id.toolbar_back_img_btn, R.id.left_arrow, R.id.right_arrow, R.id.get_started_btn})
-    public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.toolbar_back_img_btn:
-                onBackPressed();
-                break;
-            case R.id.left_arrow:
-                mViewPager.setCurrentItem(mViewPager.getCurrentItem() - 1);
-                break;
-            case R.id.right_arrow:
-                mViewPager.setCurrentItem(mViewPager.getCurrentItem() + 1);
-                break;
-            case R.id.get_started_btn:
-                PreferenceUtils.getInstance(getApplicationContext()).saveBooleanData(PreferenceUtils.IS_TUTORIAL_FIRST, true);
-                startActivity(new Intent(this, LoginActivity.class));
-                finish();
-                break;
-        }
-    }
-
-
-    @Override
-    public void onBackPressed() {
-        finish();
     }
 }
 

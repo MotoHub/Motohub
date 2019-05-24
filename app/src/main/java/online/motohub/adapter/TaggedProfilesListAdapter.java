@@ -47,7 +47,7 @@ public class TaggedProfilesListAdapter extends ArrayAdapter<ProfileResModel> {
 
         ProfileResModel mProfileResModel = mTaggedProfilesListData.get(position);
 
-        String mUsernameStr= Utility.getInstance().getUserName(mProfileResModel);
+        String mUsernameStr = Utility.getInstance().getUserName(mProfileResModel);
 
         ((BaseActivity) mContext).setImageWithGlide(mViewHolder.mUserImgView, mProfileResModel.getProfilePicture(), R.drawable.default_profile_icon);
 

@@ -3,7 +3,6 @@ package online.motohub.activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -16,7 +15,6 @@ import android.widget.TextView;
 import org.greenrobot.eventbus.EventBus;
 
 import java.io.File;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,7 +29,6 @@ import okhttp3.RequestBody;
 import online.motohub.R;
 import online.motohub.adapter.CreateGrpSelectProfilesAdapter;
 import online.motohub.adapter.CreateGrpSelectedProfilesAdapter;
-import online.motohub.application.MotoHub;
 import online.motohub.fragment.dialog.AppDialogFragment;
 import online.motohub.model.GroupChatRoomModel;
 import online.motohub.model.GroupChatRoomResModel;
@@ -79,13 +76,12 @@ public class ChatCreateGroupActivity extends BaseActivity implements
 
     @BindString(R.string.storage_permission_denied)
     String mNoStoragePer;
-
+    String mGrpChatImgUri = null;
     private ProfileResModel mMyProfileResModel;
     private CreateGrpSelectProfilesAdapter mGrpSelectProfilesAdapter;
     private List<ProfileResModel> mGrpSelectProfilesList;
     private List<ProfileResModel> mGrpSelectedProfilesList;
     private CreateGrpSelectedProfilesAdapter mGrpSelectedProfilesAdapter;
-    String mGrpChatImgUri = null;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -98,6 +94,7 @@ public class ChatCreateGroupActivity extends BaseActivity implements
             getFollowingProfileList();
         }
     }
+
     @Override
     protected void onDestroy() {
         DialogManager.hideProgress();
@@ -147,7 +144,7 @@ public class ChatCreateGroupActivity extends BaseActivity implements
         showToolbarBtn(mToolbar, R.id.toolbar_back_img_btn);
         //mMyProfileResModel = (ProfileResModel) getIntent().getSerializableExtra(ProfileModel.MY_PROFILE_RES_MODEL);
         //mMyProfileResModel= MotoHub.getApplicationInstance().getmProfileResModel();
-        mMyProfileResModel= EventBus.getDefault().getStickyEvent(ProfileResModel.class);
+        mMyProfileResModel = EventBus.getDefault().getStickyEvent(ProfileResModel.class);
         LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(this);
         mLinearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         mGrpSelectedProfilesRv.setLayoutManager(mLinearLayoutManager);
@@ -185,7 +182,7 @@ public class ChatCreateGroupActivity extends BaseActivity implements
                 if (mEditGrpName.getText().toString().isEmpty()) {
                     showSnackBar(mCoordinatorLayout, getString(R.string.grp_name_err));
                 } else if (mGrpSelectedProfilesList.size() == 0) {
-                showSnackBar(mCoordinatorLayout, getString(R.string.select_profile_err));
+                    showSnackBar(mCoordinatorLayout, getString(R.string.select_profile_err));
                 } else if (mGrpChatImgUri != null) {
                     uploadGrpChatImg(mGrpChatImgUri);
                 } else {

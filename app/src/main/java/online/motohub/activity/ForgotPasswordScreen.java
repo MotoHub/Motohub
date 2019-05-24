@@ -125,11 +125,13 @@ public class ForgotPasswordScreen extends BaseActivity {
         showSnackBar(mCoordinatorLayout, mErrorMsg);
 
     }
+
     @Override
     public void onRequestError(ErrorMessage mErrObj) {
         super.onRequestError(mErrObj);
         showSnackBar(mCoordinatorLayout, mErrObj.getError().getMessage());
     }
+
     @Override
     public void retrofitOnFailure() {
         super.retrofitOnFailure();

@@ -69,8 +69,8 @@
                                 style="@style/LayoutWrap"
                                 android:layout_centerVertical="true"
                                 android:layout_marginStart="@dimen/size5"
-                                android:layout_toEndOf="@id/profile_img"
-                                android:layout_toStartOf="@+id/followers_box">
+                                android:layout_toStartOf="@+id/followers_box"
+                                android:layout_toEndOf="@id/profile_img">
 
                                 <TextView
                                     android:id="@+id/promoterName"
@@ -100,8 +100,8 @@
                                         android:background="@drawable/black_orange_btn_bg"
                                         android:clickable="true"
                                         android:focusable="true"
-                                        android:paddingBottom="@dimen/size5"
                                         android:paddingTop="@dimen/size5"
+                                        android:paddingBottom="@dimen/size5"
                                         android:text="@string/follow"
                                         android:textAlignment="center"
                                         android:textColor="@color/text_color"
@@ -116,10 +116,10 @@
                                         android:background="@drawable/black_orange_btn_bg"
                                         android:clickable="true"
                                         android:focusable="true"
-                                        android:paddingBottom="@dimen/size5"
                                         android:paddingLeft="@dimen/size2"
-                                        android:paddingRight="@dimen/size2"
                                         android:paddingTop="@dimen/size5"
+                                        android:paddingRight="@dimen/size2"
+                                        android:paddingBottom="@dimen/size5"
                                         android:text="@string/Subscribe"
                                         android:textAlignment="center"
                                         android:textColor="@color/text_color"
@@ -169,26 +169,25 @@
                             android:layout_below="@+id/promoter_box"
                             android:background="@color/colorLighterGrey" />
 
-                      <!--  <include
-                            android:id="@+id/include"
-                            layout="@layout/write_a_post_layout"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_below="@id/userBoxSeparator"
-                            android:visibility="gone" />-->
+                        <!--  <include
+                              android:id="@+id/include"
+                              layout="@layout/write_a_post_layout"
+                              android:layout_width="match_parent"
+                              android:layout_height="wrap_content"
+                              android:layout_below="@id/userBoxSeparator"
+                              android:visibility="gone" />-->
 
                         <Button
                             android:id="@+id/writePostBtn"
                             android:layout_width="match_parent"
                             android:layout_height="@dimen/size35"
                             android:layout_below="@id/userBoxSeparator"
+                            android:layout_margin="@dimen/size10"
                             android:background="@drawable/black_orange_btn_bg"
-                            android:textColor="@color/text_color"
                             android:text="@string/write_a_post"
                             android:textAllCaps="false"
-                            android:layout_margin="@dimen/size10"
-                            android:visibility="gone"
-                            />
+                            android:textColor="@color/text_color"
+                            android:visibility="gone" />
 
                         <View
                             android:id="@+id/writePostSeparator"

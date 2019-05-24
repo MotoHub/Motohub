@@ -9,9 +9,12 @@ public class FailedSubscriptionModel {
     private String Type;
     private String CustomerID;
     private String SubscriptionExpiry;
+    private int ProfileID;
+    private int Status;
+    private int ID;
 
     public String getSubscriptionExpiry() {
-        if(SubscriptionExpiry == null)
+        if (SubscriptionExpiry == null)
             SubscriptionExpiry = "";
         return SubscriptionExpiry;
     }
@@ -21,7 +24,7 @@ public class FailedSubscriptionModel {
     }
 
     public String getDateOfFailure() {
-        if(DateOfFailure == null)
+        if (DateOfFailure == null)
             DateOfFailure = "";
         return DateOfFailure;
 
@@ -86,10 +89,6 @@ public class FailedSubscriptionModel {
     public void setID(int ID) {
         this.ID = ID;
     }
-
-    private int ProfileID;
-    private int Status;
-    private int ID;
 
 
 }

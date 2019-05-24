@@ -6,7 +6,7 @@ import com.google.gson.annotations.SerializedName;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-public class FeedLikesModel implements Serializable{
+public class FeedLikesModel implements Serializable {
 
     @SerializedName("ID")
     @Expose
@@ -17,20 +17,19 @@ public class FeedLikesModel implements Serializable{
     private int mPostID;
 
     @SerializedName("ProfileID")
-    private  int mProfileID;
+    private int mProfileID;
 
     @SerializedName("profiles_by_ProfileID")
     @Expose
     private ProfileResModel mProfilesByProfileID;
+    @SerializedName("resource")
+    @Expose
+    private ArrayList<FeedLikesModel> mResource = null;
 
     public FeedLikesModel(int postID, int profileID) {
         this.mPostID = postID;
         this.mProfileID = profileID;
     }
-
-    @SerializedName("resource")
-    @Expose
-    private ArrayList<FeedLikesModel> mResource = null;
 
     public ArrayList<FeedLikesModel> getResource() {
         return mResource;

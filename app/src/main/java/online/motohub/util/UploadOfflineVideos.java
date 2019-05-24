@@ -12,16 +12,11 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 import android.widget.Toast;
 
-import com.amazonaws.ClientConfiguration;
-import com.amazonaws.Protocol;
-import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.mobile.client.AWSMobileClient;
 import com.amazonaws.mobileconnectors.s3.transferutility.TransferListener;
 import com.amazonaws.mobileconnectors.s3.transferutility.TransferObserver;
 import com.amazonaws.mobileconnectors.s3.transferutility.TransferState;
 import com.amazonaws.mobileconnectors.s3.transferutility.TransferUtility;
-import com.amazonaws.regions.Region;
-import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -29,7 +24,6 @@ import com.google.gson.JsonObject;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Objects;
 
 import online.motohub.database.DatabaseHandler;
 import online.motohub.model.SpectatorLiveEntity;
@@ -42,6 +36,7 @@ import retrofit2.Response;
 
 public class UploadOfflineVideos extends IntentService implements ProgressRequestBody.UploadCallbacks {
 
+    DatabaseHandler handler = new DatabaseHandler(this);
     /*private AmazonS3Client s3;
     private BasicAWSCredentials credentials;K
     private TransferUtility transferUtility;*/
@@ -60,7 +55,6 @@ public class UploadOfflineVideos extends IntentService implements ProgressReques
     private int mEventId;
     private String mEventFinishDate;
     private int mLivePostProfileID;
-    DatabaseHandler handler = new DatabaseHandler(this);
     private ArrayList<SpectatorLiveEntity> list;
 
     public UploadOfflineVideos(String name) {

@@ -28,7 +28,6 @@ import online.motohub.R;
 import online.motohub.activity.BaseActivity;
 import online.motohub.adapter.NewsandMediaProfileTabPagerAdapter;
 import online.motohub.adapter.news_and_media.NewsAndMediaPostsAdapter;
-import online.motohub.application.MotoHub;
 import online.motohub.fragment.BaseFragment;
 import online.motohub.fragment.dialog.AppDialogFragment;
 import online.motohub.fragment.newsandmedia.NewsandMediaVideosFragment;
@@ -264,8 +263,8 @@ public class NewsAndMediaProfileActivity extends BaseActivity implements
                     this.mMyProfileResModel = mMyProfileResModel;
                    /* MotoHub.getApplicationInstance().setmProfileResModel(this.mMyProfileResModel);
                     MotoHub.getApplicationInstance().setmPromoterResModel(mPromotersResModel);*/
-                   EventBus.getDefault().postSticky(this.mMyProfileResModel);
-                   EventBus.getDefault().postSticky(mPromotersResModel);
+                    EventBus.getDefault().postSticky(this.mMyProfileResModel);
+                    EventBus.getDefault().postSticky(mPromotersResModel);
                     setResult(RESULT_OK, new Intent()
                             /*.putExtra(ProfileModel.MY_PROFILE_RES_MODEL, this.mMyProfileResModel)
                             .putExtra(PromotersModel.PROMOTERS_RES_MODEL, mPromotersResModel)*/);

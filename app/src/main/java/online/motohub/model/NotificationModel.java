@@ -16,7 +16,7 @@ public class NotificationModel {
     private MetaModel meta;
 
     public ArrayList<NotificationResModel> getResource() {
-        if(resource == null)
+        if (resource == null)
             resource = new ArrayList<>();
         return resource;
     }

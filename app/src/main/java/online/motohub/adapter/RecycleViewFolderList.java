@@ -21,13 +21,10 @@ import online.motohub.model.VideoListInFolder;
 
 public class RecycleViewFolderList extends RecyclerView.Adapter<RecycleViewFolderList.ViewHolder> {
 
+    private static Activity activity;
     List<FolderNameVideo> data = Collections.emptyList();
     List<VideoListInFolder> videoImg = Collections.emptyList();
-
     private LayoutInflater inflater;
-
-    private static Activity activity;
-
     private int lastPosition = -1;
 
     public RecycleViewFolderList(Activity activity, List<FolderNameVideo> data, List<VideoListInFolder> mUriList) {
@@ -57,7 +54,7 @@ public class RecycleViewFolderList extends RecyclerView.Adapter<RecycleViewFolde
             new ImageLoader().execute(currentVideoImg.getVideo_ID(), viewHolder.videoView);
             viewHolder.textNameFolder.setText(current.getFolderName());
             viewHolder.textNumberVideo.setText("Number of Videos" + ": " + current.getNumberofFiles());
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -67,22 +64,6 @@ public class RecycleViewFolderList extends RecyclerView.Adapter<RecycleViewFolde
     public int getItemCount() {
         return data.size();
     }
-
-
-    class ViewHolder extends RecyclerView.ViewHolder {
-
-        TextView textNameFolder;
-        TextView textNumberVideo;
-        ImageView videoView;
-
-        public ViewHolder(View itemView) {
-            super(itemView);
-            videoView = itemView.findViewById(R.id.row_picker_video_img_folder_backgroundImg);
-            textNameFolder = itemView.findViewById(R.id.textNameFolder);
-            textNumberVideo = itemView.findViewById(R.id.textNumberVideo);
-        }
-    }
-
 
     private static class ImageLoader extends AsyncTask<Object, String, Bitmap> {
 
@@ -111,6 +92,20 @@ public class RecycleViewFolderList extends RecyclerView.Adapter<RecycleViewFolde
                 view.setImageBitmap(bitmap);
 
             }
+        }
+    }
+
+    class ViewHolder extends RecyclerView.ViewHolder {
+
+        TextView textNameFolder;
+        TextView textNumberVideo;
+        ImageView videoView;
+
+        public ViewHolder(View itemView) {
+            super(itemView);
+            videoView = itemView.findViewById(R.id.row_picker_video_img_folder_backgroundImg);
+            textNameFolder = itemView.findViewById(R.id.textNameFolder);
+            textNumberVideo = itemView.findViewById(R.id.textNumberVideo);
         }
     }
 }

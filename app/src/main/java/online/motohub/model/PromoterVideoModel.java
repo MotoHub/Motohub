@@ -11,6 +11,9 @@ import online.motohub.model.promoter_club_news_media.PromotersResModel;
 public class PromoterVideoModel implements Serializable {
 
     private ArrayList<Resource> resource;
+    @SerializedName("meta")
+    @Expose
+    private MetaModel meta;
 
     public ArrayList<Resource> getResource() {
         if (resource == null)
@@ -18,28 +21,20 @@ public class PromoterVideoModel implements Serializable {
         return resource;
     }
 
-    @SerializedName("meta")
-    @Expose
-    private MetaModel meta;
+    public void setResource(ArrayList<Resource> resource) {
+        this.resource = resource;
+    }
 
     public MetaModel getMeta() {
         return meta;
     }
 
-    public void setResource(ArrayList<Resource> resource) {
-        this.resource = resource;
-    }
-
     public class Resource implements Serializable {
 
-        private String UserType;
-
-        private String Caption;
-
         public PromotersResModel promoter_by_UserID;
-
         public ProfileResModel profiles_by_ProfileID;
-
+        private String UserType;
+        private String Caption;
         private String ProfileID;
 
         private int ID;

@@ -33,12 +33,6 @@ public class EventsResultAdapter extends ArrayAdapter<EventsResModel> implements
         this.mEventsResultListData = eventsResultListData;
     }
 
-    private static class ViewHolder {
-        TextView mEndedOnTv;
-        TextView mEventNameTv;
-        Button mViewResultsBtn;
-    }
-
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
@@ -104,7 +98,7 @@ public class EventsResultAdapter extends ArrayAdapter<EventsResModel> implements
                     constraint = constraint.toString().toLowerCase();
                     for (int i = 0; i < mOriginalEventsResultListData.size(); i++) {
 
-                        if(constraint.toString().toLowerCase().equals("all")) {
+                        if (constraint.toString().toLowerCase().equals("all")) {
                             mFilteredArrList.add(mOriginalEventsResultListData.get(i));
                         } else {
                             String mEventType = mOriginalEventsResultListData.get(i).getEventType().toLowerCase();
@@ -130,8 +124,8 @@ public class EventsResultAdapter extends ArrayAdapter<EventsResModel> implements
                 mEventsResultListData = (List<EventsResModel>) results.values; // has the filtered values
                 notifyDataSetChanged();  // notifies the data with new filtered values
 
-                if(mEventsResultListData.size() == 0) {
-                    ((BaseActivity)mContext).showToast(mContext, mContext.getResources().getString(R.string.no_events_err));
+                if (mEventsResultListData.size() == 0) {
+                    ((BaseActivity) mContext).showToast(mContext, mContext.getResources().getString(R.string.no_events_err));
                 }
 
             }
@@ -152,6 +146,12 @@ public class EventsResultAdapter extends ArrayAdapter<EventsResModel> implements
     @Override
     public boolean isEnabled(int position) {
         return true;
+    }
+
+    private static class ViewHolder {
+        TextView mEndedOnTv;
+        TextView mEventNameTv;
+        Button mViewResultsBtn;
     }
 
 }

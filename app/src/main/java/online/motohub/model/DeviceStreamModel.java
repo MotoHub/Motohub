@@ -10,21 +10,21 @@ import java.io.Serializable;
 
 public class DeviceStreamModel implements Serializable {
 
-    public class Body{
+    @SerializedName("EasyDarwin")
+    public EasyDarwin mEasyDarwin;
+
+    public class Body {
         public String Channel;
         public String Reserve;
         public String Serial;
         public String Service;
     }
 
-    public class EasyDarwin{
+    public class EasyDarwin {
         @SerializedName("Body")
         public Body mBody;
         @SerializedName("Header")
         public Header mHeader;
     }
-
-    @SerializedName("EasyDarwin")
-    public EasyDarwin mEasyDarwin;
 
 }

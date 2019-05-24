@@ -9,24 +9,19 @@ import java.util.ArrayList;
 
 public class ReplyLikeModel implements Serializable {
 
+    @SerializedName("profiles_by_ProfileID")
+    ProfileResModel mProfilesByProfileID;
     @SerializedName("ID")
     private int mID;
-
     @SerializedName("ReplyID")
     private int mReplyID;
-
     @SerializedName("PostCommentID")
     private int mPostCommentID;
-
     @SerializedName("ProfileID")
     private int mProfileID;
-
     @SerializedName("resource")
     @Expose
     private ArrayList<ReplyLikeModel> mResource;
-
-    @SerializedName("profiles_by_ProfileID")
-    ProfileResModel mProfilesByProfileID;
 
     public ArrayList<ReplyLikeModel> getResource() {
         if (mResource == null)

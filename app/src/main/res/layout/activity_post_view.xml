@@ -28,8 +28,8 @@
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_view"
-        android:layout_below="@+id/include"
         style="@style/LayoutMatch"
+        android:layout_below="@+id/include"
         android:paddingTop="@dimen/size10"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 

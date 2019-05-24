@@ -1,7 +1,6 @@
 package com.daasuu.gpuv.egl.filter;
 
 
-
 public class GlGrayScaleFilter extends GlFilter {
 
     private static final String FRAGMENT_SHADER =

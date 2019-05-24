@@ -10,17 +10,6 @@ import java.util.List;
 public class ImageModel implements Parcelable {
 
     public static final String POST_IMAGE = "PostImage";
-
-    @SerializedName("resource")
-    private List<ImageResModel> mModels;
-
-    public ImageModel() {
-    }
-
-    private ImageModel(Parcel in) {
-        mModels = in.createTypedArrayList(ImageResModel.CREATOR);
-    }
-
     public static final Creator<ImageModel> CREATOR = new Creator<ImageModel>() {
         @Override
         public ImageModel createFromParcel(Parcel in) {
@@ -32,6 +21,15 @@ public class ImageModel implements Parcelable {
             return new ImageModel[size];
         }
     };
+    @SerializedName("resource")
+    private List<ImageResModel> mModels;
+
+    public ImageModel() {
+    }
+
+    private ImageModel(Parcel in) {
+        mModels = in.createTypedArrayList(ImageResModel.CREATOR);
+    }
 
     public List<ImageResModel> getmModels() {
         return mModels;

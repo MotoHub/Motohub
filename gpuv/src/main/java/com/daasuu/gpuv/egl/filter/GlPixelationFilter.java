@@ -23,14 +23,12 @@ public class GlPixelationFilter extends GlFilter {
             "  vec3 tc = texture2D(sTexture, coord).xyz;\n" +
             "  gl_FragColor = vec4(tc, 1.0);\n" +
             "}";
-
-    public GlPixelationFilter() {
-        super(DEFAULT_VERTEX_SHADER, PIXELATION_FRAGMENT_SHADER);
-    }
-
     private float pixel = 1f;
     private float imageWidthFactor = 1f / 720;
     private float imageHeightFactor = 1f / 720;
+    public GlPixelationFilter() {
+        super(DEFAULT_VERTEX_SHADER, PIXELATION_FRAGMENT_SHADER);
+    }
 
     @Override
     public void setFrameSize(int width, int height) {

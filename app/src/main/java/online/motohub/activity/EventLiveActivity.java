@@ -86,6 +86,7 @@ public class EventLiveActivity extends BaseActivity implements ChatBoxEventGrpAd
 
     public static final int EVENT_LIVE_PAYMENT_REQ_CODE = 505;
     private static final int mDataLimit = 15;
+    private final ArrayList<PromoterVideoModel.Resource> mPostsList = new ArrayList<>();
     @BindView(R.id.chat_box_layout)
     RelativeLayout mParentLayout;
     @BindView(R.id.toolbar)
@@ -128,8 +129,6 @@ public class EventLiveActivity extends BaseActivity implements ChatBoxEventGrpAd
     Button mSpectatorLiveBtn;
     @BindView(R.id.replyChatView)
     View mReplyChatView;
-
-    private final ArrayList<PromoterVideoModel.Resource> mPostsList = new ArrayList<>();
     private LinearLayoutManager mLinearLayoutManager;
     private EventsResModel mEventResModel;
     private ProfileResModel mMyProfileResModel;
@@ -164,6 +163,16 @@ public class EventLiveActivity extends BaseActivity implements ChatBoxEventGrpAd
     private String mToken = "";
     private boolean isUpdatePayment = false;
     private String mTransactionID = "";
+    CommonInterface mCommonInterface = new CommonInterface() {
+        @Override
+        public void onSuccess() {
+            if (isUpdatePayment) {
+                callUpdateLiveStreamPayment();
+            } else {
+                callPayViewLiveStream();
+            }
+        }
+    };
     RetrofitResInterface mRetrofitResInterface = new RetrofitResInterface() {
         @Override
         public void retrofitOnResponse(Object responseObj, int responseType) {
@@ -229,16 +238,6 @@ public class EventLiveActivity extends BaseActivity implements ChatBoxEventGrpAd
         public void retrofitOnFailure() {
             showToast(EventLiveActivity.this, getString(R.string.internet_err));
 //            DialogManager.showRetryAlertDialogWithCallback(mContext, mCommonInterface, mContext.getString(R.string.internet_err));
-        }
-    };
-    CommonInterface mCommonInterface = new CommonInterface() {
-        @Override
-        public void onSuccess() {
-            if (isUpdatePayment) {
-                callUpdateLiveStreamPayment();
-            } else {
-                callPayViewLiveStream();
-            }
         }
     };
     private boolean isRepliedMsg = false;

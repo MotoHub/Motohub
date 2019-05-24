@@ -32,7 +32,6 @@ import online.motohub.activity.BaseActivity;
 import online.motohub.activity.PromoterVideoGalleryActivity;
 import online.motohub.activity.ondemand.EventVideosPlayingActivity;
 import online.motohub.activity.ondemand.OnDemandActivity;
-import online.motohub.application.MotoHub;
 import online.motohub.interfaces.RetrofitResInterface;
 import online.motohub.model.OndemandNewResponse;
 import online.motohub.model.ProfileResModel;

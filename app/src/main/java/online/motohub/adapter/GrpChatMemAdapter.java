@@ -27,30 +27,6 @@ public class GrpChatMemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         this.mMyProfileResModel = myProfileResModel;
     }
 
-    private class ViewHolderGrpChatProfiles extends RecyclerView.ViewHolder implements View.OnClickListener {
-
-        private CircleImageView mUserImgView;
-        private TextView mUsernameTv;
-
-        ViewHolderGrpChatProfiles(View view) {
-            super(view);
-            mUserImgView = view.findViewById(R.id.circular_img_view);
-            mUsernameTv = view.findViewById(R.id.top_tv);
-            view.setOnClickListener(this);
-        }
-
-        @Override
-        public void onClick(View view) {
-            if (mGrpChatMemListData.get(getLayoutPosition()).getID() == mMyProfileResModel.getID()) {
-                ((BaseActivity) mContext).moveMyProfileScreen(mContext, 0);
-            } else {
-                ((BaseActivity) mContext).moveOtherProfileScreen(mContext, mMyProfileResModel.getID(),
-                        mGrpChatMemListData.get(getLayoutPosition()).getID());
-            }
-        }
-
-    }
-
     @Override
     public int getItemCount() {
         return mGrpChatMemListData.size();
@@ -76,8 +52,32 @@ public class GrpChatMemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             ((BaseActivity) mContext).setImageWithGlide(mViewHolderGrpChatProfiles.mUserImgView, mProfileResModel.getProfilePicture(), R.drawable.default_profile_icon);
 
             mViewHolderGrpChatProfiles.mUsernameTv.setText(mUsernameStr);
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
+        }
+
+    }
+
+    private class ViewHolderGrpChatProfiles extends RecyclerView.ViewHolder implements View.OnClickListener {
+
+        private CircleImageView mUserImgView;
+        private TextView mUsernameTv;
+
+        ViewHolderGrpChatProfiles(View view) {
+            super(view);
+            mUserImgView = view.findViewById(R.id.circular_img_view);
+            mUsernameTv = view.findViewById(R.id.top_tv);
+            view.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View view) {
+            if (mGrpChatMemListData.get(getLayoutPosition()).getID() == mMyProfileResModel.getID()) {
+                ((BaseActivity) mContext).moveMyProfileScreen(mContext, 0);
+            } else {
+                ((BaseActivity) mContext).moveOtherProfileScreen(mContext, mMyProfileResModel.getID(),
+                        mGrpChatMemListData.get(getLayoutPosition()).getID());
+            }
         }
 
     }

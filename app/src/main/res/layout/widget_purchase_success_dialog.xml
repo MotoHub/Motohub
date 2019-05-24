@@ -11,11 +11,11 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/iv"
         android:layout_centerInParent="true"
-        android:layout_marginEnd="@dimen/size10"
-        android:layout_marginLeft="@dimen/size10"
-        android:layout_marginRight="@dimen/size10"
         android:layout_marginStart="@dimen/size10"
+        android:layout_marginLeft="@dimen/size10"
         android:layout_marginTop="-35dp"
+        android:layout_marginEnd="@dimen/size10"
+        android:layout_marginRight="@dimen/size10"
         android:background="@drawable/blend_fill_white">
 
         <TextView
@@ -23,8 +23,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:gravity="center"
             android:layout_marginTop="@dimen/size35"
+            android:gravity="center"
             android:text="@string/purchase_success_msg"
             android:textColor="@color/colorBlack"
             android:textSize="@dimen/size18"
@@ -36,11 +36,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/out_of_likes"
-            android:layout_marginEnd="@dimen/size25"
-            android:layout_marginLeft="@dimen/size25"
-            android:layout_marginRight="@dimen/size25"
             android:layout_marginStart="@dimen/size25"
+            android:layout_marginLeft="@dimen/size25"
             android:layout_marginTop="@dimen/size25"
+            android:layout_marginEnd="@dimen/size25"
+            android:layout_marginRight="@dimen/size25"
             android:layout_marginBottom="@dimen/size20"
             android:background="@drawable/black_orange_btn_bg"
             android:text="@string/success"
@@ -53,10 +53,10 @@
         android:layout_width="90dp"
         android:layout_height="90dp"
         android:layout_centerHorizontal="true"
+        android:src="@drawable/ic_check_black_24dp"
         app:civ_border_color="@color/colorWhite"
         app:civ_border_width="@dimen/size5"
         app:civ_fill_color="@color/colorBlack"
-        android:src="@drawable/ic_check_black_24dp"
         tools:ignore="VectorDrawableCompat" />
 
 </RelativeLayout>

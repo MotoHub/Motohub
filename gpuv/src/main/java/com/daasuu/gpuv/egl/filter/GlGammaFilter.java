@@ -16,12 +16,11 @@ public class GlGammaFilter extends GlFilter {
             "     \n" +
             "     gl_FragColor = vec4(pow(textureColor.rgb, vec3(gamma)), textureColor.w);\n" +
             " }";
+    private float gamma = 1.2f;
 
     public GlGammaFilter() {
         super(DEFAULT_VERTEX_SHADER, GAMMA_FRAGMENT_SHADER);
     }
-
-    private float gamma = 1.2f;
 
     public void setGamma(float gamma) {
         this.gamma = gamma;

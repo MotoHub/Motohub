@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import online.motohub.R;
-import online.motohub.application.MotoHub;
 import online.motohub.fragment.Performance_Shop.PerfEventsFragment;
 import online.motohub.fragment.Performance_Shop.PerfNewsFeedFragment;
 import online.motohub.fragment.Performance_Shop.PerfPhotosFragment;

@@ -1,16 +1,16 @@
 /**
- *  This is sample code provided by Wowza Media Systems, LLC.  All sample code is intended to be a reference for the
- *  purpose of educating developers, and is not intended to be used in any production environment.
- *
- *  IN NO EVENT SHALL WOWZA MEDIA SYSTEMS, LLC BE LIABLE TO YOU OR ANY PARTY FOR DIRECT, INDIRECT, SPECIAL, INCIDENTAL,
- *  OR CONSEQUENTIAL DAMAGES, INCLUDING LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE AND ITS DOCUMENTATION,
- *  EVEN IF WOWZA MEDIA SYSTEMS, LLC HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *
- *  WOWZA MEDIA SYSTEMS, LLC SPECIFICALLY DISCLAIMS ANY WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
- *  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE. ALL CODE PROVIDED HEREUNDER IS PROVIDED "AS IS".
- *  WOWZA MEDIA SYSTEMS, LLC HAS NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS, OR MODIFICATIONS.
- *
- *  Copyright © 2015 Wowza Media Systems, LLC. All rights reserved.
+ * This is sample code provided by Wowza Media Systems, LLC.  All sample code is intended to be a reference for the
+ * purpose of educating developers, and is not intended to be used in any production environment.
+ * <p>
+ * IN NO EVENT SHALL WOWZA MEDIA SYSTEMS, LLC BE LIABLE TO YOU OR ANY PARTY FOR DIRECT, INDIRECT, SPECIAL, INCIDENTAL,
+ * OR CONSEQUENTIAL DAMAGES, INCLUDING LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE AND ITS DOCUMENTATION,
+ * EVEN IF WOWZA MEDIA SYSTEMS, LLC HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * <p>
+ * WOWZA MEDIA SYSTEMS, LLC SPECIFICALLY DISCLAIMS ANY WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+ * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE. ALL CODE PROVIDED HEREUNDER IS PROVIDED "AS IS".
+ * WOWZA MEDIA SYSTEMS, LLC HAS NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS, OR MODIFICATIONS.
+ * <p>
+ * Copyright © 2015 Wowza Media Systems, LLC. All rights reserved.
  */
 
 package online.motohub.util;
@@ -33,22 +33,20 @@ public class TimerView extends android.support.v7.widget.AppCompatTextView {
     private long mTimerDuration = -1L;
 
     private ScheduledExecutorService mTimerThread = null;
-
-    public interface TimerProvider {
-        long getTimecode();
-        long getDuration();
-    }
-
-    public void setTimerProvider(TimerProvider timerProvider) {
-        mTimerProvider = timerProvider;
-    }
-
     private TimerProvider mDefaultTimerProvider;
     private TimerProvider mTimerProvider;
 
     public TimerView(Context context) {
         super(context);
         init();
+    }
+    public TimerView(Context context, AttributeSet attrs) {
+        super(context, attrs);
+        init();
+    }
+
+    public void setTimerProvider(TimerProvider timerProvider) {
+        mTimerProvider = timerProvider;
     }
 
     private void init() {
@@ -58,16 +56,12 @@ public class TimerView extends android.support.v7.widget.AppCompatTextView {
             public long getTimecode() {
                 return System.currentTimeMillis() - mTimerStart;
             }
+
             @Override
             public long getDuration() {
                 return -1L;
             }
         };
-    }
-
-    public TimerView(Context context, AttributeSet attrs) {
-        super(context, attrs);
-        init();
     }
 
     public long getTimerDuration() {
@@ -144,5 +138,11 @@ public class TimerView extends android.support.v7.widget.AppCompatTextView {
 
     public synchronized boolean isRunning() {
         return (mTimerThread != null);
+    }
+
+    public interface TimerProvider {
+        long getTimecode();
+
+        long getDuration();
     }
 }

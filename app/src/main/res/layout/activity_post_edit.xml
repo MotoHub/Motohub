@@ -27,11 +27,11 @@
 
                 <RelativeLayout
                     style="@style/LayoutMatchWrap"
-                    android:paddingBottom="@dimen/size10"
-                    android:paddingEnd="@dimen/size10"
+                    android:paddingStart="@dimen/size10"
                     android:paddingLeft="@dimen/size10"
+                    android:paddingEnd="@dimen/size10"
                     android:paddingRight="@dimen/size10"
-                    android:paddingStart="@dimen/size10">
+                    android:paddingBottom="@dimen/size10">
 
                     <RelativeLayout
                         android:id="@+id/profile_details_box"
@@ -43,8 +43,8 @@
                             android:layout_width="@dimen/size55"
                             android:layout_height="@dimen/size55"
                             android:layout_centerVertical="true"
-                            android:layout_marginLeft="@dimen/size5"
                             android:layout_marginStart="@dimen/size5"
+                            android:layout_marginLeft="@dimen/size5"
                             android:scaleType="centerCrop"
                             android:src="@drawable/default_profile_icon" />
 
@@ -52,10 +52,10 @@
                             android:id="@+id/text_view_box"
                             style="@style/LayoutMatch"
                             android:layout_alignTop="@+id/circular_img_view"
-                            android:layout_marginEnd="@dimen/size5"
-                            android:layout_marginLeft="@dimen/size5"
-                            android:layout_marginRight="@dimen/size5"
                             android:layout_marginStart="@dimen/size5"
+                            android:layout_marginLeft="@dimen/size5"
+                            android:layout_marginEnd="@dimen/size5"
+                            android:layout_marginRight="@dimen/size5"
                             android:layout_toEndOf="@+id/circular_img_view"
                             android:layout_toRightOf="@+id/circular_img_view"
                             android:gravity="center_vertical"
@@ -102,11 +102,11 @@
                             android:gravity="top"
                             android:inputType="textMultiLine"
                             android:minHeight="@dimen/size70"
-                            android:paddingBottom="@dimen/size5"
-                            android:paddingEnd="@dimen/size5"
                             android:paddingLeft="@dimen/size5"
-                            android:paddingRight="@dimen/size5"
                             android:paddingTop="@dimen/size5"
+                            android:paddingEnd="@dimen/size5"
+                            android:paddingRight="@dimen/size5"
+                            android:paddingBottom="@dimen/size5"
                             android:textColor="@color/colorBlack"
                             android:textSize="@dimen/text12" />
 
@@ -168,74 +168,74 @@
 
                     </RelativeLayout>
 
-                <RelativeLayout
-                    style="@style/LayoutMatchWrap"
-                    android:layout_below="@+id/post_content_box">
+                    <RelativeLayout
+                        style="@style/LayoutMatchWrap"
+                        android:layout_below="@+id/post_content_box">
 
-                    <ImageView
-                        android:id="@+id/tag_profile_img"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignBottom="@+id/update_post_btn"
-                        android:layout_alignTop="@+id/update_post_btn"
-                        android:layout_centerVertical="true"
-                        android:layout_marginEnd="@dimen/size3"
-                        android:layout_toStartOf="@+id/add_post_video"
-                        android:background="@null"
-                        android:contentDescription="@string/app_name"
-                        app:srcCompat="@drawable/tag_bg" />
+                        <ImageView
+                            android:id="@+id/tag_profile_img"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignTop="@+id/update_post_btn"
+                            android:layout_alignBottom="@+id/update_post_btn"
+                            android:layout_centerVertical="true"
+                            android:layout_marginEnd="@dimen/size3"
+                            android:layout_toStartOf="@+id/add_post_video"
+                            android:background="@null"
+                            android:contentDescription="@string/app_name"
+                            app:srcCompat="@drawable/tag_bg" />
 
-                    <ImageButton
-                        android:id="@+id/add_post_video"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignBottom="@+id/update_post_btn"
-                        android:layout_alignTop="@+id/update_post_btn"
-                        android:layout_centerVertical="true"
-                        android:layout_marginEnd="@dimen/size3"
-                        android:layout_toStartOf="@+id/add_post_img"
-                        android:background="@null"
-                        android:contentDescription="@string/app_name"
-                        app:srcCompat="@drawable/video_bg" />
-
-
-                    <ImageButton
-                        android:id="@+id/add_post_img"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignBottom="@+id/update_post_btn"
-                        android:layout_alignTop="@+id/update_post_btn"
-                        android:layout_centerVertical="true"
-                        android:layout_marginEnd="@dimen/size3"
-                        android:layout_marginRight="@dimen/size3"
-                        android:layout_toLeftOf="@+id/update_post_btn"
-                        android:layout_toStartOf="@+id/update_post_btn"
-                        android:background="@null"
-                        android:contentDescription="@string/app_name"
-                        android:src="@drawable/photo_icon_bg" />
+                        <ImageButton
+                            android:id="@+id/add_post_video"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignTop="@+id/update_post_btn"
+                            android:layout_alignBottom="@+id/update_post_btn"
+                            android:layout_centerVertical="true"
+                            android:layout_marginEnd="@dimen/size3"
+                            android:layout_toStartOf="@+id/add_post_img"
+                            android:background="@null"
+                            android:contentDescription="@string/app_name"
+                            app:srcCompat="@drawable/video_bg" />
 
 
-                    <TextView
-                        android:id="@+id/update_post_btn"
-                        style="@style/LayoutWrap"
-                        android:layout_alignParentEnd="true"
-                        android:layout_alignParentRight="true"
-                        android:layout_marginTop="@dimen/size5"
-                        android:background="@drawable/black_orange_btn_bg"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:paddingBottom="@dimen/size5"
-                        android:paddingEnd="@dimen/size16"
-                        android:paddingLeft="@dimen/size16"
-                        android:paddingRight="@dimen/size16"
-                        android:paddingStart="@dimen/size16"
-                        android:paddingTop="@dimen/size5"
-                        android:text="@string/save"
-                        android:textAlignment="center"
-                        android:textColor="@color/text_color"
-                        android:textSize="@dimen/text12" />
+                        <ImageButton
+                            android:id="@+id/add_post_img"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignTop="@+id/update_post_btn"
+                            android:layout_alignBottom="@+id/update_post_btn"
+                            android:layout_centerVertical="true"
+                            android:layout_marginEnd="@dimen/size3"
+                            android:layout_marginRight="@dimen/size3"
+                            android:layout_toStartOf="@+id/update_post_btn"
+                            android:layout_toLeftOf="@+id/update_post_btn"
+                            android:background="@null"
+                            android:contentDescription="@string/app_name"
+                            android:src="@drawable/photo_icon_bg" />
 
-                </RelativeLayout>
+
+                        <TextView
+                            android:id="@+id/update_post_btn"
+                            style="@style/LayoutWrap"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentRight="true"
+                            android:layout_marginTop="@dimen/size5"
+                            android:background="@drawable/black_orange_btn_bg"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:paddingStart="@dimen/size16"
+                            android:paddingLeft="@dimen/size16"
+                            android:paddingTop="@dimen/size5"
+                            android:paddingEnd="@dimen/size16"
+                            android:paddingRight="@dimen/size16"
+                            android:paddingBottom="@dimen/size5"
+                            android:text="@string/save"
+                            android:textAlignment="center"
+                            android:textColor="@color/text_color"
+                            android:textSize="@dimen/text12" />
+
+                    </RelativeLayout>
 
 
                 </RelativeLayout>

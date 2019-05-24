@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/follow_user_parent"
     style="@style/LayoutMatch">
 
@@ -28,9 +28,9 @@
                 android:id="@+id/search_edt"
                 style="@style/LayoutMatchWrap"
                 android:layout_height="@dimen/size30"
+                android:layout_toStartOf="@+id/search_btn"
                 android:background="@null"
                 android:hint="@string/search"
-                android:layout_toStartOf="@+id/search_btn"
                 android:padding="@dimen/size5"
                 android:textColor="@color/colorBlack"
                 android:textColorHint="@color/colorGrey"
@@ -41,8 +41,8 @@
                 android:layout_width="@dimen/size20"
                 android:layout_height="@dimen/size20"
                 android:layout_alignParentEnd="true"
-                android:layout_margin="@dimen/size2"
                 android:layout_centerVertical="true"
+                android:layout_margin="@dimen/size2"
                 android:background="@drawable/white_orange_bg"
                 android:contentDescription="@string/app_name"
                 android:padding="@dimen/size5"

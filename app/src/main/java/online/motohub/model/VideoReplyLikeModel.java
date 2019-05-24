@@ -12,24 +12,19 @@ import java.util.ArrayList;
 
 public class VideoReplyLikeModel implements Serializable {
 
+    @SerializedName("profiles_by_ProfileID")
+    ProfileResModel mProfilesByProfileID;
     @SerializedName("ID")
     private int mID;
-
     @SerializedName("ReplyID")
     private int mReplyID;
-
     @SerializedName("VideoCommentID")
     private int mPostCommentID;
-
     @SerializedName("ProfileID")
     private int mProfileID;
-
     @SerializedName("resource")
     @Expose
     private ArrayList<VideoReplyLikeModel> mResource;
-
-    @SerializedName("profiles_by_ProfileID")
-    ProfileResModel mProfilesByProfileID;
 
     public ArrayList<VideoReplyLikeModel> getResource() {
         if (mResource == null)

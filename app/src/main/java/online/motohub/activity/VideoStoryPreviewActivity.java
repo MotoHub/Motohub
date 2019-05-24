@@ -5,7 +5,6 @@ import android.app.ProgressDialog;
 import android.app.job.JobInfo;
 import android.app.job.JobScheduler;
 import android.content.ComponentName;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.media.MediaPlayer;
@@ -19,7 +18,6 @@ import android.os.PersistableBundle;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
-import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,16 +28,11 @@ import android.widget.MediaController;
 import android.widget.Toast;
 import android.widget.VideoView;
 
-import com.amazonaws.ClientConfiguration;
-import com.amazonaws.Protocol;
-import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.mobile.client.AWSMobileClient;
 import com.amazonaws.mobileconnectors.s3.transferutility.TransferListener;
 import com.amazonaws.mobileconnectors.s3.transferutility.TransferObserver;
 import com.amazonaws.mobileconnectors.s3.transferutility.TransferState;
 import com.amazonaws.mobileconnectors.s3.transferutility.TransferUtility;
-import com.amazonaws.regions.Region;
-import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -51,13 +44,11 @@ import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.Random;
-import java.util.concurrent.ThreadLocalRandom;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import online.motohub.R;
-import online.motohub.application.MotoHub;
 import online.motohub.database.DatabaseHandler;
 import online.motohub.model.EventsModel;
 import online.motohub.model.EventsResModel;
@@ -69,27 +60,22 @@ import online.motohub.model.promoter_club_news_media.PromotersResModel;
 import online.motohub.retrofit.RetrofitClient;
 import online.motohub.util.AppConstants;
 import online.motohub.util.DialogManager;
-import online.motohub.util.PreferenceUtils;
 import online.motohub.util.UploadJobScheduler;
-import online.motohub.util.UploadJobService;
 import online.motohub.util.UploadOfflineVideos;
 import online.motohub.util.UrlUtils;
 
 
 public class VideoStoryPreviewActivity extends BaseActivity implements MediaPlayer.OnPreparedListener, MediaPlayer.OnCompletionListener {
 
+    private static final String TAG = "SpectorLive";
     @BindView(R.id.video)
     VideoView mVideoView;
-
     @BindView(R.id.iv_video)
     ImageView mImageView;
-
     @BindView(R.id.edit_caption)
     EditText mEditStory;
-
     @BindView(R.id.iv_video_play)
     ImageView mIvPlay;
-
     @BindView(R.id.toolbar_back_img_btn)
     ImageButton mBackBtn;
     /*AmazonS3Client s3;
@@ -100,7 +86,6 @@ public class VideoStoryPreviewActivity extends BaseActivity implements MediaPlay
     private EventsResModel mEventResModel;
     private ProfileResModel mMyProfileResModel;
     private ProgressDialog pDialog;
-    private static final String TAG = "SpectorLive";
     private String COMPRESSED_VIDEO_FOLDER = "MotoHUB";
     private String mCompressedVideoPath;
     private DatabaseHandler databaseHandler = new DatabaseHandler(this);

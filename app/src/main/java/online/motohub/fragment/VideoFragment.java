@@ -55,7 +55,7 @@ public class VideoFragment extends Fragment implements View.OnClickListener {
         mImageView = v.findViewById(R.id.video_fragment_thumbnail_image_view);
         mImageView.setOnClickListener(this);
 
-        if(mLocalVideoModel.getThumbnail() != null) {
+        if (mLocalVideoModel.getThumbnail() != null) {
             mImageView.setImageBitmap(mLocalVideoModel.getThumbnail());
         } else {
             mImageView.setImageResource(R.drawable.video_place_holder);

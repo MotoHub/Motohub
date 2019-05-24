@@ -3,13 +3,10 @@ package online.motohub.adapter.club;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
-import com.bumptech.glide.load.resource.bitmap.FitCenter;
 
 import java.util.ArrayList;
 
@@ -20,7 +17,6 @@ import online.motohub.R;
 import online.motohub.activity.BaseActivity;
 import online.motohub.fragment.Performance_Shop.PerfVehiclesFragment;
 import online.motohub.fragment.club.ClubSubscribedUsersFragment;
-import online.motohub.model.ProfileResModel;
 import online.motohub.model.promoter_club_news_media.PromoterSubs;
 import online.motohub.util.Utility;
 
@@ -36,24 +32,6 @@ public class ClubSubscribedUsersAdapter extends RecyclerView.Adapter<RecyclerVie
         this.TAG_Name = TAG;
     }
 
-    public class Holder extends RecyclerView.ViewHolder {
-
-        @BindView(R.id.club_sub_users)
-        CircleImageView mUserImg;
-        @BindView(R.id.club_sub_user_name)
-        TextView mUserNameTxt;
-        @BindView(R.id.vehicle_model)
-        TextView mVehiclename;
-        @BindView(R.id.shop_user_name)
-        TextView mshopUsername;
-
-        public Holder(View view) {
-            super(view);
-            ButterKnife.bind(this, view);
-        }
-
-    }
-
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -66,7 +44,7 @@ public class ClubSubscribedUsersAdapter extends RecyclerView.Adapter<RecyclerVie
 
         final Holder mHolder = (Holder) holder;
 
-        if(mClubUsersList.get(position).getMprofiles_by_ProfileID()!=null) {
+        if (mClubUsersList.get(position).getMprofiles_by_ProfileID() != null) {
             String imgstr = mClubUsersList.get(position).getMprofiles_by_ProfileID().getProfilePicture();
             ((BaseActivity) mContext).setImageWithGlide(mHolder.mUserImg, imgstr, R.drawable.default_profile_icon);
             if (TAG_Name.equals(ClubSubscribedUsersFragment.class.getName())) {
@@ -92,6 +70,24 @@ public class ClubSubscribedUsersAdapter extends RecyclerView.Adapter<RecyclerVie
     @Override
     public int getItemViewType(int pos) {
         return pos;
+    }
+
+    public class Holder extends RecyclerView.ViewHolder {
+
+        @BindView(R.id.club_sub_users)
+        CircleImageView mUserImg;
+        @BindView(R.id.club_sub_user_name)
+        TextView mUserNameTxt;
+        @BindView(R.id.vehicle_model)
+        TextView mVehiclename;
+        @BindView(R.id.shop_user_name)
+        TextView mshopUsername;
+
+        public Holder(View view) {
+            super(view);
+            ButterKnife.bind(this, view);
+        }
+
     }
 
 }

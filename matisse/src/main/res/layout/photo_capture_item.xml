@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   Copyright 2017 Zhihu Inc.
 
   Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,8 +13,7 @@
   See the License for the specific language governing permissions and
   limitations under the License.
   -->
-<com.zhihu.matisse.internal.ui.widget.SquareFrameLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<com.zhihu.matisse.internal.ui.widget.SquareFrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="?item.placeholder"
@@ -26,11 +24,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:drawablePadding="8dp"
         android:drawableTop="@drawable/ic_photo_camera_white_24dp"
+        android:drawablePadding="8dp"
         android:gravity="center"
         android:text="@string/photo_grid_capture"
         android:textColor="?capture.textColor"
-        android:textSize="14sp"/>
+        android:textSize="14sp" />
 
 </com.zhihu.matisse.internal.ui.widget.SquareFrameLayout>

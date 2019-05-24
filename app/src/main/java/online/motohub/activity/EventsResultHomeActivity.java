@@ -109,7 +109,7 @@ public class EventsResultHomeActivity extends BaseActivity {
     @OnItemSelected(R.id.moto_type_spinner)
     public void onItemSelected(int position) {
 
-        if(mEventsLoaded) {
+        if (mEventsLoaded) {
             mEventsResultAdapter.getFilter().filter((CharSequence) mMTSpinner.getItemAtPosition(position));
         }
 
@@ -124,7 +124,7 @@ public class EventsResultHomeActivity extends BaseActivity {
     public void retrofitOnResponse(Object responseObj, int responseType) {
         super.retrofitOnResponse(responseObj, responseType);
 
-        if(responseObj instanceof EventsModel) {
+        if (responseObj instanceof EventsModel) {
 
             EventsModel mEventsModel = (EventsModel) responseObj;
 
@@ -137,10 +137,10 @@ public class EventsResultHomeActivity extends BaseActivity {
                 showSnackBar(mCoordinatorLayout, mNoEventsErr);
             }
 
-        } else if(responseObj instanceof SessionModel) {
+        } else if (responseObj instanceof SessionModel) {
 
             SessionModel mSessionModel = (SessionModel) responseObj;
-            if(mSessionModel.getSessionToken() == null) {
+            if (mSessionModel.getSessionToken() == null) {
                 PreferenceUtils.getInstance(this).saveStrData(PreferenceUtils.SESSION_TOKEN, mSessionModel.getSessionId());
             } else {
                 PreferenceUtils.getInstance(this).saveStrData(PreferenceUtils.SESSION_TOKEN, mSessionModel.getSessionToken());
@@ -157,7 +157,7 @@ public class EventsResultHomeActivity extends BaseActivity {
     public void retrofitOnError(int code, String message) {
         super.retrofitOnError(code, message);
 
-        if(message.equals("Unauthorized") || code == 401) {
+        if (message.equals("Unauthorized") || code == 401) {
             RetrofitClient.getRetrofitInstance().callUpdateSession(this, RetrofitClient.UPDATE_SESSION_RESPONSE);
         } else {
             String mErrorMsg = code + " - " + message;

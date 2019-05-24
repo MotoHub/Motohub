@@ -1,46 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     style="@style/LayoutMatchWrap"
-    android:paddingEnd="@dimen/size10"
+    android:paddingStart="@dimen/size10"
     android:paddingLeft="@dimen/size10"
-    android:paddingRight="@dimen/size10"
-    android:paddingStart="@dimen/size10">
+    android:paddingEnd="@dimen/size10"
+    android:paddingRight="@dimen/size10">
 
     <LinearLayout
+        android:id="@+id/llEventLay"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:weightSum="4"
         android:layout_marginTop="@dimen/size10"
-        android:id="@+id/llEventLay">
+        android:orientation="horizontal"
+        android:weightSum="4">
+
         <TextView
             android:id="@+id/starts_in_tv"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/size30"
+            android:layout_weight="4"
             android:gravity="start"
             android:text="@string/app_name"
             android:textColor="@color/colorBlack"
-            android:layout_weight="4"
             android:textSize="@dimen/text14" />
 
         <Button
             android:id="@+id/promoter_follow_btn"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/size25"
+            android:layout_weight="1"
             android:background="@drawable/black_orange_btn_bg"
-            android:textColor="@color/text_color"
-            android:textSize="@dimen/text12"
             android:text="@string/follow"
             android:textAllCaps="false"
-            android:layout_weight="1"
-            />
+            android:textColor="@color/text_color"
+            android:textSize="@dimen/text12" />
 
         <Button
             android:id="@+id/live_btn"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/size30"
-            android:background="@drawable/liveicon"
             android:layout_weight="1"
+            android:background="@drawable/liveicon"
             android:contentDescription="@string/app_name" />
     </LinearLayout>
 
@@ -52,174 +52,176 @@
         android:layout_marginTop="@dimen/size10"
         android:background="@drawable/orange_border_bg">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/promoter_lay"
-        >
         <RelativeLayout
+            android:id="@+id/promoter_lay"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/promoter_profile_lay"
-            android:padding="@dimen/size5"
-            android:layout_margin="@dimen/size3"
-            android:background="@color/colorLighterGrey">
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:layout_width="@dimen/size50"
-                android:layout_height="@dimen/size50"
-                android:src="@drawable/default_profile_icon"
-                android:id="@+id/promoter_profile_img"
-                android:layout_centerVertical="true"
-                android:contentDescription="@string/app_name"/>
-            <TextView
-                android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <RelativeLayout
+                android:id="@+id/promoter_profile_lay"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginStart="@dimen/size10"
-                android:layout_toEndOf="@+id/promoter_profile_img"
-                android:gravity="start"
-                android:textStyle="bold"
-                android:padding="@dimen/size5"
-                android:layout_marginEnd="@dimen/size10"
-                android:textSize="@dimen/text14"
-                android:textColor="@color/colorBlack"
-                android:id="@+id/promoter_name_txt"/>
+                android:layout_margin="@dimen/size3"
+                android:background="@color/colorLighterGrey"
+                android:padding="@dimen/size5">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/promoter_profile_img"
+                    android:layout_width="@dimen/size50"
+                    android:layout_height="@dimen/size50"
+                    android:layout_centerVertical="true"
+                    android:contentDescription="@string/app_name"
+                    android:src="@drawable/default_profile_icon" />
+
+                <TextView
+                    android:id="@+id/promoter_name_txt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="@dimen/size10"
+                    android:layout_marginEnd="@dimen/size10"
+                    android:layout_toEndOf="@+id/promoter_profile_img"
+                    android:gravity="start"
+                    android:padding="@dimen/size5"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="@dimen/text14"
+                    android:textStyle="bold" />
+
+            </RelativeLayout>
+
+            <ImageView
+                android:id="@+id/coverImg"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_below="@+id/promoter_profile_lay"
+                android:layout_margin="@dimen/size1"
+                android:padding="@dimen/size3"
+                android:scaleType="centerCrop"
+                android:src="@drawable/default_cover_img" />
 
         </RelativeLayout>
 
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:id="@+id/coverImg"
-            android:layout_margin="@dimen/size1"
-            android:padding="@dimen/size3"
-            android:scaleType="centerCrop"
-            android:layout_below="@+id/promoter_profile_lay"
-            android:src="@drawable/default_cover_img"/>
-
-    </RelativeLayout>
-
-
-    <RelativeLayout
-        style="@style/LayoutMatchWrap"
-        android:layout_below="@+id/promoter_lay"
-        android:layout_marginTop="@dimen/size5"
-        android:padding="@dimen/size5">
 
         <RelativeLayout
-            android:id="@+id/event_header_box"
-            style="@style/LayoutMatchWrap">
+            style="@style/LayoutMatchWrap"
+            android:layout_below="@+id/promoter_lay"
+            android:layout_marginTop="@dimen/size5"
+            android:padding="@dimen/size5">
 
-            <TextView
-                android:id="@+id/moto_event_name_tv"
-                style="@style/LayoutWrap"
-                android:layout_alignParentStart="true"
-                android:layout_centerVertical="true"
-                android:layout_marginEnd="@dimen/size5"
-                android:layout_toStartOf="@id/follow_un_follow_img_btn"
-                android:gravity="center_vertical"
-                android:maxLines="3"
-                android:text="@string/app_name"
-                android:textColor="@color/colorBlack"
-                android:textSize="@dimen/text14" />
+            <RelativeLayout
+                android:id="@+id/event_header_box"
+                style="@style/LayoutMatchWrap">
+
+                <TextView
+                    android:id="@+id/moto_event_name_tv"
+                    style="@style/LayoutWrap"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="@dimen/size5"
+                    android:layout_toStartOf="@id/follow_un_follow_img_btn"
+                    android:gravity="center_vertical"
+                    android:maxLines="3"
+                    android:text="@string/app_name"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="@dimen/text14" />
+
+            </RelativeLayout>
+
+            <LinearLayout
+                style="?android:attr/buttonBarStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/event_header_box"
+                android:layout_marginTop="@dimen/size5"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/who_is_going_btn"
+                    style="?android:attr/buttonBarButtonStyle"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/black_orange_btn_bg"
+                    android:maxHeight="@dimen/size50"
+                    android:minHeight="@dimen/size30"
+                    android:paddingStart="@dimen/size2"
+                    android:paddingLeft="@dimen/size2"
+                    android:paddingEnd="@dimen/size2"
+                    android:paddingRight="@dimen/size2"
+                    android:text="@string/who_is_going"
+                    android:textAllCaps="false"
+                    android:textColor="@color/text_color"
+                    android:textSize="@dimen/text12" />
+
+                <Space
+                    android:layout_width="@dimen/size3"
+                    android:layout_height="match_parent" />
+
+                <Button
+                    android:id="@+id/time_table_btn"
+                    style="?android:attr/buttonBarButtonStyle"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/black_orange_btn_bg"
+                    android:maxHeight="@dimen/size50"
+                    android:minHeight="@dimen/size30"
+                    android:paddingStart="@dimen/size2"
+                    android:paddingLeft="@dimen/size2"
+                    android:paddingEnd="@dimen/size2"
+                    android:paddingRight="@dimen/size2"
+                    android:text="@string/time_table"
+                    android:textAllCaps="false"
+                    android:textColor="@color/text_color"
+                    android:textSize="@dimen/text12" />
+
+                <Space
+                    android:layout_width="@dimen/size3"
+                    android:layout_height="match_parent" />
+
+                <Button
+                    android:id="@+id/grp_chat_img_btn"
+                    style="?android:attr/buttonBarButtonStyle"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/black_orange_btn_bg"
+                    android:maxHeight="@dimen/size50"
+                    android:minHeight="@dimen/size30"
+                    android:paddingStart="@dimen/size2"
+                    android:paddingLeft="@dimen/size2"
+                    android:paddingEnd="@dimen/size2"
+                    android:paddingRight="@dimen/size2"
+                    android:text="@string/group_chat"
+                    android:textAllCaps="false"
+                    android:textColor="@color/text_color"
+                    android:textSize="@dimen/text12" />
+
+                <Space
+                    android:layout_width="@dimen/size3"
+                    android:layout_height="match_parent" />
+
+                <Button
+                    android:id="@+id/book_now_img_btn"
+                    style="?android:attr/buttonBarButtonStyle"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/black_orange_btn_bg"
+                    android:maxHeight="@dimen/size50"
+                    android:minHeight="@dimen/size30"
+                    android:paddingStart="@dimen/size2"
+                    android:paddingLeft="@dimen/size2"
+                    android:paddingEnd="@dimen/size2"
+                    android:paddingRight="@dimen/size2"
+                    android:text="@string/book_now"
+                    android:textAllCaps="false"
+                    android:textColor="@color/text_color"
+                    android:textSize="@dimen/text12" />
+
+            </LinearLayout>
 
         </RelativeLayout>
 
-        <LinearLayout
-            style="?android:attr/buttonBarStyle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/event_header_box"
-            android:layout_marginTop="@dimen/size5"
-            android:orientation="horizontal">
-
-            <Button
-                android:id="@+id/who_is_going_btn"
-                style="?android:attr/buttonBarButtonStyle"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="@drawable/black_orange_btn_bg"
-                android:maxHeight="@dimen/size50"
-                android:minHeight="@dimen/size30"
-                android:paddingEnd="@dimen/size2"
-                android:paddingLeft="@dimen/size2"
-                android:paddingRight="@dimen/size2"
-                android:paddingStart="@dimen/size2"
-                android:text="@string/who_is_going"
-                android:textAllCaps="false"
-                android:textColor="@color/text_color"
-                android:textSize="@dimen/text12" />
-
-            <Space
-                android:layout_width="@dimen/size3"
-                android:layout_height="match_parent" />
-
-            <Button
-                android:id="@+id/time_table_btn"
-                style="?android:attr/buttonBarButtonStyle"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="@drawable/black_orange_btn_bg"
-                android:maxHeight="@dimen/size50"
-                android:minHeight="@dimen/size30"
-                android:paddingEnd="@dimen/size2"
-                android:paddingLeft="@dimen/size2"
-                android:paddingRight="@dimen/size2"
-                android:paddingStart="@dimen/size2"
-                android:text="@string/time_table"
-                android:textAllCaps="false"
-                android:textColor="@color/text_color"
-                android:textSize="@dimen/text12" />
-
-            <Space
-                android:layout_width="@dimen/size3"
-                android:layout_height="match_parent" />
-
-            <Button
-                android:id="@+id/grp_chat_img_btn"
-                style="?android:attr/buttonBarButtonStyle"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="@drawable/black_orange_btn_bg"
-                android:maxHeight="@dimen/size50"
-                android:minHeight="@dimen/size30"
-                android:paddingEnd="@dimen/size2"
-                android:paddingLeft="@dimen/size2"
-                android:paddingRight="@dimen/size2"
-                android:paddingStart="@dimen/size2"
-                android:text="@string/group_chat"
-                android:textAllCaps="false"
-                android:textColor="@color/text_color"
-                android:textSize="@dimen/text12" />
-
-            <Space
-                android:layout_width="@dimen/size3"
-                android:layout_height="match_parent" />
-
-            <Button
-                android:id="@+id/book_now_img_btn"
-                style="?android:attr/buttonBarButtonStyle"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="@drawable/black_orange_btn_bg"
-                android:maxHeight="@dimen/size50"
-                android:minHeight="@dimen/size30"
-                android:paddingEnd="@dimen/size2"
-                android:paddingLeft="@dimen/size2"
-                android:paddingRight="@dimen/size2"
-                android:paddingStart="@dimen/size2"
-                android:text="@string/book_now"
-                android:textAllCaps="false"
-                android:textColor="@color/text_color"
-                android:textSize="@dimen/text12" />
-
-        </LinearLayout>
-
     </RelativeLayout>
-
-</RelativeLayout>
 </RelativeLayout>

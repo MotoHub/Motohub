@@ -1,27 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@android:color/transparent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:background="@android:color/transparent">
+
     <ImageView
+        android:id="@+id/ivCancelDialog"
         android:layout_width="20dp"
         android:layout_height="20dp"
+        android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_margin="@dimen/size30"
-        android:id="@+id/ivCancelDialog"
-        app:srcCompat="@drawable/cancel"
         android:contentDescription="@string/app_name"
-        android:layout_alignParentEnd="true" />
+        app:srcCompat="@drawable/cancel" />
+
     <android.support.v7.widget.RecyclerView
-        android:layout_marginTop="@dimen/size60"
-        android:layout_marginBottom="@dimen/size60"
         android:id="@+id/live_cameras_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:divider="@android:color/transparent"
-        android:listSelector="@android:color/transparent"
         android:layout_centerInParent="true"
-        />
+        android:layout_marginTop="@dimen/size60"
+        android:layout_marginBottom="@dimen/size60"
+        android:divider="@android:color/transparent"
+        android:listSelector="@android:color/transparent" />
 
 </RelativeLayout>

@@ -90,7 +90,7 @@ public class TimeTableAdapter extends RecyclerView.Adapter<TimeTableAdapter.Hold
 
 
                 Date mStartDate = DateUtil.getDateTime(model.getStartTime(), DateUtil.FORMAT_DMY_HMS);
-                Date mEndDate = DateUtil.getDateTime(model.getEndTime(),DateUtil.FORMAT_DMY_HMS);
+                Date mEndDate = DateUtil.getDateTime(model.getEndTime(), DateUtil.FORMAT_DMY_HMS);
 
                 mSessionStartTimeTv.setText(DateUtil.getDate(mStartDate, DateUtil.FORMAT_HM_AP));
                 mSessionEndTimeTv.setText(DateUtil.getDate(mEndDate, DateUtil.FORMAT_HM_AP));

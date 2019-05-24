@@ -4,6 +4,7 @@
     android:id="@+id/main_lay"
     style="@style/LayoutMatchWrap"
     android:background="@color/colorWhite">
+
     <RelativeLayout style="@style/LayoutMatch">
 
         <include
@@ -19,19 +20,17 @@
             android:background="@color/colorWhite"
             android:divider="@android:color/transparent"
             android:listSelector="@android:color/transparent"
-            android:scrollbars="none"
-            />
+            android:scrollbars="none" />
 
         <android.support.v7.widget.RecyclerView
+            android:id="@+id/rvTagList"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/include"
-            android:id="@+id/rvTagList"
-            android:padding="@dimen/size10"
             android:layout_above="@+id/footer_lay"
-            android:visibility="gone"
+            android:layout_below="@+id/include"
             android:background="@color/transparent"
-            />
+            android:padding="@dimen/size10"
+            android:visibility="gone" />
 
         <RelativeLayout
             android:id="@+id/footer_lay"
@@ -75,24 +74,25 @@
                     android:textStyle="bold" />
 
                 <android.support.constraint.ConstraintLayout
-                    style="@style/LayoutMatchWrap"
                     android:id="@+id/imageConstraintLay"
+                    style="@style/LayoutMatchWrap"
                     android:visibility="gone">
+
                     <ImageView
+                        android:id="@+id/iv_post_image"
                         android:layout_width="@dimen/size90"
                         android:layout_height="@dimen/size90"
-                        android:scaleType="centerCrop"
-                        android:id="@+id/iv_post_image"
                         android:contentDescription="@string/app_name"
-                        />
+                        android:scaleType="centerCrop" />
+
                     <ImageView
+                        android:id="@+id/iv_remove_image"
                         android:layout_width="@dimen/size20"
                         android:layout_height="@dimen/size20"
-                        android:id="@+id/iv_remove_image"
+                        android:contentDescription="@string/app_name"
                         app:layout_constraintRight_toRightOf="@+id/iv_post_image"
                         app:layout_constraintTop_toTopOf="@+id/iv_post_image"
-                        android:contentDescription="@string/app_name"
-                        app:srcCompat="@drawable/cancel_orange_circle_icon"/>
+                        app:srcCompat="@drawable/cancel_orange_circle_icon" />
 
                 </android.support.constraint.ConstraintLayout>
 
@@ -110,30 +110,30 @@
                         android:inputType="textMultiLine|textAutoCorrect|textCapSentences"
                         android:paddingStart="@dimen/size5"
                         android:paddingTop="@dimen/size5"
-                        android:paddingBottom="@dimen/size5"
                         android:paddingEnd="@dimen/size30"
+                        android:paddingBottom="@dimen/size5"
                         android:textColor="@color/colorBlack"
                         android:textColorHint="@color/colorGrey"
                         android:textSize="@dimen/text12" />
 
                     <ImageView
+                        android:id="@+id/ivPost"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:id="@+id/ivPost"
+                        android:layout_toStartOf="@+id/post_btn"
                         android:contentDescription="@string/app_name"
-                        android:src="@android:drawable/ic_menu_camera"
-                        android:layout_toStartOf="@+id/post_btn"/>
+                        android:src="@android:drawable/ic_menu_camera" />
 
                     <Button
                         android:id="@+id/post_btn"
                         android:layout_width="@dimen/size60"
                         android:layout_height="@dimen/size25"
                         android:layout_alignParentEnd="true"
-                        android:layout_margin="@dimen/size3"
-                        android:textColor="@color/text_color"
-                        android:background="@drawable/black_orange_btn_bg"
                         android:layout_centerVertical="true"
+                        android:layout_margin="@dimen/size3"
+                        android:background="@drawable/black_orange_btn_bg"
                         android:text="@string/post"
+                        android:textColor="@color/text_color"
                         android:textSize="@dimen/text12" />
 
                 </RelativeLayout>

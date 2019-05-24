@@ -32,13 +32,11 @@ public class GlWhiteBalanceFilter extends GlFilter {
             "\n" +
             "	gl_FragColor = vec4(mix(rgb, processed, temperature), source.a);\n" +
             "}";
-
+    private float temperature = 5000f;
+    private float tint = 0f;
     public GlWhiteBalanceFilter() {
         super(DEFAULT_VERTEX_SHADER, WHITE_BALANCE_FRAGMENT_SHADER);
     }
-
-    private float temperature = 5000f;
-    private float tint = 0f;
 
     public void setTemperature(final float temperature) {
         this.temperature = temperature < 5000 ? (float) (0.0004 * (temperature - 5000.0)) : (float) (0.00006 * (temperature - 5000.0));

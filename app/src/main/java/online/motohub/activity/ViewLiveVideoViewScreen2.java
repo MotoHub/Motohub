@@ -199,16 +199,16 @@ public class ViewLiveVideoViewScreen2 extends BaseActivity {
     private void loadVideo(int currentPos) {
         if (mLiveStreamList.size() > 1) {
             mRightArrow.setVisibility(View.VISIBLE);
-        }else{
+        } else {
             mRightArrow.setVisibility(View.GONE);
             mLeftArrow.setVisibility(View.GONE);
         }
         mCurrentPos = currentPos;
-        if(mCurrentPos==0){
+        if (mCurrentPos == 0) {
             mLeftArrow.setVisibility(View.GONE);
-        }else if(mCurrentPos>0){
+        } else if (mCurrentPos > 0) {
             mLeftArrow.setVisibility(View.VISIBLE);
-            if(mCurrentPos==mLiveStreamList.size()-1){
+            if (mCurrentPos == mLiveStreamList.size() - 1) {
                 mRightArrow.setVisibility(View.GONE);
             }
         }

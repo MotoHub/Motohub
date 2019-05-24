@@ -198,7 +198,7 @@ public class TrackEventFragment extends BaseFragment {
             if (mSelectedEventAddOn.size() > 0)
                 mEventsFindAdapter.callPostSelectedAddOns(mSelectedEventAddOn);
             else {
-                if(mEventsFindAdapter.mEventType.equals(AppConstants.FREE_EVENT)) {
+                if (mEventsFindAdapter.mEventType.equals(AppConstants.FREE_EVENT)) {
                     ((BaseActivity) getActivity()).showToast(getActivity(), getString(R.string.event_booked_successfully));
                 } else {
                     if (((BaseActivity) getActivity()).mPurchaseSuccessDialog != null)
@@ -206,7 +206,7 @@ public class TrackEventFragment extends BaseFragment {
                 }
             }
         } else if (responseObj instanceof PurchasedAddOnModel) {
-            if(mEventsFindAdapter.mEventType.equals(AppConstants.FREE_EVENT)){
+            if (mEventsFindAdapter.mEventType.equals(AppConstants.FREE_EVENT)) {
                 showToast(getActivity(), "Successfully booked an event.");
             } else {
                 if (((BaseActivity) getActivity()).mPurchaseSuccessDialog != null)

@@ -13,7 +13,6 @@ import com.daasuu.gpuv.egl.filter.GlFilter;
 import java.io.IOException;
 
 
-
 public class MediaVideoEncoder extends MediaEncoder {
     private static final String TAG = "MediaVideoEncoder";
 
@@ -51,79 +50,6 @@ public class MediaVideoEncoder extends MediaEncoder {
                 recordNoFilter,
                 filter
         );
-    }
-
-
-    public void frameAvailableSoon(final int texName, final float[] stMatrix, final float[] mvpMatrix, final float aspectRatio) {
-        if (super.frameAvailableSoon()) {
-            encodeRenderHandler.draw(texName, stMatrix, mvpMatrix, aspectRatio);
-        }
-        //result;
-    }
-
-    @Override
-    public boolean frameAvailableSoon() {
-        boolean result;
-        if (result = super.frameAvailableSoon()) {
-            encodeRenderHandler.prepareDraw();
-        }
-        return result;
-    }
-
-    @Override
-    protected void prepare() throws IOException {
-        Log.i(TAG, "prepare: ");
-        trackIndex = -1;
-        muxerStarted = isEOS = false;
-
-        final MediaCodecInfo videoCodecInfo = selectVideoCodec(MIME_TYPE);
-
-        if (videoCodecInfo == null) {
-            Log.e(TAG, "Unable to find an appropriate codec for " + MIME_TYPE);
-            return;
-        }
-        Log.i(TAG, "selected codec: " + videoCodecInfo.getName());
-
-        final MediaFormat format = MediaFormat.createVideoFormat(MIME_TYPE, fileWidth, fileHeight);
-        format.setInteger(MediaFormat.KEY_COLOR_FORMAT, MediaCodecInfo.CodecCapabilities.COLOR_FormatSurface);
-        format.setInteger(MediaFormat.KEY_BIT_RATE, calcBitRate(fileWidth, fileHeight));
-        format.setInteger(MediaFormat.KEY_FRAME_RATE, FRAME_RATE);
-        format.setInteger(MediaFormat.KEY_I_FRAME_INTERVAL, 3);
-        Log.i(TAG, "format: " + format);
-
-        mediaCodec = MediaCodec.createEncoderByType(MIME_TYPE);
-
-        mediaCodec.configure(format, null, null, MediaCodec.CONFIGURE_FLAG_ENCODE);
-        // get Surface for encoder input
-        // this method only can call between #configure and #start
-        surface = mediaCodec.createInputSurface();
-        mediaCodec.start();
-        Log.i(TAG, "prepare finishing");
-        if (listener != null) {
-            try {
-                listener.onPrepared(this);
-            } catch (final Exception e) {
-                Log.e(TAG, "prepare:", e);
-            }
-        }
-    }
-
-    public void setEglContext(final EGLContext shared_context, final int tex_id) {
-        encodeRenderHandler.setEglContext(shared_context, tex_id, surface);
-    }
-
-    @Override
-    protected void release() {
-        Log.i(TAG, "release:");
-        if (surface != null) {
-            surface.release();
-            surface = null;
-        }
-        if (encodeRenderHandler != null) {
-            encodeRenderHandler.release();
-            encodeRenderHandler = null;
-        }
-        super.release();
     }
 
     private static int calcBitRate(int width, int height) {
@@ -199,6 +125,78 @@ public class MediaVideoEncoder extends MediaEncoder {
     private static boolean isRecognizedViewoFormat(final int colorFormat) {
         Log.i(TAG, "isRecognizedViewoFormat:colorFormat=" + colorFormat);
         return (colorFormat == MediaCodecInfo.CodecCapabilities.COLOR_FormatSurface);
+    }
+
+    public void frameAvailableSoon(final int texName, final float[] stMatrix, final float[] mvpMatrix, final float aspectRatio) {
+        if (super.frameAvailableSoon()) {
+            encodeRenderHandler.draw(texName, stMatrix, mvpMatrix, aspectRatio);
+        }
+        //result;
+    }
+
+    @Override
+    public boolean frameAvailableSoon() {
+        boolean result;
+        if (result = super.frameAvailableSoon()) {
+            encodeRenderHandler.prepareDraw();
+        }
+        return result;
+    }
+
+    @Override
+    protected void prepare() throws IOException {
+        Log.i(TAG, "prepare: ");
+        trackIndex = -1;
+        muxerStarted = isEOS = false;
+
+        final MediaCodecInfo videoCodecInfo = selectVideoCodec(MIME_TYPE);
+
+        if (videoCodecInfo == null) {
+            Log.e(TAG, "Unable to find an appropriate codec for " + MIME_TYPE);
+            return;
+        }
+        Log.i(TAG, "selected codec: " + videoCodecInfo.getName());
+
+        final MediaFormat format = MediaFormat.createVideoFormat(MIME_TYPE, fileWidth, fileHeight);
+        format.setInteger(MediaFormat.KEY_COLOR_FORMAT, MediaCodecInfo.CodecCapabilities.COLOR_FormatSurface);
+        format.setInteger(MediaFormat.KEY_BIT_RATE, calcBitRate(fileWidth, fileHeight));
+        format.setInteger(MediaFormat.KEY_FRAME_RATE, FRAME_RATE);
+        format.setInteger(MediaFormat.KEY_I_FRAME_INTERVAL, 3);
+        Log.i(TAG, "format: " + format);
+
+        mediaCodec = MediaCodec.createEncoderByType(MIME_TYPE);
+
+        mediaCodec.configure(format, null, null, MediaCodec.CONFIGURE_FLAG_ENCODE);
+        // get Surface for encoder input
+        // this method only can call between #configure and #start
+        surface = mediaCodec.createInputSurface();
+        mediaCodec.start();
+        Log.i(TAG, "prepare finishing");
+        if (listener != null) {
+            try {
+                listener.onPrepared(this);
+            } catch (final Exception e) {
+                Log.e(TAG, "prepare:", e);
+            }
+        }
+    }
+
+    public void setEglContext(final EGLContext shared_context, final int tex_id) {
+        encodeRenderHandler.setEglContext(shared_context, tex_id, surface);
+    }
+
+    @Override
+    protected void release() {
+        Log.i(TAG, "release:");
+        if (surface != null) {
+            surface.release();
+            surface = null;
+        }
+        if (encodeRenderHandler != null) {
+            encodeRenderHandler.release();
+            encodeRenderHandler = null;
+        }
+        super.release();
     }
 
     @Override

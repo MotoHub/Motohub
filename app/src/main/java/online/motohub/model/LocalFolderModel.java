@@ -4,6 +4,17 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 public class LocalFolderModel implements Parcelable {
+    public static final Creator<LocalFolderModel> CREATOR = new Creator<LocalFolderModel>() {
+        @Override
+        public LocalFolderModel createFromParcel(Parcel in) {
+            return new LocalFolderModel(in);
+        }
+
+        @Override
+        public LocalFolderModel[] newArray(int size) {
+            return new LocalFolderModel[size];
+        }
+    };
     private int id;
     private String displayName;
     private String path;
@@ -16,18 +27,6 @@ public class LocalFolderModel implements Parcelable {
         displayName = in.readString();
         path = in.readString();
     }
-
-    public static final Creator<LocalFolderModel> CREATOR = new Creator<LocalFolderModel>() {
-        @Override
-        public LocalFolderModel createFromParcel(Parcel in) {
-            return new LocalFolderModel(in);
-        }
-
-        @Override
-        public LocalFolderModel[] newArray(int size) {
-            return new LocalFolderModel[size];
-        }
-    };
 
     public int getId() {
         return id;

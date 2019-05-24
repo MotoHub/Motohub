@@ -37,7 +37,6 @@ public class ProportionalImageView extends ImageView {
                 int h = w * d.getIntrinsicHeight() / d.getIntrinsicWidth();
                 setMeasuredDimension(w, h);
             }
-        }
-        else super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-        }
+        } else super.onMeasure(widthMeasureSpec, heightMeasureSpec);
     }
+}

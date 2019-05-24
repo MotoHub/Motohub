@@ -29,16 +29,49 @@ import online.motohub.util.PreferenceUtils;
 
 public class StreamRequestedUserAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
+    private static final int VIEW_TYPE_LOADING = 0;
+    private static final int VIEW_TYPE_ITEM = 1;
     private Context mContext;
     private ArrayList<LiveStreamRequestEntity> mStreamUserList;
     private int mCurrentProfileID, mCurrentUserID;
     private int selPos;
     private LayoutInflater mInflater;
-
-    private static final int VIEW_TYPE_LOADING = 0;
-    private static final int VIEW_TYPE_ITEM = 1;
-
     private boolean isAcceptAPI = false;
+    RetrofitResInterface mApiInterface = new RetrofitResInterface() {
+        @Override
+        public void retrofitOnResponse(Object responseObj, int responseType) {
+            if (responseObj instanceof LiveStreamRequestResponse) {
+                LiveStreamRequestResponse mStreamReqResponse = (LiveStreamRequestResponse) responseObj;
+                if (isAcceptAPI) {
+                    updateAcceptStatus();
+                } else {
+                    updateDeclineStatus();
+                }
+            }
+        }
+
+        @Override
+        public void retrofitOnError(int code, String message) {
+
+            if (message.equals("Unauthorized") || code == 401) {
+                RetrofitClient.getRetrofitInstance().callUpdateSession(mContext, mApiInterface, RetrofitClient.UPDATE_SESSION_RESPONSE);
+            } else {
+                String mErrorMsg = code + " - " + message;
+                ((BaseActivity) mContext).showToast(mContext, mErrorMsg);
+            }
+        }
+
+        @Override
+        public void retrofitOnSessionError(int code, String message) {
+            String mErrorMsg = code + " - " + message;
+            ((BaseActivity) mContext).showToast(mContext, mErrorMsg);
+        }
+
+        @Override
+        public void retrofitOnFailure() {
+            ((BaseActivity) mContext).showAppDialog(AppDialogFragment.ALERT_INTERNET_FAILURE_DIALOG, null);
+        }
+    };
 
     public StreamRequestedUserAdapter(Context context, int currentProfileID, ArrayList<LiveStreamRequestEntity> streamUserList) {
         mContext = context;
@@ -46,34 +79,6 @@ public class StreamRequestedUserAdapter extends RecyclerView.Adapter<RecyclerVie
         mCurrentUserID = PreferenceUtils.getInstance(mContext).getIntData(PreferenceUtils.USER_ID);
         mStreamUserList = streamUserList;
         mInflater = LayoutInflater.from(mContext);
-    }
-
-    public class Holder extends RecyclerView.ViewHolder {
-
-        @BindView(R.id.user_img)
-        CircleImageView mUserImg;
-        @BindView(R.id.user_name_txt)
-        TextView mUserNameTxt;
-        @BindView(R.id.accept_btn)
-        TextView mAcceptBtn;
-        @BindView(R.id.decline_btn)
-        TextView mDeclineBtn;
-
-        public Holder(View view) {
-            super(view);
-            ButterKnife.bind(this, view);
-        }
-    }
-
-    public class ViewHolderLoader extends RecyclerView.ViewHolder {
-
-        @BindView(R.id.progress_bar)
-        ProgressBar mProgressBar;
-
-        public ViewHolderLoader(View v) {
-            super(v);
-            ButterKnife.bind(this, v);
-        }
     }
 
     @Override
@@ -90,7 +95,6 @@ public class StreamRequestedUserAdapter extends RecyclerView.Adapter<RecyclerVie
                 return null;
         }
     }
-
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int pos) {
@@ -145,7 +149,7 @@ public class StreamRequestedUserAdapter extends RecyclerView.Adapter<RecyclerVie
                     } else {
                         mHolder.mUserNameTxt.setText(mEntity.getProfiles_by_RequestedProfileID().getDriver());
                     }
-                }catch (Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
                 break;
@@ -187,42 +191,6 @@ public class StreamRequestedUserAdapter extends RecyclerView.Adapter<RecyclerVie
         }
     }
 
-    RetrofitResInterface mApiInterface = new RetrofitResInterface() {
-        @Override
-        public void retrofitOnResponse(Object responseObj, int responseType) {
-            if (responseObj instanceof LiveStreamRequestResponse) {
-                LiveStreamRequestResponse mStreamReqResponse = (LiveStreamRequestResponse) responseObj;
-                if (isAcceptAPI) {
-                    updateAcceptStatus();
-                } else {
-                    updateDeclineStatus();
-                }
-            }
-        }
-
-        @Override
-        public void retrofitOnError(int code, String message) {
-
-            if (message.equals("Unauthorized") || code == 401) {
-                RetrofitClient.getRetrofitInstance().callUpdateSession(mContext, mApiInterface, RetrofitClient.UPDATE_SESSION_RESPONSE);
-            } else {
-                String mErrorMsg = code + " - " + message;
-                ((BaseActivity) mContext).showToast(mContext, mErrorMsg);
-            }
-        }
-
-        @Override
-        public void retrofitOnSessionError(int code, String message) {
-            String mErrorMsg = code + " - " + message;
-            ((BaseActivity) mContext).showToast(mContext, mErrorMsg);
-        }
-
-        @Override
-        public void retrofitOnFailure() {
-            ((BaseActivity) mContext).showAppDialog(AppDialogFragment.ALERT_INTERNET_FAILURE_DIALOG, null);
-        }
-    };
-
     private void updateAcceptStatus() {
         mStreamUserList.get(selPos).setStatus(1);
         notifyDataSetChanged();
@@ -249,6 +217,34 @@ public class StreamRequestedUserAdapter extends RecyclerView.Adapter<RecyclerVie
             return VIEW_TYPE_LOADING;
         } else {
             return VIEW_TYPE_ITEM;
+        }
+    }
+
+    public class Holder extends RecyclerView.ViewHolder {
+
+        @BindView(R.id.user_img)
+        CircleImageView mUserImg;
+        @BindView(R.id.user_name_txt)
+        TextView mUserNameTxt;
+        @BindView(R.id.accept_btn)
+        TextView mAcceptBtn;
+        @BindView(R.id.decline_btn)
+        TextView mDeclineBtn;
+
+        public Holder(View view) {
+            super(view);
+            ButterKnife.bind(this, view);
+        }
+    }
+
+    public class ViewHolderLoader extends RecyclerView.ViewHolder {
+
+        @BindView(R.id.progress_bar)
+        ProgressBar mProgressBar;
+
+        public ViewHolderLoader(View v) {
+            super(v);
+            ButterKnife.bind(this, v);
         }
     }
 

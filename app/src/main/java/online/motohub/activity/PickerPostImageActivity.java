@@ -43,33 +43,44 @@ import online.motohub.util.ZoomImageView;
 
 public class PickerPostImageActivity extends BaseActivity {
 
+    public static final String EXTRA_RESULT_DATA = "activity_image_picker_uri";
     @BindView(R.id.pick_img_parent_view)
     FrameLayout mParentView;
-
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
-
     @BindView(R.id.img_files_list_view)
     RecyclerView mImgListView;
-
     @BindView(R.id.pager)
     ViewPager mViewPager;
-
     @BindView(R.id.view_pager_lay)
     RelativeLayout mViewPagerLay;
-
     @BindString(R.string.storage_permission_denied)
     String mNoStoragePer;
-
     private GalleryPickerAdapter mAdapter;
     private List<LocalImgModel> mImgUriList = new ArrayList<>();
     private List<LocalImgModel> mFolderImgUriList = new ArrayList<>();
     private List<LocalFolderModel> mFolderList = new ArrayList<>();
-
     private boolean isFolderState = true;
-
-    public static final String EXTRA_RESULT_DATA = "activity_image_picker_uri";
+    GalleryPickerAdapter.OnItemClickListener mImageFileCallback = new GalleryPickerAdapter.OnItemClickListener() {
+        @Override
+        public void onItemClick(boolean isFolder, int position) {
+            if (isFolder) {
+                isFolderState = false;
+                int folderId = mFolderList.get(position).getId();
+                new GetImageFiles(folderId).execute();
+            } else {
+                visibleViewPager(true);
+                mViewPager.setCurrentItem(position);
+            }
+        }
+    };
     private GridLayoutManager mLayoutManager;
+    PermissionCallback mPermissionCallback = new PermissionCallback() {
+        @Override
+        public void permissionOkClick() {
+            initView();
+        }
+    };
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -85,7 +96,6 @@ public class PickerPostImageActivity extends BaseActivity {
         DialogManager.hideProgress();
         super.onDestroy();
     }
-
 
     private void initView() {
 
@@ -130,92 +140,6 @@ public class PickerPostImageActivity extends BaseActivity {
         }
     }
 
-    private class GetImageFolders extends AsyncTask<Void, List<LocalFolderModel>, List<LocalFolderModel>> {
-
-        @Override
-        protected void onPreExecute() {
-            DialogManager.showProgress(PickerPostImageActivity.this);
-        }
-
-        @Override
-        protected List<LocalFolderModel> doInBackground(Void... params) {
-            List<LocalFolderModel> mUris = getFolders();
-            if (mUris == null) {
-                mUris = new ArrayList<>();
-            }
-            return mUris;
-        }
-
-        @Override
-        protected void onPostExecute(List<LocalFolderModel> mUriList) {
-            super.onPostExecute(mUriList);
-            mFolderList.clear();
-            mFolderList.addAll(mUriList);
-            new GetImageFiles("folderimage").execute();
-        }
-    }
-
-    private class GetImageFiles extends AsyncTask<Void, List<LocalImgModel>, List<LocalImgModel>> {
-        private int folderId;
-        private String folderimage;
-
-        GetImageFiles(int folderId) {
-            this.folderId = folderId;
-        }
-
-        GetImageFiles(String folder) {
-            this.folderimage = folder;
-        }
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            if (folderimage == null) {
-                DialogManager.showProgress(PickerPostImageActivity.this);
-            }
-        }
-
-        @Override
-        protected List<LocalImgModel> doInBackground(Void... params) {
-
-            List<LocalImgModel> mUris = null;
-            if (folderimage != null) {
-                mUris = getImagesFolder(mFolderList);
-
-                if (mUris == null) {
-                    mUris = new ArrayList<>();
-                }
-
-            } else {
-                mUris = getImages(folderId);
-                if (mUris == null) {
-                    mUris = new ArrayList<>();
-                }
-            }
-            return mUris;
-        }
-
-        @Override
-        protected void onPostExecute(List<LocalImgModel> mUriList) {
-            super.onPostExecute(mUriList);
-
-            if (folderimage != null) {
-                mFolderImgUriList.clear();
-                mFolderImgUriList.addAll(mUriList);
-                setFolderAdapter();
-            } else {
-                mImgUriList.clear();
-                mImgUriList.addAll(mUriList);
-                setImageAdapter();
-                CustomPagerAdapter mCustomPagerAdapter = new CustomPagerAdapter(PickerPostImageActivity.this, mImgUriList);
-                mViewPager.setAdapter(mCustomPagerAdapter);
-                visibleViewPager(false);
-
-            }
-             DialogManager.hideProgress();
-        }
-    }
-
     private void setFolderAdapter() {
         mLayoutManager.setSpanCount(2);
         if (mAdapter == null) {
@@ -257,6 +181,7 @@ public class PickerPostImageActivity extends BaseActivity {
             });
         }
     }
+
     private void visibleViewPager(boolean isViewpager) {
         mViewPagerLay.setVisibility(isViewpager ? View.VISIBLE : View.GONE);
         mImgListView.setVisibility(isViewpager ? View.GONE : View.VISIBLE);
@@ -372,6 +297,130 @@ public class PickerPostImageActivity extends BaseActivity {
         return mFolders;
     }
 
+    @Override
+    public void onBackPressed() {
+        onBackClicked();
+    }
+
+    private void onBackClicked() {
+        if (mViewPagerLay.getVisibility() == View.VISIBLE) {
+            visibleViewPager(false);
+            isFolderState = false;
+        } else {
+            if (isFolderState) {
+                finish();
+            } else {
+                isFolderState = true;
+                setFolderAdapter();
+            }
+        }
+    }
+
+    public boolean isPermissionAdded() {
+        boolean addPermission = true;
+        if (android.os.Build.VERSION.SDK_INT >= 23) {
+            int readStoragePermission = ContextCompat.checkSelfPermission(this, android.Manifest.permission.READ_EXTERNAL_STORAGE);
+            int storagePermission = ContextCompat.checkSelfPermission(this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE);
+            List<String> listPermissionsNeeded = new ArrayList<>();
+            if (readStoragePermission != PackageManager.PERMISSION_GRANTED) {
+                listPermissionsNeeded.add(android.Manifest.permission.READ_EXTERNAL_STORAGE);
+            }
+            if (storagePermission != PackageManager.PERMISSION_GRANTED) {
+                listPermissionsNeeded.add(android.Manifest.permission.WRITE_EXTERNAL_STORAGE);
+            }
+            if (!listPermissionsNeeded.isEmpty()) {
+                addPermission = isPermission(mPermissionCallback, listPermissionsNeeded);
+            }
+        }
+        return addPermission;
+    }
+
+    private class GetImageFolders extends AsyncTask<Void, List<LocalFolderModel>, List<LocalFolderModel>> {
+
+        @Override
+        protected void onPreExecute() {
+            DialogManager.showProgress(PickerPostImageActivity.this);
+        }
+
+        @Override
+        protected List<LocalFolderModel> doInBackground(Void... params) {
+            List<LocalFolderModel> mUris = getFolders();
+            if (mUris == null) {
+                mUris = new ArrayList<>();
+            }
+            return mUris;
+        }
+
+        @Override
+        protected void onPostExecute(List<LocalFolderModel> mUriList) {
+            super.onPostExecute(mUriList);
+            mFolderList.clear();
+            mFolderList.addAll(mUriList);
+            new GetImageFiles("folderimage").execute();
+        }
+    }
+
+    private class GetImageFiles extends AsyncTask<Void, List<LocalImgModel>, List<LocalImgModel>> {
+        private int folderId;
+        private String folderimage;
+
+        GetImageFiles(int folderId) {
+            this.folderId = folderId;
+        }
+
+        GetImageFiles(String folder) {
+            this.folderimage = folder;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            if (folderimage == null) {
+                DialogManager.showProgress(PickerPostImageActivity.this);
+            }
+        }
+
+        @Override
+        protected List<LocalImgModel> doInBackground(Void... params) {
+
+            List<LocalImgModel> mUris = null;
+            if (folderimage != null) {
+                mUris = getImagesFolder(mFolderList);
+
+                if (mUris == null) {
+                    mUris = new ArrayList<>();
+                }
+
+            } else {
+                mUris = getImages(folderId);
+                if (mUris == null) {
+                    mUris = new ArrayList<>();
+                }
+            }
+            return mUris;
+        }
+
+        @Override
+        protected void onPostExecute(List<LocalImgModel> mUriList) {
+            super.onPostExecute(mUriList);
+
+            if (folderimage != null) {
+                mFolderImgUriList.clear();
+                mFolderImgUriList.addAll(mUriList);
+                setFolderAdapter();
+            } else {
+                mImgUriList.clear();
+                mImgUriList.addAll(mUriList);
+                setImageAdapter();
+                CustomPagerAdapter mCustomPagerAdapter = new CustomPagerAdapter(PickerPostImageActivity.this, mImgUriList);
+                mViewPager.setAdapter(mCustomPagerAdapter);
+                visibleViewPager(false);
+
+            }
+            DialogManager.hideProgress();
+        }
+    }
+
     private class CustomPagerAdapter extends PagerAdapter {
 
         private Context mContext;
@@ -415,63 +464,4 @@ public class PickerPostImageActivity extends BaseActivity {
             return view == object;
         }
     }
-
-    GalleryPickerAdapter.OnItemClickListener mImageFileCallback = new GalleryPickerAdapter.OnItemClickListener() {
-        @Override
-        public void onItemClick(boolean isFolder, int position) {
-            if (isFolder) {
-                isFolderState = false;
-                int folderId = mFolderList.get(position).getId();
-                new GetImageFiles(folderId).execute();
-            } else {
-                visibleViewPager(true);
-                mViewPager.setCurrentItem(position);
-            }
-        }
-    };
-
-    @Override
-    public void onBackPressed() {
-        onBackClicked();
-    }
-
-    private void onBackClicked() {
-        if (mViewPagerLay.getVisibility() == View.VISIBLE) {
-            visibleViewPager(false);
-            isFolderState = false;
-        } else {
-            if (isFolderState) {
-                finish();
-            } else {
-                isFolderState = true;
-                setFolderAdapter();
-            }
-        }
-    }
-
-    public boolean isPermissionAdded() {
-        boolean addPermission = true;
-        if (android.os.Build.VERSION.SDK_INT >= 23) {
-            int readStoragePermission = ContextCompat.checkSelfPermission(this, android.Manifest.permission.READ_EXTERNAL_STORAGE);
-            int storagePermission = ContextCompat.checkSelfPermission(this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE);
-            List<String> listPermissionsNeeded = new ArrayList<>();
-            if (readStoragePermission != PackageManager.PERMISSION_GRANTED) {
-                listPermissionsNeeded.add(android.Manifest.permission.READ_EXTERNAL_STORAGE);
-            }
-            if (storagePermission != PackageManager.PERMISSION_GRANTED) {
-                listPermissionsNeeded.add(android.Manifest.permission.WRITE_EXTERNAL_STORAGE);
-            }
-            if (!listPermissionsNeeded.isEmpty()) {
-                addPermission = isPermission(mPermissionCallback, listPermissionsNeeded);
-            }
-        }
-        return addPermission;
-    }
-
-    PermissionCallback mPermissionCallback = new PermissionCallback() {
-        @Override
-        public void permissionOkClick() {
-            initView();
-        }
-    };
 }

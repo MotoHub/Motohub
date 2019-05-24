@@ -3,7 +3,13 @@ package com.daasuu.gpuv.camerarecorder;
 import android.annotation.SuppressLint;
 import android.graphics.Rect;
 import android.graphics.SurfaceTexture;
-import android.hardware.camera2.*;
+import android.hardware.camera2.CameraAccessException;
+import android.hardware.camera2.CameraCaptureSession;
+import android.hardware.camera2.CameraCharacteristics;
+import android.hardware.camera2.CameraDevice;
+import android.hardware.camera2.CameraManager;
+import android.hardware.camera2.CameraMetadata;
+import android.hardware.camera2.CaptureRequest;
 import android.hardware.camera2.params.MeteringRectangle;
 import android.hardware.camera2.params.StreamConfigurationMap;
 import android.os.Handler;
@@ -29,54 +35,32 @@ public class CameraThread extends Thread {
 
 
     private final Object readyFence = new Object();
-    private CameraHandler handler;
+    private final OnStartPreviewListener listener;
+    private final CameraRecordListener cameraRecordListener;
+    private final CameraManager cameraManager;
+    private final LensFacing lensFacing;
     volatile boolean isRunning = false;
-
+    private CameraHandler handler;
     private CameraDevice cameraDevice;
     private CaptureRequest.Builder requestBuilder;
     private CameraCaptureSession cameraCaptureSession;
     private Rect sensorArraySize;
-
     private SurfaceTexture surfaceTexture;
-
-    private final OnStartPreviewListener listener;
-    private final CameraRecordListener cameraRecordListener;
-    private final CameraManager cameraManager;
-
     private Size cameraSize;
     private boolean isFlashTorch = false;
-    private final LensFacing lensFacing;
-
     private boolean flashSupport = false;
-
-
-    CameraThread(
-            final CameraRecordListener cameraRecordListener,
-            final OnStartPreviewListener listener,
-            final SurfaceTexture surfaceTexture,
-            final CameraManager cameraManager,
-            final LensFacing lensFacing
-    ) {
-        super("Camera thread");
-        this.listener = listener;
-        this.cameraRecordListener = cameraRecordListener;
-        this.surfaceTexture = surfaceTexture;
-        this.cameraManager = cameraManager;
-        this.lensFacing = lensFacing;
-
-    }
-
-    public CameraHandler getHandler() {
-        synchronized (readyFence) {
-            try {
-                readyFence.wait();
-            } catch (final InterruptedException e) {
-                e.printStackTrace();
-            }
+    private CameraCaptureSession.StateCallback cameraCaptureSessionCallback = new CameraCaptureSession.StateCallback() {
+        @Override
+        public void onConfigured(CameraCaptureSession session) {
+            cameraCaptureSession = session;
+            updatePreview();
         }
-        return handler;
-    }
 
+        @Override
+        public void onConfigureFailed(CameraCaptureSession session) {
+            // Toast.makeText(activity, "onConfigureFailed", Toast.LENGTH_LONG).show();
+        }
+    };
     private CameraDevice.StateCallback cameraDeviceCallback = new CameraDevice.StateCallback() {
         @Override
         public void onOpened(CameraDevice camera) {
@@ -100,19 +84,47 @@ public class CameraThread extends Thread {
         }
     };
 
-    private CameraCaptureSession.StateCallback cameraCaptureSessionCallback = new CameraCaptureSession.StateCallback() {
-        @Override
-        public void onConfigured(CameraCaptureSession session) {
-            cameraCaptureSession = session;
-            updatePreview();
-        }
+    CameraThread(
+            final CameraRecordListener cameraRecordListener,
+            final OnStartPreviewListener listener,
+            final SurfaceTexture surfaceTexture,
+            final CameraManager cameraManager,
+            final LensFacing lensFacing
+    ) {
+        super("Camera thread");
+        this.listener = listener;
+        this.cameraRecordListener = cameraRecordListener;
+        this.surfaceTexture = surfaceTexture;
+        this.cameraManager = cameraManager;
+        this.lensFacing = lensFacing;
 
-        @Override
-        public void onConfigureFailed(CameraCaptureSession session) {
-            // Toast.makeText(activity, "onConfigureFailed", Toast.LENGTH_LONG).show();
-        }
-    };
+    }
 
+    private static Size getClosestSupportedSize(List<Size> supportedSizes, final int requestedWidth, final int requestedHeight) {
+        return Collections.min(supportedSizes, new Comparator<Size>() {
+
+            private int diff(final Size size) {
+                return Math.abs(requestedWidth - size.getWidth()) + Math.abs(requestedHeight - size.getHeight());
+            }
+
+            @Override
+            public int compare(final Size lhs, final Size rhs) {
+                return diff(lhs) - diff(rhs);
+            }
+        });
+
+    }
+
+    public CameraHandler getHandler() {
+        synchronized (readyFence) {
+            try {
+                readyFence.wait();
+            } catch (final InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        return handler;
+    }
 
     private void updatePreview() {
 
@@ -128,7 +140,6 @@ public class CameraThread extends Thread {
             e.printStackTrace();
         }
     }
-
 
     /**
      * message loop
@@ -219,21 +230,6 @@ public class CameraThread extends Thread {
         }
 
         listener.onStart(cameraSize, flashSupport);
-
-    }
-
-    private static Size getClosestSupportedSize(List<Size> supportedSizes, final int requestedWidth, final int requestedHeight) {
-        return Collections.min(supportedSizes, new Comparator<Size>() {
-
-            private int diff(final Size size) {
-                return Math.abs(requestedWidth - size.getWidth()) + Math.abs(requestedHeight - size.getHeight());
-            }
-
-            @Override
-            public int compare(final Size lhs, final Size rhs) {
-                return diff(lhs) - diff(rhs);
-            }
-        });
 
     }
 

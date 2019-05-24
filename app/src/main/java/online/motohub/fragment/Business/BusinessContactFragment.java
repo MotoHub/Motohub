@@ -22,9 +22,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import online.motohub.R;
-import online.motohub.application.MotoHub;
 import online.motohub.fragment.BaseFragment;
-import online.motohub.model.ProfileResModel;
 import online.motohub.model.TrackResModel;
 import online.motohub.model.promoter_club_news_media.PromotersResModel;
 

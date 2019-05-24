@@ -110,8 +110,8 @@ public class TagFollowingProfileAdapter extends ArrayAdapter<ProfileResModel> {
 
                         String mSearchStr = constraint.toString();
 
-                        if(constraint.length() > 0 && constraint.charAt(0) == '@') {
-                            if(constraint.length() == 1) {
+                        if (constraint.length() > 0 && constraint.charAt(0) == '@') {
+                            if (constraint.length() == 1) {
                                 mSearchStr = "";
                             } else {
                                 mSearchStr = mSearchStr.substring(1, constraint.length() - 1);

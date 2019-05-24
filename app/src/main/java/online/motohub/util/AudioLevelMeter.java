@@ -1,16 +1,16 @@
 /**
- *  This is sample code provided by Wowza Media Systems, LLC.  All sample code is intended to be a reference for the
- *  purpose of educating developers, and is not intended to be used in any production environment.
- *
- *  IN NO EVENT SHALL WOWZA MEDIA SYSTEMS, LLC BE LIABLE TO YOU OR ANY PARTY FOR DIRECT, INDIRECT, SPECIAL, INCIDENTAL,
- *  OR CONSEQUENTIAL DAMAGES, INCLUDING LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE AND ITS DOCUMENTATION,
- *  EVEN IF WOWZA MEDIA SYSTEMS, LLC HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *
- *  WOWZA MEDIA SYSTEMS, LLC SPECIFICALLY DISCLAIMS ANY WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
- *  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE. ALL CODE PROVIDED HEREUNDER IS PROVIDED "AS IS".
- *  WOWZA MEDIA SYSTEMS, LLC HAS NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS, OR MODIFICATIONS.
- *
- *  Copyright © 2015 Wowza Media Systems, LLC. All rights reserved.
+ * This is sample code provided by Wowza Media Systems, LLC.  All sample code is intended to be a reference for the
+ * purpose of educating developers, and is not intended to be used in any production environment.
+ * <p>
+ * IN NO EVENT SHALL WOWZA MEDIA SYSTEMS, LLC BE LIABLE TO YOU OR ANY PARTY FOR DIRECT, INDIRECT, SPECIAL, INCIDENTAL,
+ * OR CONSEQUENTIAL DAMAGES, INCLUDING LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE AND ITS DOCUMENTATION,
+ * EVEN IF WOWZA MEDIA SYSTEMS, LLC HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * <p>
+ * WOWZA MEDIA SYSTEMS, LLC SPECIFICALLY DISCLAIMS ANY WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+ * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE. ALL CODE PROVIDED HEREUNDER IS PROVIDED "AS IS".
+ * WOWZA MEDIA SYSTEMS, LLC HAS NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS, OR MODIFICATIONS.
+ * <p>
+ * Copyright © 2015 Wowza Media Systems, LLC. All rights reserved.
  */
 
 package online.motohub.util;
@@ -41,21 +41,16 @@ import online.motohub.audio.VUMeter;
  * A custom audio level meter view that demonstrates the use of the GoCoder SDK WZAudioDevice.AudioSampleListener interface
  */
 public class AudioLevelMeter extends View
-    implements WZAudioDevice.AudioSampleListener {
+        implements WZAudioDevice.AudioSampleListener {
 
-    private final String TAG = AudioLevelMeter.class.getSimpleName();
-
-    public static final int  HANDLE_UPDATE          = 0x01;
-    private static final int UPDATE_INTERVAL        = 500; // milliseconds
-
-    public static final int DEFAULT_SQUARE_PADDING  = 10;
-    public static final int DEFAULT_SQUARE_WIDTH    = 25;
-    public static final int DEFAULT_SQUARE_HEIGHT   = 20;
-
-    private static final int ANIMATION_INTERVAL     = 70;
-
+    public static final int HANDLE_UPDATE = 0x01;
+    public static final int DEFAULT_SQUARE_PADDING = 10;
+    public static final int DEFAULT_SQUARE_WIDTH = 25;
+    public static final int DEFAULT_SQUARE_HEIGHT = 20;
+    private static final int UPDATE_INTERVAL = 500; // milliseconds
+    private static final int ANIMATION_INTERVAL = 70;
     private static final int NUM_STEPS = 8;
-    private static final int[] STEP_COLORS = new int[] {
+    private static final int[] STEP_COLORS = new int[]{
             0xff80f280,
             0xff80f280,
             0xfffff280,
@@ -65,11 +60,10 @@ public class AudioLevelMeter extends View
             0xffff2e0e,
             0xffff2e0e
     };
-
-    private static final int ALPHA_PEAK              = 180;
-    private static final int ALPHA_LAST_PEAK         = 30;
-    private static final int ALPHA_BEFORE_LAST_PEAK  = 90;
-
+    private static final int ALPHA_PEAK = 180;
+    private static final int ALPHA_LAST_PEAK = 30;
+    private static final int ALPHA_BEFORE_LAST_PEAK = 90;
+    private final String TAG = AudioLevelMeter.class.getSimpleName();
     private ScheduledExecutorService mUpdateThread;
 
     private int mPeak;
@@ -84,10 +78,6 @@ public class AudioLevelMeter extends View
 
     private VUMeter mVUMeter;
     private boolean mPaused;
-
-    public UpdateHandler getHandler() {
-        return mHandler;
-    }
     private UpdateHandler mHandler;
 
     public AudioLevelMeter(Context context, AttributeSet attrs) {
@@ -100,29 +90,33 @@ public class AudioLevelMeter extends View
         init();
     }
 
+    public UpdateHandler getHandler() {
+        return mHandler;
+    }
+
     private void init() {
-        mHandler        = new UpdateHandler(this);
-        mUpdateThread   = null;
+        mHandler = new UpdateHandler(this);
+        mUpdateThread = null;
 
-        mPaint          = new Paint(Paint.ANTI_ALIAS_FLAG);
+        mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
 
-        mPeak           = 0;
-        mLastPeak       = 0;
+        mPeak = 0;
+        mLastPeak = 0;
         mBeforeLastPeak = 0;
 
-        mSquarePadding  = DEFAULT_SQUARE_PADDING;
-        mSquareHeight   = DEFAULT_SQUARE_HEIGHT;
-        mSquareWidth    = DEFAULT_SQUARE_WIDTH;
+        mSquarePadding = DEFAULT_SQUARE_PADDING;
+        mSquareHeight = DEFAULT_SQUARE_HEIGHT;
+        mSquareWidth = DEFAULT_SQUARE_WIDTH;
 
-        mVUMeter        = new VUMeter();
-        mPaused         = false;
+        mVUMeter = new VUMeter();
+        mPaused = false;
 
         setViewSize();
     }
 
     @Override
     public void onMeasure(int w, int h) {
-        int x = NUM_STEPS*(mSquareWidth + mSquarePadding);
+        int x = NUM_STEPS * (mSquareWidth + mSquarePadding);
 
         setMeasuredDimension(x, mSquareHeight + (2 * mSquarePadding));
     }
@@ -131,9 +125,9 @@ public class AudioLevelMeter extends View
     public void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
-        for(int i = 0; i < NUM_STEPS; i++) {
+        for (int i = 0; i < NUM_STEPS; i++) {
             mPaint.setColor(STEP_COLORS[i]);
-            
+
             int x, y;
             x = (i * mSquareWidth) + (i * mSquarePadding);
             y = mSquarePadding;
@@ -142,7 +136,7 @@ public class AudioLevelMeter extends View
                 if (i >= mLastPeak) {
                     mPaint.setAlpha(ALPHA_LAST_PEAK);
                 } else {
-                    if(i >= mBeforeLastPeak) {
+                    if (i >= mBeforeLastPeak) {
                         mPaint.setAlpha(ALPHA_BEFORE_LAST_PEAK);
                     } else {
                         mPaint.setAlpha(ALPHA_PEAK);
@@ -155,13 +149,13 @@ public class AudioLevelMeter extends View
 
         mBeforeLastPeak = mLastPeak;
         mLastPeak = mPeak;
-        
+
         postInvalidateDelayed(ANIMATION_INTERVAL);
     }
 
     private void setViewSize() {
-        int viewWidth   = (mSquareWidth*NUM_STEPS) + (mSquarePadding*(NUM_STEPS-1));
-        int viewHeight  = mSquareHeight;
+        int viewWidth = (mSquareWidth * NUM_STEPS) + (mSquarePadding * (NUM_STEPS - 1));
+        int viewHeight = mSquareHeight;
 
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(viewWidth, viewHeight);
         setLayoutParams(params);
@@ -182,10 +176,10 @@ public class AudioLevelMeter extends View
      */
     @Override
     public void onWZAudioSampleListenerSetup(WZMediaConfig audioConfig) {
-        mPeak           = 0;
-        mLastPeak       = 0;
+        mPeak = 0;
+        mLastPeak = 0;
         mBeforeLastPeak = 0;
-        mPaused         = false;
+        mPaused = false;
 
         mUpdateThread = Executors.newSingleThreadScheduledExecutor();
         mUpdateThread.scheduleWithFixedDelay(new Runnable() {
@@ -208,7 +202,7 @@ public class AudioLevelMeter extends View
      */
     @Override
     public synchronized void onWZAudioSampleRecorded(byte[] sampleData, int sampleDataLength, long timecodeNanos) {
-        short[] shorts = new short[sampleData.length/2];
+        short[] shorts = new short[sampleData.length / 2];
         ByteBuffer.wrap(sampleData).order(ByteOrder.LITTLE_ENDIAN).asShortBuffer().get(shorts);
         mVUMeter.calculateVULevels(shorts);
 
@@ -240,7 +234,7 @@ public class AudioLevelMeter extends View
     }
 
     private void handleUpdate(int level, int peak) {
-        mPeak = Math.min(peak, NUM_STEPS-1);
+        mPeak = Math.min(peak, NUM_STEPS - 1);
         invalidate();
     }
 

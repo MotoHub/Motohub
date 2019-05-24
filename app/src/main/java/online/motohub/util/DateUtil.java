@@ -9,16 +9,12 @@ import java.util.Locale;
 
 public class DateUtil {
 
-    private static DateUtil mInstance = null;
-
     public static final String FORMAT_DMY_HMS = "yyyy-MM-dd hh:mm:ss";
     public static final String FORMAT_DMY = "yyyy-MM-dd";
     public static final String FORMAT_HMS = "hh:mm:ss";
     public static final String FORMAT_H_AP = "h a";
     public static final String FORMAT_HM_AP = "h:mm a";
-
-
-
+    private static DateUtil mInstance = null;
     private static DateFormat sSourceFormat, sDestinationFormat;
 
 
@@ -35,39 +31,39 @@ public class DateUtil {
 
     public static String getTime(String dateTime, String sourceFormat, String destinationFormat) throws ParseException {
         sSourceFormat = new SimpleDateFormat(sourceFormat, Locale.getDefault());
-       // sSourceFormat.setTimeZone(TimeZone.getTimeZone("New Zealand"));
+        // sSourceFormat.setTimeZone(TimeZone.getTimeZone("New Zealand"));
         Date date = sSourceFormat.parse(dateTime);
         return getTime(date, destinationFormat);
     }
 
     public static String getTime(Date date, String destinationFormat) {
         sDestinationFormat = new SimpleDateFormat(destinationFormat, Locale.getDefault());
-      //  sDestinationFormat.setTimeZone(TimeZone.getTimeZone("New Zealand"));
+        //  sDestinationFormat.setTimeZone(TimeZone.getTimeZone("New Zealand"));
         return sDestinationFormat.format(date);
     }
 
     public static String getDate(String dateTime, String sourceFormat, String destinationFormat) throws ParseException {
         sSourceFormat = new SimpleDateFormat(sourceFormat, Locale.getDefault());
-       // sSourceFormat.setTimeZone(TimeZone.getTimeZone("New Zealand"));
+        // sSourceFormat.setTimeZone(TimeZone.getTimeZone("New Zealand"));
         Date date = sSourceFormat.parse(dateTime);
-        return getDate(date,destinationFormat);
+        return getDate(date, destinationFormat);
     }
 
     public static String getDate(Date date, String destinationFormat) {
         sDestinationFormat = new SimpleDateFormat(destinationFormat, Locale.getDefault());
-       // sDestinationFormat.setTimeZone(TimeZone.getTimeZone("New Zealand"));
+        // sDestinationFormat.setTimeZone(TimeZone.getTimeZone("New Zealand"));
         return sDestinationFormat.format(date);
     }
 
     public static Date getDateTime(String dateTime, String sourceFormat) throws ParseException {
         sSourceFormat = new SimpleDateFormat(sourceFormat, Locale.getDefault());
-      //  sSourceFormat.setTimeZone(TimeZone.getTimeZone("New Zealand"));
+        //  sSourceFormat.setTimeZone(TimeZone.getTimeZone("New Zealand"));
         return sSourceFormat.parse(dateTime);
     }
 
     public static Date getDateWoTime(String dateTime, String sourceFormat) throws ParseException {
         sSourceFormat = new SimpleDateFormat(sourceFormat, Locale.getDefault());
-       // sSourceFormat.setTimeZone(TimeZone.getTimeZone("New Zealand"));
+        // sSourceFormat.setTimeZone(TimeZone.getTimeZone("New Zealand"));
         Date date = sSourceFormat.parse(dateTime);
 
         Calendar calendar = Calendar.getInstance();
@@ -81,7 +77,7 @@ public class DateUtil {
 
     public static Date getDateWoTime(Date dateTime, String sourceFormat) {
         sSourceFormat = new SimpleDateFormat(sourceFormat, Locale.getDefault());
-       // sSourceFormat.setTimeZone(TimeZone.getTimeZone("New Zealand"));
+        // sSourceFormat.setTimeZone(TimeZone.getTimeZone("New Zealand"));
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(dateTime);
         calendar.set(Calendar.HOUR_OF_DAY, 0);
@@ -93,7 +89,7 @@ public class DateUtil {
 
     public static Date getDateTimeRoundOff(String dateTime, String sourceFormat) throws ParseException {
         sSourceFormat = new SimpleDateFormat(sourceFormat, Locale.getDefault());
-       // sSourceFormat.setTimeZone(TimeZone.getTimeZone("New Zealand"));
+        // sSourceFormat.setTimeZone(TimeZone.getTimeZone("New Zealand"));
         Date date = sSourceFormat.parse(dateTime);
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);

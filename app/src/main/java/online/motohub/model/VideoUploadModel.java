@@ -3,18 +3,18 @@ package online.motohub.model;
 import java.io.Serializable;
 
 public class VideoUploadModel implements Serializable {
-    public static String VideoUploadTable="video_table";
-    public static String VideoUploadID="id";
-    public static String VideoUploadURL="url";
-    public static String VideoUploadThumbnailurl="thumbnailurl";
-    public static String VideoPost="text";
-    public static String VideoFlag="flag";
-    public static String Notificationflag="notificationflag";
-    public static String ProfileID="profileid";
-    public static String NotificationIsRunning="notificationrunning";
-    public static String TaggedProfileID="taggedProfileId";
-    public static String UploadUserType="UserType";
-    private String UserType ="user";
+    public static String VideoUploadTable = "video_table";
+    public static String VideoUploadID = "id";
+    public static String VideoUploadURL = "url";
+    public static String VideoUploadThumbnailurl = "thumbnailurl";
+    public static String VideoPost = "text";
+    public static String VideoFlag = "flag";
+    public static String Notificationflag = "notificationflag";
+    public static String ProfileID = "profileid";
+    public static String NotificationIsRunning = "notificationrunning";
+    public static String TaggedProfileID = "taggedProfileId";
+    public static String UploadUserType = "UserType";
+    private String UserType = "user";
     private Integer flag;
     private Integer ID;
     private String VideoURL;
@@ -23,6 +23,7 @@ public class VideoUploadModel implements Serializable {
     private Integer NotificationFlag;
     private Integer profileID;
     private String taggedProfileID;
+
     public Integer getProfileID() {
         return profileID;
     }
@@ -88,8 +89,8 @@ public class VideoUploadModel implements Serializable {
     }
 
     public String getUserType() {
-        if(UserType == null)
-            UserType="";
+        if (UserType == null)
+            UserType = "";
         return UserType;
     }
 

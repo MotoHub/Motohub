@@ -21,12 +21,10 @@ import online.motohub.model.EventRegistrationQuestionModel;
 
 public class EventRegistrationQuestionAdapter extends RecyclerView.Adapter<EventRegistrationQuestionAdapter.Holder> {
 
-    private Context mContext;
-
     public String[] mDataset = new String[25];
-
     ArrayList<EventRegistrationQuestionModel> mEventQuestionList = new ArrayList<>();
     ArrayList<EventAnswersModel> mEventAnswerList = new ArrayList<>();
+    private Context mContext;
 
 
     public EventRegistrationQuestionAdapter(Context mContext, ArrayList<EventRegistrationQuestionModel> eventQuestionList, ArrayList<EventAnswersModel> mEventAnswerList) {
@@ -36,33 +34,10 @@ public class EventRegistrationQuestionAdapter extends RecyclerView.Adapter<Event
         this.mEventAnswerList = mEventAnswerList;
     }
 
-
-    public class Holder extends RecyclerView.ViewHolder {
-
-        @BindView(R.id.qtn_number_tv)
-        TextView mQuestionNoTv;
-
-        @BindView(R.id.qtn_tv)
-        TextView mQuestionTv;
-
-        @BindView(R.id.answer_et)
-        EditText mAnswerEt;
-
-        public MyCustomEditTextListener myCustomEditTextListener;
-
-        public Holder(View view, MyCustomEditTextListener myCustomEditTextListener) {
-            super(view);
-            ButterKnife.bind(this, view);
-            this.myCustomEditTextListener = myCustomEditTextListener;
-            this.mAnswerEt.addTextChangedListener(myCustomEditTextListener);
-        }
-    }
-
-
     @Override
     public EventRegistrationQuestionAdapter.Holder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.adap_event_question_list, parent, false);
-        return new EventRegistrationQuestionAdapter.Holder(view,new MyCustomEditTextListener());
+        return new EventRegistrationQuestionAdapter.Holder(view, new MyCustomEditTextListener());
     }
 
     @Override
@@ -75,19 +50,36 @@ public class EventRegistrationQuestionAdapter extends RecyclerView.Adapter<Event
             mHolder.mQuestionTv.setText(mEventQuestionList.get(pos).getQuestion());
             if (mEventAnswerList != null && !mEventAnswerList.isEmpty())
                 mHolder.mAnswerEt.setText(mEventAnswerList.get(pos).getAnswer());
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public String[] getAnswers(){
+    public String[] getAnswers() {
         return this.mDataset;
     }
-
 
     @Override
     public int getItemCount() {
         return mEventQuestionList.size();
+    }
+
+    public class Holder extends RecyclerView.ViewHolder {
+
+        public MyCustomEditTextListener myCustomEditTextListener;
+        @BindView(R.id.qtn_number_tv)
+        TextView mQuestionNoTv;
+        @BindView(R.id.qtn_tv)
+        TextView mQuestionTv;
+        @BindView(R.id.answer_et)
+        EditText mAnswerEt;
+
+        public Holder(View view, MyCustomEditTextListener myCustomEditTextListener) {
+            super(view);
+            ButterKnife.bind(this, view);
+            this.myCustomEditTextListener = myCustomEditTextListener;
+            this.mAnswerEt.addTextChangedListener(myCustomEditTextListener);
+        }
     }
 
     private class MyCustomEditTextListener implements TextWatcher {

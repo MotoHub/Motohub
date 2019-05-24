@@ -8,7 +8,6 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
-
 import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.util.ArrayList;
@@ -1536,6 +1535,7 @@ public class RetrofitClient {
                 });
 
     }
+
     public void callGetProfilePost(final BaseActivity activity, String filter, final int queryType, int limit, int offset) {
 //        filter = filter + " AND (Post_on<=" + activity.getCurrentDate() + ")";
         String mOrderBy = "CreatedAt DESC";
@@ -1564,6 +1564,7 @@ public class RetrofitClient {
                 });
 
     }
+
     public void callGetProfilePosts(final BaseActivity activity, String filter, final int queryType, int limit, int offset) {
         filter = filter + " AND (Post_on<=" + activity.getCurrentDate() + ")";
         String mOrderBy = "CreatedAt DESC";

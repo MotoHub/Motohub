@@ -33,7 +33,6 @@ import online.motohub.R;
 import online.motohub.activity.BaseActivity;
 import online.motohub.activity.ViewSpecLiveActivity;
 import online.motohub.adapter.GalleryVideoAdapter;
-import online.motohub.application.MotoHub;
 import online.motohub.fragment.BaseFragment;
 import online.motohub.fragment.promoter.PromoterVideosFragment;
 import online.motohub.model.GalleryVideoModel;
@@ -54,6 +53,9 @@ import static android.content.Context.INPUT_METHOD_SERVICE;
 public class BusinessVideosFragment extends BaseFragment {
 
     public static final String TAG = PromoterVideosFragment.class.getSimpleName();
+    private static final int mDataLimit = 15;
+    private static String mSearchStr = "";
+    public boolean mRefresh = true;
     @BindView(R.id.rv_videos)
     RecyclerView mRv;
     @BindView(R.id.search_edt)
@@ -62,18 +64,13 @@ public class BusinessVideosFragment extends BaseFragment {
     TextView txtNoData;
     @BindView(R.id.parent)
     LinearLayout parent;
+    GridLayoutManager layoutManager;
     private ArrayList<GalleryVideoResModel> videoResModels;
-    private static String mSearchStr = "";
-
     private GalleryVideoAdapter mAdapter;
     private PromotersResModel mPromotersResModel;
-
     private Unbinder mUnBinder;
     private Activity mActivity;
-    GridLayoutManager layoutManager;
-    public boolean mRefresh = true;
     private boolean mIsPostsRvLoading = true;
-    private static final int mDataLimit = 15;
     private int mPostsRvOffset = 0, mPostsRvTotalCount = 0;
 
     @Override
@@ -200,7 +197,7 @@ public class BusinessVideosFragment extends BaseFragment {
                 + APIConstants.UserType + " = " + AppConstants.USER_EVENT_VIDEOS + "))";
         RetrofitClient.getRetrofitInstance()
                 .getPromoterVideoGallery1((BaseActivity) getActivity(),
-                        mFilter, RetrofitClient.GET_VIDEO_FILE_RESPONSE,mDataLimit,mPostsRvOffset);
+                        mFilter, RetrofitClient.GET_VIDEO_FILE_RESPONSE, mDataLimit, mPostsRvOffset);
     }
 
     private void findvideos(String searchstr) {
@@ -277,7 +274,7 @@ public class BusinessVideosFragment extends BaseFragment {
     @Override
     public void retrofitOnError(int code, String message) {
         super.retrofitOnError(code, message);
-        if (code == RetrofitClient.GET_VIDEO_FILE_RESPONSE){
+        if (code == RetrofitClient.GET_VIDEO_FILE_RESPONSE) {
             mPostsRvTotalCount = 0;
         }
     }
