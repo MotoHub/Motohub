@@ -440,7 +440,7 @@ public class PromoterOrUserAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                                 isVideoFile = !(mVideoList.length == 1 && mVideoList[0].trim().equals(""));
                             }
                             if (isVideoFile) {
-                                String mVideosList[] = getImgVideoList(mPostsList.get(position).getVideoUrl());
+                                String[] mVideosList = getImgVideoList(mPostsList.get(position).getVideoUrl());
                                 ((BaseActivity) mContext).showFBShareDialog(AppDialogFragment.BOTTOM_SHARE_DIALOG, content, null, mVideosList, position, true);
                             } else {
                                 ((BaseActivity) mContext).showFBShareDialog(AppDialogFragment.BOTTOM_SHARE_DIALOG, content, null, null, position, true);
@@ -513,9 +513,9 @@ public class PromoterOrUserAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         ArrayList<VideoLikesModel> mFeedLikes = mPostsList.get(position).getVideolikes_by_VideoID();
         String resLikes;
         if (mPostsList.get(position).getVideolikes_by_VideoID().size() == 1) {
-            resLikes = String.valueOf(mPostsList.get(position).getVideolikes_by_VideoID().size()) + " Like";
+            resLikes = mPostsList.get(position).getVideolikes_by_VideoID().size() + " Like";
         } else {
-            resLikes = String.valueOf(mPostsList.get(position).getVideolikes_by_VideoID().size()) + " Likes";
+            resLikes = mPostsList.get(position).getVideolikes_by_VideoID().size() + " Likes";
         }
         mViewHolderPost.mLikeCountText.setText(resLikes);
         for (final VideoLikesModel likesEntity : mFeedLikes) {

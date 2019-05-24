@@ -191,7 +191,7 @@ public class ProfileUploadService extends IntentService implements ProgressReque
         int count = databaseHandler.getPendingCount();
         int notificationid = count + 1;
         String s = videoFile.toString();
-        videoUploadModel.setVideoURL(s.substring(s.lastIndexOf("/") + 1, s.length()));
+        videoUploadModel.setVideoURL(s.substring(s.lastIndexOf("/") + 1));
         videoUploadModel.setFlag(1);
         videoUploadModel.setThumbnailURl(mImageFile.toString());
         videoUploadModel.setProfileID(mProfileID);
@@ -270,7 +270,7 @@ public class ProfileUploadService extends IntentService implements ProgressReque
             @Override
             public void onStateChanged(int id, TransferState state) {
 
-                if (state.COMPLETED.equals(observerVideo.getState())) {
+                if (TransferState.COMPLETED.equals(observerVideo.getState())) {
 
                     String imageFileName = image.getName().substring(image.getName().lastIndexOf("/") + 1);
                     String videoFileName = video.getName().substring(video.getName().lastIndexOf("/") + 1);
@@ -324,7 +324,7 @@ public class ProfileUploadService extends IntentService implements ProgressReque
             @Override
             public void onStateChanged(int id, TransferState state) {
 
-                if (state.COMPLETED.equals(observerImage.getState())) {
+                if (TransferState.COMPLETED.equals(observerImage.getState())) {
                     //Toast.makeText(ProfileUploadService.this, "File Upload Complete", Toast.LENGTH_SHORT).show();
                 }
             }

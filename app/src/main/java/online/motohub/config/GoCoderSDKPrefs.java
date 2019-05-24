@@ -424,7 +424,7 @@ public class GoCoderSDKPrefs {
                     //
                     // H.264 profile level preference
                     //
-                    final WZProfileLevel avcProfileLevels[] = WZCodecUtils.getProfileLevels();
+                    final WZProfileLevel[] avcProfileLevels = WZCodecUtils.getProfileLevels();
 
                     final ListPreference profileLevelsPref = (ListPreference) findPreference("wz_video_profile_level");
                     if (avcProfileLevels.length == 0) {

@@ -121,8 +121,8 @@ public class APIConstants {
     private static final String blockeduserprofiles_by_ProfileID = "blockeduserprofiles_by_ProfileID";
     private static final String blockeduserprofiles_by_BlockedProfileID = "blockeduserprofiles_by_BlockedProfileID";
 
-  /*  public static final String mPromoterGalleryRelated = PromotersModel.PROMOTER_BY_USERID + "," + PromotersModel.VIDEO_COMMENTS_BY_VIDEO_ID +
-            "," + PromotersModel.VIDEO_LIKES_BY_VIDEO_ID + "," + PromotersModel.VIDEO_SHARES_BY_ORIGINAL_VIDEO_ID + "," + profiles_by_ProfileID + ",event_by_EventID";*/
+    /*  public static final String mPromoterGalleryRelated = PromotersModel.PROMOTER_BY_USERID + "," + PromotersModel.VIDEO_COMMENTS_BY_VIDEO_ID +
+              "," + PromotersModel.VIDEO_LIKES_BY_VIDEO_ID + "," + PromotersModel.VIDEO_SHARES_BY_ORIGINAL_VIDEO_ID + "," + profiles_by_ProfileID + ",event_by_EventID";*/
     public static final String PROFILE_RELATION_FOLLOW_BLOCK = followprofile_by_FollowProfileID
             + "," + followprofile_by_ProfileID
             + "," + blockeduserprofiles_by_ProfileID

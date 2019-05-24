@@ -352,7 +352,7 @@ public class PromoterOrUserFragment extends BaseFragment implements SwipeRefresh
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.video_gallery_fab:
-                assert ((BaseActivity) getActivity()) != null;
+                assert getActivity() != null;
                 ((BaseActivity) getActivity()).showAppDialog(AppDialogFragment.BOTTOM_ADD_VIDEO_DIALOG, null);
                 break;
         }
@@ -391,7 +391,7 @@ public class PromoterOrUserFragment extends BaseFragment implements SwipeRefresh
                     Uri videoUri = data.getData();
                     // mVideoPathUri = data.getStringExtra(EXTRA_RESULT_DATA);
                     if (videoUri != null) {
-                        assert ((BaseActivity) getActivity()) != null;
+                        assert getActivity() != null;
                         mVideoPathUri = ((BaseActivity) getActivity()).getRealPathFromURI(videoUri);
                         getSelectedVideoPath();
                         startVideoPreviewOnDemandActivity();

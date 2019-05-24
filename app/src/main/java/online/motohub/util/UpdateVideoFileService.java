@@ -261,7 +261,7 @@ public class UpdateVideoFileService extends IntentService implements ProgressReq
         //  int count = databaseHandler.getPendingCount();
         VideoUploadModel videoUploadModel = new VideoUploadModel();
         String s = videoFile.toString();
-        videoUploadModel.setVideoURL(s.substring(s.lastIndexOf("/") + 1, s.length()));
+        videoUploadModel.setVideoURL(s.substring(s.lastIndexOf("/") + 1));
         videoUploadModel.setFlag(1);
         videoUploadModel.setThumbnailURl(imagfile.toString());
         videoUploadModel.setPosts(postText);

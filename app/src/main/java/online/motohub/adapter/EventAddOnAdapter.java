@@ -55,9 +55,7 @@ public class EventAddOnAdapter extends RecyclerView.Adapter<EventAddOnAdapter.Ho
                         mHolder.mAddOnToggleBtn.setTextOn(mTempText);
                         ((EventsAddOnActivity) mContext).increaseTotalAmount(mEventAddOnList.get(mHolder.getLayoutPosition()).getAddOnPrice());
                     } else {
-                        if (mSelectedEventAddOn.contains(mEventAddOnList.get(mHolder.getLayoutPosition()))) {
-                            mSelectedEventAddOn.remove(mEventAddOnList.get(mHolder.getLayoutPosition()));
-                        }
+                        mSelectedEventAddOn.remove(mEventAddOnList.get(mHolder.getLayoutPosition()));
                         String mTempText = "+ " + "$ " + (mEventAddOnList.get(mHolder.getLayoutPosition()).getAddOnPrice() / 100);
                         mHolder.mAddOnToggleBtn.setTextOff(mTempText);
                         ((EventsAddOnActivity) mContext).decreaseTotalAmount(mEventAddOnList.get(mHolder.getLayoutPosition()).getAddOnPrice());

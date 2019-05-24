@@ -113,7 +113,7 @@ public class UpdateEventQuestionAnswerActivity extends BaseActivity {
                 break;
 
             case R.id.save_answers_btn:
-                String mAnswers[] = mEventQuestionAdapter.getAnswers();
+                String[] mAnswers = mEventQuestionAdapter.getAnswers();
                 JsonArray mJsonArray = new JsonArray();
 
                 for (int i = 0; i < mEventQuestionList.size(); i++) {

@@ -136,7 +136,7 @@ public class PickerImageActivity extends BaseActivity {
                 VideoUploadModel videoUploadModel = new VideoUploadModel();
                 // File imgfile=new File(selectedUri.getFileName());
                 String s = String.valueOf(selectedUri.getFileUri());
-                videoUploadModel.setThumbnailURl(s.substring(s.lastIndexOf("/") + 1, s.length()));
+                videoUploadModel.setThumbnailURl(s.substring(s.lastIndexOf("/") + 1));
                 videoUploadModel.setProfileID(ProfileID);
                 videoUploadModel.setNotificationflag(notificationcount);
                 databaseHandler.addVideoDetails(videoUploadModel);
@@ -227,7 +227,7 @@ public class PickerImageActivity extends BaseActivity {
 
         Uri mExternalUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
 
-        String projection[] = {"DISTINCT " + MediaStore.Images.Media.BUCKET_DISPLAY_NAME,
+        String[] projection = {"DISTINCT " + MediaStore.Images.Media.BUCKET_DISPLAY_NAME,
                 MediaStore.Images.Media.DATA, MediaStore.Images.Media.BUCKET_ID,
                 MediaStore.Images.Media.DATE_TAKEN};
 

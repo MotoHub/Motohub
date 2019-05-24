@@ -210,7 +210,7 @@ public class ProfileImgGalleryActivity extends BaseActivity {
     private void getGalleryImages() {
 
         mUpdateTask = UpdateTask.NONE;
-        RetrofitClient.getRetrofitInstance().callGetImageGallery(ProfileImgGalleryActivity.this, "MotoID = " + String.valueOf(mProfileID),
+        RetrofitClient.getRetrofitInstance().callGetImageGallery(ProfileImgGalleryActivity.this, "MotoID = " + mProfileID,
                 RetrofitClient.GET_GALLERY_DATA_RESPONSE);
 
     }
@@ -404,7 +404,7 @@ public class ProfileImgGalleryActivity extends BaseActivity {
 
         if (mActionMode != null)
             //set action mode title on item selection
-            mActionMode.setTitle(String.valueOf(mAdapter.getSelectedCount()) + " selected");
+            mActionMode.setTitle(mAdapter.getSelectedCount() + " selected");
     }
 
     //Set action mode null after use

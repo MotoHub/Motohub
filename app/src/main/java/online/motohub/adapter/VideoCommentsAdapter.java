@@ -440,9 +440,9 @@ public class VideoCommentsAdapter extends RecyclerView.Adapter<VideoCommentsAdap
 
             if (mFeedCommentList.get(position).getFeedCommentLikeModel().size() == 1) {
 
-                resLikes = String.valueOf(mFeedCommentList.get(position).getFeedCommentLikeModel().size()) + " like";
+                resLikes = mFeedCommentList.get(position).getFeedCommentLikeModel().size() + " like";
             } else {
-                resLikes = String.valueOf(mFeedCommentList.get(position).getFeedCommentLikeModel().size()) + " likes";
+                resLikes = mFeedCommentList.get(position).getFeedCommentLikeModel().size() + " likes";
 
             }
             mViewHolder.mLikeCountTxt.setText(resLikes);

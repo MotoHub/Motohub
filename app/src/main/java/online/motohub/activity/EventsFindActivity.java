@@ -264,8 +264,8 @@ public class EventsFindActivity extends BaseActivity {
                 if (mEventsFindAdapter.mEventType.equals(AppConstants.FREE_EVENT)) {
                     showSnackBar(mCoordinatorLayout, "Successfully booked an event.");
                 } else {
-                    if (((BaseActivity) this).mPurchaseSuccessDialog != null)
-                        ((BaseActivity) this).mPurchaseSuccessDialog.show();
+                    if (this.mPurchaseSuccessDialog != null)
+                        this.mPurchaseSuccessDialog.show();
                 }
             }
 
@@ -278,12 +278,12 @@ public class EventsFindActivity extends BaseActivity {
             if (mEventsFindAdapter.mEventType.equals(AppConstants.FREE_EVENT)) {
                 showSnackBar(mCoordinatorLayout, "Successfully booked an event.");
             } else {
-                if (((BaseActivity) this).mPurchaseSuccessDialog != null)
-                    ((BaseActivity) this).mPurchaseSuccessDialog.show();
+                if (this.mPurchaseSuccessDialog != null)
+                    this.mPurchaseSuccessDialog.show();
             }
         } else {
-            if (((BaseActivity) this).mPurchaseSuccessDialog != null)
-                ((BaseActivity) this).mPurchaseSuccessDialog.show();
+            if (this.mPurchaseSuccessDialog != null)
+                this.mPurchaseSuccessDialog.show();
         }
 
 

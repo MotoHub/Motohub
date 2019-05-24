@@ -144,6 +144,7 @@ public class BluetoothActivity extends AudioMeterActivity {
 
     /**
      * Process the Bluetooth connectivity state received via the intent
+     *
      * @param state the AudioManager intent
      */
     protected void processBluetoothState(int state) {
@@ -224,6 +225,7 @@ public class BluetoothActivity extends AudioMeterActivity {
 
     /**
      * Ensure broadcast config meets Bluetooth requirements
+     *
      * @return Any synchronous error that may have occurred starting the broadcast, null otherwise
      */
     @Override

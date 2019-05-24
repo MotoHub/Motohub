@@ -36,7 +36,7 @@ import online.motohub.R;
 import online.motohub.activity.business.BusinessProfileActivity;
 import online.motohub.adapter.RecentUsersAdapter;
 import online.motohub.database.DatabaseHandler;
-import online.motohub.fcm.MyFireBaseInstanceIdService;
+import online.motohub.fcm.MyFireBaseMessagingService;
 import online.motohub.interfaces.CommonReturnInterface;
 import online.motohub.model.LoginModel;
 import online.motohub.model.ProfileModel;
@@ -264,9 +264,9 @@ public class LoginActivity extends BaseActivity {
             LoginModel mLoginModel = (LoginModel) responseObj;
             switch (responseType) {
                 case RetrofitClient.CALL_GET_PROFILE_USER_TYPE:
-                    MyFireBaseInstanceIdService mMyFireBaseInstanceIdService = new MyFireBaseInstanceIdService();
+                    MyFireBaseMessagingService mMyFireBaseMessagingService = new MyFireBaseMessagingService();
                     String refreshedToken = FirebaseInstanceId.getInstance().getToken();
-                    mMyFireBaseInstanceIdService.sendRegistrationToken(refreshedToken, MyFireBaseInstanceIdService.UPDATE_PUSH_TOKEN);
+                    mMyFireBaseMessagingService.sendRegistrationToken(refreshedToken, MyFireBaseMessagingService.UPDATE_PUSH_TOKEN);
                     int mUserID = PreferenceUtils.getInstance(this).getIntData(PreferenceUtils.USER_ID);
                     String mUserType = mLoginModel.getPhone();
                     if (mUserType.equals(AppConstants.PROMOTER) || mUserType.equals(AppConstants.TRACK) || mUserType.equals(AppConstants.NEWS_MEDIA) || mUserType.equals(AppConstants.SHOP) || mUserType.equals(AppConstants.CLUB)) {
@@ -283,15 +283,6 @@ public class LoginActivity extends BaseActivity {
                     RetrofitClient.getRetrofitInstance().callGetProfileUserType(this, RetrofitClient.CALL_GET_PROFILE_USER_TYPE);
                     break;
             }
-            //saveUserDataLocally(mLoginModel);
-            /*MyFireBaseInstanceIdService mMyFireBaseInstanceIdService = new MyFireBaseInstanceIdService();
-            String refreshedToken = FirebaseInstanceId.getInstance().getToken();
-            mMyFireBaseInstanceIdService.sendRegistrationToken(refreshedToken, MyFireBaseInstanceIdService.UPDATE_PUSH_TOKEN);*/
-            /*int mUserID = PreferenceUtils.getInstance(this).getIntData(PreferenceUtils.USER_ID);
-            String mFilter = "UserID=" + mUserID;
-
-            RetrofitClient.getRetrofitInstance().callGetProfilesWithPushToken(this, mFilter, RetrofitClient.GET_PROFILE_RESPONSE);*/
-
         }
 
         if (responseObj instanceof ProfileModel) {

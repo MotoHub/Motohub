@@ -1402,9 +1402,7 @@ public class ViewProfileActivity extends BaseActivity implements
             } else if (responseType == RetrofitClient.UN_FOLLOW_PROFILE_RESPONSE) {
                 if (mResponse.getResource().size() > 0) {
                     ArrayList<FollowProfileEntity> mFollowList = mCurrentProfileObj.getFollowprofile_by_ProfileID();
-                    if (mFollowList.contains(mResponse.getResource().get(0))) {
-                        mFollowList.remove(mResponse.getResource().get(0));
-                    }
+                    mFollowList.remove(mResponse.getResource().get(0));
                     mCurrentProfileObj.setFollowprofile_by_ProfileID(mFollowList);
                     if (mHorPhoneEmailFriendsRecyclerView.getVisibility() == View.GONE)
                         mHorPhoneEmailFriendsRecyclerView.setVisibility(View.VISIBLE);

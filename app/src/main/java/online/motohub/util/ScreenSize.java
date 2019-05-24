@@ -9,6 +9,7 @@ public class ScreenSize {
     private static ScreenSize instance;
     private static DisplayMetrics metrics;
     private static float scale;
+
     private ScreenSize() {
     }
 

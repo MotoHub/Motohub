@@ -170,7 +170,7 @@ public class CreateNewPaymentActivity extends BaseActivity {
             mCardNameTxt = mCardName.getText().toString();
             mCardNumberTxt = mCardNumber.getText().toString().trim();
             if (mCardExpDate.getText().toString().contains("/")) {
-                String date[] = mCardExpDate.getText().toString().split("/");
+                String[] date = mCardExpDate.getText().toString().split("/");
                 mCardExpMonthVal = Integer.parseInt(date[0]);
                 mCardExpYearVal = Integer.parseInt(date[1]);
             } else {
@@ -234,8 +234,6 @@ public class CreateNewPaymentActivity extends BaseActivity {
             e.printStackTrace();
         }
     }
-
-    ;
 
     @Override
     public void retrofitOnResponse(Object responseObj, int responseType) {
@@ -435,7 +433,7 @@ public class CreateNewPaymentActivity extends BaseActivity {
         @Override
         public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
             boolean flag = true;
-            String eachBlock[] = mCardExpDate.getText().toString().split("/");
+            String[] eachBlock = mCardExpDate.getText().toString().split("/");
             for (String anEachBlock : eachBlock) {
                 if (anEachBlock.length() > 2) {
                     flag = false;

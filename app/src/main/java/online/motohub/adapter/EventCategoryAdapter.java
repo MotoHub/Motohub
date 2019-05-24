@@ -46,9 +46,7 @@ public class EventCategoryAdapter extends RecyclerView.Adapter<EventCategoryAdap
                     if (isChecked) {
                         mSelectedEventCategory.add(mEventCategoryList.get(pos));
                     } else {
-                        if (mSelectedEventCategory.contains(mEventCategoryList.get(pos))) {
-                            mSelectedEventCategory.remove(mEventCategoryList.get(pos));
-                        }
+                        mSelectedEventCategory.remove(mEventCategoryList.get(pos));
                     }
                 }
             });

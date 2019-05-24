@@ -216,7 +216,7 @@ abstract public class CameraActivityBase extends GoCoderSDKActivityBase
     public void onToggleBroadcast(View v) {
 //        if (getBroadcast() == null) return;
 
-        String sName = MotoHub.getApplicationInstance().getLiveStreamName().toString().trim();
+        String sName = MotoHub.getApplicationInstance().getLiveStreamName().trim();
 
 
         mWZBroadcastConfig.setHostAddress(getString(R.string.wz_live_host_address_default_value));
@@ -288,7 +288,7 @@ abstract public class CameraActivityBase extends GoCoderSDKActivityBase
             // Initialize the camera preview
             if (this.hasDevicePermissionToAccess(Manifest.permission.CAMERA)) {
                 if (mWZCameraView != null) {
-                    WZCamera availableCameras[] = mWZCameraView.getCameras();
+                    WZCamera[] availableCameras = mWZCameraView.getCameras();
                     // Ensure we can access to at least one camera
                     if (availableCameras.length > 0) {
                         // Set the video broadcaster in the broadcast config
