@@ -8,6 +8,7 @@ import android.hardware.camera2.CameraManager;
 import android.opengl.GLSurfaceView;
 import android.util.Log;
 import android.view.Surface;
+
 import com.daasuu.gpuv.egl.filter.GlFilter;
 
 

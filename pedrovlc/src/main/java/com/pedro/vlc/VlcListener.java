@@ -5,11 +5,13 @@ package com.pedro.vlc;
  */
 public interface VlcListener {
 
-  void onPlaying();
+    void onPlaying();
 
-  void onError();
+    void onError();
 
-  void onBuffer();
-  void onOpening();
-  void onStopped();
+    void onBuffer();
+
+    void onOpening();
+
+    void onStopped();
 }

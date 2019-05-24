@@ -2,6 +2,7 @@ package com.daasuu.gpuv.egl.filter;
 
 import android.opengl.GLES20;
 import android.util.Pair;
+
 import com.daasuu.gpuv.egl.GlFramebufferObject;
 
 import java.util.ArrayList;
@@ -17,6 +18,7 @@ public class GlFilterGroup extends GlFilter {
     private final Collection<GlFilter> filters;
 
     private final ArrayList<Pair<GlFilter, GlFramebufferObject>> list = new ArrayList<Pair<GlFilter, GlFramebufferObject>>();
+    private int prevTexName;
 
     public GlFilterGroup(final GlFilter... glFilters) {
         this(Arrays.asList(glFilters));
@@ -75,8 +77,6 @@ public class GlFilterGroup extends GlFilter {
             }
         }
     }
-
-    private int prevTexName;
 
     @Override
     public void draw(final int texName, final GlFramebufferObject fbo) {

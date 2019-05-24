@@ -21,12 +21,11 @@ public class GlOpacityFilter extends GlFilter {
             "      \n" +
             "      gl_FragColor = vec4(textureColor.rgb, textureColor.a * opacity);\n" +
             "  }\n";
+    private float opacity = 1f;
 
     public GlOpacityFilter() {
         super(DEFAULT_VERTEX_SHADER, OPACITY_FRAGMENT_SHADER);
     }
-
-    private float opacity = 1f;
 
     public void setOpacity(float opacity) {
         this.opacity = opacity;

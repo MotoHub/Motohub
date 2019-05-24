@@ -8,7 +8,6 @@ import android.opengl.GLES20;
 import com.daasuu.gpuv.egl.EglUtil;
 
 
-
 public class GlLookUpTableFilter extends GlFilter {
 
     private final static String FRAGMENT_SHADER =
@@ -39,6 +38,8 @@ public class GlLookUpTableFilter extends GlFilter {
                     "   pixel = gradedPixel;\n" +
                     "   gl_FragColor = pixel;\n " +
                     "}";
+    private int hTex;
+    private Bitmap lutTexture;
 
     public GlLookUpTableFilter(Bitmap bitmap) {
         super(DEFAULT_VERTEX_SHADER, FRAGMENT_SHADER);
@@ -46,16 +47,11 @@ public class GlLookUpTableFilter extends GlFilter {
         hTex = EglUtil.NO_TEXTURE;
     }
 
-
     public GlLookUpTableFilter(Resources resources, int fxID) {
         super(DEFAULT_VERTEX_SHADER, FRAGMENT_SHADER);
         this.lutTexture = BitmapFactory.decodeResource(resources, fxID);
         hTex = EglUtil.NO_TEXTURE;
     }
-
-    private int hTex;
-
-    private Bitmap lutTexture;
 
     @Override
     public void onDraw() {

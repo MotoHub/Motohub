@@ -64,29 +64,6 @@ public final class SelectionCreator {
     private final Matisse mMatisse;
     private final SelectionSpec mSelectionSpec;
 
-    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
-    @IntDef({
-            SCREEN_ORIENTATION_UNSPECIFIED,
-            SCREEN_ORIENTATION_LANDSCAPE,
-            SCREEN_ORIENTATION_PORTRAIT,
-            SCREEN_ORIENTATION_USER,
-            SCREEN_ORIENTATION_BEHIND,
-            SCREEN_ORIENTATION_SENSOR,
-            SCREEN_ORIENTATION_NOSENSOR,
-            SCREEN_ORIENTATION_SENSOR_LANDSCAPE,
-            SCREEN_ORIENTATION_SENSOR_PORTRAIT,
-            SCREEN_ORIENTATION_REVERSE_LANDSCAPE,
-            SCREEN_ORIENTATION_REVERSE_PORTRAIT,
-            SCREEN_ORIENTATION_FULL_SENSOR,
-            SCREEN_ORIENTATION_USER_LANDSCAPE,
-            SCREEN_ORIENTATION_USER_PORTRAIT,
-            SCREEN_ORIENTATION_FULL_USER,
-            SCREEN_ORIENTATION_LOCKED
-    })
-    @Retention(RetentionPolicy.SOURCE)
-    @interface ScreenOrientation {
-    }
-
     /**
      * Constructs a new specification builder on the context.
      *
@@ -351,6 +328,29 @@ public final class SelectionCreator {
         } else {
             activity.startActivityForResult(intent, requestCode);
         }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
+    @IntDef({
+            SCREEN_ORIENTATION_UNSPECIFIED,
+            SCREEN_ORIENTATION_LANDSCAPE,
+            SCREEN_ORIENTATION_PORTRAIT,
+            SCREEN_ORIENTATION_USER,
+            SCREEN_ORIENTATION_BEHIND,
+            SCREEN_ORIENTATION_SENSOR,
+            SCREEN_ORIENTATION_NOSENSOR,
+            SCREEN_ORIENTATION_SENSOR_LANDSCAPE,
+            SCREEN_ORIENTATION_SENSOR_PORTRAIT,
+            SCREEN_ORIENTATION_REVERSE_LANDSCAPE,
+            SCREEN_ORIENTATION_REVERSE_PORTRAIT,
+            SCREEN_ORIENTATION_FULL_SENSOR,
+            SCREEN_ORIENTATION_USER_LANDSCAPE,
+            SCREEN_ORIENTATION_USER_PORTRAIT,
+            SCREEN_ORIENTATION_FULL_USER,
+            SCREEN_ORIENTATION_LOCKED
+    })
+    @Retention(RetentionPolicy.SOURCE)
+    @interface ScreenOrientation {
     }
 
 }

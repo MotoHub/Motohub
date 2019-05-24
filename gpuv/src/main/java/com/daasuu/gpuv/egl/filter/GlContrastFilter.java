@@ -22,13 +22,11 @@ public class GlContrastFilter extends GlFilter {
             "     \n" +
             "     gl_FragColor = vec4(((textureColor.rgb - vec3(0.5)) * contrast + vec3(0.5)), textureColor.w);\n" +
             " }";
-
+    private float contrast = 1.2f;
 
     public GlContrastFilter() {
         super(DEFAULT_VERTEX_SHADER, CONTRAST_FRAGMENT_SHADER);
     }
-
-    private float contrast = 1.2f;
 
     public void setContrast(float contrast) {
         this.contrast = contrast;

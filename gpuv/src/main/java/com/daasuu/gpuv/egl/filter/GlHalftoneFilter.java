@@ -27,13 +27,11 @@ public class GlHalftoneFilter extends GlFilter {
             "  lowp float checkForPresenceWithinDot = 1.0 - step(distanceFromSamplePoint, (fractionalWidthOfPixel * 0.5) * dotScaling);\n" +
             "  gl_FragColor = vec4(vec3(checkForPresenceWithinDot), 1.0);\n" +
             "}";
-
+    private float fractionalWidthOfPixel = 0.01f;
+    private float aspectRatio = 1f;
     public GlHalftoneFilter() {
         super(DEFAULT_VERTEX_SHADER, HALFTONE_FRAGMENT_SHADER);
     }
-
-    private float fractionalWidthOfPixel = 0.01f;
-    private float aspectRatio = 1f;
 
     public void setFractionalWidthOfAPixel(float fractionalWidthOfAPixel) {
         this.fractionalWidthOfPixel = fractionalWidthOfAPixel;

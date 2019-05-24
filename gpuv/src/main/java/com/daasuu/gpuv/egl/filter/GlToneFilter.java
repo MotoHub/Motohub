@@ -3,7 +3,6 @@ package com.daasuu.gpuv.egl.filter;
 import android.opengl.GLES20;
 
 
-
 public class GlToneFilter extends GlThreex3TextureSamplingFilter {
 
     private static final String FRAGMENT_SHADER =

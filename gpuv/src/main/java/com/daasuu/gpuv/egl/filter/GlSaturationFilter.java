@@ -21,13 +21,11 @@ public class GlSaturationFilter extends GlFilter {
             "    gl_FragColor = vec4(mix(greyScaleColor, textureColor.rgb, saturation), textureColor.w);\n" +
             "     \n" +
             " }";
-
+    private float saturation = 1f;
 
     public GlSaturationFilter() {
         super(DEFAULT_VERTEX_SHADER, SATURATION_FRAGMENT_SHADER);
     }
-
-    private float saturation = 1f;
 
     public void setSaturation(float saturation) {
         this.saturation = saturation;

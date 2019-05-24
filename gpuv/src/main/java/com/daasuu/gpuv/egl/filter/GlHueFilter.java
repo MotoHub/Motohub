@@ -48,12 +48,11 @@ public class GlHueFilter extends GlFilter {
             "    // Save the result\n" +
             "    gl_FragColor = color;\n" +
             "}\n";
+    private float hue = 90f;
 
     public GlHueFilter() {
         super(DEFAULT_VERTEX_SHADER, HUE_FRAGMENT_SHADER);
     }
-
-    private float hue = 90f;
 
     public void setHue(float hue) {
         this.hue = hue;
