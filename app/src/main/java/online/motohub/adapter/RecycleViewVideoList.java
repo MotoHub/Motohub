@@ -58,9 +58,9 @@ public class RecycleViewVideoList extends RecyclerView.Adapter<RecycleViewVideoL
             if (minutes < 1) {
 
                 minutes = TimeUnit.MILLISECONDS.toSeconds(Long.parseLong(current.getVideo_Duration()));
-                viewHolder.textSecond.setText(String.valueOf(minutes) + " sec");
+                viewHolder.textSecond.setText(minutes + " sec");
             } else {
-                viewHolder.textSecond.setText(String.valueOf(minutes) + " min");
+                viewHolder.textSecond.setText(minutes + " min");
             }
         } catch (Exception e) {
             e.printStackTrace();

@@ -264,7 +264,7 @@ public class PickerPostVideoForOnDemandActivity extends BaseActivity {
 
         Uri mExternalUri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
 
-        String projection[] = {"DISTINCT " + MediaStore.Video.Media.BUCKET_DISPLAY_NAME,
+        String[] projection = {"DISTINCT " + MediaStore.Video.Media.BUCKET_DISPLAY_NAME,
                 MediaStore.Video.Media.DATA, MediaStore.Video.Media.BUCKET_ID,
                 MediaStore.Video.Media.DATE_TAKEN};
 

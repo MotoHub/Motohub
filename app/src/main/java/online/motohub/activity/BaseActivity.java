@@ -1611,16 +1611,6 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     public void retrofitOnResponse(Object responseObj, int responseType) {
-        // sysOut(responseObj.toString());
-
-        /**
-         * Need clear explanation for using this code?
-         */
-//        if (responseObj instanceof SessionModel) {
-//            MyFireBaseInstanceIdService mMyFireBaseInstanceIdService = new MyFireBaseInstanceIdService();
-//
-//            mMyFireBaseInstanceIdService.getRegistrationToken();
-//        }
 
     }
 
@@ -1649,7 +1639,7 @@ public class BaseActivity extends AppCompatActivity {
     public void onRequestError(ErrorMessage mErrObj) {
         try {
             String err = new Gson().toJson(mErrObj);
-            sysOut("API-ERROR-OUTPUT: " + err.toString());
+            sysOut("API-ERROR-OUTPUT: " + err);
         } catch (Exception e) {
             sysOut("" + e.getMessage());
         }

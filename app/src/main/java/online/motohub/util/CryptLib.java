@@ -3,6 +3,7 @@ package online.motohub.util;
 import android.util.Base64;
 
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.MessageDigest;
@@ -43,7 +44,7 @@ public class CryptLib {
         String resultString;
         MessageDigest md = MessageDigest.getInstance("SHA-256");
 
-        md.update(text.getBytes("UTF-8"));
+        md.update(text.getBytes(StandardCharsets.UTF_8));
         byte[] digest = md.digest();
 
         StringBuilder result = new StringBuilder();
@@ -78,18 +79,18 @@ public class CryptLib {
             InvalidKeyException, InvalidAlgorithmParameterException,
             IllegalBlockSizeException, BadPaddingException {
 
-        int len = encryptionKey.getBytes("UTF-8").length; // length of the key	provided
+        int len = encryptionKey.getBytes(StandardCharsets.UTF_8).length; // length of the key	provided
 
-        if (encryptionKey.getBytes("UTF-8").length > _key.length)
+        if (encryptionKey.getBytes(StandardCharsets.UTF_8).length > _key.length)
             len = _key.length;
 
-        int ivlength = initVector.getBytes("UTF-8").length;
+        int ivlength = initVector.getBytes(StandardCharsets.UTF_8).length;
 
-        if (initVector.getBytes("UTF-8").length > _iv.length)
+        if (initVector.getBytes(StandardCharsets.UTF_8).length > _iv.length)
             ivlength = _iv.length;
 
-        System.arraycopy(encryptionKey.getBytes("UTF-8"), 0, _key, 0, len);
-        System.arraycopy(initVector.getBytes("UTF-8"), 0, _iv, 0, ivlength);
+        System.arraycopy(encryptionKey.getBytes(StandardCharsets.UTF_8), 0, _key, 0, len);
+        System.arraycopy(initVector.getBytes(StandardCharsets.UTF_8), 0, _iv, 0, ivlength);
 
 
         SecretKeySpec keySpec = new SecretKeySpec(_key, "AES"); // Create a new SecretKeySpec for the specified key data and algorithm name.
@@ -101,7 +102,7 @@ public class CryptLib {
             // Potentially insecure random numbers on Android 4.3 and older. Read for more info.
             // https://android-developers.blogspot.com/2013/08/some-securerandom-thoughts.html
             _cx.init(Cipher.ENCRYPT_MODE, keySpec, ivSpec);// Initialize this cipher instance
-            return _cx.doFinal(inputText.getBytes("UTF-8")); // Finish multi-part transformation (encryption)
+            return _cx.doFinal(inputText.getBytes(StandardCharsets.UTF_8)); // Finish multi-part transformation (encryption)
         } else {
             _cx.init(Cipher.DECRYPT_MODE, keySpec, ivSpec);// Initialize this cipher instance
 
@@ -128,7 +129,7 @@ public class CryptLib {
     public String decryptCipherTextWithRandomIV(String cipherText, String key) throws Exception {
         byte[] bytes = encryptDecrypt(cipherText, CryptLib.SHA256(key, 32), EncryptMode.DECRYPT, generateRandomIV16());
         String out = new String(bytes);
-        return out.substring(16, out.length());
+        return out.substring(16);
     }
 
     /**

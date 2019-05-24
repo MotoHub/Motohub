@@ -256,7 +256,7 @@ public class PickerPostImageActivity extends BaseActivity {
 
         Uri mExternalUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
 
-        String projection[] = {"DISTINCT " + MediaStore.Images.Media.BUCKET_DISPLAY_NAME,
+        String[] projection = {"DISTINCT " + MediaStore.Images.Media.BUCKET_DISPLAY_NAME,
                 MediaStore.Images.Media.DATA, MediaStore.Images.Media.BUCKET_ID,
                 MediaStore.Images.Media.DATE_TAKEN};
 

@@ -155,7 +155,7 @@ public class UploadOfflineVideos extends IntentService implements ProgressReques
         int count = databaseHandler.getPendingCount();
         final int notificationid = 1;
         String s = videoFile.toString();
-        videoUploadModel.setVideoURL(s.substring(s.lastIndexOf("/") + 1, s.length()));
+        videoUploadModel.setVideoURL(s.substring(s.lastIndexOf("/") + 1));
         videoUploadModel.setFlag(1);
         videoUploadModel.setThumbnailURl(mThumbImgFile.toString());
         videoUploadModel.setProfileID(mProfileID);

@@ -163,6 +163,7 @@ public class AudioLevelMeter extends View
 
     /**
      * Indicates if audio samples should be sent to the onWZAudioSampleRecorded method or not
+     *
      * @return true if onWZAudioSampleRecorded should be called with new audio sample data, false otherwise
      */
     @Override
@@ -172,6 +173,7 @@ public class AudioLevelMeter extends View
 
     /**
      * This method will be called just before streaming begins
+     *
      * @param audioConfig The broadcast stream configuration
      */
     @Override
@@ -196,9 +198,10 @@ public class AudioLevelMeter extends View
 
     /**
      * This method is called with a buffer containing the audio sample data
-     * @param sampleData The raw audio sample data
+     *
+     * @param sampleData       The raw audio sample data
      * @param sampleDataLength The length of the data in bytes
-     * @param timecodeNanos The timecode of the sample in nanoseconds
+     * @param timecodeNanos    The timecode of the sample in nanoseconds
      */
     @Override
     public synchronized void onWZAudioSampleRecorded(byte[] sampleData, int sampleDataLength, long timecodeNanos) {
@@ -216,6 +219,7 @@ public class AudioLevelMeter extends View
 
     /**
      * This method is called is the audio stream is paused or unpaused during a broadcast
+     *
      * @param paused A flag indicating whether the audio stream is paused or unpaused
      */
     @Override

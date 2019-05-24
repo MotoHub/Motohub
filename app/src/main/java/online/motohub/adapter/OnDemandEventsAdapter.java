@@ -144,7 +144,7 @@ public class OnDemandEventsAdapter extends RecyclerView.Adapter<OnDemandEventsAd
                 ((BaseActivity) mContext).setImageWithGlide(holder.imageURL, mOnDemandResponse.getProfilePicture(), R.drawable.default_profile_icon);
             //}
             holder.txt_event_name.setText(String.valueOf(mOnDemandResponse.getName()));
-            holder.txt_no_videos.setText("No of videos: " + String.valueOf(mOnDemandResponse.getCount()));
+            holder.txt_no_videos.setText("No of videos: " + mOnDemandResponse.getCount());
             mPromoterFollowerList = mMyProfileResModel.getPromoterFollowerByProfileID();
             if (mOnDemandResponse.getViewCount() == 0) {
                 holder.view_count.setVisibility(View.GONE);

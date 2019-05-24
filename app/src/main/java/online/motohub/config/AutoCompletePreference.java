@@ -129,7 +129,7 @@ public class AutoCompletePreference extends EditTextPreference {
         String storedConfig = sharedPrefs.getString(hostConfigKey, null);
         if (storedConfig == null) return null;
 
-        String storedValues[] = TextUtils.split(storedConfig, ";");
+        String[] storedValues = TextUtils.split(storedConfig, ";");
         if (storedValues.length != 4) {
             removeAutoCompleteHostConfig(sharedPrefs, hostAddress);
             return null;

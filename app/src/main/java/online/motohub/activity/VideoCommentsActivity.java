@@ -234,11 +234,7 @@ public class VideoCommentsActivity extends BaseActivity implements TaggedProfile
 
                 mSearchTextIndex = mCommentEdt.getSelectionStart();
 
-                if (after < count) {
-                    isBackspaceClicked = true;
-                } else {
-                    isBackspaceClicked = false;
-                }
+                isBackspaceClicked = after < count;
 
             }
 
@@ -429,7 +425,7 @@ public class VideoCommentsActivity extends BaseActivity implements TaggedProfile
                 mCommentUserIDs = String.valueOf(mCommentTaggedUserIDs.get(i));
                 mCommentTaggedUserNames = mCommentTaggedUserList.get(i);
             } else {
-                mCommentUserIDs = mCommentUserIDs + "," + String.valueOf(mCommentTaggedUserIDs.get(i));
+                mCommentUserIDs = mCommentUserIDs + "," + mCommentTaggedUserIDs.get(i);
                 mCommentTaggedUserNames = mCommentTaggedUserNames + "," + mCommentTaggedUserList.get(i);
             }
         }
@@ -742,7 +738,7 @@ public class VideoCommentsActivity extends BaseActivity implements TaggedProfile
         mCommentTxt = mCommentEdt.getText().toString();
         mTempCommentTxt1 = mCommentTxt.substring(0, mCurrentIndexOfCommentTag);
         if (mSearchTextIndex < mCommentTxt.length()) {
-            mTempCommentTxt2 = mCommentTxt.substring(mSearchTextIndex + 1, mCommentTxt.length());
+            mTempCommentTxt2 = mCommentTxt.substring(mSearchTextIndex + 1);
         } else {
             mTempCommentTxt2 = "";
         }

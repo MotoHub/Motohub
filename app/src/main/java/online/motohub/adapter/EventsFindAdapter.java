@@ -100,16 +100,6 @@ public class EventsFindAdapter extends RecyclerView.Adapter<EventsFindAdapter.Ho
     private String mToken = "";
     private boolean isUpdatePayment = false;
     private String mTransactionID = "";
-    CommonInterface mCommonInterface = new CommonInterface() {
-        @Override
-        public void onSuccess() {
-            if (isUpdatePayment) {
-                callUpdateLiveStreamPayment();
-            } else {
-                callPayViewLiveStream();
-            }
-        }
-    };
     private ArrayList<PromoterFollowerResModel> mPromoterFollowerList = new ArrayList<>();
     RetrofitResInterface mRetrofitResInterface = new RetrofitResInterface() {
         @Override
@@ -200,6 +190,16 @@ public class EventsFindAdapter extends RecyclerView.Adapter<EventsFindAdapter.Ho
         public void retrofitOnFailure() {
             ((BaseActivity) mContext).showToast(mContext, mContext.getString(R.string.internet_err));
 //            DialogManager.showRetryAlertDialogWithCallback(mContext, mCommonInterface, mContext.getString(R.string.internet_err));
+        }
+    };
+    CommonInterface mCommonInterface = new CommonInterface() {
+        @Override
+        public void onSuccess() {
+            if (isUpdatePayment) {
+                callUpdateLiveStreamPayment();
+            } else {
+                callPayViewLiveStream();
+            }
         }
     };
     private boolean isFromEventList = false;
@@ -690,16 +690,16 @@ public class EventsFindAdapter extends RecyclerView.Adapter<EventsFindAdapter.Ho
                     ArrayList<RacingModel> mRacingModelList = mEventCategoryRacingList.get(mSelectedCategory.get(i).getGroupNo());
                     int mLastIndex = mRacingModelList.size() - 1;
                     mCarNumber = String.valueOf(Integer.parseInt(mRacingModelList.get(mLastIndex).getCarNumber()) + 1);
-                } else if (mEventsFindListData.get(i).getBookingNumberIndex().toString().trim().equals("")) {
+                } else if (mEventsFindListData.get(i).getBookingNumberIndex().trim().equals("")) {
                     mCarNumber = "1";
                 } else {
-                    mCarNumber = String.valueOf((mEventsFindListData.get(mAdapterPos).getBookingNumberIndex()) + 1);
+                    mCarNumber = (mEventsFindListData.get(mAdapterPos).getBookingNumberIndex()) + 1;
                 }
             } else {
-                if (mEventsFindListData.get(i).getBookingNumberIndex().toString().trim().equals("")) {
+                if (mEventsFindListData.get(i).getBookingNumberIndex().trim().equals("")) {
                     mCarNumber = "1";
                 } else {
-                    mCarNumber = String.valueOf((mEventsFindListData.get(mAdapterPos).getBookingNumberIndex()) + 1);
+                    mCarNumber = (mEventsFindListData.get(mAdapterPos).getBookingNumberIndex()) + 1;
                 }
             }
 

@@ -89,7 +89,7 @@ public class MyWorkWithData extends Worker implements ProgressRequestBody.Upload
         DatabaseHandler databaseHandler = new DatabaseHandler(context);
         videoUploadModel = new VideoUploadModel();
         String s = videoFile.toString();
-        videoUploadModel.setVideoURL(s.substring(s.lastIndexOf("/") + 1, s.length()));
+        videoUploadModel.setVideoURL(s.substring(s.lastIndexOf("/") + 1));
         videoUploadModel.setFlag(1);
         videoUploadModel.setThumbnailURl(mThumbImgFile.toString());
         videoUploadModel.setPosts(mPostStr);
@@ -201,7 +201,7 @@ public class MyWorkWithData extends Worker implements ProgressRequestBody.Upload
         //  int count = databaseHandler.getPendingCount();
         videoUploadModel = new VideoUploadModel();
         String s = videoFile.toString();
-        videoUploadModel.setVideoURL(s.substring(s.lastIndexOf("/") + 1, s.length()));
+        videoUploadModel.setVideoURL(s.substring(s.lastIndexOf("/") + 1));
         videoUploadModel.setFlag(1);
         videoUploadModel.setThumbnailURl(mImageFile.toString());
         videoUploadModel.setPosts(mPostStr);
@@ -270,7 +270,7 @@ public class MyWorkWithData extends Worker implements ProgressRequestBody.Upload
             @Override
             public void onStateChanged(int id, TransferState state) {
 
-                if (state.COMPLETED.equals(observer.getState())) {
+                if (TransferState.COMPLETED.equals(observer.getState())) {
 
                     String imageFileName = image.getName().substring(image.getName().lastIndexOf("/") + 1);
                     String videoFileName = video.getName().substring(video.getName().lastIndexOf("/") + 1);
@@ -328,7 +328,7 @@ public class MyWorkWithData extends Worker implements ProgressRequestBody.Upload
             @Override
             public void onStateChanged(int id, TransferState state) {
 
-                if (state.COMPLETED.equals(observer1.getState())) {
+                if (TransferState.COMPLETED.equals(observer1.getState())) {
                     //Toast.makeText(ProfileUploadService.this, "File Upload Complete", Toast.LENGTH_SHORT).show();
                 }
             }

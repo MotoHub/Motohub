@@ -24,6 +24,7 @@ public class ControlView<Value> extends LinearLayout implements Spinner.OnItemSe
     private Control control;
     private Callback callback;
     private Spinner spinner;
+
     public ControlView(Context context, Control control, Callback callback) {
         super(context);
         this.control = control;

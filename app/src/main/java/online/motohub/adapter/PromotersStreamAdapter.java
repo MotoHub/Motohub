@@ -69,6 +69,16 @@ public class PromotersStreamAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     private boolean isUpdatePayment = false;
     private String mToken = "";
     private int mMyUserID = 0;
+    CommonInterface mCommonInterface = new CommonInterface() {
+        @Override
+        public void onSuccess() {
+            if (isUpdatePayment) {
+                callUpdateLiveStreamPayment();
+            } else {
+                callPayViewLiveStream();
+            }
+        }
+    };
     RetrofitResInterface mRetrofitResInterface = new RetrofitResInterface() {
         @Override
         public void retrofitOnResponse(Object responseObj, int responseType) {
@@ -134,16 +144,6 @@ public class PromotersStreamAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         @Override
         public void retrofitOnFailure() {
             DialogManager.showRetryAlertDialogWithCallback(mContext, mCommonInterface, mContext.getString(R.string.internet_err));
-        }
-    };
-    CommonInterface mCommonInterface = new CommonInterface() {
-        @Override
-        public void onSuccess() {
-            if (isUpdatePayment) {
-                callUpdateLiveStreamPayment();
-            } else {
-                callPayViewLiveStream();
-            }
         }
     };
 

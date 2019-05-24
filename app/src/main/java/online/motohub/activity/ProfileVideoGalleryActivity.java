@@ -350,7 +350,7 @@ public class ProfileVideoGalleryActivity extends BaseActivity {
 
         if (mActionMode != null)
             //set action mode title on item selection
-            mActionMode.setTitle(String.valueOf(mAdapter.getSelectedCount()) + " selected");
+            mActionMode.setTitle(mAdapter.getSelectedCount() + " selected");
     }
 
     //Set action mode null after use

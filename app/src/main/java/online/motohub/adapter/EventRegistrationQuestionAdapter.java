@@ -43,7 +43,7 @@ public class EventRegistrationQuestionAdapter extends RecyclerView.Adapter<Event
     @Override
     public void onBindViewHolder(EventRegistrationQuestionAdapter.Holder mHolder, final int pos) {
         try {
-            String mQtnNo = String.valueOf(pos + 1) + ".";
+            String mQtnNo = (pos + 1) + ".";
             mHolder.mQuestionNoTv.setText(mQtnNo);
 
             mHolder.myCustomEditTextListener.updatePosition(mHolder.getLayoutPosition());

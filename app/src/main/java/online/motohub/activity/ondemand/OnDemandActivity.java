@@ -133,7 +133,7 @@ public class OnDemandActivity extends BaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        ((BaseFragment) adapter.getItem(tabs.getSelectedTabPosition())).onActivityResult(requestCode, resultCode, data);
+        adapter.getItem(tabs.getSelectedTabPosition()).onActivityResult(requestCode, resultCode, data);
     }
 
     @Override

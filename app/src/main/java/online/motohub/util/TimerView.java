@@ -40,6 +40,7 @@ public class TimerView extends android.support.v7.widget.AppCompatTextView {
         super(context);
         init();
     }
+
     public TimerView(Context context, AttributeSet attrs) {
         super(context, attrs);
         init();
