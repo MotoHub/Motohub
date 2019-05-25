@@ -22,7 +22,8 @@ public class NotificationModel1 {
     private boolean forceNotification;
     @SerializedName("testNotification")
     private boolean testNotification;
-
+    @SerializedName("notificationID")
+    private int notificationID;
     public JSONObject getMainObj() {
         return mainObj;
     }
@@ -80,5 +81,13 @@ public class NotificationModel1 {
 
     public void setTestNotification(boolean testNotification) {
         this.testNotification = testNotification;
+    }
+
+    public int getNotificationID() {
+        return notificationID;
+    }
+
+    public void setNotificationID(int notificationID) {
+        this.notificationID = notificationID;
     }
 }
