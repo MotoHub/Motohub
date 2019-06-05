@@ -213,9 +213,6 @@ public class PromoterOrUserAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                         } else if (mModel.profiles_by_ProfileID != null) {
                             ((BaseActivity) mContext).setImageWithGlide(mViewHolderPost.mProfileImg, mModel.profiles_by_ProfileID.getProfilePicture(), R.drawable.default_profile_icon);
                             mViewHolderPost.mUsername.setText(Utility.getInstance().getUserName(mModel.profiles_by_ProfileID));
-                        } else if (mModel.getPromoter_by_UserID() != null) {
-                            ((BaseActivity) mContext).setImageWithGlide(mViewHolderPost.mProfileImg, mModel.promoter_by_UserID.getProfileImage(), R.drawable.default_profile_icon);
-                            mViewHolderPost.mUsername.setText(mModel.promoter_by_UserID.getName());
                         }
 
                     } else if (mModel.getPromoter_by_UserID() != null) {
