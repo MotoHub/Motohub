@@ -15,7 +15,7 @@ import online.motohub.model.VideoUploadModel;
 import online.motohub.util.AppConstants;
 
 public class DatabaseHandler extends SQLiteOpenHelper {
-    private static final int DATABASE_VERSION = 3;
+    private static final int DATABASE_VERSION = 4;
     private static final String DATABASE_NAME = "contactsManager";
 
     private String LOCAL_USER_TABLE = "LOCAL_USER_TABLE";
@@ -26,7 +26,18 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     private String USER_IMG_URL = "USER_IMG_URL";
     private String USER_NAME = "USER_NAME";
 
-    //Offline Storage
+    private String VIDEO_UPLOAD_TABLE = "VIDEO_UPLOAD_TABLE";
+
+    private String FLAG="FLAG";
+    private String NOTIFICATION_ID="NOTIFICATION_ID";
+    private String VIDEO_PATH="VIDEO_PATH";
+    private String IMAGE_PATH="IMAGE_PATH";
+    private String USER_TYPE="USER_TYPE";
+    private String POST_CONTENT="POST_CONTENT";
+    private String PROFILE_ID="PROFILE_ID";
+    private String TAGGED_PROFILE_ID="TAGGED_PROFILE_ID";
+    private String SUBSCRIPTION_ID="SUBSCRIPTION_ID";
+    private String STATUS="STATUS";
 
 
     public DatabaseHandler(Context context) {
@@ -69,9 +80,17 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 + USER_NAME + " TEXT"
                 + ")";
 
+        String CREATE_VIDEO_UPLOAD_TABLE = "CREATE TABLE " + VIDEO_UPLOAD_TABLE + "(" + ID + " TEXT PRIMARY KEY,"
+                + LOGIN_TYPE + " TEXT,"
+                + EMAIL + " TEXT,"
+                + PASSWORD + " TEXT,"
+                + USER_IMG_URL + " TEXT,"
+                + USER_NAME + " TEXT"
+                + ")";
         db.execSQL(CREATE_CONTACTS_TABLE);
         db.execSQL(CREATE_VIDEO_TABLE);
         db.execSQL(CREATE_LOCAL_USER_TABLE);
+        db.execSQL(CREATE_VIDEO_UPLOAD_TABLE);
     }
 
     @Override
@@ -79,6 +98,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + VideoUploadModel.VideoUploadTable);
         db.execSQL("DROP TABLE IF EXISTS " + SpectatorLiveModel.TABLE);
         db.execSQL("DROP TABLE IF EXISTS " + LOCAL_USER_TABLE);
+        db.execSQL("DROP TABLE IF EXISTS " + VIDEO_UPLOAD_TABLE);
         onCreate(db);
     }
 

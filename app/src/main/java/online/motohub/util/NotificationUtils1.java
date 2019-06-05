@@ -100,19 +100,21 @@ public class NotificationUtils1 {
         //If needed generate random number for notificationID
         NotificationManager mNotificationManager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
         try {
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-                mNotificationManager.createNotificationChannel(getNotificationChannel(model));
-            }
-            NotificationCompat.Builder mNotificationCompatBuilder = getNotificationCompatBuilder(model);
-            Notification mNotification = mNotificationCompatBuilder.build();
-            mNotification.flags |= Notification.FLAG_AUTO_CANCEL;
-            mNotification.defaults |= Notification.DEFAULT_LIGHTS;
-            if (mNotificationID == 0) {
+            if(mNotificationManager!=null) {
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                    mNotificationManager.createNotificationChannel(getNotificationChannel(model));
+                }
+                NotificationCompat.Builder mNotificationCompatBuilder = getNotificationCompatBuilder(model);
+                Notification mNotification = mNotificationCompatBuilder.build();
+                mNotification.flags |= Notification.FLAG_AUTO_CANCEL;
+                mNotification.defaults |= Notification.DEFAULT_LIGHTS;
+                if (mNotificationID == 0) {
+                    mNotificationID = 143;
+                }
+                //TODO Temporary Fix
                 mNotificationID = 143;
+                mNotificationManager.notify(mNotificationID, mNotification);
             }
-            //TODO Temporary Fix
-            mNotificationID = 143;
-            mNotificationManager.notify(mNotificationID, mNotification);
         } catch (Exception e) {
             e.printStackTrace();
         }

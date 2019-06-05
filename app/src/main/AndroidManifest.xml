@@ -737,6 +737,13 @@
             android:enabled="true"
             android:exported="true" />
 
+        <receiver android:name=".util.ConnectivityChangeReceiver">
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+            </intent-filter>
+        </receiver>
+
+
     </application>
 
 </manifest>
