@@ -1,9 +1,14 @@
 package com.daasuu.gpuv.egl;
 
 import android.opengl.GLES20;
+
 import com.daasuu.gpuv.egl.filter.GlFilter;
 
-import static android.opengl.GLES20.*;
+import static android.opengl.GLES20.GL_ARRAY_BUFFER;
+import static android.opengl.GLES20.GL_FLOAT;
+import static android.opengl.GLES20.GL_TEXTURE0;
+import static android.opengl.GLES20.GL_TEXTURE_2D;
+import static android.opengl.GLES20.GL_TRIANGLE_STRIP;
 
 public class GlPreviewFilter extends GlFilter {
 

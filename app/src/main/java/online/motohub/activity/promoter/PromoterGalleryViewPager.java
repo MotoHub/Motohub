@@ -79,13 +79,13 @@ public class PromoterGalleryViewPager extends BaseActivity {
                 /*GlideUrl glideUrl = new GlideUrl(UrlUtils.AWS_FILE_URL + mImgUriList[pos], new LazyHeaders.Builder()
                         .addHeader("X-DreamFactory-Api-Key", getString(R.string.dream_factory_api_key))
                         .build());*/
-                Glide.with(getApplicationContext())
-                        .load(UrlUtils.AWS_S3_BASE_URL + mImgUriList[pos])
-                        .apply(new RequestOptions()
-                                .error(R.drawable.img_place_holder)
-                                .dontAnimate()
-                        )
-                        .into(mImageView);
+            Glide.with(getApplicationContext())
+                    .load(UrlUtils.AWS_S3_BASE_URL + mImgUriList[pos])
+                    .apply(new RequestOptions()
+                            .error(R.drawable.img_place_holder)
+                            .dontAnimate()
+                    )
+                    .into(mImageView);
             //}
             parent.addView(convertView);
             return convertView;

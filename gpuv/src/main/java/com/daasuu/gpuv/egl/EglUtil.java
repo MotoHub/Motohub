@@ -22,14 +22,11 @@ import static android.opengl.GLES20.GL_TRUE;
 import static android.opengl.GLES20.glCreateProgram;
 
 
-
 public class EglUtil {
-    private EglUtil() {
-    }
-
     public static final int NO_TEXTURE = -1;
     private static final int FLOAT_SIZE_BYTES = 4;
-
+    private EglUtil() {
+    }
 
     public static int loadShader(final String strSource, final int iType) {
         int[] compiled = new int[1];

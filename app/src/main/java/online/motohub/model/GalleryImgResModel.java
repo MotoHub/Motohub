@@ -7,27 +7,6 @@ import com.google.gson.annotations.SerializedName;
 
 public class GalleryImgResModel implements Parcelable {
 
-    @SerializedName("ID")
-    private int id;
-
-    @SerializedName("UserID")
-    private int userId;
-
-    @SerializedName("MotoID")
-    private int motoId;
-
-    @SerializedName("GalleryImage")
-    private String galleryImage;
-
-    public GalleryImgResModel() {}
-
-    private GalleryImgResModel(Parcel in) {
-        id = in.readInt();
-        userId = in.readInt();
-        motoId = in.readInt();
-        galleryImage = in.readString();
-    }
-
     public static final Creator<GalleryImgResModel> CREATOR = new Creator<GalleryImgResModel>() {
         @Override
         public GalleryImgResModel createFromParcel(Parcel in) {
@@ -39,6 +18,24 @@ public class GalleryImgResModel implements Parcelable {
             return new GalleryImgResModel[size];
         }
     };
+    @SerializedName("ID")
+    private int id;
+    @SerializedName("UserID")
+    private int userId;
+    @SerializedName("MotoID")
+    private int motoId;
+    @SerializedName("GalleryImage")
+    private String galleryImage;
+
+    public GalleryImgResModel() {
+    }
+
+    private GalleryImgResModel(Parcel in) {
+        id = in.readInt();
+        userId = in.readInt();
+        motoId = in.readInt();
+        galleryImage = in.readString();
+    }
 
     public int getId() {
         return id;

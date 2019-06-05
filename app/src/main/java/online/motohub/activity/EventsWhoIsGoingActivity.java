@@ -22,7 +22,6 @@ import butterknife.OnClick;
 import butterknife.OnItemClick;
 import online.motohub.R;
 import online.motohub.adapter.EventsWhoIsGoingAdapter;
-import online.motohub.application.MotoHub;
 import online.motohub.model.EventsModel;
 import online.motohub.model.EventsWhoIsGoingModel;
 import online.motohub.model.EventsWhoIsGoingResModel;

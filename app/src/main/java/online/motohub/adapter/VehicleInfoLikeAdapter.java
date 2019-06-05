@@ -21,7 +21,7 @@ import online.motohub.model.VehicleInfoLikeModel;
 import online.motohub.util.Utility;
 
 
-public class VehicleInfoLikeAdapter extends RecyclerView.Adapter<VehicleInfoLikeAdapter.Holder>{
+public class VehicleInfoLikeAdapter extends RecyclerView.Adapter<VehicleInfoLikeAdapter.Holder> {
 
     private Context mContext;
     private List<VehicleInfoLikeModel> mVehicleInfoLikesList;
@@ -32,25 +32,6 @@ public class VehicleInfoLikeAdapter extends RecyclerView.Adapter<VehicleInfoLike
         this.mContext = mContext;
         this.mVehicleInfoLikesList = mVehicleInfoLikeList;
         this.mMyProfileResModel = mMyProfileResModel;
-    }
-
-
-    public class Holder extends RecyclerView.ViewHolder {
-
-        @BindView(R.id.comment_user_img)
-        CircleImageView mUserImg;
-
-        @BindView(R.id.comment_user_img_lay)
-        RelativeLayout mCommentImgLay;
-
-        @BindView(R.id.comment_user_name_txt)
-        TextView mUserNameTxt;
-
-        public Holder(View view) {
-            super(view);
-            ButterKnife.bind(this, view);
-        }
-
     }
 
     @Override
@@ -79,7 +60,7 @@ public class VehicleInfoLikeAdapter extends RecyclerView.Adapter<VehicleInfoLike
                 }
             });
             mHolder.mUserNameTxt.setText(Utility.getInstance().getUserName(mEntity.getProfilesByWhoLikedProfileID()));
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -91,12 +72,30 @@ public class VehicleInfoLikeAdapter extends RecyclerView.Adapter<VehicleInfoLike
 
     private void profileClick(VehicleInfoLikeModel vehicleInfoLikeModel) {
 
-        if(mMyProfileResModel.getID() == vehicleInfoLikeModel.getWhoLikedProfileID()){
-            ((BaseActivity) mContext).moveMyProfileScreen(mContext,0);
-        } else{
+        if (mMyProfileResModel.getID() == vehicleInfoLikeModel.getWhoLikedProfileID()) {
+            ((BaseActivity) mContext).moveMyProfileScreen(mContext, 0);
+        } else {
             ((BaseActivity) mContext).moveOtherProfileScreen(mContext, mMyProfileResModel.getID(),
-                    vehicleInfoLikeModel.getProfilesByWhoLikedProfileID() .getID());
+                    vehicleInfoLikeModel.getProfilesByWhoLikedProfileID().getID());
         }
+    }
+
+    public class Holder extends RecyclerView.ViewHolder {
+
+        @BindView(R.id.comment_user_img)
+        CircleImageView mUserImg;
+
+        @BindView(R.id.comment_user_img_lay)
+        RelativeLayout mCommentImgLay;
+
+        @BindView(R.id.comment_user_name_txt)
+        TextView mUserNameTxt;
+
+        public Holder(View view) {
+            super(view);
+            ButterKnife.bind(this, view);
+        }
+
     }
 
 }

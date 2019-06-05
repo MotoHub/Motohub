@@ -379,9 +379,9 @@ public class FeedCommentsReplyAdapter extends RecyclerView.Adapter<FeedCommentsR
 
             if (mFeedReplyList.get(position).getReplyLikeByReplyID().size() == 1) {
 
-                resLikes = String.valueOf(mFeedReplyList.get(position).getReplyLikeByReplyID().size()) + " like";
+                resLikes = mFeedReplyList.get(position).getReplyLikeByReplyID().size() + " like";
             } else {
-                resLikes = String.valueOf(mFeedReplyList.get(position).getReplyLikeByReplyID().size()) + " likes";
+                resLikes = mFeedReplyList.get(position).getReplyLikeByReplyID().size() + " likes";
 
             }
             mViewHolder.mLikeCountTxt.setText(resLikes);

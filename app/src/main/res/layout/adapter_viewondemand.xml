@@ -9,9 +9,9 @@
         android:id="@+id/root"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/size15"
         android:layout_marginLeft="@dimen/size15"
         android:layout_marginRight="@dimen/size15"
+        android:layout_marginBottom="@dimen/size15"
         android:elevation="3dp"
         app:cardBackgroundColor="@color/colorWhite"
         app:cardCornerRadius="@dimen/size10"
@@ -32,10 +32,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:paddingBottom="@dimen/size20"
                 android:paddingLeft="@dimen/size20"
+                android:paddingTop="@dimen/size5"
                 android:paddingRight="@dimen/size20"
-                android:paddingTop="@dimen/size5">
+                android:paddingBottom="@dimen/size20">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -85,8 +85,8 @@
                     android:layout_gravity="end"
                     android:clickable="false"
                     android:focusable="false"
-                    android:paddingBottom="@dimen/size5"
                     android:paddingRight="@dimen/size40"
+                    android:paddingBottom="@dimen/size5"
                     android:text="@string/view_count"
                     android:textAlignment="center"
                     android:textColor="@color/colorBlack"

@@ -91,43 +91,6 @@ public class VideoCommentsReplyAdapter extends RecyclerView.Adapter<VideoComment
         notifyDataSetChanged();
     }
 
-    public class Holder extends RecyclerView.ViewHolder {
-
-        @BindView(R.id.reply_user_img)
-        CircleImageView mUserImg;
-
-        @BindView(R.id.reply_user_img_lay)
-        RelativeLayout mCommentReplyImgLay;
-
-        @BindView(R.id.reply_user_name_txt)
-        TextView mUserNameTxt;
-
-        @BindView(R.id.reply_txt)
-        TextView mCommentReplyTxt;
-
-        @BindView(R.id.like_count_txt)
-        TextView mLikeCountTxt;
-
-        @BindView(R.id.likeBtn)
-        ImageView mLikeBtn;
-
-        @BindView(R.id.ivCommentImg)
-        ImageView mIvCommentImg;
-
-        @BindView(R.id.replyPostTimeTxt)
-        TextView mReplyPostTime;
-
-        @BindView(R.id.smallProgressBar)
-        ProgressBar mPostPicProgressBar;
-
-
-        public Holder(View view) {
-            super(view);
-            ButterKnife.bind(this, view);
-        }
-
-    }
-
     @Override
     public Holder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.adap_feed_comments_reply, parent, false);
@@ -180,7 +143,7 @@ public class VideoCommentsReplyAdapter extends RecyclerView.Adapter<VideoComment
             if (!mEntity.getReplyText().trim().isEmpty()) {
                 try {
                     mHolder.mCommentReplyTxt.setVisibility(View.VISIBLE);
-                    mHolder.mCommentReplyTxt.setText(((BaseActivity) mContext).setTextEdt(mContext,URLDecoder.decode(mEntity.getReplyText(), "UTF-8"),mEntity.getReplyTaggedUserNames(), mEntity.getReplyTaggedUserIDs(), mMyProfileResModel.getID()));
+                    mHolder.mCommentReplyTxt.setText(((BaseActivity) mContext).setTextEdt(mContext, URLDecoder.decode(mEntity.getReplyText(), "UTF-8"), mEntity.getReplyTaggedUserNames(), mEntity.getReplyTaggedUserIDs(), mMyProfileResModel.getID()));
                 } catch (UnsupportedEncodingException e) {
                     e.printStackTrace();
                 }
@@ -270,7 +233,7 @@ public class VideoCommentsReplyAdapter extends RecyclerView.Adapter<VideoComment
                     }
                 }
             });
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -340,10 +303,10 @@ public class VideoCommentsReplyAdapter extends RecyclerView.Adapter<VideoComment
 
     private void profileClick(VideoCommentReplyModel feedCommentReplyModel) {
         if (mMyProfileResModel.getID() == feedCommentReplyModel.getProfileID()) {
-            ((BaseActivity)mContext).moveMyProfileScreen(mContext,mMyProfileResModel.getID());
+            ((BaseActivity) mContext).moveMyProfileScreen(mContext, mMyProfileResModel.getID());
         } else {
 
-            ((BaseActivity)mContext).moveOtherProfileScreen(mContext,mMyProfileResModel.getID(),
+            ((BaseActivity) mContext).moveOtherProfileScreen(mContext, mMyProfileResModel.getID(),
                     feedCommentReplyModel.getProfilesByProfileID().getID());
 
         }
@@ -359,9 +322,9 @@ public class VideoCommentsReplyAdapter extends RecyclerView.Adapter<VideoComment
 
             if (mFeedReplyList.get(position).getReplyLikeByReplyID().size() == 1) {
 
-                resLikes = String.valueOf(mFeedReplyList.get(position).getReplyLikeByReplyID().size()) + " like";
+                resLikes = mFeedReplyList.get(position).getReplyLikeByReplyID().size() + " like";
             } else {
-                resLikes = String.valueOf(mFeedReplyList.get(position).getReplyLikeByReplyID().size()) + " likes";
+                resLikes = mFeedReplyList.get(position).getReplyLikeByReplyID().size() + " likes";
 
             }
             mViewHolder.mLikeCountTxt.setText(resLikes);
@@ -382,5 +345,42 @@ public class VideoCommentsReplyAdapter extends RecyclerView.Adapter<VideoComment
             mViewHolder.mLikeBtn.setTag("like");
             mViewHolder.mLikeCountTxt.setText("like");
         }
+    }
+
+    public class Holder extends RecyclerView.ViewHolder {
+
+        @BindView(R.id.reply_user_img)
+        CircleImageView mUserImg;
+
+        @BindView(R.id.reply_user_img_lay)
+        RelativeLayout mCommentReplyImgLay;
+
+        @BindView(R.id.reply_user_name_txt)
+        TextView mUserNameTxt;
+
+        @BindView(R.id.reply_txt)
+        TextView mCommentReplyTxt;
+
+        @BindView(R.id.like_count_txt)
+        TextView mLikeCountTxt;
+
+        @BindView(R.id.likeBtn)
+        ImageView mLikeBtn;
+
+        @BindView(R.id.ivCommentImg)
+        ImageView mIvCommentImg;
+
+        @BindView(R.id.replyPostTimeTxt)
+        TextView mReplyPostTime;
+
+        @BindView(R.id.smallProgressBar)
+        ProgressBar mPostPicProgressBar;
+
+
+        public Holder(View view) {
+            super(view);
+            ButterKnife.bind(this, view);
+        }
+
     }
 }

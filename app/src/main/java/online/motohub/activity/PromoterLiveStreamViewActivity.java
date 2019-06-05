@@ -63,6 +63,7 @@ public class PromoterLiveStreamViewActivity extends BaseActivity implements VlcL
     private int mEventID = 0;
     private int mCurrentPos = 0;
     private VlcVideoLibrary mVLCLib;
+    private int i = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,8 +92,6 @@ public class PromoterLiveStreamViewActivity extends BaseActivity implements VlcL
         super.onResume();
         initView();
     }
-
-
 
     private void callGetLiveStream() {
         String mFilter = APIConstants.EventID + "=" + mEventID;
@@ -274,8 +273,6 @@ public class PromoterLiveStreamViewActivity extends BaseActivity implements VlcL
 //            setProgressState(true, "PROGRESS BUFFER ");
         }
     }
-
-    private int i = 1;
 
     private void setProgress(boolean isView) {
         mProgressLay.setVisibility(isView ? View.VISIBLE : View.GONE);

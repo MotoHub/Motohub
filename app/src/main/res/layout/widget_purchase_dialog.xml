@@ -11,11 +11,11 @@
         android:layout_height="260dp"
         android:layout_below="@+id/iv"
         android:layout_centerInParent="true"
-        android:layout_marginEnd="@dimen/size10"
-        android:layout_marginLeft="@dimen/size10"
-        android:layout_marginRight="@dimen/size10"
         android:layout_marginStart="@dimen/size10"
+        android:layout_marginLeft="@dimen/size10"
         android:layout_marginTop="-35dp"
+        android:layout_marginEnd="@dimen/size10"
+        android:layout_marginRight="@dimen/size10"
         android:background="@drawable/blend_fill_white">
 
         <TextView
@@ -63,11 +63,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/tv_price"
-            android:layout_marginEnd="@dimen/size25"
-            android:layout_marginLeft="@dimen/size25"
-            android:layout_marginRight="@dimen/size25"
             android:layout_marginStart="@dimen/size25"
+            android:layout_marginLeft="@dimen/size25"
             android:layout_marginTop="@dimen/size25"
+            android:layout_marginEnd="@dimen/size25"
+            android:layout_marginRight="@dimen/size25"
             android:background="@drawable/black_orange_btn_bg"
             android:text="@string/subscribe_now"
             android:textColor="@color/text_color" />

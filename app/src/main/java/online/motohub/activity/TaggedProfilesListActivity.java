@@ -18,7 +18,6 @@ import butterknife.OnClick;
 import butterknife.OnItemClick;
 import online.motohub.R;
 import online.motohub.adapter.TaggedProfilesListAdapter;
-import online.motohub.application.MotoHub;
 import online.motohub.model.ProfileModel;
 import online.motohub.model.ProfileResModel;
 import online.motohub.model.SessionModel;
@@ -29,20 +28,15 @@ import online.motohub.util.PreferenceUtils;
 
 public class TaggedProfilesListActivity extends BaseActivity {
 
+    public static final String TAGGED_PROFILES_ID = "TaggedProfilesID";
     @BindView(R.id.list_view_co_layout)
     CoordinatorLayout mCoordinatorLayout;
-
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
-
     @BindView(R.id.widget_list_view)
     ListView mTaggedProfilesListView;
-
     @BindString(R.string.tagged_profile)
     String mToolbarTitle;
-
-    public static final String TAGGED_PROFILES_ID = "TaggedProfilesID";
-
     private ArrayList<ProfileResModel> mTaggedProfilesList;
     private TaggedProfilesListAdapter mTaggedProfilesListAdapter;
     private String mTaggedProfilesIDStr;

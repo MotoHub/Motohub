@@ -18,8 +18,8 @@
             android:layout_below="@+id/include">
 
             <android.support.design.widget.AppBarLayout
-                style="@style/LayoutMatchWrap"
                 android:id="@+id/appBarLayout"
+                style="@style/LayoutMatchWrap"
                 android:fitsSystemWindows="true"
                 android:theme="@style/ThemeOverlay.AppCompat.Light">
 
@@ -37,8 +37,8 @@
                             android:id="@+id/cover_photo_img_view"
                             android:layout_width="match_parent"
                             android:layout_height="@dimen/size100"
-                            android:contentDescription="@string/app_name"
                             android:adjustViewBounds="true"
+                            android:contentDescription="@string/app_name"
                             app:srcCompat="@drawable/default_cover_img" />
 
                         <View
@@ -69,8 +69,8 @@
                                 style="@style/LayoutWrap"
                                 android:layout_centerVertical="true"
                                 android:layout_marginStart="@dimen/size5"
-                                android:layout_toEndOf="@id/profile_img"
-                                android:layout_toStartOf="@+id/followers_box">
+                                android:layout_toStartOf="@+id/followers_box"
+                                android:layout_toEndOf="@id/profile_img">
 
                                 <TextView
                                     android:id="@+id/promoterName"
@@ -100,8 +100,8 @@
                                         android:background="@drawable/black_orange_btn_bg"
                                         android:clickable="true"
                                         android:focusable="true"
-                                        android:paddingBottom="@dimen/size5"
                                         android:paddingTop="@dimen/size5"
+                                        android:paddingBottom="@dimen/size5"
                                         android:text="@string/follow"
                                         android:textAlignment="center"
                                         android:textColor="@color/text_color"
@@ -116,10 +116,10 @@
                                         android:background="@drawable/black_orange_btn_bg"
                                         android:clickable="true"
                                         android:focusable="true"
-                                        android:paddingBottom="@dimen/size5"
                                         android:paddingLeft="@dimen/size2"
-                                        android:paddingRight="@dimen/size2"
                                         android:paddingTop="@dimen/size5"
+                                        android:paddingRight="@dimen/size2"
+                                        android:paddingBottom="@dimen/size5"
                                         android:text="@string/Subscribe"
                                         android:textAlignment="center"
                                         android:textColor="@color/text_color"
@@ -174,8 +174,8 @@
                             android:id="@+id/post_layout"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:visibility="gone"
-                            android:layout_below="@id/userBoxSeparator">
+                            android:layout_below="@id/userBoxSeparator"
+                            android:visibility="gone">
 
                             <include
                                 android:id="@+id/include"

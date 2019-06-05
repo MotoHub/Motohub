@@ -36,7 +36,7 @@ public class MainSplashScreenActivity extends BaseActivity {
                         startActivity(new Intent(MainSplashScreenActivity.this, TutorialScreen.class));
                     } else {
                         if (mKeepMeLoggedIn) {
-                            if(mBusinessProfileCompleted){
+                            if (mBusinessProfileCompleted) {
                                 startActivity(new Intent(MainSplashScreenActivity.this, BusinessProfileActivity.class));
                             } else if (mUserProfileCompleted) {
                                 setmIsFirstLaunch(true);

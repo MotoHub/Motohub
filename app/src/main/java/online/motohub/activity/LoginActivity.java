@@ -36,7 +36,7 @@ import online.motohub.R;
 import online.motohub.activity.business.BusinessProfileActivity;
 import online.motohub.adapter.RecentUsersAdapter;
 import online.motohub.database.DatabaseHandler;
-import online.motohub.fcm.MyFireBaseInstanceIdService;
+import online.motohub.fcm.MyFireBaseMessagingService;
 import online.motohub.interfaces.CommonReturnInterface;
 import online.motohub.model.LoginModel;
 import online.motohub.model.ProfileModel;
@@ -94,6 +94,20 @@ public class LoginActivity extends BaseActivity {
 
     private DatabaseHandler mDatabaseHandler;
     private ProfileResModel localDBModel;
+    private ArrayList<ProfileResModel> mRecentList = new ArrayList<>();
+    CommonReturnInterface mCommonReturnInterface = new CommonReturnInterface() {
+        @Override
+        public void onSuccess(int pos) {
+
+            if (mRecentList.get(pos).getLoginType().equals("1")) {
+                callFbLogin();
+            } else {
+                mEmail = mRecentList.get(pos).getEmail();
+                mPwd = mRecentList.get(pos).getPassword();
+                callEmailLogin();
+            }
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -155,8 +169,6 @@ public class LoginActivity extends BaseActivity {
 
     }
 
-    private ArrayList<ProfileResModel> mRecentList = new ArrayList<>();
-
     private void setRecentUserAdapter() {
         mRecentList.clear();
         mRecentList.addAll(mDatabaseHandler.getLocalUserList());
@@ -167,20 +179,6 @@ public class LoginActivity extends BaseActivity {
         }
 
     }
-
-    CommonReturnInterface mCommonReturnInterface = new CommonReturnInterface() {
-        @Override
-        public void onSuccess(int pos) {
-
-            if (mRecentList.get(pos).getLoginType().equals("1")) {
-                callFbLogin();
-            } else {
-                mEmail = mRecentList.get(pos).getEmail();
-                mPwd = mRecentList.get(pos).getPassword();
-                callEmailLogin();
-            }
-        }
-    };
 
     @OnClick({R.id.fb_login_btn, R.id.register_btn, R.id.email_login_btn, R.id.forgot_pwd_btn})
     public void onClick(View v) {
@@ -266,9 +264,9 @@ public class LoginActivity extends BaseActivity {
             LoginModel mLoginModel = (LoginModel) responseObj;
             switch (responseType) {
                 case RetrofitClient.CALL_GET_PROFILE_USER_TYPE:
-                    MyFireBaseInstanceIdService mMyFireBaseInstanceIdService = new MyFireBaseInstanceIdService();
+                    MyFireBaseMessagingService mMyFireBaseMessagingService = new MyFireBaseMessagingService();
                     String refreshedToken = FirebaseInstanceId.getInstance().getToken();
-                    mMyFireBaseInstanceIdService.sendRegistrationToken(refreshedToken, MyFireBaseInstanceIdService.UPDATE_PUSH_TOKEN);
+                    mMyFireBaseMessagingService.sendRegistrationToken(refreshedToken, MyFireBaseMessagingService.UPDATE_PUSH_TOKEN);
                     int mUserID = PreferenceUtils.getInstance(this).getIntData(PreferenceUtils.USER_ID);
                     String mUserType = mLoginModel.getPhone();
                     if (mUserType.equals(AppConstants.PROMOTER) || mUserType.equals(AppConstants.TRACK) || mUserType.equals(AppConstants.NEWS_MEDIA) || mUserType.equals(AppConstants.SHOP) || mUserType.equals(AppConstants.CLUB)) {
@@ -285,15 +283,6 @@ public class LoginActivity extends BaseActivity {
                     RetrofitClient.getRetrofitInstance().callGetProfileUserType(this, RetrofitClient.CALL_GET_PROFILE_USER_TYPE);
                     break;
             }
-            //saveUserDataLocally(mLoginModel);
-            /*MyFireBaseInstanceIdService mMyFireBaseInstanceIdService = new MyFireBaseInstanceIdService();
-            String refreshedToken = FirebaseInstanceId.getInstance().getToken();
-            mMyFireBaseInstanceIdService.sendRegistrationToken(refreshedToken, MyFireBaseInstanceIdService.UPDATE_PUSH_TOKEN);*/
-            /*int mUserID = PreferenceUtils.getInstance(this).getIntData(PreferenceUtils.USER_ID);
-            String mFilter = "UserID=" + mUserID;
-
-            RetrofitClient.getRetrofitInstance().callGetProfilesWithPushToken(this, mFilter, RetrofitClient.GET_PROFILE_RESPONSE);*/
-
         }
 
         if (responseObj instanceof ProfileModel) {
@@ -329,7 +318,6 @@ public class LoginActivity extends BaseActivity {
         }
 
     }
-
 
 
     private void saveUserDataLocally(LoginModel loginModel) {

@@ -69,8 +69,8 @@
                                 style="@style/LayoutWrap"
                                 android:layout_centerVertical="true"
                                 android:layout_marginStart="@dimen/size5"
-                                android:layout_toEndOf="@id/profile_img"
-                                android:layout_toStartOf="@+id/followers_box">
+                                android:layout_toStartOf="@+id/followers_box"
+                                android:layout_toEndOf="@id/profile_img">
 
                                 <TextView
                                     android:id="@+id/promoterName"

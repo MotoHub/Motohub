@@ -43,6 +43,7 @@ public class NotificationUtils1 {
 
     private int mNotificationID;
     private String mIntentAction;
+    private int mProfileID = 0;
 
     public NotificationUtils1(Context mContext, NotificationModel1 model) {
         this.mContext = mContext;
@@ -53,6 +54,14 @@ public class NotificationUtils1 {
             notificationAction(model);
         }
 
+    }
+
+    // Clears notification tray messages
+    public static void clearNotifications(Context context) {
+
+        NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        if (notificationManager != null)
+            notificationManager.cancelAll();
     }
 
     // Playing notification sound
@@ -69,14 +78,6 @@ public class NotificationUtils1 {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    // Clears notification tray messages
-    public static void clearNotifications(Context context) {
-
-        NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-        if (notificationManager != null)
-            notificationManager.cancelAll();
     }
 
     private PendingIntent getPendingIntent(NotificationModel1 model) {
@@ -106,11 +107,11 @@ public class NotificationUtils1 {
             Notification mNotification = mNotificationCompatBuilder.build();
             mNotification.flags |= Notification.FLAG_AUTO_CANCEL;
             mNotification.defaults |= Notification.DEFAULT_LIGHTS;
-            if(mNotificationID==0){
-                mNotificationID=143;
+            if (mNotificationID == 0) {
+                mNotificationID = 143;
             }
             //TODO Temporary Fix
-            mNotificationID=143;
+            mNotificationID = 143;
             mNotificationManager.notify(mNotificationID, mNotification);
         } catch (Exception e) {
             e.printStackTrace();
@@ -150,8 +151,8 @@ public class NotificationUtils1 {
      * When the OS version is equal or greater than orea this method will trigger.
      * We must set the Channel ID while creating this NotificationChannel
      *
-     * @return NotificationChannel
      * @param model
+     * @return NotificationChannel
      */
     private NotificationChannel getNotificationChannel(NotificationModel1 model) {
         boolean allow_sound_status = PreferenceUtils.getInstance(mContext).getBooleanData(PreferenceUtils.ALLOW_NOTIFICATION_Sound);
@@ -202,8 +203,6 @@ public class NotificationUtils1 {
             return null;
         }
     }
-
-    private int mProfileID = 0;
 
     private void notificationAction(NotificationModel1 model) {
         try {

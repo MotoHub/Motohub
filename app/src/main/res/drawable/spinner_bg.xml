@@ -3,14 +3,14 @@
     <item>
         <shape android:shape="rectangle">
             <stroke
-                android:color="@color/colorBlack"
-                android:width="@dimen/size1" />
+                android:width="@dimen/size1"
+                android:color="@color/colorBlack" />
             <solid android:color="@color/colorWhite" />
             <padding
                 android:bottom="@dimen/size3"
                 android:left="@dimen/size3"
                 android:right="@dimen/size3"
-                android:top="@dimen/size3"/>
+                android:top="@dimen/size3" />
         </shape>
     </item>
     <item>

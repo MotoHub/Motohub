@@ -21,8 +21,8 @@
                 android:id="@+id/row_picker_img_folder_backgroundImg"
                 style="@style/LayoutMatchWrap"
                 android:layout_height="@dimen/size150"
-                android:contentDescription="@null"
                 android:layout_centerInParent="true"
+                android:contentDescription="@null"
                 android:scaleType="centerCrop"
                 app:srcCompat="@drawable/com_facebook_profile_picture_blank_portrait" />
 

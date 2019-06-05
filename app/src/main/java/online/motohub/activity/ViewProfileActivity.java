@@ -212,7 +212,9 @@ public class ViewProfileActivity extends BaseActivity implements
     ShimmerFrameLayout mShimmerView_phonecontacts;
     @BindView(R.id.shimmer_profile)
     ShimmerFrameLayout mShimmerView_profiles;
-
+    //Ended
+    String data = "This build version is only for testing purpose.";
+    String contactDescription = "We will connect you with your existing friends already on Motohub.";
     private ArrayList<ProfileResModel> mFullMPList = new ArrayList<>();
     private ArrayList<String> mMPSpinnerList = new ArrayList<>();
     private List<EventsResModel> mEventsFindListData = new ArrayList<>();
@@ -224,14 +226,12 @@ public class ViewProfileActivity extends BaseActivity implements
     private LinearLayoutManager mHorLayoutManager;
     private int mHorRvUnfollowOffset = 0, mHorRvUnfollowTotalCount = 0, mHorFindFriendsRvOffset = 0, mHorRvfollowTotalCount = 0,
             mHorFindFriendsRvTotalCount = 0, mHorRvOtherUsersCount = 0;
-
     private boolean mIsHorRvLoading = true, mIsHorFindFriendsRvLoading = true, isSearched = false;
     private ArrayList<ProfileResModel> mOtherProfilesList = new ArrayList<>();
     private ArrayList<ProfileResModel> mPhoneEmailProfileList = new ArrayList<>();
     private ArrayList<ProfileResModel> mAllPhoneEmailProfileList = new ArrayList<>();
     private FollowProfileAdapter mOtherProfileAdapter = null;
     private FollowProfileAdapter mSearchProfileAdapter = null;
-
     private FollowPhoneEmailProfileAdapter mPhoneEmailProfileAdapter = null;
     private boolean isExtraProfile = false;
     //New changes
@@ -244,9 +244,6 @@ public class ViewProfileActivity extends BaseActivity implements
     private int mCurrentPostPosition;
     private FeedShareModel mSharedFeed;
     private ProfileResModel mCurrentProfileObj;
-    //Ended
-    String data = "This build version is only for testing purpose.";
-    String contactDescription = "We will connect you with your existing friends already on Motohub.";
     BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -1405,9 +1402,7 @@ public class ViewProfileActivity extends BaseActivity implements
             } else if (responseType == RetrofitClient.UN_FOLLOW_PROFILE_RESPONSE) {
                 if (mResponse.getResource().size() > 0) {
                     ArrayList<FollowProfileEntity> mFollowList = mCurrentProfileObj.getFollowprofile_by_ProfileID();
-                    if (mFollowList.contains(mResponse.getResource().get(0))) {
-                        mFollowList.remove(mResponse.getResource().get(0));
-                    }
+                    mFollowList.remove(mResponse.getResource().get(0));
                     mCurrentProfileObj.setFollowprofile_by_ProfileID(mFollowList);
                     if (mHorPhoneEmailFriendsRecyclerView.getVisibility() == View.GONE)
                         mHorPhoneEmailFriendsRecyclerView.setVisibility(View.VISIBLE);
@@ -2143,6 +2138,24 @@ public class ViewProfileActivity extends BaseActivity implements
         mRelativeLayoutPhoneEmailFriends.setVisibility(View.GONE);
     }
 
+    private void uploadOffline() {
+        DatabaseHandler handler = new DatabaseHandler(this);
+        ArrayList<SpectatorLiveEntity> mList = handler.getSpectatorLiveVideos();
+        if (mList.size() > 0) {
+            if (isNetworkConnected(this)) {
+                for (int i = 0; i < mList.size(); i++) {
+                    Intent service_intent = new Intent(this, UploadOfflineVideos.class);
+                    String data = new Gson().toJson(mList.get(i));
+                    service_intent.putExtra("data", data);
+                    startService(service_intent);
+                }
+
+                /*Intent service_intent = new Intent(this, UploadOfflineVideos.class);
+                startService(service_intent);*/
+            }
+        }
+    }
+
     @SuppressLint("StaticFieldLeak")
     private class MyTask extends AsyncTask<Void, Void, String> {
         @Override
@@ -2222,24 +2235,6 @@ public class ViewProfileActivity extends BaseActivity implements
             } else {
                 mRelativeLayoutPhoneEmailFriends.setVisibility(View.VISIBLE);
                 getPhoneEmailProfileList();
-            }
-        }
-    }
-
-    private void uploadOffline(){
-        DatabaseHandler handler = new DatabaseHandler(this);
-        ArrayList<SpectatorLiveEntity> mList = handler.getSpectatorLiveVideos();
-        if (mList.size() > 0) {
-            if (isNetworkConnected(this)) {
-                for (int i = 0; i < mList.size(); i++) {
-                    Intent service_intent = new Intent(this, UploadOfflineVideos.class);
-                    String data = new Gson().toJson(mList.get(i));
-                    service_intent.putExtra("data", data);
-                    startService(service_intent);
-                }
-
-                /*Intent service_intent = new Intent(this, UploadOfflineVideos.class);
-                startService(service_intent);*/
             }
         }
     }

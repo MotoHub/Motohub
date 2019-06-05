@@ -2,7 +2,7 @@ package online.motohub.model;
 
 import java.io.Serializable;
 
-public class FollowProfileEntity implements Serializable{
+public class FollowProfileEntity implements Serializable {
 
     private int ID;
 

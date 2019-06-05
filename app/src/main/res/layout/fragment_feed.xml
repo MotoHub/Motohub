@@ -9,13 +9,13 @@
         android:layout_height="wrap_content">
 
         <LinearLayout
-            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-            <include layout="@layout/posts_placeholder_item"/>
+            <include layout="@layout/posts_placeholder_item" />
 
-            <include layout="@layout/posts_placeholder_item"/>
+            <include layout="@layout/posts_placeholder_item" />
 
         </LinearLayout>
 
@@ -23,8 +23,8 @@
 
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/swipeRefreshLayout"
-        android:visibility="gone"
-        style="@style/LayoutMatchWrap">
+        style="@style/LayoutMatchWrap"
+        android:visibility="gone">
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recycler_view"

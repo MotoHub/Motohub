@@ -36,7 +36,6 @@ import online.motohub.activity.WritePostActivity;
 import online.motohub.adapter.EventsFindAdapter;
 import online.motohub.adapter.PerfProfileTabPagerAdapter;
 import online.motohub.adapter.club.ClubPostsAdapter;
-import online.motohub.application.MotoHub;
 import online.motohub.fragment.BaseFragment;
 import online.motohub.fragment.Performance_Shop.PerfVehiclesFragment;
 import online.motohub.fragment.Performance_Shop.PerfVideosFragment;

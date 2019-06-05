@@ -4,8 +4,9 @@
     style="@style/LayoutMatchWrap"
     android:background="@color/colorWhite">
 
-    <RelativeLayout style="@style/LayoutMatchWrap"
-        android:id="@+id/replyRelativeLay">
+    <RelativeLayout
+        android:id="@+id/replyRelativeLay"
+        style="@style/LayoutMatchWrap">
 
         <android.support.v7.widget.CardView
             style="@style/LayoutMatchWrap"
@@ -36,8 +37,8 @@
                 </RelativeLayout>
 
                 <LinearLayout
-                    style="@style/LayoutMatchWrap"
                     android:id="@+id/replyLinearLay"
+                    style="@style/LayoutMatchWrap"
                     android:layout_toEndOf="@+id/reply_user_img_lay"
                     android:gravity="center|start"
                     android:orientation="vertical">
@@ -57,87 +58,84 @@
                         android:layout_marginStart="@dimen/size5"
                         android:autoLink="all"
                         android:linksClickable="true"
-                        android:textColorLink="@color/colorOrange"
                         android:padding="@dimen/size1"
                         android:textColor="@color/colorBlack"
+                        android:textColorLink="@color/colorOrange"
                         android:textSize="@dimen/text14"
-                        android:visibility="gone"/>
+                        android:visibility="gone" />
 
                     <include
                         layout="@layout/widget_small_progress_bar"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:layout_marginBottom="@dimen/size5"
                         android:layout_marginTop="@dimen/size5"
+                        android:layout_marginBottom="@dimen/size5"
                         android:visibility="gone" />
 
                     <ImageView
+                        android:id="@+id/ivCommentImg"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:id="@+id/ivCommentImg"
                         android:adjustViewBounds="true"
-                        android:visibility="gone"
-                        android:contentDescription="@string/app_name"/>
+                        android:contentDescription="@string/app_name"
+                        android:visibility="gone" />
 
                 </LinearLayout>
 
-            <RelativeLayout
-                android:id="@+id/replyRelativeInnerLay"
-                android:layout_below="@+id/replyLinearLay"
-                style="@style/LayoutWrap"
-                android:orientation="horizontal"
-                android:layout_marginStart="@dimen/size40">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_alignParentStart="true"
-                    android:id="@+id/replyPostTimeTxt"
-                    android:textColor="@color/colorDarkGrey"
-                    android:layout_centerVertical="true"
-                    android:layout_toStartOf="@+id/linearCommentLay"
-                    android:textSize="@dimen/text14"/>
-
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/linearCommentLay"
-                    android:orientation="horizontal"
-                    android:layout_centerVertical="true"
-                    android:layout_below="@+id/replyPostTimeTxt"
-                    android:layout_alignParentEnd="true"
-                    android:layout_marginEnd="@dimen/size20"
-                    >
-
-                    <ImageView
-                        android:id="@+id/likeBtn"
-                        android:layout_width="@dimen/size30"
-                        android:layout_height="@dimen/size30"
-                        android:background="@drawable/ripple_effect"
-                        android:clickable="true"
-                        android:layout_marginStart="@dimen/size10"
-                        android:paddingBottom="@dimen/size5"
-                        android:contentDescription="@string/like"
-                        android:focusable="true"
-                        android:gravity="center"
-                        android:layout_gravity="center"
-                        app:srcCompat="@drawable/like_icon"
-                        />
+                <RelativeLayout
+                    android:id="@+id/replyRelativeInnerLay"
+                    style="@style/LayoutWrap"
+                    android:layout_below="@+id/replyLinearLay"
+                    android:layout_marginStart="@dimen/size40"
+                    android:orientation="horizontal">
 
                     <TextView
-                        android:id="@+id/like_count_txt"
+                        android:id="@+id/replyPostTimeTxt"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:layout_centerVertical="true"
                         android:layout_gravity="center"
-                        android:layout_marginStart="@dimen/size5"
+                        android:layout_toStartOf="@+id/linearCommentLay"
                         android:textColor="@color/colorDarkGrey"
-                        android:textSize="@dimen/text14"
-                        />
-                </LinearLayout>
-            </RelativeLayout>
+                        android:textSize="@dimen/text14" />
+
+
+                    <LinearLayout
+                        android:id="@+id/linearCommentLay"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/replyPostTimeTxt"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginEnd="@dimen/size20"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:id="@+id/likeBtn"
+                            android:layout_width="@dimen/size30"
+                            android:layout_height="@dimen/size30"
+                            android:layout_gravity="center"
+                            android:layout_marginStart="@dimen/size10"
+                            android:background="@drawable/ripple_effect"
+                            android:clickable="true"
+                            android:contentDescription="@string/like"
+                            android:focusable="true"
+                            android:gravity="center"
+                            android:paddingBottom="@dimen/size5"
+                            app:srcCompat="@drawable/like_icon" />
+
+                        <TextView
+                            android:id="@+id/like_count_txt"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginStart="@dimen/size5"
+                            android:textColor="@color/colorDarkGrey"
+                            android:textSize="@dimen/text14" />
+                    </LinearLayout>
+                </RelativeLayout>
 
 
             </RelativeLayout>

@@ -22,10 +22,8 @@ import online.motohub.activity.BaseActivity;
 import online.motohub.activity.ChatCreateGroupActivity;
 import online.motohub.activity.ChatHomeActivity;
 import online.motohub.adapter.GroupChatRoomAdapter;
-import online.motohub.application.MotoHub;
 import online.motohub.model.GroupChatRoomModel;
 import online.motohub.model.GroupChatRoomResModel;
-import online.motohub.model.ProfileModel;
 import online.motohub.model.ProfileResModel;
 import online.motohub.retrofit.RetrofitClient;
 

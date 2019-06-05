@@ -2,10 +2,10 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     style="@style/LayoutMatchWrap"
-    android:layout_marginBottom="@dimen/size5"
     android:layout_marginLeft="@dimen/size10"
+    android:layout_marginTop="@dimen/size5"
     android:layout_marginRight="@dimen/size10"
-    android:layout_marginTop="@dimen/size5">
+    android:layout_marginBottom="@dimen/size5">
 
     <View
         android:id="@+id/senderChatView"
@@ -34,8 +34,8 @@
             android:id="@+id/profileImgView"
             android:layout_width="@dimen/size55"
             android:layout_height="@dimen/size55"
-            android:layout_alignParentEnd="true"
             android:layout_below="@+id/senderNameTv"
+            android:layout_alignParentEnd="true"
             android:layout_marginStart="@dimen/size5"
             android:scaleType="centerCrop"
             android:src="@drawable/default_profile_icon" />
@@ -62,8 +62,8 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/senderReplyChatLayout"
                 android:layout_gravity="center"
-                android:layout_marginBottom="@dimen/size5"
                 android:layout_marginTop="@dimen/size5"
+                android:layout_marginBottom="@dimen/size5"
                 android:visibility="gone" />
 
             <ImageView
@@ -85,10 +85,10 @@
                 android:gravity="start"
                 android:linksClickable="true"
                 android:minHeight="@dimen/size20"
-                android:paddingBottom="@dimen/size5"
                 android:paddingLeft="@dimen/size10"
-                android:paddingRight="@dimen/size10"
                 android:paddingTop="@dimen/size5"
+                android:paddingRight="@dimen/size10"
+                android:paddingBottom="@dimen/size5"
                 android:text="@string/messages"
                 android:textAlignment="textStart"
                 android:textColor="@color/colorWhite"
@@ -102,8 +102,8 @@
             android:layout_height="@dimen/size25"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
-            android:layout_marginEnd="@dimen/size10"
             android:layout_marginTop="@dimen/size20"
+            android:layout_marginEnd="@dimen/size10"
             android:layout_toEndOf="@+id/senderChatBubbleLayout"
             android:background="@null"
             android:contentDescription="@string/app_name"

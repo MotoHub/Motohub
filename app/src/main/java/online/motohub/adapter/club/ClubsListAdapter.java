@@ -17,7 +17,6 @@ import online.motohub.R;
 import online.motohub.activity.BaseActivity;
 import online.motohub.activity.club.ClubProfileActivity;
 import online.motohub.activity.promoter.PromotersListActivity;
-import online.motohub.application.MotoHub;
 import online.motohub.model.ProfileResModel;
 import online.motohub.model.promoter_club_news_media.PromotersResModel;
 
@@ -91,8 +90,8 @@ public class ClubsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                     PromotersListActivity.PROMOTER_FOLLOW_RESPONSE);*/
            /* MotoHub.getApplicationInstance().setmProfileResModel(mMyProfileResModel);
             MotoHub.getApplicationInstance().setmPromoterResModel(mClubsList.get(getLayoutPosition()));*/
-           EventBus.getDefault().postSticky(mMyProfileResModel);
-           EventBus.getDefault().postSticky(mClubsList.get(getLayoutPosition()));
+            EventBus.getDefault().postSticky(mMyProfileResModel);
+            EventBus.getDefault().postSticky(mClubsList.get(getLayoutPosition()));
             ((BaseActivity) mContext).startActivityForResult(
                     new Intent(mContext, ClubProfileActivity.class),
                     PromotersListActivity.PROMOTER_FOLLOW_RESPONSE);

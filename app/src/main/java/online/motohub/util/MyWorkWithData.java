@@ -1,17 +1,18 @@
 package online.motohub.util;
 
 import android.annotation.SuppressLint;
-import android.app.IntentService;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.os.IBinder;
-import android.support.annotation.Nullable;
+import android.support.annotation.NonNull;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.widget.Toast;
+
+import androidx.work.Worker;
+import androidx.work.WorkerParameters;
 
 import com.amazonaws.mobile.client.AWSMobileClient;
 import com.amazonaws.mobileconnectors.s3.transferutility.TransferListener;
@@ -25,6 +26,7 @@ import com.google.gson.JsonObject;
 import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.Objects;
 
 import online.motohub.database.DatabaseHandler;
 import online.motohub.model.GalleryImgModel;
@@ -37,13 +39,14 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class BusinnesPostFileUploadService extends IntentService implements ProgressRequestBody.UploadCallbacks {
+import static online.motohub.util.UploadFileService.NOTIFY_POST_VIDEO_UPDATED;
 
-    public static final String NOTIFY_POST_VIDEO_UPDATED = "online.motohub.NOTIFY_POST_VIDEO_UPDATED";
-    //S3 server
-    /*AmazonS3Client s3;
-    BasicAWSCredentials credentials;
-    TransferUtility transferUtility;*/
+public class MyWorkWithData extends Worker implements ProgressRequestBody.UploadCallbacks {
+
+    public static final String EXTRA_TITLE = "title";
+    public static final String EXTRA_TEXT = "text";
+    public static final String EXTRA_OUTPUT_MESSAGE = "output_message";
+    private static final String TAB = MyWorkWithData.class.getSimpleName();
     TransferObserver observer, observer1;
     private Integer flag;
     private String mUserType, mPostStr;
@@ -54,138 +57,63 @@ public class BusinnesPostFileUploadService extends IntentService implements Prog
     private NotificationCompat.Builder mNotificationCompatBuilder;
     private Notification mNotification;
     private int mSubscriptionID;
+    private Context context;
+    private boolean isSuccess;
 
-    public BusinnesPostFileUploadService(String name) {
-        super(name);
+    public MyWorkWithData(@NonNull Context context, @NonNull WorkerParameters workerParams) {
+        super(context, workerParams);
+        this.context = context;
+        AWSMobileClient.getInstance().initialize(context).execute();
     }
 
-    @Nullable
+    @NonNull
     @Override
-    public IBinder onBind(Intent intent) {
-        return null;
-    }
+    public Result doWork() {
 
-    @Override
-    public void onDestroy() {
-        count = 111;
-    }
+        flag = getInputData().getInt("flag", 0);
 
-    @Override
-    protected void onHandleIntent(@Nullable Intent intent) {
-        try {
-
-            if (intent != null) {
-                flag = intent.getIntExtra("flag", 0);
-                AWSMobileClient.getInstance().initialize(this).execute();
-                int mNotificationID = intent.getIntExtra("running", 0);
-                String mVideoPath = intent.getStringExtra("videofile");
-                File mThumbImgFile = new File(intent.getStringExtra("imagefile"));
-                if (intent.hasExtra("usertype")) {
-                    mUserType = intent.getStringExtra("usertype");
-                    if (mUserType.equals(AppConstants.CLUB_USER)) {
-                        if (intent.hasExtra(AppConstants.TO_SUBSCRIBED_USER_ID))
-                            mSubscriptionID = intent.getIntExtra(AppConstants.TO_SUBSCRIBED_USER_ID, 0);
-                    }
-                }
-                mPostStr = intent.getStringExtra("posttext");
-                String mTaggedProfileID = intent.getStringExtra(PostsModel.TAGGED_PROFILE_ID);
-                int mProfileID = intent.getIntExtra("profileid", 0);
-
-                UploadVideoFile(this, mVideoPath, mThumbImgFile, mPostStr, mProfileID, mTaggedProfileID, mNotificationID);
-            }
-
-        } catch (Exception ex) {
-            ex.printStackTrace();
+        int mNotificationID = getInputData().getInt("running", 0);
+        String mVideoPath = getInputData().getString("videofile");
+        File mThumbImgFile = new File(Objects.requireNonNull(getInputData().getString("imagefile")));
+        mUserType = getInputData().getString("usertype");
+        assert mUserType != null;
+        if (mUserType.equals(AppConstants.CLUB_USER)) {
+            mSubscriptionID = getInputData().getInt(AppConstants.TO_SUBSCRIBED_USER_ID, 0);
         }
-    }
+        mPostStr = getInputData().getString("posttext");
+        String mTaggedProfileID = getInputData().getString(PostsModel.TAGGED_PROFILE_ID);
+        int mProfileID = getInputData().getInt("profileid", 0);
 
-    @Override
-    public void onProgressUpdate(int percentage, int notificationId) {
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-            mNotificationBuilder.setProgress(100, percentage, false);
-            mNotification = mNotificationBuilder.build();
-        } else {
-            mNotificationCompatBuilder.setProgress(100, percentage, false);
-            mNotification = mNotificationCompatBuilder.build();
-        }
-        mNotificationManager.notify(notificationId, mNotification);
-    }
-
-    @Override
-    public void onError() {
-
-    }
-
-    @Override
-    public void onFinish() {
-
-    }
-
-    private void UploadVideoFile(Context mContext, String compressedFilePath, File mImageFile, String mPostStr,
-                                 int mProfileID, String mTaggedProfileID, int mNotificationID) {
-        File videoFile = new File(compressedFilePath);
-        DatabaseHandler databaseHandler = new DatabaseHandler(mContext);
-        //  int count = databaseHandler.getPendingCount();
+        assert mVideoPath != null;
+        File videoFile = new File(mVideoPath);
+        DatabaseHandler databaseHandler = new DatabaseHandler(context);
         videoUploadModel = new VideoUploadModel();
         String s = videoFile.toString();
         videoUploadModel.setVideoURL(s.substring(s.lastIndexOf("/") + 1));
         videoUploadModel.setFlag(1);
-        videoUploadModel.setThumbnailURl(mImageFile.toString());
+        videoUploadModel.setThumbnailURl(mThumbImgFile.toString());
         videoUploadModel.setPosts(mPostStr);
         videoUploadModel.setProfileID(mProfileID);
         videoUploadModel.setTaggedProfileID(mTaggedProfileID);
         videoUploadModel.setNotificationflag(mNotificationID);
         mPostStr = "";
         databaseHandler.addVideoDetails(videoUploadModel);
-        mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+        mNotificationManager = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
             if (mNotificationManager != null) {
                 mNotificationManager.createNotificationChannel(NotificationUtils.getInstance().getNotificationChannel(mNotificationID));
             }
-            mNotificationBuilder = NotificationUtils.getInstance().getNotificationBuilder(this, false, "Uploading Video",
+            mNotificationBuilder = NotificationUtils.getInstance().getNotificationBuilder(context, false, "Uploading Video",
                     mNotificationID, 100, 0);
             mNotification = mNotificationBuilder.build();
             mNotificationManager.notify(mNotificationID, mNotification);
         } else {
-            mNotificationCompatBuilder = NotificationUtils.getInstance().getNotificationCompatBuilder(this, false, "Uploading Video",
+            mNotificationCompatBuilder = NotificationUtils.getInstance().getNotificationCompatBuilder(context, false, "Uploading Video",
                     mNotificationID, 100, 0);
             mNotification = mNotificationCompatBuilder.build();
             mNotificationManager.notify(mNotificationID, mNotification);
         }
-        startForeground(mNotificationID, mNotification);
-        UploadAsync uploadAsync = new UploadAsync(mNotificationID, videoFile, mImageFile);
-        uploadAsync.execute();
-    }
-
-    private void amazoneUpload(final File video, final File image, final int notificationid) {
-
-        mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-            if (mNotificationManager != null) {
-                mNotificationManager.createNotificationChannel(NotificationUtils.getInstance().getNotificationChannel(notificationid));
-            }
-            mNotificationBuilder = NotificationUtils.getInstance().getNotificationBuilder(this, false, "Uploading Video",
-                    notificationid, 100, 0);
-            mNotification = mNotificationBuilder.build();
-            mNotificationManager.notify(notificationid, mNotification);
-        } else {
-            mNotificationCompatBuilder = NotificationUtils.getInstance().getNotificationCompatBuilder(this, false, "Uploading Video",
-                    notificationid, 100, 0);
-            mNotification = mNotificationCompatBuilder.build();
-            mNotificationManager.notify(notificationid, mNotification);
-        }
-        startForeground(notificationid, mNotification);
-
-       /* ClientConfiguration configuration = new ClientConfiguration();
-        configuration.setMaxErrorRetry(3);
-        configuration.setConnectionTimeout(501000);
-        configuration.setSocketTimeout(501000);
-        configuration.setProtocol(Protocol.HTTP);
-
-        credentials = new BasicAWSCredentials(AppConstants.KEY, AppConstants.SECRET);
-        s3 = new AmazonS3Client(credentials, configuration);
-        s3.setRegion(Region.getRegion(Regions.AP_SOUTHEAST_2));
-        transferUtility = new TransferUtility(s3, BusinnesPostFileUploadService.this);*/
 
         TransferUtility transferUtility =
                 TransferUtility.builder()
@@ -194,33 +122,28 @@ public class BusinnesPostFileUploadService extends IntentService implements Prog
                         .s3Client(new AmazonS3Client(AWSMobileClient.getInstance().getCredentialsProvider()))
                         .build();
 
-        if (!video.exists()) {
-            Toast.makeText(BusinnesPostFileUploadService.this, "File Not Found!", Toast.LENGTH_SHORT).show();
-            return;
-        }
+        observer = transferUtility.upload(AppConstants.BUCKET_NAME, UrlUtils.FILE_WRITE_POST + videoFile.getName(), videoFile);
 
-        observer = transferUtility.upload(AppConstants.BUCKET_NAME, UrlUtils.FILE_WRITE_POST + video.getName(), video);
-
-        observer1 = transferUtility.upload(AppConstants.BUCKET_NAME, UrlUtils.FILE_WRITE_POST + image.getName(), image);
+        observer1 = transferUtility.upload(AppConstants.BUCKET_NAME, UrlUtils.FILE_WRITE_POST + mThumbImgFile.getName(), mThumbImgFile);
 
         observer.setTransferListener(new TransferListener() {
             @Override
             public void onStateChanged(int id, TransferState state) {
-
                 if (TransferState.COMPLETED.equals(observer.getState())) {
 
-                    String imageFileName = image.getName().substring(image.getName().lastIndexOf("/") + 1);
-                    String videoFileName = video.getName().substring(video.getName().lastIndexOf("/") + 1);
+                    String imageFileName = mThumbImgFile.getName().substring(mThumbImgFile.getName().lastIndexOf("/") + 1);
+                    String videoFileName = videoFile.getName().substring(videoFile.getName().lastIndexOf("/") + 1);
 
                     createPostJson(videoFileName, imageFileName, videoUploadModel.getPosts(), videoUploadModel.getProfileID(), videoUploadModel.getTaggedProfileID());
+
+                    JsonArray jsonElements = new JsonArray();
+                    JsonObject obj = new JsonObject();
                     String postText = "";
                     try {
                         postText = URLEncoder.encode(videoUploadModel.getPosts(), "UTF-8");
                     } catch (UnsupportedEncodingException e) {
                         e.printStackTrace();
                     }
-                    JsonArray jsonElements = new JsonArray();
-                    JsonObject obj = new JsonObject();
                     obj.addProperty(GalleryImgModel.USER_ID, getUserId());
                     obj.addProperty(GalleryImgModel.PROFILE_ID, videoUploadModel.getProfileID());
                     obj.addProperty(GalleryImgModel.VIDEO_URL, UrlUtils.FILE_WRITE_POST + videoFileName);
@@ -240,7 +163,148 @@ public class BusinnesPostFileUploadService extends IntentService implements Prog
                 long _bytesTotal = bytesTotal;
 
                 float percentage = ((float) _bytesCurrent / (float) _bytesTotal * 100);
-                //Log.d("percentage", "" + percentage);
+                Log.d("percentage", "" + percentage);
+
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                    mNotificationBuilder.setProgress(100, (int) percentage, false);
+                    mNotification = mNotificationBuilder.build();
+                } else {
+                    mNotificationCompatBuilder.setProgress(100, (int) percentage, false);
+                    mNotification = mNotificationCompatBuilder.build();
+                }
+                mNotificationManager.notify(mNotificationID, mNotification);
+            }
+
+            @Override
+            public void onError(int id, Exception ex) {
+                //Toast.makeText(context, "" + ex.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
+        try {
+            wait();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        if (isSuccess) {
+            return Result.success();
+        } else {
+            return Result.retry();
+        }
+    }
+
+    private void UploadVideoFile(Context mContext, String compressedFilePath, File mImageFile, String mPostStr,
+                                 int mProfileID, String mTaggedProfileID, int mNotificationID) {
+        File videoFile = new File(compressedFilePath);
+        DatabaseHandler databaseHandler = new DatabaseHandler(mContext);
+        //  int count = databaseHandler.getPendingCount();
+        videoUploadModel = new VideoUploadModel();
+        String s = videoFile.toString();
+        videoUploadModel.setVideoURL(s.substring(s.lastIndexOf("/") + 1));
+        videoUploadModel.setFlag(1);
+        videoUploadModel.setThumbnailURl(mImageFile.toString());
+        videoUploadModel.setPosts(mPostStr);
+        videoUploadModel.setProfileID(mProfileID);
+        videoUploadModel.setTaggedProfileID(mTaggedProfileID);
+        videoUploadModel.setNotificationflag(mNotificationID);
+        mPostStr = "";
+        databaseHandler.addVideoDetails(videoUploadModel);
+        mNotificationManager = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            if (mNotificationManager != null) {
+                mNotificationManager.createNotificationChannel(NotificationUtils.getInstance().getNotificationChannel(mNotificationID));
+            }
+            mNotificationBuilder = NotificationUtils.getInstance().getNotificationBuilder(context, false, "Uploading Video",
+                    mNotificationID, 100, 0);
+            mNotification = mNotificationBuilder.build();
+            mNotificationManager.notify(mNotificationID, mNotification);
+        } else {
+            mNotificationCompatBuilder = NotificationUtils.getInstance().getNotificationCompatBuilder(context, false, "Uploading Video",
+                    mNotificationID, 100, 0);
+            mNotification = mNotificationCompatBuilder.build();
+            mNotificationManager.notify(mNotificationID, mNotification);
+        }
+        //startForeground(mNotificationID, mNotification);
+        amazoneUpload(videoFile, mImageFile, mNotificationID);
+        /*UploadAsync uploadAsync = new UploadAsync(mNotificationID, videoFile, mImageFile);
+        uploadAsync.execute();*/
+    }
+
+    private void amazoneUpload(final File video, final File image, final int notificationid) {
+
+        mNotificationManager = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            if (mNotificationManager != null) {
+                mNotificationManager.createNotificationChannel(NotificationUtils.getInstance().getNotificationChannel(notificationid));
+            }
+            mNotificationBuilder = NotificationUtils.getInstance().getNotificationBuilder(context, false, "Uploading Video",
+                    notificationid, 100, 0);
+            mNotification = mNotificationBuilder.build();
+            mNotificationManager.notify(notificationid, mNotification);
+        } else {
+            mNotificationCompatBuilder = NotificationUtils.getInstance().getNotificationCompatBuilder(context, false, "Uploading Video",
+                    notificationid, 100, 0);
+            mNotification = mNotificationCompatBuilder.build();
+            mNotificationManager.notify(notificationid, mNotification);
+        }
+        //startForeground(notificationid, mNotification);
+
+        TransferUtility transferUtility =
+                TransferUtility.builder()
+                        .context(getApplicationContext())
+                        .awsConfiguration(AWSMobileClient.getInstance().getConfiguration())
+                        .s3Client(new AmazonS3Client(AWSMobileClient.getInstance().getCredentialsProvider()))
+                        .build();
+
+        if (!video.exists()) {
+            Toast.makeText(context, "File Not Found!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        observer = transferUtility.upload(AppConstants.BUCKET_NAME, UrlUtils.FILE_WRITE_POST + video.getName(), video);
+
+        observer1 = transferUtility.upload(AppConstants.BUCKET_NAME, UrlUtils.FILE_WRITE_POST + image.getName(), image);
+
+        observer.setTransferListener(new TransferListener() {
+            @Override
+            public void onStateChanged(int id, TransferState state) {
+
+                if (TransferState.COMPLETED.equals(observer.getState())) {
+
+                    String imageFileName = image.getName().substring(image.getName().lastIndexOf("/") + 1);
+                    String videoFileName = video.getName().substring(video.getName().lastIndexOf("/") + 1);
+
+                    createPostJson(videoFileName, imageFileName, videoUploadModel.getPosts(), videoUploadModel.getProfileID(), videoUploadModel.getTaggedProfileID());
+
+                    JsonArray jsonElements = new JsonArray();
+                    JsonObject obj = new JsonObject();
+                    String postText = "";
+                    try {
+                        postText = URLEncoder.encode(videoUploadModel.getPosts(), "UTF-8");
+                    } catch (UnsupportedEncodingException e) {
+                        e.printStackTrace();
+                    }
+                    obj.addProperty(GalleryImgModel.USER_ID, getUserId());
+                    obj.addProperty(GalleryImgModel.PROFILE_ID, videoUploadModel.getProfileID());
+                    obj.addProperty(GalleryImgModel.VIDEO_URL, UrlUtils.FILE_WRITE_POST + videoFileName);
+                    obj.addProperty(GalleryImgModel.THUMBNAIL, UrlUtils.FILE_WRITE_POST + imageFileName);
+                    obj.addProperty(GalleryImgModel.USER_TYPE, videoUploadModel.getUserType());
+                    obj.addProperty(GalleryImgModel.CAPTION, postText != null ? postText : " ");
+                    jsonElements.add(obj);
+                    callAddVideoToGallery(jsonElements);
+                }
+            }
+
+            @SuppressLint("SetTextI18n")
+            @Override
+            public void onProgressChanged(int id, long bytesCurrent, long bytesTotal) {
+
+                long _bytesCurrent = bytesCurrent;
+                long _bytesTotal = bytesTotal;
+
+                float percentage = ((float) _bytesCurrent / (float) _bytesTotal * 100);
+                Log.d("percentage", "" + percentage);
 
                 if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
                     mNotificationBuilder.setProgress(100, (int) percentage, false);
@@ -254,7 +318,8 @@ public class BusinnesPostFileUploadService extends IntentService implements Prog
 
             @Override
             public void onError(int id, Exception ex) {
-                Toast.makeText(BusinnesPostFileUploadService.this, "" + ex.getMessage(), Toast.LENGTH_SHORT).show();
+
+                Toast.makeText(context, "" + ex.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -281,12 +346,34 @@ public class BusinnesPostFileUploadService extends IntentService implements Prog
 
             @Override
             public void onError(int id, Exception ex) {
-                Toast.makeText(BusinnesPostFileUploadService.this, "" + ex.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "" + ex.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
 
-    public void createPostJson(String videourl, String thumbail, String post, Integer profileID, String taggedProfileID) {
+    private void callAddVideoToGallery(JsonArray jsonArray) {
+
+        RetrofitClient.getRetrofitInstance().getRetrofitApiInterface().postGalleryVideo(jsonArray)
+                .enqueue(new Callback<GalleryImgModel>() {
+                    @Override
+                    public void onResponse(Call<GalleryImgModel> call, Response<GalleryImgModel> response) {
+                        onDownloadComplete("File Uploaded", videoUploadModel.getNotificationflag());
+                        isSuccess = true;
+                    }
+
+                    @Override
+                    public void onFailure(Call<GalleryImgModel> call, Throwable t) {
+                        // onDownloadComplete(t.getMainObj(), 0);
+                    }
+                });
+
+    }
+
+    protected String getUserId() {
+        return String.valueOf(PreferenceUtils.getInstance(context).getIntData(PreferenceUtils.USER_ID));
+    }
+
+    private void createPostJson(String videourl, String thumbail, String post, Integer profileID, String taggedProfileID) {
         try {
             JsonObject mJsonObject = new JsonObject();
             mJsonObject.addProperty(PostsModel.POST_TEXT, URLEncoder.encode(post, "UTF-8"));
@@ -300,7 +387,7 @@ public class BusinnesPostFileUploadService extends IntentService implements Prog
             mJsonObject.addProperty(PostsModel.TAGGED_PROFILE_ID, taggedProfileID);
             mJsonObject.addProperty(PostsModel.WHO_POSTED_PROFILE_ID, profileID);
             mJsonObject.addProperty(PostsModel.USER_TYPE, mUserType);
-            mJsonObject.addProperty(PostsModel.WHO_POSTED_USER_ID, PreferenceUtils.getInstance(this).getIntData(PreferenceUtils.USER_ID));
+            mJsonObject.addProperty(PostsModel.WHO_POSTED_USER_ID, PreferenceUtils.getInstance(context).getIntData(PreferenceUtils.USER_ID));
             mJsonObject.addProperty(PostsModel.IS_NEWS_FEED_POST, true);
 
             if (mUserType.equals(AppConstants.CLUB_USER))
@@ -326,7 +413,7 @@ public class BusinnesPostFileUploadService extends IntentService implements Prog
                             Intent mIntent = new Intent(NOTIFY_POST_VIDEO_UPDATED);
                             mIntent.putExtra(PostsModel.POST_MODEL, mPostResModel);
                             mIntent.putExtra(AppConstants.USER_TYPE, mUserType);
-                            sendBroadcast(mIntent);
+                            context.sendBroadcast(mIntent);
                         }
                     }
 
@@ -336,35 +423,19 @@ public class BusinnesPostFileUploadService extends IntentService implements Prog
                 });
     }
 
-    private void callAddVideoToGallery(JsonArray jsonArray) {
-        RetrofitClient.getRetrofitInstance().getRetrofitApiInterface().postGalleryVideo(jsonArray)
-                .enqueue(new Callback<GalleryImgModel>() {
-                    @Override
-                    public void onResponse(Call<GalleryImgModel> call, Response<GalleryImgModel> response) {
-                        onDownloadComplete("File Uploaded", videoUploadModel.getNotificationflag());
-                    }
-
-                    @Override
-                    public void onFailure(Call<GalleryImgModel> call, Throwable t) {
-                        // onDownloadComplete(t.getMainObj(), 0);
-                    }
-                });
-
-    }
-
     private void onDownloadComplete(String value, int mNotificationID) {
         try {
-            DatabaseHandler databaseHandler = new DatabaseHandler(this);
+            DatabaseHandler databaseHandler = new DatabaseHandler(context);
             int checkCount = databaseHandler.getPendingCount();
-            stopForeground(true);
+            //stopForeground(true);
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
                 if (mNotificationManager != null) {
                     mNotificationManager.createNotificationChannel(NotificationUtils.getInstance().getNotificationChannel(mNotificationID));
                 }
-                mNotificationBuilder = NotificationUtils.getInstance().getNotificationBuilder(this, false, value, mNotificationID, 0, 0);
+                mNotificationBuilder = NotificationUtils.getInstance().getNotificationBuilder(context, false, value, mNotificationID, 0, 0);
                 mNotification = mNotificationBuilder.build();
             } else {
-                mNotificationCompatBuilder = NotificationUtils.getInstance().getNotificationCompatBuilder(this, false, value, mNotificationID, 0, 0);
+                mNotificationCompatBuilder = NotificationUtils.getInstance().getNotificationCompatBuilder(context, false, value, mNotificationID, 0, 0);
                 mNotification = mNotificationCompatBuilder.build();
             }
             if (checkCount == 0 || mNotificationID == 0) {
@@ -380,15 +451,28 @@ public class BusinnesPostFileUploadService extends IntentService implements Prog
         }
     }
 
-    protected String getHttpFilePath(String filePath) {
-        return filePath;
+    @Override
+    public void onProgressUpdate(int percentage, int notificationid) {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            mNotificationBuilder.setProgress(100, percentage, false);
+            mNotification = mNotificationBuilder.build();
+        } else {
+            mNotificationCompatBuilder.setProgress(100, percentage, false);
+            mNotification = mNotificationCompatBuilder.build();
+        }
+        mNotificationManager.notify(notificationid, mNotification);
     }
 
-    //Some Stuff
+    @Override
+    public void onError() {
 
-    protected String getUserId() {
-        return String.valueOf(PreferenceUtils.getInstance(this).getIntData(PreferenceUtils.USER_ID));
     }
+
+    @Override
+    public void onFinish() {
+
+    }
+
 
     @SuppressLint("StaticFieldLeak")
     private class UploadAsync extends AsyncTask<String, String, Void> {
@@ -401,12 +485,15 @@ public class BusinnesPostFileUploadService extends IntentService implements Prog
             this.notificationid = notificationid;
             imagfile = ImageFile;
             this.videofile = videofile;
+
         }
 
         @Override
         protected Void doInBackground(String... paths) {
+            //uploadImgAndVidToServer(notificationid, videofile, imagfile);
             amazoneUpload(videofile, imagfile, notificationid);
             return null;
         }
     }
+
 }

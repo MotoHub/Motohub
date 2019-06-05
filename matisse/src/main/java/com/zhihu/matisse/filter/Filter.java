@@ -19,8 +19,8 @@ import android.content.Context;
 
 import com.zhihu.matisse.MimeType;
 import com.zhihu.matisse.SelectionCreator;
-import com.zhihu.matisse.internal.entity.Item;
 import com.zhihu.matisse.internal.entity.IncapableCause;
+import com.zhihu.matisse.internal.entity.Item;
 
 import java.util.Set;
 

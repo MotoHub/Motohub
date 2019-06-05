@@ -2,22 +2,22 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     style="@style/LayoutWrap"
-    android:layout_marginBottom="@dimen/size5"
-    android:layout_marginLeft="@dimen/size5"
     android:layout_marginStart="@dimen/size5"
+    android:layout_marginLeft="@dimen/size5"
+    android:layout_marginBottom="@dimen/size5"
     android:background="@drawable/orange_round_bg"
     android:orientation="horizontal"
-    android:paddingEnd="@dimen/size5"
+    android:paddingStart="@dimen/size0"
     android:paddingLeft="@dimen/size0"
-    android:paddingRight="@dimen/size5"
-    android:paddingStart="@dimen/size0">
+    android:paddingEnd="@dimen/size5"
+    android:paddingRight="@dimen/size5">
 
     <TextView
         android:id="@+id/name_of_tag"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/size10"
         android:layout_marginStart="@dimen/size10"
+        android:layout_marginLeft="@dimen/size10"
         android:layout_weight="1"
         android:maxLines="3"
         android:padding="@dimen/size5"

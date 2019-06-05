@@ -146,7 +146,6 @@ public class UpgradeProfileActivity extends BaseActivity {
     }
 
 
-
     private void initView() {
         setupUI(mCoordinatorLayout);
         setToolbar(mToolbar, mToolbarTitle);

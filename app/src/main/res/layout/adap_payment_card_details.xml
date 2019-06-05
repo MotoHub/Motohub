@@ -1,108 +1,110 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_height="wrap_content">
 
     <android.support.v7.widget.CardView
+        android:id="@+id/rootCard"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:foreground="?android:attr/selectableItemBackground"
         android:layout_marginLeft="@dimen/size10"
-        android:layout_marginRight="@dimen/size10"
         android:layout_marginTop="@dimen/size5"
+        android:layout_marginRight="@dimen/size10"
         android:layout_marginBottom="@dimen/size5"
+        android:foreground="?android:attr/selectableItemBackground"
+        app:cardBackgroundColor="@color/colorGrey"
         app:cardCornerRadius="5dp"
         app:cardElevation="10dp"
-        app:cardBackgroundColor="@color/colorGrey"
-        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        android:id="@+id/rootCard"
-        >
+        app:layout_constraintTop_toTopOf="parent">
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="@dimen/size10"
-            android:background="@color/colorWhite">
-
-        <android.support.constraint.ConstraintLayout
-            style="@style/LayoutMatchWrap"
             android:background="@color/colorWhite"
-            android:id="@+id/cardDetailsConstraintLayout"
-            >
+            android:padding="@dimen/size10">
 
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/paymentCardImage"
-                android:src="@drawable/ic_credit_card"
-                app:layout_constraintRight_toLeftOf="@+id/linearLayout"
-                app:layout_constraintTop_toTopOf="@+id/linearLayout"
-                app:layout_constraintBottom_toBottomOf="@+id/linearLayout"
+            <android.support.constraint.ConstraintLayout
+                android:id="@+id/cardDetailsConstraintLayout"
+                style="@style/LayoutMatchWrap"
+                android:background="@color/colorWhite">
 
-                />
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:id="@+id/linearLayout"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintLeft_toRightOf="@+id/paymentCardImage"
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/paymentCardImage"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_credit_card"
+                    app:layout_constraintBottom_toBottomOf="@+id/linearLayout"
+                    app:layout_constraintRight_toLeftOf="@+id/linearLayout"
+                    app:layout_constraintTop_toTopOf="@+id/linearLayout"
 
-                >
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/paymentCardNumber"
-                android:text="1234-xxxx-xxxx-2454"
-                android:textSize="@dimen/text14"
-                android:layout_marginStart="@dimen/size20"
-                android:textColor="@color/colorBlack"
+                    />
 
-                />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/paymentCardName"
-                android:textColor="@color/colorGrey"
-                android:text="Test User"
-                android:textSize="@dimen/text14"
-                android:layout_marginStart="@dimen/size20"
-                app:layout_constraintTop_toBottomOf="@+id/paymentCardNumber"
-                app:layout_constraintLeft_toRightOf="@+id/paymentCardImage"
-                android:layout_marginTop="@dimen/size3"
-                />
-            </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/linearLayout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toRightOf="@+id/paymentCardImage"
+                    app:layout_constraintTop_toTopOf="parent"
 
-        </android.support.constraint.ConstraintLayout>
+                    >
+
+                    <TextView
+                        android:id="@+id/paymentCardNumber"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/size20"
+                        android:text="1234-xxxx-xxxx-2454"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="@dimen/text14"
+
+                        />
+
+                    <TextView
+                        android:id="@+id/paymentCardName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/size20"
+                        android:layout_marginTop="@dimen/size3"
+                        android:text="Test User"
+                        android:textColor="@color/colorGrey"
+                        android:textSize="@dimen/text14"
+                        app:layout_constraintLeft_toRightOf="@+id/paymentCardImage"
+                        app:layout_constraintTop_toBottomOf="@+id/paymentCardNumber" />
+                </LinearLayout>
+
+            </android.support.constraint.ConstraintLayout>
+
             <RelativeLayout
+                android:id="@+id/cardCvvRelativeLayout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/cardCvvRelativeLayout"
                 android:layout_below="@+id/cardDetailsConstraintLayout"
                 android:layout_centerHorizontal="true"
-                android:background="@color/colorWhite"
                 android:layout_marginTop="@dimen/size20"
+                android:background="@color/colorWhite"
                 android:visibility="gone">
 
                 <EditText
-                    android:hint="@string/enter_cvv"
-                    android:gravity="center"
-                    android:maxLength="3"
-                    android:inputType="numberPassword"
-                    android:textColorHint="@color/colorGrey"
+                    android:id="@+id/cvvEdtTxt"
                     android:layout_width="@dimen/size200"
                     android:layout_height="@dimen/size40"
-                    android:layout_marginStart="@dimen/size20"
-                    android:id="@+id/cvvEdtTxt"
-                    android:textColor="@color/colorBlack"
-                    android:textSize="@dimen/text16"
                     android:layout_centerVertical="true"
+                    android:layout_marginStart="@dimen/size20"
                     android:background="@drawable/orange_border_bg"
-                    />
+                    android:gravity="center"
+                    android:hint="@string/enter_cvv"
+                    android:inputType="numberPassword"
+                    android:maxLength="3"
+                    android:textColor="@color/colorBlack"
+                    android:textColorHint="@color/colorGrey"
+                    android:textSize="@dimen/text16" />
+
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/ivSelectedPayCard"
                     android:layout_width="@dimen/size60"

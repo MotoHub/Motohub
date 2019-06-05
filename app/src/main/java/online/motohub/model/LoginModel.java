@@ -55,7 +55,7 @@ public class LoginModel implements Serializable {
     private String mHost;
 
     public String getPhone() {
-        if(mPhone == null)
+        if (mPhone == null)
             mPhone = "";
         return mPhone;
     }
@@ -63,7 +63,6 @@ public class LoginModel implements Serializable {
     public void setPhone(String mPhone) {
         this.mPhone = mPhone;
     }
-
 
 
     public String getSessionToken() {

@@ -23,10 +23,10 @@
     <EditText
         android:id="@+id/search_edt"
         style="@style/LayoutMatchWrap"
-        android:layout_marginBottom="@dimen/size5"
-        android:layout_marginTop="@dimen/size110"
         android:layout_marginLeft="@dimen/size5"
+        android:layout_marginTop="@dimen/size110"
         android:layout_marginRight="@dimen/size5"
+        android:layout_marginBottom="@dimen/size5"
         android:background="@drawable/orange_border_bg"
         android:hint="@string/search_here"
         android:padding="5dp"
@@ -36,25 +36,24 @@
 
     <com.facebook.shimmer.ShimmerFrameLayout
         android:id="@+id/shimmer_ondemand_promoters"
-        android:layout_below="@+id/search_edt"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_below="@+id/search_edt">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <include layout="@layout/posts_placeholder_item"/>
+            <include layout="@layout/posts_placeholder_item" />
 
-            <include layout="@layout/posts_placeholder_item"/>
+            <include layout="@layout/posts_placeholder_item" />
 
         </LinearLayout>
 
     </com.facebook.shimmer.ShimmerFrameLayout>
 
-    <android.support.v4.widget.SwipeRefreshLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
+    <android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/swipe_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -79,8 +78,8 @@
         android:id="@+id/video_gallery_fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
         android:layout_margin="@dimen/size16"
         app:fabSize="normal"
         app:srcCompat="@drawable/file_upload_icon" />

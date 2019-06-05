@@ -7,11 +7,11 @@ public class AppConstants {
      * You should replace these values with your own. See the README for details
      * on what to fill in.
      */
-   // public static final String COGNITO_POOL_ID = "ap-southeast-2:dea16175-0997-4e07-a686-19034fcc8232";
+    // public static final String COGNITO_POOL_ID = "ap-southeast-2:dea16175-0997-4e07-a686-19034fcc8232";
     /*
      * Region of your Cognito identity pool ID.
      */
-   // public static final String COGNITO_POOL_REGION = "ap-southeast-2";
+    // public static final String COGNITO_POOL_REGION = "ap-southeast-2";
 
     /*
      * Note, you must first create a bucket using the S3 console before running
@@ -112,6 +112,22 @@ public class AppConstants {
     public static final int IMAGE = 1;
     public static final int VIDEO = 2;
     public static final String POSITION = "position";
+    public static final String USER_EVENT_VIDEOS = "usereventvideos";
+    public static final String PURCHASE_DIALOG = "PURCHASE_DIALOG";
+    public static final String VIDEO_LIST = "VIDEO_LIST";
+    public static final String USER_ID = "USER_ID";
+    public static final int CREATE_NEW_PAYMENT_REQUEST = 2011;
+    public static final String NEW_PAYMENT_CARD_DETAILS = "NEW_PAYMENT_CARD_DETAILS";
+    public static final String CARD_SETTINGS = "CARD_SETTINGS";
+    public static final String PROMOTER_ID = "PROMOTER_ID";
+    public static final String FREE_EVENT = "FREE_EVENT";
+    public static final String FREE_SUBSCRIPTION = "FREE_SUBSCRIPTION";
+    //TODO this is for Event Status
+    public static final int EVENT_STATUS = 2;
+    public static final int FAILED_SUBSCRIPTION_STATUS = 1;
+    public static final String ACTION_PICK = "motohub.ACTION_PICK";
+    public static final String ACTION_MULTIPLE_PICK = "motohub.ACTION_MULTIPLE_PICK";
+    public static final String CACHE_DIR = ".MotoHUB/Cache";
     private static final String SKU_PROMOTER_SUBS_3 = "promoter_subs_3";
     private static final String SKU_PROMOTER_SUBS_4 = "promoter_subs_4";
     private static final String SKU_PROMOTER_SUBS_5 = "promoter_subs_5";
@@ -123,28 +139,8 @@ public class AppConstants {
     private static final String SKU_PROMOTER_SUBS_15 = "promoter_subs_15";
     private static final String SKU_PROMOTER_SUBS_20 = "promoter_subs_20";
     private static final String SKU_PROMOTER_SUBS_25 = "promoter_subs_25";
-    public static final String USER_EVENT_VIDEOS = "usereventvideos";
-    public static final String PURCHASE_DIALOG = "PURCHASE_DIALOG";
-    public static final String VIDEO_LIST = "VIDEO_LIST";
-    public static final String USER_ID = "USER_ID";
-    public static final int CREATE_NEW_PAYMENT_REQUEST = 2011;
-    public static final String NEW_PAYMENT_CARD_DETAILS = "NEW_PAYMENT_CARD_DETAILS";
-    public static final String CARD_SETTINGS = "CARD_SETTINGS";
-    public static final String PROMOTER_ID = "PROMOTER_ID";
-    public static final String FREE_EVENT = "FREE_EVENT";
-    public static final String FREE_SUBSCRIPTION = "FREE_SUBSCRIPTION";
-
-    //TODO this is for Event Status
-    public static final int EVENT_STATUS = 2;
-    public static final int FAILED_SUBSCRIPTION_STATUS = 1;
-
-
     public static String TAG = "MOTOHUB";
     public static CommonInterface LIVE_STREAM_CALL_BACK = null;
     public static String[] ARRAYSKU = {SKU_PROMOTER_SUBS_3, "1", "2", SKU_PROMOTER_SUBS_3, SKU_PROMOTER_SUBS_4, SKU_PROMOTER_SUBS_5, SKU_PROMOTER_SUBS_6,
             SKU_PROMOTER_SUBS_7, SKU_PROMOTER_SUBS_8, SKU_PROMOTER_SUBS_9, SKU_PROMOTER_SUBS_10, SKU_PROMOTER_SUBS_15, SKU_PROMOTER_SUBS_20, SKU_PROMOTER_SUBS_25};
-
-    public static final String ACTION_PICK = "motohub.ACTION_PICK";
-    public static final String ACTION_MULTIPLE_PICK = "motohub.ACTION_MULTIPLE_PICK";
-    public static final String CACHE_DIR = ".MotoHUB/Cache";
 }

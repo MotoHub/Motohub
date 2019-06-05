@@ -42,8 +42,8 @@
             style="@style/LayoutMatchWrap"
             android:layout_below="@+id/grp_name_tv"
             android:layout_marginLeft="@dimen/size10"
-            android:layout_marginRight="@dimen/size10"
             android:layout_marginTop="@dimen/size10"
+            android:layout_marginRight="@dimen/size10"
             android:text="@string/group_members"
             android:textAlignment="center"
             android:textColor="@color/colorBlack"
@@ -54,11 +54,11 @@
             android:id="@+id/grp_members_rv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
             android:layout_below="@+id/group_members_tv"
-            android:layout_marginBottom="@dimen/size10"
+            android:layout_alignParentBottom="true"
             android:layout_marginLeft="@dimen/size10"
             android:layout_marginRight="@dimen/size10"
+            android:layout_marginBottom="@dimen/size10"
             android:paddingTop="@dimen/size10" />
 
     </RelativeLayout>

@@ -21,7 +21,7 @@ import online.motohub.model.ProfileResModel;
 import online.motohub.util.Utility;
 
 
-public class FeedCommentLikeAdapter extends RecyclerView.Adapter<FeedCommentLikeAdapter.Holder>{
+public class FeedCommentLikeAdapter extends RecyclerView.Adapter<FeedCommentLikeAdapter.Holder> {
 
     private Context mContext;
     private List<FeedCommentLikeModel> mFeedLikesList;
@@ -32,25 +32,6 @@ public class FeedCommentLikeAdapter extends RecyclerView.Adapter<FeedCommentLike
         this.mContext = mContext;
         this.mFeedLikesList = mFeedLikeList;
         this.mMyProfileResModel = mMyProfileResModel;
-    }
-
-
-    public class Holder extends RecyclerView.ViewHolder {
-
-        @BindView(R.id.comment_user_img)
-        CircleImageView mUserImg;
-
-        @BindView(R.id.comment_user_img_lay)
-        RelativeLayout mCommentImgLay;
-
-        @BindView(R.id.comment_user_name_txt)
-        TextView mUserNameTxt;
-
-        public Holder(View view) {
-            super(view);
-            ButterKnife.bind(this, view);
-        }
-
     }
 
     @Override
@@ -79,7 +60,7 @@ public class FeedCommentLikeAdapter extends RecyclerView.Adapter<FeedCommentLike
             });
 
             mHolder.mUserNameTxt.setText(Utility.getInstance().getUserName(mEntity.getProfileByProfileID()));
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -90,12 +71,30 @@ public class FeedCommentLikeAdapter extends RecyclerView.Adapter<FeedCommentLike
     }
 
     private void profileClick(FeedCommentLikeModel feedCommentLikeModel) {
-        if(mMyProfileResModel.getID() == feedCommentLikeModel.getProfileID()){
+        if (mMyProfileResModel.getID() == feedCommentLikeModel.getProfileID()) {
             ((BaseActivity) mContext).moveMyProfileScreen(mContext, 0);
-        } else{
+        } else {
             ((BaseActivity) mContext).moveOtherProfileScreen(mContext, mMyProfileResModel.getID(),
-                    feedCommentLikeModel.getProfileByProfileID()  .getID());
+                    feedCommentLikeModel.getProfileByProfileID().getID());
         }
+    }
+
+    public class Holder extends RecyclerView.ViewHolder {
+
+        @BindView(R.id.comment_user_img)
+        CircleImageView mUserImg;
+
+        @BindView(R.id.comment_user_img_lay)
+        RelativeLayout mCommentImgLay;
+
+        @BindView(R.id.comment_user_name_txt)
+        TextView mUserNameTxt;
+
+        public Holder(View view) {
+            super(view);
+            ButterKnife.bind(this, view);
+        }
+
     }
 
 }

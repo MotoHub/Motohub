@@ -33,11 +33,6 @@ public class EventsWhoIsGoingAdapter extends ArrayAdapter<EventsWhoIsGoingResMod
         this.mOriginalWhoIsGoingList = whoIsGoingListData;
     }
 
-    private static class ViewHolder {
-        CircleImageView mUserImgView;
-        TextView mUsernameTv;
-    }
-
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
@@ -128,8 +123,8 @@ public class EventsWhoIsGoingAdapter extends ArrayAdapter<EventsWhoIsGoingResMod
 
                 mWhoIsGoingListData = (List<EventsWhoIsGoingResModel>) results.values; // has the filtered values
                 notifyDataSetChanged();  // notifies the data with new filtered values
-                if(mWhoIsGoingListData.size() == 0)
-                    ((BaseActivity)mContext).showToast(mContext, mContext.getString(R.string.no_result_err));
+                if (mWhoIsGoingListData.size() == 0)
+                    ((BaseActivity) mContext).showToast(mContext, mContext.getString(R.string.no_result_err));
 
             }
         };
@@ -144,6 +139,11 @@ public class EventsWhoIsGoingAdapter extends ArrayAdapter<EventsWhoIsGoingResMod
     @Override
     public EventsWhoIsGoingResModel getItem(int position) {
         return mWhoIsGoingListData.get(position);
+    }
+
+    private static class ViewHolder {
+        CircleImageView mUserImgView;
+        TextView mUsernameTv;
     }
 
 }

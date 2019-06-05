@@ -3,7 +3,6 @@ package com.daasuu.gpuv.egl;
 import android.graphics.SurfaceTexture;
 
 
-
 public class GlSurfaceTexture implements SurfaceTexture.OnFrameAvailableListener {
 
     private SurfaceTexture surfaceTexture;

@@ -24,10 +24,6 @@ public class CreateGrpSelectProfilesAdapter extends RecyclerView.Adapter<Recycle
     private Context mContext;
     private List<ProfileResModel> mGrpSelectProfilesList;
 
-    public interface CreateGrpSelectProfilesInterface {
-        void grpSelectProfiles(int adapterPosition);
-    }
-
     public CreateGrpSelectProfilesAdapter(List<ProfileResModel> grpSelectProfilesList, Context ctx) {
         this.mCreateGrpSelectProfilesInterface = (CreateGrpSelectProfilesInterface) ctx;
         this.mGrpSelectProfilesList = grpSelectProfilesList;
@@ -61,7 +57,7 @@ public class CreateGrpSelectProfilesAdapter extends RecyclerView.Adapter<Recycle
             }
 
             mViewHolderGrpSelectProfiles.mRightArrow.setVisibility(View.GONE);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -70,6 +66,10 @@ public class CreateGrpSelectProfilesAdapter extends RecyclerView.Adapter<Recycle
     @Override
     public int getItemCount() {
         return mGrpSelectProfilesList.size();
+    }
+
+    public interface CreateGrpSelectProfilesInterface {
+        void grpSelectProfiles(int adapterPosition);
     }
 
     private class ViewHolderGrpSelectProfiles extends RecyclerView.ViewHolder implements View.OnClickListener {

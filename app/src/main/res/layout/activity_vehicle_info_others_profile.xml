@@ -11,8 +11,8 @@
     <ScrollView
         android:id="@+id/profile_scroll_view"
         style="@style/LayoutMatch"
-        android:padding="@dimen/size5"
         android:layout_marginTop="@dimen/size56"
+        android:padding="@dimen/size5"
         android:scrollbars="none">
 
         <RelativeLayout style="@style/LayoutMatchWrap">
@@ -71,42 +71,38 @@
                     android:textAlignment="center"
                     android:textColor="@color/colorOrange"
                     android:textSize="@dimen/text16"
-                    android:textStyle="bold"
-                    />
+                    android:textStyle="bold" />
 
                 <LinearLayout
+                    android:id="@+id/linearLikeLay"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/linearLikeLay"
-                    android:orientation="horizontal"
                     android:layout_alignParentEnd="true"
                     android:layout_toStartOf="@+id/profile_title_tv"
-                    >
+                    android:orientation="horizontal">
 
-                <ImageView
-                    android:id="@+id/likeBtn"
-                    android:layout_width="@dimen/size30"
-                    android:layout_height="@dimen/size30"
-                    android:background="@drawable/ripple_effect"
-                    android:clickable="true"
-                    android:layout_marginStart="@dimen/size10"
-                    android:paddingBottom="@dimen/size5"
-                    android:contentDescription="@string/like"
-                    android:focusable="true"
-                    android:gravity="center"
-                    android:layout_gravity="center"
-                    app:srcCompat="@drawable/like_icon"
-                    />
+                    <ImageView
+                        android:id="@+id/likeBtn"
+                        android:layout_width="@dimen/size30"
+                        android:layout_height="@dimen/size30"
+                        android:layout_gravity="center"
+                        android:layout_marginStart="@dimen/size10"
+                        android:background="@drawable/ripple_effect"
+                        android:clickable="true"
+                        android:contentDescription="@string/like"
+                        android:focusable="true"
+                        android:gravity="center"
+                        android:paddingBottom="@dimen/size5"
+                        app:srcCompat="@drawable/like_icon" />
 
-                <TextView
-                    android:id="@+id/like_count_txt"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginStart="@dimen/size5"
-                    android:textColor="@color/colorDarkGrey"
-                    android:textSize="@dimen/text14"
-                    />
+                    <TextView
+                        android:id="@+id/like_count_txt"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginStart="@dimen/size5"
+                        android:textColor="@color/colorDarkGrey"
+                        android:textSize="@dimen/text14" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -168,8 +164,7 @@
                             android:text="@string/name_of_moto"
                             android:textColor="@color/colorBlack"
                             android:textSize="@dimen/text12"
-                            android:textStyle="bold" 
-                            />
+                            android:textStyle="bold" />
 
                         <TextView
                             android:id="@+id/name_of_moto_et"
@@ -181,8 +176,7 @@
                             android:hint="@string/name_of_moto"
                             android:textColor="@color/colorBlack"
                             android:textColorHint="@color/colorGrey"
-                            android:textSize="@dimen/text12"
-                            />
+                            android:textSize="@dimen/text12" />
 
                     </LinearLayout>
 
@@ -267,8 +261,8 @@
                     <LinearLayout
                         android:id="@+id/phone_box"
                         style="@style/LayoutMatchWrap"
-                        android:visibility="gone"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        android:visibility="gone">
 
                         <TextView
                             android:id="@+id/phone_tv"
@@ -1573,8 +1567,8 @@
                         android:id="@+id/back_protection_line"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/size1"
-                        android:visibility="gone"
-                        android:background="@color/colorGrey" />
+                        android:background="@color/colorGrey"
+                        android:visibility="gone" />
 
                     <LinearLayout
                         android:id="@+id/chest_protection_box"
@@ -1612,7 +1606,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/size1"
                         android:background="@color/colorGrey"
-                        android:visibility="gone"/>
+                        android:visibility="gone" />
 
                     <LinearLayout
                         android:id="@+id/more_info_box"

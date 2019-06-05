@@ -14,16 +14,11 @@ import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.amazonaws.ClientConfiguration;
-import com.amazonaws.Protocol;
-import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.mobile.client.AWSMobileClient;
 import com.amazonaws.mobileconnectors.s3.transferutility.TransferListener;
 import com.amazonaws.mobileconnectors.s3.transferutility.TransferObserver;
 import com.amazonaws.mobileconnectors.s3.transferutility.TransferState;
 import com.amazonaws.mobileconnectors.s3.transferutility.TransferUtility;
-import com.amazonaws.regions.Region;
-import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -106,39 +101,6 @@ public class UploadJobScheduler extends JobService implements ProgressRequestBod
 
     }
 
-    @SuppressLint("StaticFieldLeak")
-    private class JobTask extends AsyncTask<JobParameters, Void, JobParameters> {
-        private SpectatorLiveEntity myObj;
-
-        JobTask(SpectatorLiveEntity myObj) {
-            this.myObj = myObj;
-        }
-
-        @Override
-        protected JobParameters doInBackground(final JobParameters... params) {
-            /*Runnable r = new Runnable() {
-                public void run() {
-                    synchronized (this) {
-                        try {
-                            amazoneUpload(UploadJobScheduler.this, myObj, params[0]);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }
-            };
-            Thread t = new Thread(r);
-            t.start();*/
-
-            uploadFileNotification(UploadJobScheduler.this, myObj, params[0]);
-            return params[0];
-        }
-
-        @Override
-        protected void onPostExecute(JobParameters jobParameters) {
-        }
-    }
-
     private void uploadFileNotification(Context mContext, SpectatorLiveEntity entity, final JobParameters param) {
         //SpectatorLiveEntity entity = list.get(mFinalValue);
         mProfileID = Integer.parseInt(entity.getProfileID());
@@ -156,7 +118,7 @@ public class UploadJobScheduler extends JobService implements ProgressRequestBod
         int count = databaseHandler.getPendingCount();
         final int notificationid = 1;
         String s = videoFile.toString();
-        videoUploadModel.setVideoURL(s.substring(s.lastIndexOf("/") + 1, s.length()));
+        videoUploadModel.setVideoURL(s.substring(s.lastIndexOf("/") + 1));
         videoUploadModel.setFlag(1);
         videoUploadModel.setThumbnailURl(mThumbImgFile.toString());
         videoUploadModel.setProfileID(mProfileID);
@@ -315,6 +277,39 @@ public class UploadJobScheduler extends JobService implements ProgressRequestBod
 
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    @SuppressLint("StaticFieldLeak")
+    private class JobTask extends AsyncTask<JobParameters, Void, JobParameters> {
+        private SpectatorLiveEntity myObj;
+
+        JobTask(SpectatorLiveEntity myObj) {
+            this.myObj = myObj;
+        }
+
+        @Override
+        protected JobParameters doInBackground(final JobParameters... params) {
+            /*Runnable r = new Runnable() {
+                public void run() {
+                    synchronized (this) {
+                        try {
+                            amazoneUpload(UploadJobScheduler.this, myObj, params[0]);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            };
+            Thread t = new Thread(r);
+            t.start();*/
+
+            uploadFileNotification(UploadJobScheduler.this, myObj, params[0]);
+            return params[0];
+        }
+
+        @Override
+        protected void onPostExecute(JobParameters jobParameters) {
         }
     }
 }

@@ -38,7 +38,6 @@ import online.motohub.activity.news_and_media.NewsAndMediaProfileActivity;
 import online.motohub.activity.performance_shop.PerformanceShopProfileActivity;
 import online.motohub.activity.promoter.PromoterProfileActivity;
 import online.motohub.activity.track.TrackProfileActivity;
-import online.motohub.application.MotoHub;
 import online.motohub.model.EventGrpChatMsgResModel;
 import online.motohub.model.ProfileResModel;
 import online.motohub.model.promoter_club_news_media.PromotersModel;
@@ -264,7 +263,7 @@ public class ChatBoxEventGrpAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                         mViewHolderSender.mSenderMsgTv.setVisibility(View.VISIBLE);
                         try {
                             mViewHolderSender.mSenderMsgTv.setText(URLDecoder.decode(mEventGrpChatMsgList.get(position).getMessage(), "UTF-8"));
-                           // mViewHolderSender.mSenderMsgTv.setText(replacer(sb.append(mEventGrpChatMsgList.get(position).getMainObj())));
+                            // mViewHolderSender.mSenderMsgTv.setText(replacer(sb.append(mEventGrpChatMsgList.get(position).getMainObj())));
                         } catch (Exception e) {
                             e.printStackTrace();
                         }

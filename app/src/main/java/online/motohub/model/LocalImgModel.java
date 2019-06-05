@@ -6,24 +6,6 @@ import android.os.Parcelable;
 
 public class LocalImgModel implements Parcelable {
 
-    private int id;
-    private Uri fileUri;
-    private String fileName;
-    private String folderName;
-    private int folderId;
-
-
-    public LocalImgModel() {
-    }
-
-    protected LocalImgModel(Parcel in) {
-        id = in.readInt();
-        fileUri = in.readParcelable(Uri.class.getClassLoader());
-        fileName = in.readString();
-        folderName = in.readString();
-        folderId = in.readInt();
-    }
-
     public static final Creator<LocalImgModel> CREATOR = new Creator<LocalImgModel>() {
         @Override
         public LocalImgModel createFromParcel(Parcel in) {
@@ -35,6 +17,22 @@ public class LocalImgModel implements Parcelable {
             return new LocalImgModel[size];
         }
     };
+    private int id;
+    private Uri fileUri;
+    private String fileName;
+    private String folderName;
+    private int folderId;
+
+    public LocalImgModel() {
+    }
+
+    protected LocalImgModel(Parcel in) {
+        id = in.readInt();
+        fileUri = in.readParcelable(Uri.class.getClassLoader());
+        fileName = in.readString();
+        folderName = in.readString();
+        folderId = in.readInt();
+    }
 
     public int getId() {
         return id;

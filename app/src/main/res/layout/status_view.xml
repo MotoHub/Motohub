@@ -1,32 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
-<merge xmlns:android="http://schemas.android.com/apk/res/android" >
-    <RelativeLayout android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"
-                    android:background="#c0000000"
-                    android:id="@+id/vwStatus"
-                    android:padding="20dp">
+<merge xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <RelativeLayout
+        android:id="@+id/vwStatus"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="#c0000000"
+        android:padding="20dp">
 
         <TextView
+            android:id="@+id/txtStatus"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text=""
-            android:id="@+id/txtStatus"
-            android:layout_centerVertical="true"
             android:layout_centerHorizontal="true"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:layout_marginBottom="25dip"
+            android:layout_centerVertical="true"
             android:layout_marginTop="10dip"
-            android:textAlignment="center"/>
+            android:layout_marginBottom="25dip"
+            android:text=""
+            android:textAlignment="center"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <Button
+            android:id="@+id/btnDismiss"
             style="?android:attr/buttonStyleSmall"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/button_dismiss"
-            android:id="@+id/btnDismiss"
-            android:visibility="visible"
             android:layout_below="@+id/txtStatus"
-            android:layout_centerHorizontal="true" />
+            android:layout_centerHorizontal="true"
+            android:text="@string/button_dismiss"
+            android:visibility="visible" />
 
     </RelativeLayout>
 </merge>

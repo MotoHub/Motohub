@@ -11,7 +11,6 @@ import static android.opengl.GLES20.GL_TEXTURE_2D;
 import static android.opengl.GLES20.GL_TRIANGLE_STRIP;
 
 
-
 public class GlPreview extends GlFilter {
 
     public static final int GL_TEXTURE_EXTERNAL_OES = 0x8D65;

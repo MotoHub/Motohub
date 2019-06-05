@@ -16,12 +16,12 @@ class MuxRender {
     private static final String TAG = "MuxRender";
     private static final int BUFFER_SIZE = 64 * 1024; // I have no idea whether this value is appropriate or not...
     private final MediaMuxer muxer;
+    private final List<SampleInfo> sampleInfoList;
     private MediaFormat videoFormat;
     private MediaFormat audioFormat;
     private int videoTrackIndex;
     private int audioTrackIndex;
     private ByteBuffer byteBuffer;
-    private final List<SampleInfo> sampleInfoList;
     private boolean started;
 
     MuxRender(MediaMuxer muxer) {

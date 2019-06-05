@@ -2,6 +2,7 @@ package com.daasuu.gpuv.egl.filter;
 
 import android.content.res.Resources;
 import android.opengl.GLES20;
+
 import com.daasuu.gpuv.egl.EglUtil;
 import com.daasuu.gpuv.egl.GlFramebufferObject;
 
@@ -29,7 +30,8 @@ public class GlFilter {
                     "void main() {\n" +
                     "gl_FragColor = texture2D(sTexture, vTextureCoord);\n" +
                     "}\n";
-
+    protected static final int VERTICES_DATA_POS_SIZE = 3;
+    protected static final int VERTICES_DATA_UV_SIZE = 2;
     private static final float[] VERTICES_DATA = new float[]{
             // X, Y, Z, U, V
             -1.0f, 1.0f, 0.0f, 0.0f, 1.0f,
@@ -37,25 +39,18 @@ public class GlFilter {
             -1.0f, -1.0f, 0.0f, 0.0f, 0.0f,
             1.0f, -1.0f, 0.0f, 1.0f, 0.0f
     };
-
     private static final int FLOAT_SIZE_BYTES = 4;
-    protected static final int VERTICES_DATA_POS_SIZE = 3;
-    protected static final int VERTICES_DATA_UV_SIZE = 2;
     protected static final int VERTICES_DATA_STRIDE_BYTES = (VERTICES_DATA_POS_SIZE + VERTICES_DATA_UV_SIZE) * FLOAT_SIZE_BYTES;
     protected static final int VERTICES_DATA_POS_OFFSET = 0 * FLOAT_SIZE_BYTES;
     protected static final int VERTICES_DATA_UV_OFFSET = VERTICES_DATA_POS_OFFSET + VERTICES_DATA_POS_SIZE * FLOAT_SIZE_BYTES;
 
     private final String vertexShaderSource;
+    private final HashMap<String, Integer> handleMap = new HashMap<String, Integer>();
     private String fragmentShaderSource;
-
     private int program;
-
     private int vertexShader;
     private int fragmentShader;
-
     private int vertexBufferName;
-
-    private final HashMap<String, Integer> handleMap = new HashMap<String, Integer>();
 
     public GlFilter() {
         this(DEFAULT_VERTEX_SHADER, DEFAULT_FRAGMENT_SHADER);

@@ -31,16 +31,9 @@ public class IncapableCause {
     public static final int TOAST = 0x00;
     public static final int DIALOG = 0x01;
     public static final int NONE = 0x02;
-
-    @Retention(SOURCE)
-    @IntDef({TOAST, DIALOG, NONE})
-    public @interface Form {
-    }
-
     private int mForm = TOAST;
     private String mTitle;
     private String mMessage;
-
     public IncapableCause(String message) {
         mMessage = message;
     }
@@ -79,5 +72,10 @@ public class IncapableCause {
                 Toast.makeText(context, cause.mMessage, Toast.LENGTH_SHORT).show();
                 break;
         }
+    }
+
+    @Retention(SOURCE)
+    @IntDef({TOAST, DIALOG, NONE})
+    public @interface Form {
     }
 }

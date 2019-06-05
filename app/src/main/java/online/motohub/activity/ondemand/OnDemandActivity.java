@@ -40,6 +40,11 @@ import online.motohub.util.DialogManager;
 
 public class OnDemandActivity extends BaseActivity {
 
+    private static final int PERMISSIONS_STORAGE_PREMISSONS = 1;
+    private static String[] PERMISSIONS_STORAGE = {
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            Manifest.permission.READ_EXTERNAL_STORAGE
+    };
     @BindView(R.id.toolbar_back_img_btn)
     ImageButton toolbarBackImgBtn;
     @BindView(R.id.toolbar_title)
@@ -51,7 +56,13 @@ public class OnDemandActivity extends BaseActivity {
     @BindView(R.id.viewpager)
     ViewPager viewpager;
     ViewPagerAdapter adapter;
-    private static final int PERMISSIONS_STORAGE_PREMISSONS = 1;
+
+    public static void verifyStoragePermissions(Activity activity) {
+        int writePermission = ActivityCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        if (writePermission != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(activity, PERMISSIONS_STORAGE, PERMISSIONS_STORAGE_PREMISSONS);
+        }
+    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -86,11 +97,11 @@ public class OnDemandActivity extends BaseActivity {
                 break;
         }
     }
+
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
     }
-
 
     private void setupViewPager(ViewPager viewPager) {
         adapter = new ViewPagerAdapter(getSupportFragmentManager());
@@ -112,7 +123,6 @@ public class OnDemandActivity extends BaseActivity {
 
     }
 
-
     @Override
     @SuppressWarnings("unchecked")
     protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
@@ -120,6 +130,17 @@ public class OnDemandActivity extends BaseActivity {
         super.onRestoreInstanceState(savedInstanceState);
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        adapter.getItem(tabs.getSelectedTabPosition()).onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    public void retrofitOnResponse(Object responseObj, int responseType) {
+        super.retrofitOnResponse(responseObj, responseType);
+        ((BaseFragment) adapter.getItem(tabs.getSelectedTabPosition())).retrofitOnResponse(responseObj, responseType);
+    }
 
     class ViewPagerAdapter extends FragmentStatePagerAdapter {
         private final List<Fragment> mFragmentList = new ArrayList<>();
@@ -149,30 +170,6 @@ public class OnDemandActivity extends BaseActivity {
         public CharSequence getPageTitle(int position) {
             return mFragmentTitleList.get(position);
         }
-    }
-
-    public static void verifyStoragePermissions(Activity activity) {
-        int writePermission = ActivityCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE);
-        if (writePermission != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(activity, PERMISSIONS_STORAGE, PERMISSIONS_STORAGE_PREMISSONS);
-        }
-    }
-
-    private static String[] PERMISSIONS_STORAGE = {
-            Manifest.permission.WRITE_EXTERNAL_STORAGE,
-            Manifest.permission.READ_EXTERNAL_STORAGE
-    };
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        ((BaseFragment) adapter.getItem(tabs.getSelectedTabPosition())).onActivityResult(requestCode, resultCode,data);
-    }
-
-    @Override
-    public void retrofitOnResponse(Object responseObj, int responseType) {
-        super.retrofitOnResponse(responseObj, responseType);
-        ((BaseFragment) adapter.getItem(tabs.getSelectedTabPosition())).retrofitOnResponse(responseObj, responseType);
     }
 
 

@@ -21,8 +21,14 @@ import static android.Manifest.permission.CAMERA;
 public class ScannerActivity extends BaseActivity implements ZXingScannerView.ResultHandler {
 
     private static final int REQUEST_CAMERA = 1;
-    private ZXingScannerView mScannerView;
     private static int camId = Camera.CameraInfo.CAMERA_FACING_BACK;
+    private ZXingScannerView mScannerView;
+    CommonInterface mCommonInterface = new CommonInterface() {
+        @Override
+        public void onSuccess() {
+            mScannerView.resumeCameraPreview(ScannerActivity.this);
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,8 +45,6 @@ public class ScannerActivity extends BaseActivity implements ZXingScannerView.Re
         }
     }
 
-
-
     private boolean checkPermission() {
         return (ContextCompat.checkSelfPermission(getApplicationContext(), CAMERA) == PackageManager.PERMISSION_GRANTED);
     }
@@ -49,7 +53,7 @@ public class ScannerActivity extends BaseActivity implements ZXingScannerView.Re
         ActivityCompat.requestPermissions(this, new String[]{CAMERA}, REQUEST_CAMERA);
     }
 
-    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         switch (requestCode) {
             case REQUEST_CAMERA:
                 if (grantResults.length > 0) {
@@ -120,17 +124,10 @@ public class ScannerActivity extends BaseActivity implements ZXingScannerView.Re
     public void handleResult(Result rawResult) {
 
         String result = rawResult.getText();
-        if (result == null||result.isEmpty())
+        if (result == null || result.isEmpty())
             result = "Please Scan proper Bar/QR code";
 
-        result="Scan Result - "+result+"\nYou are entered into the draw";
+        result = "Scan Result - " + result + "\nYou are entered into the draw";
         DialogManager.showAlertDialogWithCallback(this, mCommonInterface, result);
     }
-
-    CommonInterface mCommonInterface = new CommonInterface() {
-        @Override
-        public void onSuccess() {
-            mScannerView.resumeCameraPreview(ScannerActivity.this);
-        }
-    };
 }

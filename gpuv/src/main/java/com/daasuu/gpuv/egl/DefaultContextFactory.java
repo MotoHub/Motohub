@@ -12,18 +12,15 @@ import static javax.microedition.khronos.egl.EGL10.EGL_NONE;
 import static javax.microedition.khronos.egl.EGL10.EGL_NO_CONTEXT;
 
 
-
 public class DefaultContextFactory implements GLSurfaceView.EGLContextFactory {
 
     private static final String TAG = "DefaultContextFactory";
-
+    private static final int EGL_CONTEXT_CLIENT_VERSION = 0x3098;
     private int EGLContextClientVersion;
 
     public DefaultContextFactory(final int version) {
         EGLContextClientVersion = version;
     }
-
-    private static final int EGL_CONTEXT_CLIENT_VERSION = 0x3098;
 
     @Override
     public EGLContext createContext(final EGL10 egl, final EGLDisplay display, final EGLConfig config) {

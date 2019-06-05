@@ -13,10 +13,10 @@
             layout="@layout/widget_toolbar" />
 
         <include
+            layout="@layout/widget_recycler_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@+id/include"
-            layout="@layout/widget_recycler_view" />
+            android:layout_below="@+id/include" />
 
     </RelativeLayout>
 

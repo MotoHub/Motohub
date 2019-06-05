@@ -44,10 +44,15 @@ public class CreateGrpSelectedProfilesAdapter extends RecyclerView.Adapter<Recyc
 
 
             mViewHolderUserProfile.mUsername.setText(Utility.getInstance().getUserName(mGrpSelectedProfilesList.get(position)));
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
+    }
+
+    @Override
+    public int getItemCount() {
+        return mGrpSelectedProfilesList.size();
     }
 
     private class ViewHolderUserProfile extends RecyclerView.ViewHolder {
@@ -61,11 +66,6 @@ public class CreateGrpSelectedProfilesAdapter extends RecyclerView.Adapter<Recyc
             mUsername = view.findViewById(R.id.name_of_driver_tv);
         }
 
-    }
-
-    @Override
-    public int getItemCount() {
-        return mGrpSelectedProfilesList.size();
     }
 
 }

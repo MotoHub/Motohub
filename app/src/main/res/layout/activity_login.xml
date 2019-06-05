@@ -27,9 +27,9 @@
                 <RelativeLayout
                     android:id="@+id/recent_users_lay"
                     style="@style/LayoutMatchWrap"
-                    android:visibility="gone"
                     android:layout_below="@+id/app_logo"
-                    android:layout_centerHorizontal="true">
+                    android:layout_centerHorizontal="true"
+                    android:visibility="gone">
 
                     <TextView
                         android:id="@+id/recent_users_txt"

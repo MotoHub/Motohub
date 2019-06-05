@@ -30,19 +30,15 @@ public class GlToneCurveFilter extends GlFilter {
                     "\n" +
                     "     gl_FragColor = vec4(redCurveValue, greenCurveValue, blueCurveValue, textureColor.a);\n" +
                     " }";
-
+    private final LinkedList<Runnable> runOnDraw;
     private PointF[] rgbCompositeControlPoints;
     private PointF[] redControlPoints;
     private PointF[] greenControlPoints;
     private PointF[] blueControlPoints;
-
     private ArrayList<Float> rgbCompositeCurve;
     private ArrayList<Float> redCurve;
     private ArrayList<Float> greenCurve;
     private ArrayList<Float> blueCurve;
-
-    private final LinkedList<Runnable> runOnDraw;
-
     private int[] textures = new int[1];
 
     private byte[] toneCurveByteArray;

@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import online.motohub.R;
-import online.motohub.application.MotoHub;
 import online.motohub.fragment.club.ClubEventsFragment;
 import online.motohub.fragment.club.ClubHomeFragment;
 import online.motohub.fragment.club.ClubPhotosFragment;
@@ -25,7 +24,7 @@ public class ClubViewPagerAdapter extends FragmentPagerAdapter {
     private List<Fragment> mFragments = new ArrayList<>();
     private Context ctx;
 
-    public ClubViewPagerAdapter(FragmentManager fm,Context ctx,PromotersResModel promotersResModel,
+    public ClubViewPagerAdapter(FragmentManager fm, Context ctx, PromotersResModel promotersResModel,
                                 ProfileResModel profileResModel) {
         super(fm);
         this.ctx = ctx;
@@ -86,7 +85,6 @@ public class ClubViewPagerAdapter extends FragmentPagerAdapter {
     public int getCount() {
         return mFragments.size();
     }
-
 
 
 }

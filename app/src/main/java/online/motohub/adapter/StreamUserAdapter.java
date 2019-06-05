@@ -31,7 +31,6 @@ import online.motohub.interfaces.RetrofitResInterface;
 import online.motohub.model.LiveStreamRequestEntity;
 import online.motohub.model.LiveStreamRequestResponse;
 import online.motohub.model.LiveStreamResponse;
-import online.motohub.model.ProfileModel;
 import online.motohub.model.ProfileResModel;
 import online.motohub.retrofit.APIConstants;
 import online.motohub.retrofit.RetrofitClient;
@@ -42,18 +41,68 @@ import online.motohub.util.StringUtils;
 
 public class StreamUserAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements CommonInterface {
 
+    private static final int VIEW_TYPE_LOADING = 0;
+    private static final int VIEW_TYPE_ITEM = 1;
     private Context mContext;
     private ArrayList<ProfileResModel> mStreamUserList;
     private int mCurrentProfileID, mCurrentUserID;
     private int selPos;
     private LayoutInflater mInflater;
-
-    private static final int VIEW_TYPE_LOADING = 0;
-    private static final int VIEW_TYPE_ITEM = 1;
     private boolean isDelete = false;
     private int liveStreamID = 0;
     private String mLiveStreamName = "";
     private boolean isAcceptAPI = false;
+    RetrofitResInterface mApiInterface = new RetrofitResInterface() {
+        @Override
+        public void retrofitOnResponse(Object responseObj, int responseType) {
+            if (responseObj instanceof LiveStreamRequestResponse) {
+                LiveStreamRequestResponse mStreamReqResponse = (LiveStreamRequestResponse) responseObj;
+                if (mStreamReqResponse.getResource().size() > 0) {
+                    if (isAcceptAPI) {
+                        updateRequestStatus(mStreamReqResponse.getResource().get(0));
+                    } else {
+                        updateDeclineStatus();
+                    }
+
+                }
+            }
+            if (responseObj instanceof LiveStreamResponse) {
+                if (isDelete) {
+                    isDelete = false;
+                } else {
+                    LiveStreamResponse mLiveStreamResponse = (LiveStreamResponse) responseObj;
+                    if (mLiveStreamResponse.getResource().size() > 0) {
+                        liveStreamID = mLiveStreamResponse.getResource().get(0).getID();
+                        mLiveStreamName = mLiveStreamResponse.getResource().get(0).getStreamName();
+                    }
+                    MotoHub.getApplicationInstance().setLiveStreamName(mLiveStreamName);
+                    Intent mCameraActivity = new Intent(mContext, CameraActivity.class);
+                    mContext.startActivity(mCameraActivity);
+                }
+            }
+        }
+
+        @Override
+        public void retrofitOnError(int code, String message) {
+            if (message.equals("Unauthorized") || code == 401) {
+                RetrofitClient.getRetrofitInstance().callUpdateSession(mContext, mApiInterface, RetrofitClient.UPDATE_SESSION_RESPONSE);
+            } else {
+                String mErrorMsg = code + " - " + message;
+                ((BaseActivity) mContext).showToast(mContext, mErrorMsg);
+            }
+        }
+
+        @Override
+        public void retrofitOnSessionError(int code, String message) {
+            String mErrorMsg = code + " - " + message;
+            ((BaseActivity) mContext).showToast(mContext, mErrorMsg);
+        }
+
+        @Override
+        public void retrofitOnFailure() {
+            ((BaseActivity) mContext).showAppDialog(AppDialogFragment.ALERT_INTERNET_FAILURE_DIALOG, null);
+        }
+    };
 
     public StreamUserAdapter(Context context, int currentProfileID, ArrayList<ProfileResModel> streamUserList) {
         AppConstants.LIVE_STREAM_CALL_BACK = this;
@@ -62,32 +111,6 @@ public class StreamUserAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         mCurrentUserID = PreferenceUtils.getInstance(mContext).getIntData(PreferenceUtils.USER_ID);
         mStreamUserList = streamUserList;
         mInflater = LayoutInflater.from(mContext);
-    }
-
-    public class Holder extends RecyclerView.ViewHolder {
-
-        @BindView(R.id.user_img)
-        CircleImageView mUserImg;
-        @BindView(R.id.user_name_txt)
-        TextView mUserNameTxt;
-        @BindView(R.id.send_request_btn)
-        Button mSendRequestBtn;
-
-        public Holder(View view) {
-            super(view);
-            ButterKnife.bind(this, view);
-        }
-    }
-
-    public class ViewHolderLoader extends RecyclerView.ViewHolder {
-
-        @BindView(R.id.progress_bar)
-        ProgressBar mProgressBar;
-
-        public ViewHolderLoader(View v) {
-            super(v);
-            ButterKnife.bind(this, v);
-        }
     }
 
     @Override
@@ -104,7 +127,6 @@ public class StreamUserAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                 return null;
         }
     }
-
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int pos) {
@@ -159,7 +181,7 @@ public class StreamUserAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                         mHolder.mUserNameTxt.setText(mProfileEntity.getDriver());
                     }
 
-                }catch (Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
                 break;
@@ -190,8 +212,6 @@ public class StreamUserAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         }
     }
 
-
-
     private void callSendRequestAPI(int receiverProfileID) {
 
         try {
@@ -218,6 +238,7 @@ public class StreamUserAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             ((BaseActivity) mContext).sysOut("" + e.getMessage());
         }
     }
+
     private int getDeclineStreamRequestID(ArrayList<LiveStreamRequestEntity> mRequestedList) {
         int mID = 0;
         for (int i = 0; i < mRequestedList.size(); i++) {
@@ -229,57 +250,6 @@ public class StreamUserAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         }
         return mID;
     }
-    RetrofitResInterface mApiInterface = new RetrofitResInterface() {
-        @Override
-        public void retrofitOnResponse(Object responseObj, int responseType) {
-            if (responseObj instanceof LiveStreamRequestResponse) {
-                LiveStreamRequestResponse mStreamReqResponse = (LiveStreamRequestResponse) responseObj;
-                if (mStreamReqResponse.getResource().size() > 0) {
-                    if (isAcceptAPI) {
-                        updateRequestStatus(mStreamReqResponse.getResource().get(0));
-                    } else {
-                        updateDeclineStatus();
-                    }
-
-                }
-            }
-            if (responseObj instanceof LiveStreamResponse) {
-                if (isDelete) {
-                    isDelete = false;
-                } else {
-                    LiveStreamResponse mLiveStreamResponse = (LiveStreamResponse) responseObj;
-                    if (mLiveStreamResponse.getResource().size() > 0) {
-                        liveStreamID = mLiveStreamResponse.getResource().get(0).getID();
-                        mLiveStreamName = mLiveStreamResponse.getResource().get(0).getStreamName();
-                    }
-                    MotoHub.getApplicationInstance().setLiveStreamName(mLiveStreamName);
-                    Intent mCameraActivity = new Intent(mContext, CameraActivity.class);
-                    mContext.startActivity(mCameraActivity);
-                }
-            }
-        }
-
-        @Override
-        public void retrofitOnError(int code, String message) {
-            if (message.equals("Unauthorized") || code == 401) {
-                RetrofitClient.getRetrofitInstance().callUpdateSession(mContext, mApiInterface, RetrofitClient.UPDATE_SESSION_RESPONSE);
-            } else {
-                String mErrorMsg = code + " - " + message;
-                ((BaseActivity) mContext).showToast(mContext, mErrorMsg);
-            }
-        }
-
-        @Override
-        public void retrofitOnSessionError(int code, String message) {
-            String mErrorMsg = code + " - " + message;
-            ((BaseActivity) mContext).showToast(mContext, mErrorMsg);
-        }
-
-        @Override
-        public void retrofitOnFailure() {
-            ((BaseActivity) mContext).showAppDialog(AppDialogFragment.ALERT_INTERNET_FAILURE_DIALOG, null);
-        }
-    };
 
     private void updateDeclineStatus() {
         ArrayList<LiveStreamRequestEntity> mReqList = mStreamUserList.get(selPos).getLivestreamrequest_by_ReceiverProfileID();
@@ -341,5 +311,31 @@ public class StreamUserAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         isDelete = true;
         String mLiveStreamName = "ID=" + liveStreamID;
         RetrofitClient.getRetrofitInstance().callDeleteLiveStream(mContext, mApiInterface, mLiveStreamName);
+    }
+
+    public class Holder extends RecyclerView.ViewHolder {
+
+        @BindView(R.id.user_img)
+        CircleImageView mUserImg;
+        @BindView(R.id.user_name_txt)
+        TextView mUserNameTxt;
+        @BindView(R.id.send_request_btn)
+        Button mSendRequestBtn;
+
+        public Holder(View view) {
+            super(view);
+            ButterKnife.bind(this, view);
+        }
+    }
+
+    public class ViewHolderLoader extends RecyclerView.ViewHolder {
+
+        @BindView(R.id.progress_bar)
+        ProgressBar mProgressBar;
+
+        public ViewHolderLoader(View v) {
+            super(v);
+            ButterKnife.bind(this, v);
+        }
     }
 }

@@ -27,7 +27,6 @@ import online.motohub.activity.BaseActivity;
 import online.motohub.activity.LoginActivity;
 import online.motohub.adapter.business.BusinessPostAdapter;
 import online.motohub.adapter.business.BusinessViewPagerAdapter;
-import online.motohub.application.MotoHub;
 import online.motohub.fragment.BaseFragment;
 import online.motohub.fragment.Business.BusinessContactFragment;
 import online.motohub.fragment.Business.BusinessEventFragment;

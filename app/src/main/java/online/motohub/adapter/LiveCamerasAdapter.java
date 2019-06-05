@@ -49,7 +49,7 @@ public class LiveCamerasAdapter extends RecyclerView.Adapter<LiveCamerasAdapter.
                     mListener.cameraClicked(position);
                 }
             });
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -62,19 +62,20 @@ public class LiveCamerasAdapter extends RecyclerView.Adapter<LiveCamerasAdapter.
     }
 
 
-    public class ViewHolder extends RecyclerView.ViewHolder  {
-        TextView mCameraView;
-        ViewHolder(View itemView) {
-            super(itemView);
-            mCameraView =  itemView.findViewById(R.id.CameraImageViewText);
-
-        }
-
-    }
-
     public interface CameraListener {
 
         void cameraClicked(int adapterPosition);
+    }
+
+    public class ViewHolder extends RecyclerView.ViewHolder {
+        TextView mCameraView;
+
+        ViewHolder(View itemView) {
+            super(itemView);
+            mCameraView = itemView.findViewById(R.id.CameraImageViewText);
+
+        }
+
     }
 
 }

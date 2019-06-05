@@ -3,7 +3,6 @@ package online.motohub.activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -47,7 +46,6 @@ import online.motohub.model.FeedShareModel;
 import online.motohub.model.ImageModel;
 import online.motohub.model.PostsModel;
 import online.motohub.model.PostsResModel;
-import online.motohub.model.ProfileModel;
 import online.motohub.model.ProfileResModel;
 import online.motohub.model.SessionModel;
 import online.motohub.retrofit.RetrofitClient;
@@ -59,44 +57,31 @@ import online.motohub.util.Utility;
 
 public class PostCommentLikeViewActivity extends BaseActivity implements PostCommentLikeViewAdapter.TotalRetrofitPostsResultCount {
 
+    private static final int mDataLimit = 1;
     @BindView(R.id.postViewCoLayout)
     RelativeLayout mCoordinatorLayout;
-
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
-
     @BindView(R.id.recycler_view)
     RecyclerView mPostRecyclerView;
-
     @BindString(R.string.post)
     String mToolbarTitle;
-
     @BindView(R.id.user_img)
     CircleImageView mUserImg;
-
     @BindView(R.id.name_txt)
     TextView mUsernameTxt;
-
     @BindView(R.id.feeds_comments_list_view)
     RecyclerView mFeedCommentRecyclerView;
-
     @BindView(R.id.comment_edt)
     EditText mCommentEdt;
-
     @BindView(R.id.imageConstraintLay)
     ConstraintLayout mImageConstraintLay;
-
     @BindView(R.id.iv_post_image)
     ImageView mIvPostImage;
-
     @BindView(R.id.ivPost)
     ImageView mIvPost;
-
     private ArrayList<PostsResModel> mPostList = new ArrayList<>();
     private PostCommentLikeViewAdapter mPostCommentLikeViewAdapter;
-
-    private static final int mDataLimit = 1;
-
     private int mPostsRvOffset = 0, mPostsRvTotalCount = 0;
 
     private int mCurrentPostPosition;
@@ -111,17 +96,16 @@ public class PostCommentLikeViewActivity extends BaseActivity implements PostCom
     private ArrayList<FeedCommentModel> mFeedCommentsList = new ArrayList<>();
     private int mCurrentCommentPosition;
     private ProfileResModel mMyProfileResModel;
-    private String mPostImgUri;
-    private int mPostID;
-    private String imgUrl = "";
-
     SharePostInterface mShareTextWithPostInterface = new SharePostInterface() {
         @Override
-        public void onSuccess (String shareMessage) {
+        public void onSuccess(String shareMessage) {
             mShareTxt = shareMessage;
             CommonAPI.getInstance().callPostShare(PostCommentLikeViewActivity.this, mPostList.get(mCurrentPostPosition), mMyProfileResModel.getID());
         }
     };
+    private String mPostImgUri;
+    private int mPostID;
+    private String imgUrl = "";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -275,7 +259,7 @@ public class PostCommentLikeViewActivity extends BaseActivity implements PostCom
             case AppDialogFragment.BOTTOM_SHARE_DIALOG:
                 mCurrentPostPosition = position;
                 DialogManager.showShareDialogWithCallback(this, mShareTextWithPostInterface);
-               // CommonAPI.getInstance().callPostShare(this, mPostList.get(getProfileCurrentPos()), mMyProfileResModel.getID());
+                // CommonAPI.getInstance().callPostShare(this, mPostList.get(getProfileCurrentPos()), mMyProfileResModel.getID());
                 break;
 
         }

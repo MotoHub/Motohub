@@ -17,10 +17,10 @@
             android:id="@+id/profile_shared_box"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/size10"
-            android:layout_marginLeft="@dimen/size10"
-            android:layout_marginRight="@dimen/size10"
             android:layout_marginStart="@dimen/size10"
+            android:layout_marginLeft="@dimen/size10"
+            android:layout_marginEnd="@dimen/size10"
+            android:layout_marginRight="@dimen/size10"
             android:visibility="gone">
 
             <de.hdodenhof.circleimageview.CircleImageView
@@ -36,8 +36,8 @@
                 style="@style/LayoutWrap"
                 android:layout_alignTop="@+id/circular_img_view_share"
                 android:layout_centerVertical="true"
-                android:layout_marginLeft="@dimen/size5"
                 android:layout_marginStart="@dimen/size5"
+                android:layout_marginLeft="@dimen/size5"
                 android:layout_toEndOf="@+id/circular_img_view_share"
                 android:gravity="center_vertical"
                 android:orientation="vertical">
@@ -72,9 +72,9 @@
             <ImageView
                 android:id="@+id/share_down_arrow"
                 style="@style/LayoutWrapMatch"
+                android:layout_alignTop="@+id/circular_img_view_share"
                 android:layout_alignBottom="@+id/circular_img_view_share"
                 android:layout_alignParentEnd="true"
-                android:layout_alignTop="@+id/circular_img_view_share"
                 android:layout_marginStart="@dimen/size5"
                 android:layout_toStartOf="@+id/text_view_box_share"
                 android:background="@null"
@@ -97,8 +97,8 @@
                 android:id="@+id/circular_img_view"
                 android:layout_width="@dimen/size55"
                 android:layout_height="@dimen/size55"
-                android:layout_marginLeft="@dimen/size5"
                 android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/size5"
                 android:scaleType="centerCrop"
                 android:src="@drawable/default_profile_icon" />
 
@@ -108,8 +108,8 @@
                 android:layout_alignTop="@+id/circular_img_view"
                 android:layout_centerVertical="true"
                 android:layout_marginStart="@dimen/size5"
-                android:layout_toEndOf="@+id/circular_img_view"
                 android:layout_toStartOf="@+id/down_arrow"
+                android:layout_toEndOf="@+id/circular_img_view"
                 android:gravity="center_vertical"
                 android:orientation="vertical">
 
@@ -140,9 +140,9 @@
             <ImageView
                 android:id="@+id/down_arrow"
                 style="@style/LayoutWrapMatch"
+                android:layout_alignTop="@+id/circular_img_view"
                 android:layout_alignBottom="@+id/circular_img_view"
                 android:layout_alignParentEnd="true"
-                android:layout_alignTop="@+id/circular_img_view"
                 android:background="@null"
                 android:clickable="true"
                 android:contentDescription="@string/app_name"
@@ -161,9 +161,9 @@
             <TextView
                 android:id="@+id/post_text_tv"
                 style="@style/LayoutMatchWrap"
-                android:layout_marginBottom="@dimen/size10"
                 android:layout_marginLeft="@dimen/size15"
                 android:layout_marginRight="@dimen/size15"
+                android:layout_marginBottom="@dimen/size10"
                 android:autoLink="all"
                 android:focusable="false"
                 android:gravity="start"
@@ -178,8 +178,8 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/post_text_tv"
                 android:layout_centerHorizontal="true"
-                android:layout_marginBottom="@dimen/size5"
                 android:layout_marginTop="@dimen/size5"
+                android:layout_marginBottom="@dimen/size5"
                 android:visibility="gone" />
 
             <RelativeLayout
@@ -249,8 +249,8 @@
                     <TextView
                         android:id="@+id/comment_user_name_txt"
                         style="@style/LayoutWrap"
-                        android:layout_marginLeft="@dimen/size5"
                         android:layout_marginStart="@dimen/size5"
+                        android:layout_marginLeft="@dimen/size5"
                         android:padding="@dimen/size1"
                         android:textColor="@color/colorBlack"
                         android:textSize="@dimen/text14"
@@ -259,8 +259,8 @@
                     <TextView
                         android:id="@+id/comment_txt"
                         style="@style/LayoutWrap"
-                        android:layout_marginLeft="@dimen/size5"
                         android:layout_marginStart="@dimen/size5"
+                        android:layout_marginLeft="@dimen/size5"
                         android:autoLink="all"
                         android:linksClickable="true"
                         android:maxLines="2"
@@ -286,11 +286,11 @@
                         android:id="@+id/like_count_txt"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentLeft="true"
                         android:layout_alignParentStart="true"
+                        android:layout_alignParentLeft="true"
                         android:layout_centerVertical="true"
-                        android:layout_marginLeft="@dimen/size10"
                         android:layout_marginStart="@dimen/size10"
+                        android:layout_marginLeft="@dimen/size10"
                         android:padding="@dimen/size5"
                         android:textColor="@color/colorDarkGrey"
                         android:textSize="@dimen/text14" />
@@ -300,11 +300,11 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
-                        android:layout_toEndOf="@+id/like_count_txt"
                         android:layout_toStartOf="@+id/ll_like_share_count"
+                        android:layout_toEndOf="@+id/like_count_txt"
                         android:padding="@dimen/size5"
                         android:textColor="@color/colorDarkGrey"
-                        android:textSize="@dimen/text14"/>
+                        android:textSize="@dimen/text14" />
 
                     <LinearLayout
                         android:id="@+id/ll_like_share_count"
@@ -327,8 +327,8 @@
                         <TextView
                             android:id="@+id/share_count_txt"
                             style="@style/LayoutWrap"
-                            android:layout_marginLeft="@dimen/size5"
                             android:layout_marginStart="@dimen/size5"
+                            android:layout_marginLeft="@dimen/size5"
                             android:padding="@dimen/size5"
                             android:textColor="@color/colorDarkGrey"
                             android:textSize="@dimen/text14" />
@@ -348,8 +348,8 @@
             <LinearLayout
                 android:id="@+id/like_comment_share_lay"
                 style="@style/LayoutMatchWrap"
-                android:layout_marginBottom="@dimen/size4"
                 android:layout_marginTop="@dimen/size4"
+                android:layout_marginBottom="@dimen/size4"
                 android:baselineAligned="false"
                 android:orientation="horizontal"
                 android:paddingLeft="@dimen/size5"

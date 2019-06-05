@@ -33,14 +33,12 @@ public class GlSwirlFilter extends GlFilter {
             "gl_FragColor = texture2D(sTexture, textureCoordinateToUse );\n" +
             "\n" +
             "}\n";
-
-    public GlSwirlFilter() {
-        super(DEFAULT_VERTEX_SHADER, SWIRL_FRAGMENT_SHADER);
-    }
-
     private float angle = 1.0f;
     private float radius = 0.5f;
     private PointF center = new PointF(0.5f, 0.5f);
+    public GlSwirlFilter() {
+        super(DEFAULT_VERTEX_SHADER, SWIRL_FRAGMENT_SHADER);
+    }
 
     public void setAngle(float angle) {
         this.angle = angle;

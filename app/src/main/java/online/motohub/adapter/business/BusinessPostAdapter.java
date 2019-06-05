@@ -245,9 +245,9 @@ public class BusinessPostAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
                             if (mPostsList.get(position).getPostLikes().size() == 1) {
 
-                                resLikes = String.valueOf(mPostsList.get(position).getPostLikes().size()) + " Like";
+                                resLikes = mPostsList.get(position).getPostLikes().size() + " Like";
                             } else {
-                                resLikes = String.valueOf(mPostsList.get(position).getPostLikes().size()) + " Likes";
+                                resLikes = mPostsList.get(position).getPostLikes().size() + " Likes";
 
                             }
 
@@ -336,8 +336,8 @@ public class BusinessPostAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 mViewHolderPost.mPostImageVideoBox.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        String mVideosList[] = ((BaseActivity) mContext).getImgVideoList(mPostsList.get(position).getPostVideoURL());
-                        String mImgList[] = ((BaseActivity) mContext).getImgVideoList(mPostsList.get(position).getPostPicture());
+                        String[] mVideosList = ((BaseActivity) mContext).getImgVideoList(mPostsList.get(position).getPostVideoURL());
+                        String[] mImgList = ((BaseActivity) mContext).getImgVideoList(mPostsList.get(position).getPostPicture());
                         if (mVideosList != null && mVideosList.length > 0) {
                             ((BaseActivity) mContext).moveLoadVideoScreen(mContext, UrlUtils.AWS_S3_BASE_URL + mVideosList[0]);
                         } else if (mImgList != null && mImgList.length > 0) {

@@ -16,6 +16,27 @@ public class PaymentCardDetailsModel implements Serializable {
 
     @SerializedName("ProfileID")
     private String mProfileID;
+    @SerializedName("CardNumber")
+
+    private String mCardNumber;
+    @SerializedName("CardName")
+    private String mCardName;
+    @SerializedName("CardExpiryDate")
+    private String mCardExpiryDate;
+    @SerializedName("CardExpiryMonth")
+    private String mCardExpiryMonth;
+    @SerializedName("CardExpiryYear")
+    private String mCardExpiryYear;
+    @SerializedName("EventID")
+    private String mEventID;
+    @SerializedName("Payment_type")
+    private String mPaymentType;
+    @SerializedName("CardRelation")
+    private String mCardRelation;
+    private boolean isSelectedCard;
+    @SerializedName("resource")
+    @Expose
+    private ArrayList<PaymentCardDetailsModel> mResource = null;
 
     public String getID() {
         return mID;
@@ -25,25 +46,6 @@ public class PaymentCardDetailsModel implements Serializable {
         this.mID = mID;
     }
 
-    @SerializedName("CardNumber")
-
-    private String mCardNumber;
-
-    @SerializedName("CardName")
-    private String mCardName;
-
-    @SerializedName("CardExpiryDate")
-    private String mCardExpiryDate;
-
-    @SerializedName("CardExpiryMonth")
-    private String mCardExpiryMonth;
-
-    @SerializedName("CardExpiryYear")
-    private String mCardExpiryYear;
-
-    @SerializedName("EventID")
-    private String mEventID;
-
     public String getCardRelation() {
         return mCardRelation;
     }
@@ -51,18 +53,6 @@ public class PaymentCardDetailsModel implements Serializable {
     public void setCardRelation(String mCardRelation) {
         this.mCardRelation = mCardRelation;
     }
-
-    @SerializedName("Payment_type")
-    private String mPaymentType;
-
-    @SerializedName("CardRelation")
-    private String mCardRelation;
-
-    private boolean isSelectedCard;
-
-    @SerializedName("resource")
-    @Expose
-    private ArrayList<PaymentCardDetailsModel> mResource = null;
 
     public boolean isSelectedCard() {
         return isSelectedCard;
@@ -73,7 +63,7 @@ public class PaymentCardDetailsModel implements Serializable {
     }
 
     public ArrayList<PaymentCardDetailsModel> getResource() {
-        if(mResource == null)
+        if (mResource == null)
 
             mResource = new ArrayList<>();
         return mResource;
@@ -100,7 +90,7 @@ public class PaymentCardDetailsModel implements Serializable {
     }
 
     public String getCardNumber() {
-        if(mCardNumber.isEmpty())
+        if (mCardNumber.isEmpty())
             mCardNumber = "";
         return mCardNumber;
     }

@@ -3,29 +3,35 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:theme="@style/PopupMenu">
 
-    <item android:id="@+id/create_new_profile"
-        app:showAsAction="never"
-        android:title="@string/create_new_profile" />
+    <item
+        android:id="@+id/create_new_profile"
+        android:title="@string/create_new_profile"
+        app:showAsAction="never" />
 
-    <item android:id="@+id/other_profiles"
-        app:showAsAction="never"
-        android:title="@string/other_profiles" />
+    <item
+        android:id="@+id/other_profiles"
+        android:title="@string/other_profiles"
+        app:showAsAction="never" />
 
-    <item android:id="@+id/notification_settings"
-        app:showAsAction="never"
-        android:title="@string/notifications" />
+    <item
+        android:id="@+id/notification_settings"
+        android:title="@string/notifications"
+        app:showAsAction="never" />
 
-    <item android:id="@+id/blocked_users"
-        app:showAsAction="never"
-        android:title="@string/blocked_users" />
+    <item
+        android:id="@+id/blocked_users"
+        android:title="@string/blocked_users"
+        app:showAsAction="never" />
 
-    <item android:id="@+id/logout"
-        app:showAsAction="never"
-        android:title="@string/com_facebook_loginview_log_out_button"/>
+    <item
+        android:id="@+id/logout"
+        android:title="@string/com_facebook_loginview_log_out_button"
+        app:showAsAction="never" />
 
 
-    <item android:id="@+id/card_management"
-        app:showAsAction="never"
-        android:title="@string/CardManagement"/>
+    <item
+        android:id="@+id/card_management"
+        android:title="@string/CardManagement"
+        app:showAsAction="never" />
 
 </menu>

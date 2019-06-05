@@ -13,9 +13,9 @@
         <TextView
             android:id="@+id/profile_name_tv"
             style="@style/LayoutMatchWrap"
+            android:layout_alignTop="@+id/close_btn"
             android:layout_alignBottom="@+id/close_btn"
             android:layout_alignParentStart="true"
-            android:layout_alignTop="@+id/close_btn"
             android:gravity="center"
             android:maxLines="1"
             android:padding="@dimen/size10"
@@ -48,8 +48,8 @@
         <LinearLayout
             style="@style/LayoutMatchWrap"
             android:layout_below="@+id/profile_img"
-            android:layout_marginBottom="@dimen/size10"
             android:layout_marginTop="@dimen/size10"
+            android:layout_marginBottom="@dimen/size10"
             android:gravity="center"
             android:orientation="horizontal">
 
@@ -62,8 +62,8 @@
                 android:background="@drawable/black_orange_btn_bg"
                 android:clickable="true"
                 android:focusable="true"
-                android:paddingBottom="@dimen/size5"
                 android:paddingTop="@dimen/size5"
+                android:paddingBottom="@dimen/size5"
                 android:text="@string/un_follow"
                 android:textAlignment="center"
                 android:textColor="@color/text_color"
@@ -78,8 +78,8 @@
                 android:background="@drawable/black_orange_btn_bg"
                 android:clickable="true"
                 android:focusable="true"
-                android:paddingBottom="@dimen/size5"
                 android:paddingTop="@dimen/size5"
+                android:paddingBottom="@dimen/size5"
                 android:text="@string/block"
                 android:textAlignment="center"
                 android:textColor="@color/text_color"

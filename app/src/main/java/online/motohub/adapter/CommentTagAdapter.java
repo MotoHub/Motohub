@@ -10,6 +10,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+
 import de.hdodenhof.circleimageview.CircleImageView;
 import online.motohub.R;
 import online.motohub.activity.BaseActivity;
@@ -22,14 +23,10 @@ import online.motohub.util.Utility;
 
 public class CommentTagAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private ArrayList<ProfileResModel> mUnFollowedProfileListData;
-    private Context mContext;
     private static final int VIEW_TYPE_LOADING = 0;
     private static final int VIEW_TYPE_USER = 1;
-
-    public interface TotalRetrofitResultCount {
-        int getTotalUnFollowedResultCount();
-    }
+    private ArrayList<ProfileResModel> mUnFollowedProfileListData;
+    private Context mContext;
 
     public CommentTagAdapter(ArrayList<ProfileResModel> unFollowedProfileListData, Context ctx) {
         this.mUnFollowedProfileListData = unFollowedProfileListData;
@@ -55,32 +52,6 @@ public class CommentTagAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     @Override
     public long getItemId(int position) {
         return (getItemViewType(position) == VIEW_TYPE_USER) ? position : -1;
-    }
-
-    private class ViewHolderUser extends RecyclerView.ViewHolder {
-
-        private CircleImageView mProfileImg;
-        private TextView mUsername;
-        private CardView mCardView;
-
-        ViewHolderUser(View view) {
-            super(view);
-            mProfileImg = view.findViewById(R.id.comment_user_img);
-            mUsername = view.findViewById(R.id.comment_user_name_txt);
-            mCardView = view.findViewById(R.id.cardView);
-        }
-
-    }
-
-    private class ViewHolderLoader extends RecyclerView.ViewHolder {
-
-        ProgressBar mProgressBar;
-
-        ViewHolderLoader(View view) {
-            super(view);
-            mProgressBar = view.findViewById(R.id.smallProgressBar);
-        }
-
     }
 
     @Override
@@ -132,14 +103,14 @@ public class CommentTagAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                                 ((PostCommentsActivity) mContext).addTaggedFriends(mUnFollowedProfileListData.get(position));
                             else if (mContext instanceof VideoCommentsActivity)
                                 ((VideoCommentsActivity) mContext).addTaggedFriends(mUnFollowedProfileListData.get(position));
-                            else if(mContext instanceof CommentReplyActivity)
+                            else if (mContext instanceof CommentReplyActivity)
                                 ((CommentReplyActivity) mContext).addTaggedFriends(mUnFollowedProfileListData.get(position));
-                            else if(mContext instanceof VideoCommentReplyActivity)
+                            else if (mContext instanceof VideoCommentReplyActivity)
                                 ((VideoCommentReplyActivity) mContext).addTaggedFriends(mUnFollowedProfileListData.get(position));
                         }
                     });
                     // mViewHolderUserProfile.mUsername.setOnClickListener(this);
-                }catch (Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
                 break;
@@ -154,6 +125,36 @@ public class CommentTagAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             default:
                 break;
         }
+    }
+
+    public interface TotalRetrofitResultCount {
+        int getTotalUnFollowedResultCount();
+    }
+
+    private class ViewHolderUser extends RecyclerView.ViewHolder {
+
+        private CircleImageView mProfileImg;
+        private TextView mUsername;
+        private CardView mCardView;
+
+        ViewHolderUser(View view) {
+            super(view);
+            mProfileImg = view.findViewById(R.id.comment_user_img);
+            mUsername = view.findViewById(R.id.comment_user_name_txt);
+            mCardView = view.findViewById(R.id.cardView);
+        }
+
+    }
+
+    private class ViewHolderLoader extends RecyclerView.ViewHolder {
+
+        ProgressBar mProgressBar;
+
+        ViewHolderLoader(View view) {
+            super(view);
+            mProgressBar = view.findViewById(R.id.smallProgressBar);
+        }
+
     }
 
 }

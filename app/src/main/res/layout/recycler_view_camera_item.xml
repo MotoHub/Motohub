@@ -1,25 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 
-<RelativeLayout android:id="@+id/relativeLayout"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/relativeLayout"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:background="@android:color/transparent"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    android:background="@android:color/transparent">
 
 
     <TextView
         android:id="@+id/CameraImageViewText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:drawableTop="@drawable/camera"
-        android:layout_marginBottom="@dimen/size20"
+        android:layout_marginStart="@dimen/size40"
+        android:layout_marginLeft="@dimen/size25"
         android:layout_marginTop="@dimen/size20"
         android:layout_marginRight="@dimen/size20"
-        android:layout_marginStart="@dimen/size40"
+        android:layout_marginBottom="@dimen/size20"
+        android:drawableTop="@drawable/camera"
         android:gravity="center"
-        android:textSize="@dimen/text14"
         android:textColor="@color/colorLightGrey"
-        android:layout_marginLeft="@dimen/size25" />
+        android:textSize="@dimen/text14" />
 
 </RelativeLayout>

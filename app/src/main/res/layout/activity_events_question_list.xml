@@ -2,37 +2,35 @@
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/events_question_list_co_layout"
     style="@style/LayoutMatch"
+    android:clickable="true"
     android:focusable="true"
-    android:focusableInTouchMode="true"
-    android:clickable="true">
+    android:focusableInTouchMode="true">
 
-    <RelativeLayout style="@style/LayoutMatch"
-        android:id="@+id/parent_recycler_lay">
+    <RelativeLayout
+        android:id="@+id/parent_recycler_lay"
+        style="@style/LayoutMatch">
 
         <include
             android:id="@+id/include"
-            layout="@layout/widget_toolbar"
-            />
+            layout="@layout/widget_toolbar" />
 
         <android.support.v7.widget.RecyclerView
+            android:id="@+id/qtn_list_rv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/include"
-            android:id="@+id/qtn_list_rv"
             android:layout_above="@+id/save_answers_btn"
-            />
+            android:layout_below="@+id/include" />
 
         <Button
+            android:id="@+id/save_answers_btn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/save_answers_btn"
-            android:layout_margin="@dimen/size10"
-            android:text="@string/save"
-            android:background="@drawable/black_orange_btn_bg"
-            android:textColor="@color/text_color"
-            android:textSize="@dimen/text16"
             android:layout_alignParentBottom="true"
-            />
+            android:layout_margin="@dimen/size10"
+            android:background="@drawable/black_orange_btn_bg"
+            android:text="@string/save"
+            android:textColor="@color/text_color"
+            android:textSize="@dimen/text16" />
 
 
     </RelativeLayout>

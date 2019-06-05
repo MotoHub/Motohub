@@ -3,7 +3,6 @@ package com.daasuu.gpuv.egl.filter;
 import android.opengl.GLES20;
 
 
-
 public class GlSharpenFilter extends GlFilter {
 
     private static final String VERTEX_SHADER =

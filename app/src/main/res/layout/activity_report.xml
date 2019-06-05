@@ -1,32 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
+
     <LinearLayout
         android:layout_width="match_parent"
-        android:orientation="vertical"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
         <include
             android:id="@+id/toolbarLayout"
             layout="@layout/widget_toolbar" />
+
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recycler_view"
-            android:layout_marginTop="@dimen/size8"
             android:layout_width="match_parent"
-            android:layout_weight="1"
-            android:layout_height="0dp" />
+            android:layout_height="0dp"
+            android:layout_marginTop="@dimen/size8"
+            android:layout_weight="1" />
+
         <Button
             android:id="@+id/reportBtn"
             android:layout_width="match_parent"
-            android:padding="@dimen/size16"
-            android:layout_marginBottom="@dimen/size16"
+            android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/size16"
             android:layout_marginEnd="@dimen/size16"
+            android:layout_marginBottom="@dimen/size16"
             android:background="@drawable/black_btn"
-            android:text="@string/report"
             android:gravity="center"
+            android:padding="@dimen/size16"
+            android:text="@string/report"
             android:textAllCaps="false"
-            android:textColor="@color/text_color"
-            android:layout_height="wrap_content" />
+            android:textColor="@color/text_color" />
     </LinearLayout>
 </android.support.design.widget.CoordinatorLayout>

@@ -18,7 +18,6 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import online.motohub.R;
 import online.motohub.activity.BaseActivity;
 import online.motohub.activity.ChatBoxGroupActivity;
-import online.motohub.application.MotoHub;
 import online.motohub.fcm.MyFireBaseMessagingService;
 import online.motohub.model.GroupChatRoomModel;
 import online.motohub.model.GroupChatRoomResModel;
@@ -46,12 +45,12 @@ public class GroupChatRoomAdapter extends RecyclerView.Adapter<RecyclerView.View
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
 
-            final ViewHolderGroupChatRoom mViewHolderGroupChatRoom = (ViewHolderGroupChatRoom) holder;
-            GroupChatRoomResModel mGroupChatRoomResModel = mGroupChatRoomList.get(position);
+        final ViewHolderGroupChatRoom mViewHolderGroupChatRoom = (ViewHolderGroupChatRoom) holder;
+        GroupChatRoomResModel mGroupChatRoomResModel = mGroupChatRoomList.get(position);
         /*((BaseActivity) mContext).setImageWithGlide(mViewHolderGroupChatRoom.mGroupImgView, mGroupChatRoomResModel.getGroupPicture(), R.drawable.default_group_icon);
         mViewHolderGroupChatRoom.mGroupNameTv.setText(mGroupChatRoomResModel.getGroupName());*/
-            ((BaseActivity) mContext).setImageWithGlide(mViewHolderGroupChatRoom.img_profile, mGroupChatRoomResModel.getGroupPicture(), R.drawable.default_group_icon);
-            mViewHolderGroupChatRoom.name.setText(mGroupChatRoomResModel.getGroupName());
+        ((BaseActivity) mContext).setImageWithGlide(mViewHolderGroupChatRoom.img_profile, mGroupChatRoomResModel.getGroupPicture(), R.drawable.default_group_icon);
+        mViewHolderGroupChatRoom.name.setText(mGroupChatRoomResModel.getGroupName());
 
     }
 

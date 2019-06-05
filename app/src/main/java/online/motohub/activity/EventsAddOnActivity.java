@@ -28,7 +28,7 @@ import online.motohub.retrofit.RetrofitClient;
 import online.motohub.util.AppConstants;
 import online.motohub.util.DialogManager;
 
-public class EventsAddOnActivity extends BaseActivity{
+public class EventsAddOnActivity extends BaseActivity {
 
     @BindView(R.id.rvAddOn)
     RecyclerView mRvAddOn;
@@ -50,7 +50,7 @@ public class EventsAddOnActivity extends BaseActivity{
 
     private ArrayList<EventAddOnModel> mEventAddOnList = new ArrayList<>();
     private EventAddOnAdapter mEventAddOnAdapter;
-    private int mEventID,mTotalAmount, mProfileID;
+    private int mEventID, mTotalAmount, mProfileID;
 
 
     @Override
@@ -91,13 +91,14 @@ public class EventsAddOnActivity extends BaseActivity{
         setResult(Activity.RESULT_CANCELED, resultIntent);
         finish();
     }
+
     private void initView() {
 
         setToolbar(mToolbar, mToolbarTitle);
 
         showToolbarBtn(mToolbar, R.id.toolbar_back_img_btn);
 
-        mEventID = getIntent().getIntExtra(EventsModel.EVENT_ID,0);
+        mEventID = getIntent().getIntExtra(EventsModel.EVENT_ID, 0);
         mTotalAmount = getIntent().getIntExtra(EventsModel.EVENT_AMOUNT, 0);
         mProfileID = getIntent().getIntExtra(AppConstants.PROFILE_ID, 0);
 
@@ -105,10 +106,10 @@ public class EventsAddOnActivity extends BaseActivity{
         mRvAddOn.setLayoutManager(mLayoutManager);
         mRvAddOn.setItemAnimator(new DefaultItemAnimator());
 
-        mEventAddOnAdapter = new EventAddOnAdapter(this,mEventAddOnList);
+        mEventAddOnAdapter = new EventAddOnAdapter(this, mEventAddOnList);
         mRvAddOn.setAdapter(mEventAddOnAdapter);
 
-        mResEventAmount = "Event Amount $ " + (mTotalAmount/100);
+        mResEventAmount = "Event Amount $ " + (mTotalAmount / 100);
         mTotalPriceAmountBtn.setText(mResEventAmount);
 
 
@@ -117,18 +118,18 @@ public class EventsAddOnActivity extends BaseActivity{
 
     private void callGetEventAddOn() {
         String mFilter = "event_id=" + mEventID;
-        RetrofitClient.getRetrofitInstance().callGetEventAddOn(this,mFilter,RetrofitClient.CALL_GET_ADD_ON_RESPONSE);
+        RetrofitClient.getRetrofitInstance().callGetEventAddOn(this, mFilter, RetrofitClient.CALL_GET_ADD_ON_RESPONSE);
     }
 
-    public void increaseTotalAmount(int mAmount){
+    public void increaseTotalAmount(int mAmount) {
         mTotalAmount += mAmount;
-        mResEventAmount = "Event Amount $ " + (mTotalAmount/100);
+        mResEventAmount = "Event Amount $ " + (mTotalAmount / 100);
         mTotalPriceAmountBtn.setText(mResEventAmount);
     }
 
-    public void decreaseTotalAmount(int mAmount){
+    public void decreaseTotalAmount(int mAmount) {
         mTotalAmount -= mAmount;
-        mResEventAmount = "Event Amount $ " + (mTotalAmount/100);
+        mResEventAmount = "Event Amount $ " + (mTotalAmount / 100);
         mTotalPriceAmountBtn.setText(mResEventAmount);
 
     }
@@ -136,9 +137,9 @@ public class EventsAddOnActivity extends BaseActivity{
     @Override
     public void retrofitOnResponse(Object responseObj, int responseType) {
         super.retrofitOnResponse(responseObj, responseType);
-        if(responseObj instanceof EventAddOnModel){
-            EventAddOnModel mEventAddOnModel = (EventAddOnModel)responseObj;
-            if(mEventAddOnModel.getResource().size()==0){
+        if (responseObj instanceof EventAddOnModel) {
+            EventAddOnModel mEventAddOnModel = (EventAddOnModel) responseObj;
+            if (mEventAddOnModel.getResource().size() == 0) {
                 mNoAddOnTxt.setVisibility(View.VISIBLE);
 
             }
@@ -156,7 +157,7 @@ public class EventsAddOnActivity extends BaseActivity{
     @Override
     public void retrofitOnError(int code, String message) {
         super.retrofitOnError(code, message);
-        if(message.equals("Unauthorized") || code == 401) {
+        if (message.equals("Unauthorized") || code == 401) {
             RetrofitClient.getRetrofitInstance().callUpdateSession(this, RetrofitClient.UPDATE_SESSION_RESPONSE);
         } else {
             String mErrorMsg = code + " - " + message;
@@ -172,7 +173,7 @@ public class EventsAddOnActivity extends BaseActivity{
     @Override
     public void retrofitOnError(int code, String message, int responseType) {
         super.retrofitOnError(code, message, responseType);
-        if(message.equals("Unauthorized") || code == 401) {
+        if (message.equals("Unauthorized") || code == 401) {
             RetrofitClient.getRetrofitInstance().callUpdateSession(this, RetrofitClient.UPDATE_SESSION_RESPONSE);
         } else {
             String mErrorMsg = code + " - " + message;
@@ -188,17 +189,17 @@ public class EventsAddOnActivity extends BaseActivity{
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-            if (requestCode == EventsFindAdapter.EVENT_PAYMENT_REQ_CODE) {
-                if(resultCode == RESULT_OK) {
-                    Intent resultIntent = new Intent();
-                    setResult(Activity.RESULT_OK, resultIntent);
-                    resultIntent.putExtra("TOKEN", data.getStringExtra("TOKEN"));
-                    resultIntent.putExtra(EventsModel.EVENT_AMOUNT, mTotalAmount);
-                    this.finish();
-                } else if(resultCode == RESULT_CANCELED){
-                    Intent resultIntent = new Intent();
-                    setResult(Activity.RESULT_CANCELED, resultIntent);
-                }
+        if (requestCode == EventsFindAdapter.EVENT_PAYMENT_REQ_CODE) {
+            if (resultCode == RESULT_OK) {
+                Intent resultIntent = new Intent();
+                setResult(Activity.RESULT_OK, resultIntent);
+                resultIntent.putExtra("TOKEN", data.getStringExtra("TOKEN"));
+                resultIntent.putExtra(EventsModel.EVENT_AMOUNT, mTotalAmount);
+                this.finish();
+            } else if (resultCode == RESULT_CANCELED) {
+                Intent resultIntent = new Intent();
+                setResult(Activity.RESULT_CANCELED, resultIntent);
+            }
         }
     }
 }

@@ -5,8 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:ellipsize="marquee"
+    android:padding="@dimen/size10"
     android:singleLine="true"
     android:textColor="@color/colorBlack"
-    android:padding="@dimen/size10"
     android:textSize="@dimen/text12" />
 

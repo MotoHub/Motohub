@@ -10,21 +10,20 @@ import java.io.Serializable;
 
 public class DeviceInfoModel implements Serializable {
 
-    public class EasyDarwin{
+    @SerializedName("EasyDarwin")
+    public EasyDarwin mEasyDarwin;
+
+    public class EasyDarwin {
         @SerializedName("Body")
         public Body mBody;
         @SerializedName("Header")
         public Header mHeader;
     }
 
-    public class Body{
+    public class Body {
         public String Serial;
         public String SnapURL;
     }
-
-
-    @SerializedName("EasyDarwin")
-    public EasyDarwin mEasyDarwin;
 
 
 }

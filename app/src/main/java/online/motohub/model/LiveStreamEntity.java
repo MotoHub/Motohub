@@ -21,7 +21,7 @@ public class LiveStreamEntity implements Serializable {
     }
 
     public String getStreamName() {
-              return StreamName;
+        return StreamName;
     }
 
     public ProfileResModel getProfiles_by_StreamProfileID() {

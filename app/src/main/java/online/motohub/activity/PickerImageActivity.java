@@ -47,35 +47,46 @@ import online.motohub.util.ZoomImageView;
 
 public class PickerImageActivity extends BaseActivity {
 
+    public static final String EXTRA_RESULT_DATA = "activity_image_picker_uri";
     @BindView(R.id.pick_img_parent_view)
     FrameLayout mParentView;
-
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
-
     @BindView(R.id.img_files_list_view)
     RecyclerView mImgListView;
-
     @BindView(R.id.pager)
     ViewPager mViewPager;
-
     @BindView(R.id.view_pager_lay)
     RelativeLayout mViewPagerLay;
-
     @BindView(R.id.select_btn)
     Button mSelectViewPagerBtn;
-
     @BindString(R.string.storage_permission_denied)
     String mNoStoragePer;
     Integer ProfileID;
     private GalleryPickerAdapter mAdapter;
     private List<LocalImgModel> mImgUriList = new ArrayList<>();
     private List<LocalFolderModel> mFolderList = new ArrayList<>();
-
     private boolean isFolderState = true;
-
-    public static final String EXTRA_RESULT_DATA = "activity_image_picker_uri";
+    GalleryPickerAdapter.OnItemClickListener mImageFileCallback = new GalleryPickerAdapter.OnItemClickListener() {
+        @Override
+        public void onItemClick(boolean isFolder, int position) {
+            if (isFolder) {
+                isFolderState = false;
+                int folderId = mFolderList.get(position).getId();
+                new GetImageFiles(folderId).execute();
+            } else {
+                visibleViewPager(true);
+                mViewPager.setCurrentItem(position);
+            }
+        }
+    };
     private GridLayoutManager mLayoutManager;
+    PermissionCallback mPermissionCallback = new PermissionCallback() {
+        @Override
+        public void permissionOkClick() {
+            initView();
+        }
+    };
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -83,9 +94,10 @@ public class PickerImageActivity extends BaseActivity {
         setContentView(R.layout.activity_image_picker);
         ButterKnife.bind(this);
 
-        if(isPermissionAdded())
-        initView();
+        if (isPermissionAdded())
+            initView();
     }
+
     private void initView() {
         setToolbar(mToolbar, getString(R.string.photos));
         showToolbarBtn(mToolbar, R.id.toolbar_back_img_btn);
@@ -124,7 +136,7 @@ public class PickerImageActivity extends BaseActivity {
                 VideoUploadModel videoUploadModel = new VideoUploadModel();
                 // File imgfile=new File(selectedUri.getFileName());
                 String s = String.valueOf(selectedUri.getFileUri());
-                videoUploadModel.setThumbnailURl(s.substring(s.lastIndexOf("/") + 1, s.length()));
+                videoUploadModel.setThumbnailURl(s.substring(s.lastIndexOf("/") + 1));
                 videoUploadModel.setProfileID(ProfileID);
                 videoUploadModel.setNotificationflag(notificationcount);
                 databaseHandler.addVideoDetails(videoUploadModel);
@@ -142,14 +154,166 @@ public class PickerImageActivity extends BaseActivity {
         }
     }
 
+    private void visibleViewPager(boolean isViewpager) {
+        mViewPagerLay.setVisibility(isViewpager ? View.VISIBLE : View.GONE);
+        mImgListView.setVisibility(isViewpager ? View.GONE : View.VISIBLE);
+    }
+
+    private List<LocalImgModel> getImages(int folderId) {
+        List<LocalImgModel> mImgModels = new ArrayList<>();
+        Uri mExternalUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+
+        Cursor mCursor = getContentResolver().query(mExternalUri, null, MediaStore.Images.Media.BUCKET_ID + "=?",
+                new String[]{String.valueOf(folderId)}, MediaStore.MediaColumns.DATE_MODIFIED + " DESC");
+
+        if (mCursor != null && mCursor.moveToFirst()) {
+            do {
+
+                LocalImgModel model = new LocalImgModel();
+
+                int id = mCursor.getInt(mCursor.getColumnIndex(MediaStore.Images.Media._ID));
+                String fileName = mCursor.getString(mCursor.getColumnIndex(MediaStore.Images.Media.TITLE));
+                String folderName = mCursor.getString(mCursor.getColumnIndex(MediaStore.Images.Media.BUCKET_DISPLAY_NAME));
+                String data = mCursor.getString(mCursor.getColumnIndex(MediaStore.Images.Media.DATA));
+
+                model.setId(id);
+                model.setFileName(fileName);
+                model.setFolderName(folderName);
+                model.setFolderId(folderId);
+                model.setFileUri(Uri.parse(data));
+                mImgModels.add(model);
+            } while (mCursor.moveToNext());
+
+            mCursor.close();
+        }
+        return mImgModels;
+
+    }
+
+    private List<LocalImgModel> getImagesFolder(List<LocalFolderModel> folderList) {
+        List<LocalImgModel> mImgModels = new ArrayList<>();
+        Uri mExternalUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+        for (int i = 0; i < folderList.size() - 1; i++) {
+
+            Cursor mCursor = getContentResolver().query(mExternalUri, null, MediaStore.Images.Media.BUCKET_ID + "=?",
+                    new String[]{String.valueOf(folderList.get(i).getId())}, MediaStore.Images.Media.DATE_MODIFIED + " DESC");
+
+            if (mCursor != null && mCursor.moveToFirst()) {
+
+                LocalImgModel model = new LocalImgModel();
+
+                int id = mCursor.getInt(mCursor.getColumnIndex(MediaStore.Images.Media._ID));
+                String fileName = mCursor.getString(mCursor.getColumnIndex(MediaStore.Images.Media.TITLE));
+                String folderName = mCursor.getString(mCursor.getColumnIndex(MediaStore.Images.Media.BUCKET_DISPLAY_NAME));
+                String data = mCursor.getString(mCursor.getColumnIndex(MediaStore.Images.Media.DATA));
+
+                model.setId(id);
+                model.setFileName(fileName);
+                model.setFolderName(folderName);
+                model.setFolderId(folderList.get(i).getId());
+                model.setFileUri(Uri.parse(data));
+                mImgModels.add(model);
+
+
+                mCursor.close();
+            }
+        }
+        return mImgModels;
+
+    }
+
+    private List<LocalFolderModel> getFolders() {
+        List<LocalFolderModel> mFolders = new ArrayList<>();
+
+        Uri mExternalUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+
+        String[] projection = {"DISTINCT " + MediaStore.Images.Media.BUCKET_DISPLAY_NAME,
+                MediaStore.Images.Media.DATA, MediaStore.Images.Media.BUCKET_ID,
+                MediaStore.Images.Media.DATE_TAKEN};
+
+        String orderBy = MediaStore.Images.Media.DATE_MODIFIED + " DESC";
+
+        Cursor mCursor = getContentResolver().query(mExternalUri, projection, null, null, orderBy);
+
+        if (mCursor != null && mCursor.moveToFirst()) {
+            do {
+                LocalFolderModel model = new LocalFolderModel();
+
+                String folderName = mCursor.getString(mCursor.getColumnIndex(MediaStore.Images.Media.BUCKET_DISPLAY_NAME));
+                int id = mCursor.getInt(mCursor.getColumnIndex(MediaStore.Images.Media.BUCKET_ID));
+                String folderPath = mCursor.getString(mCursor.getColumnIndex(MediaStore.Images.Media.DATA));
+
+                model.setDisplayName(folderName);
+                model.setPath(folderPath);
+                model.setId(id);
+
+                boolean isExists = false;
+                for (int i = 0; i < mFolders.size(); i++) {
+                    LocalFolderModel folderModel = mFolders.get(i);
+                    if (folderModel.getId() == model.getId()) {
+                        isExists = true;
+                        break;
+                    }
+                }
+
+                if (!isExists) {
+                    mFolders.add(model);
+                }
+
+            } while (mCursor.moveToNext());
+            mCursor.close();
+
+        }
+
+        return mFolders;
+    }
+
+    @Override
+    public void onBackPressed() {
+        onBackClicked();
+    }
+
+    private void onBackClicked() {
+        if (mViewPagerLay.getVisibility() == View.VISIBLE) {
+            visibleViewPager(false);
+            isFolderState = false;
+        } else {
+            if (isFolderState) {
+                finish();
+            } else {
+                isFolderState = true;
+                new GetImageFolders().execute();
+            }
+        }
+
+    }
+
+    public boolean isPermissionAdded() {
+        boolean addPermission = true;
+        if (android.os.Build.VERSION.SDK_INT >= 23) {
+            int readStoragePermission = ContextCompat.checkSelfPermission(this, android.Manifest.permission.READ_EXTERNAL_STORAGE);
+            int storagePermission = ContextCompat.checkSelfPermission(this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE);
+            List<String> listPermissionsNeeded = new ArrayList<>();
+            if (readStoragePermission != PackageManager.PERMISSION_GRANTED) {
+                listPermissionsNeeded.add(android.Manifest.permission.READ_EXTERNAL_STORAGE);
+            }
+            if (storagePermission != PackageManager.PERMISSION_GRANTED) {
+                listPermissionsNeeded.add(android.Manifest.permission.WRITE_EXTERNAL_STORAGE);
+            }
+            if (!listPermissionsNeeded.isEmpty()) {
+                addPermission = isPermission(mPermissionCallback, listPermissionsNeeded);
+            }
+        }
+        return addPermission;
+    }
+
     private class GetImageFolders extends AsyncTask<Void, List<LocalFolderModel>, List<LocalFolderModel>> {
-        
-		@Override
-        protected void onPreExecute()
-        {
+
+        @Override
+        protected void onPreExecute() {
             DialogManager.showProgress(PickerImageActivity.this);
         }
-		
+
         @Override
         protected List<LocalFolderModel> doInBackground(Void... params) {
             List<LocalFolderModel> mUris = getFolders();
@@ -164,7 +328,7 @@ public class PickerImageActivity extends BaseActivity {
             super.onPostExecute(mUriList);
             mFolderList.clear();
             mFolderList.addAll(mUriList);
-            if(mImgUriList.size() != 0){
+            if (mImgUriList.size() != 0) {
                 mImgUriList.clear();
             }
             mLayoutManager.setSpanCount(2);
@@ -226,122 +390,8 @@ public class PickerImageActivity extends BaseActivity {
                 mViewPager.setAdapter(mCustomPagerAdapter);
                 visibleViewPager(false);
             }
-             DialogManager.hideProgress();
+            DialogManager.hideProgress();
         }
-    }
-
-    private void visibleViewPager(boolean isViewpager) {
-        mViewPagerLay.setVisibility(isViewpager ? View.VISIBLE : View.GONE);
-        mImgListView.setVisibility(isViewpager ? View.GONE : View.VISIBLE);
-    }
-
-    private List<LocalImgModel> getImages(int folderId) {
-        List<LocalImgModel> mImgModels = new ArrayList<>();
-        Uri mExternalUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
-
-        Cursor mCursor = getContentResolver().query(mExternalUri, null, MediaStore.Images.Media.BUCKET_ID + "=?",
-                new String[]{String.valueOf(folderId)}, MediaStore.MediaColumns.DATE_MODIFIED + " DESC");
-
-            if (mCursor != null && mCursor.moveToFirst()) {
-                do {
-
-                    LocalImgModel model = new LocalImgModel();
-
-                    int id = mCursor.getInt(mCursor.getColumnIndex(MediaStore.Images.Media._ID));
-                    String fileName = mCursor.getString(mCursor.getColumnIndex(MediaStore.Images.Media.TITLE));
-                    String folderName = mCursor.getString(mCursor.getColumnIndex(MediaStore.Images.Media.BUCKET_DISPLAY_NAME));
-                    String data = mCursor.getString(mCursor.getColumnIndex(MediaStore.Images.Media.DATA));
-
-                    model.setId(id);
-                    model.setFileName(fileName);
-                    model.setFolderName(folderName);
-                    model.setFolderId(folderId);
-                    model.setFileUri(Uri.parse(data));
-                    mImgModels.add(model);
-                } while (mCursor.moveToNext());
-
-                mCursor.close();
-            }
-        return mImgModels;
-
-    }
-
-    private List<LocalImgModel> getImagesFolder(List<LocalFolderModel> folderList) {
-        List<LocalImgModel> mImgModels = new ArrayList<>();
-        Uri mExternalUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
-        for (int i = 0; i < folderList.size() - 1; i++) {
-
-            Cursor mCursor = getContentResolver().query(mExternalUri, null, MediaStore.Images.Media.BUCKET_ID + "=?",
-                    new String[]{String.valueOf(folderList.get(i).getId())}, MediaStore.Images.Media.DATE_MODIFIED + " DESC");
-
-            if (mCursor != null && mCursor.moveToFirst()) {
-
-                LocalImgModel model = new LocalImgModel();
-
-                    int id = mCursor.getInt(mCursor.getColumnIndex(MediaStore.Images.Media._ID));
-                    String fileName = mCursor.getString(mCursor.getColumnIndex(MediaStore.Images.Media.TITLE));
-                    String folderName = mCursor.getString(mCursor.getColumnIndex(MediaStore.Images.Media.BUCKET_DISPLAY_NAME));
-                    String data = mCursor.getString(mCursor.getColumnIndex(MediaStore.Images.Media.DATA));
-
-                    model.setId(id);
-                    model.setFileName(fileName);
-                    model.setFolderName(folderName);
-                    model.setFolderId(folderList.get(i).getId());
-                    model.setFileUri(Uri.parse(data));
-                    mImgModels.add(model);
-
-
-                mCursor.close();
-            }
-        }
-        return mImgModels;
-
-    }
-
-    private List<LocalFolderModel> getFolders() {
-        List<LocalFolderModel> mFolders = new ArrayList<>();
-
-        Uri mExternalUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
-
-        String projection[] = {"DISTINCT " + MediaStore.Images.Media.BUCKET_DISPLAY_NAME,
-                MediaStore.Images.Media.DATA, MediaStore.Images.Media.BUCKET_ID,
-                MediaStore.Images.Media.DATE_TAKEN};
-
-        String orderBy = MediaStore.Images.Media.DATE_MODIFIED + " DESC";
-
-        Cursor mCursor = getContentResolver().query(mExternalUri, projection, null, null, orderBy);
-
-        if (mCursor != null && mCursor.moveToFirst()) {
-            do {
-                LocalFolderModel model = new LocalFolderModel();
-
-                String folderName = mCursor.getString(mCursor.getColumnIndex(MediaStore.Images.Media.BUCKET_DISPLAY_NAME));
-                int id = mCursor.getInt(mCursor.getColumnIndex(MediaStore.Images.Media.BUCKET_ID));
-                String folderPath = mCursor.getString(mCursor.getColumnIndex(MediaStore.Images.Media.DATA));
-
-                model.setDisplayName(folderName);
-                model.setPath(folderPath);
-                model.setId(id);
-
-                boolean isExists = false;
-                for (int i = 0; i < mFolders.size(); i++) {
-                    LocalFolderModel folderModel = mFolders.get(i);
-                    if (folderModel.getId() == model.getId()) {
-                        isExists = true;
-                        break;
-                    }
-                }
-
-                if (!isExists) {
-                    mFolders.add(model);
-                }
-
-            } while (mCursor.moveToNext());
-            mCursor.close();
-
-        }
-
-        return mFolders;
     }
 
     private class CustomPagerAdapter extends PagerAdapter {
@@ -386,64 +436,4 @@ public class PickerImageActivity extends BaseActivity {
             return view == object;
         }
     }
-
-    GalleryPickerAdapter.OnItemClickListener mImageFileCallback = new GalleryPickerAdapter.OnItemClickListener() {
-        @Override
-        public void onItemClick(boolean isFolder, int position) {
-            if (isFolder) {
-                isFolderState = false;
-                int folderId = mFolderList.get(position).getId();
-                new GetImageFiles(folderId).execute();
-            } else {
-                visibleViewPager(true);
-                mViewPager.setCurrentItem(position);
-            }
-        }
-    };
-
-    @Override
-    public void onBackPressed() {
-        onBackClicked();
-    }
-
-    private void onBackClicked() {
-        if (mViewPagerLay.getVisibility() == View.VISIBLE) {
-            visibleViewPager(false);
-            isFolderState = false;
-        } else {
-            if (isFolderState) {
-                finish();
-            } else {
-                isFolderState = true;
-                new GetImageFolders().execute();
-            }
-        }
-
-    }
-
-    public boolean isPermissionAdded() {
-        boolean addPermission = true;
-        if (android.os.Build.VERSION.SDK_INT >= 23) {
-            int readStoragePermission = ContextCompat.checkSelfPermission(this, android.Manifest.permission.READ_EXTERNAL_STORAGE);
-            int storagePermission = ContextCompat.checkSelfPermission(this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE);
-            List<String> listPermissionsNeeded = new ArrayList<>();
-            if (readStoragePermission != PackageManager.PERMISSION_GRANTED) {
-                listPermissionsNeeded.add(android.Manifest.permission.READ_EXTERNAL_STORAGE);
-            }
-            if (storagePermission != PackageManager.PERMISSION_GRANTED) {
-                listPermissionsNeeded.add(android.Manifest.permission.WRITE_EXTERNAL_STORAGE);
-            }
-            if (!listPermissionsNeeded.isEmpty()) {
-                addPermission = isPermission(mPermissionCallback, listPermissionsNeeded);
-            }
-        }
-        return addPermission;
-    }
-
-    PermissionCallback mPermissionCallback = new PermissionCallback() {
-        @Override
-        public void permissionOkClick() {
-            initView();
-        }
-    };
 }

@@ -23,7 +23,6 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import online.motohub.R;
 import online.motohub.activity.BaseActivity;
 import online.motohub.activity.ChatBoxSingleActivity;
-import online.motohub.application.MotoHub;
 import online.motohub.fcm.MyFireBaseMessagingService;
 import online.motohub.fragment.dialog.AppDialogFragment;
 import online.motohub.model.ProfileResModel;
@@ -85,7 +84,6 @@ public class SingleChatRoomAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         Calendar calendar = Calendar.getInstance();
         return calendar.getTime();
     }
-
 
 
     public static String getTimeAgo(Date date, Context ctx) {
@@ -164,7 +162,7 @@ public class SingleChatRoomAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                 if (mSingleChatMsg.getMsinglechatmsg_by_Order().getmFromProfileID() == mProfileResModel.getID()
                         || mSingleChatMsg.getMsinglechatmsg_by_Order().getmToProfileID() == mProfileResModel.getID()) {
                     String last_msg = mSingleChatMsg.getMsinglechatmsg_by_Order().getmMessage();
-                    String enc_last_msg = URLDecoder.decode(last_msg,"UTF-8");
+                    String enc_last_msg = URLDecoder.decode(last_msg, "UTF-8");
                     //String enc_last_msg = replacer(sb.append(last_msg));
                     String createdAt = mSingleChatMsg.getMsinglechatmsg_by_Order().getmCreatedAt();
 

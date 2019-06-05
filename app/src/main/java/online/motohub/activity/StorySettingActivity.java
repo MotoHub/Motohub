@@ -29,7 +29,6 @@ import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import online.motohub.R;
 import online.motohub.adapter.StoryAdapter;
-import online.motohub.application.MotoHub;
 import online.motohub.fragment.dialog.AppDialogFragment;
 import online.motohub.model.EventsModel;
 import online.motohub.model.EventsResModel;
@@ -103,7 +102,7 @@ public class StorySettingActivity extends BaseActivity {
         mEventResModel = (EventsResModel) getIntent().getBundleExtra("bundle_data").getSerializable(EventsModel.EVENTS_RES_MODEL);
         //mMyProfileResModel = (ProfileResModel) getIntent().getBundleExtra("bundle_data").getSerializable(ProfileModel.MY_PROFILE_RES_MODEL);
         //mMyProfileResModel= MotoHub.getApplicationInstance().getmProfileResModel();
-        mMyProfileResModel= EventBus.getDefault().getStickyEvent(ProfileResModel.class);
+        mMyProfileResModel = EventBus.getDefault().getStickyEvent(ProfileResModel.class);
     }
 
     private void setPlayIconVisiblity(String mFileType) {

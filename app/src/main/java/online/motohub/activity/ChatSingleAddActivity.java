@@ -20,7 +20,6 @@ import butterknife.OnClick;
 import butterknife.OnItemClick;
 import online.motohub.R;
 import online.motohub.adapter.ChatSingleAddAdapter;
-import online.motohub.application.MotoHub;
 import online.motohub.model.ProfileModel;
 import online.motohub.model.ProfileResModel;
 import online.motohub.model.SessionModel;

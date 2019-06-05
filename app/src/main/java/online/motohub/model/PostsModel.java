@@ -23,23 +23,22 @@ public class PostsModel {
     public static final String SHARED_PROFILE_ID = "SharedProfileID";
     public static final String WHO_SHARED_PROFILE_ID = "WhoSharedProfileID";
     public static final String NEW_SHARED_POST_ID = "NewSharedPostID";
-    public static final String OLD_POST_ID = "OldPostID" ;
-    public static final String IS_NEWS_FEED_POST="IsNewsFeedPost";
-    public static final String PostVideoThumbnailurl="PostVideoThumbnailUrl";
-    public static final String PostVideoURL="PostVideoUrl";
+    public static final String OLD_POST_ID = "OldPostID";
+    public static final String IS_NEWS_FEED_POST = "IsNewsFeedPost";
+    public static final String PostVideoThumbnailurl = "PostVideoThumbnailUrl";
+    public static final String PostVideoURL = "PostVideoUrl";
     public static final String PROMOTER_BY_PROFILE_ID = "promoter_by_ProfileID";
-    public static final String PROMOTER_BY_WHO_POSTED_PROFILEID="promoter_by_WhoPostedProfileID";
+    public static final String PROMOTER_BY_WHO_POSTED_PROFILEID = "promoter_by_WhoPostedProfileID";
     public static final String USER_TYPE = "user_type";
     public static final String IS_UPDATE = "is_update";
     public static final String POST_LIST = "POST_LIST";
     public static final String SHARES_BY_NEW_SHARED_POST_ID = "postshares_by_NewSharedPostID";
-    public static final String VIDEO_SHARES_BY_NEW_SHARED_POST_ID ="videoshares_by_NewSharedPostID";
+    public static final String VIDEO_SHARES_BY_NEW_SHARED_POST_ID = "videoshares_by_NewSharedPostID";
     public static final String PROFILES_BY_PROFILE_ID = "profiles_by_ProfileID";
     public static final String REPORT_STATUS = "ReportStatus";
     public static final String TO_SUBSCRIBED_USER_ID = "to_subscribedUserID";
     public static final String SHARED_TEXT = "SharedText";
     public static final String viewCount = "ViewCount";
-
 
 
     @SerializedName("resource")

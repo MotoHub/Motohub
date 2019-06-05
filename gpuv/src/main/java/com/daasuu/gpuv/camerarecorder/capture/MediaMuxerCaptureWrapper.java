@@ -9,7 +9,6 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 
 
-
 public class MediaMuxerCaptureWrapper {
     private static final String TAG = "MediaMuxerWrapper";
 

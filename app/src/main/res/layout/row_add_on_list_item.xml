@@ -1,39 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<RelativeLayout style="@style/LayoutMatchWrap"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:background="@color/colorGrey"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/LayoutMatchWrap"
     android:layout_marginTop="@dimen/size10"
-    >
+    android:background="@color/colorGrey">
 
     <android.support.v7.widget.CardView
         style="@style/LayoutMatchWrap"
         android:layout_margin="@dimen/size5"
-        android:background="@color/colorGrey"
-        >
+        android:background="@color/colorGrey">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/colorWhite"
-            android:padding="@dimen/size5"
-            >
-    <TextView
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:id="@+id/addOnDescTxt"
-        android:layout_weight="2"
-        android:textSize="@dimen/text16"
-        android:textColor="@color/colorBlack"
-        />
+            android:padding="@dimen/size5">
 
-    <ToggleButton
-        android:layout_width="0dp"
-        android:id="@+id/addOnToggleBtn"
-        android:layout_marginStart="@dimen/size10"
-        android:layout_height="@dimen/size40"
-        android:background="@drawable/toggle_btn_bg"
-        android:textColor="@color/text_color_changed"
-        android:layout_weight="1"/>
+            <TextView
+                android:id="@+id/addOnDescTxt"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:textColor="@color/colorBlack"
+                android:textSize="@dimen/text16" />
+
+            <ToggleButton
+                android:id="@+id/addOnToggleBtn"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/size40"
+                android:layout_marginStart="@dimen/size10"
+                android:layout_weight="1"
+                android:background="@drawable/toggle_btn_bg"
+                android:textColor="@color/text_color_changed" />
 
         </LinearLayout>
     </android.support.v7.widget.CardView>

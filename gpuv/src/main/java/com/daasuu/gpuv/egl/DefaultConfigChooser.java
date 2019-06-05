@@ -16,9 +16,9 @@ import static javax.microedition.khronos.egl.EGL10.EGL_RENDERABLE_TYPE;
 import static javax.microedition.khronos.egl.EGL10.EGL_STENCIL_SIZE;
 
 
-
 public class DefaultConfigChooser implements GLSurfaceView.EGLConfigChooser {
 
+    private static final int EGL_OPENGL_ES2_BIT = 4;
     private final int[] configSpec;
     private final int redSize;
     private final int greenSize;
@@ -67,8 +67,6 @@ public class DefaultConfigChooser implements GLSurfaceView.EGLConfigChooser {
         this.depthSize = depthSize;
         this.stencilSize = stencilSize;
     }
-
-    private static final int EGL_OPENGL_ES2_BIT = 4;
 
     private int[] filterConfigSpec(final int[] configSpec, final int version) {
         if (version != 2) {

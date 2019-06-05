@@ -9,19 +9,15 @@ import java.lang.ref.WeakReference;
 import java.nio.ByteBuffer;
 
 
-
 public abstract class MediaEncoder implements Runnable {
-    private static final String TAG = "MediaEncoder";
-
     protected static final int TIMEOUT_USEC = 10000;    // 10[msec]
-
-    public interface MediaEncoderListener {
-        void onPrepared(MediaEncoder encoder);
-
-        void onStopped(MediaEncoder encoder);
-    }
-
+    private static final String TAG = "MediaEncoder";
     protected final Object sync = new Object();
+    /**
+     * Weak refarence of MediaMuxerWarapper instance
+     */
+    protected final WeakReference<MediaMuxerCaptureWrapper> weakMuxer;
+    protected final MediaEncoderListener listener;
     /**
      * Flag that indicate this encoder is capturing now.
      */
@@ -51,15 +47,13 @@ public abstract class MediaEncoder implements Runnable {
      */
     protected MediaCodec mediaCodec;
     /**
-     * Weak refarence of MediaMuxerWarapper instance
-     */
-    protected final WeakReference<MediaMuxerCaptureWrapper> weakMuxer;
-    /**
      * BufferInfo instance for dequeuing
      */
     private MediaCodec.BufferInfo bufferInfo;
-
-    protected final MediaEncoderListener listener;
+    /**
+     * previous presentationTimeUs for writing
+     */
+    private long prevOutputPTSUs = 0;
 
     MediaEncoder(final MediaMuxerCaptureWrapper muxer, final MediaEncoderListener listener) {
         if (listener == null) throw new NullPointerException("MediaEncoderListener is null");
@@ -342,11 +336,6 @@ public abstract class MediaEncoder implements Runnable {
     }
 
     /**
-     * previous presentationTimeUs for writing
-     */
-    private long prevOutputPTSUs = 0;
-
-    /**
      * get next encoding presentationTimeUs
      *
      * @return
@@ -358,6 +347,12 @@ public abstract class MediaEncoder implements Runnable {
         if (result < prevOutputPTSUs)
             result = (prevOutputPTSUs - result) + result;
         return result;
+    }
+
+    public interface MediaEncoderListener {
+        void onPrepared(MediaEncoder encoder);
+
+        void onStopped(MediaEncoder encoder);
     }
 }
 

@@ -8,36 +8,35 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.Surface;
 import android.view.SurfaceHolder;
+
 import com.daasuu.gpuv.egl.GlFramebufferObject;
 import com.daasuu.gpuv.egl.GlPreview;
 import com.daasuu.gpuv.egl.filter.GlFilter;
 
-import static android.opengl.GLES20.*;
+import static android.opengl.GLES20.GL_COLOR_BUFFER_BIT;
+import static android.opengl.GLES20.GL_DEPTH_BUFFER_BIT;
+import static android.opengl.GLES20.GL_FRAMEBUFFER;
 
 
 public class EncodeRenderHandler implements Runnable {
     private static final String TAG = "GPUCameraRecorder";
 
     private final Object sync = new Object();
-    private EGLContext sharedContext;
-    private boolean isRecordable;
-    private Object surface;
-    private int texId = -1;
-
-    private boolean requestSetEglContext;
-    private boolean requestRelease;
-    private int requestDraw;
-
-    private float[] MVPMatrix = new float[16];
-    private float[] STMatrix = new float[16];
-    private float aspectRatio = 1f;
-
     private final float XMatrixScale;
     private final float YMatrixScale;
     private final float fileWidth;
     private final float fileHeight;
     private final boolean recordNoFilter;
-
+    private EGLContext sharedContext;
+    private boolean isRecordable;
+    private Object surface;
+    private int texId = -1;
+    private boolean requestSetEglContext;
+    private boolean requestRelease;
+    private int requestDraw;
+    private float[] MVPMatrix = new float[16];
+    private float[] STMatrix = new float[16];
+    private float aspectRatio = 1f;
     private GlFramebufferObject framebufferObject;
     private GlFramebufferObject filterFramebufferObject;
     private GlFilter normalFilter;
@@ -46,39 +45,6 @@ public class EncodeRenderHandler implements Runnable {
     private EglWrapper egl;
     private EglSurface inputSurface;
     private GlPreview previewShader;
-
-    static EncodeRenderHandler createHandler(final String name,
-                                             final boolean flipVertical,
-                                             final boolean flipHorizontal,
-                                             final float viewAspect,
-                                             final float fileWidth,
-                                             final float fileHeight,
-                                             final boolean recordNoFilter,
-                                             final GlFilter filter
-    ) {
-        Log.v(TAG, "createHandler:");
-        Log.v(TAG, "fileAspect:" + (fileHeight / fileWidth) + " viewAcpect: " + viewAspect);
-
-        final EncodeRenderHandler handler = new EncodeRenderHandler(
-                flipVertical,
-                flipHorizontal,
-                fileHeight / fileWidth,
-                viewAspect,
-                fileWidth,
-                fileHeight,
-                recordNoFilter,
-                filter
-        );
-        synchronized (handler.sync) {
-            new Thread(handler, !TextUtils.isEmpty(name) ? name : TAG).start();
-            try {
-                handler.sync.wait();
-            } catch (final InterruptedException e) {
-            }
-        }
-
-        return handler;
-    }
 
     private EncodeRenderHandler(final boolean flipVertical,
                                 final boolean flipHorizontal,
@@ -111,6 +77,39 @@ public class EncodeRenderHandler implements Runnable {
             }
         }
 
+    }
+
+    static EncodeRenderHandler createHandler(final String name,
+                                             final boolean flipVertical,
+                                             final boolean flipHorizontal,
+                                             final float viewAspect,
+                                             final float fileWidth,
+                                             final float fileHeight,
+                                             final boolean recordNoFilter,
+                                             final GlFilter filter
+    ) {
+        Log.v(TAG, "createHandler:");
+        Log.v(TAG, "fileAspect:" + (fileHeight / fileWidth) + " viewAcpect: " + viewAspect);
+
+        final EncodeRenderHandler handler = new EncodeRenderHandler(
+                flipVertical,
+                flipHorizontal,
+                fileHeight / fileWidth,
+                viewAspect,
+                fileWidth,
+                fileHeight,
+                recordNoFilter,
+                filter
+        );
+        synchronized (handler.sync) {
+            new Thread(handler, !TextUtils.isEmpty(name) ? name : TAG).start();
+            try {
+                handler.sync.wait();
+            } catch (final InterruptedException e) {
+            }
+        }
+
+        return handler;
     }
 
     final void setEglContext(final EGLContext shared_context, final int tex_id, final Object surface) {

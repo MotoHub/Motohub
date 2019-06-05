@@ -30,11 +30,9 @@ import online.motohub.R;
 import online.motohub.activity.BaseActivity;
 import online.motohub.activity.ViewSpecLiveActivity;
 import online.motohub.adapter.GalleryVideoAdapter;
-import online.motohub.application.MotoHub;
 import online.motohub.fragment.BaseFragment;
 import online.motohub.model.GalleryVideoModel;
 import online.motohub.model.GalleryVideoResModel;
-import online.motohub.model.ProfileResModel;
 import online.motohub.model.promoter_club_news_media.PromotersResModel;
 import online.motohub.retrofit.APIConstants;
 import online.motohub.retrofit.RetrofitClient;
@@ -247,8 +245,8 @@ public class ClubVideosFragment extends BaseFragment {
                 if (videoModel != null && videoModel.getResModelList().size() > 0) {
                     videoResModels.clear();
                     videoResModels.addAll(videoModel.getResModelList());
-                        mRv.setVisibility(View.VISIBLE);
-                        txtNoData.setVisibility(View.GONE);
+                    mRv.setVisibility(View.VISIBLE);
+                    txtNoData.setVisibility(View.GONE);
                 } else {
                     /*((BaseActivity) getActivity()).showToast(getActivity(), getString(R.string.video_not_found));*/
                     mRv.setVisibility(View.GONE);

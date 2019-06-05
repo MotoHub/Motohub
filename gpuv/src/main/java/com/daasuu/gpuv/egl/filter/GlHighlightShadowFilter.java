@@ -25,13 +25,11 @@ public class GlHighlightShadowFilter extends GlFilter {
             " \n" +
             " 	gl_FragColor = vec4(result.rgb, source.a);\n" +
             " }";
-
+    private float shadows = 1f;
+    private float highlights = 0f;
     public GlHighlightShadowFilter() {
         super(DEFAULT_VERTEX_SHADER, HIGHLIGHT_SHADOW_FRAGMENT_SHADER);
     }
-
-    private float shadows = 1f;
-    private float highlights = 0f;
 
     public void setShadows(float shadows) {
         this.shadows = shadows;

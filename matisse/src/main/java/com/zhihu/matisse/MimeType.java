@@ -18,8 +18,8 @@ package com.zhihu.matisse;
 
 import android.content.ContentResolver;
 import android.net.Uri;
-import android.text.TextUtils;
 import android.support.v4.util.ArraySet;
+import android.text.TextUtils;
 import android.webkit.MimeTypeMap;
 
 import com.zhihu.matisse.internal.utils.PhotoMetadataUtils;

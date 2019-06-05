@@ -2,12 +2,9 @@ package online.motohub.activity.ondemand;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.view.Window;
@@ -18,13 +15,9 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.DataSource;
-import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.load.model.GlideUrl;
 import com.bumptech.glide.load.model.LazyHeaders;
-import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
-import com.bumptech.glide.request.target.Target;
 import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.DefaultRenderersFactory;
 import com.google.android.exoplayer2.ExoPlaybackException;
@@ -625,7 +618,7 @@ public class EventVideosPlayingActivity extends BaseActivity {
     }
 
     public void getViewCount(int pos) {
-        String mFilter = "ID = " + String.valueOf(mPostsList.get(pos).getID());
+        String mFilter = "ID = " + mPostsList.get(pos).getID();
         RetrofitClient.getRetrofitInstance().getViewCountOnDemand(this, mFilter, RetrofitClient.FEED_VIDEO_COUNT);
     }
 
@@ -736,11 +729,7 @@ public class EventVideosPlayingActivity extends BaseActivity {
             FollowProfileModel mFollowProfileModel = (FollowProfileModel) responseObj;
             switch (responseType) {
                 case RetrofitClient.PROFILE_IS_ALREADY_FOLLOWED:
-                    if (mFollowProfileModel.getResource().size() > 0) {
-                        mIsAlreadyFollowing = true;
-                    } else {
-                        mIsAlreadyFollowing = false;
-                    }
+                    mIsAlreadyFollowing = mFollowProfileModel.getResource().size() > 0;
                     setFollowUnfollow();
                     //callGetProfile(mOtherProfileID, RetrofitClient.GET_OTHER_PROFILE_RESPONSE);
                     break;
@@ -757,11 +746,7 @@ public class EventVideosPlayingActivity extends BaseActivity {
             PromoterFollowerModel mPromoterFollowerModel = (PromoterFollowerModel) responseObj;
             switch (responseType) {
                 case RetrofitClient.PROMOTER_IS_ALREADY_FOLLOWED:
-                    if (mPromoterFollowerModel.getResource() != null && mPromoterFollowerModel.getResource().size() > 0) {
-                        mIsAlreadyFollowing = true;
-                    } else {
-                        mIsAlreadyFollowing = false;
-                    }
+                    mIsAlreadyFollowing = mPromoterFollowerModel.getResource() != null && mPromoterFollowerModel.getResource().size() > 0;
                     setFollowUnfollow();
                     callGetProfile(mOtherProfileID, RetrofitClient.GET_OTHER_PROFILE_RESPONSE);
                     break;

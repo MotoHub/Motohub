@@ -499,7 +499,7 @@ public class PostsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                                     ((BaseActivity) mContext).showFBShareDialog(AppDialogFragment.BOTTOM_SHARE_DIALOG, content, mBitmapList, null, position, mIsOtherMotoProfile);
                                 }
                             } else if (isVideoFile) {
-                                String mVideosList[] = ((BaseActivity) mContext).getImgVideoList(mPostsList.get(position).getPostVideoURL());
+                                String[] mVideosList = ((BaseActivity) mContext).getImgVideoList(mPostsList.get(position).getPostVideoURL());
                                 ((BaseActivity) mContext).showFBShareDialog(AppDialogFragment.BOTTOM_SHARE_DIALOG, content, null, mVideosList, position, mIsOtherMotoProfile);
 
                             } else {
@@ -515,8 +515,8 @@ public class PostsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                     mViewHolderPost.mPostImageVideoBox.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            String mVideosList[] = ((BaseActivity) mContext).getImgVideoList(mPostsList.get(position).getPostVideoURL());
-                            String mImgList[] = ((BaseActivity) mContext).getImgVideoList(mPostsList.get(position).getPostPicture());
+                            String[] mVideosList = ((BaseActivity) mContext).getImgVideoList(mPostsList.get(position).getPostVideoURL());
+                            String[] mImgList = ((BaseActivity) mContext).getImgVideoList(mPostsList.get(position).getPostPicture());
                             if (mVideosList != null && mVideosList.length > 0) {
                                 mAdapterPosition = position;
                                 getViewCount(mAdapterPosition);
@@ -1112,9 +1112,9 @@ public class PostsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         ArrayList<FeedLikesModel> mFeedLikes = mPostsList.get(position).getPostLikes();
         String resLikes;
         if (mPostsList.get(position).getPostLikes().size() == 1) {
-            resLikes = String.valueOf(mPostsList.get(position).getPostLikes().size()) + " Like";
+            resLikes = mPostsList.get(position).getPostLikes().size() + " Like";
         } else {
-            resLikes = String.valueOf(mPostsList.get(position).getPostLikes().size()) + " Likes";
+            resLikes = mPostsList.get(position).getPostLikes().size() + " Likes";
         }
         mViewHolderPost.mLikeCountText.setText(resLikes);
         for (final FeedLikesModel likesEntity : mFeedLikes) {

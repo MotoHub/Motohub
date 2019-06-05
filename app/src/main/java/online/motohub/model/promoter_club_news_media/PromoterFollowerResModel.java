@@ -11,7 +11,7 @@ public class PromoterFollowerResModel implements
         Serializable,
         Comparable<PromoterFollowerResModel> {
 
-    public static final String ID ="ID";
+    public static final String ID = "ID";
     public static final String PROFILE_ID = "ProfileID";
     public static final String PROMOTER_USER_ID = "PromoterUserID";
     public static final String CREATED_AT = "CreatedAt";

@@ -21,12 +21,11 @@ public class GlLuminanceThresholdFilter extends GlFilter {
             "    \n" +
             "    gl_FragColor = vec4(vec3(thresholdResult), textureColor.w);\n" +
             "}";
+    private float threshold = 0.5f;
 
     public GlLuminanceThresholdFilter() {
         super(DEFAULT_VERTEX_SHADER, LUMINANCE_THRESHOLD_FRAGMENT_SHADER);
     }
-
-    private float threshold = 0.5f;
 
     public void setThreshold(float threshold) {
         this.threshold = threshold;

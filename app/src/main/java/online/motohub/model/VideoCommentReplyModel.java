@@ -50,10 +50,24 @@ public class VideoCommentReplyModel implements Serializable {
     @SerializedName("ReplyTaggedUserNames")
     @Expose
     private String mReplyTaggedUserNames;
-
+    @SerializedName("ReplyTaggedUserID")
+    @Expose
+    private String mReplyTaggedUserIDs;
+    @SerializedName("resource")
+    @Expose
+    private ArrayList<VideoCommentReplyModel> mResource;
+    @SerializedName("profiles_by_ProfileID")
+    @Expose
+    private ProfileResModel mProfilesByProfileID;
+    @SerializedName("videoreplylike_by_ReplyID")
+    @Expose
+    private ArrayList<VideoReplyLikeModel> mReplyLikeByReplyID;
+    @SerializedName("videocomments_by_CommentID")
+    @Expose
+    private VideoCommentsModel mVideoCommentsByVideoID;
 
     public String getReplyTaggedUserNames() {
-        if(mReplyTaggedUserNames == null)
+        if (mReplyTaggedUserNames == null)
             mReplyTaggedUserNames = "";
         return mReplyTaggedUserNames;
     }
@@ -69,26 +83,6 @@ public class VideoCommentReplyModel implements Serializable {
     public void setReplyTaggedUserIDs(String mReplyTaggedUserIDs) {
         this.mReplyTaggedUserIDs = mReplyTaggedUserIDs;
     }
-
-    @SerializedName("ReplyTaggedUserID")
-    @Expose
-    private String mReplyTaggedUserIDs;
-
-    @SerializedName("resource")
-    @Expose
-    private ArrayList<VideoCommentReplyModel> mResource;
-
-    @SerializedName("profiles_by_ProfileID")
-    @Expose
-    private ProfileResModel mProfilesByProfileID;
-
-    @SerializedName("videoreplylike_by_ReplyID")
-    @Expose
-    private ArrayList<VideoReplyLikeModel> mReplyLikeByReplyID;
-
-    @SerializedName("videocomments_by_CommentID")
-    @Expose
-    private VideoCommentsModel mVideoCommentsByVideoID;
 
     public int getID() {
         return mID;
@@ -115,7 +109,7 @@ public class VideoCommentReplyModel implements Serializable {
     }
 
     public String getReplyText() {
-        if(mReplyText == null)
+        if (mReplyText == null)
             mReplyText = "";
         return mReplyText;
     }
@@ -141,7 +135,7 @@ public class VideoCommentReplyModel implements Serializable {
     }
 
     public ArrayList<VideoReplyLikeModel> getReplyLikeByReplyID() {
-        if(mReplyLikeByReplyID==null)
+        if (mReplyLikeByReplyID == null)
             mReplyLikeByReplyID = new ArrayList<>();
         return mReplyLikeByReplyID;
     }
@@ -151,7 +145,7 @@ public class VideoCommentReplyModel implements Serializable {
     }
 
     public String getReplyImages() {
-        if(mReplyImages == null)
+        if (mReplyImages == null)
             mReplyImages = "";
         return mReplyImages;
     }
@@ -169,7 +163,7 @@ public class VideoCommentReplyModel implements Serializable {
     }
 
     public String getUserType() {
-        if(mUserType == null)
+        if (mUserType == null)
             mUserType = "";
         return mUserType;
     }

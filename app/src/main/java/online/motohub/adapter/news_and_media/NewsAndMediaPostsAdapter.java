@@ -346,9 +346,9 @@ public class NewsAndMediaPostsAdapter extends RecyclerView.Adapter<RecyclerView.
 
                             if (mPostsList.get(position).getPostLikes().size() == 1) {
 
-                                resLikes = String.valueOf(mPostsList.get(position).getPostLikes().size()) + " Like";
+                                resLikes = mPostsList.get(position).getPostLikes().size() + " Like";
                             } else {
-                                resLikes = String.valueOf(mPostsList.get(position).getPostLikes().size()) + " Likes";
+                                resLikes = mPostsList.get(position).getPostLikes().size() + " Likes";
 
                             }
 
@@ -436,8 +436,8 @@ public class NewsAndMediaPostsAdapter extends RecyclerView.Adapter<RecyclerView.
                 mViewHolderNewsAndMedia.mPostImageVideoBox.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        String mVideosList[] = ((BaseActivity) mContext).getImgVideoList(mPostsList.get(position).getPostVideoURL());
-                        String mImgList[] = ((BaseActivity) mContext).getImgVideoList(mPostsList.get(position).getPostPicture());
+                        String[] mVideosList = ((BaseActivity) mContext).getImgVideoList(mPostsList.get(position).getPostVideoURL());
+                        String[] mImgList = ((BaseActivity) mContext).getImgVideoList(mPostsList.get(position).getPostPicture());
                         if (mVideosList != null && mVideosList.length > 0) {
                             mAdapterPosition = position;
                             getViewCount(mAdapterPosition);
@@ -559,7 +559,7 @@ public class NewsAndMediaPostsAdapter extends RecyclerView.Adapter<RecyclerView.
 
                         String[] mImgList = ((BaseActivity) mContext).getImgVideoList(mPostsList.get(position).getPostPicture());
 
-                        String mVideosList[] = ((BaseActivity) mContext).getImgVideoList(mPostsList.get(mViewHolderNewsAndMedia
+                        String[] mVideosList = ((BaseActivity) mContext).getImgVideoList(mPostsList.get(mViewHolderNewsAndMedia
                                 .getLayoutPosition()).getPostVideoURL());
 
                         if (mVideosList != null && mVideosList.length > 0) {
