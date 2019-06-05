@@ -78,9 +78,6 @@ public class VideoStoryPreviewActivity extends BaseActivity implements MediaPlay
     ImageView mIvPlay;
     @BindView(R.id.toolbar_back_img_btn)
     ImageButton mBackBtn;
-    /*AmazonS3Client s3;
-    BasicAWSCredentials credentials;
-    TransferUtility transferUtility;*/
     TransferObserver observerVideo, observerImage;
     private Uri videoUri;
     private EventsResModel mEventResModel;
@@ -246,6 +243,7 @@ public class VideoStoryPreviewActivity extends BaseActivity implements MediaPlay
             entity.setLivePostProfileID(String.valueOf(mMyProfileResModel.getID()));
             Gson g = new Gson();
             String json = g.toJson(entity);
+            databaseHandler.insertSpectatorLiveVideo(entity);
             //scheduleJob1(json);
             Intent service_intent = new Intent(this, UploadOfflineVideos.class);
             service_intent.putExtra("data", json);
