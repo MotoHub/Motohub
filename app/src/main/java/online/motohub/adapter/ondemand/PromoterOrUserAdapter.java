@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -171,8 +172,9 @@ public class PromoterOrUserAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         return mPostsList.get(position) == null ? VIEW_TYPE_LOADING : VIEW_TYPE_POSTS;
     }
 
+    @NonNull
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View mView;
         switch (viewType) {
             case VIEW_TYPE_POSTS:
@@ -191,7 +193,7 @@ public class PromoterOrUserAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, @SuppressLint("RecyclerView") final int position) {
         switch (getItemViewType(position)) {
             case VIEW_TYPE_POSTS:
                 final PromoterVideoModel.Resource mModel = mPostsList.get(position);
@@ -205,7 +207,10 @@ public class PromoterOrUserAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                     mViewHolderPost.mProfileImg.setTag(position);
                     Glide.with(mContext).clear(mViewHolderPost.mProfileImg);
                     if (mModel.getUserType().equals(AppConstants.ONDEMAND) || mModel.getUserType().equals(AppConstants.USER) || mModel.getUserType().equals(AppConstants.USER_EVENT_VIDEOS)) {
-                        if (mModel.profiles_by_ProfileID != null) {
+                        if (mModel.getPromoter_by_UserID() != null) {
+                            ((BaseActivity) mContext).setImageWithGlide(mViewHolderPost.mProfileImg, mModel.promoter_by_UserID.getProfileImage(), R.drawable.default_profile_icon);
+                            mViewHolderPost.mUsername.setText(mModel.promoter_by_UserID.getName());
+                        } else if (mModel.profiles_by_ProfileID != null) {
                             ((BaseActivity) mContext).setImageWithGlide(mViewHolderPost.mProfileImg, mModel.profiles_by_ProfileID.getProfilePicture(), R.drawable.default_profile_icon);
                             mViewHolderPost.mUsername.setText(Utility.getInstance().getUserName(mModel.profiles_by_ProfileID));
                         }
