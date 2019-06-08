@@ -268,18 +268,18 @@ public class UploadOfflineVideos extends IntentService implements ProgressReques
                 .callPostSpectatorLiveStory("*", jsonArray).enqueue(new Callback<SpectatorLiveModel>() {
             @Override
             public void onResponse(Call<SpectatorLiveModel> call, Response<SpectatorLiveModel> response) {
-                onDownloadComplete("File Uploaded", notificationId, id);
+                onDownloadComplete("File Uploaded", notificationId, id, true);
             }
 
             @Override
             public void onFailure(Call<SpectatorLiveModel> call, Throwable t) {
-                onDownloadComplete("File failed", videoUploadModel.getNotificationflag(), id);
+                onDownloadComplete("File failed", videoUploadModel.getNotificationflag(), id, false);
             }
         });
     }
 
     @SuppressWarnings("SameParameterValue")
-    private void onDownloadComplete(String value, int mNotificationID, String id) {
+    private void onDownloadComplete(String value, int mNotificationID, String id, boolean isSuccess) {
         try {
             DatabaseHandler databaseHandler = new DatabaseHandler(this);
             int checkCount = databaseHandler.getPendingCount();
@@ -295,9 +295,11 @@ public class UploadOfflineVideos extends IntentService implements ProgressReques
                 mNotification = mNotificationCompatBuilder.build();
             }
             if (mNotificationID > 0) {
-                databaseHandler.deletepost(mNotificationID);
-                if (id != null && !id.equals(""))
-                    databaseHandler.deleteRow(id);
+                if (isSuccess) {
+                    databaseHandler.deletepost(mNotificationID);
+                    if (id != null && !id.equals(""))
+                        databaseHandler.deleteRow(id);
+                }
                 mNotificationManager.cancelAll();
                 mNotificationManager.notify(mNotificationID, mNotification);
                 sendBroadcast(new Intent().setAction("UPLOAD_STATUS").putExtra("status", value));
