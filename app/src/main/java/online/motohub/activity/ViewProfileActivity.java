@@ -303,7 +303,6 @@ public class ViewProfileActivity extends BaseActivity implements
                 }
             }
         }
-        uploadOffline();
     }
 
     @Override
@@ -2136,24 +2135,6 @@ public class ViewProfileActivity extends BaseActivity implements
 
     public void hidePhoneEmailLayout() {
         mRelativeLayoutPhoneEmailFriends.setVisibility(View.GONE);
-    }
-
-    private void uploadOffline() {
-        DatabaseHandler handler = new DatabaseHandler(this);
-        ArrayList<SpectatorLiveEntity> mList = handler.getSpectatorLiveVideos();
-        if (mList.size() > 0) {
-            if (isNetworkConnected(this)) {
-                for (int i = 0; i < mList.size(); i++) {
-                    Intent service_intent = new Intent(this, UploadOfflineVideos.class);
-                    String data = new Gson().toJson(mList.get(i));
-                    service_intent.putExtra("data", data);
-                    startService(service_intent);
-                }
-
-                /*Intent service_intent = new Intent(this, UploadOfflineVideos.class);
-                startService(service_intent);*/
-            }
-        }
     }
 
     @SuppressLint("StaticFieldLeak")

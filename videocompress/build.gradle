@@ -16,7 +16,8 @@ android {
         multiDexEnabled true
         ndk {
             moduleName "compress"
-            abiFilters "armeabi", "armeabi-v7a", "x86", "mips"
+//            abiFilters "armeabi", "armeabi-v7a","arm64-v8a", "x86","x86_64", "mips"
+            abiFilters "armeabi", "arm64-v8a", "x86_64", "mips"
         }
     }
 
