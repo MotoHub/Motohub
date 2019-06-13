@@ -89,10 +89,8 @@ dependencies {
     implementation 'com.android.support.constraint:constraint-layout:1.1.3'
 
     implementation project(':gpuv')
-    implementation project(':pedrovlc')
     implementation project(':libvlc')
     implementation project(':videocompress')
-    implementation project(':matisse')
 
     implementation 'de.hdodenhof:circleimageview:2.1.0'
     implementation 'com.google.android:flexbox:0.3.0'
