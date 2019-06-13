@@ -1,6 +1,5 @@
 package online.motohub.activity;
 
-import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -708,35 +707,5 @@ public class PromoterVideoGalleryActivity extends BaseActivity {
         startActivity(intent);
     }
 
-    @SuppressLint("StaticFieldLeak")
-    class VideoCompressor extends AsyncTask<String, Void, Boolean> {
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            DialogManager.showProgress(PromoterVideoGalleryActivity.this);
-        }
-
-        @Override
-        protected Boolean doInBackground(String... params) {
-            return com.yovenny.videocompress.MediaController.getInstance().convertVideo(params[0], params[1]);
-        }
-
-        @Override
-        protected void onPostExecute(Boolean compressed) {
-            super.onPostExecute(compressed);
-            DialogManager.hideProgress();
-            if (compressed) {
-                //showToast(PromoterVideoGalleryActivity.this, getString(R.string.uploading_video));
-                //uploadVideoFile();
-                //Intent intent = new Intent(PromoterVideoGalleryActivity.this, VideoStoryPreviewActivity.class);
-                Intent intent = new Intent(PromoterVideoGalleryActivity.this, VideoPreviewOnDemandActivity.class);
-                intent.putExtra("file_uri", Uri.fromFile(videoFile));
-                intent.putExtra("mVideoPathUri", mVideoPathUri);
-                intent.putExtra("bundle_data", mMyProfileResModel);
-                startActivity(intent);
-            }
-        }
-    }
 
 }

@@ -90,7 +90,6 @@ dependencies {
 
     implementation project(':gpuv')
     implementation project(':libvlc')
-    implementation project(':videocompress')
 
     implementation 'de.hdodenhof:circleimageview:2.1.0'
     implementation 'com.google.android:flexbox:0.3.0'
