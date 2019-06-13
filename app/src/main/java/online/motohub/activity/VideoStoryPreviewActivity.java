@@ -10,7 +10,6 @@ import android.graphics.Bitmap;
 import android.media.MediaPlayer;
 import android.media.ThumbnailUtils;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -514,33 +513,6 @@ public class VideoStoryPreviewActivity extends BaseActivity implements MediaPlay
                 + COMPRESSED_VIDEO_FOLDER + System.currentTimeMillis() + "COMPRESSED_VIDEO.mp4";
         return mCompressedVideoPath;
 
-    }
-
-    @SuppressLint("StaticFieldLeak")
-    class VideoCompressor extends AsyncTask<String, Void, Boolean> {
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            pDialog.setMessage("Please wait ...");
-            showDialog();
-        }
-
-        @Override
-        protected Boolean doInBackground(String... params) {
-            return com.yovenny.videocompress.MediaController.getInstance().convertVideo(params[0], params[1]);
-        }
-
-        @Override
-        protected void onPostExecute(Boolean compressed) {
-            super.onPostExecute(compressed);
-            hideDialog();
-            if (compressed) {
-                //showToast(PromoterVideoGalleryActivity.this, getString(R.string.uploading_video));
-                //uploadVideoToServer(mCompressedVideoPath);
-
-            }
-        }
     }
 
 

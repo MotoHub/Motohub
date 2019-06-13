@@ -1,6 +1,5 @@
 package online.motohub.activity;
 
-import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -686,20 +685,6 @@ public class PromoterVideoGalleryActivity extends BaseActivity {
         }
     }
 
-    public String getPathVideo(Uri uri) {
-        String[] projection = {MediaStore.Video.Media.DATA};
-        Cursor cursor = getContentResolver().query(uri, projection, null, null, null);
-        if (cursor != null) {
-            // HERE YOU WILL GET A NULLPOINTER IF CURSOR IS NULL
-            // THIS CAN BE, IF YOU USED OI FILE MANAGER FOR PICKING THE MEDIA
-            int column_index = cursor
-                    .getColumnIndexOrThrow(MediaStore.Video.Media.DATA);
-            cursor.moveToFirst();
-            return cursor.getString(column_index);
-        } else
-            return null;
-    }
-
     void startVideoPreviewOnDemandActivity() {
         Intent intent = new Intent(PromoterVideoGalleryActivity.this, VideoPreviewOnDemandActivity.class);
         intent.putExtra("file_uri", Uri.fromFile(videoFile));
@@ -708,35 +693,5 @@ public class PromoterVideoGalleryActivity extends BaseActivity {
         startActivity(intent);
     }
 
-    @SuppressLint("StaticFieldLeak")
-    class VideoCompressor extends AsyncTask<String, Void, Boolean> {
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            DialogManager.showProgress(PromoterVideoGalleryActivity.this);
-        }
-
-        @Override
-        protected Boolean doInBackground(String... params) {
-            return com.yovenny.videocompress.MediaController.getInstance().convertVideo(params[0], params[1]);
-        }
-
-        @Override
-        protected void onPostExecute(Boolean compressed) {
-            super.onPostExecute(compressed);
-            DialogManager.hideProgress();
-            if (compressed) {
-                //showToast(PromoterVideoGalleryActivity.this, getString(R.string.uploading_video));
-                //uploadVideoFile();
-                //Intent intent = new Intent(PromoterVideoGalleryActivity.this, VideoStoryPreviewActivity.class);
-                Intent intent = new Intent(PromoterVideoGalleryActivity.this, VideoPreviewOnDemandActivity.class);
-                intent.putExtra("file_uri", Uri.fromFile(videoFile));
-                intent.putExtra("mVideoPathUri", mVideoPathUri);
-                intent.putExtra("bundle_data", mMyProfileResModel);
-                startActivity(intent);
-            }
-        }
-    }
 
 }

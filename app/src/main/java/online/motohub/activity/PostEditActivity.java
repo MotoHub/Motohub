@@ -6,7 +6,6 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.media.ThumbnailUtils;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -35,7 +34,6 @@ import com.google.android.flexbox.FlexboxLayoutManager;
 import com.google.android.flexbox.JustifyContent;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.yovenny.videocompress.MediaController;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -762,31 +760,6 @@ public class PostEditActivity extends BaseActivity implements
             mTagProfilesRecyclerView.setVisibility(View.VISIBLE);
         } else {
             mTagProfilesRecyclerView.setVisibility(View.GONE);
-        }
-    }
-
-    class VideoCompressor extends AsyncTask<String, Void, Boolean> {
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            DialogManager.showProgress(PostEditActivity.this);
-        }
-
-        @Override
-        protected Boolean doInBackground(String... params) {
-            return MediaController.getInstance().convertVideo(params[0], params[1]);
-        }
-
-        @Override
-        protected void onPostExecute(Boolean compressed) {
-            super.onPostExecute(compressed);
-            DialogManager.hideProgress();
-            if (compressed) {
-                showToast(PostEditActivity
-                        .this, getString(R.string.uploading_video));
-                startUploadVideoService();
-            }
         }
     }
 
