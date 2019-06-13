@@ -685,20 +685,6 @@ public class PromoterVideoGalleryActivity extends BaseActivity {
         }
     }
 
-    public String getPathVideo(Uri uri) {
-        String[] projection = {MediaStore.Video.Media.DATA};
-        Cursor cursor = getContentResolver().query(uri, projection, null, null, null);
-        if (cursor != null) {
-            // HERE YOU WILL GET A NULLPOINTER IF CURSOR IS NULL
-            // THIS CAN BE, IF YOU USED OI FILE MANAGER FOR PICKING THE MEDIA
-            int column_index = cursor
-                    .getColumnIndexOrThrow(MediaStore.Video.Media.DATA);
-            cursor.moveToFirst();
-            return cursor.getString(column_index);
-        } else
-            return null;
-    }
-
     void startVideoPreviewOnDemandActivity() {
         Intent intent = new Intent(PromoterVideoGalleryActivity.this, VideoPreviewOnDemandActivity.class);
         intent.putExtra("file_uri", Uri.fromFile(videoFile));
