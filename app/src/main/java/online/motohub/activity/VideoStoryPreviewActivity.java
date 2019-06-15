@@ -57,10 +57,10 @@ import online.motohub.model.SpectatorLiveEntity;
 import online.motohub.model.SpectatorLiveModel;
 import online.motohub.model.promoter_club_news_media.PromotersResModel;
 import online.motohub.retrofit.RetrofitClient;
-import online.motohub.util.AppConstants;
+import online.motohub.constants.AppConstants;
+import online.motohub.services.SpectatorFileUploadService;
 import online.motohub.util.DialogManager;
-import online.motohub.util.UploadJobScheduler;
-import online.motohub.util.UploadOfflineVideos;
+import online.motohub.services.UploadJobScheduler;
 import online.motohub.util.UrlUtils;
 
 
@@ -244,7 +244,7 @@ public class VideoStoryPreviewActivity extends BaseActivity implements MediaPlay
             String json = g.toJson(entity);
             databaseHandler.insertSpectatorLiveVideo(entity);
             //scheduleJob1(json);
-            Intent service_intent = new Intent(this, UploadOfflineVideos.class);
+            Intent service_intent = new Intent(this, SpectatorFileUploadService.class);
             service_intent.putExtra("data", json);
             startService(service_intent);
             finish();

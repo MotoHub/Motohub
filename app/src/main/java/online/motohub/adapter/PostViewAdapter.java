@@ -73,7 +73,7 @@ import online.motohub.model.VideoShareModel;
 import online.motohub.model.promoter_club_news_media.PromotersModel;
 import online.motohub.model.promoter_club_news_media.PromotersResModel;
 import online.motohub.retrofit.RetrofitClient;
-import online.motohub.util.AppConstants;
+import online.motohub.constants.AppConstants;
 import online.motohub.util.UrlUtils;
 import online.motohub.util.Utility;
 

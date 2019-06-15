@@ -8,7 +8,7 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import java.util.ArrayList;
 
 import online.motohub.R;
-import online.motohub.util.AppConstants;
+import online.motohub.constants.AppConstants;
 
 public class BusinessViewPagerAdapter extends FragmentStatePagerAdapter {
 

@@ -26,6 +26,7 @@ import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
+import online.motohub.constants.AppConstants;
 import online.motohub.database.DatabaseHandler;
 import online.motohub.model.GalleryImgModel;
 import online.motohub.model.PostsModel;

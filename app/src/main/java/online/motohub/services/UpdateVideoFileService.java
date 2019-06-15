@@ -1,4 +1,4 @@
-package online.motohub.util;
+package online.motohub.services;
 
 import android.app.IntentService;
 import android.app.Notification;
@@ -28,6 +28,9 @@ import online.motohub.model.PostsResModel;
 import online.motohub.model.VideoUploadModel;
 import online.motohub.retrofit.APIConstants;
 import online.motohub.retrofit.RetrofitClient;
+import online.motohub.util.NotificationUtils;
+import online.motohub.util.PreferenceUtils;
+import online.motohub.util.ProgressRequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;

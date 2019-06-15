@@ -50,7 +50,7 @@ import online.motohub.model.promoter_club_news_media.PromotersResModel;
 import online.motohub.retrofit.RetrofitClient;
 import online.motohub.util.DialogManager;
 import online.motohub.util.PreferenceUtils;
-import online.motohub.util.UploadFileService;
+import online.motohub.services.UploadFileService;
 
 public class BusinessWritePostActivity extends BaseActivity {
 

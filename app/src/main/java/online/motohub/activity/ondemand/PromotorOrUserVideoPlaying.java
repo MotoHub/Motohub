@@ -67,7 +67,7 @@ import online.motohub.model.VideoLikesModel;
 import online.motohub.model.promoter_club_news_media.PromoterFollowerModel;
 import online.motohub.retrofit.APIConstants;
 import online.motohub.retrofit.RetrofitClient;
-import online.motohub.util.AppConstants;
+import online.motohub.constants.AppConstants;
 import online.motohub.util.CommonAPI;
 import online.motohub.util.DialogManager;
 import online.motohub.util.OnSwipeTouchListener;

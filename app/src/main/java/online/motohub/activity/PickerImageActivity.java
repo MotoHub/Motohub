@@ -41,7 +41,7 @@ import online.motohub.model.LocalFolderModel;
 import online.motohub.model.LocalImgModel;
 import online.motohub.model.VideoUploadModel;
 import online.motohub.util.DialogManager;
-import online.motohub.util.ProfileImageService;
+import online.motohub.services.ProfileImageService;
 import online.motohub.util.ZoomImageView;
 
 
