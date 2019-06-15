@@ -1,4 +1,4 @@
-package online.motohub.util;
+package online.motohub.services;
 
 import android.annotation.SuppressLint;
 import android.app.IntentService;
@@ -23,18 +23,22 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import java.io.File;
-import java.util.ArrayList;
 
+import online.motohub.constants.AppConstants;
 import online.motohub.database.DatabaseHandler;
+import online.motohub.enums.UploadStatus;
 import online.motohub.model.SpectatorLiveEntity;
 import online.motohub.model.SpectatorLiveModel;
 import online.motohub.model.VideoUploadModel;
 import online.motohub.retrofit.RetrofitClient;
+import online.motohub.util.NotificationUtils;
+import online.motohub.util.ProgressRequestBody;
+import online.motohub.util.UrlUtils;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class UploadOfflineVideos extends IntentService implements ProgressRequestBody.UploadCallbacks {
+public class SpectatorFileUploadService extends IntentService implements ProgressRequestBody.UploadCallbacks {
 
     private TransferObserver observerVideo;
     private TransferObserver observerImage;
@@ -43,57 +47,26 @@ public class UploadOfflineVideos extends IntentService implements ProgressReques
     private NotificationCompat.Builder mNotificationCompatBuilder;
     private Notification mNotification;
     private int mProfileID, mUserId;
-    private String mUserType = AppConstants.USER_EVENT_VIDEOS, mCaption = "";
-    private VideoUploadModel post, videoUploadModel;
-    private String mVideoPath;
+    private String mCaption = "";
+    private VideoUploadModel videoUploadModel;
     private File mThumbImgFile;
     private int mEventId;
     private String mEventFinishDate;
     private int mLivePostProfileID;
-    private ArrayList<SpectatorLiveEntity> list;
 
-    public UploadOfflineVideos() {
-        super(UploadOfflineVideos.class.getName());
+    public SpectatorFileUploadService() {
+        super(SpectatorFileUploadService.class.getName());
     }
 
     @Override
     protected void onHandleIntent(@Nullable Intent intent) {
         assert intent != null;
-        AWSMobileClient.getInstance().initialize(this).execute();
-        String data = intent.getStringExtra("data");
-        Gson g = new Gson();
-        SpectatorLiveEntity myObj = g.fromJson(data, SpectatorLiveEntity.class);
-        doTask(myObj);
-    }
 
-    private void doTask(SpectatorLiveEntity myObj) {
-        /*if (list.size() > 0) {
-            SpectatorLiveEntity myObj;
-            for (int mFinalValue = 0; mFinalValue < list.size(); mFinalValue++) {
-                try {
-                    myObj = list.get(mFinalValue);
-                    uploadFileNotification(UploadOfflineVideos.this, myObj);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-            *//*Runnable r = new Runnable() {
-                public void run() {
-                    for (int mFinalValue = 0; mFinalValue < list.size(); mFinalValue++) {
-                        synchronized (this) {
-                            try {
-                                uploadFileNotification(UploadOfflineVideos.this, list.get(mFinalValue));
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    }
-                }
-            };
-            Thread t = new Thread(r);
-            t.start();*//*
-        }*/
-        uploadFileNotification(UploadOfflineVideos.this, myObj);
+        AWSMobileClient.getInstance().initialize(this).execute();
+
+        AppConstants.UPLOAD_STATUS = UploadStatus.STARTED;
+
+        uploadFileNotification(this, new Gson().fromJson(intent.getStringExtra("data"), SpectatorLiveEntity.class));
     }
 
     @Override
@@ -133,7 +106,7 @@ public class UploadOfflineVideos extends IntentService implements ProgressReques
         mProfileID = Integer.parseInt(entity.getProfileID());
         mUserId = Integer.parseInt(entity.getUserID());
         mCaption = entity.getCaption();
-        mVideoPath = entity.getVideoUrl();
+        String mVideoPath = entity.getVideoUrl();
         mThumbImgFile = new File(entity.getThumbnail());
         mEventId = Integer.parseInt(entity.getEventID());
         mEventFinishDate = entity.getEventFinishDate();
@@ -150,6 +123,7 @@ public class UploadOfflineVideos extends IntentService implements ProgressReques
         videoUploadModel.setThumbnailURl(mThumbImgFile.toString());
         videoUploadModel.setProfileID(mProfileID);
         videoUploadModel.setNotificationflag(notificationid);
+        String mUserType = AppConstants.USER_EVENT_VIDEOS;
         videoUploadModel.setUserType(mUserType);
         databaseHandler.addVideoDetails(videoUploadModel);
 
@@ -179,7 +153,7 @@ public class UploadOfflineVideos extends IntentService implements ProgressReques
         credentials = new BasicAWSCredentials(AppConstants.KEY, AppConstants.SECRET);
         s3 = new AmazonS3Client(credentials, configuration);
         s3.setRegion(Region.getRegion(Regions.AP_SOUTHEAST_2));
-        transferUtility = new TransferUtility(s3, UploadOfflineVideos.this);*/
+        transferUtility = new TransferUtility(s3, SpectatorFileUploadService.this);*/
 
         TransferUtility transferUtility =
                 TransferUtility.builder()
@@ -237,7 +211,8 @@ public class UploadOfflineVideos extends IntentService implements ProgressReques
 
             @Override
             public void onError(int id, Exception ex) {
-                Toast.makeText(UploadOfflineVideos.this, "" + ex.getMessage(), Toast.LENGTH_SHORT).show();
+                AppConstants.UPLOAD_STATUS = UploadStatus.FAILED;
+                Toast.makeText(SpectatorFileUploadService.this, "" + ex.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -257,7 +232,8 @@ public class UploadOfflineVideos extends IntentService implements ProgressReques
 
             @Override
             public void onError(int id, Exception ex) {
-                Toast.makeText(UploadOfflineVideos.this, "" + ex.getMessage(), Toast.LENGTH_SHORT).show();
+                AppConstants.UPLOAD_STATUS = UploadStatus.FAILED;
+                Toast.makeText(SpectatorFileUploadService.this, "" + ex.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -280,6 +256,7 @@ public class UploadOfflineVideos extends IntentService implements ProgressReques
 
     @SuppressWarnings("SameParameterValue")
     private void onDownloadComplete(String value, int mNotificationID, String id, boolean isSuccess) {
+        AppConstants.UPLOAD_STATUS = UploadStatus.FAILED;
         try {
             DatabaseHandler databaseHandler = new DatabaseHandler(this);
             int checkCount = databaseHandler.getPendingCount();
@@ -296,6 +273,7 @@ public class UploadOfflineVideos extends IntentService implements ProgressReques
             }
             if (mNotificationID > 0) {
                 if (isSuccess) {
+                    AppConstants.UPLOAD_STATUS = UploadStatus.COMPLETED;
                     databaseHandler.deletepost(mNotificationID);
                     if (id != null && !id.equals(""))
                         databaseHandler.deleteRow(id);

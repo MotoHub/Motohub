@@ -1,4 +1,4 @@
-package online.motohub.util;
+package online.motohub.services;
 
 import android.annotation.SuppressLint;
 import android.app.IntentService;
@@ -36,6 +36,11 @@ import online.motohub.model.ImageModel;
 import online.motohub.model.OnDemandVideoUploadedResponse;
 import online.motohub.model.VideoUploadModel;
 import online.motohub.retrofit.RetrofitClient;
+import online.motohub.constants.AppConstants;
+import online.motohub.util.NotificationUtils;
+import online.motohub.util.PreferenceUtils;
+import online.motohub.util.ProgressRequestBody;
+import online.motohub.util.UrlUtils;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;

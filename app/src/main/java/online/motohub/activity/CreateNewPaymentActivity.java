@@ -40,7 +40,7 @@ import online.motohub.model.EventsModel;
 import online.motohub.model.PaymentCardDetailsModel;
 import online.motohub.model.SessionModel;
 import online.motohub.retrofit.RetrofitClient;
-import online.motohub.util.AppConstants;
+import online.motohub.constants.AppConstants;
 import online.motohub.util.CryptLib;
 import online.motohub.util.DialogManager;
 import online.motohub.util.PreferenceUtils;

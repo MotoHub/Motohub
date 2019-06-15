@@ -32,7 +32,7 @@ import online.motohub.activity.MyMotoFileActivity;
 import online.motohub.activity.OthersMotoFileActivity;
 import online.motohub.model.GroupChatMsgResModel;
 import online.motohub.model.ProfileResModel;
-import online.motohub.util.AppConstants;
+import online.motohub.constants.AppConstants;
 import online.motohub.util.PreferenceUtils;
 import online.motohub.util.UrlUtils;
 

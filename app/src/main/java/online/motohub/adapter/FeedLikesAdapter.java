@@ -18,7 +18,7 @@ import online.motohub.R;
 import online.motohub.activity.BaseActivity;
 import online.motohub.model.FeedLikesModel;
 import online.motohub.model.ProfileResModel;
-import online.motohub.util.AppConstants;
+import online.motohub.constants.AppConstants;
 import online.motohub.util.Utility;
 
 public class FeedLikesAdapter extends RecyclerView.Adapter<FeedLikesAdapter.Holder> {

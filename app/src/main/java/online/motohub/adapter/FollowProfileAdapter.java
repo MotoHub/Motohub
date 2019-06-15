@@ -16,7 +16,7 @@ import online.motohub.activity.BaseActivity;
 import online.motohub.activity.ViewProfileActivity;
 import online.motohub.model.FollowProfileEntity;
 import online.motohub.model.ProfileResModel;
-import online.motohub.util.AppConstants;
+import online.motohub.constants.AppConstants;
 import online.motohub.util.CommonAPI;
 import online.motohub.util.Utility;
 

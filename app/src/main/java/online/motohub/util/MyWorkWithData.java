@@ -28,6 +28,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.Objects;
 
+import online.motohub.constants.AppConstants;
 import online.motohub.database.DatabaseHandler;
 import online.motohub.model.GalleryImgModel;
 import online.motohub.model.PostsModel;
@@ -39,7 +40,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static online.motohub.util.UploadFileService.NOTIFY_POST_VIDEO_UPDATED;
+import static online.motohub.services.UploadFileService.NOTIFY_POST_VIDEO_UPDATED;
 
 public class MyWorkWithData extends Worker implements ProgressRequestBody.UploadCallbacks {
 

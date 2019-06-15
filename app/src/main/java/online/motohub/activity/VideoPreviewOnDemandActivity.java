@@ -32,9 +32,9 @@ import online.motohub.R;
 import online.motohub.model.EventsResModel;
 import online.motohub.model.ProfileResModel;
 import online.motohub.retrofit.RetrofitClient;
-import online.motohub.util.AppConstants;
+import online.motohub.constants.AppConstants;
 import online.motohub.util.DialogManager;
-import online.motohub.util.ProfileUploadService;
+import online.motohub.services.ProfileUploadService;
 
 public class VideoPreviewOnDemandActivity extends BaseActivity implements MediaPlayer.OnPreparedListener, MediaPlayer.OnCompletionListener {
 

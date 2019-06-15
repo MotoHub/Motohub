@@ -11,8 +11,11 @@ import com.google.gson.Gson;
 
 import java.util.ArrayList;
 
+import online.motohub.constants.AppConstants;
 import online.motohub.database.DatabaseHandler;
+import online.motohub.enums.UploadStatus;
 import online.motohub.model.SpectatorLiveEntity;
+import online.motohub.services.SpectatorFileUploadService;
 
 public class ConnectivityChangeReceiver extends BroadcastReceiver {
     @Override
@@ -20,7 +23,7 @@ public class ConnectivityChangeReceiver extends BroadcastReceiver {
         if (intent.getAction().equalsIgnoreCase("android.net.conn.CONNECTIVITY_CHANGE")) {
             Log.e("CONNECTIVITY_STATUS -->", "TRUE");
             boolean isLoggedIn = PreferenceUtils.getInstance(context).getBooleanData(PreferenceUtils.USER_KEEP_LOGGED_IN);
-            if (isLoggedIn && isNetworkConnected(context))
+            if (isLoggedIn && isNetworkConnected(context)&& AppConstants.UPLOAD_STATUS!= UploadStatus.STARTED)
                 Log.e("CONNECTIVITY -->", "TRUE");
             uploadOffline(context);
         }
@@ -31,7 +34,7 @@ public class ConnectivityChangeReceiver extends BroadcastReceiver {
         ArrayList<SpectatorLiveEntity> mList = handler.getSpectatorLiveVideos();
         if (mList.size() > 0) {
             for (int i = 0; i < mList.size(); i++) {
-                Intent service_intent = new Intent(context, UploadOfflineVideos.class);
+                Intent service_intent = new Intent(context, SpectatorFileUploadService.class);
                 String data = new Gson().toJson(mList.get(i));
                 service_intent.putExtra("data", data);
                 context.startService(service_intent);

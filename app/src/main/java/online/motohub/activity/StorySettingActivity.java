@@ -38,7 +38,7 @@ import online.motohub.model.ProfileResModel;
 import online.motohub.model.SpectatorLiveModel;
 import online.motohub.retrofit.APIConstants;
 import online.motohub.retrofit.RetrofitClient;
-import online.motohub.util.AppConstants;
+import online.motohub.constants.AppConstants;
 import online.motohub.util.DialogManager;
 
 public class StorySettingActivity extends BaseActivity {

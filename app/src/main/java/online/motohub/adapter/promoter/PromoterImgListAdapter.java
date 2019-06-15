@@ -18,7 +18,7 @@ import java.util.List;
 import online.motohub.R;
 import online.motohub.activity.LoadVideoFromServerActivity;
 import online.motohub.activity.promoter.PromoterGalleryViewPager;
-import online.motohub.util.AppConstants;
+import online.motohub.constants.AppConstants;
 import online.motohub.util.UrlUtils;
 
 public class PromoterImgListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
