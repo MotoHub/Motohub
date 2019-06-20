@@ -49,7 +49,7 @@ import online.motohub.model.ImageModel;
 import online.motohub.model.ImageResModel;
 import online.motohub.model.SessionModel;
 import online.motohub.retrofit.RetrofitClient;
-import online.motohub.util.AppConstants;
+import online.motohub.constants.AppConstants;
 import online.motohub.util.DialogManager;
 import online.motohub.util.PreferenceUtils;
 import online.motohub.util.RecyclerClick_Listener;

@@ -10,7 +10,6 @@ import android.graphics.Bitmap;
 import android.media.MediaPlayer;
 import android.media.ThumbnailUtils;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -58,10 +57,10 @@ import online.motohub.model.SpectatorLiveEntity;
 import online.motohub.model.SpectatorLiveModel;
 import online.motohub.model.promoter_club_news_media.PromotersResModel;
 import online.motohub.retrofit.RetrofitClient;
-import online.motohub.util.AppConstants;
+import online.motohub.constants.AppConstants;
+import online.motohub.services.SpectatorFileUploadService;
 import online.motohub.util.DialogManager;
-import online.motohub.util.UploadJobScheduler;
-import online.motohub.util.UploadOfflineVideos;
+import online.motohub.services.UploadJobScheduler;
 import online.motohub.util.UrlUtils;
 
 
@@ -245,7 +244,7 @@ public class VideoStoryPreviewActivity extends BaseActivity implements MediaPlay
             String json = g.toJson(entity);
             databaseHandler.insertSpectatorLiveVideo(entity);
             //scheduleJob1(json);
-            Intent service_intent = new Intent(this, UploadOfflineVideos.class);
+            Intent service_intent = new Intent(this, SpectatorFileUploadService.class);
             service_intent.putExtra("data", json);
             startService(service_intent);
             finish();
@@ -514,33 +513,6 @@ public class VideoStoryPreviewActivity extends BaseActivity implements MediaPlay
                 + COMPRESSED_VIDEO_FOLDER + System.currentTimeMillis() + "COMPRESSED_VIDEO.mp4";
         return mCompressedVideoPath;
 
-    }
-
-    @SuppressLint("StaticFieldLeak")
-    class VideoCompressor extends AsyncTask<String, Void, Boolean> {
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            pDialog.setMessage("Please wait ...");
-            showDialog();
-        }
-
-        @Override
-        protected Boolean doInBackground(String... params) {
-            return com.yovenny.videocompress.MediaController.getInstance().convertVideo(params[0], params[1]);
-        }
-
-        @Override
-        protected void onPostExecute(Boolean compressed) {
-            super.onPostExecute(compressed);
-            hideDialog();
-            if (compressed) {
-                //showToast(PromoterVideoGalleryActivity.this, getString(R.string.uploading_video));
-                //uploadVideoToServer(mCompressedVideoPath);
-
-            }
-        }
     }
 
 

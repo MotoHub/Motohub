@@ -480,10 +480,10 @@
             </intent-filter>
         </service>
         <service
-            android:name=".util.UploadFileService"
+            android:name=".services.UploadFileService"
             android:exported="false" />
         <service
-            android:name=".util.UpdateVideoFileService"
+            android:name=".services.UpdateVideoFileService"
             android:exported="false" />
 
         <activity
@@ -512,11 +512,11 @@
             android:windowSoftInputMode="stateHidden|adjustPan" />
 
         <service
-            android:name=".util.ProfileUploadService"
+            android:name=".services.ProfileUploadService"
             android:enabled="true"
             android:exported="true" />
         <service
-            android:name=".util.ProfileImageService"
+            android:name=".services.ProfileImageService"
             android:enabled="true"
             android:exported="true" />
 
@@ -723,17 +723,22 @@
             android:enabled="true" />
 
         <service
-            android:name=".util.UploadJobService"
+            android:name=".services.UploadJobService"
             android:exported="true"
             android:permission="android.permission.BIND_JOB_SERVICE" />
 
         <service
-            android:name=".util.UploadJobScheduler"
+            android:name=".services.UploadJobScheduler"
             android:exported="true"
             android:permission="android.permission.BIND_JOB_SERVICE" />
 
         <service
-            android:name=".util.UploadOfflineVideos"
+            android:name=".services.SpectatorFileUploadService"
+            android:enabled="true"
+            android:exported="true" />
+
+        <service
+            android:name=".services.SpectatorFileUploadOfflineService"
             android:enabled="true"
             android:exported="true" />
 

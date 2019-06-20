@@ -10,9 +10,6 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
-import com.pedro.vlc.VlcListener;
-import com.pedro.vlc.VlcVideoLibrary;
-
 import java.util.ArrayList;
 
 import butterknife.BindString;
@@ -25,9 +22,11 @@ import online.motohub.model.LiveStreamResponse;
 import online.motohub.model.SessionModel;
 import online.motohub.retrofit.APIConstants;
 import online.motohub.retrofit.RetrofitClient;
-import online.motohub.util.AppConstants;
+import online.motohub.constants.AppConstants;
 import online.motohub.util.DialogManager;
 import online.motohub.util.PreferenceUtils;
+import online.motohub.vlc.VlcListener;
+import online.motohub.vlc.VlcVideoLibrary;
 
 public class PromoterLiveStreamViewActivity extends BaseActivity implements VlcListener {
 

@@ -21,7 +21,7 @@ import online.motohub.R;
 import online.motohub.fragment.dialog.AppDialogFragment;
 import online.motohub.model.PushTokenModel;
 import online.motohub.retrofit.RetrofitClient;
-import online.motohub.util.AppConstants;
+import online.motohub.constants.AppConstants;
 import online.motohub.util.DialogManager;
 import online.motohub.util.PreferenceUtils;
 

@@ -41,7 +41,7 @@ import online.motohub.model.VideoCommentReplyModel;
 import online.motohub.model.VideoCommentsModel;
 import online.motohub.model.VideoReplyLikeModel;
 import online.motohub.retrofit.RetrofitClient;
-import online.motohub.util.AppConstants;
+import online.motohub.constants.AppConstants;
 import online.motohub.util.UrlUtils;
 
 public class VideoCommentsReplyAdapter extends RecyclerView.Adapter<VideoCommentsReplyAdapter.Holder> {

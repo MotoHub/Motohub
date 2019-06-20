@@ -20,7 +20,7 @@ import online.motohub.model.PostReportModel;
 import online.motohub.model.PostsModel;
 import online.motohub.model.ProfileModel;
 import online.motohub.retrofit.RetrofitClient;
-import online.motohub.util.AppConstants;
+import online.motohub.constants.AppConstants;
 import online.motohub.util.CommonAPI;
 import online.motohub.util.DialogManager;
 

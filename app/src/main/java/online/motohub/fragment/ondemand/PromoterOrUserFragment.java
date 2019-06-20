@@ -58,7 +58,7 @@ import online.motohub.model.VideoCommentsModel;
 import online.motohub.model.VideoLikesModel;
 import online.motohub.model.VideoShareModel;
 import online.motohub.retrofit.RetrofitClient;
-import online.motohub.util.AppConstants;
+import online.motohub.constants.AppConstants;
 import online.motohub.util.PreferenceUtils;
 import online.motohub.util.Utility;
 import rx.Observer;
@@ -681,32 +681,4 @@ public class PromoterOrUserFragment extends BaseFragment implements SwipeRefresh
         intent.putExtra("bundle_data", mMyProfileResModel);
         startActivity(intent);
     }
-
-    /*@SuppressLint("StaticFieldLeak")
-    class VideoCompressor extends AsyncTask<String, Void, Boolean> {
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            DialogManager.showProgress(getActivity());
-        }
-
-        @Override
-        protected Boolean doInBackground(String... params) {
-            return com.yovenny.videocompress.MediaController.getInstance().convertVideo(params[0], params[1]);
-        }
-
-        @Override
-        protected void onPostExecute(Boolean compressed) {
-            super.onPostExecute(compressed);
-            DialogManager.hideProgress();
-            if (compressed) {
-                Intent intent = new Intent(getActivity(), VideoPreviewOnDemandActivity.class);
-                intent.putExtra("file_uri", Uri.fromFile(videoFile));
-                intent.putExtra("mVideoPathUri", mVideoPathUri);
-                intent.putExtra("bundle_data", mMyProfileResModel);
-                startActivity(intent);
-            }
-        }
-    }*/
 }

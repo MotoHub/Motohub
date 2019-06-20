@@ -7,7 +7,6 @@ import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.media.ThumbnailUtils;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -43,10 +42,10 @@ import online.motohub.model.GalleryVideoModel;
 import online.motohub.model.GalleryVideoResModel;
 import online.motohub.model.SessionModel;
 import online.motohub.retrofit.RetrofitClient;
-import online.motohub.util.AppConstants;
+import online.motohub.constants.AppConstants;
 import online.motohub.util.DialogManager;
 import online.motohub.util.PreferenceUtils;
-import online.motohub.util.ProfileUploadService;
+import online.motohub.services.ProfileUploadService;
 import online.motohub.util.RecyclerClick_Listener;
 import online.motohub.util.RecyclerTouchListener;
 import online.motohub.util.ToolbarActionModeCallbackVideos;
@@ -405,30 +404,6 @@ public class ProfileVideoGalleryActivity extends BaseActivity {
                         retrofitOnFailure();
                     }
                 });
-    }
-
-    class VideoCompressor extends AsyncTask<String, Void, Boolean> {
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            DialogManager.showProgress(ProfileVideoGalleryActivity.this);
-        }
-
-        @Override
-        protected Boolean doInBackground(String... params) {
-            return com.yovenny.videocompress.MediaController.getInstance().convertVideo(params[0], params[1]);
-        }
-
-        @Override
-        protected void onPostExecute(Boolean compressed) {
-            super.onPostExecute(compressed);
-            DialogManager.hideProgress();
-            if (compressed) {
-                showToast(ProfileVideoGalleryActivity.this, getString(R.string.uploading_video));
-                uploadVideoFile();
-            }
-        }
     }
 
 }

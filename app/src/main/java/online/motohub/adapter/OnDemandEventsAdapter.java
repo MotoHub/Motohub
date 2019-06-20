@@ -40,7 +40,7 @@ import online.motohub.model.promoter_club_news_media.PromoterFollowerModel;
 import online.motohub.model.promoter_club_news_media.PromoterFollowerResModel;
 import online.motohub.retrofit.APIConstants;
 import online.motohub.retrofit.RetrofitClient;
-import online.motohub.util.AppConstants;
+import online.motohub.constants.AppConstants;
 import online.motohub.util.DialogManager;
 import retrofit2.Call;
 import retrofit2.Callback;
