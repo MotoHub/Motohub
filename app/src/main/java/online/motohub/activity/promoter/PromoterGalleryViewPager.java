@@ -18,7 +18,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import online.motohub.R;
 import online.motohub.activity.BaseActivity;
-import online.motohub.util.DialogManager;
+import online.motohub.dialog.DialogManager;
 import online.motohub.util.UrlUtils;
 import online.motohub.util.ZoomImageView;
 

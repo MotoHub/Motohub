@@ -13,7 +13,7 @@ import butterknife.OnClick;
 import online.motohub.R;
 import online.motohub.activity.BaseActivity;
 import online.motohub.adapter.promoter.PromoterImgListAdapter;
-import online.motohub.util.DialogManager;
+import online.motohub.dialog.DialogManager;
 
 public class PromotersImgListActivity extends BaseActivity {
     @BindView(R.id.toolbar)

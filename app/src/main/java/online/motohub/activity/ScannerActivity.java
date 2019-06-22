@@ -14,7 +14,7 @@ import com.google.zxing.Result;
 
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
 import online.motohub.interfaces.CommonInterface;
-import online.motohub.util.DialogManager;
+import online.motohub.dialog.DialogManager;
 
 import static android.Manifest.permission.CAMERA;
 

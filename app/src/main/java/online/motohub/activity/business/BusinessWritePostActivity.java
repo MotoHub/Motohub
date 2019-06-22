@@ -48,7 +48,7 @@ import online.motohub.model.ImageResModel;
 import online.motohub.model.PostsModel;
 import online.motohub.model.promoter_club_news_media.PromotersResModel;
 import online.motohub.retrofit.RetrofitClient;
-import online.motohub.util.DialogManager;
+import online.motohub.dialog.DialogManager;
 import online.motohub.util.PreferenceUtils;
 import online.motohub.services.UploadFileService;
 

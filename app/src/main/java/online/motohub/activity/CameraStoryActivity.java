@@ -40,7 +40,7 @@ import online.motohub.interfaces.PermissionCallback;
 import online.motohub.model.EventsModel;
 import online.motohub.model.EventsResModel;
 import online.motohub.util.CustomWatermarkFilter;
-import online.motohub.util.DialogManager;
+import online.motohub.dialog.DialogManager;
 import online.motohub.util.story.ControlView;
 
 public class CameraStoryActivity extends BaseActivity implements View.OnClickListener {

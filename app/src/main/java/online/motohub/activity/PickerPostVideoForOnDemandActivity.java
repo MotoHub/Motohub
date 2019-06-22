@@ -37,7 +37,7 @@ import online.motohub.adapter.GalleryPickerAdapter;
 import online.motohub.interfaces.PermissionCallback;
 import online.motohub.model.LocalFolderModel;
 import online.motohub.model.LocalImgModel;
-import online.motohub.util.DialogManager;
+import online.motohub.dialog.DialogManager;
 
 public class PickerPostVideoForOnDemandActivity extends BaseActivity {
 

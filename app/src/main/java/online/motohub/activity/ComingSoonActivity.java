@@ -9,7 +9,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import online.motohub.R;
-import online.motohub.util.DialogManager;
+import online.motohub.dialog.DialogManager;
 
 public class ComingSoonActivity extends BaseActivity {
 

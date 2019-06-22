@@ -52,7 +52,7 @@ import online.motohub.model.SingleChatRoomModel;
 import online.motohub.model.SingleChatRoomResModel;
 import online.motohub.retrofit.RetrofitClient;
 import online.motohub.util.CommonAPI;
-import online.motohub.util.DialogManager;
+import online.motohub.dialog.DialogManager;
 import online.motohub.util.NotificationUtils1;
 import online.motohub.util.PreferenceUtils;
 import online.motohub.util.Utility;

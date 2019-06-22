@@ -43,7 +43,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import online.motohub.R;
 import online.motohub.constants.AppConstants;
-import online.motohub.util.DialogManager;
+import online.motohub.dialog.DialogManager;
 
 public class LoadVideoFromServerActivity extends BaseActivity {
 

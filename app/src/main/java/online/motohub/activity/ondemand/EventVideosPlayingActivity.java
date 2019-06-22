@@ -75,7 +75,7 @@ import online.motohub.retrofit.APIConstants;
 import online.motohub.retrofit.RetrofitClient;
 import online.motohub.constants.AppConstants;
 import online.motohub.util.CommonAPI;
-import online.motohub.util.DialogManager;
+import online.motohub.dialog.DialogManager;
 import online.motohub.util.OnSwipeTouchListener;
 import online.motohub.util.UrlUtils;
 import online.motohub.util.Utility;

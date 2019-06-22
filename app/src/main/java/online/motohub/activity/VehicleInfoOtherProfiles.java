@@ -31,7 +31,7 @@ import online.motohub.application.MotoHub;
 import online.motohub.model.ProfileResModel;
 import online.motohub.model.VehicleInfoLikeModel;
 import online.motohub.retrofit.RetrofitClient;
-import online.motohub.util.DialogManager;
+import online.motohub.dialog.DialogManager;
 
 public class VehicleInfoOtherProfiles extends BaseActivity {
 

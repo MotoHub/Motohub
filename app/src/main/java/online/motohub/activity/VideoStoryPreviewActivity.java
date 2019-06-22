@@ -59,7 +59,7 @@ import online.motohub.model.promoter_club_news_media.PromotersResModel;
 import online.motohub.retrofit.RetrofitClient;
 import online.motohub.constants.AppConstants;
 import online.motohub.services.SpectatorFileUploadService;
-import online.motohub.util.DialogManager;
+import online.motohub.dialog.DialogManager;
 import online.motohub.services.UploadJobScheduler;
 import online.motohub.util.UrlUtils;
 

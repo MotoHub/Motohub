@@ -85,7 +85,7 @@ import online.motohub.model.VideoReplyLikeModel;
 import online.motohub.model.VideoShareModel;
 import online.motohub.model.promoter_club_news_media.PromoterFollowerModel;
 import online.motohub.model.promoter_club_news_media.PromotersModel;
-import online.motohub.util.DialogManager;
+import online.motohub.dialog.DialogManager;
 import online.motohub.util.PreferenceUtils;
 import online.motohub.util.UrlUtils;
 import retrofit2.Call;

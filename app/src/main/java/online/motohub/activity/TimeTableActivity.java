@@ -29,7 +29,7 @@ import online.motohub.model.SessionModel;
 import online.motohub.retrofit.RetrofitClient;
 import online.motohub.util.DateComparator;
 import online.motohub.util.DateUtil;
-import online.motohub.util.DialogManager;
+import online.motohub.dialog.DialogManager;
 import online.motohub.util.PreferenceUtils;
 
 public class TimeTableActivity extends BaseActivity {

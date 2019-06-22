@@ -40,7 +40,7 @@ import java.util.Arrays;
 import online.motohub.R;
 import online.motohub.application.MotoHub;
 import online.motohub.config.GoCoderSDKPrefs;
-import online.motohub.util.DialogManager;
+import online.motohub.dialog.DialogManager;
 import online.motohub.util.MultiStateButton;
 import online.motohub.util.StatusView;
 

@@ -18,7 +18,7 @@ import butterknife.OnClick;
 import online.motohub.R;
 import online.motohub.constants.AppConstants;
 import online.motohub.util.AutoFocusListener;
-import online.motohub.util.DialogManager;
+import online.motohub.dialog.DialogManager;
 import online.motohub.util.MultiStateButton;
 import online.motohub.util.TimerView;
 

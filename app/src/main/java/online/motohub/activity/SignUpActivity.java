@@ -17,7 +17,7 @@ import online.motohub.R;
 import online.motohub.model.ErrorMessage;
 import online.motohub.model.SignUpResModel;
 import online.motohub.retrofit.RetrofitClient;
-import online.motohub.util.DialogManager;
+import online.motohub.dialog.DialogManager;
 
 public class SignUpActivity extends BaseActivity {
 

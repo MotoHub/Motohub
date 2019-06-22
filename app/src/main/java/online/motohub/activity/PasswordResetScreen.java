@@ -20,7 +20,7 @@ import online.motohub.model.CommonResponse;
 import online.motohub.model.ErrorMessage;
 import online.motohub.retrofit.APIConstants;
 import online.motohub.retrofit.RetrofitClient;
-import online.motohub.util.DialogManager;
+import online.motohub.dialog.DialogManager;
 import online.motohub.util.Utility;
 
 public class PasswordResetScreen extends BaseActivity {

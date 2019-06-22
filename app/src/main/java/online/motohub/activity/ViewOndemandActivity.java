@@ -25,7 +25,7 @@ import online.motohub.model.ProfileModel;
 import online.motohub.model.ProfileResModel;
 import online.motohub.retrofit.RetrofitClient;
 import online.motohub.constants.AppConstants;
-import online.motohub.util.DialogManager;
+import online.motohub.dialog.DialogManager;
 
 /**
  * Created by Prithiv on 5/14/2018.

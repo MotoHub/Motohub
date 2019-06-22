@@ -31,7 +31,7 @@ import online.motohub.model.SingleChatRoomModel;
 import online.motohub.model.SingleChatRoomResModel;
 import online.motohub.model.SingleChatUnreadMsgModel;
 import online.motohub.retrofit.RetrofitClient;
-import online.motohub.util.DialogManager;
+import online.motohub.dialog.DialogManager;
 import online.motohub.util.PreferenceUtils;
 
 public class ChatHomeActivity extends BaseActivity implements TabLayout.OnTabSelectedListener {

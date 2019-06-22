@@ -1,4 +1,4 @@
-package online.motohub.util;
+package online.motohub.dialog;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -25,22 +25,24 @@ import online.motohub.R;
 import online.motohub.activity.BaseActivity;
 import online.motohub.adapter.EventLivePromoterChatAdapter;
 import online.motohub.constants.AppConstants;
+import online.motohub.dialog.BasePopup;
 import online.motohub.interfaces.CommonInterface;
 import online.motohub.interfaces.CommonReturnInterface;
 import online.motohub.interfaces.SharePostInterface;
 import online.motohub.model.EventGrpChatMsgResModel;
 import online.motohub.model.ProfileResModel;
+import online.motohub.util.Utility;
 
 
 public class DialogManager extends BasePopup {
 
-    static Dialog mLiveOptionDialog;
-    static Dialog mUpgradeRacerOptionDialog;
-    static Dialog mAlertDialog;
-    static Dialog mProgressDialog;
-    static Dialog mPromoterChatDialog;
+    private static Dialog mLiveOptionDialog;
+    private static Dialog mUpgradeRacerOptionDialog;
+    private static Dialog mAlertDialog;
+    private static Dialog mProgressDialog;
+    private static Dialog mPromoterChatDialog;
 
-    public static Dialog getDialog(Context mContext, int mLayout) {
+    private static Dialog getDialog(Context mContext, int mLayout) {
 
         Dialog mDialog = new Dialog(mContext, R.style.AppTheme);
         mDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -58,7 +60,7 @@ public class DialogManager extends BasePopup {
         return mDialog;
     }
 
-    public static Dialog getLoaderDialog(Context mContext, int mLayout) {
+    private static Dialog getLoaderDialog(Context mContext, int mLayout) {
 
         Dialog mDialog = new Dialog(mContext, R.style.MyProgressBarTheme);
         mDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -168,9 +170,9 @@ public class DialogManager extends BasePopup {
         mUpgradeRacerOptionDialog.show();
     }
 
-    private static Dialog getLoadingDialog(Context mContext, int mLay) {
+    private static Dialog getLoadingDialog(Context mContext) {
 
-        Dialog mDialog = getLoaderDialog(mContext, mLay);
+        Dialog mDialog = getLoaderDialog(mContext, R.layout.progress);
         mDialog.setCancelable(true);
         mDialog.setCanceledOnTouchOutside(true);
         mDialog.getWindow().setLayout(
@@ -184,7 +186,7 @@ public class DialogManager extends BasePopup {
             mProgressDialog.dismiss();
         }
         try {
-            mProgressDialog = getLoadingDialog(context, R.layout.progress);
+            mProgressDialog = getLoadingDialog(context);
             mProgressDialog.setCancelable(true);
             mProgressDialog.setCanceledOnTouchOutside(true);
             mProgressDialog.setOnKeyListener(new DialogInterface.OnKeyListener() {

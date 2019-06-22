@@ -1,4 +1,4 @@
-package online.motohub.util;
+package online.motohub.dialog;
 
 import android.app.Dialog;
 import android.content.Context;

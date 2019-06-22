@@ -36,7 +36,7 @@ import online.motohub.adapter.LiveCamerasAdapter;
 import online.motohub.model.LiveStreamEntity;
 import online.motohub.model.LiveStreamResponse;
 import online.motohub.retrofit.RetrofitClient;
-import online.motohub.util.DialogManager;
+import online.motohub.dialog.DialogManager;
 
 
 public class LiveStreamingActivity extends BaseActivity implements IVLCVout.Callback, LiveCamerasAdapter.CameraListener {

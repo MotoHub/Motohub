@@ -31,7 +31,7 @@ import online.motohub.fragment.BaseFragment;
 import online.motohub.fragment.dialog.AppDialogFragment;
 import online.motohub.fragment.ondemand.EventsFragment;
 import online.motohub.fragment.ondemand.PromoterOrUserFragment;
-import online.motohub.util.DialogManager;
+import online.motohub.dialog.DialogManager;
 
 
 /**
