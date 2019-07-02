@@ -13,7 +13,7 @@ import online.motohub.interfaces.ViewModelCallback
 import java.lang.ref.WeakReference
 import java.lang.reflect.InvocationTargetException
 
-class BaseViewModel(application: Application) : AndroidViewModel(application) {
+open class BaseViewModel(application: Application) : AndroidViewModel(application) {
 
     private var wr_callback: WeakReference<ViewModelCallback>? = null
     private var wr_navcallback: WeakReference<PermissionViewModelCallback>? = null
