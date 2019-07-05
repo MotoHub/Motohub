@@ -23,6 +23,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import java.io.File;
+import java.util.ArrayList;
 
 import online.motohub.constants.AppConstants;
 import online.motohub.database.DatabaseHandler;
@@ -259,7 +260,6 @@ public class SpectatorFileUploadService extends IntentService implements Progres
         AppConstants.UPLOAD_STATUS = UploadStatus.FAILED;
         try {
             DatabaseHandler databaseHandler = new DatabaseHandler(this);
-            int checkCount = databaseHandler.getPendingCount();
             stopForeground(true);
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
                 if (mNotificationManager != null) {
@@ -282,7 +282,27 @@ public class SpectatorFileUploadService extends IntentService implements Progres
                 mNotificationManager.notify(mNotificationID, mNotification);
                 sendBroadcast(new Intent().setAction("UPLOAD_STATUS").putExtra("status", value));
             }
+            uploadOffline(this);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
+    private void uploadOffline(Context context) {
+        try {
+            DatabaseHandler handler = new DatabaseHandler(context);
+            ArrayList<SpectatorLiveEntity> mList = handler.getSpectatorLiveVideos();
+            if (mList.size() > 0) {
+                for (int i = 0; i < mList.size(); i++) {
+                    if(AppConstants.UPLOAD_STATUS == UploadStatus.STARTED){
+                        break;
+                    }
+                    Intent service_intent = new Intent(context, SpectatorFileUploadService.class);
+                    String data = new Gson().toJson(mList.get(i));
+                    service_intent.putExtra("data", data);
+                    context.startService(service_intent);
+                }
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

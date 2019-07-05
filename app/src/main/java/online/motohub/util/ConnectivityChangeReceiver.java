@@ -33,15 +33,22 @@ public class ConnectivityChangeReceiver extends BroadcastReceiver {
     }
 
     private void uploadOffline(Context context) {
-        DatabaseHandler handler = new DatabaseHandler(context);
-        ArrayList<SpectatorLiveEntity> mList = handler.getSpectatorLiveVideos();
-        if (mList.size() > 0) {
-            for (int i = 0; i < mList.size(); i++) {
-                Intent service_intent = new Intent(context, SpectatorFileUploadService.class);
-                String data = new Gson().toJson(mList.get(i));
-                service_intent.putExtra("data", data);
-                context.startService(service_intent);
+        try {
+            DatabaseHandler handler = new DatabaseHandler(context);
+            ArrayList<SpectatorLiveEntity> mList = handler.getSpectatorLiveVideos();
+            if (mList.size() > 0) {
+                for (int i = 0; i < mList.size(); i++) {
+                    if(AppConstants.UPLOAD_STATUS == UploadStatus.STARTED){
+                        break;
+                    }
+                    Intent service_intent = new Intent(context, SpectatorFileUploadService.class);
+                    String data = new Gson().toJson(mList.get(i));
+                    service_intent.putExtra("data", data);
+                    context.startService(service_intent);
+                }
             }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

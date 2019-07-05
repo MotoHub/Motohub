@@ -171,6 +171,10 @@ public class CreateProfileActivity extends BaseActivity implements PopupMenu.OnM
         }
     }
 
+    private void changeButtonBg(int id){
+
+    }
+
     private void addOrRemoveProfileTypes(String profile_type, boolean isChecked) {
         if (isChecked) {
             mProfileTypes.add(profile_type);
