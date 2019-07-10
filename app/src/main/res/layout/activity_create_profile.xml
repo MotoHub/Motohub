@@ -13,132 +13,93 @@
         style="@style/LayoutMatch"
         android:layout_marginTop="?attr/actionBarSize">
 
-        <RelativeLayout
+        <LinearLayout
             style="@style/LayoutMatch"
             android:layout_above="@+id/tip_tv"
-            android:gravity="center">
+            android:gravity="center|top"
+            android:orientation="vertical">
 
-            <ToggleButton
-                android:id="@+id/spectator_toggle_btn"
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:background="@drawable/polygon_btn_bg"
-                android:text="@string/spectator"
-                android:textAllCaps="false"
-                android:textColor="@color/text_color_changed"
-                android:textOff="@string/spectator"
-                android:textOn="@string/spectator"
-                android:textSize="@dimen/text14" />
+                android:layout_margin="@dimen/size10"
+                android:gravity="center"
+                android:text="@string/select_profile_title"
+                android:textAllCaps="true"
+                android:textColor="@color/colorBlack"
+                android:textSize="@dimen/text14"
+                android:textStyle="bold" />
 
             <ToggleButton
-                android:id="@+id/per_shop_toggle_btn"
-                android:layout_width="wrap_content"
+                android:id="@+id/car_toggle_btn"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/spectator_toggle_btn"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="@dimen/size10"
-                android:background="@drawable/polygon_btn_bg"
-                android:text="@string/performance_shop"
-                android:textAllCaps="false"
-                android:textColor="@color/text_color_changed"
-                android:textOff="@string/performance_shop"
-                android:textOn="@string/performance_shop"
-                android:textSize="@dimen/text14" />
+                android:layout_margin="@dimen/size10"
+                android:background="@drawable/black_orange_toggle_btn_bg"
+                android:text="@string/car"
+                android:textAllCaps="true"
+                android:textColor="@color/text_color_white"
+                android:textOff="@string/car"
+                android:textOn="@string/car"
+                android:textSize="@dimen/text16"
+                android:textStyle="bold" />
 
             <ToggleButton
                 android:id="@+id/bike_toggle_btn"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/per_shop_toggle_btn"
-                android:layout_centerInParent="true"
-                android:layout_marginTop="@dimen/size10"
-                android:background="@drawable/polygon_btn_bg"
+                android:layout_margin="@dimen/size10"
+                android:background="@drawable/black_orange_toggle_btn_bg"
                 android:text="@string/bike"
-                android:textAllCaps="false"
-                android:textColor="@color/text_color_changed"
+                android:textAllCaps="true"
+                android:textColor="@color/text_color_white"
                 android:textOff="@string/bike"
                 android:textOn="@string/bike"
-                android:textSize="@dimen/text14" />
+                android:textSize="@dimen/text16"
+                android:textStyle="bold" />
 
-            <RelativeLayout
-                android:id="@+id/left_box"
-                android:layout_width="wrap_content"
+            <ToggleButton
+                android:id="@+id/boat_toggle_btn"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignStart="@null"
-                android:layout_alignLeft="@null"
-                android:layout_marginTop="@dimen/size55"
-                android:layout_marginEnd="@dimen/sizeMinus20"
-                android:layout_marginRight="@dimen/sizeMinus20"
-                android:layout_toStartOf="@+id/spectator_toggle_btn"
-                android:layout_toLeftOf="@+id/spectator_toggle_btn">
+                android:layout_margin="@dimen/size10"
+                android:background="@drawable/black_orange_toggle_btn_bg"
+                android:text="@string/boat"
+                android:textAllCaps="true"
+                android:textColor="@color/text_color_white"
+                android:textOff="@string/boat"
+                android:textOn="@string/boat"
+                android:textSize="@dimen/text16"
+                android:textStyle="bold" />
 
-                <ToggleButton
-                    android:id="@+id/car_toggle_btn"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/polygon_btn_bg"
-                    android:text="@string/car"
-                    android:textAllCaps="false"
-                    android:textColor="@color/text_color_changed"
-                    android:textOff="@string/car"
-                    android:textOn="@string/car"
-                    android:textSize="@dimen/text14" />
+            <ToggleButton
+                android:id="@+id/kart_toggle_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/size10"
+                android:background="@drawable/black_orange_toggle_btn_bg"
+                android:text="@string/kart"
+                android:textAllCaps="true"
+                android:textColor="@color/text_color_white"
+                android:textOff="@string/kart"
+                android:textOn="@string/kart"
+                android:textSize="@dimen/text16"
+                android:textStyle="bold" />
 
-                <ToggleButton
-                    android:id="@+id/boat_toggle_btn"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/car_toggle_btn"
-                    android:layout_marginTop="@dimen/size10"
-                    android:background="@drawable/polygon_btn_bg"
-                    android:text="@string/boat"
-                    android:textAllCaps="false"
-                    android:textColor="@color/text_color_changed"
-                    android:textOff="@string/boat"
-                    android:textOn="@string/boat"
-                    android:textSize="@dimen/text14" />
-
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:id="@+id/right_box"
-                style="@style/LayoutWrap"
-                android:layout_marginStart="@dimen/sizeMinus20"
-                android:layout_marginLeft="@dimen/sizeMinus20"
-                android:layout_marginTop="@dimen/size55"
-                android:layout_toEndOf="@+id/spectator_toggle_btn"
-                android:layout_toRightOf="@+id/spectator_toggle_btn">
-
-                <ToggleButton
-                    android:id="@+id/media_photography_toggle_btn"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/polygon_btn_bg"
-                    android:text="@string/media_and_photography"
-                    android:textAllCaps="false"
-                    android:textColor="@color/text_color_changed"
-                    android:textOff="@string/media_and_photography"
-                    android:textOn="@string/media_and_photography"
-                    android:textSize="@dimen/text14" />
-
-                <ToggleButton
-                    android:id="@+id/kart_toggle_btn"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/media_photography_toggle_btn"
-                    android:layout_marginTop="@dimen/size10"
-                    android:background="@drawable/polygon_btn_bg"
-                    android:text="@string/kart"
-                    android:textAllCaps="false"
-                    android:textColor="@color/text_color_changed"
-                    android:textOff="@string/kart"
-                    android:textOn="@string/kart"
-                    android:textSize="@dimen/text14" />
-
-            </RelativeLayout>
-
-        </RelativeLayout>
+            <ToggleButton
+                android:id="@+id/spectator_toggle_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/size10"
+                android:background="@drawable/black_orange_toggle_btn_bg"
+                android:text="@string/spectator"
+                android:textAllCaps="true"
+                android:textColor="@color/text_color_white"
+                android:textOff="@string/spectator"
+                android:textOn="@string/spectator"
+                android:textSize="@dimen/text16"
+                android:textStyle="bold" />
+        </LinearLayout>
 
         <TextView
             android:id="@+id/tip_tv"
@@ -162,7 +123,7 @@
             android:layout_margin="@dimen/size10"
             android:background="@drawable/black_orange_btn_bg"
             android:text="@string/enter"
-            android:textColor="@color/text_color"
+            android:textColor="@color/text_color_white"
             android:textSize="@dimen/text16"
             android:textStyle="bold" />
 

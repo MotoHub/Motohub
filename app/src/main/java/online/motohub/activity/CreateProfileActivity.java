@@ -18,11 +18,11 @@ import butterknife.ButterKnife;
 import butterknife.OnCheckedChanged;
 import butterknife.OnClick;
 import online.motohub.R;
+import online.motohub.constants.AppConstants;
+import online.motohub.dialog.DialogManager;
 import online.motohub.fragment.dialog.AppDialogFragment;
 import online.motohub.model.PushTokenModel;
 import online.motohub.retrofit.RetrofitClient;
-import online.motohub.constants.AppConstants;
-import online.motohub.dialog.DialogManager;
 import online.motohub.util.PreferenceUtils;
 
 /**
@@ -47,10 +47,6 @@ public class CreateProfileActivity extends BaseActivity implements PopupMenu.OnM
     ToggleButton mKartToggleBtn;
     @BindView(R.id.spectator_toggle_btn)
     ToggleButton mSpectatorToggleBtn;
-    @BindView(R.id.per_shop_toggle_btn)
-    ToggleButton mPerShopToggleBtn;
-    @BindView(R.id.media_photography_toggle_btn)
-    ToggleButton mMediaAndPhotoToggleBtn;
     @BindString(R.string.create_your_profile)
     String mToolbarTitle;
     @BindString(R.string.memo)
@@ -124,8 +120,7 @@ public class CreateProfileActivity extends BaseActivity implements PopupMenu.OnM
     }
 
     @OnCheckedChanged({R.id.bike_toggle_btn, R.id.boat_toggle_btn, R.id.car_toggle_btn,
-            R.id.kart_toggle_btn, R.id.spectator_toggle_btn, R.id.per_shop_toggle_btn,
-            R.id.media_photography_toggle_btn})
+            R.id.kart_toggle_btn, R.id.spectator_toggle_btn})
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         switch (buttonView.getId()) {
             case R.id.bike_toggle_btn:
@@ -173,19 +168,11 @@ public class CreateProfileActivity extends BaseActivity implements PopupMenu.OnM
                 }
                 addOrRemoveProfileTypes(SPECTATOR, isChecked);
                 break;
-            case R.id.per_shop_toggle_btn:
-                if (isChecked) {
-                    mPerShopToggleBtn.setChecked(false);
-                }
-                showAppDialog(AppDialogFragment.ALERT_TIP_DIALOG, null);
-                break;
-            case R.id.media_photography_toggle_btn:
-                if (isChecked) {
-                    mMediaAndPhotoToggleBtn.setChecked(false);
-                }
-                showAppDialog(AppDialogFragment.ALERT_TIP_DIALOG, null);
-                break;
         }
+    }
+
+    private void changeButtonBg(int id){
+
     }
 
     private void addOrRemoveProfileTypes(String profile_type, boolean isChecked) {
