@@ -18,6 +18,7 @@ class MainHomeActivity : BaseActivity() {
         val bundle = intent.extras
         val navigationID = bundle.getInt("ID")
         navigationAction(navigationID)
+        changeFooterMenu(navigationID)
         navigationView.setOnNavigationItemSelectedListener { item ->
             navigationAction(item.itemId)
             return@setOnNavigationItemSelectedListener true
@@ -49,9 +50,9 @@ class MainHomeActivity : BaseActivity() {
     }
 
     /**
-     * If needed call from fragment and change the selection
+     * If needed remove private call from fragment and change the selection
      */
-    fun changeFooterMenu(id: Int) {
+    private fun changeFooterMenu(id: Int) {
         navigationView.selectedItemId = id
     }
 }
