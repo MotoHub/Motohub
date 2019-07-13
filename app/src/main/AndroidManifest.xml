@@ -38,10 +38,11 @@
         android:icon="@mipmap/app_icon"
         android:label="@string/app_name"
         android:largeHeap="true"
-        android:resizeableActivity="false"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.WhiteStatusBar"
         tools:replace="android:allowBackup">
+
+
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
@@ -65,6 +66,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".activity.HomeActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"/>
+        <activity android:name=".activity.MainHomeActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"/>
         <activity
             android:name=".activity.MotoVideoScreen"
             android:configChanges="orientation"
@@ -162,7 +171,6 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="stateHidden|adjustPan" />
-
         <activity
             android:name=".activity.NotificationUpdateProfileActivity"
             android:configChanges="orientation"
@@ -452,9 +460,8 @@
             android:configChanges="orientation"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
-
         <activity
-            android:name="online.motohub.activity.ReportActivity"
+            android:name=".activity.ReportActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
@@ -659,21 +666,18 @@
             android:screenOrientation="fullUser"
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="stateHidden|adjustPan" />
-
         <activity
             android:name=".activity.ondemand.PromotorOrUserVideoPlaying"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="fullUser"
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="stateHidden|adjustPan" />
-
         <activity
             android:name=".activity.ondemand.EventVideosPlayingActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="fullUser"
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="stateHidden|adjustPan" />
-
         <activity
             android:name=".activity.VideoPreviewOnDemandActivity"
             android:configChanges="orientation|screenSize"
@@ -695,22 +699,19 @@
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
-
         <activity
             android:name=".activity.ondemand.OnDemandActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="stateHidden" />
-
         <activity
-            android:name="online.motohub.activity.business.BusinessProfileActivity"
+            android:name=".activity.business.BusinessProfileActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
-
         <activity
-            android:name="online.motohub.activity.business.BusinessWritePostActivity"
+            android:name=".activity.business.BusinessWritePostActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
@@ -722,22 +723,18 @@
         <service
             android:name="com.amazonaws.mobileconnectors.s3.transferutility.TransferService"
             android:enabled="true" />
-
         <service
             android:name=".services.UploadJobService"
             android:exported="true"
             android:permission="android.permission.BIND_JOB_SERVICE" />
-
         <service
             android:name=".services.UploadJobScheduler"
             android:exported="true"
             android:permission="android.permission.BIND_JOB_SERVICE" />
-
         <service
             android:name=".services.SpectatorFileUploadService"
             android:enabled="true"
             android:exported="true" />
-
         <service
             android:name=".services.SpectatorFileUploadOfflineService"
             android:enabled="true"
@@ -748,8 +745,6 @@
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
             </intent-filter>
         </receiver>
-
-
     </application>
 
 </manifest>

@@ -26,4 +26,6 @@
     <color name="ash">#616161</color>
     <color name="colorRed">#ffff0000</color>
 
+    <color name="footer_bg">#ECECEC</color>
+
 </resources>

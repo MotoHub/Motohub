@@ -2110,4 +2110,31 @@ public class BaseActivity extends AppCompatActivity {
         }, 0, mCommentTagString.length(), 0);*/
         return mWordToSpan;
     }
+
+    /**
+     * Move to Next Screen
+     *
+     * @param clazz
+     */
+    public void launchScreen(Class<?> clazz) {
+        Intent mIntent = new Intent(mActivity, clazz);
+        mActivity.startActivity(mIntent);
+        mActivity.overridePendingTransition(R.anim.slide_in_right,
+                R.anim.slide_out_left);
+        mActivity.finish();
+    }
+
+    public void nextScreen(Class<?> clazz) {
+        Intent mIntent = new Intent(mActivity, clazz);
+        mActivity.startActivity(mIntent);
+        mActivity.overridePendingTransition(R.anim.slide_in_right,
+                R.anim.slide_out_left);
+    }
+    public void nextScreen(Class<?> clazz,Bundle bundle) {
+        Intent mIntent = new Intent(mActivity, clazz);
+        mIntent.putExtras(bundle);
+        mActivity.startActivity(mIntent);
+        mActivity.overridePendingTransition(R.anim.slide_in_right,
+                R.anim.slide_out_left);
+    }
 }

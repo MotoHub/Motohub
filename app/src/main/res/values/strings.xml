@@ -659,4 +659,8 @@
     <string name="file_upload_success">File Uploaded</string>
     <string name="file_upload_failure">Uploading Failed. Please try again!</string>
     <string name="select_profile_title">Select what profile you wish to create</string>
+    <string name="news_feed">News Feed</string>
+    <string name="event_videos">Event Videos</string>
+
+    <string name="profile_my">My Profile</string>
 </resources>

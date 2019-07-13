@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/parentAnimateLay"
+    style="@style/LayoutMatch">
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/newsFeedView"
+        style="@style/customCard"
+        app:cardBackgroundColor="@color/card_bg"
+        app:cardCornerRadius="@dimen/size5"
+        app:layout_constraintBottom_toTopOf="@+id/horGuideline1"
+        app:layout_constraintEnd_toStartOf="@+id/verticalGuideline"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            style="@style/LayoutMatch"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/news_feed"
+                android:src="@drawable/news_feed_icon_white" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/news_feed"
+                android:textColor="@color/text_color_white"
+                android:textSize="@dimen/text20"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+    </android.support.v7.widget.CardView>
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/onDemandView"
+        style="@style/customCard"
+        app:cardBackgroundColor="@color/card_bg"
+        app:cardCornerRadius="@dimen/size5"
+        app:layout_constraintBottom_toTopOf="@+id/horGuideline1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/verticalGuideline"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            style="@style/LayoutMatch"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/on_demand"
+                android:src="@drawable/on_demand_icon_white" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/on_demand"
+                android:textColor="@color/text_color_white"
+                android:textSize="@dimen/text20"
+                android:textStyle="bold" />
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/eventVideosView"
+        style="@style/customCard"
+        app:cardBackgroundColor="@color/card_bg"
+        app:cardCornerRadius="@dimen/size5"
+        app:layout_constraintBottom_toTopOf="@+id/horGuideline2"
+        app:layout_constraintEnd_toStartOf="@+id/verticalGuideline"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/horGuideline1">
+
+        <LinearLayout
+            style="@style/LayoutMatch"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/event_videos"
+                android:src="@drawable/event_videos_icon_white" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/event_videos"
+                android:textColor="@color/text_color_white"
+                android:textSize="@dimen/text20"
+                android:textStyle="bold" />
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/findEventView"
+        style="@style/customCard"
+        app:cardBackgroundColor="@color/card_bg"
+        app:cardCornerRadius="@dimen/size5"
+        app:layout_constraintBottom_toTopOf="@+id/horGuideline2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/verticalGuideline"
+        app:layout_constraintTop_toTopOf="@+id/horGuideline1">
+
+        <LinearLayout
+            style="@style/LayoutMatch"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/find_event"
+                android:src="@drawable/find_event_icon_white" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/find_event"
+                android:textColor="@color/text_color_white"
+                android:textSize="@dimen/text20"
+                android:textStyle="bold" />
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/myProfileView"
+        style="@style/customCard"
+        app:cardBackgroundColor="@color/card_bg"
+        app:cardCornerRadius="@dimen/size5"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/horGuideline2">
+
+        <LinearLayout
+            style="@style/LayoutMatch"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/my_moto_file"
+                android:src="@drawable/profile_icon_white" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/profile_my"
+                android:textColor="@color/text_color_white"
+                android:textSize="@dimen/text20"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+    </android.support.v7.widget.CardView>
+
+    <android.support.constraint.Guideline
+        android:id="@+id/verticalGuideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.5" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/horGuideline1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.33" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/horGuideline2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.66" />
+
+</android.support.constraint.ConstraintLayout>

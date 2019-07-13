@@ -47,7 +47,7 @@ public class MainSplashScreenActivity extends BaseActivity {
                             }
                         } else {
                             setmIsFirstLaunch(true);
-                            startActivity(new Intent(MainSplashScreenActivity.this, LoginActivity.class));
+                            startActivity(new Intent(MainSplashScreenActivity.this, HomeActivity.class));
                         }
                     }
                     finish();
