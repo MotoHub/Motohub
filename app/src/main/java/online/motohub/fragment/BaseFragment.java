@@ -24,24 +24,29 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.lang.ref.WeakReference;
 import java.nio.channels.FileChannel;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 import online.motohub.R;
 import online.motohub.fragment.dialog.AppDialogFragment;
+import online.motohub.interfaces.PermissionViewModelCallback;
+import online.motohub.interfaces.ViewModelCallback;
 import online.motohub.model.GroupChatRoomResModel;
 import online.motohub.model.OndemandNewResponse;
 import online.motohub.model.ProfileResModel;
 import online.motohub.model.SingleChatRoomResModel;
 import online.motohub.util.PreferenceUtils;
+import online.motohub.viewmodel.BaseViewModel;
 
 import static android.content.Context.INPUT_METHOD_SERVICE;
 
-public class BaseFragment extends Fragment {
+public class BaseFragment extends Fragment implements PermissionViewModelCallback {
 
     protected static final String GALLERY_IMAGE_NAME_TYPE = "gallery_img";
     protected static final String GALLERY_VIDEO_NAME_TYPE = "gallery_vid";
@@ -304,5 +309,21 @@ public class BaseFragment extends Fragment {
                 AppDialogFragment.newInstance(dialogType, shareContent, shareImg, videoUrl, mPos, mIsFromOtherMotoProfile).show(getActivity().getSupportFragmentManager(), AppDialogFragment.TAG);
             }
         });
+    }
+
+    private WeakReference<BaseViewModel> registeredModel = null;
+
+    public void registerModel(BaseViewModel model) {
+        if (getActivity() instanceof ViewModelCallback) {
+            ViewModelCallback callback = (ViewModelCallback) getActivity();
+            model.setCallback(callback);
+        }
+        model.setNavCallback(this);
+        this.registeredModel = new WeakReference<>(model);
+    }
+
+    @Override
+    public void requestPermission(List<String> strings, int code) {
+        requestPermissions(strings.toArray(new String[strings.size()]), code);
     }
 }

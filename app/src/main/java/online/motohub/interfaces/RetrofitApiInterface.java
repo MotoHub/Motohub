@@ -767,4 +767,7 @@ public interface RetrofitApiInterface {
 //    @GET("http://18.221.84.245:10088/api/v1/getdevicestream?device=1234567890123&channel=1&protocol=rtmp&reserve=1")
 //    Call<GetDeviceStreamModel> callGetDeviceStream();
 
+    @GET(UrlUtils.ALL_POST)
+    Call<PostsModel> getAllFeeds(@Query("userid") int userID, @Query("related") String related, @Query("order") String order,
+                                 @Query("limit") int limit, @Query("offset") int offset, @Query("include_count") boolean count);
 }

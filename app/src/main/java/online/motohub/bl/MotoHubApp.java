@@ -77,8 +77,7 @@ public class MotoHubApp implements UserPreferenceCallback {
         }
         MotoHubApp mh = getInstance();
         Context context = configuration.context;
-
-//        mh.apiClients = new RetrofitClient(url, mh.userPreferences, mh.fileCacheImplementor);
+        mh.apiClients = new RetrofitClient();
         mh.internetUtil = new ConnectivityLiveData(context);
         return mh;
     }

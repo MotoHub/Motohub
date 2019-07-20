@@ -25,7 +25,7 @@ class MainHomeActivity : BaseActivity() {
             navigationAction(item.itemId)
             return@setOnNavigationItemSelectedListener true
         }
-        navigationView.setOnNavigationItemReselectedListener { item ->
+        navigationView.setOnNavigationItemReselectedListener {
             //TODO do nothing if needed will use in future
         }
     }

@@ -388,7 +388,7 @@ public class RetrofitClient {
 
     private static Converter<ResponseBody, ErrorMessage> errorConverter;
 
-    private RetrofitClient() {
+    public RetrofitClient() {
     }
 
     /**

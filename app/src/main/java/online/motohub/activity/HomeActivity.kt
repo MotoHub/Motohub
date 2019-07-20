@@ -35,7 +35,7 @@ class HomeActivity : BaseActivity(), View.OnClickListener {
             }
             else -> {
                 val bundle = Bundle()
-                bundle.putInt("ID", v!!.id)
+                bundle.putInt("ID", v.id)
                 nextScreen(MainHomeActivity::class.java, bundle)
             }
         }

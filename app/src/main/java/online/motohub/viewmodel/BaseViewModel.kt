@@ -3,42 +3,37 @@ package online.motohub.viewmodel
 import android.app.Application
 import android.arch.lifecycle.AndroidViewModel
 import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModel
-import android.arch.lifecycle.ViewModelProvider
 import android.content.Context
-import android.os.Bundle
 import online.motohub.bl.MotoHubApp
 import online.motohub.interfaces.PermissionViewModelCallback
 import online.motohub.interfaces.ViewModelCallback
 import java.lang.ref.WeakReference
-import java.lang.reflect.InvocationTargetException
 
 open class BaseViewModel(application: Application) : AndroidViewModel(application) {
 
-    private var wr_callback: WeakReference<ViewModelCallback>? = null
-    private var wr_navcallback: WeakReference<PermissionViewModelCallback>? = null
+    private var wrCallback: WeakReference<ViewModelCallback>? = null
+    private var wrNavCallback: WeakReference<PermissionViewModelCallback>? = null
 
     var isFirstTime = true
     var isFirstTimeWithInternet = true
-
 
     val context: Context
         get() = getApplication()
 
     var callback: ViewModelCallback?
-        get() = if (wr_callback != null) wr_callback!!.get() else null
+        get() = if (wrCallback != null) wrCallback!!.get() else null
         set(callback) = if (callback != null) {
-            this.wr_callback = WeakReference(callback)
+            this.wrCallback = WeakReference(callback)
         } else {
-            this.wr_callback = null
+            this.wrCallback = null
         }
 
     var navCallback: PermissionViewModelCallback?
-        get() = if (wr_navcallback != null) wr_navcallback!!.get() else null
+        get() = if (wrNavCallback != null) wrNavCallback!!.get() else null
         set(callback) = if (callback != null) {
-            this.wr_navcallback = WeakReference(callback)
+            this.wrNavCallback = WeakReference(callback)
         } else {
-            this.wr_navcallback = null
+            this.wrNavCallback = null
         }
 
     fun initialize(callback: ViewModelCallback, navCallback: PermissionViewModelCallback) {
@@ -46,6 +41,7 @@ open class BaseViewModel(application: Application) : AndroidViewModel(applicatio
         this.navCallback = navCallback
         initialize()
     }
+
     // Call every time on ViewCreated/onCreate. So for a given session it can be called many time.
     fun initialize() {
         initialize(isFirstTime)
@@ -78,44 +74,7 @@ open class BaseViewModel(application: Application) : AndroidViewModel(applicatio
             }
         }
     }
-    class BaseViewModelFactory : ViewModelProvider.AndroidViewModelFactory {
 
-        private val application: Application
-        private var bundle: Bundle? = null
-
-        /**
-         * Creates a `AndroidViewModelFactory`
-         *
-         * @param application an application to pass in [AndroidViewModel]
-         */
-        constructor(application: Application) : super(application) {
-            this.application = application
-        }
-
-        constructor(application: Application, bundle: Bundle?) : super(application) {
-            this.application = application
-            this.bundle = bundle
-        }
-
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            if (BaseViewModel::class.java.isAssignableFrom(modelClass)) {
-
-                try {
-                    return modelClass.getConstructor(Application::class.java, Bundle::class.java).newInstance(application, bundle)
-                } catch (e: NoSuchMethodException) {
-                    throw RuntimeException("Cannot create an instance of $modelClass", e)
-                } catch (e: IllegalAccessException) {
-                    throw RuntimeException("Cannot create an instance of $modelClass", e)
-                } catch (e: InstantiationException) {
-                    throw RuntimeException("Cannot create an instance of $modelClass", e)
-                } catch (e: InvocationTargetException) {
-                    throw RuntimeException("Cannot create an instance of $modelClass", e)
-                }
-
-            }
-            return super.create(modelClass)
-        }
-    }
     override fun onCleared() {
         super.onCleared()
     }
