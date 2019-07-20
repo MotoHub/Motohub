@@ -5,14 +5,14 @@
     style="@style/LayoutMatch">
 
     <android.support.v7.widget.CardView
-        android:id="@+id/newsFeedView"
+        android:id="@+id/eventVideosView"
         style="@style/customCard"
         app:cardBackgroundColor="@color/card_bg"
         app:cardCornerRadius="@dimen/size5"
-        app:layout_constraintBottom_toTopOf="@+id/horGuideline2"
+        app:layout_constraintBottom_toTopOf="@+id/horGuideline1"
         app:layout_constraintEnd_toStartOf="@+id/verticalGuideline"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/horGuideline1">
+        app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
             style="@style/LayoutMatch"
@@ -22,18 +22,17 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:contentDescription="@string/news_feed"
-                android:src="@drawable/news_feed_icon_white" />
+                android:contentDescription="@string/event_videos"
+                android:src="@drawable/event_videos_icon_white1" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/news_feed"
+                android:text="@string/event_videos"
                 android:textColor="@color/text_color_white"
                 android:textSize="@dimen/text20"
                 android:textStyle="bold" />
         </LinearLayout>
-
     </android.support.v7.widget.CardView>
 
     <android.support.v7.widget.CardView
@@ -68,14 +67,14 @@
     </android.support.v7.widget.CardView>
 
     <android.support.v7.widget.CardView
-        android:id="@+id/eventVideosView"
+        android:id="@+id/newsFeedView"
         style="@style/customCard"
         app:cardBackgroundColor="@color/card_bg"
         app:cardCornerRadius="@dimen/size5"
-        app:layout_constraintBottom_toTopOf="@+id/horGuideline1"
+        app:layout_constraintBottom_toTopOf="@+id/horGuideline2"
         app:layout_constraintEnd_toStartOf="@+id/verticalGuideline"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="@+id/horGuideline1">
 
         <LinearLayout
             style="@style/LayoutMatch"
@@ -85,17 +84,18 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:contentDescription="@string/event_videos"
-                android:src="@drawable/event_videos_icon_white1" />
+                android:contentDescription="@string/news_feed"
+                android:src="@drawable/news_feed_icon_white" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/event_videos"
+                android:text="@string/news_feed"
                 android:textColor="@color/text_color_white"
                 android:textSize="@dimen/text20"
                 android:textStyle="bold" />
         </LinearLayout>
+
     </android.support.v7.widget.CardView>
 
     <android.support.v7.widget.CardView
@@ -160,6 +160,7 @@
         </LinearLayout>
 
     </android.support.v7.widget.CardView>
+
     <android.support.v7.widget.CardView
         android:id="@+id/athleteFeedView"
         style="@style/customCard"
@@ -191,6 +192,7 @@
         </LinearLayout>
 
     </android.support.v7.widget.CardView>
+
     <android.support.constraint.Guideline
         android:id="@+id/verticalGuideline"
         android:layout_width="wrap_content"
