@@ -1,17 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
+
     <item
-        android:id="@+id/newsFeedView"
-        android:icon="@drawable/news_feed_icon_white"
-        android:title="@string/news_feed" />
+        android:id="@+id/eventVideosView"
+        android:icon="@drawable/event_videos_icon_white1"
+        android:title="@string/event_videos" />
     <item
         android:id="@+id/onDemandView"
         android:icon="@drawable/on_demand_icon_white"
         android:title="@string/on_demand" />
     <item
-        android:id="@+id/eventVideosView"
-        android:icon="@drawable/event_videos_icon_white"
-        android:title="@string/event_videos" />
+        android:id="@+id/newsFeedView"
+        android:icon="@drawable/news_feed_icon_white"
+        android:title="@string/news_feed" />
     <item
         android:id="@+id/findEventView"
         android:icon="@drawable/find_event_icon_white"
@@ -20,4 +21,5 @@
         android:id="@+id/myProfileView"
         android:icon="@drawable/profile_icon_white"
         android:title="@string/profile_my" />
+
 </menu>

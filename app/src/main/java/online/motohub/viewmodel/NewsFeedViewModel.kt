@@ -9,10 +9,18 @@ class NewsFeedViewModel(application: Application, bundle: Bundle?) : BaseViewMod
     val newsFeedProvider: NewsFeedProvider? = null
 
     init {
-
+        getFeeds()
     }
 
-    override fun onCleared() {
-        super.onCleared()
+    override fun initialize(firstTime: Boolean) {
+        super.initialize(firstTime)
+    }
+
+    override fun initializeWithNetworkAvailable() {
+        super.initializeWithNetworkAvailable()
+    }
+
+    private fun getFeeds() {
+
     }
 }

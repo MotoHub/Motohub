@@ -30,16 +30,13 @@ class NewsFeedFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener {
         swipeRefreshLay.setOnRefreshListener(this)
         model = ViewModelProviders.of(this, BaseViewModel.BaseViewModelFactory(activity!!.application)).get(NewsFeedViewModel::class.java)
 
-        getFeeds()
     }
 
     override fun onRefresh() {
         swipeRefreshLay.isRefreshing=false
     }
 
-    private fun getFeeds() {
 
-    }
 
     private fun setAdapter() {
 

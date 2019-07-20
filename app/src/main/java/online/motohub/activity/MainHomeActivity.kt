@@ -32,17 +32,17 @@ class MainHomeActivity : BaseActivity() {
 
     private fun navigationAction(itemId: Int) {
         when (itemId) {
-            R.id.newsFeedView -> {
-                setTitleTxt(getString(R.string.news_feed))
-                replaceFragment(NewsFeedFragment())
+            R.id.eventVideosView -> {
+                setTitleTxt(getString(R.string.event_videos))
+                replaceFragment(EventVideosFragment())
             }
             R.id.onDemandView -> {
                 setTitleTxt(getString(R.string.on_demand))
                 replaceFragment(OnDemandFragment())
             }
-            R.id.eventVideosView -> {
-                setTitleTxt(getString(R.string.event_videos))
-                replaceFragment(EventVideosFragment())
+            R.id.newsFeedView -> {
+                setTitleTxt(getString(R.string.news_feed))
+                replaceFragment(NewsFeedFragment())
             }
             R.id.findEventView -> {
                 setTitleTxt(getString(R.string.find_event))
@@ -52,6 +52,7 @@ class MainHomeActivity : BaseActivity() {
                 setTitleTxt(getString(R.string.profile_my))
                 replaceFragment(MyProfileFragment())
             }
+
         }
     }
 
@@ -85,5 +86,6 @@ class MainHomeActivity : BaseActivity() {
     private fun changeFooterMenu(id: Int) {
         navigationView.selectedItemId = id
     }
+
 }
 

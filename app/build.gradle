@@ -108,8 +108,8 @@ dependencies {
     implementation 'com.github.pavlospt:rxfile:1.8'
     implementation 'com.github.Yalantis:Context-Menu.Android:1.0.8'
 
-    implementation 'com.squareup.retrofit2:retrofit:2.4.0'
-    implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
+    implementation 'com.squareup.retrofit2:retrofit:2.5.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.5.0'
     implementation 'com.squareup.retrofit2:adapter-rxjava:2.4.0'
 
     implementation 'com.facebook.android:facebook-android-sdk:4.31.0'

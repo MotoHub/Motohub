@@ -13,15 +13,15 @@ class HomeActivity : BaseActivity(), View.OnClickListener {
     }
 
     override fun onClick(v: View?) {
-//        when (v!!.id) {
-//            R.id.newsFeedView -> {
-//                nextScreen(MainHomeActivity::class.java)
+        when (v!!.id) {
+//            R.id.eventVideosView -> {
+//
 //            }
 //            R.id.onDemandView -> {
 //
 //            }
-//            R.id.eventVideosView -> {
-//
+//            R.id.newsFeedView -> {
+//                nextScreen(MainHomeActivity::class.java)
 //            }
 //            R.id.findEventView -> {
 //
@@ -29,10 +29,17 @@ class HomeActivity : BaseActivity(), View.OnClickListener {
 //            R.id.myProfileView -> {
 //
 //            }
-//        }
-        val bundle = Bundle()
-        bundle.putInt("ID", v!!.id)
-        nextScreen(MainHomeActivity::class.java, bundle)
+            R.id.athleteFeedView -> {
+                val bundle = Bundle()
+                nextScreen(ComingSoonActivity::class.java, bundle)
+            }
+            else -> {
+                val bundle = Bundle()
+                bundle.putInt("ID", v!!.id)
+                nextScreen(MainHomeActivity::class.java, bundle)
+            }
+        }
+
     }
     /**
      *  For Animation
