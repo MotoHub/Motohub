@@ -2,9 +2,12 @@ package online.motohub.bl;
 
 import android.content.Context;
 
+import java.io.File;
+
+import online.motohub.constants.AppConstants;
+import online.motohub.constants.ConfigConstants;
 import online.motohub.interfaces.UserPreferenceCallback;
 import online.motohub.interfaces.UserPreferences;
-import online.motohub.retrofit.RetrofitClient;
 
 /***
  * Stores access to all manager that will be used by Providers.
@@ -60,11 +63,11 @@ public class MotoHubApp implements UserPreferenceCallback {
     }
 
 
-    public RetrofitClient apiClients;
+    public ApiClient apiClients;
     public UserPreferences userPreferences;
     public String appName;
     public ConnectivityLiveData internetUtil;
-
+    public MHFileCacheImplementor fileCacheImplementor;
     /**
      * Initialize the MotoHub app with given configuration
      */
@@ -75,9 +78,17 @@ public class MotoHubApp implements UserPreferenceCallback {
         if (configuration.context == null) {
             throw new AssertionError("Context in Configuration cannot be null");
         }
+        String url= ConfigConstants.getBaseUrl();
+//        if (TextUtils.isEmpty(configuration.baseURL)) {
+//            url = ConfigConstants.getBaseUrl();
+//        } else {
+//            url = configuration.baseURL;
+//        }
         MotoHubApp mh = getInstance();
         Context context = configuration.context;
-        mh.apiClients = new RetrofitClient();
+        File filecacheDir = new File(context.getFilesDir(), AppConstants.FILE_CACHE_FOLDER_NAME);
+        mh.fileCacheImplementor = new MHFileCacheImplementor(filecacheDir);
+        mh.apiClients = new ApiClient(url, mh.userPreferences, mh.fileCacheImplementor);
         mh.internetUtil = new ConnectivityLiveData(context);
         return mh;
     }

@@ -1,9 +1,9 @@
 package online.motohub.provider
 
 import okhttp3.RequestBody
+import online.motohub.bl.ApiClient
 import online.motohub.bl.MotoHubApp
 import online.motohub.interfaces.UserPreferences
-import online.motohub.retrofit.RetrofitClient
 
 open class BaseProvider {
 
@@ -11,7 +11,7 @@ open class BaseProvider {
         return RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"), inputBody)
     }
 
-    val apiService: RetrofitClient
+    val apiService: ApiClient
         get() = MotoHubApp.getInstance().apiClients
 
     val userPreference: UserPreferences

@@ -221,7 +221,7 @@ public class LiveStreamingActivity extends BaseActivity implements IVLCVout.Call
         String url = "rtsp://208.109.95.214:1935/live/" + mStreamName;
         playVideo(url);
 
-        // RetrofitClient.getRetrofitInstance().getDeviceInfo(this,mDeviceID, RetrofitClient.GET_DEVICE_INFO_RESPONSE);
+        // ApiClient.getRetrofitInstance().getDeviceInfo(this,mDeviceID, ApiClient.GET_DEVICE_INFO_RESPONSE);
     }
 
     private void initView() {
@@ -318,7 +318,7 @@ public class LiveStreamingActivity extends BaseActivity implements IVLCVout.Call
                     mBaseActivity.setImageWithGlide(mSnapImage, mSnapURL, R.drawable.default_profile_icon);
                 }
 
-                RetrofitClient.getRetrofitInstance().startDeviceStream(this, mDeviceID,RetrofitClient.START_DEVICE_STREAM);
+                ApiClient.getRetrofitInstance().startDeviceStream(this, mDeviceID,ApiClient.START_DEVICE_STREAM);
             } else{
 
 
@@ -332,7 +332,7 @@ public class LiveStreamingActivity extends BaseActivity implements IVLCVout.Call
 
             if(mDeviceStreamModel.mEasyDarwin.mHeader.ErrorNum.equals("200")){
 
-                RetrofitClient.getRetrofitInstance().getDeviceStream(this,mDeviceID,RetrofitClient.GET_DEVICE_STREAM);
+                ApiClient.getRetrofitInstance().getDeviceStream(this,mDeviceID,ApiClient.GET_DEVICE_STREAM);
             } else{
 
                 mRetry.setVisibility(View.VISIBLE);
@@ -448,14 +448,14 @@ public class LiveStreamingActivity extends BaseActivity implements IVLCVout.Call
 
 
         switch (responseType){
-            case RetrofitClient.GET_DEVICE_INFO_RESPONSE:
-                RetrofitClient.getRetrofitInstance().getDeviceInfo(this,mDeviceID, RetrofitClient.GET_DEVICE_INFO_RESPONSE);
+            case ApiClient.GET_DEVICE_INFO_RESPONSE:
+                ApiClient.getRetrofitInstance().getDeviceInfo(this,mDeviceID, ApiClient.GET_DEVICE_INFO_RESPONSE);
                 break;
-            case RetrofitClient.START_DEVICE_STREAM:
-                RetrofitClient.getRetrofitInstance().startDeviceStream(this,mDeviceID,RetrofitClient.START_DEVICE_STREAM);
+            case ApiClient.START_DEVICE_STREAM:
+                ApiClient.getRetrofitInstance().startDeviceStream(this,mDeviceID,ApiClient.START_DEVICE_STREAM);
                 break;
-            case RetrofitClient.GET_DEVICE_STREAM:
-                RetrofitClient.getRetrofitInstance().getDeviceStream(this,mDeviceID,RetrofitClient.GET_DEVICE_STREAM);
+            case ApiClient.GET_DEVICE_STREAM:
+                ApiClient.getRetrofitInstance().getDeviceStream(this,mDeviceID,ApiClient.GET_DEVICE_STREAM);
                 break;
         }
 

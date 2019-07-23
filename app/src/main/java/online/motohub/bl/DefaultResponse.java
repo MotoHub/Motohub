@@ -2,10 +2,13 @@ package online.motohub.bl;
 
 import android.support.annotation.NonNull;
 
+import okhttp3.ResponseBody;
 import online.motohub.interfaces.ResponseCallback;
 import online.motohub.interfaces.ResponseSuccessCallback;
+import online.motohub.model.ErrorMessage;
 import retrofit2.Call;
 import retrofit2.Callback;
+import retrofit2.Converter;
 import retrofit2.Response;
 
 
@@ -19,6 +22,7 @@ public class DefaultResponse<T> implements Callback<T> {
     private final ResponseCallback<T> callback;
     private final ResponseSuccessCallback<T> successCallback;
 
+
     public DefaultResponse(@NonNull ResponseCallback<T> callback) {
         this.callback = callback;
         this.successCallback = null;
@@ -28,7 +32,15 @@ public class DefaultResponse<T> implements Callback<T> {
         this.callback = callback;
         this.successCallback = successCallback;
     }
-
+//    private ErrorMessage getErrorMessage(Converter<ResponseBody, ErrorMessage> errorConverter,Response response) {
+//        ErrorMessage error = null;
+//        try {
+//            error = errorConverter.convert(response.errorBody());
+//        } catch (Exception e) {
+//            error = new ErrorMessage("Unexpected error");
+//        }
+//        return error;
+//    }
     @Override
     public void onResponse(Call<T> call, Response<T> response) {
         if (response.isSuccessful()) {

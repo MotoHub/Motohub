@@ -200,12 +200,12 @@ public class NewsAndMediaProfileActivity extends BaseActivity implements
 
 /*    private void callCheckFollow() {
         String mFilter = "FollowRelation=" + mMyProfileResModel.getID() + "_" + mPromotersResModel.getUserId();
-        RetrofitClient.getRetrofitInstance().callCheckFollowers(this, mFilter, RetrofitClient.CHECK_FOLLOWER_STATUS);
+        ApiClient.getRetrofitInstance().callCheckFollowers(this, mFilter, ApiClient.CHECK_FOLLOWER_STATUS);
     }*/
 
    /* private void getNewsFeedPosts() {
         String mFilter = "(ProfileID=" + mPromotersResModel.getUserId() + ") AND (user_type=newsmedia)";
-        RetrofitClient.getRetrofitInstance().callGetProfilePosts(this, mFilter, RetrofitClient.GET_FEED_POSTS_RESPONSE, mDataLimit, mPostsRvOffset);
+        ApiClient.getRetrofitInstance().callGetProfilePosts(this, mFilter, ApiClient.GET_FEED_POSTS_RESPONSE, mDataLimit, mPostsRvOffset);
     }*/
 
     @OnClick({R.id.toolbar_back_img_btn, R.id.followBtn, R.id.followers_box, R.id.cover_photo_img_view})

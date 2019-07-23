@@ -674,7 +674,7 @@ public class OthersMotoFileActivity extends BaseActivity
                 case AppConstants.REPORT_POST_SUCCESS:
                     //TODO remove the reported post
                     mPostsRvOffset = 0;
-                    //callGetProfile(mMyProfileID, RetrofitClient.GET_PROFILE_RESPONSE);
+                    //callGetProfile(mMyProfileID, ApiClient.GET_PROFILE_RESPONSE);
                     getProfilePosts();
                     break;
             }

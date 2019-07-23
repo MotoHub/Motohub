@@ -10,7 +10,7 @@ import retrofit2.Call
 class NewsFeedProvider : BaseProvider() {
 
     fun getAllFeeds(inputModel: ApiInputModel, response: ResponseCallback<PostsModel>): Call<PostsModel> {
-        val call = apiService.retrofitApiInterface.getAllFeeds(inputModel.userID, inputModel.related, inputModel.order,
+        val call = apiService.apiInterface.getAllFeeds(inputModel.userID, inputModel.related, inputModel.order,
                 inputModel.limit, inputModel.offset, inputModel.includeCount)
         call.enqueue(DefaultResponse(response, ResponseSuccessCallback {}))
         return call

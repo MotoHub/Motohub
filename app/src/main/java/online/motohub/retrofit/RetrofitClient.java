@@ -1600,7 +1600,7 @@ public class RetrofitClient {
 //        String mFilter = "(ReportStatus == false) AND (user_type != club_user) AND (Post_on<=" + activity.getCurrentDate() + ")";
 //        activity.sysOut("API-TYPE: " + "GET");
 //        activity.sysOut("API-OPERATION: " + UrlUtils.BASE_URL + UrlUtils.POSTS + "&related=" + APIConstants.POST_FEED_RELATION + "&order=" + mOrderBy + "&limit=" + limit + "&offset=" + offset);
-//        RetrofitClient.getRetrofitInstance().getRetrofitApiInterface().callGetProfilePosts(mFilter, APIConstants.POST_FEED_RELATION, mOrderBy, limit, offset, true)
+//        ApiClient.getRetrofitInstance().getRetrofitApiInterface().callGetProfilePosts(mFilter, APIConstants.POST_FEED_RELATION, mOrderBy, limit, offset, true)
 //                .enqueue(new Callback<PostsModel>() {
 //                    @Override
 //                    public void onResponse(Call<PostsModel> call, Response<PostsModel> response) {
@@ -2301,7 +2301,7 @@ public class RetrofitClient {
         ((BaseActivity) mContext).sysOut("API-OPERATION: " + UrlUtils.BASE_URL + UrlUtils.GALLERY_VIDEO);
         DialogManager.showProgress(mContext);
 
-        /*RetrofitClient.getRetrofitInstance().getRetrofitApiInterface().postGalleryVideo(jsonArray)
+        /*ApiClient.getRetrofitInstance().getRetrofitApiInterface().postGalleryVideo(jsonArray)
                 .enqueue(new Callback<GalleryImgModel>() {
                     @Override
                     public void onResponse(Call<GalleryImgModel> call, Response<GalleryImgModel> response) {
@@ -5365,7 +5365,7 @@ public class RetrofitClient {
      */
     //    public void startDeviceStream(final BaseActivity activity, final int responseType) {
 //
-//        RetrofitClient.getRetrofitInstance().getPromoterPaymentInterface( )
+//        ApiClient.getRetrofitInstance().getPromoterPaymentInterface( )
 //                .callStartDeviceStream( "1234567890123",1,1).enqueue(new Callback<DeviceStreamModel>() {
 //            @Override
 //            public void onResponse(Call<DeviceStreamModel> call, Response<DeviceStreamModel> response) {
@@ -5388,7 +5388,7 @@ public class RetrofitClient {
 //
 //    public void getDeviceInfo(final BaseActivity activity, final int responseType) {
 //
-//        RetrofitClient.getRetrofitInstance().getPromoterPaymentInterface( )
+//        ApiClient.getRetrofitInstance().getPromoterPaymentInterface( )
 //                .callGetDeviceInfo( "1234567890123").enqueue(new Callback<DeviceInfoModel>() {
 //            @Override
 //            public void onResponse(Call<DeviceInfoModel> call, Response<DeviceInfoModel> response) {
@@ -5416,7 +5416,7 @@ public class RetrofitClient {
 //
 //        DialogManager.showProgress(activity);
 //
-//        RetrofitClient.getRetrofitInstance().getRetrofitApiInterface(mDreamFactoryApiKey,sessionToken)
+//        ApiClient.getRetrofitInstance().getRetrofitApiInterface(mDreamFactoryApiKey,sessionToken)
 //                .callGetDeviceStream("1234567890123",1,"rtmp",1 ).enqueue(new Callback<GetDeviceStreamModel>() {
 //            @Override
 //            public void onResponse(Call<GetDeviceStreamModel> call, Response<GetDeviceStreamModel> response) {

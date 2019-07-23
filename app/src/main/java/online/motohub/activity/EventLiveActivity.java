@@ -254,7 +254,7 @@ public class EventLiveActivity extends BaseActivity implements ChatBoxEventGrpAd
         mJsonObject.addProperty(EventLiveGroupChatModel.EVENT_ID, mEventID);
         JsonArray mJsonArray = new JsonArray();
         mJsonArray.add(mJsonObject);
-        RetrofitClient.getRetrofitInstance().callPostEventLiveGroupChatMember(this, mJsonArray, RetrofitClient.POST_EVENT_LIVE_GROUP_CHAT_MEMBER);
+        ApiClient.getRetrofitInstance().callPostEventLiveGroupChatMember(this, mJsonArray, ApiClient.POST_EVENT_LIVE_GROUP_CHAT_MEMBER);
     }
 */
 
@@ -269,7 +269,7 @@ public class EventLiveActivity extends BaseActivity implements ChatBoxEventGrpAd
 
     /*private void RemoveMembersFromGroupChat() {
         String mFilter = "(UserID=" + mUserID + ") AND (EventID=" + mEventID + ")";
-        RetrofitClient.getRetrofitInstance().callDeleteEventLiveGroupChatMember(this, mFilter, RetrofitClient.DELETE_EVENT_LIVE_GROUP_CHAT_MEMBER);
+        ApiClient.getRetrofitInstance().callDeleteEventLiveGroupChatMember(this, mFilter, ApiClient.DELETE_EVENT_LIVE_GROUP_CHAT_MEMBER);
     }*/
 
     private void getData() {

@@ -127,7 +127,7 @@ public class LiveStreamActivity extends BaseActivity implements CommonInterface 
 //        } else {
 //            String mFilter = "(" + APIConstants.StreamProfileID + " in (" + mMyPromoterFollowings + ")) AND (" + APIConstants.UserType + "!=user)";
 //            LIVE_STREAM_RES_TYPE = PROMOTERS_LIVE_STREAM;
-//            RetrofitClient.getRetrofitInstance().callGetFriendsStream(this, mFilter);
+//            ApiClient.getRetrofitInstance().callGetFriendsStream(this, mFilter);
 //        }
 //    }
 

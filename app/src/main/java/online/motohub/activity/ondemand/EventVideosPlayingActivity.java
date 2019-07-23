@@ -731,7 +731,7 @@ public class EventVideosPlayingActivity extends BaseActivity {
                 case RetrofitClient.PROFILE_IS_ALREADY_FOLLOWED:
                     mIsAlreadyFollowing = mFollowProfileModel.getResource().size() > 0;
                     setFollowUnfollow();
-                    //callGetProfile(mOtherProfileID, RetrofitClient.GET_OTHER_PROFILE_RESPONSE);
+                    //callGetProfile(mOtherProfileID, ApiClient.GET_OTHER_PROFILE_RESPONSE);
                     break;
                 case RetrofitClient.FOLLOW_PROFILE_RESPONSE:
                     mIsAlreadyFollowing = true;

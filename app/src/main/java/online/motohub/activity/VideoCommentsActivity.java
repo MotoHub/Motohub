@@ -598,7 +598,7 @@ public class VideoCommentsActivity extends BaseActivity implements TaggedProfile
             ProfileModel mProfileModel = (ProfileModel) responseObj;
             switch (responseType) {
 
-                case RetrofitClient.PROFILE_FIND_FRIENDS_LOAD_MORE_RESPONSE:
+                case ApiClient.PROFILE_FIND_FRIENDS_LOAD_MORE_RESPONSE:
 
                     if (mProfileModel.getResource() != null && mProfileModel.getResource().size() > 0) {
                         mRvTagList.setVisibility(View.VISIBLE);

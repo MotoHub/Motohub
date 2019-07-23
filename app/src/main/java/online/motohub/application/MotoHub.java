@@ -19,6 +19,7 @@ import java.util.ArrayList;
 
 import io.fabric.sdk.android.Fabric;
 import online.motohub.R;
+import online.motohub.bl.MotoHubApp;
 import online.motohub.model.EventAddOnModel;
 import online.motohub.model.EventCategoryModel;
 import online.motohub.model.ProfileResModel;
@@ -131,7 +132,7 @@ public class MotoHub extends Application {
         AppEventsLogger.activateApp(this);
         ScreenSize.getInstance(getApplicationContext());
         DateUtil.getInstance();
-        registerReceiver(new ConnectivityChangeReceiver(),new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE"));
+        registerReceiver(new ConnectivityChangeReceiver(), new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE"));
 
         StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
         StrictMode.setVmPolicy(builder.build());
@@ -143,6 +144,8 @@ public class MotoHub extends Application {
                 e.printStackTrace();
             }
         }
+        MotoHubApp.Builder mhBuilder = new MotoHubApp.Builder(this);
+        MotoHubApp.initialize(mhBuilder);
         UTILITY_INSTANCE = new Utility();
         COMMON_API_INSTANCE = new CommonAPI();
     }

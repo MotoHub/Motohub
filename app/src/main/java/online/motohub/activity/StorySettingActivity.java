@@ -173,7 +173,7 @@ public class StorySettingActivity extends BaseActivity {
             mObject.addProperty(SpectatorLiveModel.FILETYPE, mFileType.equalsIgnoreCase("image") ? AppConstants.IMAGE : AppConstants.VIDEO);
             mJsonArray.add(mObject);
         }
-        //  RetrofitClient.getRetrofitInstance().callToShareSpectatorData(this, mJsonArray, RetrofitClient.SHARE_STORY_RESPONSE_IN_SPECTATOR_LIVE);
+        //  ApiClient.getRetrofitInstance().callToShareSpectatorData(this, mJsonArray, ApiClient.SHARE_STORY_RESPONSE_IN_SPECTATOR_LIVE);
     }
 
     private void uploadProfilePicture() {
@@ -181,10 +181,10 @@ public class StorySettingActivity extends BaseActivity {
         RequestBody requestBody = RequestBody.create(MediaType.parse("*/*"), mFile);
         MultipartBody.Part filePart =
                 MultipartBody.Part.createFormData("files", mFile.getName(), requestBody);
-        /*RetrofitClient.getRetrofitInstance().callUploadSpectatorLive(
+        /*ApiClient.getRetrofitInstance().callUploadSpectatorLive(
                 this,
                 filePart,
-                RetrofitClient.UPLOAD_PROFILE_IMAGE_FILE_RESPONSE);*/
+                ApiClient.UPLOAD_PROFILE_IMAGE_FILE_RESPONSE);*/
     }
 
     @Override
@@ -200,7 +200,7 @@ public class StorySettingActivity extends BaseActivity {
                 ImageModel mImageModel = (ImageModel) responseObj;
                 apiCallToPostSpectatorData(mImageModel.getmModels().get(0).getPath());
                 break;
-           /* case RetrofitClient.SHARE_STORY_RESPONSE_IN_SPECTATOR_LIVE:
+           /* case ApiClient.SHARE_STORY_RESPONSE_IN_SPECTATOR_LIVE:
                 SpectatorLiveModel mSpectatorLiveStory = (SpectatorLiveModel) responseObj;
                 showToast(this, "Shared successfully");
                 break;*/

@@ -106,7 +106,7 @@ public class ViewOndemandActivity extends BaseActivity implements SwipeRefreshLa
 
     private void callApi() {
         mNotificationRefreshLayout.setRefreshing(false);
-        //RetrofitClient.getRetrofitInstance().callGetOndemandList(this, api_key, RetrofitClient.CALL_GET_NOTIFICATIONS);
+        //ApiClient.getRetrofitInstance().callGetOndemandList(this, api_key, ApiClient.CALL_GET_NOTIFICATIONS);
     }
 
     private void getMyProfiles() {

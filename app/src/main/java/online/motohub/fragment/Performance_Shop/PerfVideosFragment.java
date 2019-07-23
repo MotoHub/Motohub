@@ -164,9 +164,9 @@ public class PerfVideosFragment extends BaseFragment {
     private void getVideoDataFromAPi() {
         String mFilter = "(UserID=" + mClubResModel.getUserId() + ") AND ((" + APIConstants.UserType + "=shop) OR ("
                 + APIConstants.UserType + "=" + AppConstants.USER_EVENT_VIDEOS + "))";
-        /*RetrofitClient.getRetrofitInstance()
+        /*ApiClient.getRetrofitInstance()
                 .getPromoterVideoGallery1((BaseActivity) getActivity(),
-                        mFilter, RetrofitClient.GET_VIDEO_FILE_RESPONSE, mDataLimit, mPostsRvOffset);*/
+                        mFilter, ApiClient.GET_VIDEO_FILE_RESPONSE, mDataLimit, mPostsRvOffset);*/
         RetrofitClient.getRetrofitInstance()
                 .getPromoterVideoGallery((BaseActivity) getActivity(), mFilter, RetrofitClient.GET_VIDEO_FILE_RESPONSE);
     }
@@ -184,8 +184,8 @@ public class PerfVideosFragment extends BaseFragment {
     private void searchVideoDataFromApi() {
         String mFilter = "(UserID=" + mClubResModel.getUserId() + ") AND (Caption like '%" + mSearchStr + "%') AND ((" + APIConstants.UserType + "=shop) OR ("
                 + APIConstants.UserType + "=" + AppConstants.USER_EVENT_VIDEOS + "))";
-        /*RetrofitClient.getRetrofitInstance().getPromoterVideoGallery1((BaseActivity) getActivity(),
-                mFilter, RetrofitClient.SEARCH_VIDEO_FILE_RESPONSE, mDataLimit, mPostsRvOffset);*/
+        /*ApiClient.getRetrofitInstance().getPromoterVideoGallery1((BaseActivity) getActivity(),
+                mFilter, ApiClient.SEARCH_VIDEO_FILE_RESPONSE, mDataLimit, mPostsRvOffset);*/
         RetrofitClient.getRetrofitInstance()
                 .getPromoterVideoGallery((BaseActivity) getActivity(), mFilter, RetrofitClient.SEARCH_VIDEO_FILE_RESPONSE);
     }
