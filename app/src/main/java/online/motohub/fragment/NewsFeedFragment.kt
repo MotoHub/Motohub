@@ -10,17 +10,17 @@ import android.view.View
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.fragment_news_feed.*
 import online.motohub.R
-import online.motohub.adapter.PostsAdapter
+import online.motohub.adapter.NewsFeedAdapter
 import online.motohub.model.PostsResModel
 import online.motohub.viewmodel.BaseViewModelFactory
 import online.motohub.viewmodel.NewsFeedViewModel
 import java.util.*
 
-class NewsFeedFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener, PostsAdapter.TotalRetrofitPostsResultCount {
+class NewsFeedFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener, NewsFeedAdapter.TotalRetrofitPostsResultCount {
 
 
     var model: NewsFeedViewModel? = null
-    var feedAdapter: PostsAdapter? = null
+    var feedAdapter: NewsFeedAdapter? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_news_feed, container, false)
@@ -58,7 +58,7 @@ class NewsFeedFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener, P
 
     private fun setAdapter(list: ArrayList<PostsResModel>) {
         if (feedAdapter == null) {
-            feedAdapter = PostsAdapter(list, model!!.profileObj, activity, false)
+            feedAdapter = NewsFeedAdapter(list, model!!.profileObj, activity, false)
             listView.adapter = feedAdapter
         } else {
             feedAdapter!!.notifyDataSetChanged()
