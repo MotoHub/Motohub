@@ -85,7 +85,6 @@ public class PostsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     private static final int VIEW_TYPE_LOADING = 0;
     private static final int VIEW_TYPE_POSTS = 1;
     private final ArrayList<PostsResModel> mPostsList;
-    private int count_post_position = 0;
     private ArrayList<NotificationBlockedUsersModel> notifications_blocked_users = new ArrayList<>();
     private Context mContext;
     private ProfileResModel mCurrentProfileObj;
@@ -94,7 +93,6 @@ public class PostsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     private int mAdapterPosition;
     private RecyclerView mFeedLikesListView;
     private ViewHolderPosts mViewHolderPost;
-    private int mProfilePos;
     private int mDeleteLikeID;
     private String[] finalArr = null;
     private boolean isFromMyProfile;
@@ -106,7 +104,6 @@ public class PostsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         this.mContext = ctx;
         this.isFromMyProfile = isFromMyProfile;
         this.mActivity = (Activity) ctx;
-        refreshProfilePos();
     }
 
     @Override
@@ -125,9 +122,6 @@ public class PostsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     }
 
-    public void refreshProfilePos() {
-        mProfilePos = ((BaseActivity) mContext).getProfileCurrentPos();
-    }
 
     @Override
     public long getItemId(int position) {

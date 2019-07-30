@@ -5302,13 +5302,13 @@ public class RetrofitClient {
 
     }
 
-    public void callGetAllPosts(final BaseActivity activity, int filter, final int responseType, int limit, int offset) {
+    public void callGetAllPosts(final BaseActivity activity, int userID, final int responseType, int limit, int offset) {
         String mOrderBy = "CreatedAt DESC";
         // DialogManager.showProgress(activity);
         activity.sysOut("API-TYPE: " + "GET");
-        activity.sysOut("API-OPERATION: https://df.motohub.online/api/v2/allposts?filter=" +
-                filter + "&related=" + APIConstants.POST_FEED_RELATION + "&order=" + mOrderBy + "&limit=" + limit + "&offset=" + offset);
-        RetrofitClient.getRetrofitInstance().getRetrofitApiInterface().callGetAllPosts(filter, APIConstants.POST_FEED_RELATION, limit, offset, true)
+        activity.sysOut("API-OPERATION: https://df.motohub.online/api/v2/allposts?userid=" +
+                userID + "&related=" + APIConstants.POST_FEED_RELATION + "&order=" + mOrderBy + "&limit=" + limit + "&offset=" + offset);
+        RetrofitClient.getRetrofitInstance().getRetrofitApiInterface().callGetAllPosts(userID, APIConstants.POST_FEED_RELATION, limit, offset, true)
                 .enqueue(new Callback<PostsModel>() {
                     @Override
                     public void onResponse(Call<PostsModel> call, Response<PostsModel> response) {

@@ -6,6 +6,7 @@ import android.arch.lifecycle.Observer
 import android.content.Context
 import online.motohub.bl.MotoHubApp
 import online.motohub.interfaces.PermissionViewModelCallback
+import online.motohub.interfaces.UserPreferences
 import online.motohub.interfaces.ViewModelCallback
 import java.lang.ref.WeakReference
 

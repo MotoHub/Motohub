@@ -2,6 +2,7 @@ package online.motohub.activity;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -62,6 +63,7 @@ import com.google.gson.Gson;
 import com.yalantis.contextmenu.lib.MenuObject;
 
 import org.greenrobot.eventbus.EventBus;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -69,6 +71,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.ref.WeakReference;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.channels.FileChannel;
@@ -89,10 +92,15 @@ import butterknife.BindString;
 import butterknife.ButterKnife;
 import online.motohub.R;
 import online.motohub.adapter.EventsFindAdapter;
+import online.motohub.bl.ViewModelAlert;
+import online.motohub.constants.AppConstants;
+import online.motohub.dialog.DialogManager;
 import online.motohub.fragment.dialog.AppDialogFragment;
 import online.motohub.interfaces.CommonInterface;
 import online.motohub.interfaces.PermissionCallback;
+import online.motohub.interfaces.PermissionViewModelCallback;
 import online.motohub.interfaces.SendVideoUrl;
+import online.motohub.interfaces.ViewModelCallback;
 import online.motohub.model.ErrorMessage;
 import online.motohub.model.EventsModel;
 import online.motohub.model.ImageModel;
@@ -101,14 +109,13 @@ import online.motohub.model.PostsModel;
 import online.motohub.model.ProfileResModel;
 import online.motohub.model.SingleChatRoomResModel;
 import online.motohub.retrofit.RetrofitClient;
-import online.motohub.constants.AppConstants;
-import online.motohub.dialog.DialogManager;
 import online.motohub.util.PreferenceUtils;
 import online.motohub.util.UrlUtils;
 import online.motohub.util.ZoomImageView;
+import online.motohub.viewmodel.BaseViewModel;
 
 @SuppressLint("Registered")
-public class BaseActivity extends AppCompatActivity {
+public class BaseActivity extends AppCompatActivity implements ViewModelCallback, PermissionViewModelCallback {
     public static final int PERMISSION_IMAGE_CAMERA = 1;
     public static final int PERMISSION_IMAGE_GALLERY = 2;
     public static final int PERMISSION_VIDEO_CAMERA = 3;
@@ -2130,11 +2137,64 @@ public class BaseActivity extends AppCompatActivity {
         mActivity.overridePendingTransition(R.anim.slide_in_right,
                 R.anim.slide_out_left);
     }
-    public void nextScreen(Class<?> clazz,Bundle bundle) {
+
+    public void nextScreen(Class<?> clazz, Bundle bundle) {
         Intent mIntent = new Intent(mActivity, clazz);
         mIntent.putExtras(bundle);
         mActivity.startActivity(mIntent);
         mActivity.overridePendingTransition(R.anim.slide_in_right,
                 R.anim.slide_out_left);
+    }
+
+    private WeakReference<BaseViewModel> registeredModel = null;
+
+    public void registerModel(BaseViewModel model) {
+        if (getActivity() instanceof ViewModelCallback) {
+            ViewModelCallback callback = (ViewModelCallback) getActivity();
+            model.setCallback(callback);
+        }
+        model.setNavCallback(this);
+        this.registeredModel = new WeakReference<>(model);
+    }
+
+    @TargetApi(Build.VERSION_CODES.M)
+    @Override
+    public void requestPermission(List<String> strings, int code) {
+        requestPermissions(strings.toArray(new String[strings.size()]), code);
+    }
+
+    @Override
+    public void onPointerCaptureChanged(boolean hasCapture) {
+
+    }
+
+    @Override
+    public void showProgress() {
+        DialogManager.showProgress(this);
+    }
+
+    @Override
+    public void hideProgress() {
+        DialogManager.hideProgress();
+    }
+
+    @Override
+    public void showMessage(@NotNull String errorMessage) {
+        Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void showAlert(@NotNull ViewModelAlert viewModelAlert) {
+
+    }
+
+    @Override
+    public int getProgressCount() {
+        return 0;
+    }
+
+    @Override
+    public void setProgressCount(int progressCount) {
+
     }
 }

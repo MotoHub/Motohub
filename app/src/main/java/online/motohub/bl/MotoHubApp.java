@@ -23,12 +23,7 @@ public class MotoHubApp implements UserPreferenceCallback {
          * Members of Builder
          */
         public Context context;
-        public String baseURL;
-        public String fileDir;
         public UserPreferences userPreferences;
-        public String appName;
-        public boolean testMode = false;
-
         /**
          * Initialize a builder with a given context.
          *
@@ -41,33 +36,13 @@ public class MotoHubApp implements UserPreferenceCallback {
             this.context = context;
         }
 
-        public void setAppName(String appName) {
-            this.appName = appName;
-        }
-
-        public void setBaseURL(String baseURL) {
-            this.baseURL = baseURL;
-        }
-
-        public void setFileDir(String fileDir) {
-            this.fileDir = fileDir;
-        }
-
-        public void setUserPreferences(UserPreferences userPreferences) {
-            this.userPreferences = userPreferences;
-        }
-
-        public void setTestMode(boolean testMode) {
-            this.testMode = testMode;
-        }
     }
 
 
     public ApiClient apiClients;
     public UserPreferences userPreferences;
-    public String appName;
     public ConnectivityLiveData internetUtil;
-    public MHFileCacheImplementor fileCacheImplementor;
+    private MHFileCacheImplementor fileCacheImplementor;
     /**
      * Initialize the MotoHub app with given configuration
      */
@@ -84,10 +59,17 @@ public class MotoHubApp implements UserPreferenceCallback {
 //        } else {
 //            url = configuration.baseURL;
 //        }
+
         MotoHubApp mh = getInstance();
         Context context = configuration.context;
-        File filecacheDir = new File(context.getFilesDir(), AppConstants.FILE_CACHE_FOLDER_NAME);
-        mh.fileCacheImplementor = new MHFileCacheImplementor(filecacheDir);
+
+        if (configuration.userPreferences == null) {
+            mh.userPreferences = new AppPreferences(context);
+        } else {
+            mh.userPreferences = configuration.userPreferences;
+        }
+        File fileCacheDir = new File(context.getFilesDir(), AppConstants.FILE_CACHE_FOLDER_NAME);
+        mh.fileCacheImplementor = new MHFileCacheImplementor(fileCacheDir);
         mh.apiClients = new ApiClient(url, mh.userPreferences, mh.fileCacheImplementor);
         mh.internetUtil = new ConnectivityLiveData(context);
         return mh;
@@ -116,6 +98,7 @@ public class MotoHubApp implements UserPreferenceCallback {
     }
 
     public void onUserLogout() {
+
     }
 
 

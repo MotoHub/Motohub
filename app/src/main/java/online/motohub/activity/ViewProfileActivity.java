@@ -1429,7 +1429,6 @@ public class ViewProfileActivity extends BaseActivity implements
                             mNewsFeedList.addAll(mPostsModel.getResource());
                             mPostsRvOffset = mPostsRvOffset + mDataLimit;
                             setPostAdapter();
-                            mNewsFeedAdapter.refreshProfilePos();
                             postNestedScrollView.setNestedScrollingEnabled(true);
                         } else {
                             if (mPostsRvOffset == 0) {
@@ -1445,7 +1444,6 @@ public class ViewProfileActivity extends BaseActivity implements
                         mNewsFeedList.remove(mPostPos);
                         mPostsRvTotalCount -= 1;
                         setPostAdapter();
-                        mNewsFeedAdapter.refreshProfilePos();
                         showSnackBar(mCoordinatorLayout, getResources().getString(R.string.post_delete));
                     }
                     break;
@@ -1455,9 +1453,7 @@ public class ViewProfileActivity extends BaseActivity implements
                         mNewsFeedList.add(0, mPostsResModel);
                         mPostsRvTotalCount += 1;
                         setPostAdapter();
-                        mNewsFeedAdapter.refreshProfilePos();
                         mNewsFeedAdapter.resetShareAdapter(mSharedFeed);
-                        mNewsFeedAdapter.refreshProfilePos();
                         showSnackBar(mCoordinatorLayout, getResources().getString(R.string.post_shared));
                     }
                     break;

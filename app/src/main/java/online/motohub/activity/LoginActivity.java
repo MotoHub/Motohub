@@ -35,7 +35,9 @@ import butterknife.OnClick;
 import online.motohub.R;
 import online.motohub.activity.business.BusinessProfileActivity;
 import online.motohub.adapter.RecentUsersAdapter;
+import online.motohub.constants.AppConstants;
 import online.motohub.database.DatabaseHandler;
+import online.motohub.dialog.DialogManager;
 import online.motohub.fcm.MyFireBaseMessagingService;
 import online.motohub.interfaces.CommonReturnInterface;
 import online.motohub.model.LoginModel;
@@ -43,8 +45,6 @@ import online.motohub.model.ProfileModel;
 import online.motohub.model.ProfileResModel;
 import online.motohub.model.promoter_club_news_media.PromotersModel;
 import online.motohub.retrofit.RetrofitClient;
-import online.motohub.constants.AppConstants;
-import online.motohub.dialog.DialogManager;
 import online.motohub.util.PreferenceUtils;
 import online.motohub.util.UrlUtils;
 
@@ -295,7 +295,7 @@ public class LoginActivity extends BaseActivity {
                 addUserToLocalDB();
                 PERMISSION_ACTION_TYPE = PERMISSION_SHARING_WRITE_ACCESS;
                 // if (isPermissionAdded()) {
-                startActivity(new Intent(this, ViewProfileActivity.class));
+                startActivity(new Intent(this, HomeActivity.class));
                 // }
                 finish();
             } else {

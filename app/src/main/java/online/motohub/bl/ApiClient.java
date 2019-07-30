@@ -19,11 +19,13 @@ import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.ResponseBody;
+import online.motohub.R;
+import online.motohub.application.MotoHub;
 import online.motohub.interfaces.RetrofitApiInterface;
 import online.motohub.interfaces.UserPreferences;
 import online.motohub.model.ErrorMessage;
+import online.motohub.util.PreferenceUtils;
 import retrofit2.Converter;
-import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -36,14 +38,21 @@ public class ApiClient {
 
     public ApiClient(String base_url, UserPreferences preferences, MHFileCacheImplementor fileCacheImplementor) {
         this.sharedPreference = preferences;
-
+        final String apiKey = MotoHub.getApplicationInstance().getResources().getString(R.string.dream_factory_api_key);
+        final String sessionToken = sharedPreference.getString(PreferenceUtils.SESSION_TOKEN);
         OkHttpClient okHttpClient = getUnsafeOkHttpClient()
                 .addInterceptor(
                         new Interceptor() {
                             @Override
                             public okhttp3.Response intercept(@NonNull Chain chain) throws IOException {
-                                Request request = chain.request().newBuilder()
-                                        .addHeader("Accept", "Application/JSON").build();
+                                Request.Builder requestBuilder =
+                                        chain.request().newBuilder()
+                                                .addHeader("X-DreamFactory-Api-Key", apiKey)
+                                                .addHeader("Accept", "Application/JSON");
+                                if (!sessionToken.isEmpty()) {
+                                    requestBuilder.addHeader("X-DreamFactory-Session-Token", sessionToken);
+                                }
+                                Request request = requestBuilder.build();
                                 return chain.proceed(request);
                             }
                         }).connectTimeout(60, TimeUnit.SECONDS)

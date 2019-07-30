@@ -25,7 +25,6 @@ import online.motohub.R;
 import online.motohub.activity.BaseActivity;
 import online.motohub.adapter.EventLivePromoterChatAdapter;
 import online.motohub.constants.AppConstants;
-import online.motohub.dialog.BasePopup;
 import online.motohub.interfaces.CommonInterface;
 import online.motohub.interfaces.CommonReturnInterface;
 import online.motohub.interfaces.SharePostInterface;

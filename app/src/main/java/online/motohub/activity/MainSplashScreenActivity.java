@@ -40,14 +40,14 @@ public class MainSplashScreenActivity extends BaseActivity {
                                 startActivity(new Intent(MainSplashScreenActivity.this, BusinessProfileActivity.class));
                             } else if (mUserProfileCompleted) {
                                 setmIsFirstLaunch(true);
-                                startActivity(new Intent(MainSplashScreenActivity.this, ViewProfileActivity.class));
+                                startActivity(new Intent(MainSplashScreenActivity.this, HomeActivity.class));
                             } else {
                                 startActivity(new Intent(MainSplashScreenActivity.this, CreateProfileActivity.class)
                                         .putExtra(AppConstants.TAG, TAG));
                             }
                         } else {
                             setmIsFirstLaunch(true);
-                            startActivity(new Intent(MainSplashScreenActivity.this, HomeActivity.class));
+                            startActivity(new Intent(MainSplashScreenActivity.this, LoginActivity.class));
                         }
                     }
                     finish();

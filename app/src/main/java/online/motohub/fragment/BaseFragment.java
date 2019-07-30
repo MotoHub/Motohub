@@ -20,6 +20,8 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -34,6 +36,8 @@ import java.util.List;
 import java.util.Locale;
 
 import online.motohub.R;
+import online.motohub.bl.ViewModelAlert;
+import online.motohub.dialog.DialogManager;
 import online.motohub.fragment.dialog.AppDialogFragment;
 import online.motohub.interfaces.PermissionViewModelCallback;
 import online.motohub.interfaces.ViewModelCallback;
@@ -46,7 +50,7 @@ import online.motohub.viewmodel.BaseViewModel;
 
 import static android.content.Context.INPUT_METHOD_SERVICE;
 
-public class BaseFragment extends Fragment implements PermissionViewModelCallback {
+public class BaseFragment extends Fragment implements ViewModelCallback, PermissionViewModelCallback {
 
     protected static final String GALLERY_IMAGE_NAME_TYPE = "gallery_img";
     protected static final String GALLERY_VIDEO_NAME_TYPE = "gallery_vid";
@@ -325,5 +329,35 @@ public class BaseFragment extends Fragment implements PermissionViewModelCallbac
     @Override
     public void requestPermission(List<String> strings, int code) {
         requestPermissions(strings.toArray(new String[strings.size()]), code);
+    }
+
+    @Override
+    public void showProgress() {
+        DialogManager.showProgress(getActivity());
+    }
+
+    @Override
+    public void hideProgress() {
+        DialogManager.hideProgress();
+    }
+
+    @Override
+    public void showMessage(@NotNull String errorMessage) {
+        Toast.makeText(getActivity(), errorMessage, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void showAlert(@NotNull ViewModelAlert viewModelAlert) {
+
+    }
+
+    @Override
+    public int getProgressCount() {
+        return 0;
+    }
+
+    @Override
+    public void setProgressCount(int progressCount) {
+
     }
 }

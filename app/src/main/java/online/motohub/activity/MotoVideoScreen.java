@@ -114,7 +114,7 @@ public class MotoVideoScreen extends BaseActivity {
     }
 
     private void doAction() {
-        startActivity(new Intent(this, HomeActivity.class));
+        startActivity(new Intent(this, LoginActivity.class));
         finish();
     }
 

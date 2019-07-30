@@ -745,7 +745,7 @@ public interface RetrofitApiInterface {
     Call<PromoterVideoModel> callsetViewCountOnDemand(@Query("fields") String fields, @Body JsonObject mJsonArray);
 
     @GET(UrlUtils.ALL_POST)
-    Call<PostsModel> callGetAllPosts(@Query("userid") int filter, @Query("related") String related,
+    Call<PostsModel> callGetAllPosts(@Query("userid") int userID, @Query("related") String related,
                                      @Query("limit") int limit, @Query("offset") int offset, @Query("include_count") boolean count);
 
     @Headers("Content-Type: application/json")
@@ -770,4 +770,8 @@ public interface RetrofitApiInterface {
     @GET(UrlUtils.ALL_POST)
     Call<PostsModel> getAllFeeds(@Query("userid") int userID, @Query("related") String related, @Query("order") String order,
                                  @Query("limit") int limit, @Query("offset") int offset, @Query("include_count") boolean count);
+
+    @Headers("Content-Type: application/json")
+    @GET(UrlUtils.PROFILES)
+    Call<ProfileModel> getProfiles(@Query("filter") String filter, @Query("related") String related);
 }
