@@ -28,7 +28,7 @@ public class ConnectivityChangeReceiver extends BroadcastReceiver {
             boolean isLoggedIn = PreferenceUtils.getInstance(context).getBooleanData(PreferenceUtils.USER_KEEP_LOGGED_IN);
             if (isLoggedIn && isNetworkConnected(context) && AppConstants.UPLOAD_STATUS != UploadStatus.STARTED)
                 Log.e("CONNECTIVITY -->", "TRUE");
-            uploadOffline(context);
+//            uploadOffline(context);
         }
     }
 

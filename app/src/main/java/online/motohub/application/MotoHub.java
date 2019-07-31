@@ -2,7 +2,6 @@ package online.motohub.application;
 
 import android.app.Application;
 import android.content.Context;
-import android.content.IntentFilter;
 import android.os.Build;
 import android.os.StrictMode;
 import android.support.multidex.MultiDex;
@@ -24,7 +23,6 @@ import online.motohub.model.EventCategoryModel;
 import online.motohub.model.ProfileResModel;
 import online.motohub.model.PromoterVideoModel;
 import online.motohub.util.CommonAPI;
-import online.motohub.util.ConnectivityChangeReceiver;
 import online.motohub.util.DateUtil;
 import online.motohub.util.ScreenSize;
 import online.motohub.util.Utility;
@@ -131,7 +129,7 @@ public class MotoHub extends Application {
         AppEventsLogger.activateApp(this);
         ScreenSize.getInstance(getApplicationContext());
         DateUtil.getInstance();
-        registerReceiver(new ConnectivityChangeReceiver(),new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE"));
+//        registerReceiver(new ConnectivityChangeReceiver(),new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE"));
 
         StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
         StrictMode.setVmPolicy(builder.build());

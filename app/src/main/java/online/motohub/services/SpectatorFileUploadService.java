@@ -113,20 +113,20 @@ public class SpectatorFileUploadService extends IntentService implements Progres
         mEventFinishDate = entity.getEventFinishDate();
         mLivePostProfileID = Integer.parseInt(entity.getLivePostProfileID());
 
-        final File videoFile = new File(mVideoPath);
-        DatabaseHandler databaseHandler = new DatabaseHandler(mContext);
-        videoUploadModel = new VideoUploadModel();
-        int count = databaseHandler.getPendingCount();
         final int notificationid = 1;
-        String s = videoFile.toString();
-        videoUploadModel.setVideoURL(s.substring(s.lastIndexOf("/") + 1));
-        videoUploadModel.setFlag(1);
-        videoUploadModel.setThumbnailURl(mThumbImgFile.toString());
-        videoUploadModel.setProfileID(mProfileID);
-        videoUploadModel.setNotificationflag(notificationid);
-        String mUserType = AppConstants.USER_EVENT_VIDEOS;
-        videoUploadModel.setUserType(mUserType);
-        databaseHandler.addVideoDetails(videoUploadModel);
+        final File videoFile = new File(mVideoPath);
+//        DatabaseHandler databaseHandler = new DatabaseHandler(mContext);
+//        videoUploadModel = new VideoUploadModel();
+//
+//        String s = videoFile.toString();
+//        videoUploadModel.setVideoURL(s.substring(s.lastIndexOf("/") + 1));
+//        videoUploadModel.setFlag(1);
+//        videoUploadModel.setThumbnailURl(mThumbImgFile.toString());
+//        videoUploadModel.setProfileID(mProfileID);
+//        videoUploadModel.setNotificationflag(notificationid);
+//        String mUserType = AppConstants.USER_EVENT_VIDEOS;
+//        videoUploadModel.setUserType(mUserType);
+//        databaseHandler.addVideoDetails(videoUploadModel);
 
         mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -145,16 +145,6 @@ public class SpectatorFileUploadService extends IntentService implements Progres
         }
         startForeground(notificationid, mNotification);
 
-        /*ClientConfiguration configuration = new ClientConfiguration();
-        configuration.setMaxErrorRetry(3);
-        configuration.setConnectionTimeout(501000);
-        configuration.setSocketTimeout(501000);
-        configuration.setProtocol(Protocol.HTTP);
-
-        credentials = new BasicAWSCredentials(AppConstants.KEY, AppConstants.SECRET);
-        s3 = new AmazonS3Client(credentials, configuration);
-        s3.setRegion(Region.getRegion(Regions.AP_SOUTHEAST_2));
-        transferUtility = new TransferUtility(s3, SpectatorFileUploadService.this);*/
 
         TransferUtility transferUtility =
                 TransferUtility.builder()
@@ -170,9 +160,7 @@ public class SpectatorFileUploadService extends IntentService implements Progres
         observerVideo.setTransferListener(new TransferListener() {
             @Override
             public void onStateChanged(int id, TransferState state) {
-
                 if (TransferState.COMPLETED.equals(observerVideo.getState())) {
-
                     try {
                         JsonObject mObject = new JsonObject();
                         mObject.addProperty(SpectatorLiveModel.PROFILE_ID, mProfileID);
@@ -191,7 +179,6 @@ public class SpectatorFileUploadService extends IntentService implements Progres
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-
                 }
             }
 
@@ -220,15 +207,10 @@ public class SpectatorFileUploadService extends IntentService implements Progres
         observerImage.setTransferListener(new TransferListener() {
             @Override
             public void onStateChanged(int id, TransferState state) {
-
-                if (TransferState.COMPLETED.equals(observerImage.getState())) {
-                }
             }
 
-            @SuppressLint("SetTextI18n")
             @Override
             public void onProgressChanged(int id, long bytesCurrent, long bytesTotal) {
-                float percentage = ((float) bytesCurrent / (float) bytesTotal * 100);
             }
 
             @Override
@@ -255,7 +237,6 @@ public class SpectatorFileUploadService extends IntentService implements Progres
         });
     }
 
-    @SuppressWarnings("SameParameterValue")
     private void onDownloadComplete(String value, int mNotificationID, String id, boolean isSuccess) {
         AppConstants.UPLOAD_STATUS = UploadStatus.FAILED;
         try {
@@ -282,7 +263,7 @@ public class SpectatorFileUploadService extends IntentService implements Progres
                 mNotificationManager.notify(mNotificationID, mNotification);
                 sendBroadcast(new Intent().setAction("UPLOAD_STATUS").putExtra("status", value));
             }
-            uploadOffline(this);
+//            uploadOffline(this);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -294,7 +275,7 @@ public class SpectatorFileUploadService extends IntentService implements Progres
             ArrayList<SpectatorLiveEntity> mList = handler.getSpectatorLiveVideos();
             if (mList.size() > 0) {
                 for (int i = 0; i < mList.size(); i++) {
-                    if(AppConstants.UPLOAD_STATUS == UploadStatus.STARTED){
+                    if (AppConstants.UPLOAD_STATUS == UploadStatus.STARTED) {
                         break;
                     }
                     Intent service_intent = new Intent(context, SpectatorFileUploadService.class);

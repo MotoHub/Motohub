@@ -1,10 +1,6 @@
 package online.motohub.activity;
 
-import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
-import android.app.job.JobInfo;
-import android.app.job.JobScheduler;
-import android.content.ComponentName;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.media.MediaPlayer;
@@ -12,27 +8,19 @@ import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
-import android.os.PersistableBundle;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.MediaController;
-import android.widget.Toast;
 import android.widget.VideoView;
 
 import com.amazonaws.mobile.client.AWSMobileClient;
-import com.amazonaws.mobileconnectors.s3.transferutility.TransferListener;
 import com.amazonaws.mobileconnectors.s3.transferutility.TransferObserver;
-import com.amazonaws.mobileconnectors.s3.transferutility.TransferState;
-import com.amazonaws.mobileconnectors.s3.transferutility.TransferUtility;
-import com.amazonaws.services.s3.AmazonS3Client;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -42,13 +30,14 @@ import org.greenrobot.eventbus.EventBus;
 import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
-import java.util.Random;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import online.motohub.R;
+import online.motohub.constants.AppConstants;
 import online.motohub.database.DatabaseHandler;
+import online.motohub.dialog.DialogManager;
 import online.motohub.model.EventsModel;
 import online.motohub.model.EventsResModel;
 import online.motohub.model.ImageModel;
@@ -57,11 +46,7 @@ import online.motohub.model.SpectatorLiveEntity;
 import online.motohub.model.SpectatorLiveModel;
 import online.motohub.model.promoter_club_news_media.PromotersResModel;
 import online.motohub.retrofit.RetrofitClient;
-import online.motohub.constants.AppConstants;
 import online.motohub.services.SpectatorFileUploadService;
-import online.motohub.dialog.DialogManager;
-import online.motohub.services.UploadJobScheduler;
-import online.motohub.util.UrlUtils;
 
 
 public class VideoStoryPreviewActivity extends BaseActivity implements MediaPlayer.OnPreparedListener, MediaPlayer.OnCompletionListener {
@@ -216,7 +201,6 @@ public class VideoStoryPreviewActivity extends BaseActivity implements MediaPlay
         finish();
     }*/
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private void uploadSpecLiveVideo() {
         File mFile = new File(videoUri.getPath());
         Bitmap bitmap = ThumbnailUtils.createVideoThumbnail(mFile.getPath(), MediaStore.Images.Thumbnails.MINI_KIND);
@@ -228,94 +212,29 @@ public class VideoStoryPreviewActivity extends BaseActivity implements MediaPlay
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
+        SpectatorLiveEntity entity = new SpectatorLiveEntity();
+        entity.setProfileID(String.valueOf(mMyProfileResModel.getID()));
+        entity.setUserID(String.valueOf(mPromoter.getUserId()));
+        entity.setUserType(AppConstants.USER_EVENT_VIDEOS);
+        entity.setCaption(text);
+        entity.setVideoUrl(videoUri.getPath());
+        assert mThumb != null;
+        entity.setThumbnail(mThumb.getAbsolutePath());
+        entity.setEventID(String.valueOf(mEventResModel.getID()));
+        entity.setEventFinishDate(mEventResModel.getFinish());
+        entity.setLivePostProfileID(String.valueOf(mMyProfileResModel.getID()));
+        Gson g = new Gson();
+        String json = g.toJson(entity);
+        databaseHandler.insertSpectatorLiveVideo(entity);
         if (isNetworkConnected(this)) {
-            SpectatorLiveEntity entity = new SpectatorLiveEntity();
-            entity.setProfileID(String.valueOf(mMyProfileResModel.getID()));
-            entity.setUserID(String.valueOf(mPromoter.getUserId()));
-            entity.setUserType(AppConstants.USER_EVENT_VIDEOS);
-            entity.setCaption(text);
-            entity.setVideoUrl(videoUri.getPath());
-            assert mThumb != null;
-            entity.setThumbnail(mThumb.getAbsolutePath());
-            entity.setEventID(String.valueOf(mEventResModel.getID()));
-            entity.setEventFinishDate(mEventResModel.getFinish());
-            entity.setLivePostProfileID(String.valueOf(mMyProfileResModel.getID()));
-            Gson g = new Gson();
-            String json = g.toJson(entity);
-            databaseHandler.insertSpectatorLiveVideo(entity);
             //scheduleJob1(json);
             Intent service_intent = new Intent(this, SpectatorFileUploadService.class);
             service_intent.putExtra("data", json);
             startService(service_intent);
             finish();
         } else {
-            SpectatorLiveEntity entity = new SpectatorLiveEntity();
-            entity.setProfileID(String.valueOf(mMyProfileResModel.getID()));
-            entity.setUserID(String.valueOf(mPromoter.getUserId()));
-            entity.setUserType(AppConstants.USER_EVENT_VIDEOS);
-            entity.setCaption(text);
-            entity.setVideoUrl(videoUri.getPath());
-            assert mThumb != null;
-            entity.setThumbnail(mThumb.getAbsolutePath());
-            entity.setEventID(String.valueOf(mEventResModel.getID()));
-            entity.setEventFinishDate(mEventResModel.getFinish());
-            entity.setLivePostProfileID(String.valueOf(mMyProfileResModel.getID()));
-            databaseHandler.insertSpectatorLiveVideo(entity);
             finish();
         }
-    }
-
-    /*@RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    public void scheduleJob() {
-        ComponentName componentName = new ComponentName(this, UploadJobService.class);
-        JobInfo info = new JobInfo.Builder(123, componentName)
-                .setRequiresCharging(false)
-                .setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)
-                .setPersisted(true)
-                .setPeriodic(15 * 60 * 10000)
-                .build();
-
-        JobScheduler scheduler = (JobScheduler) getSystemService(JOB_SCHEDULER_SERVICE);
-        assert scheduler != null;
-        int resultCode = scheduler.schedule(info);
-        if (resultCode == JobScheduler.RESULT_SUCCESS) {
-            Log.d(TAG, "Job scheduled");
-        } else {
-            Log.d(TAG, "Job scheduling failed");
-        }
-    }*/
-
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    public void scheduleJob1(String data) {
-        Random ran = new Random();
-        int x = ran.nextInt(50) + 1;
-        ComponentName componentName = new ComponentName(this, UploadJobScheduler.class);
-        PersistableBundle bundle = new PersistableBundle();
-        bundle.putString("data", data);
-        JobInfo info = new JobInfo.Builder(x, componentName)
-                .setRequiresCharging(false)
-                .setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)
-                .setPersisted(true)
-                .setExtras(bundle)
-                .setPeriodic(50000)
-                .build();
-
-        JobScheduler scheduler = (JobScheduler) getSystemService(JOB_SCHEDULER_SERVICE);
-        assert scheduler != null;
-        int resultCode = scheduler.schedule(info);
-        if (resultCode == JobScheduler.RESULT_SUCCESS) {
-            Log.d(TAG, "Job scheduled");
-        } else {
-            Log.d(TAG, "Job scheduling failed");
-        }
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    public void cancelJob(View v) {
-        JobScheduler scheduler = (JobScheduler) getSystemService(JOB_SCHEDULER_SERVICE);
-        assert scheduler != null;
-        scheduler.cancel(123);
-        Log.d(TAG, "Job cancelled");
     }
 
     private void apiCallToUploadSpecLiveStreamVideo(String mVideoPath, String mThumb) {
@@ -352,17 +271,6 @@ public class VideoStoryPreviewActivity extends BaseActivity implements MediaPlay
             e.printStackTrace();
         }
         return null;
-    }
-
-    private void nextScreen() {
-        Intent intent = new Intent(this, StorySettingActivity.class);
-        intent.putExtra("file_uri", videoUri);
-        intent.putExtra("file_type", "video");
-        Bundle mBundle = getIntent().getExtras().getBundle("bundle_data");
-        if (mBundle != null)
-            intent.putExtra("bundle_data", mBundle);
-        startActivity(intent);
-        finish();
     }
 
     void playVideo() {
@@ -402,100 +310,6 @@ public class VideoStoryPreviewActivity extends BaseActivity implements MediaPlay
         }
     }
 
-
-    private void amazoneUpload(final File video, final File image) {
-
-        pDialog.setMessage("Please wait video is uploading...");
-        showDialog();
-
-        /*ClientConfiguration configuration = new ClientConfiguration();
-        configuration.setMaxErrorRetry(3);
-        configuration.setConnectionTimeout(501000);
-        configuration.setSocketTimeout(501000);
-        configuration.setProtocol(Protocol.HTTP);
-
-        credentials = new BasicAWSCredentials(AppConstants.KEY, AppConstants.SECRET);
-        s3 = new AmazonS3Client(credentials, configuration);
-        s3.setRegion(Region.getRegion(Regions.AP_SOUTHEAST_2));
-        transferUtility = new TransferUtility(s3, VideoStoryPreviewActivity.this);*/
-
-        TransferUtility transferUtility =
-                TransferUtility.builder()
-                        .context(getApplicationContext())
-                        .awsConfiguration(AWSMobileClient.getInstance().getConfiguration())
-                        .s3Client(new AmazonS3Client(AWSMobileClient.getInstance().getCredentialsProvider()))
-                        .build();
-
-        if (!video.exists()) {
-            Toast.makeText(VideoStoryPreviewActivity.this, "File Not Found!", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        final String videoFileName = video.getName();
-        final String imageFileName = image.getName();
-
-        observerVideo = transferUtility.upload(AppConstants.BUCKET_NAME, UrlUtils.FILE_UPLOAD_SPECTOCTORLIVE + videoFileName, video);
-
-        observerImage = transferUtility.upload(AppConstants.BUCKET_NAME, UrlUtils.FILE_UPLOAD_SPECTOCTORLIVE + imageFileName, image);
-
-        observerVideo.setTransferListener(new TransferListener() {
-            @Override
-            public void onStateChanged(int id, TransferState state) {
-
-                if (TransferState.COMPLETED.equals(observerVideo.getState())) {
-                    hideDialog();
-                    apiCallToUploadSpecLiveStreamVideo(UrlUtils.FILE_UPLOAD_SPECTOCTORLIVE + videoFileName, UrlUtils.FILE_UPLOAD_SPECTOCTORLIVE + imageFileName);
-                }
-            }
-
-            @SuppressLint("SetTextI18n")
-            @Override
-            public void onProgressChanged(int id, long bytesCurrent, long bytesTotal) {
-
-                long _bytesCurrent = bytesCurrent;
-                long _bytesTotal = bytesTotal;
-
-                float percentage = ((float) _bytesCurrent / (float) _bytesTotal * 100);
-                Log.d("percentage", "" + percentage);
-                //pDialog.setProgress((int) percentage);
-
-            }
-
-            @Override
-            public void onError(int id, Exception ex) {
-                hideDialog();
-                //Toast.makeText(VideoStoryPreviewActivity.this, "" + ex.getMainObj(), Toast.LENGTH_SHORT).show();
-            }
-        });
-
-
-        observerImage.setTransferListener(new TransferListener() {
-            @Override
-            public void onStateChanged(int id, TransferState state) {
-
-                if (TransferState.COMPLETED.equals(observerImage.getState())) {
-                }
-            }
-
-            @SuppressLint("SetTextI18n")
-            @Override
-            public void onProgressChanged(int id, long bytesCurrent, long bytesTotal) {
-
-                long _bytesCurrent = bytesCurrent;
-                long _bytesTotal = bytesTotal;
-
-                float percentage = ((float) _bytesCurrent / (float) _bytesTotal * 100);
-                Log.d("percentage", "" + percentage);
-                /*pb.setProgress((int) percentage);*/
-            }
-
-            @Override
-            public void onError(int id, Exception ex) {
-                //Toast.makeText(VideoStoryPreviewActivity.this, "" + ex.getMainObj(), Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
-
     private void showDialog() {
         if (!pDialog.isShowing())
             pDialog.show();
@@ -504,15 +318,6 @@ public class VideoStoryPreviewActivity extends BaseActivity implements MediaPlay
     private void hideDialog() {
         if (pDialog.isShowing())
             pDialog.dismiss();
-    }
-
-    public String getCompressedVideoPath() {
-        CreateCompressedVideoPath();
-        mCompressedVideoPath = Environment.getExternalStorageDirectory()
-                + File.separator
-                + COMPRESSED_VIDEO_FOLDER + System.currentTimeMillis() + "COMPRESSED_VIDEO.mp4";
-        return mCompressedVideoPath;
-
     }
 
 
