@@ -263,7 +263,7 @@ public class SpectatorFileUploadService extends IntentService implements Progres
                 mNotificationManager.notify(mNotificationID, mNotification);
                 sendBroadcast(new Intent().setAction("UPLOAD_STATUS").putExtra("status", value));
             }
-//            uploadOffline(this);
+            uploadOffline(this);
         } catch (Exception e) {
             e.printStackTrace();
         }

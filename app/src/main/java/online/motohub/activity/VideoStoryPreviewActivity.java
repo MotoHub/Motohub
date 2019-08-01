@@ -1,6 +1,5 @@
 package online.motohub.activity;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.media.MediaPlayer;
@@ -66,7 +65,6 @@ public class VideoStoryPreviewActivity extends BaseActivity implements MediaPlay
     private Uri videoUri;
     private EventsResModel mEventResModel;
     private ProfileResModel mMyProfileResModel;
-    private ProgressDialog pDialog;
     private String COMPRESSED_VIDEO_FOLDER = "MotoHUB";
     private String mCompressedVideoPath;
     private DatabaseHandler databaseHandler = new DatabaseHandler(this);
@@ -86,7 +84,6 @@ public class VideoStoryPreviewActivity extends BaseActivity implements MediaPlay
     @Override
     protected void onDestroy() {
         DialogManager.hideProgress();
-        hideDialog();
         super.onDestroy();
     }
 
@@ -107,9 +104,6 @@ public class VideoStoryPreviewActivity extends BaseActivity implements MediaPlay
         mVideoView.setVideoURI(videoUri);
         mVideoView.setOnPreparedListener(this);
         mVideoView.setOnCompletionListener(this);
-
-        pDialog = new ProgressDialog(this, R.style.MyAlertDialogStyle);
-        pDialog.setCancelable(false);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -139,67 +133,6 @@ public class VideoStoryPreviewActivity extends BaseActivity implements MediaPlay
         }
     }
 
-    /*private void showAlertDialog(final String data) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                final AlertDialog.Builder builder = new AlertDialog.Builder(VideoStoryPreviewActivity.this, R.style.MyAlertDialogStyle);
-                builder.setTitle(data);
-                builder.setCancelable(false);
-                builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-                    @Override
-                    public void onClick(DialogInterface dialog, int whichButton) {
-                        jobScheduler();
-                        dialog.dismiss();
-                    }
-                });
-                builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        uploadSpecLiveVideo();
-                        dialog.dismiss();
-                    }
-                });
-                builder.show();
-            }
-        });
-    }*/
-
-    /*@RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    private void jobScheduler() {
-        File mFile = new File(videoUri.getPath());
-        Bitmap bitmap = ThumbnailUtils.createVideoThumbnail(mFile.getPath(), MediaStore.Images.Thumbnails.MINI_KIND);
-        File mThumb = getThumbPath(bitmap);
-
-        PromotersResModel mPromoter = mEventResModel.getPromoterByUserID();
-        String text = null;
-        try {
-            text = URLEncoder.encode(mEditStory.getText().toString(), "UTF-8");
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-
-        SpectatorLiveEntity entity = new SpectatorLiveEntity();
-        entity.setProfileID(String.valueOf(mMyProfileResModel.getID()));
-        entity.setUserID(String.valueOf(mPromoter.getUserId()));
-        entity.setUserType(AppConstants.USER_EVENT_VIDEOS);
-        entity.setCaption(text);
-        entity.setVideoUrl(videoUri.getPath());
-        assert mThumb != null;
-        entity.setThumbnail(mThumb.getAbsolutePath());
-        entity.setEventID(String.valueOf(mEventResModel.getID()));
-        entity.setEventFinishDate(mEventResModel.getFinish());
-        entity.setLivePostProfileID(String.valueOf(mMyProfileResModel.getID()));
-        databaseHandler.insertSpectatorLiveVideo(entity);
-        boolean mIsJobSchedule = PreferenceUtils.getInstance(this).getBooleanData(PreferenceUtils.IS_JOB_SCHEDULER);
-        if (!mIsJobSchedule) {
-            scheduleJob();
-            PreferenceUtils.getInstance(this).saveBooleanData(PreferenceUtils.IS_JOB_SCHEDULER, true);
-        }
-        finish();
-    }*/
 
     private void uploadSpecLiveVideo() {
         File mFile = new File(videoUri.getPath());
@@ -309,16 +242,5 @@ public class VideoStoryPreviewActivity extends BaseActivity implements MediaPlay
                 break;
         }
     }
-
-    private void showDialog() {
-        if (!pDialog.isShowing())
-            pDialog.show();
-    }
-
-    private void hideDialog() {
-        if (pDialog.isShowing())
-            pDialog.dismiss();
-    }
-
 
 }
