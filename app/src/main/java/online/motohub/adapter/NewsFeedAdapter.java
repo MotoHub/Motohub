@@ -97,11 +97,11 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     private String[] finalArr = null;
     private boolean isFromMyProfile;
 
-    public NewsFeedAdapter(ArrayList<PostsResModel> postsList, ProfileResModel myProfileResModel,
-                           Context ctx, boolean isFromMyProfile) {
+    public NewsFeedAdapter(
+            Context ctx, ArrayList<PostsResModel> postsList, ProfileResModel myProfileResModel, boolean isFromMyProfile) {
+        this.mContext = ctx;
         this.mPostsList = postsList;
         this.mCurrentProfileObj = myProfileResModel;
-        this.mContext = ctx;
         this.isFromMyProfile = isFromMyProfile;
         this.mActivity = (Activity) ctx;
     }

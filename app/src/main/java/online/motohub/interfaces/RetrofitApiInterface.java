@@ -774,4 +774,8 @@ public interface RetrofitApiInterface {
     @Headers("Content-Type: application/json")
     @GET(UrlUtils.PROFILES)
     Call<ProfileModel> getProfiles(@Query("filter") String filter, @Query("related") String related);
+
+    @Headers("Content-Type: application/json")
+    @GET(UrlUtils.EVENTS)
+    Call<EventsModel> getEvents(@Query("filter") String filter, @Query("related") String related, @Query("order") String order);
 }

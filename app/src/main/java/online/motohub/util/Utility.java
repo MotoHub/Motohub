@@ -1,7 +1,11 @@
 package online.motohub.util;
 
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -161,5 +165,11 @@ public class Utility {
             mStringBuilder.append(mBlockedUsersList.get(i).getPromoterUserID()).append(divider);
         }
         return mStringBuilder.toString();
+    }
+
+    public String getCurrentDateTime() {
+        DateFormat mDateFormat = new SimpleDateFormat("yyyy-MM-dd H:mm:ss", Locale.getDefault());
+//        mDateFormat.setTimeZone(TimeZone.getTimeZone(AppConstants.NZ_TIME_ZONE));
+        return mDateFormat.format(new Date());
     }
 }

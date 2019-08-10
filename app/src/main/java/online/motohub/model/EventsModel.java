@@ -18,7 +18,6 @@ public class EventsModel {
     public static final String LIVESTREAM_BY_EVENTID = "livestream_by_EventID";
     public static final String LIVESTREAMPAYMENT_BY_EVENTID = "livestreampayment_by_EventID";
     public static final String EVENT_AMOUNT = "EventAmount";
-    public static final String PROMOTER_FOLLOWER_BY_PROMOTER_USER_ID = "promoterfollower_by_PromoterUserID";
     public static final String EVENT_AD_BY_EVENTID = "eventad_by_EventID";
 
     @SerializedName("resource")

@@ -58,7 +58,7 @@ class NewsFeedFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener, N
 
     private fun setAdapter(list: ArrayList<PostsResModel>) {
         if (feedAdapter == null) {
-            feedAdapter = NewsFeedAdapter(list, model!!.profileObj, activity, false)
+            feedAdapter = NewsFeedAdapter(activity, list, model!!.profileObj, false)
             listView.adapter = feedAdapter
         } else {
             feedAdapter!!.notifyDataSetChanged()

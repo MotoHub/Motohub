@@ -13,4 +13,8 @@ public class RelationConstants {
     public static final String POST_FEED_RELATION = "profiles_by_WhoPostedProfileID, postlikes_by_PostID, postlikes_by_PostID," +
             "postshares_by_OriginalPostID, promoter_by_WhoPostedProfileID, promoter_by_ProfileID, postshares_by_NewSharedPostID," +
             " videoshares_by_NewSharedPostID, profiles_by_ProfileID,clubgroup_by_ClubUserID,promoterfollower_by_PromoterUserID,track_by_user_id";
+
+    public static final String EVENT_RELATION = "whosgoing_by_EventID, event_groups_by_EventID, racing_by_EventID, event_registration_question_by_group_id," +
+            "event_registration_answer_by_EventID,promoter_by_UserID, livestream_by_EventID, livestreampayment_by_EventID, eventad_by_EventID";
+
 }

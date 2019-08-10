@@ -4,19 +4,21 @@ import android.app.Application
 import android.arch.lifecycle.MutableLiveData
 import android.os.Bundle
 import com.google.gson.Gson
+import online.motohub.constants.AppConstants
 import online.motohub.constants.BundleConstants
 import online.motohub.constants.RelationConstants
 import online.motohub.interfaces.ResponseCallback
 import online.motohub.model.ApiInputModel
-import online.motohub.model.PostsResModel
+import online.motohub.model.EventsResModel
 import online.motohub.model.ProfileResModel
-import online.motohub.provider.NewsFeedProvider
+import online.motohub.provider.FindEventProvider
+import online.motohub.util.Utility
 import java.util.*
 
-class NewsFeedViewModel(application: Application, bundle: Bundle?) : BaseViewModel(application) {
+class FindEventViewModel(application: Application, bundle: Bundle?) : BaseViewModel(application) {
 
-    val provider = NewsFeedProvider()
-    val newsFeedLiveData = MutableLiveData<ArrayList<PostsResModel>>()
+    val provider = FindEventProvider()
+    val eventsLiveData = MutableLiveData<ArrayList<EventsResModel>>()
     var profileObj: ProfileResModel? = null
 
     init {
@@ -25,7 +27,7 @@ class NewsFeedViewModel(application: Application, bundle: Bundle?) : BaseViewMod
 
     override fun initialize(firstTime: Boolean) {
         super.initialize(firstTime)
-        getFeeds()
+        getUpcomingEvents()
 
     }
 
@@ -33,25 +35,24 @@ class NewsFeedViewModel(application: Application, bundle: Bundle?) : BaseViewMod
         super.initializeWithNetworkAvailable()
     }
 
-    private fun getFeeds() {
-
+    private fun getUpcomingEvents() {
         callback!!.showProgress()
-        provider.getAllFeeds(getInputModel(10, 0), ResponseCallback {
+        provider.getUpcomingEvents(getInputModel(), ResponseCallback {
             callback!!.hideProgress()
             if (it.isSuccess && it.data != null && it.data.resource != null) {
-                newsFeedLiveData.value = it.data.resource
+                eventsLiveData.value = it.data.resource
             }
         })
     }
 
-    private fun getInputModel(limit: Int, offset: Int): ApiInputModel {
+    private fun getInputModel(): ApiInputModel {
+        val status = AppConstants.EVENT_STATUS
+        val currentDate =Utility.getInstance().getCurrentDateTime()
+        val filter = "(( Date >= " + currentDate + " ) OR ( Finish >= " + currentDate + " )) AND ( EventStatus = " + status + ")"
         val inputModel = ApiInputModel()
-        inputModel.userID = profileObj!!.id
-        inputModel.related = RelationConstants.POST_FEED_RELATION
-        inputModel.order = "CreatedAt DESC"
-        inputModel.limit = limit
-        inputModel.offset = offset
-        inputModel.includeCount = true
+        inputModel.filter = filter
+        inputModel.related = RelationConstants.EVENT_RELATION
+        inputModel.order = "CreatedAt ASC"
         return inputModel
     }
 }
