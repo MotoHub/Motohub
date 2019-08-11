@@ -8,7 +8,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import kotlinx.android.synthetic.main.fragment_news_feed.*
+import kotlinx.android.synthetic.main.fragment_find_event.*
 import online.motohub.R
 import online.motohub.adapter.FindEventsAdapter
 import online.motohub.model.EventsResModel
