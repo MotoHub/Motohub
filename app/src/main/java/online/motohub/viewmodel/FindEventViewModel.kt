@@ -48,7 +48,7 @@ class FindEventViewModel(application: Application, bundle: Bundle?) : BaseViewMo
     private fun getInputModel(): ApiInputModel {
         val status = AppConstants.EVENT_STATUS
         val currentDate =Utility.getInstance().getCurrentDateTime()
-        val filter = "(( Date >= " + currentDate + " ) OR ( Finish >= " + currentDate + " )) AND ( EventStatus = " + status + ")"
+        val filter = "(( Date >= $currentDate ) OR ( Finish >= $currentDate )) AND ( EventStatus = $status)"
         val inputModel = ApiInputModel()
         inputModel.filter = filter
         inputModel.related = RelationConstants.EVENT_RELATION

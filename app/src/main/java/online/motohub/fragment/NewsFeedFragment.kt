@@ -5,22 +5,35 @@ import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.fragment_news_feed.*
 import online.motohub.R
 import online.motohub.adapter.NewsFeedAdapter
+import online.motohub.interfaces.OnLoadMoreListener
 import online.motohub.model.PostsResModel
 import online.motohub.viewmodel.BaseViewModelFactory
 import online.motohub.viewmodel.NewsFeedViewModel
 import java.util.*
 
-class NewsFeedFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener, NewsFeedAdapter.TotalRetrofitPostsResultCount {
+class NewsFeedFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener {
 
 
-    var model: NewsFeedViewModel? = null
-    var feedAdapter: NewsFeedAdapter? = null
+    private var model: NewsFeedViewModel? = null
+    private var feedAdapter: NewsFeedAdapter? = null
+
+    private var isLoadMoreCalled = false
+    private var isLoading = false
+    private var hasNextPage = false
+
+    private var feedsList = ArrayList<PostsResModel?>()
+
+    private val mOnLoadMoreListener = OnLoadMoreListener {
+        isLoadMoreCalled = true
+        model!!.getFeeds(feedsList.size, false)
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_news_feed, container, false)
@@ -45,27 +58,49 @@ class NewsFeedFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener, N
         registerModel(model)
         model!!.newsFeedLiveData.observe(this, Observer {
             if (it != null)
-                setAdapter(it)
+                feedsList.addAll(it)
+
+            setAdapter()
+
         })
         model!!.initialize()
 
+        listView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                val mVisibleItemCount = layoutManager!!.childCount
+                val mTotalItemCount = layoutManager!!.itemCount
+                val mFirstVisibleItemPosition = layoutManager!!.findFirstVisibleItemPosition()
+                if (!isLoading && hasNextPage) {
+                    if (mVisibleItemCount + mFirstVisibleItemPosition >= mTotalItemCount && mFirstVisibleItemPosition >= 0) {
+                        isLoading = true
+                        mOnLoadMoreListener.onLoadMore()
+
+                    }
+                }
+            }
+        })
     }
 
     override fun onRefresh() {
-        swipeRefreshLay.isRefreshing = false
+
+        feedsList.clear()
+        model!!.getFeeds(feedsList.size, false)
     }
 
 
-    private fun setAdapter(list: ArrayList<PostsResModel>) {
+    private fun setAdapter() {
         if (feedAdapter == null) {
-            feedAdapter = NewsFeedAdapter(activity, list, model!!.profileObj, false)
+            feedAdapter = NewsFeedAdapter(activity, feedsList, model!!.profileObj, false)
             listView.adapter = feedAdapter
         } else {
             feedAdapter!!.notifyDataSetChanged()
         }
+        hasNextPage = model!!.totalCount > feedsList.size
+        isLoadMoreCalled = false
+        isLoading = false
+        if (swipeRefreshLay.isRefreshing)
+            swipeRefreshLay.isRefreshing = false
     }
 
-    override fun getTotalPostsResultCount(): Int {
-        return 10
-    }
 }

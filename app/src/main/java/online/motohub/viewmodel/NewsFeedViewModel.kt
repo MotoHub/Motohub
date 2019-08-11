@@ -5,6 +5,7 @@ import android.arch.lifecycle.MutableLiveData
 import android.os.Bundle
 import com.google.gson.Gson
 import online.motohub.constants.BundleConstants
+import online.motohub.constants.OtherConstants
 import online.motohub.constants.RelationConstants
 import online.motohub.interfaces.ResponseCallback
 import online.motohub.model.ApiInputModel
@@ -18,6 +19,7 @@ class NewsFeedViewModel(application: Application, bundle: Bundle?) : BaseViewMod
     val provider = NewsFeedProvider()
     val newsFeedLiveData = MutableLiveData<ArrayList<PostsResModel>>()
     var profileObj: ProfileResModel? = null
+    var totalCount: Int = 0
 
     init {
         profileObj = Gson().fromJson(bundle!!.getString(BundleConstants.MY_PROFILE_OBJ), ProfileResModel::class.java)
@@ -25,31 +27,28 @@ class NewsFeedViewModel(application: Application, bundle: Bundle?) : BaseViewMod
 
     override fun initialize(firstTime: Boolean) {
         super.initialize(firstTime)
-        getFeeds()
+        getFeeds(0, true)
 
     }
 
-    override fun initializeWithNetworkAvailable() {
-        super.initializeWithNetworkAvailable()
-    }
-
-    private fun getFeeds() {
+    fun getFeeds(offset: Int, showProgress: Boolean) {
 
         callback!!.showProgress()
-        provider.getAllFeeds(getInputModel(10, 0), ResponseCallback {
+        provider.getAllFeeds(getInputModel(offset), ResponseCallback {
             callback!!.hideProgress()
             if (it.isSuccess && it.data != null && it.data.resource != null) {
+                totalCount=it.data.meta.count
                 newsFeedLiveData.value = it.data.resource
             }
         })
     }
 
-    private fun getInputModel(limit: Int, offset: Int): ApiInputModel {
+    private fun getInputModel(offset: Int): ApiInputModel {
         val inputModel = ApiInputModel()
         inputModel.userID = profileObj!!.id
         inputModel.related = RelationConstants.POST_FEED_RELATION
         inputModel.order = "CreatedAt DESC"
-        inputModel.limit = limit
+        inputModel.limit = OtherConstants.LIMIT_10
         inputModel.offset = offset
         inputModel.includeCount = true
         return inputModel

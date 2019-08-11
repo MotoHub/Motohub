@@ -530,11 +530,11 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
                 final ViewHolderLoader mViewHolderLoader = (ViewHolderLoader) holder;
 
-                if (mPostsList.size() != ((TotalRetrofitPostsResultCount) mContext).getTotalPostsResultCount()) {
-                    mViewHolderLoader.mProgressBar.setVisibility(View.VISIBLE);
-                } else {
-                    mViewHolderLoader.mProgressBar.setVisibility(View.GONE);
-                }
+//                if (mPostsList.size() != ((TotalRetrofitPostsResultCount) mContext).getTotalPostsResultCount()) {
+//                    mViewHolderLoader.mProgressBar.setVisibility(View.VISIBLE);
+//                } else {
+//                    mViewHolderLoader.mProgressBar.setVisibility(View.GONE);
+//                }
                 break;
 
             default:
@@ -1452,9 +1452,9 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         return result;
     }
 
-    public interface TotalRetrofitPostsResultCount {
-        int getTotalPostsResultCount();
-    }
+//    public interface TotalRetrofitPostsResultCount {
+//        int getTotalPostsResultCount();
+//    }
 
     class ViewHolderPosts extends RecyclerView.ViewHolder {
 
