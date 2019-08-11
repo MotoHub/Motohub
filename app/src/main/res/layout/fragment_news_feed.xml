@@ -2,7 +2,8 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/parentLay"
-    style="@style/LayoutMatch">
+    style="@style/LayoutMatch"
+    android:background="@color/colorLightGrey">
 
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/swipeRefreshLay"
@@ -14,8 +15,7 @@
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/listView"
-            style="@style/LayoutMatchWrap"
-            android:background="@color/colorLighterGrey" />
+            style="@style/LayoutMatchWrap" />
     </android.support.v4.widget.SwipeRefreshLayout>
 
 </android.support.constraint.ConstraintLayout>

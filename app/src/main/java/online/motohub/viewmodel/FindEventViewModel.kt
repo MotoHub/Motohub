@@ -52,7 +52,7 @@ class FindEventViewModel(application: Application, bundle: Bundle?) : BaseViewMo
         val inputModel = ApiInputModel()
         inputModel.filter = filter
         inputModel.related = RelationConstants.EVENT_RELATION
-        inputModel.order = "CreatedAt ASC"
+        inputModel.order = "Date ASC"
         return inputModel
     }
 }

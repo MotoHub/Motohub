@@ -2,6 +2,7 @@ package online.motohub.fragment
 
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
+import android.content.Intent
 import android.os.Bundle
 import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.LinearLayoutManager
@@ -10,6 +11,8 @@ import android.view.View
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.fragment_find_event.*
 import online.motohub.R
+import online.motohub.activity.ComingSoonActivity
+import online.motohub.activity.EventsFindActivity
 import online.motohub.adapter.FindEventsAdapter
 import online.motohub.model.EventsResModel
 import online.motohub.viewmodel.BaseViewModelFactory
@@ -47,6 +50,13 @@ class FindEventFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener {
                 setAdapter(it)
         })
         model!!.initialize()
+
+        findEventsView.setOnClickListener {
+            startActivity(Intent(activity, EventsFindActivity::class.java))
+        }
+        viewEventResultsView.setOnClickListener {
+            startActivity(Intent(activity, ComingSoonActivity::class.java))
+        }
     }
 
     override fun onRefresh() {

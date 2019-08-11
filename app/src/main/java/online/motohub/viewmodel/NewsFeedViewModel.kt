@@ -32,12 +32,13 @@ class NewsFeedViewModel(application: Application, bundle: Bundle?) : BaseViewMod
     }
 
     fun getFeeds(offset: Int, showProgress: Boolean) {
-
-        callback!!.showProgress()
+        if (showProgress)
+            callback!!.showProgress()
         provider.getAllFeeds(getInputModel(offset), ResponseCallback {
-            callback!!.hideProgress()
+            if (showProgress)
+                callback!!.hideProgress()
             if (it.isSuccess && it.data != null && it.data.resource != null) {
-                totalCount=it.data.meta.count
+                totalCount = it.data.meta.count
                 newsFeedLiveData.value = it.data.resource
             }
         })
