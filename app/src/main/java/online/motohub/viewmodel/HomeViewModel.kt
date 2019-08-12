@@ -16,7 +16,7 @@ class HomeViewModel(application: Application, bundle: Bundle?) : BaseViewModel(a
     val provider = HomeProvider()
     val profileListLiveData = MutableLiveData<ArrayList<ProfileResModel>>()
     var profileObj: ProfileResModel? = null
-    var cacheProfile: ArrayList<ProfileResModel>? = null
+    private var cacheProfile: ArrayList<ProfileResModel>? = null
 
     override fun initialize(firstTime: Boolean) {
         super.initialize(firstTime)
@@ -25,7 +25,6 @@ class HomeViewModel(application: Application, bundle: Bundle?) : BaseViewModel(a
             getProfileList()
         } else {
             setProfileObj(cacheProfile!!)
-            profileListLiveData.value = cacheProfile
         }
     }
 
@@ -39,8 +38,6 @@ class HomeViewModel(application: Application, bundle: Bundle?) : BaseViewModel(a
             callback!!.hideProgress()
             if (it.isSuccess && it.data != null && it.data.resource != null && it.data.resource.size > 0) {
                 setProfileObj(it.data.resource)
-                profileListLiveData.value = it.data.resource
-
             }
         })
     }
@@ -55,5 +52,6 @@ class HomeViewModel(application: Application, bundle: Bundle?) : BaseViewModel(a
 
     private fun setProfileObj(list: ArrayList<ProfileResModel>) {
         profileObj = list.get(0)
+        profileListLiveData.value = list
     }
 }
