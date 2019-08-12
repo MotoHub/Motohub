@@ -42,7 +42,7 @@ public class MotoHubApp implements UserPreferenceCallback {
     public ApiClient apiClients;
     public UserPreferences userPreferences;
     public ConnectivityLiveData internetUtil;
-    private MHFileCacheImplementor fileCacheImplementor;
+    public MHFileCacheImplementor fileCacheImplementor;
     /**
      * Initialize the MotoHub app with given configuration
      */

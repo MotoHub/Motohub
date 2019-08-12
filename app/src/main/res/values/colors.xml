@@ -28,4 +28,5 @@
 
     <color name="footer_bg">#ECECEC</color>
 
+    <color name="mainBg">#E9FFFFFF</color>
 </resources>

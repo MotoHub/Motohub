@@ -771,11 +771,10 @@ public interface RetrofitApiInterface {
     Call<PostsModel> getAllFeeds(@Query("userid") int userID, @Query("related") String related, @Query("order") String order,
                                  @Query("limit") int limit, @Query("offset") int offset, @Query("include_count") boolean count);
 
-    @Headers("Content-Type: application/json")
+    @Headers({"SAVE_RESPONSE_AS: Profile"})
     @GET(UrlUtils.PROFILES)
     Call<ProfileModel> getProfiles(@Query("filter") String filter, @Query("related") String related);
 
-    @Headers("Content-Type: application/json")
     @GET(UrlUtils.EVENTS)
     Call<EventsModel> getEvents(@Query("filter") String filter, @Query("related") String related, @Query("order") String order);
 }

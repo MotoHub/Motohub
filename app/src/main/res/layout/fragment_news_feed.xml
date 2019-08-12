@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/parentLay"
     style="@style/LayoutMatch"
-    android:background="@color/colorLightGrey">
+    android:background="@color/mainBg">
 
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/swipeRefreshLay"
