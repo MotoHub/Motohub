@@ -905,7 +905,7 @@ public class PostsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 } else {
                     mViewHolderPost.mShareTextTv.setText(mPostsList.get(position).getSharedTxt());
                 }
-                //mViewHolderPost.mShareTextTv.setText(replacer(sb.append(mPostsList.get(position).getSharedTxt())));
+                //mViewHolderPost.sharedContentTxt.setText(replacer(sb.append(mPostsList.get(position).getSharedTxt())));
             } catch (Exception e) {
                 e.printStackTrace();
             }

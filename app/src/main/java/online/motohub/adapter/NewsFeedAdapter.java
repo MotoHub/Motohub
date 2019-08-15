@@ -66,6 +66,7 @@ import online.motohub.activity.promoter.PromotersImgListActivity;
 import online.motohub.activity.track.TrackProfileActivity;
 import online.motohub.constants.AppConstants;
 import online.motohub.fragment.dialog.AppDialogFragment;
+import online.motohub.interfaces.AdapterClickCallBack;
 import online.motohub.model.FeedCommentModel;
 import online.motohub.model.FeedLikesModel;
 import online.motohub.model.FeedShareModel;
@@ -96,14 +97,16 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     private int mDeleteLikeID;
     private String[] finalArr = null;
     private boolean isFromMyProfile;
+    private  AdapterClickCallBack callBack;
 
     public NewsFeedAdapter(
-            Context ctx, ArrayList<PostsResModel> postsList, ProfileResModel myProfileResModel, boolean isFromMyProfile) {
+            Context ctx, ArrayList<PostsResModel> postsList, ProfileResModel myProfileResModel, boolean isFromMyProfile, AdapterClickCallBack callBack) {
         this.mContext = ctx;
         this.mPostsList = postsList;
         this.mCurrentProfileObj = myProfileResModel;
         this.isFromMyProfile = isFromMyProfile;
         this.mActivity = (Activity) ctx;
+        this.callBack=callBack;
     }
 
     @Override
@@ -113,13 +116,11 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     @Override
     public int getItemViewType(int position) {
-
         if (position >= mPostsList.size()) {
             return VIEW_TYPE_LOADING;
         } else {
             return VIEW_TYPE_POSTS;
         }
-
     }
 
 
@@ -135,7 +136,7 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         switch (viewType) {
             case VIEW_TYPE_POSTS:
                 mView = LayoutInflater.from(parent.getContext())
-                        .inflate(R.layout.row_profile_post_item, parent, false);
+                        .inflate(R.layout.adap_news_feed, parent, false);
                 return new ViewHolderPosts(mView);
             case VIEW_TYPE_LOADING:
                 mView = LayoutInflater.from(parent.getContext())
@@ -166,7 +167,7 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     mViewHolderPost.mPostPicProgressBar.setVisibility(View.GONE);
                     mViewHolderPost.mPostImageVideoBox.setVisibility(View.GONE);
                     if (mPostsList.get(position).getDateCreatedAt() != null)
-                        mViewHolderPost.mPostDate.setText(((BaseActivity) mContext).findTime(mPostsList.get(position).getDateCreatedAt()));
+                        mViewHolderPost.mPostDate.setText(Utility.getInstance().findTime(mPostsList.get(position).getDateCreatedAt()));
 
                     mViewHolderPost.mBottomArrowImgView.setVisibility(View.VISIBLE);
                     mViewHolderPost.mBottomArrowImgView.setOnClickListener(this);
@@ -182,7 +183,7 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                         public void onClick(View v) {
                             mAdapterPosition = position;
                             String img_tag = v.getTag().toString();
-                            if (!((BaseActivity) mContext).isMultiClicked()) {
+                            if (!Utility.getInstance().isMultiClicked()) {
                                 if (img_tag.equals(mContext.getString(R.string.notification_blocked))) {
                                     unBlockNotification(position);
                                 } else if (img_tag.equals(mContext.getString(R.string.notification_unblocked))) {
@@ -196,8 +197,8 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                         mViewHolderPost.mProfileImg.setOnClickListener(this);
                         mViewHolderPost.mUsername.setTag(position);
                         mViewHolderPost.mUsername.setOnClickListener(this);
-                        mViewHolderPost.mShareProfileImg.setTag(position);
-                        mViewHolderPost.mShareProfileImg.setOnClickListener(this);
+                        mViewHolderPost.sharedUserImg.setTag(position);
+                        mViewHolderPost.sharedUserImg.setOnClickListener(this);
                     }
                     if (mPostsList.get(position).getUserType() == null
                             || mPostsList.get(position).getUserType().isEmpty()
@@ -257,7 +258,7 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     final String[] mVideoArray = ((BaseActivity) mContext).getImgVideoList(mPostsList.get(position).getPostVideoThumbnailURL());
                     final String[] mImgArray = ((BaseActivity) mContext).getImgVideoList(mPostsList.get(position).getPostPicture());
                     if ((mVideoArray != null && mVideoArray.length >= 1) && (mImgArray != null && mImgArray.length >= 1)) {
-                        String[] c = concat(mVideoArray, mImgArray);
+                        String[] c = mergeArrayList(mVideoArray, mImgArray);
                         mViewHolderPost.mMultiImgLay.setVisibility(View.VISIBLE);
                         setImageView(mViewHolderPost, c);
                     } else {
@@ -354,7 +355,7 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                             final String[] mImgArray = ((BaseActivity) mContext).getImgVideoList(mPostsList.get(position).getPostPicture());
                             final String[] mVideoArray = ((BaseActivity) mContext).getImgVideoList(mPostsList.get(position).getPostVideoThumbnailURL());
                             if (mImgArray != null && mVideoArray != null) {
-                                finalArr = concat(mVideoArray, mImgArray);
+                                finalArr = mergeArrayList(mVideoArray, mImgArray);
                             } else if (mImgArray == null && mVideoArray != null) {
                                 finalArr = Arrays.copyOf(mVideoArray, mVideoArray.length);
                             } else //noinspection ConstantConditions,ConstantConditions
@@ -369,7 +370,7 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     mViewHolderPost.mLikeBtn.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            if (!((BaseActivity) mContext).isMultiClicked()) {
+                            if (!Utility.getInstance().isMultiClicked()) {
                                 mAdapterPosition = position;
                                 switch (view.getTag().toString()) {
                                     case "unlike":
@@ -526,17 +527,6 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     e.printStackTrace();
                 }
                 break;
-            case VIEW_TYPE_LOADING:
-
-                final ViewHolderLoader mViewHolderLoader = (ViewHolderLoader) holder;
-
-//                if (mPostsList.size() != ((TotalRetrofitPostsResultCount) mContext).getTotalPostsResultCount()) {
-//                    mViewHolderLoader.mProgressBar.setVisibility(View.VISIBLE);
-//                } else {
-//                    mViewHolderLoader.mProgressBar.setVisibility(View.GONE);
-//                }
-                break;
-
             default:
                 break;
 
@@ -546,7 +536,6 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     @Override
     public void onClick(View view) {
-
         switch (view.getId()) {
             case R.id.down_arrow:
                 int position = (int) view.getTag();
@@ -558,12 +547,12 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     ((BaseActivity) mContext).showAppDialog(AppDialogFragment.BOTTOM_REPORT_ACTION_DIALOG, mPos);
                 }
                 break;
-            case R.id.circular_img_view:
-            case R.id.top_tv_share:
+            case R.id.userImg:
+            case R.id.sharedProfileTxt:
             case R.id.top_tv:
                 postProfileClick(view);
                 break;
-            case R.id.circular_img_view_share:
+            case R.id.sharedUserImg:
                 sharedPostProfileClick(view);
                 break;
         }
@@ -794,13 +783,13 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     }
 
-    public void postNotificationDefault(ImageView img) {
+    private void postNotificationDefault(ImageView img) {
         img.setVisibility(View.VISIBLE);
         img.setImageResource(R.drawable.notify_active_icon);
         img.setTag(mContext.getString(R.string.notification_unblocked));
     }
 
-    public void setPostNotifications(int pos, ImageView img) {
+    private void setPostNotifications(int pos, ImageView img) {
         notifications_blocked_users = mPostsList.get(pos).getmNotificationBlockedUsersID();
         for (final NotificationBlockedUsersModel mNotifications_post : notifications_blocked_users) {
             if (mCurrentProfileObj.getID() == mNotifications_post.getmProfileID()) {
@@ -892,20 +881,20 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     }
 
     private void showShareLayout(final ViewHolderPosts mViewHolderPost, final int position, String mPostOwnerName) {
-        mViewHolderPost.mShareViewLay.setVisibility(View.VISIBLE);
-        mViewHolderPost.mSharedBottomArrow.setVisibility(View.VISIBLE);
-        mViewHolderPost.mNotify_share.setVisibility(View.VISIBLE);
+        mViewHolderPost.sharedProfileLay.setVisibility(View.VISIBLE);
+        mViewHolderPost.sharedDownIcon.setVisibility(View.VISIBLE);
+        mViewHolderPost.sharedNotifyIcon.setVisibility(View.VISIBLE);
         if (mPostsList.get(position).getSharedTxt().trim().isEmpty()) {
-            mViewHolderPost.mShareTextTv.setVisibility(View.GONE);
+            mViewHolderPost.sharedContentTxt.setVisibility(View.GONE);
         } else {
-            mViewHolderPost.mShareTextTv.setVisibility(View.VISIBLE);
+            mViewHolderPost.sharedContentTxt.setVisibility(View.VISIBLE);
             try {
                 if (!mPostsList.get(position).getSharedTxt().contains(" ")) {
-                    mViewHolderPost.mShareTextTv.setText(URLDecoder.decode(mPostsList.get(position).getSharedTxt(), "UTF-8"));
+                    mViewHolderPost.sharedContentTxt.setText(URLDecoder.decode(mPostsList.get(position).getSharedTxt(), "UTF-8"));
                 } else {
-                    mViewHolderPost.mShareTextTv.setText(mPostsList.get(position).getSharedTxt());
+                    mViewHolderPost.sharedContentTxt.setText(mPostsList.get(position).getSharedTxt());
                 }
-                //mViewHolderPost.mShareTextTv.setText(replacer(sb.append(mPostsList.get(position).getSharedTxt())));
+                //mViewHolderPost.sharedContentTxt.setText(replacer(sb.append(mPostsList.get(position).getSharedTxt())));
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -913,16 +902,16 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
         /*PostNotifications*/
         if (mPostsList.get(position).getmNotificationBlockedUsersID().size() > 0) {
-            setPostNotifications(position, mViewHolderPost.mNotify_share);
+            setPostNotifications(position, mViewHolderPost.sharedNotifyIcon);
         } else {
-            postNotificationDefault(mViewHolderPost.mNotify_share);
+            postNotificationDefault(mViewHolderPost.sharedNotifyIcon);
         }
-        mViewHolderPost.mNotify_share.setOnClickListener(new View.OnClickListener() {
+        mViewHolderPost.sharedNotifyIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mAdapterPosition = position;
                 String imgtag = v.getTag().toString();
-                if (!((BaseActivity) mContext).isMultiClicked()) {
+                if (!Utility.getInstance().isMultiClicked()) {
                     if (imgtag.equals(mContext.getString(R.string.notification_blocked))) {
                         unBlockNotification(position);
                     } else if (imgtag.equals(mContext.getString(R.string.notification_unblocked))) {
@@ -940,7 +929,7 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         });
         if (String.valueOf(mPostsList.get(position).getProfileID()).trim()
                 .equals(String.valueOf(mCurrentProfileObj.getID()).trim())) {
-            mViewHolderPost.mSharedBottomArrow.setOnClickListener(new View.OnClickListener() {
+            mViewHolderPost.sharedDownIcon.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     ArrayList<String> mPos = new ArrayList<>();
@@ -949,7 +938,7 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 }
             });
         } else {
-            mViewHolderPost.mSharedBottomArrow.setOnClickListener(new View.OnClickListener() {
+            mViewHolderPost.sharedDownIcon.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     ArrayList<String> mPos = new ArrayList<>();
@@ -962,12 +951,12 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         if (mPostsList.get(position).getUserType().trim().equals(AppConstants.VIDEO_SHARED_POST) || mPostsList.get(position).getUserType().trim().equals(AppConstants.USER_VIDEO_SHARED_POST)) {
             if (mPostsList.get(position).getVideoSharesByNewSharedPostID() != null) {
                 VideoShareModel mFollowingsShareList = mPostsList.get(position).getVideoSharesByNewSharedPostID();
-                mViewHolderPost.mPostDate.setText(((BaseActivity) mContext).findTime(mFollowingsShareList.getSharedAt()));
+                mViewHolderPost.mPostDate.setText(Utility.getInstance().findTime(mFollowingsShareList.getSharedAt()));
             }
         } else {
             if (mPostsList.get(position).getNewSharedPost() != null) {
                 FeedShareModel mFollowingsShareList = mPostsList.get(position).getNewSharedPost();
-                mViewHolderPost.mPostDate.setText(((BaseActivity) mContext).findTime(mFollowingsShareList.getSharedAt()));
+                mViewHolderPost.mPostDate.setText(Utility.getInstance().findTime(mFollowingsShareList.getSharedAt()));
             }
         }
 
@@ -983,7 +972,7 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             mFirstSpanWordLength = mPostsList.get(position).getProfilesByProfileID().getDriver().length();
         }
 
-        ((BaseActivity) mContext).setImageWithGlide(mViewHolderPost.mShareProfileImg, mPostsList.get(position).getProfilesByProfileID().getProfilePicture(), R.drawable.default_profile_icon);
+        ((BaseActivity) mContext).setImageWithGlide(mViewHolderPost.sharedUserImg, mPostsList.get(position).getProfilesByProfileID().getProfilePicture(), R.drawable.default_profile_icon);
 
         Spannable mWordToSpan = new SpannableString(mShareTxt);
         int mSecondSpanWordLength = mShareTxt.length();
@@ -1016,12 +1005,12 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             }
         }, mFirstSpanWordLength + 8, mSecondSpanWordLength - 5, 0);
 
-        mViewHolderPost.mShareTxtName.setText(mWordToSpan);
-        mViewHolderPost.mShareTxtName.setTag(position);
-        mViewHolderPost.mShareTxtName.setMovementMethod(LinkMovementMethod.getInstance());
+        mViewHolderPost.sharedProfileNameTxt.setText(mWordToSpan);
+        mViewHolderPost.sharedProfileNameTxt.setTag(position);
+        mViewHolderPost.sharedProfileNameTxt.setMovementMethod(LinkMovementMethod.getInstance());
         if (mPostsList.get(position).getDateCreatedAt() != null)
-            mViewHolderPost.mShareTxtTime.setText(((BaseActivity) mContext).findTime(mPostsList.get(position).getDateCreatedAt()));
-        RelativeLayout.LayoutParams relativeParams = (RelativeLayout.LayoutParams) mViewHolderPost.mProfileDetailedLay.getLayoutParams();
+            mViewHolderPost.sharedProfileTxt.setText(Utility.getInstance().findTime(mPostsList.get(position).getDateCreatedAt()));
+        RelativeLayout.LayoutParams relativeParams = (RelativeLayout.LayoutParams) mViewHolderPost.profileLay.getLayoutParams();
 
         //relativeParams.height = mContext.getResources().getDimensionPixelSize(R.dimen.size80);
 
@@ -1033,8 +1022,8 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 mContext.getResources().getDimensionPixelSize(R.dimen.size24),
                 mContext.getResources().getDimensionPixelSize(R.dimen.size0));
 
-        mViewHolderPost.mProfileDetailedLay.setLayoutParams(relativeParams);
-        mViewHolderPost.mProfileDetailedLay.requestLayout();
+        mViewHolderPost.profileLay.setLayoutParams(relativeParams);
+        mViewHolderPost.profileLay.requestLayout();
 
         ViewGroup.MarginLayoutParams relativeParams1 = (ViewGroup.MarginLayoutParams) mViewHolderPost.mImageLay.getLayoutParams();
 
@@ -1056,7 +1045,7 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     private void HideShareLayout(ViewHolderPosts mViewHolderPost, int position) {
 
-        RelativeLayout.LayoutParams relativeParams = (RelativeLayout.LayoutParams) mViewHolderPost.mProfileDetailedLay.getLayoutParams();
+        RelativeLayout.LayoutParams relativeParams = (RelativeLayout.LayoutParams) mViewHolderPost.profileLay.getLayoutParams();
 
 //        relativeParams.height = mContext.getResources().getDimensionPixelSize(R.dimen.size80);
         relativeParams.height = ViewGroup.MarginLayoutParams.WRAP_CONTENT;
@@ -1067,8 +1056,8 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 mContext.getResources().getDimensionPixelSize(R.dimen.size10),
                 mContext.getResources().getDimensionPixelSize(R.dimen.size0));
 
-        mViewHolderPost.mProfileDetailedLay.setLayoutParams(relativeParams);
-        mViewHolderPost.mProfileDetailedLay.requestLayout();
+        mViewHolderPost.profileLay.setLayoutParams(relativeParams);
+        mViewHolderPost.profileLay.requestLayout();
 
         ViewGroup.MarginLayoutParams relativeParams1 = (ViewGroup.MarginLayoutParams) mViewHolderPost.mImageLay.getLayoutParams();
 
@@ -1083,7 +1072,7 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         mViewHolderPost.mImageLay.setLayoutParams(relativeParams1);
         mViewHolderPost.mImageLay.requestLayout();
 
-        mViewHolderPost.mShareViewLay.setVisibility(View.GONE);
+        mViewHolderPost.sharedProfileLay.setVisibility(View.GONE);
         mViewHolderPost.mShareCountTxt.setVisibility(View.GONE);
 
     }
@@ -1438,7 +1427,7 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         notifyItemChanged(mAdapterPosition);
     }
 
-    public String[] concat(String[]... arrays) {
+    private String[] mergeArrayList(String[]... arrays) {
         int length = 0;
         for (String[] array : arrays) {
             length += array.length;
@@ -1452,14 +1441,9 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         return result;
     }
 
-//    public interface TotalRetrofitPostsResultCount {
-//        int getTotalPostsResultCount();
-//    }
-
     class ViewHolderPosts extends RecyclerView.ViewHolder {
 
-        @BindView(R.id.share_text_tv)
-        TextView mShareTextTv;
+
         @BindView(R.id.top_lay)
         LinearLayout mTopLay;
         @BindView(R.id.bottom_lay)
@@ -1512,11 +1496,8 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         private TextView mLikeCountText;
         private TextView mViewCountText;
         private TextView mCommentCountTxt;
-        private RelativeLayout mShareViewLay;
-        private CircleImageView mShareProfileImg;
-        private TextView mShareTxtName;
-        private TextView mShareTxtTime;
-        private RelativeLayout mProfileDetailedLay;
+
+        private RelativeLayout profileLay;
         private RelativeLayout mImageLay;
         private ImageView mLikeBtn;
         private ImageView mCommentBtn;
@@ -1524,9 +1505,16 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         private ImageView playicon;
         private ProgressBar mPostPicProgressBar;
         private RelativeLayout mMultiImgLay;
-        private ImageView mSharedBottomArrow;
+
         private ImageView mNotify;
-        private ImageView mNotify_share;
+
+        private RelativeLayout sharedProfileLay;
+        private CircleImageView sharedUserImg;
+        private TextView sharedProfileNameTxt;
+        private TextView sharedProfileTxt;
+        private TextView sharedContentTxt;
+        private ImageView sharedNotifyIcon;
+        private ImageView sharedDownIcon;
 
         ViewHolderPosts(View view) {
             super(view);
@@ -1548,13 +1536,8 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             mCountLay = view.findViewById(R.id.rl_count);
             mCommentCountTxt = view.findViewById(R.id.comments_comment_txt);
             mShareCountTxt = view.findViewById(R.id.share_count_txt);
-            mShareViewLay = view.findViewById(R.id.profile_shared_box);
-            mShareProfileImg = view.findViewById(R.id.circular_img_view_share);
-            mShareTxtName = view.findViewById(R.id.top_tv_share);
-            mShareTxtTime = view.findViewById(R.id.bottom_tv_share);
-            mProfileDetailedLay = view.findViewById(R.id.profile_details_box);
             mNotify = view.findViewById(R.id.onoff_notify);
-            mNotify_share = view.findViewById(R.id.sharenotify);
+            
             mImageLay = view.findViewById(R.id.img_lay);
             mLikeBtn = view.findViewById(R.id.likeBtn);
             mCommentBtn = view.findViewById(R.id.commentBtn);
@@ -1562,8 +1545,18 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             mPostImageVideoBox = view.findViewById(R.id.postImageVideoBox);
             mMultiImgLay = view.findViewById(R.id.multi_img_lay);
             mTotalImgCountTv = view.findViewById(R.id.img_count_txt);
-            mSharedBottomArrow = view.findViewById(R.id.share_down_arrow);
+            
             mLikeCommentShareLay = view.findViewById(R.id.like_comment_share_lay);
+
+            sharedProfileLay = view.findViewById(R.id.sharedProfileLay);
+            sharedUserImg = view.findViewById(R.id.sharedUserImg);
+            sharedProfileNameTxt = view.findViewById(R.id.sharedProfileNameTxt);
+            sharedProfileTxt = view.findViewById(R.id.sharedProfileTxt);
+            sharedContentTxt = view.findViewById(R.id.sharedContentTxt);
+            sharedDownIcon = view.findViewById(R.id.sharedDownIcon);
+            sharedNotifyIcon = view.findViewById(R.id.sharedNotifyIcon);
+            
+            profileLay = view.findViewById(R.id.profileLay);
         }
 
     }

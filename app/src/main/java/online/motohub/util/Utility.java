@@ -1,11 +1,16 @@
 package online.motohub.util;
 
 
+import android.os.SystemClock;
+import android.text.TextUtils;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+import java.util.TimeZone;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -171,5 +176,99 @@ public class Utility {
         DateFormat mDateFormat = new SimpleDateFormat("yyyy-MM-dd H:mm:ss", Locale.getDefault());
 //        mDateFormat.setTimeZone(TimeZone.getTimeZone(AppConstants.NZ_TIME_ZONE));
         return mDateFormat.format(new Date());
+    }
+
+    public String findTime(String createDate) {
+        String diffTime = "";
+        if (TextUtils.isEmpty(createDate)) {
+            return diffTime;
+        }
+        DateFormat mServerFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+        mServerFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+
+        DateFormat mLocalFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+        long current = Calendar.getInstance().getTimeInMillis();
+        String currentDate = mLocalFormat.format(current);
+
+        Date mCreateDate = null, mCurrentDate = null;
+
+        try {
+            mCreateDate = mServerFormat.parse(createDate);
+            mCurrentDate = mLocalFormat.parse(currentDate);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        assert mCurrentDate != null;
+        long diff = mCurrentDate.getTime() - mCreateDate.getTime();
+        long diffMinutes = diff / (60 * 1000) % 60;
+        long diffHours = diff / (60 * 60 * 1000) % 24;
+        int diffInDays = (int) (diff / (60 * 60 * 1000 * 24));
+        int diffInMonths = diffInDays / 30;
+        int diffInYear = diffInMonths / 12;
+        if (diffInYear > 0) {
+            if (diffInYear == 1) {
+                diffTime = diffInYear + " Year ago";
+            } else {
+                diffTime = diffInYear + " Years ago";
+            }
+        } else if (diffInMonths > 0) {
+            if (diffInMonths == 1) {
+                diffTime = diffInMonths + " Month ago";
+            } else {
+                diffTime = diffInMonths + " Months ago";
+            }
+        } else if (diffInDays > 0) {
+            if (diffInDays == 1) {
+                diffTime = diffInDays + " Day ago";
+            } else if (diffInDays >= 7) {
+                if (diffInDays / 7 == 1) {
+                    diffTime = diffInDays / 7 + " Week ago";
+                } else {
+                    diffTime = diffInDays / 7 + " Weeks ago";
+                }
+            } else {
+                diffTime = diffInDays + " Days ago";
+            }
+        } else if (diffHours > 0) {
+            if (diffHours == 1) {
+                diffTime = diffHours + " Hour ago";
+            } else {
+                diffTime = diffHours + " Hours ago";
+            }
+        } else if (diffMinutes > 0) {
+            if (diffMinutes == 1) {
+                diffTime = diffMinutes + " Minute ago";
+            } else {
+                diffTime = diffMinutes + " Minutes ago";
+            }
+        } else {
+            diffTime = "Just Now";
+        }
+        return diffTime;
+    }
+    private long mLastClickTime = 0;
+    public boolean isMultiClicked() {
+        if (SystemClock.elapsedRealtime() - mLastClickTime < 3000) {
+            return true;
+        }
+        mLastClickTime = SystemClock.elapsedRealtime();
+        return false;
+    }
+    public String[] getImgVideoList(String str) {
+        String[] mArray = null;
+        if (str != null && !str.isEmpty()) {
+            str = str.replace("]", "")
+                    .replace("[", "")
+                    .replace("\n", "")
+                    .replace("\"", "")
+                    .replace("\\", "")
+                    .replace(" ", "");
+            if (str.isEmpty())
+                return mArray;
+
+            mArray = str.split(",");
+        }
+        return mArray;
     }
 }

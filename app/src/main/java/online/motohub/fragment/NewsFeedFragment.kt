@@ -12,13 +12,15 @@ import android.view.ViewGroup
 import kotlinx.android.synthetic.main.fragment_news_feed.*
 import online.motohub.R
 import online.motohub.adapter.NewsFeedAdapter
+import online.motohub.interfaces.AdapterClickCallBack
 import online.motohub.interfaces.OnLoadMoreListener
 import online.motohub.model.PostsResModel
 import online.motohub.viewmodel.BaseViewModelFactory
 import online.motohub.viewmodel.NewsFeedViewModel
 import java.util.*
 
-class NewsFeedFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener {
+class NewsFeedFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener, AdapterClickCallBack {
+
 
 
     private var model: NewsFeedViewModel? = null
@@ -68,9 +70,9 @@ class NewsFeedFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener {
         listView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
-                val mVisibleItemCount = layoutManager!!.childCount
-                val mTotalItemCount = layoutManager!!.itemCount
-                val mFirstVisibleItemPosition = layoutManager!!.findFirstVisibleItemPosition()
+                val mVisibleItemCount = layoutManager.childCount
+                val mTotalItemCount = layoutManager.itemCount
+                val mFirstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition()
                 if (!isLoading && hasNextPage) {
                     if (mVisibleItemCount + mFirstVisibleItemPosition >= mTotalItemCount && mFirstVisibleItemPosition >= 0) {
                         isLoading = true
@@ -83,7 +85,6 @@ class NewsFeedFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener {
     }
 
     override fun onRefresh() {
-
         feedsList.clear()
         model!!.getFeeds(feedsList.size, false)
     }
@@ -91,7 +92,7 @@ class NewsFeedFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener {
 
     private fun setAdapter() {
         if (feedAdapter == null) {
-            feedAdapter = NewsFeedAdapter(activity, feedsList, model!!.profileObj, false)
+            feedAdapter = NewsFeedAdapter(activity, feedsList, model!!.profileObj, false,this)
             listView.adapter = feedAdapter
         } else {
             feedAdapter!!.notifyDataSetChanged()
@@ -101,6 +102,14 @@ class NewsFeedFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener {
         isLoading = false
         if (swipeRefreshLay.isRefreshing)
             swipeRefreshLay.isRefreshing = false
+    }
+
+    override fun onClick(view: View?, pos: Int) {
+        when(view?.id){
+            R.id.onoff_notify ->{
+
+            }
+        }
     }
 
 }
