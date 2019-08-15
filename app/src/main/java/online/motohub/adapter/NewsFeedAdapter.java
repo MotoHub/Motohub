@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -1414,7 +1415,7 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         private TextView commentUserNameTxt;
         private TextView commentContentTxt;
 
-        private RelativeLayout countView;
+        private ConstraintLayout countView;
         private TextView shareCountTxt;
         private TextView likeCountTxt;
         private TextView viewCountTxt;

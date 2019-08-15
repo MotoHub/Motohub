@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     style="@style/LayoutMatchWrap"
     android:layout_margin="@dimen/size5"
     app:cardBackgroundColor="@color/colorWhite"
@@ -279,57 +280,76 @@
 
             </RelativeLayout>
 
-            <RelativeLayout
+            <android.support.constraint.ConstraintLayout
                 android:id="@+id/countView"
-                android:visibility="gone"
-                style="@style/LayoutMatchWrap">
+                style="@style/LayoutMatchWrap"
+                android:visibility="visible">
 
                 <TextView
                     android:id="@+id/likeCountTxt"
                     style="@style/LayoutWrap"
                     android:layout_alignParentStart="true"
                     android:layout_centerVertical="true"
-                    android:layout_marginStart="@dimen/size10"
                     android:padding="@dimen/size5"
-                    android:text="deeee"
                     android:textColor="@color/colorDarkGrey"
-                    android:textSize="@dimen/text14" />
+                    android:textSize="@dimen/text14"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintWidth_percent="1"
+                    tools:text="100 Likes" />
 
                 <TextView
                     android:id="@+id/viewCountTxt"
                     style="@style/LayoutWrap"
                     android:layout_centerVertical="true"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="8dp"
                     android:layout_toStartOf="@+id/commentsCountTxt"
                     android:layout_toEndOf="@+id/likeCountTxt"
                     android:padding="@dimen/size5"
-                    android:text="deeee"
                     android:textColor="@color/colorDarkGrey"
-                    android:textSize="@dimen/text14" />
+                    android:textSize="@dimen/text14"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/commentsCountTxt"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toEndOf="@id/likeCountTxt"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintWidth_percent="1"
+                    tools:text="10 Views" />
 
 
                 <TextView
                     android:id="@+id/commentsCountTxt"
                     style="@style/LayoutWrap"
                     android:layout_toStartOf="@+id/shareCountTxt"
+                    android:layout_marginEnd="@dimen/size5"
                     android:padding="@dimen/size5"
-                    android:text="deeee"
                     android:textColor="@color/colorDarkGrey"
-                    android:textSize="@dimen/text14" />
+                    android:textSize="@dimen/text14"
+                    app:layout_constraintEnd_toStartOf="@+id/shareCountTxt"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintWidth_percent="1"
+                    tools:text="123 Comments" />
 
                 <TextView
                     android:id="@+id/shareCountTxt"
                     style="@style/LayoutWrap"
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
-                    android:layout_marginStart="@dimen/size5"
                     android:layout_marginEnd="@dimen/size5"
                     android:padding="@dimen/size5"
-                    android:text="deeee"
                     android:textColor="@color/colorDarkGrey"
-                    android:textSize="@dimen/text14" />
+                    android:textSize="@dimen/text14"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintWidth_percent="1"
+                    tools:text="143 Shares" />
 
 
-            </RelativeLayout>
+            </android.support.constraint.ConstraintLayout>
 
             <View
                 android:id="@+id/view1"
