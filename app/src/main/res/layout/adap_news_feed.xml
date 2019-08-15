@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     style="@style/LayoutMatchWrap"
     android:layout_margin="@dimen/size5"
-    app:cardBackgroundColor="@color/colorLightGrey"
+    app:cardBackgroundColor="@color/colorWhite"
     app:cardCornerRadius="@dimen/size4"
     app:cardPreventCornerOverlap="true"
     app:cardUseCompatPadding="false">
@@ -58,7 +58,7 @@
                         android:layout_height="@dimen/size2" />
 
                     <TextView
-                        android:id="@+id/sharedProfileTxt"
+                        android:id="@+id/sharedPostTimeTxt"
                         style="@style/LayoutWrapMatch"
                         android:maxLines="1"
                         android:textColor="@color/colorDarkGrey"
@@ -96,7 +96,7 @@
             </RelativeLayout>
 
             <TextView
-                android:id="@+id/sharedContentTxt"
+                android:id="@+id/sharedPostContentTxt"
                 style="@style/LayoutMatchWrap"
                 android:layout_below="@+id/sharedProfileView"
                 android:layout_marginLeft="@dimen/size15"
@@ -131,18 +131,17 @@
                 android:src="@drawable/default_profile_icon" />
 
             <LinearLayout
-                android:id="@+id/text_view_box"
                 style="@style/LayoutMatchWrap"
                 android:layout_alignTop="@+id/userImg"
                 android:layout_centerVertical="true"
                 android:layout_marginStart="@dimen/size5"
-                android:layout_toStartOf="@+id/onoff_notify"
+                android:layout_toStartOf="@+id/notifyIcon"
                 android:layout_toEndOf="@+id/userImg"
                 android:gravity="center_vertical"
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/top_tv"
+                    android:id="@+id/profileNameTxt"
                     style="@style/LayoutWrapMatch"
                     android:clickable="true"
                     android:focusable="true"
@@ -157,7 +156,7 @@
                     android:layout_height="@dimen/size2" />
 
                 <TextView
-                    android:id="@+id/bottom_tv"
+                    android:id="@+id/postTimeTxt"
                     style="@style/LayoutWrapMatch"
                     android:maxLines="1"
                     android:textColor="@color/colorDarkGrey"
@@ -166,11 +165,11 @@
             </LinearLayout>
 
             <ImageView
-                android:id="@+id/onoff_notify"
+                android:id="@+id/notifyIcon"
                 style="@style/LayoutWrapMatch"
                 android:layout_alignTop="@+id/userImg"
                 android:layout_alignBottom="@+id/userImg"
-                android:layout_toStartOf="@+id/down_arrow"
+                android:layout_toStartOf="@+id/downIcon"
                 android:background="@null"
                 android:clickable="true"
                 android:contentDescription="@string/app_name"
@@ -180,7 +179,7 @@
                 app:srcCompat="@drawable/notify_active_icon" />
 
             <ImageView
-                android:id="@+id/down_arrow"
+                android:id="@+id/downIcon"
                 style="@style/LayoutWrapMatch"
                 android:layout_alignTop="@+id/userImg"
                 android:layout_alignBottom="@+id/userImg"
@@ -195,13 +194,13 @@
         </RelativeLayout>
 
         <RelativeLayout
-            android:id="@+id/img_lay"
+            android:id="@+id/imgVideoLay"
             style="@style/LayoutMatchWrap"
             android:layout_below="@id/profileLay"
             android:layout_marginTop="@dimen/size10">
 
             <TextView
-                android:id="@+id/post_text_tv"
+                android:id="@+id/postContentTxt"
                 style="@style/LayoutMatchWrap"
                 android:layout_marginLeft="@dimen/size15"
                 android:layout_marginRight="@dimen/size15"
@@ -214,45 +213,11 @@
                 android:textColorLink="@color/colorOrange"
                 android:textSize="@dimen/text14" />
 
-            <include
-                layout="@layout/widget_small_progress_bar"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/post_text_tv"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="@dimen/size5"
-                android:layout_marginBottom="@dimen/size5"
-                android:visibility="gone" />
-
             <RelativeLayout
-                android:id="@+id/postImageVideoBox"
+                android:id="@+id/imgVideoView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/post_text_tv">
-
-                <ImageView
-                    android:id="@+id/post_picture_img_view"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:adjustViewBounds="true"
-                    android:contentDescription="@string/app_name"
-                    android:scaleType="fitCenter" />
-
-                <ImageView
-                    android:id="@+id/playicon"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:src="@drawable/playbutton"
-                    android:visibility="gone" />
-
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:id="@+id/multi_img_lay"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/post_text_tv"
+                android:layout_below="@id/postContentTxt"
                 android:visibility="gone">
 
                 <include layout="@layout/adap_multi_image_lay" />
@@ -263,46 +228,32 @@
         </RelativeLayout>
 
         <LinearLayout
-            android:id="@+id/comment_lay"
             style="@style/LayoutMatchWrap"
-            android:layout_below="@id/img_lay"
+            android:layout_below="@id/imgVideoLay"
             android:orientation="vertical">
 
             <RelativeLayout
-                android:id="@+id/comment_view_lay"
+                android:id="@+id/commentView"
                 style="@style/LayoutMatchWrap"
                 android:background="@color/colorLighterGrey"
                 android:padding="@dimen/size5"
-                android:visibility="visible">
+                android:visibility="gone">
 
-                <RelativeLayout
-                    android:id="@+id/comment_img_lay"
-                    style="@style/LayoutWrap"
-                    android:layout_gravity="center">
-
-                    <ProgressBar
-                        android:layout_width="@dimen/size10"
-                        android:layout_height="@dimen/size10"
-                        android:layout_centerInParent="true" />
-
-                    <de.hdodenhof.circleimageview.CircleImageView
-                        android:id="@+id/comment_img"
-                        android:layout_width="@dimen/size34"
-                        android:layout_height="@dimen/size34"
-                        android:src="@drawable/default_profile_icon" />
-
-                </RelativeLayout>
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/commentUserImg"
+                    android:layout_width="@dimen/size34"
+                    android:layout_height="@dimen/size34"
+                    android:src="@drawable/default_profile_icon" />
 
                 <LinearLayout
                     style="@style/LayoutMatchWrap"
                     android:layout_centerVertical="true"
-                    android:layout_toEndOf="@+id/comment_img_lay"
-                    android:layout_toRightOf="@+id/comment_img_lay"
+                    android:layout_toEndOf="@+id/commentUserImg"
                     android:gravity="center|start"
                     android:orientation="vertical">
 
                     <TextView
-                        android:id="@+id/comment_user_name_txt"
+                        android:id="@+id/commentUserNameTxt"
                         style="@style/LayoutWrap"
                         android:layout_marginStart="@dimen/size5"
                         android:padding="@dimen/size1"
@@ -311,7 +262,7 @@
                         android:textStyle="bold" />
 
                     <TextView
-                        android:id="@+id/comment_txt"
+                        android:id="@+id/commentContentTxt"
                         style="@style/LayoutWrap"
                         android:layout_marginStart="@dimen/size5"
                         android:autoLink="all"
@@ -329,62 +280,54 @@
             </RelativeLayout>
 
             <RelativeLayout
-                android:id="@+id/rl_count"
+                android:id="@+id/countView"
+                android:visibility="gone"
                 style="@style/LayoutMatchWrap">
 
-                <RelativeLayout
-                    style="@style/LayoutMatchWrap"
-                    android:layout_centerVertical="true">
+                <TextView
+                    android:id="@+id/likeCountTxt"
+                    style="@style/LayoutWrap"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="@dimen/size10"
+                    android:padding="@dimen/size5"
+                    android:text="deeee"
+                    android:textColor="@color/colorDarkGrey"
+                    android:textSize="@dimen/text14" />
 
-                    <TextView
-                        android:id="@+id/like_count_txt"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentStart="true"
-                        android:layout_centerVertical="true"
-                        android:layout_marginStart="@dimen/size10"
-                        android:padding="@dimen/size5"
-                        android:textColor="@color/colorDarkGrey"
-                        android:textSize="@dimen/text14" />
+                <TextView
+                    android:id="@+id/viewCountTxt"
+                    style="@style/LayoutWrap"
+                    android:layout_centerVertical="true"
+                    android:layout_toStartOf="@+id/commentsCountTxt"
+                    android:layout_toEndOf="@+id/likeCountTxt"
+                    android:padding="@dimen/size5"
+                    android:text="deeee"
+                    android:textColor="@color/colorDarkGrey"
+                    android:textSize="@dimen/text14" />
 
-                    <TextView
-                        android:id="@+id/view_count_txt"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:layout_toStartOf="@+id/ll_like_share_count"
-                        android:layout_toEndOf="@+id/like_count_txt"
-                        android:padding="@dimen/size5"
-                        android:textColor="@color/colorDarkGrey"
-                        android:textSize="@dimen/text14" />
 
-                    <LinearLayout
-                        android:id="@+id/ll_like_share_count"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentEnd="true"
-                        android:layout_centerVertical="true"
-                        android:layout_marginEnd="@dimen/size5"
-                        android:orientation="horizontal">
+                <TextView
+                    android:id="@+id/commentsCountTxt"
+                    style="@style/LayoutWrap"
+                    android:layout_toStartOf="@+id/shareCountTxt"
+                    android:padding="@dimen/size5"
+                    android:text="deeee"
+                    android:textColor="@color/colorDarkGrey"
+                    android:textSize="@dimen/text14" />
 
-                        <TextView
-                            android:id="@+id/comments_comment_txt"
-                            style="@style/LayoutWrap"
-                            android:padding="@dimen/size5"
-                            android:textColor="@color/colorDarkGrey"
-                            android:textSize="@dimen/text14" />
+                <TextView
+                    android:id="@+id/shareCountTxt"
+                    style="@style/LayoutWrap"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="@dimen/size5"
+                    android:layout_marginEnd="@dimen/size5"
+                    android:padding="@dimen/size5"
+                    android:text="deeee"
+                    android:textColor="@color/colorDarkGrey"
+                    android:textSize="@dimen/text14" />
 
-                        <TextView
-                            android:id="@+id/share_count_txt"
-                            style="@style/LayoutWrap"
-                            android:layout_marginStart="@dimen/size5"
-                            android:padding="@dimen/size5"
-                            android:textColor="@color/colorDarkGrey"
-                            android:textSize="@dimen/text14" />
-
-                    </LinearLayout>
-
-                </RelativeLayout>
 
             </RelativeLayout>
 
@@ -395,7 +338,6 @@
                 android:background="@color/colorLighterGrey" />
 
             <LinearLayout
-                android:id="@+id/like_comment_share_lay"
                 style="@style/LayoutMatchWrap"
                 android:layout_marginTop="@dimen/size4"
                 android:layout_marginBottom="@dimen/size4"

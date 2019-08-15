@@ -37,6 +37,7 @@ import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.Toolbar;
 import android.text.SpannableString;
 import android.text.TextPaint;
+import android.text.TextUtils;
 import android.text.style.ClickableSpan;
 import android.util.Base64;
 import android.view.LayoutInflater;
@@ -381,7 +382,7 @@ public class BaseActivity extends AppCompatActivity implements ViewModelCallback
 
     public String[] getImgVideoList(String str) {
         String[] mArray = null;
-        if (str != null && !str.isEmpty()) {
+        if (!TextUtils.isEmpty(str)) {
             str = str.replace("]", "")
                     .replace("[", "")
                     .replace("\n", "")
@@ -389,7 +390,7 @@ public class BaseActivity extends AppCompatActivity implements ViewModelCallback
                     .replace("\\", "")
                     .replace(" ", "");
             if (str.isEmpty())
-                return mArray;
+                return null;
 
             mArray = str.split(",");
         }

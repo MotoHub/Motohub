@@ -465,7 +465,7 @@ public class PromoterOrUserAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     private void setViewCount(ViewHolderPosts mViewHolderPost, int position) {
         String view_count;
         int val = 11;
-        /*view_count = String.valueOf(mPostsList.get(position).getViewCount() * val) + " Views";
+        /*view_count = String.valueOf(mPostsList.get(position).updateViewCount() * val) + " Views";
         mViewHolderPost.mViewCount.setText(view_count);*/
         view_count = String.valueOf(mPostsList.get(position).getViewCount() * val);
         String count = BaseActivity.convertToSuffix(Long.parseLong(view_count));

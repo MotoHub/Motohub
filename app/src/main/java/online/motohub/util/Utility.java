@@ -257,7 +257,7 @@ public class Utility {
     }
     public String[] getImgVideoList(String str) {
         String[] mArray = null;
-        if (str != null && !str.isEmpty()) {
+        if (!TextUtils.isEmpty(str)) {
             str = str.replace("]", "")
                     .replace("[", "")
                     .replace("\n", "")
@@ -265,7 +265,7 @@ public class Utility {
                     .replace("\\", "")
                     .replace(" ", "");
             if (str.isEmpty())
-                return mArray;
+                return null;
 
             mArray = str.split(",");
         }
