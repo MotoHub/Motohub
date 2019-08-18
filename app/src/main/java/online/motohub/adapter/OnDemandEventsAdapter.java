@@ -54,7 +54,7 @@ import static android.app.Activity.RESULT_OK;
  */
 public class OnDemandEventsAdapter extends RecyclerView.Adapter<OnDemandEventsAdapter.ViewHolder> {
 
-    private final ArrayList<PromoterVideoModel.Resource> mPostsList = new ArrayList<>();
+    private final ArrayList<PromoterVideoModel.PromoterVideoResModel> mPostsList = new ArrayList<>();
     private Context mContext;
     private List<OndemandNewResponse> mDataList;
     private int profileId;

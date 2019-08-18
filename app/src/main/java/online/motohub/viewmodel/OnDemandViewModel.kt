@@ -1,0 +1,63 @@
+package online.motohub.viewmodel
+
+import android.app.Application
+import android.arch.lifecycle.MutableLiveData
+import android.os.Bundle
+import android.text.TextUtils
+import com.google.gson.Gson
+import online.motohub.constants.BundleConstants
+import online.motohub.constants.OtherConstants
+import online.motohub.constants.RelationConstants
+import online.motohub.interfaces.ResponseCallback
+import online.motohub.model.ApiInputModel
+import online.motohub.model.ProfileResModel
+import online.motohub.model.PromoterVideoModel
+import online.motohub.provider.OnDemandProvider
+import java.util.*
+
+class OnDemandViewModel(application: Application, bundle: Bundle?) : BaseViewModel(application) {
+
+    val provider = OnDemandProvider()
+    val onDemandVideoLiveData = MutableLiveData<ArrayList<PromoterVideoModel.PromoterVideoResModel>>()
+    var profileObj: ProfileResModel? = null
+    var totalCount: Int = 0
+
+    init {
+        profileObj = Gson().fromJson(bundle!!.getString(BundleConstants.MY_PROFILE_OBJ), ProfileResModel::class.java)
+    }
+
+    override fun initialize(firstTime: Boolean) {
+        super.initialize(firstTime)
+        getOnDemandVideos("", 0, true)
+
+    }
+
+    fun getOnDemandVideos(searchStr: String, offset: Int, showProgress: Boolean) {
+        if (showProgress)
+            callback!!.showProgress()
+        provider.getOnDemandVideos(getInputModel(searchStr, offset), ResponseCallback {
+            if (showProgress)
+                callback!!.hideProgress()
+            if (it.isSuccess && it.data != null && it.data.resource != null) {
+                totalCount = it.data.meta.count
+                onDemandVideoLiveData.value = it.data.resource
+            }
+        })
+    }
+
+    private fun getInputModel(searchStr: String, offset: Int): ApiInputModel {
+        val inputModel = ApiInputModel()
+        inputModel.fields = "*"
+        if (TextUtils.isEmpty(searchStr)) {
+            inputModel.filter = "(UserType != usereventvideos) AND (ReportStatus == 0)"
+        } else {
+            inputModel.filter = "(UserType != usereventvideos) AND (ReportStatus == 0) AND (Caption LIKE '%$searchStr%')"
+        }
+        inputModel.related = RelationConstants.POST_FEED_RELATION
+        inputModel.order = "CreatedAt DESC"
+        inputModel.limit = OtherConstants.LIMIT_10
+        inputModel.offset = offset
+        inputModel.includeCount = true
+        return inputModel
+    }
+}

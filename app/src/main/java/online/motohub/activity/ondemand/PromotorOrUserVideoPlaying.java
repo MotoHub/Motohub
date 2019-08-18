@@ -112,7 +112,7 @@ public class PromotorOrUserVideoPlaying extends BaseActivity {
     private ProfileResModel mMyProfileResModel, mOtherProfileResModel;
     private int pos = 0, checkPosition = 0;
     private CacheDataSourceFactory mCacheDataSrcFactory;
-    private ArrayList<PromoterVideoModel.Resource> mPostsList = new ArrayList<>();
+    private ArrayList<PromoterVideoModel.PromoterVideoResModel> mPostsList = new ArrayList<>();
     private int ProfileID;
     private int mDeleteLikeID;
     private String mFilter;
@@ -135,7 +135,7 @@ public class PromotorOrUserVideoPlaying extends BaseActivity {
 
         setSwipeListenerForVideoView();
         checkPosition = getIntent().getIntExtra(AppConstants.POSITION, 0);
-        mPostsList = (ArrayList<PromoterVideoModel.Resource>) getIntent().getSerializableExtra(AppConstants.ONDEMAND_DATA);
+        mPostsList = (ArrayList<PromoterVideoModel.PromoterVideoResModel>) getIntent().getSerializableExtra(AppConstants.ONDEMAND_DATA);
         mOtherProfileID = Integer.parseInt(mPostsList.get(pos).getProfileID());
         //mMyProfileResModel = (ProfileResModel) getIntent().getSerializableExtra(AppConstants.MY_PROFILE_OBJ);
         //mMyProfileResModel = MotoHub.getApplicationInstance().getmProfileResModel();

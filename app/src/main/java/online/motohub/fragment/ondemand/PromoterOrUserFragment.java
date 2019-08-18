@@ -98,7 +98,7 @@ public class PromoterOrUserFragment extends BaseFragment implements SwipeRefresh
     private int mCurrentPostPosition;
     private ProfileResModel mMyProfileResModel;
     private PromoterOrUserAdapter mAdapter;
-    private ArrayList<PromoterVideoModel.Resource> mPromoterVideoList;
+    private ArrayList<PromoterVideoModel.PromoterVideoResModel> mPromoterVideoList;
     private String mVideoPathUri;
     private String mFilter = "(UserType != usereventvideos) AND (ReportStatus == 0)";
     private boolean mIsLoadMore = false;
@@ -368,7 +368,7 @@ public class PromoterOrUserFragment extends BaseFragment implements SwipeRefresh
                     try {
                         isLoading = false;
                         if (mAdapter == null && mMyProfileResModel.getID() != 0) {
-                            mAdapter = new PromoterOrUserAdapter(mPromoterVideoList, mMyProfileResModel, getActivity(), ProfileID, PromoterOrUserFragment.this);
+                            mAdapter = new PromoterOrUserAdapter(mPromoterVideoList, mMyProfileResModel, getActivity(), PromoterOrUserFragment.this);
                             recyclerView.setAdapter(mAdapter);
                         } else {
                             mAdapter.notifyDataSetChanged();
@@ -422,7 +422,7 @@ public class PromoterOrUserFragment extends BaseFragment implements SwipeRefresh
                     assert data.getExtras() != null;
                     if (mPromoterVideoList != null) {
                         mPromoterVideoList.clear();
-                        ArrayList<PromoterVideoModel.Resource> mTempPromoterVideoList = (ArrayList<PromoterVideoModel.Resource>) data.getExtras().getSerializable(AppConstants.VIDEO_LIST);
+                        ArrayList<PromoterVideoModel.PromoterVideoResModel> mTempPromoterVideoList = (ArrayList<PromoterVideoModel.PromoterVideoResModel>) data.getExtras().getSerializable(AppConstants.VIDEO_LIST);
                         if (mTempPromoterVideoList.size() > 0) {
                             mPromoterVideoList.addAll(mTempPromoterVideoList);
                             mAdapter.notifyDataSetChanged();

@@ -59,7 +59,7 @@ public class MotoHub extends Application {
     private ArrayList<ProfileResModel> mFullProfileList;
     private JsonObject mEventQuestionAnswer;
     private ArrayList<EventAddOnModel> mSelectedEventAddOn = new ArrayList<>();
-    private ArrayList<PromoterVideoModel.Resource> mPostsList = new ArrayList<>();
+    private ArrayList<PromoterVideoModel.PromoterVideoResModel> mPostsList = new ArrayList<>();
 
     public static boolean ismIsFirstLaunch() {
         return mIsFirstLaunch;
@@ -73,7 +73,7 @@ public class MotoHub extends Application {
         return sMotoHub;
     }
 
-    public ArrayList<PromoterVideoModel.Resource> getmPostsList() {
+    public ArrayList<PromoterVideoModel.PromoterVideoResModel> getmPostsList() {
         return mPostsList;
     }
 
@@ -101,7 +101,7 @@ public class MotoHub extends Application {
         this.mPromoterResModel = mPromoterResModel;
     }*/
 
-    public void setmPostsList(ArrayList<PromoterVideoModel.Resource> mPostsList) {
+    public void setmPostsList(ArrayList<PromoterVideoModel.PromoterVideoResModel> mPostsList) {
         this.mPostsList = mPostsList;
     }
 

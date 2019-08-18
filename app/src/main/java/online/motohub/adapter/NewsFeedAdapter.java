@@ -922,7 +922,6 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
         void setVisibility(PostsResModel postsResModel) {
             //Set Visibility
-            countView.setVisibility(View.VISIBLE);
             downIcon.setVisibility(View.VISIBLE);
             notifyIcon.setVisibility(View.VISIBLE);
 

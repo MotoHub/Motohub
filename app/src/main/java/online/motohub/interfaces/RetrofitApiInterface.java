@@ -777,4 +777,10 @@ public interface RetrofitApiInterface {
 
     @GET(UrlUtils.EVENTS)
     Call<EventsModel> getEvents(@Query("filter") String filter, @Query("related") String related, @Query("order") String order);
+
+    @Headers("Content-Type: application/json")
+    @GET(UrlUtils.GALLERY_VIDEO)
+    Call<PromoterVideoModel> getOnDemandVideos(@Query("fields") String fields, @Query("filter") String mFilter,
+                                                    @Query("related") String related, @Query("order") String order,
+                                                    @Query("limit") int mLimit, @Query("offset") int mOffset, @Query("include_count") boolean isIncludeCount);
 }

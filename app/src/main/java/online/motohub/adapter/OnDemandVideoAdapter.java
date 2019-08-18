@@ -1,4 +1,4 @@
-package online.motohub.adapter.ondemand;
+package online.motohub.adapter;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -55,8 +55,9 @@ import online.motohub.activity.performance_shop.PerformanceShopProfileActivity;
 import online.motohub.activity.promoter.PromoterProfileActivity;
 import online.motohub.activity.promoter.PromotersListActivity;
 import online.motohub.activity.track.TrackProfileActivity;
-import online.motohub.adapter.VideoLikesAdapter;
-import online.motohub.adapter.VideoSharesAdapter;
+import online.motohub.constants.AppConstants;
+import online.motohub.dialog.DialogManager;
+import online.motohub.fragment.OnDemandFragment;
 import online.motohub.fragment.dialog.AppDialogFragment;
 import online.motohub.fragment.ondemand.PromoterOrUserFragment;
 import online.motohub.interfaces.CommonReturnInterface;
@@ -71,16 +72,11 @@ import online.motohub.model.VideoLikesModel;
 import online.motohub.model.VideoShareModel;
 import online.motohub.model.promoter_club_news_media.PromotersModel;
 import online.motohub.retrofit.RetrofitClient;
-import online.motohub.constants.AppConstants;
-import online.motohub.dialog.DialogManager;
 import online.motohub.util.UrlUtils;
 import online.motohub.util.Utility;
 
-/**
- * Created by pickzy01 on 01/06/2018.
- */
 
-public class PromoterOrUserAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class OnDemandVideoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private static final int VIEW_TYPE_LOADING = 0;
     private static final int VIEW_TYPE_POSTS = 1;
@@ -141,10 +137,10 @@ public class PromoterOrUserAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             }
         }
     };
-    private PromoterOrUserFragment promoterOrUserFragment;
+    private OnDemandFragment promoterOrUserFragment;
     private StringBuffer sb = new StringBuffer();
 
-    public PromoterOrUserAdapter(ArrayList<PromoterVideoModel.PromoterVideoResModel> postsList, ProfileResModel mMyProfileResModel, Context ctx, PromoterOrUserFragment promoterOrUserFragment) {
+    public OnDemandVideoAdapter(ArrayList<PromoterVideoModel.PromoterVideoResModel> postsList, ProfileResModel mMyProfileResModel, Context ctx, OnDemandFragment promoterOrUserFragment) {
         this.mPostsList = postsList;
         this.mContext = ctx;
         this.mActivity = (Activity) ctx;

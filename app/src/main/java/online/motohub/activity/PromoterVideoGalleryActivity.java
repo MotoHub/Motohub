@@ -92,7 +92,7 @@ public class PromoterVideoGalleryActivity extends BaseActivity {
     private int mCurrentPostPosition;
     private ProfileResModel mMyProfileResModel;
     private PromoterVideoPostAdapter mAdapter;
-    private ArrayList<PromoterVideoModel.Resource> mPromoterVideoList;
+    private ArrayList<PromoterVideoModel.PromoterVideoResModel> mPromoterVideoList;
     private String mVideoPathUri;
     private String mEventType = "UserID";
     public String mFilter = "(EventFinishDate<" + getCurrentDate() + ") AND (" + mEventType + "= " + mEventId + ") AND (ReportStatus == false)";
@@ -669,7 +669,7 @@ public class PromoterVideoGalleryActivity extends BaseActivity {
                     assert data.getExtras() != null;
                     if (mPromoterVideoList != null) {
                         mPromoterVideoList.clear();
-                        ArrayList<PromoterVideoModel.Resource> mTempPromoterVideoList = (ArrayList<PromoterVideoModel.Resource>) data.getExtras().getSerializable(AppConstants.VIDEO_LIST);
+                        ArrayList<PromoterVideoModel.PromoterVideoResModel> mTempPromoterVideoList = (ArrayList<PromoterVideoModel.PromoterVideoResModel>) data.getExtras().getSerializable(AppConstants.VIDEO_LIST);
                         if (mTempPromoterVideoList.size() > 0) {
                             mPromoterVideoList.addAll(mTempPromoterVideoList);
                             mAdapter.notifyDataSetChanged();

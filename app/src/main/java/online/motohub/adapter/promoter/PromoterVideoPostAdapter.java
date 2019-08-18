@@ -80,7 +80,7 @@ public class PromoterVideoPostAdapter extends RecyclerView.Adapter<RecyclerView.
 
     private static final int VIEW_TYPE_LOADING = 0;
     private static final int VIEW_TYPE_POSTS = 1;
-    private ArrayList<PromoterVideoModel.Resource> mPostsList;
+    private ArrayList<PromoterVideoModel.PromoterVideoResModel> mPostsList;
     // ArrayList<HashMap<String, String>> mResMap;
     private Context mContext;
     // private ArrayList<HashMap<String, String>> mVideoList;
@@ -142,8 +142,8 @@ public class PromoterVideoPostAdapter extends RecyclerView.Adapter<RecyclerView.
         }
     };
 
-    public PromoterVideoPostAdapter(List<PromoterVideoModel.Resource> postsList, ProfileResModel mMyProfileResModel, Context ctx, int ProfileID) {
-        this.mPostsList = (ArrayList<PromoterVideoModel.Resource>) postsList;
+    public PromoterVideoPostAdapter(List<PromoterVideoModel.PromoterVideoResModel> postsList, ProfileResModel mMyProfileResModel, Context ctx, int ProfileID) {
+        this.mPostsList = (ArrayList<PromoterVideoModel.PromoterVideoResModel>) postsList;
         this.mContext = ctx;
         this.mActivity = (Activity) ctx;
         this.mCurrentProfileResModel = mMyProfileResModel;
@@ -192,7 +192,7 @@ public class PromoterVideoPostAdapter extends RecyclerView.Adapter<RecyclerView.
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         switch (getItemViewType(position)) {
             case VIEW_TYPE_POSTS:
-                final PromoterVideoModel.Resource mModel = mPostsList.get(position);
+                final PromoterVideoModel.PromoterVideoResModel mModel = mPostsList.get(position);
                 try {
                     mViewHolderPost = (ViewHolderPosts) holder;
                     mViewHolderPost.mPostPic.setVisibility(View.GONE);
@@ -671,13 +671,13 @@ public class PromoterVideoPostAdapter extends RecyclerView.Adapter<RecyclerView.
         mCommentListPopup.show();
     }
 
-    private ArrayList<HashMap<String, String>> convertModelToList(List<PromoterVideoModel.Resource> mPostsList) {
+    private ArrayList<HashMap<String, String>> convertModelToList(List<PromoterVideoModel.PromoterVideoResModel> mPostsList) {
         ArrayList<HashMap<String, String>> mVideoList = new ArrayList<>();
         try {
-            for (PromoterVideoModel.Resource mResource : mPostsList) {
+            for (PromoterVideoModel.PromoterVideoResModel mPromoterVideoResModel : mPostsList) {
                 HashMap<String, String> mMapData = new HashMap<>();
-                mMapData.put(AppConstants.VIDEO_PATH, mResource.getVideoUrl());
-                mMapData.put(AppConstants.CAPTION, mResource.getCaption());
+                mMapData.put(AppConstants.VIDEO_PATH, mPromoterVideoResModel.getVideoUrl());
+                mMapData.put(AppConstants.CAPTION, mPromoterVideoResModel.getCaption());
                 mVideoList.add(mMapData);
             }
         } catch (Exception e) {
@@ -732,7 +732,7 @@ public class PromoterVideoPostAdapter extends RecyclerView.Adapter<RecyclerView.
         }
     }
 
-    public void updateList(ArrayList<PromoterVideoModel.Resource> list) {
+    public void updateList(ArrayList<PromoterVideoModel.PromoterVideoResModel> list) {
         mPostsList = list;
         this.notifyDataSetChanged();
     }

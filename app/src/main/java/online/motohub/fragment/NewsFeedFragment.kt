@@ -40,6 +40,7 @@ import online.motohub.viewmodel.NewsFeedViewModel
 import org.greenrobot.eventbus.EventBus
 import java.net.URLDecoder
 import java.util.*
+import kotlin.collections.ArrayList
 
 class NewsFeedFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener, AdapterClickCallBack {
 

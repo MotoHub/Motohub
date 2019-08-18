@@ -4,7 +4,6 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -27,11 +26,11 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import online.motohub.R;
 import online.motohub.activity.BaseActivity;
+import online.motohub.dialog.DialogManager;
 import online.motohub.fragment.BaseFragment;
 import online.motohub.fragment.dialog.AppDialogFragment;
 import online.motohub.fragment.ondemand.EventsFragment;
 import online.motohub.fragment.ondemand.PromoterOrUserFragment;
-import online.motohub.dialog.DialogManager;
 
 
 /**
@@ -57,11 +56,13 @@ public class OnDemandActivity extends BaseActivity {
     ViewPager viewpager;
     ViewPagerAdapter adapter;
 
-    public static void verifyStoragePermissions(Activity activity) {
+    private boolean isHavePermission(Activity activity) {
         int writePermission = ActivityCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE);
         if (writePermission != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(activity, PERMISSIONS_STORAGE, PERMISSIONS_STORAGE_PREMISSONS);
+            return false;
         }
+        return true;
     }
 
     @Override
@@ -77,9 +78,7 @@ public class OnDemandActivity extends BaseActivity {
         showToolbarBtn(toolbar, R.id.toolbar_back_img_btn);
         setupViewPager(viewpager);
         tabs.setupWithViewPager(viewpager);
-        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
-            verifyStoragePermissions(OnDemandActivity.this);
-        }
+        isHavePermission(OnDemandActivity.this);
     }
 
     @Override

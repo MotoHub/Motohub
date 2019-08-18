@@ -223,7 +223,7 @@ public class EventsFragment extends BaseFragment implements SwipeRefreshLayout.O
                     assert data.getExtras() != null;
                     /*DialogManager.showProgress(getActivity());
                     mPromoterVideoList.clear();*/
-                    ArrayList<PromoterVideoModel.Resource> mTempPromoterVideoList = (ArrayList<PromoterVideoModel.Resource>) data.getExtras().getSerializable(AppConstants.VIDEO_LIST);
+                    ArrayList<PromoterVideoModel.PromoterVideoResModel> mTempPromoterVideoList = (ArrayList<PromoterVideoModel.PromoterVideoResModel>) data.getExtras().getSerializable(AppConstants.VIDEO_LIST);
                     /*mPromoterVideoList.addAll(mTempPromoterVideoList);
                     mAdapter.notifyDataSetChanged();
                     DialogManager.hideProgress();*/

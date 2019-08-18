@@ -115,7 +115,7 @@ public class OnDemanAudoVideoView extends BaseActivity {
     private ProfileResModel mMyProfileResModel, mOtherProfileResModel;
     private int pos = 0, checkPosition = 0;
     private CacheDataSourceFactory mCacheDataSrcFactory;
-    private ArrayList<PromoterVideoModel.Resource> mPostsList = new ArrayList<>();
+    private ArrayList<PromoterVideoModel.PromoterVideoResModel> mPostsList = new ArrayList<>();
     private boolean mIsAlreadyBlocked, isBlockedme, mIsAlreadyFollowing, isNextVideo, isLoadedData;
     private String usertype, replaceString, mFilter;
     private int mOtherProfileID, mMyProfileID, mDeleteLikeID;

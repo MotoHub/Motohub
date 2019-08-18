@@ -86,7 +86,7 @@ public class EventLiveActivity extends BaseActivity implements ChatBoxEventGrpAd
 
     public static final int EVENT_LIVE_PAYMENT_REQ_CODE = 505;
     private static final int mDataLimit = 15;
-    private final ArrayList<PromoterVideoModel.Resource> mPostsList = new ArrayList<>();
+    private final ArrayList<PromoterVideoModel.PromoterVideoResModel> mPostsList = new ArrayList<>();
     @BindView(R.id.chat_box_layout)
     RelativeLayout mParentLayout;
     @BindView(R.id.toolbar)

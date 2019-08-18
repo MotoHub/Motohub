@@ -50,10 +50,12 @@ class MainHomeActivity : BaseActivity() {
 
     private fun navigationAction(itemId: Int) {
         var bundle = Bundle()
+        bundle.putString(BundleConstants.MY_PROFILE_OBJ, Gson().toJson(model!!.profileObj))
         when (itemId) {
             R.id.eventVideosView -> {
                 setTitleTxt(getString(R.string.event_videos))
                 replaceFragment(EventVideosFragment(), bundle)
+//                replaceFragment(EventsFragment(), bundle)
             }
             R.id.onDemandView -> {
                 setTitleTxt(getString(R.string.on_demand))
@@ -61,12 +63,13 @@ class MainHomeActivity : BaseActivity() {
             }
             R.id.newsFeedView -> {
                 setTitleTxt(getString(R.string.news_feed))
-                bundle.putString(BundleConstants.MY_PROFILE_OBJ,Gson().toJson(model!!.profileObj))
+                bundle.putString(BundleConstants.MY_PROFILE_OBJ, Gson().toJson(model!!.profileObj))
                 replaceFragment(NewsFeedFragment(), bundle)
             }
             R.id.findEventView -> {
                 setTitleTxt(getString(R.string.find_event))
                 replaceFragment(FindEventFragment(), bundle)
+
             }
             R.id.myProfileView -> {
                 setTitleTxt(getString(R.string.profile_my))

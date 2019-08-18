@@ -120,7 +120,7 @@ public class EventVideosPlayingActivity extends BaseActivity {
     private ProfileResModel mMyProfileResModel, mOtherProfileResModel;
     private int pos = 0, checkPosition = 0;
     private CacheDataSourceFactory mCacheDataSrcFactory;
-    private ArrayList<PromoterVideoModel.Resource> mPostsList = new ArrayList<>();
+    private ArrayList<PromoterVideoModel.PromoterVideoResModel> mPostsList = new ArrayList<>();
     private int ProfileID;
     private int mDeleteLikeID;
     private String mFilter;
@@ -145,7 +145,7 @@ public class EventVideosPlayingActivity extends BaseActivity {
         imageList = new ArrayList<>();
         setSwipeListenerForVideoView();
         checkPosition = getIntent().getIntExtra(AppConstants.POSITION, 0);
-        mPostsList = (ArrayList<PromoterVideoModel.Resource>) getIntent().getSerializableExtra(AppConstants.ONDEMAND_DATA);
+        mPostsList = (ArrayList<PromoterVideoModel.PromoterVideoResModel>) getIntent().getSerializableExtra(AppConstants.ONDEMAND_DATA);
         mOtherProfileID = Integer.parseInt(mPostsList.get(pos).getProfileID());
         mEventResModel = mPostsList.get(pos).getEvent_by_EventID();
         mFilter = getIntent().getStringExtra("Filter");
