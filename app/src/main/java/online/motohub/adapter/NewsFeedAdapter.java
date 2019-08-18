@@ -229,12 +229,7 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
 
                     //Count View
-                    if (feedsList.get(position).getPostLikes().size() > 0
-                            || feedsList.get(position).getPostComments().size() >= 0
-                            || feedsList.get(position).getPostShares().size() >= 0
-                            || feedsList.get(position).getViewCount() >= 0) {
-                        holder.countView.setVisibility(View.VISIBLE);
-                    }
+
 
                     //share
                     if (TextUtils.isEmpty(feedsList.get(position).getNewSharedPostID().trim())) {
@@ -901,6 +896,8 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         }
 
         void bindView(PostsResModel postsResModel) {
+            setClickListener();
+            setVisibility(postsResModel);
             adapPos = getLayoutPosition();
 
             likeCountTxt.setText(getCount(postsResModel.getPostLikes().size(), ModelConstants.LIKE));
@@ -920,13 +917,12 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 sharedNotifyIcon.setImageResource(R.drawable.notify_active_icon);
                 notifyIcon.setImageResource(R.drawable.notify_active_icon);
             }
-            setClickListener();
-            setVisibility();
+
         }
 
-        void setVisibility() {
+        void setVisibility(PostsResModel postsResModel) {
             //Set Visibility
-
+            countView.setVisibility(View.VISIBLE);
             downIcon.setVisibility(View.VISIBLE);
             notifyIcon.setVisibility(View.VISIBLE);
 
@@ -946,6 +942,13 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             playicon2.setVisibility(View.GONE);
             playicon3.setVisibility(View.GONE);
             playicon4.setVisibility(View.GONE);
+
+            if (postsResModel.getPostLikes().size() > 0
+                    || postsResModel.getPostComments().size() > 0
+                    || postsResModel.getPostShares().size() > 0
+                    || postsResModel.getViewCount() > 0) {
+                countView.setVisibility(View.VISIBLE);
+            }
         }
 
         void setClickListener() {
