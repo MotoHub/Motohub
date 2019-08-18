@@ -12,12 +12,12 @@ import online.motohub.interfaces.ResponseCallback
 import online.motohub.model.ApiInputModel
 import online.motohub.model.ProfileResModel
 import online.motohub.model.PromoterVideoModel
-import online.motohub.provider.OnDemandProvider
+import online.motohub.provider.OnDemandVideosProvider
 import java.util.*
 
-class OnDemandViewModel(application: Application, bundle: Bundle?) : BaseViewModel(application) {
+class OnDemandVideosViewModel(application: Application, bundle: Bundle?) : BaseViewModel(application) {
 
-    val provider = OnDemandProvider()
+    val provider = OnDemandVideosProvider()
     val onDemandVideoLiveData = MutableLiveData<ArrayList<PromoterVideoModel.PromoterVideoResModel>>()
     var profileObj: ProfileResModel? = null
     var totalCount: Int = 0
@@ -39,6 +39,9 @@ class OnDemandViewModel(application: Application, bundle: Bundle?) : BaseViewMod
             if (showProgress)
                 callback!!.hideProgress()
             if (it.isSuccess && it.data != null && it.data.resource != null) {
+                if (it.data.resource.size == 0) {
+                    callback!!.showMessage("No ondemand videos are available")
+                }
                 totalCount = it.data.meta.count
                 onDemandVideoLiveData.value = it.data.resource
             }

@@ -783,4 +783,8 @@ public interface RetrofitApiInterface {
     Call<PromoterVideoModel> getOnDemandVideos(@Query("fields") String fields, @Query("filter") String mFilter,
                                                     @Query("related") String related, @Query("order") String order,
                                                     @Query("limit") int mLimit, @Query("offset") int mOffset, @Query("include_count") boolean isIncludeCount);
+
+    @Headers("Content-Type: application/json")
+    @GET(UrlUtils.NEW_ONDEMAND)
+    Call<ArrayList<OndemandNewResponse>> getOnDemandEvents(@Query("api_key") String key);
 }

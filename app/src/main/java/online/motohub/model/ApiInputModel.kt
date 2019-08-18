@@ -10,6 +10,7 @@ class ApiInputModel {
     var limit: Int = 10
     var offset: Int = 0
     var includeCount: Boolean = false
+    var apiKey: String = ""
 
 
 

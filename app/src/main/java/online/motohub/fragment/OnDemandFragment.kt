@@ -20,7 +20,7 @@ import online.motohub.interfaces.OnLoadMoreListener
 import online.motohub.model.PromoterVideoModel
 import online.motohub.tags.AdapterTag
 import online.motohub.viewmodel.BaseViewModelFactory
-import online.motohub.viewmodel.OnDemandViewModel
+import online.motohub.viewmodel.OnDemandVideosViewModel
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
 import java.io.UnsupportedEncodingException
@@ -30,7 +30,7 @@ import java.util.concurrent.TimeUnit
 class OnDemandFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener, AdapterClickCallBack {
 
 
-    private var model: OnDemandViewModel? = null
+    private var model: OnDemandVideosViewModel? = null
     private var onDemandAdapter: OnDemandVideoAdapter? = null
 
     private var isLoadMoreCalled = false
@@ -56,6 +56,7 @@ class OnDemandFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener, A
     }
 
     private fun initView() {
+        setupUI(parentLay)
         var activeBundle = arguments
         if (activeBundle == null) {
             activeBundle = Bundle()
@@ -65,7 +66,7 @@ class OnDemandFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener, A
         listView.layoutManager = layoutManager
 
         swipeRefreshLay.setOnRefreshListener(this)
-        model = ViewModelProviders.of(this, BaseViewModelFactory(activity!!.application, activeBundle)).get(OnDemandViewModel::class.java)
+        model = ViewModelProviders.of(this, BaseViewModelFactory(activity!!.application, activeBundle)).get(OnDemandVideosViewModel::class.java)
         registerModel(model)
         model!!.onDemandVideoLiveData.observe(this, Observer {
             if (it != null)
@@ -144,7 +145,6 @@ class OnDemandFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener, A
 
     private fun setAdapter() {
         if (onDemandAdapter == null) {
-
             onDemandAdapter = OnDemandVideoAdapter(videoList, model!!.profileObj, activity, this@OnDemandFragment);
             listView.adapter = onDemandAdapter
         } else {

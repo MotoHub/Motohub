@@ -119,7 +119,7 @@ public class ViewOndemandActivity extends BaseActivity implements SwipeRefreshLa
 
     private void setAdapter() {
         if (adapter == null) {
-            adapter = new OnDemandEventsAdapter(this, mListOndemand, mCurrentProfileID, mMyProfileResModel);
+            adapter = new OnDemandEventsAdapter(this, mListOndemand, mMyProfileResModel);
             mNotificationRecyclerView.setAdapter(adapter);
         } else {
             adapter.notifyDataSetChanged();

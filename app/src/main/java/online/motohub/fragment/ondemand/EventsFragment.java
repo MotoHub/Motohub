@@ -239,7 +239,7 @@ public class EventsFragment extends BaseFragment implements SwipeRefreshLayout.O
                 // Do whatever you want
                 try {
                     if (adapter == null && mMyProfileResModel.getID() != 0) {
-                        adapter = new OnDemandEventsAdapter(getActivity(), mListOndemand, mCurrentProfileID, mMyProfileResModel);
+                        adapter = new OnDemandEventsAdapter(getActivity(), mListOndemand, mMyProfileResModel);
                         recyclerView.setAdapter(adapter);
                     } else {
                         adapter.notifyDataSetChanged();

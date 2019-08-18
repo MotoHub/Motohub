@@ -8,7 +8,7 @@ import online.motohub.model.PostsModel
 import online.motohub.model.PromoterVideoModel
 import retrofit2.Call
 
-class OnDemandProvider : BaseProvider() {
+class OnDemandVideosProvider : BaseProvider() {
 
     fun getOnDemandVideos(inputModel: ApiInputModel, response: ResponseCallback<PromoterVideoModel>): Call<PromoterVideoModel> {
         val call = apiService.apiInterface.getOnDemandVideos(inputModel.fields,inputModel.filter, inputModel.related, inputModel.order,

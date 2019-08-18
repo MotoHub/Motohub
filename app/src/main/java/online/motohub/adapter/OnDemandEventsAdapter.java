@@ -57,7 +57,6 @@ public class OnDemandEventsAdapter extends RecyclerView.Adapter<OnDemandEventsAd
     private final ArrayList<PromoterVideoModel.PromoterVideoResModel> mPostsList = new ArrayList<>();
     private Context mContext;
     private List<OndemandNewResponse> mDataList;
-    private int profileId;
     private ProfileResModel mMyProfileResModel;
     private ArrayList<PromoterFollowerResModel> mPromoterFollowerList = new ArrayList<>();
     private RetrofitResInterface mRetrofitResInterface = new RetrofitResInterface() {
@@ -108,10 +107,9 @@ public class OnDemandEventsAdapter extends RecyclerView.Adapter<OnDemandEventsAd
         }
     };
 
-    public OnDemandEventsAdapter(Context context, List<OndemandNewResponse> dataList, int profileId, ProfileResModel profileResModel) {
+    public OnDemandEventsAdapter(Context context, ArrayList<OndemandNewResponse> dataList, ProfileResModel profileResModel) {
         this.mContext = context;
         this.mDataList = dataList;
-        this.profileId = profileId;
         this.mMyProfileResModel = profileResModel;
     }
 
@@ -180,7 +178,7 @@ public class OnDemandEventsAdapter extends RecyclerView.Adapter<OnDemandEventsAd
                     if (isNetwork()) {
                         mPostsList.clear();
                         Bundle mBundle = new Bundle();
-                        mBundle.putInt(AppConstants.PROFILE_ID, profileId);
+                        mBundle.putInt(AppConstants.PROFILE_ID, mMyProfileResModel.getID());
                         mBundle.putInt("ID", mOnDemandResponse.getEventID());
                         mBundle.putString("TYPE", "EventID");
                         //mBundle.putString("Filter", "EventID" + mOnDemandResponse.getEventID());

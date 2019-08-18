@@ -55,7 +55,6 @@ class MainHomeActivity : BaseActivity() {
             R.id.eventVideosView -> {
                 setTitleTxt(getString(R.string.event_videos))
                 replaceFragment(EventVideosFragment(), bundle)
-//                replaceFragment(EventsFragment(), bundle)
             }
             R.id.onDemandView -> {
                 setTitleTxt(getString(R.string.on_demand))

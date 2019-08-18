@@ -69,6 +69,7 @@ class NewsFeedFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener, A
     }
 
     private fun initView() {
+
         var activeBundle = arguments
         if (activeBundle == null) {
             activeBundle = Bundle()
