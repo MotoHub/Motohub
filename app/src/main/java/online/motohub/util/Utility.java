@@ -255,6 +255,19 @@ public class Utility {
         mLastClickTime = SystemClock.elapsedRealtime();
         return false;
     }
+    public String[] mergeArrayList(String[]... arrays) {
+        int length = 0;
+        for (String[] array : arrays) {
+            length += array.length;
+        }
+        String[] result = new String[length];
+        int destPos = 0;
+        for (String[] array : arrays) {
+            System.arraycopy(array, 0, result, destPos, array.length);
+            destPos += array.length;
+        }
+        return result;
+    }
     public String[] getImgVideoList(String str) {
         String[] mArray = null;
         if (!TextUtils.isEmpty(str)) {

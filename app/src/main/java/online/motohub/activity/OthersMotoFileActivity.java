@@ -795,7 +795,7 @@ public class OthersMotoFileActivity extends BaseActivity
                     case RetrofitClient.FEED_VIDEO_COUNT:
                         try {
                             if (mPostsModel.getResource() != null && mPostsModel.getResource().size() > 0) {
-                                mPostsAdapter.addViewCount(mPostsModel.getResource().get(0).getmViewCount());
+                                mPostsAdapter.addViewCount(mPostsModel.getResource().get(0).getViewCount());
                             }
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -804,7 +804,7 @@ public class OthersMotoFileActivity extends BaseActivity
                     case RetrofitClient.ADD_FEED_COUNT:
                         try {
                             if (mPostsModel.getResource() != null && mPostsModel.getResource().size() > 0) {
-                                mPostsAdapter.ViewCount(mPostsModel.getResource().get(0).getmViewCount());
+                                mPostsAdapter.ViewCount(mPostsModel.getResource().get(0).getViewCount());
                             }
                         } catch (Exception e) {
                             e.printStackTrace();

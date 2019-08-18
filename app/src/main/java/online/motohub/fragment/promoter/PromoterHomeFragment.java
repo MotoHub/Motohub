@@ -275,7 +275,7 @@ public class PromoterHomeFragment extends BaseFragment implements SwipeRefreshLa
                 case RetrofitClient.FEED_VIDEO_COUNT:
                     try {
                         if (mPostsModel.getResource() != null && mPostsModel.getResource().size() > 0) {
-                            mPromoterPostsAdapter.addViewCount(mPostsModel.getResource().get(0).getmViewCount());
+                            mPromoterPostsAdapter.addViewCount(mPostsModel.getResource().get(0).getViewCount());
                         }
                     } catch (IndexOutOfBoundsException e) {
                         e.printStackTrace();
@@ -284,7 +284,7 @@ public class PromoterHomeFragment extends BaseFragment implements SwipeRefreshLa
                 case RetrofitClient.ADD_FEED_COUNT:
                     try {
                         if (mPostsModel.getResource() != null && mPostsModel.getResource().size() > 0) {
-                            mPromoterPostsAdapter.ViewCount(mPostsModel.getResource().get(0).getmViewCount());
+                            mPromoterPostsAdapter.ViewCount(mPostsModel.getResource().get(0).getViewCount());
                         }
                     } catch (IndexOutOfBoundsException e) {
                         e.printStackTrace();

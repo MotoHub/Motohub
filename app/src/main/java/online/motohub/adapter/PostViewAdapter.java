@@ -266,7 +266,7 @@ public class PostViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                         mViewHolderPost.mCountLay.setVisibility(View.VISIBLE);
                     }
                     //View Count
-                    if (mPostsList.get(position).getmViewCount() > 0) {
+                    if (mPostsList.get(position).getViewCount() > 0) {
                         setViewCount(mViewHolderPost, position);
                     } else {
                         mViewHolderPost.mViewCountText.setVisibility(View.GONE);
@@ -496,9 +496,9 @@ public class PostViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     private void setViewCount(ViewHolderPosts mViewHolderPost, int position) {
         String view_count;
         int val = 11;
-        /*view_count = String.valueOf(mPostsList.get(position).getmViewCount() * val) + " Views";
+        /*view_count = String.valueOf(mPostsList.get(position).getViewCount() * val) + " Views";
         mViewHolderPost.mViewCountText.setText(view_count);*/
-        view_count = String.valueOf(mPostsList.get(position).getmViewCount());/* * val);*/
+        view_count = String.valueOf(mPostsList.get(position).getViewCount());/* * val);*/
         String count = BaseActivity.convertToSuffix(Long.parseLong(view_count));
         mViewHolderPost.mViewCountText.setText(count + " Views");
     }

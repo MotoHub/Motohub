@@ -1,139 +1,117 @@
 package online.motohub.model;
 
-import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 
 import online.motohub.model.promoter_club_news_media.PromotersResModel;
+import online.motohub.util.Utility;
 
 public class PostsResModel implements Serializable {
 
-    public boolean isCurrentProfileId;
-
     @SerializedName("ID")
-    @Expose
-    private int mID;
+    private int ID;
 
     @SerializedName("ViewCount")
-    @Expose
-    private int mViewCount;
+    private int ViewCount;
 
     @SerializedName("PostVideoThumbnailUrl")
-    @Expose
     private String PostVideoThumbnailURL;
 
     @SerializedName("PostVideoUrl")
-    @Expose
     private String PostVideoURL;
 
     @SerializedName("ProfileID")
-    @Expose
-    private int mProfileID;
+    private int ProfileID;
 
     @SerializedName("WhoPostedProfileID")
-    @Expose
-    private int mWhoPostedProfileID;
+    private int WhoPostedProfileID;
 
     @SerializedName("WhoPostedUserID")
-    @Expose
-    private int mWhoPostedUserID;
+    private int WhoPostedUserID;
 
     @SerializedName("PostText")
-    @Expose
-    private String mPostText;
+    private String PostText;
 
     @SerializedName("PostPicture")
-    @Expose
-    private String mPostPicture;
+    private String PostPicture;
 
     @SerializedName("TaggedProfileID")
-    @Expose
-    private String mTaggedProfileID;
+    private String TaggedProfileID;
 
     @SerializedName("SharedProfileID")
-    @Expose
-    private String mSharedProfileID;
+    private String SharedProfileID;
 
     @SerializedName("WhoSharedProfileID")
-    @Expose
-    private String mWhoSharedProfileID;
+    private String WhoSharedProfileID;
 
     @SerializedName("NewSharedPostID")
-    @Expose
-    private String mNewSharedPostID;
+    private String NewSharedPostID;
 
     @SerializedName("OldPostID")
-    @Expose
-    private int mOldPostID;
+    private int OldPostID;
 
     @SerializedName("CreatedAt")
-    @Expose
-    private String mDateCreatedAt;
+    private String CreatedAt;
 
     @SerializedName("IsNewsFeedPost")
-    @Expose
-    private Boolean mIsNewsFeedPost;
+    private Boolean IsNewsFeedPost;
 
     @SerializedName("user_type")
-    @Expose
     private String userType;
 
     @SerializedName("ReportStatus")
-    @Expose
-    private boolean mReportStatus;
+    private boolean ReportStatus;
 
     @SerializedName("SharedText")
-    @Expose
-    private String mSharedTxt;
+    private String SharedText;
 
     @SerializedName("Post_on")
-    @Expose
     private String Post_on;
+
     @SerializedName("is_scheduled")
-    @Expose
     private boolean is_scheduled;
 
     @SerializedName("profiles_by_WhoPostedProfileID")
-    @Expose
+
     private ProfileResModel mProfilesByWhoPostedProfileID;
     @SerializedName("profiles_by_ProfileID")
-    @Expose
+
     private ProfileResModel mProfilesByProfileID;
     @SerializedName("postcomments_by_PostID")
-    @Expose
+
     private ArrayList<FeedCommentModel> mPostComments;
     @SerializedName("postlikes_by_PostID")
-    @Expose
+
     private ArrayList<FeedLikesModel> mPostLikes;
     @SerializedName("postshares_by_OriginalPostID")
-    @Expose
+
     private ArrayList<FeedShareModel> mPostSharesList;
     @SerializedName("postshares_by_NewSharedPostID")
-    @Expose
+
     private FeedShareModel mNewSharedPost;
     @SerializedName("promoter_by_ProfileID")
-    @Expose
+
     private PromotersResModel mPromoterByProfileID;
     @SerializedName("promoter_by_WhoPostedProfileID")
-    @Expose
+
     private PromotersResModel mPromoterByWhoPostedProfileID;
     @SerializedName("videoshares_by_NewSharedPostID")
-    @Expose
+
     private VideoShareModel mVideoSharesByNewSharedPostID;
     @SerializedName("postnotificationblockedusers_by_PostID")
-    @Expose
+
     private ArrayList<NotificationBlockedUsersModel> mNotificationBlockedUsersID;
 
     public String getSharedTxt() {
-        if (mSharedTxt == null)
-            mSharedTxt = "";
-        return mSharedTxt;
+        if (SharedText == null)
+            SharedText = "";
+        return SharedText;
     }
 
     public void setSharedTxt(String mSharedTxt) {
-        this.mSharedTxt = mSharedTxt;
+        this.SharedText = mSharedTxt;
     }
 
     public ArrayList<NotificationBlockedUsersModel> getmNotificationBlockedUsersID() {
@@ -146,83 +124,83 @@ public class PostsResModel implements Serializable {
         this.mNotificationBlockedUsersID = mNotificationBlockedUsersID;
     }
 
-    public int getmViewCount() {
-        return mViewCount;
+    public int getViewCount() {
+        return ViewCount;
     }
 
-    public void setmViewCount(int mViewCount) {
-        this.mViewCount = mViewCount;
+    public void setViewCount(int viewCount) {
+        this.ViewCount = viewCount;
     }
 
     public Integer getID() {
-        return mID;
+        return ID;
     }
 
     public void setID(int iD) {
-        this.mID = iD;
+        this.ID = iD;
     }
 
     public int getProfileID() {
-        return mProfileID;
+        return ProfileID;
     }
 
     public void setProfileID(int profileID) {
-        this.mProfileID = profileID;
+        this.ProfileID = profileID;
     }
 
     public int getWhoPostedProfileID() {
-        return mWhoPostedProfileID;
+        return WhoPostedProfileID;
     }
 
     public void setWhoPostedProfileID(int whoPostedProfileID) {
-        this.mWhoPostedProfileID = whoPostedProfileID;
+        this.WhoPostedProfileID = whoPostedProfileID;
     }
 
     public int getWhoPostedUserID() {
-        return mWhoPostedUserID;
+        return WhoPostedUserID;
     }
 
     public void setWhoPostedUserID(int userID) {
-        this.mWhoPostedUserID = userID;
+        this.WhoPostedUserID = userID;
     }
 
     public String getPostText() {
-        if (mPostText == null)
-            mPostText = "";
-        return mPostText;
+        if (PostText == null)
+            PostText = "";
+        return PostText;
     }
 
     public void setPostText(String postText) {
-        this.mPostText = postText;
+        this.PostText = postText;
     }
 
     public String getPostPicture() {
-        if (mPostPicture == null)
-            mPostPicture = "";
-        return mPostPicture;
+        if (PostPicture == null)
+            PostPicture = "";
+        return PostPicture;
     }
 
     public void setPostPicture(String postPicture) {
-        this.mPostPicture = postPicture;
+        this.PostPicture = postPicture;
     }
 
     public String getDateCreatedAt() {
         if (is_scheduled) {
-            mDateCreatedAt = getPost_on();
+            CreatedAt = getPost_on();
         }
-        return mDateCreatedAt;
+        return Utility.getInstance().findTime(CreatedAt);
     }
 
     public void setDateCreatedAt(String dateCreatedAt) {
-        this.mDateCreatedAt = dateCreatedAt;
+        this.CreatedAt = dateCreatedAt;
     }
 
     public String getTaggedProfileID() {
-        return mTaggedProfileID;
+        return TaggedProfileID;
     }
 
     public void setTaggedProfileID(String taggedProfileID) {
-        this.mTaggedProfileID = taggedProfileID;
+        this.TaggedProfileID = taggedProfileID;
     }
 
     public ProfileResModel getProfilesByWhoPostedProfileID() {
@@ -267,29 +245,29 @@ public class PostsResModel implements Serializable {
     }
 
     public String getSharedProfileID() {
-        return mSharedProfileID;
+        return SharedProfileID;
     }
 
     public void setSharedProfileID(String mSharedProfileID) {
-        this.mSharedProfileID = mSharedProfileID;
+        this.SharedProfileID = mSharedProfileID;
     }
 
     public String getWhoSharedProfileID() {
-        return mWhoSharedProfileID;
+        return WhoSharedProfileID;
     }
 
     public void setWhoSharedProfileID(String mWhoSharedProfileID) {
-        this.mWhoSharedProfileID = mWhoSharedProfileID;
+        this.WhoSharedProfileID = mWhoSharedProfileID;
     }
 
     public String getNewSharedPostID() {
-        if (mNewSharedPostID == null)
-            mNewSharedPostID = "";
-        return mNewSharedPostID;
+        if (NewSharedPostID == null)
+            NewSharedPostID = "";
+        return NewSharedPostID;
     }
 
     public void setNewSharedPostID(String mNewSharedPostID) {
-        this.mNewSharedPostID = mNewSharedPostID;
+        this.NewSharedPostID = mNewSharedPostID;
     }
 
     public FeedShareModel getNewSharedPost() {
@@ -301,19 +279,19 @@ public class PostsResModel implements Serializable {
     }
 
     public int getOldPostID() {
-        return mOldPostID;
+        return OldPostID;
     }
 
     public void setOldPostID(int mOldPostID) {
-        this.mOldPostID = mOldPostID;
+        this.OldPostID = mOldPostID;
     }
 
     public Boolean getIsNewsFeedPost() {
-        return mIsNewsFeedPost;
+        return IsNewsFeedPost;
     }
 
     public void setIsNewsFeedPost(Boolean mIsNewsFeedPost) {
-        this.mIsNewsFeedPost = mIsNewsFeedPost;
+        this.IsNewsFeedPost = mIsNewsFeedPost;
     }
 
     public String getUserType() {
@@ -382,11 +360,11 @@ public class PostsResModel implements Serializable {
     }
 
     public boolean getReportStatus() {
-        return mReportStatus;
+        return ReportStatus;
     }
 
     public void setReportStatus(boolean mReportStatus) {
-        this.mReportStatus = mReportStatus;
+        this.ReportStatus = mReportStatus;
     }
 
     public String getPost_on() {

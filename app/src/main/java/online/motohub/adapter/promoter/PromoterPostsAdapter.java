@@ -315,7 +315,7 @@ public class PromoterPostsAdapter extends RecyclerView.Adapter<RecyclerView.View
                     if (mPostsList.get(position).getPostLikes().size() == 0
                             && mPostsList.get(position).getPostComments().size() == 0
                             && mPostsList.get(position).getPostShares().size() == 0
-                            && mPostsList.get(position).getmViewCount() == 0) {
+                            && mPostsList.get(position).getViewCount() == 0) {
                         mViewHolderPost.mCountLay.setVisibility(View.GONE);
                     } else {
                         mViewHolderPost.mCountLay.setVisibility(View.VISIBLE);
@@ -325,7 +325,7 @@ public class PromoterPostsAdapter extends RecyclerView.Adapter<RecyclerView.View
                     }*/
 
                     //View Count
-                    if (mPostsList.get(position).getmViewCount() > 0) {
+                    if (mPostsList.get(position).getViewCount() > 0) {
                         setViewCount(mViewHolderPost, position);
                     } else {
                         mViewHolderPost.mViewCountText.setVisibility(View.GONE);
@@ -951,10 +951,10 @@ public class PromoterPostsAdapter extends RecyclerView.Adapter<RecyclerView.View
     private void setViewCount(ViewHolderPosts mViewHolderPost, int position) {
         String view_count;
         int val = 11;
-        /*view_count = String.valueOf(mPostsList.get(position).getmViewCount() * val) + " Views";
+        /*view_count = String.valueOf(mPostsList.get(position).getViewCount() * val) + " Views";
         mViewHolderPost.mViewCountText.setText(view_count);*/
-        //view_count = String.valueOf(mPostsList.get(position).getmViewCount() * val);
-        view_count = String.valueOf(mPostsList.get(position).getmViewCount());// * val);
+        //view_count = String.valueOf(mPostsList.get(position).getViewCount() * val);
+        view_count = String.valueOf(mPostsList.get(position).getViewCount());// * val);
         String count = BaseActivity.convertToSuffix(Long.parseLong(view_count));
         mViewHolderPost.mViewCountText.setText(count + " Views");
     }
@@ -991,7 +991,7 @@ public class PromoterPostsAdapter extends RecyclerView.Adapter<RecyclerView.View
     }
 
     public void ViewCount(int Count) {
-        mPostsList.get(mAdapterPosition).setmViewCount(Count);
+        mPostsList.get(mAdapterPosition).setViewCount(Count);
     }
 
     public void resetLikeAdapter(FeedLikesModel feedLikesModel) {

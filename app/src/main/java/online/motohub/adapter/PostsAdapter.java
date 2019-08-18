@@ -302,13 +302,13 @@ public class PostsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                     if (mPostsList.get(position).getPostLikes().size() == 0
                             && mPostsList.get(position).getPostComments().size() == 0
                             && mPostsList.get(position).getPostShares().size() == 0
-                            && mPostsList.get(position).getmViewCount() == 0) {
+                            && mPostsList.get(position).getViewCount() == 0) {
                         mViewHolderPost.mCountLay.setVisibility(View.GONE);
                     } else {
                         mViewHolderPost.mCountLay.setVisibility(View.VISIBLE);
                     }
                     //View Count
-                    if (mPostsList.get(position).getmViewCount() > 0) {
+                    if (mPostsList.get(position).getViewCount() > 0) {
                         setViewCount(mViewHolderPost, position);
                     } else {
                         mViewHolderPost.mViewCountText.setVisibility(View.GONE);
@@ -848,10 +848,10 @@ public class PostsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     private void setViewCount(ViewHolderPosts mViewHolderPost, int position) {
         String view_count;
         int val = 11;
-        /*view_count = String.valueOf(mPostsList.get(position).getmViewCount() * val);
+        /*view_count = String.valueOf(mPostsList.get(position).getViewCount() * val);
         String count = BaseActivity.convertToSuffix(Long.parseLong(view_count));
         mViewHolderPost.mViewCountText.setText(count + " Views");*/
-        view_count = String.valueOf(mPostsList.get(position).getmViewCount()); /** val);*/
+        view_count = String.valueOf(mPostsList.get(position).getViewCount()); /** val);*/
         String count = BaseActivity.convertToSuffix(Long.parseLong(view_count));
         mViewHolderPost.mViewCountText.setText(count + " Views");
     }
@@ -888,7 +888,7 @@ public class PostsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     }
 
     public void ViewCount(int Count) {
-        mPostsList.get(mAdapterPosition).setmViewCount(Count);
+        mPostsList.get(mAdapterPosition).setViewCount(Count);
     }
 
     private void showShareLayout(final ViewHolderPosts mViewHolderPost, final int position, String mPostOwnerName) {

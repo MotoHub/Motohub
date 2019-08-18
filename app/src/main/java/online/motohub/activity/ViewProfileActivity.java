@@ -1460,7 +1460,7 @@ public class ViewProfileActivity extends BaseActivity implements
                 case RetrofitClient.FEED_VIDEO_COUNT:
                     try {
                         if (mPostsModel.getResource() != null && mPostsModel.getResource().size() > 0) {
-                            mNewsFeedAdapter.addViewCount(mPostsModel.getResource().get(0).getmViewCount());
+                            mNewsFeedAdapter.addViewCount(mPostsModel.getResource().get(0).getViewCount());
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -1469,7 +1469,7 @@ public class ViewProfileActivity extends BaseActivity implements
                 case RetrofitClient.ADD_FEED_COUNT:
                     try {
                         if (mPostsModel.getResource() != null && mPostsModel.getResource().size() > 0) {
-                            mNewsFeedAdapter.ViewCount(mPostsModel.getResource().get(0).getmViewCount());
+                            mNewsFeedAdapter.ViewCount(mPostsModel.getResource().get(0).getViewCount());
                         }
                     } catch (Exception e) {
                         e.printStackTrace();

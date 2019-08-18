@@ -360,4 +360,7 @@ public class BaseFragment extends Fragment implements ViewModelCallback, Permiss
     public void setProgressCount(int progressCount) {
 
     }
+
+    public void moveProfileScreen(int pos, boolean isSharedProfile) {
+    }
 }

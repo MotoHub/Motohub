@@ -235,7 +235,7 @@ public class ClubHomeFragment extends BaseFragment implements SwipeRefreshLayout
                 case RetrofitClient.FEED_VIDEO_COUNT:
                     try {
                         if (mPostsModel.getResource() != null && mPostsModel.getResource().size() > 0) {
-                            mClubPostsAdapter.addViewCount(mPostsModel.getResource().get(0).getmViewCount());
+                            mClubPostsAdapter.addViewCount(mPostsModel.getResource().get(0).getViewCount());
                         }
                     } catch (IndexOutOfBoundsException e) {
                         e.printStackTrace();
@@ -244,7 +244,7 @@ public class ClubHomeFragment extends BaseFragment implements SwipeRefreshLayout
                 case RetrofitClient.ADD_FEED_COUNT:
                     try {
                         if (mPostsModel.getResource() != null && mPostsModel.getResource().size() > 0) {
-                            mClubPostsAdapter.ViewCount(mPostsModel.getResource().get(0).getmViewCount());
+                            mClubPostsAdapter.ViewCount(mPostsModel.getResource().get(0).getViewCount());
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
