@@ -341,7 +341,7 @@ public class ClubPostsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
                             for (final FeedLikesModel likesEntity : mFeedLikes) {
 
-                                if ((likesEntity.getOwnerID() == mCurrentProfileResModel.getID())) {
+                                if ((likesEntity.getProfileID() == mCurrentProfileResModel.getID())) {
                                     mViewHolderPost.mLikeBtn.setImageResource(R.drawable.liked_icon);
                                     mViewHolderPost.mLikeBtn.setTag("unlike");
                                     break;
@@ -466,7 +466,7 @@ public class ClubPostsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                                         if (mFeedLikeList.size() > 0) {
 
                                             for (FeedLikesModel likesEntity : mFeedLikeList) {
-                                                if (likesEntity.getOwnerID() == mCurrentProfileResModel.getID() && likesEntity.getFeedID() == mPostsList.get(position).getID()) {
+                                                if (likesEntity.getProfileID() == mCurrentProfileResModel.getID() && likesEntity.getFeedID() == mPostsList.get(position).getID()) {
                                                     mDeleteLikeID = likesEntity.getId();
                                                     break;
                                                 }

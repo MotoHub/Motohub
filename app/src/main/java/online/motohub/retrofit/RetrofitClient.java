@@ -2608,7 +2608,35 @@ public class RetrofitClient {
             }
         });
     }
+    public void postLikesForPosts(final BaseFragment activity, JsonObject mFeedLikesEntity, final int responseType) {
 
+        DialogManager.showProgress(activity.getActivity());
+
+        RetrofitClient.getRetrofitInstance().getRetrofitApiInterface()
+                .postLikesForPosts("*", mFeedLikesEntity).enqueue(new Callback<FeedLikesModel>() {
+            @Override
+            public void onResponse(Call<FeedLikesModel> call, Response<FeedLikesModel> response) {
+                DialogManager.hideProgress();
+
+                if (response.isSuccessful()) {
+
+                    Object mResponseObj = response.body();
+                    activity.retrofitOnResponse(mResponseObj, responseType);
+
+                } else {
+
+                    activity.retrofitOnError(response.code(), response.message());
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<FeedLikesModel> call, Throwable t) {
+                DialogManager.hideProgress();
+                activity.retrofitOnFailure();
+            }
+        });
+    }
     public void callPostFeedComments(final BaseActivity activity, JsonObject jsonArray, final int responseType) {
 
         DialogManager.showProgress(activity);
@@ -2656,7 +2684,28 @@ public class RetrofitClient {
             }
         });
     }
+    public void callUnLikeForPosts(final BaseFragment activity, String mFilter, final int responseType) {
+        DialogManager.showProgress(activity.getActivity());
+        RetrofitClient.getRetrofitInstance().getRetrofitApiInterface()
+                .postUnLikesForPosts("*", mFilter).enqueue(new Callback<FeedLikesModel>() {
+            @Override
+            public void onResponse(Call<FeedLikesModel> call, Response<FeedLikesModel> response) {
+                DialogManager.hideProgress();
+                if (response.isSuccessful()) {
+                    Object mResponseObj = response.body();
+                    activity.retrofitOnResponse(mResponseObj, responseType);
+                } else {
+                    activity.retrofitOnError(response.code(), response.message());
+                }
+            }
 
+            @Override
+            public void onFailure(Call<FeedLikesModel> call, Throwable t) {
+                DialogManager.hideProgress();
+                activity.retrofitOnFailure();
+            }
+        });
+    }
     public void callPostShares(final Context context, JsonObject jsonObject, final int responseType) {
         DialogManager.showProgress(context);
         RetrofitClient.getRetrofitInstance().getRetrofitApiInterface()
@@ -5078,7 +5127,29 @@ public class RetrofitClient {
                     }
                 });
     }
+    public void blockNotifications(final BaseFragment activity, JsonObject jsonobj, final int responseType) {
+        DialogManager.showProgress(activity.getActivity());
 
+        RetrofitClient.getRetrofitInstance().getRetrofitApiInterface().blockNotifications("*", jsonobj)
+                .enqueue(new Callback<NotificationBlockedUsersModel>() {
+                    @Override
+                    public void onResponse(Call<NotificationBlockedUsersModel> call, Response<NotificationBlockedUsersModel> response) {
+                        DialogManager.hideProgress();
+                        if (response.isSuccessful()) {
+                            Object mResponseObj = response.body();
+                            activity.retrofitOnResponse(mResponseObj, responseType);
+                        } else {
+                            activity.retrofitOnError(response.code(), response.message());
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<NotificationBlockedUsersModel> call, Throwable t) {
+                        DialogManager.hideProgress();
+                        activity.retrofitOnFailure();
+                    }
+                });
+    }
     public void getViewCount(final BaseActivity activity, String filter, final int responseType) {
         RetrofitClient.getRetrofitInstance().getRetrofitApiInterface().callGetViewCount(filter)
                 .enqueue(new Callback<PostsModel>() {
@@ -5185,7 +5256,28 @@ public class RetrofitClient {
                     }
                 });
     }
+    public void unBlockNotifications(final BaseFragment activity, String filter, final int responseType) {
+        DialogManager.showProgress(activity.getActivity());
+        RetrofitClient.getRetrofitInstance().getRetrofitApiInterface().unBlockNotifications("*", filter)
+                .enqueue(new Callback<NotificationBlockedUsersModel>() {
+                    @Override
+                    public void onResponse(Call<NotificationBlockedUsersModel> call, Response<NotificationBlockedUsersModel> response) {
+                        DialogManager.hideProgress();
+                        if (response.isSuccessful()) {
+                            Object mResponseObj = response.body();
+                            activity.retrofitOnResponse(mResponseObj, responseType);
+                        } else {
+                            activity.retrofitOnError(response.code(), response.message());
+                        }
+                    }
 
+                    @Override
+                    public void onFailure(Call<NotificationBlockedUsersModel> call, Throwable t) {
+                        DialogManager.hideProgress();
+                        activity.retrofitOnFailure();
+                    }
+                });
+    }
     public void getPromotersSubs(final BaseActivity activity, String mFilter, final int responseType, int limit, int offset) {
         DialogManager.showProgress(activity);
         String mRelated = "profiles_by_ProfileID";

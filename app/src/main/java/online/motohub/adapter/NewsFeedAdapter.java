@@ -479,7 +479,7 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     private boolean isLiked(ArrayList<FeedLikesModel> likedList) {
         for (final FeedLikesModel data : likedList) {
-            if (myProfile.getID() == data.getOwnerID()) {
+            if (myProfile.getID() == data.getProfileID()) {
                 return true;
             }
         }
@@ -666,12 +666,12 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     }
 
-    public void resetUnBlock(int pos, NotificationBlockedUsersModel mNotify) {
+    public void resetUnBlock(int pos) {
         ArrayList<NotificationBlockedUsersModel> mNotifylist = feedsList.get(pos).getmNotificationBlockedUsersID();
         Iterator<NotificationBlockedUsersModel> iterator = mNotifylist.iterator();
         while (iterator.hasNext()) {
             NotificationBlockedUsersModel next = iterator.next();
-            if ((next.getmProfileID() == mNotify.getmProfileID()) && (next.getmPostID() == mNotify.getmPostID())) {
+            if (next.getmProfileID() == myProfile.getID()) {
                 iterator.remove();
                 mNotifylist.remove(next);
             }
@@ -684,7 +684,6 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         ArrayList<NotificationBlockedUsersModel> mNotifylist = feedsList.get(pos).getmNotificationBlockedUsersID();
         mNotifylist.add(mNotify);
         feedsList.get(pos).setmNotificationBlockedUsersID(mNotifylist);
-        //notifyDataSetChanged();
         notifyItemChanged(pos);
     }
 
@@ -692,22 +691,20 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         ArrayList<FeedLikesModel> mFeedLikesList = feedsList.get(pos).getPostLikes();
         mFeedLikesList.add(feedLikesModel);
         feedsList.get(pos).setPostLikes(mFeedLikesList);
-        //notifyDataSetChanged();
         notifyItemChanged(pos);
     }
 
-    public void resetDisLike(int pos, FeedLikesModel feedLikesModel) {
+    public void resetDisLike(int pos) {
         ArrayList<FeedLikesModel> mFeedLikesList = feedsList.get(pos).getPostLikes();
         Iterator<FeedLikesModel> iterator = mFeedLikesList.iterator();
         while (iterator.hasNext()) {
             FeedLikesModel next = iterator.next();
-            if (next.getId() == (feedLikesModel.getId())) {
+            if (next.getProfileID() == myProfile.getID()) {
                 iterator.remove();
                 mFeedLikesList.remove(next);
             }
         }
         feedsList.get(pos).setPostLikes(mFeedLikesList);
-        //notifyDataSetChanged();
         notifyItemChanged(pos);
     }
 
@@ -956,7 +953,7 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             AdapterTag tag = new AdapterTag();
             tag.setPos(getLayoutPosition());
             tag.setBlocked(isBlocked(feedsList.get(getLayoutPosition()).getmNotificationBlockedUsersID()));
-            tag.setLiked(isBlocked(feedsList.get(getLayoutPosition()).getmNotificationBlockedUsersID()));
+            tag.setLiked(isLiked(feedsList.get(getLayoutPosition()).getPostLikes()));
             sharedUserImg.setTag(tag);
             sharedUserImg.setOnClickListener(NewsFeedAdapter.this);
             sharedProfileNameTxt.setTag(tag);

@@ -71,11 +71,11 @@ public class FeedLikesAdapter extends RecyclerView.Adapter<FeedLikesAdapter.Hold
 
     private void profileClick(FeedLikesModel feedLikeModel) {
 
-        if (mMyProfileResModel.getID() == feedLikeModel.getOwnerID()) {
+        if (mMyProfileResModel.getID() == feedLikeModel.getProfileID()) {
             ((BaseActivity) mContext).moveMyProfileScreenWithResult(mContext, mMyProfileResModel.getID(), AppConstants.FOLLOWERS_FOLLOWING_RESULT);
         } else {
             ((BaseActivity) mContext).moveOtherProfileScreenWithResult(mContext, mMyProfileResModel.getID(),
-                    feedLikeModel.getOwnerID(), AppConstants.FOLLOWERS_FOLLOWING_RESULT);
+                    feedLikeModel.getProfileID(), AppConstants.FOLLOWERS_FOLLOWING_RESULT);
         }
     }
 

@@ -126,7 +126,7 @@ class NewsFeedFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener, A
 
     var clickPos = 0
     override fun onClick(view: View?, tag: AdapterTag) {
-        if (swipeRefreshLay.isRefreshing){
+        if (swipeRefreshLay.isRefreshing) {
             return
         }
         clickPos = tag.pos
@@ -311,7 +311,7 @@ class NewsFeedFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener, A
         val mJsonObj = JsonObject()
         mJsonObj.add("resource", mJsonArray)
 
-        RetrofitClient.getRetrofitInstance().blockNotifications(activity as BaseActivity, mJsonObj, RetrofitClient.BLOCK_NOTIFY)
+        RetrofitClient.getRetrofitInstance().blockNotifications(this, mJsonObj, RetrofitClient.BLOCK_NOTIFY)
     }
 
     private fun unBlockNotification(pos: Int) {
@@ -319,12 +319,14 @@ class NewsFeedFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener, A
         val profileID = model!!.profileObj!!.id
         val filter = "((ProfileID=$profileID)AND(PostID=$postID))"
 
-        RetrofitClient.getRetrofitInstance().unBlockNotifications(activity as BaseActivity, filter, RetrofitClient.UNBLOCK_NOTIFY)
+        RetrofitClient.getRetrofitInstance().unBlockNotifications(this, filter, RetrofitClient.UNBLOCK_NOTIFY)
     }
 
     private fun unLikePost(pos: Int) {
-        val filter = "ID=" + model!!.profileObj!!.id
-        RetrofitClient.getRetrofitInstance().callUnLikeForPosts(activity as BaseActivity, filter, RetrofitClient.POST_UNLIKE)
+        val postID = feedsList.get(pos)!!.id!!
+        val profileID = model!!.profileObj!!.id
+        val filter = "((ProfileID=$profileID)AND(PostID=$postID))"
+        RetrofitClient.getRetrofitInstance().callUnLikeForPosts(this, filter, RetrofitClient.POST_UNLIKE)
     }
 
     private fun likePost(pos: Int) {
@@ -338,7 +340,7 @@ class NewsFeedFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener, A
         mJsonArray.add(mItem)
         mJsonObject.add("resource", mJsonArray)
 
-        RetrofitClient.getRetrofitInstance().postLikesForPosts(activity as BaseActivity, mJsonObject, RetrofitClient.POST_LIKES)
+        RetrofitClient.getRetrofitInstance().postLikesForPosts(this, mJsonObject, RetrofitClient.POST_LIKES)
     }
 
     private fun sharePost(pos: Int) {
@@ -378,19 +380,19 @@ class NewsFeedFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener, A
 
     override fun retrofitOnResponse(responseObj: Any?, responseType: Int) {
         super.retrofitOnResponse(responseObj, responseType)
-        if (responseObj is FeedLikesModel) run {
-            val mNewFeedLike = responseObj.resource
+        if (responseObj is FeedLikesModel) {
+            val feedLikesList = responseObj.resource
             when (responseType) {
-                RetrofitClient.POST_LIKES -> feedAdapter!!.resetLikeAdapter(clickPos, mNewFeedLike[0])
-                RetrofitClient.POST_UNLIKE -> feedAdapter!!.resetDisLike(clickPos, mNewFeedLike[0])
+                RetrofitClient.POST_LIKES -> if (feedLikesList.size > 0)
+                    feedAdapter!!.resetLikeAdapter(clickPos, feedLikesList[0])
+                RetrofitClient.POST_UNLIKE -> feedAdapter!!.resetDisLike(clickPos)
             }
-        } else if (responseObj is NotificationBlockedUsersModel) run {
-            val mPostNotification = responseObj.resource
+        } else if (responseObj is NotificationBlockedUsersModel) {
+            val notifyBlockedList = responseObj.resource
             when (responseType) {
-                RetrofitClient.BLOCK_NOTIFY -> if (mPostNotification.size > 0)
-                    feedAdapter!!.resetBlock(clickPos, mPostNotification[0])
-                RetrofitClient.UNBLOCK_NOTIFY -> if (mPostNotification.size > 0)
-                    feedAdapter!!.resetUnBlock(clickPos, mPostNotification[0])
+                RetrofitClient.BLOCK_NOTIFY -> if (notifyBlockedList.size > 0)
+                    feedAdapter!!.resetBlock(clickPos, notifyBlockedList[0])
+                RetrofitClient.UNBLOCK_NOTIFY -> feedAdapter!!.resetUnBlock(clickPos)
             }
         }
     }

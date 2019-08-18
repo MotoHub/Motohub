@@ -298,7 +298,7 @@ public class NewsAndMediaPostsAdapter extends RecyclerView.Adapter<RecyclerView.
 
                             for (final FeedLikesModel likesEntity : mFeedLikes) {
 
-                                if ((likesEntity.getOwnerID() == mCurrentProfileResModel.getID())) {
+                                if ((likesEntity.getProfileID() == mCurrentProfileResModel.getID())) {
                                     mViewHolderNewsAndMedia.mLikeBtn.setImageResource(R.drawable.liked_icon);
                                     mViewHolderNewsAndMedia.mLikeBtn.setTag("unlike");
                                     break;
@@ -466,7 +466,7 @@ public class NewsAndMediaPostsAdapter extends RecyclerView.Adapter<RecyclerView.
                                     if (mFeedLikeList.size() > 0) {
 
                                         for (FeedLikesModel likesEntity : mFeedLikeList) {
-                                            if (likesEntity.getOwnerID() == mCurrentProfileResModel.getID() && likesEntity.getFeedID() == mPostsList.get(position).getID()) {
+                                            if (likesEntity.getProfileID() == mCurrentProfileResModel.getID() && likesEntity.getFeedID() == mPostsList.get(position).getID()) {
                                                 mDeleteLikeID = likesEntity.getId();
                                                 break;
                                             }

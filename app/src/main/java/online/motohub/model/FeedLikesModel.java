@@ -9,54 +9,51 @@ import java.util.ArrayList;
 public class FeedLikesModel implements Serializable {
 
     @SerializedName("ID")
-    @Expose
-    private int mID;
+    private int ID;
 
     @SerializedName("PostID")
-    @Expose
-    private int mPostID;
+    private int PostID;
 
     @SerializedName("ProfileID")
-    private int mProfileID;
+    private int ProfileID;
 
     @SerializedName("profiles_by_ProfileID")
-    @Expose
-    private ProfileResModel mProfilesByProfileID;
+    private ProfileResModel ProfilesByProfileID;
     @SerializedName("resource")
     @Expose
-    private ArrayList<FeedLikesModel> mResource = null;
+    private ArrayList<FeedLikesModel> Resource = null;
 
     public FeedLikesModel(int postID, int profileID) {
-        this.mPostID = postID;
-        this.mProfileID = profileID;
+        this.PostID = postID;
+        this.ProfileID = profileID;
     }
 
     public ArrayList<FeedLikesModel> getResource() {
-        return mResource;
+        return Resource;
     }
 
     public void setResource(ArrayList<FeedLikesModel> resource) {
-        this.mResource = resource;
+        this.Resource = resource;
     }
 
     public int getId() {
-        return this.mID;
+        return this.ID;
     }
 
-    public int getOwnerID() {
-        return this.mProfileID;
+    public int getProfileID() {
+        return this.ProfileID;
     }
 
     public int getFeedID() {
-        return this.mPostID;
+        return this.PostID;
     }
 
     public ProfileResModel getProfiles_by_ProfileID() {
-        return mProfilesByProfileID;
+        return ProfilesByProfileID;
     }
 
     public void setProfiles_by_ProfileID(ProfileResModel profiles_by_ProfileID) {
-        this.mProfilesByProfileID = profiles_by_ProfileID;
+        this.ProfilesByProfileID = profiles_by_ProfileID;
     }
 
 }

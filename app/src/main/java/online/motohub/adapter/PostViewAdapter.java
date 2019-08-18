@@ -334,7 +334,7 @@ public class PostViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                                         ArrayList<FeedLikesModel> mFeedLikeList = mPostsList.get(position).getPostLikes();
                                         if (mFeedLikeList.size() > 0) {
                                             for (FeedLikesModel likesEntity : mFeedLikeList) {
-                                                if (likesEntity.getOwnerID() == mCurrentProfileObj.getID() && likesEntity.getFeedID() == mPostsList.get(position).getID()) {
+                                                if (likesEntity.getProfileID() == mCurrentProfileObj.getID() && likesEntity.getFeedID() == mPostsList.get(position).getID()) {
                                                     mDeleteLikeID = likesEntity.getId();
                                                     break;
                                                 }
@@ -883,7 +883,7 @@ public class PostViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         mViewHolderPost.mLikeCountText.setText(resLikes);
         for (final FeedLikesModel likesEntity : mFeedLikes) {
 
-            if ((likesEntity.getOwnerID() == mCurrentProfileObj.getID())) {
+            if ((likesEntity.getProfileID() == mCurrentProfileObj.getID())) {
                 mViewHolderPost.mLikeBtn.setImageResource(R.drawable.liked_icon);
                 mViewHolderPost.mLikeBtn.setTag("unlike");
                 break;
