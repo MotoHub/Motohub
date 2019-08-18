@@ -27,6 +27,7 @@ import online.motohub.constants.AppConstants
 import online.motohub.fragment.dialog.AppDialogFragment
 import online.motohub.interfaces.AdapterClickCallBack
 import online.motohub.interfaces.OnLoadMoreListener
+import online.motohub.model.FeedLikesModel
 import online.motohub.model.NotificationBlockedUsersModel
 import online.motohub.model.PostsResModel
 import online.motohub.model.promoter_club_news_media.PromotersModel
@@ -123,7 +124,12 @@ class NewsFeedFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener, A
             swipeRefreshLay.isRefreshing = false
     }
 
+    var clickPos = 0
     override fun onClick(view: View?, tag: AdapterTag) {
+        if (swipeRefreshLay.isRefreshing){
+            return
+        }
+        clickPos = tag.pos
         val pos = tag.pos
         val isBlocked = tag.isBlocked
         val isLiked = tag.isLiked
@@ -197,6 +203,7 @@ class NewsFeedFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener, A
         intent.putExtra("img", finalArr)
         startActivity(intent)
     }
+
     private fun updateViewCount(pos: Int) {
         val filter = "ID = " + feedsList.get(pos)!!.getID()!!
         RetrofitClient.getRetrofitInstance().getViewCount(activity as BaseActivity, filter, RetrofitClient.FEED_VIDEO_COUNT)
@@ -366,6 +373,25 @@ class NewsFeedFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener, A
 
         } else {
             (activity as BaseActivity).showFBShareDialog(AppDialogFragment.BOTTOM_SHARE_DIALOG, content, null, null, pos, mIsOtherMotoProfile)
+        }
+    }
+
+    override fun retrofitOnResponse(responseObj: Any?, responseType: Int) {
+        super.retrofitOnResponse(responseObj, responseType)
+        if (responseObj is FeedLikesModel) run {
+            val mNewFeedLike = responseObj.resource
+            when (responseType) {
+                RetrofitClient.POST_LIKES -> feedAdapter!!.resetLikeAdapter(clickPos, mNewFeedLike[0])
+                RetrofitClient.POST_UNLIKE -> feedAdapter!!.resetDisLike(clickPos, mNewFeedLike[0])
+            }
+        } else if (responseObj is NotificationBlockedUsersModel) run {
+            val mPostNotification = responseObj.resource
+            when (responseType) {
+                RetrofitClient.BLOCK_NOTIFY -> if (mPostNotification.size > 0)
+                    feedAdapter!!.resetBlock(clickPos, mPostNotification[0])
+                RetrofitClient.UNBLOCK_NOTIFY -> if (mPostNotification.size > 0)
+                    feedAdapter!!.resetUnBlock(clickPos, mPostNotification[0])
+            }
         }
     }
 }
