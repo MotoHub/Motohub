@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/colorWhite"
+    style="@style/LayoutMatch">
+
+    <Button
+        android:id="@+id/writePostBtn"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/size35"
+        android:layout_margin="@dimen/size10"
+        android:background="@drawable/grey_orange_btn_bg"
+        android:text="@string/write_a_post1"
+        android:textAllCaps="false"
+        android:textColor="@color/colorBlack"
+        android:textSize="@dimen/text14"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/view1" />
+
+    <LinearLayout
+        android:id="@+id/topLay"
+        style="@style/LayoutMatchWrap"
+        android:padding="@dimen/size5"
+        android:baselineAligned="false"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <RelativeLayout
+            android:id="@+id/performanceShopLay"
+            android:layout_width="@dimen/size0"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/white_orange_bg"
+            android:clickable="true"
+            android:focusable="true">
+
+            <ImageView
+                android:id="@+id/performanceShopIcon"
+                android:layout_width="@dimen/size24"
+                android:layout_height="@dimen/size24"
+                android:layout_centerHorizontal="true"
+                android:background="@null"
+                android:contentDescription="@string/app_name"
+                android:src="@drawable/ic_performance_shop" />
+
+            <TextView
+                style="@style/LayoutMatchWrap"
+                android:layout_below="@+id/performanceShopIcon"
+                android:gravity="center"
+                android:text="@string/performance_shop"
+                android:textColor="@color/colorBlack"
+                android:textSize="@dimen/text10" />
+
+        </RelativeLayout>
+        <View
+            android:layout_width="@dimen/size1"
+            android:layout_height="@dimen/size30"
+            android:layout_gravity="center"
+            android:background="@color/colorGrey" />
+        <RelativeLayout
+            android:id="@+id/newsAndMediaLay"
+            android:layout_width="@dimen/size0"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/white_orange_bg"
+            android:clickable="true"
+            android:focusable="true">
+
+            <ImageView
+                android:id="@+id/newsAndMediaIcon"
+                android:layout_width="@dimen/size24"
+                android:layout_height="@dimen/size24"
+                android:layout_centerHorizontal="true"
+                android:background="@null"
+                android:contentDescription="@string/app_name"
+                android:src="@drawable/news_and_media_icon" />
+
+            <TextView
+                style="@style/LayoutMatchWrap"
+                android:layout_below="@+id/newsAndMediaIcon"
+                android:gravity="center"
+                android:text="@string/news_and_media1"
+                android:textColor="@color/colorBlack"
+                android:textSize="@dimen/text10" />
+
+        </RelativeLayout>
+        <View
+            android:layout_width="@dimen/size1"
+            android:layout_height="@dimen/size30"
+            android:layout_gravity="center"
+            android:background="@color/colorGrey" />
+        <RelativeLayout
+            android:id="@+id/tracksLay"
+            android:layout_width="@dimen/size0"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/white_orange_bg"
+            android:clickable="true"
+            android:focusable="true">
+
+            <ImageView
+                android:id="@+id/tracksIcon"
+                android:layout_width="@dimen/size24"
+                android:layout_height="@dimen/size24"
+                android:layout_centerHorizontal="true"
+                android:background="@null"
+                android:contentDescription="@string/app_name"
+                android:src="@drawable/tracks_icon" />
+
+            <TextView
+                style="@style/LayoutMatchWrap"
+                android:layout_below="@+id/tracksIcon"
+                android:gravity="center"
+                android:text="@string/Tracks"
+                android:textColor="@color/colorBlack"
+                android:textSize="@dimen/text10" />
+
+        </RelativeLayout>
+        <View
+            android:layout_width="@dimen/size1"
+            android:layout_height="@dimen/size30"
+            android:layout_gravity="center"
+            android:background="@color/colorGrey" />
+        <RelativeLayout
+            android:id="@+id/clubsLay"
+            android:layout_width="@dimen/size0"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/white_orange_bg"
+            android:clickable="true"
+            android:focusable="true">
+
+            <ImageView
+                android:id="@+id/clubsIcon"
+                android:layout_width="@dimen/size24"
+                android:layout_height="@dimen/size24"
+                android:layout_centerHorizontal="true"
+                android:background="@null"
+                android:contentDescription="@string/app_name"
+                android:src="@drawable/clubs_icon" />
+
+            <TextView
+                style="@style/LayoutMatchWrap"
+                android:layout_below="@+id/clubsIcon"
+                android:gravity="center"
+                android:text="@string/clubs"
+                android:textColor="@color/colorBlack"
+                android:textSize="@dimen/text10" />
+
+        </RelativeLayout>
+        <View
+            android:layout_width="@dimen/size1"
+            android:layout_height="@dimen/size30"
+            android:layout_gravity="center"
+            android:background="@color/colorGrey" />
+        <RelativeLayout
+            android:id="@+id/promotersLay"
+            android:layout_width="@dimen/size0"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/white_orange_bg"
+            android:clickable="true"
+            android:focusable="true">
+
+            <ImageView
+                android:id="@+id/promotersIcon"
+                android:layout_width="@dimen/size24"
+                android:layout_height="@dimen/size24"
+                android:layout_centerHorizontal="true"
+                android:background="@null"
+                android:contentDescription="@string/app_name"
+                android:src="@drawable/promoters_icon" />
+
+            <TextView
+                style="@style/LayoutMatchWrap"
+                android:layout_below="@+id/promotersIcon"
+                android:gravity="center"
+                android:paddingTop="@dimen/size2"
+                android:text="@string/promoters"
+                android:textColor="@color/colorBlack"
+                android:textSize="@dimen/text10" />
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+    <View
+        android:id="@+id/view1"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/size10"
+        android:layout_below="@+id/topLay"
+        android:background="@color/colorLighterGrey"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/topLay" />
+
+    <View
+        android:id="@+id/view2"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/size10"
+        android:layout_below="@+id/topLay"
+        android:background="@color/colorLighterGrey"
+        android:layout_marginTop="@dimen/size10"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/writePostBtn" />
+
+</android.support.constraint.ConstraintLayout>

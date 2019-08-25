@@ -73,7 +73,6 @@ class OnDemandFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener, A
                 videoList.addAll(it)
 
             setAdapter()
-
         })
         model!!.initialize()
 

@@ -32,6 +32,8 @@ import online.motohub.activity.BaseActivity;
 import online.motohub.activity.PromoterVideoGalleryActivity;
 import online.motohub.activity.ondemand.EventVideosPlayingActivity;
 import online.motohub.activity.ondemand.OnDemandActivity;
+import online.motohub.constants.AppConstants;
+import online.motohub.dialog.DialogManager;
 import online.motohub.interfaces.RetrofitResInterface;
 import online.motohub.model.OndemandNewResponse;
 import online.motohub.model.ProfileResModel;
@@ -40,18 +42,12 @@ import online.motohub.model.promoter_club_news_media.PromoterFollowerModel;
 import online.motohub.model.promoter_club_news_media.PromoterFollowerResModel;
 import online.motohub.retrofit.APIConstants;
 import online.motohub.retrofit.RetrofitClient;
-import online.motohub.constants.AppConstants;
-import online.motohub.dialog.DialogManager;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 import static android.app.Activity.RESULT_OK;
 
-/**
- * Author: pickzy01
- * Created on 24/05/2018
- */
 public class OnDemandEventsAdapter extends RecyclerView.Adapter<OnDemandEventsAdapter.ViewHolder> {
 
     private final ArrayList<PromoterVideoModel.PromoterVideoResModel> mPostsList = new ArrayList<>();
@@ -243,8 +239,7 @@ public class OnDemandEventsAdapter extends RecyclerView.Adapter<OnDemandEventsAd
                                     //MotoHub.getApplicationInstance().setmProfileResModel(mMyProfileResModel);
                                     EventBus.getDefault().postSticky(mMyProfileResModel);
                                     mBundle.putString("Filter", filter);
-                                    if (mContext instanceof OnDemandActivity)
-                                        ((OnDemandActivity) mContext).startActivityForResult(new Intent(mContext, EventVideosPlayingActivity.class).putExtras(mBundle), AppConstants.ONDEMAND_REQUEST);
+                                    ((OnDemandActivity) mContext).startActivityForResult(new Intent(mContext, EventVideosPlayingActivity.class).putExtras(mBundle), AppConstants.ONDEMAND_REQUEST);
                                 }
                             }
                         }

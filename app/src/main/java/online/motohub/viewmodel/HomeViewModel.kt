@@ -9,6 +9,7 @@ import online.motohub.model.ApiInputModel
 import online.motohub.model.ProfileResModel
 import online.motohub.provider.HomeProvider
 import online.motohub.util.PreferenceUtils
+import online.motohub.util.Utility
 import java.util.*
 
 class HomeViewModel(application: Application, bundle: Bundle?) : BaseViewModel(application) {
@@ -17,6 +18,7 @@ class HomeViewModel(application: Application, bundle: Bundle?) : BaseViewModel(a
     val profileListLiveData = MutableLiveData<ArrayList<ProfileResModel>>()
     var profileObj: ProfileResModel? = null
     private var cacheProfile: ArrayList<ProfileResModel>? = null
+    var profileSpinnerList = ArrayList<String>()
 
     override fun initialize(firstTime: Boolean) {
         super.initialize(firstTime)
@@ -26,10 +28,6 @@ class HomeViewModel(application: Application, bundle: Bundle?) : BaseViewModel(a
         } else {
             setProfileObj(cacheProfile!!)
         }
-    }
-
-    override fun initializeWithNetworkAvailable() {
-        super.initializeWithNetworkAvailable()
     }
 
     private fun getProfileList() {
@@ -51,7 +49,15 @@ class HomeViewModel(application: Application, bundle: Bundle?) : BaseViewModel(a
     }
 
     private fun setProfileObj(list: ArrayList<ProfileResModel>) {
-        profileObj = list.get(0)
+        profileObj = list[0]
+        profileSpinnerList.clear()
+        for (data in list) {
+            if (Utility.getInstance().isSpectator(data)) {
+                profileSpinnerList.add(data.spectatorName)
+            } else {
+                profileSpinnerList.add(data.motoName)
+            }
+        }
         profileListLiveData.value = list
     }
 }

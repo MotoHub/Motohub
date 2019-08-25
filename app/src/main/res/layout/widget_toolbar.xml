@@ -19,10 +19,8 @@
             android:background="@null"
             android:contentDescription="@string/app_name"
             android:paddingStart="@dimen/size10"
-            android:paddingLeft="@dimen/size10"
             android:paddingTop="@dimen/size17"
             android:paddingEnd="@dimen/size0"
-            android:paddingRight="@dimen/size0"
             android:paddingBottom="@dimen/size17"
             android:visibility="gone"
             app:srcCompat="@drawable/arrow_back_icon" />
@@ -49,10 +47,8 @@
             android:contentDescription="@string/app_name"
             android:focusable="true"
             android:paddingStart="@dimen/size0"
-            android:paddingLeft="@dimen/size0"
             android:paddingTop="@dimen/size17"
             android:paddingEnd="@dimen/size10"
-            android:paddingRight="@dimen/size10"
             android:paddingBottom="@dimen/size17"
             android:src="@drawable/settings_icon"
             android:visibility="gone" />
@@ -66,10 +62,8 @@
             android:contentDescription="@string/app_name"
             android:focusable="true"
             android:paddingStart="@dimen/size0"
-            android:paddingLeft="@dimen/size0"
             android:paddingTop="@dimen/size17"
             android:paddingEnd="@dimen/size5"
-            android:paddingRight="@dimen/size5"
             android:paddingBottom="@dimen/size17"
             android:src="@drawable/messages_icon"
             android:visibility="gone" />
@@ -83,10 +77,8 @@
             android:contentDescription="@string/app_name"
             android:focusable="true"
             android:paddingStart="@dimen/size0"
-            android:paddingLeft="@dimen/size0"
             android:paddingTop="@dimen/size17"
             android:paddingEnd="@dimen/size5"
-            android:paddingRight="@dimen/size5"
             android:paddingBottom="@dimen/size17"
             android:src="@drawable/notify_widget_icon"
             android:visibility="gone" />

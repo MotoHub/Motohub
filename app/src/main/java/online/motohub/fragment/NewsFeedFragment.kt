@@ -13,11 +13,15 @@ import android.view.ViewGroup
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import kotlinx.android.synthetic.main.fragment_news_feed.*
+import kotlinx.android.synthetic.main.view_header_news_feed.*
 import online.motohub.R
 import online.motohub.activity.BaseActivity
 import online.motohub.activity.MyMotoFileActivity
+import online.motohub.activity.ReportActivity
+import online.motohub.activity.WritePostActivity
 import online.motohub.activity.club.ClubProfileActivity
 import online.motohub.activity.news_and_media.NewsAndMediaProfileActivity
+import online.motohub.activity.performance_shop.PerformanceShopListActivity
 import online.motohub.activity.performance_shop.PerformanceShopProfileActivity
 import online.motohub.activity.promoter.PromoterProfileActivity
 import online.motohub.activity.promoter.PromotersImgListActivity
@@ -27,9 +31,7 @@ import online.motohub.constants.AppConstants
 import online.motohub.fragment.dialog.AppDialogFragment
 import online.motohub.interfaces.AdapterClickCallBack
 import online.motohub.interfaces.OnLoadMoreListener
-import online.motohub.model.FeedLikesModel
-import online.motohub.model.NotificationBlockedUsersModel
-import online.motohub.model.PostsResModel
+import online.motohub.model.*
 import online.motohub.model.promoter_club_news_media.PromotersModel
 import online.motohub.retrofit.RetrofitClient
 import online.motohub.tags.AdapterTag
@@ -42,7 +44,7 @@ import java.net.URLDecoder
 import java.util.*
 import kotlin.collections.ArrayList
 
-class NewsFeedFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener, AdapterClickCallBack {
+class NewsFeedFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener, AdapterClickCallBack, View.OnClickListener {
 
 
     private var model: NewsFeedViewModel? = null
@@ -105,6 +107,13 @@ class NewsFeedFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener, A
                 }
             }
         })
+
+        performanceShopLay.setOnClickListener(this)
+        newsAndMediaLay.setOnClickListener(this)
+        tracksLay.setOnClickListener(this)
+        clubsLay.setOnClickListener(this)
+        promotersLay.setOnClickListener(this)
+        writePostBtn.setOnClickListener(this)
     }
 
     override fun onRefresh() {
@@ -124,6 +133,29 @@ class NewsFeedFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener, A
         isLoading = false
         if (swipeRefreshLay.isRefreshing)
             swipeRefreshLay.isRefreshing = false
+    }
+
+    override fun onClick(v: View?) {
+        when (view?.id) {
+            R.id.performanceShopLay -> {
+                EventBus.getDefault().postSticky(model!!.profileObj)
+                startActivity(Intent(activity, PerformanceShopListActivity::class.java))
+            }
+            R.id.newsAndMediaLay -> {
+            }
+            R.id.tracksLay -> {
+            }
+            R.id.clubsLay -> {
+            }
+            R.id.promoterLay -> {
+            }
+            R.id.writePostBtn -> {
+                EventBus.getDefault().postSticky(model!!.profileObj)
+                startActivityForResult(Intent(activity, WritePostActivity::class.java)
+                        .putExtra(AppConstants.IS_NEWSFEED_POST, false)
+                        .putExtra(AppConstants.USER_TYPE, "user"), AppConstants.WRITE_POST_REQUEST)
+            }
+        }
     }
 
     var clickPos = 0
@@ -207,7 +239,7 @@ class NewsFeedFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener, A
     }
 
     private fun updateViewCount(pos: Int) {
-        val filter = "ID = " + feedsList.get(pos)!!.getID()!!
+        val filter = "ID = " + feedsList[pos]!!.id!!
         RetrofitClient.getRetrofitInstance().getViewCount(activity as BaseActivity, filter, RetrofitClient.FEED_VIDEO_COUNT)
     }
 
@@ -218,6 +250,23 @@ class NewsFeedFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener, A
             (activity as BaseActivity).showAppDialog(AppDialogFragment.BOTTOM_POST_ACTION_DIALOG, mPos)
         } else {
             (activity as BaseActivity).showAppDialog(AppDialogFragment.BOTTOM_REPORT_ACTION_DIALOG, mPos)
+        }
+    }
+
+    override fun alertDialogPositiveBtnClick(dialogType: String?, position: Int) {
+        super.alertDialogPositiveBtnClick(dialogType, position)
+
+        when (dialogType) {
+            AppDialogFragment.BOTTOM_DELETE_DIALOG -> {
+                RetrofitClient.getRetrofitInstance().callDeleteProfilePosts(this, feedsList[position]!!.id, RetrofitClient.DELETE_PROFILE_POSTS_RESPONSE)
+            }
+            AppDialogFragment.BOTTOM_REPORT_ACTION_DIALOG -> {
+                startActivity(
+                        Intent(activity, ReportActivity::class.java)
+                                .putExtra(PostsModel.POST_ID, feedsList[position]!!.id)
+                                .putExtra(ProfileModel.PROFILE_ID, model!!.profileObj!!.id)
+                                .putExtra(ProfileModel.USER_ID, model!!.profileObj!!.userID))
+            }
         }
     }
 
@@ -395,6 +444,16 @@ class NewsFeedFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener, A
                 RetrofitClient.BLOCK_NOTIFY -> if (notifyBlockedList.size > 0)
                     feedAdapter!!.resetBlock(clickPos, notifyBlockedList[0])
                 RetrofitClient.UNBLOCK_NOTIFY -> feedAdapter!!.resetUnBlock(clickPos)
+            }
+        } else if (responseObj is PostsModel) {
+            if (responseObj.resource != null && responseObj.resource.size > 0) {
+                when (responseObj) {
+                    RetrofitClient.DELETE_PROFILE_POSTS_RESPONSE -> {
+                        feedsList.removeAt(clickPos)
+                        setAdapter()
+                        showMessage(getString(R.string.post_delete))
+                    }
+                }
             }
         }
     }

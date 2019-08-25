@@ -384,6 +384,8 @@ public class RetrofitClient {
 
     public static final int UPDATE_FEED_COUNT = 147;
 
+    public static final int LOGOUT = 148;
+
     private static RetrofitClient mRetrofitInstance;
 
     private static Converter<ResponseBody, ErrorMessage> errorConverter;
@@ -1531,6 +1533,33 @@ public class RetrofitClient {
                     public void onFailure(Call<PostsModel> call, Throwable t) {
                         DialogManager.hideProgress();
                         activity.retrofitOnFailure();
+                    }
+                });
+
+    }
+    public void callDeleteProfilePosts(final BaseFragment fragment, int postID, final int responseType) {
+
+        String mFilter = "ID=" + postID;
+
+        DialogManager.showProgress(fragment.getActivity());
+
+        RetrofitClient.getRetrofitInstance().getRetrofitApiInterface().callDeleteProfilePost(mFilter)
+                .enqueue(new Callback<PostsModel>() {
+                    @Override
+                    public void onResponse(Call<PostsModel> call, Response<PostsModel> response) {
+                        DialogManager.hideProgress();
+                        if (response.isSuccessful()) {
+                            Object mResponseObj = response.body();
+                            fragment.retrofitOnResponse(mResponseObj, responseType);
+                        } else {
+                            fragment.retrofitOnError(response.code(), response.message());
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<PostsModel> call, Throwable t) {
+                        DialogManager.hideProgress();
+                        fragment.retrofitOnFailure();
                     }
                 });
 

@@ -13,9 +13,27 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/listView"
-            style="@style/LayoutMatchWrap" />
+        <android.support.constraint.ConstraintLayout style="@style/LayoutMatch">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/listView"
+                style="@style/LayoutMatchWrap"
+                android:layout_height="0dp"
+                android:visibility="visible"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/include2"
+                app:layout_constraintVertical_bias="0.0" />
+
+            <include
+                android:id="@+id/include2"
+                style="@style/LayoutMatchWrap"
+                layout="@layout/view_header_news_feed"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </android.support.constraint.ConstraintLayout>
     </android.support.v4.widget.SwipeRefreshLayout>
 
 </android.support.constraint.ConstraintLayout>

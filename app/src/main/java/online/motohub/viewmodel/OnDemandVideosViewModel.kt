@@ -56,7 +56,7 @@ class OnDemandVideosViewModel(application: Application, bundle: Bundle?) : BaseV
         } else {
             inputModel.filter = "(UserType != usereventvideos) AND (ReportStatus == 0) AND (Caption LIKE '%$searchStr%')"
         }
-        inputModel.related = RelationConstants.POST_FEED_RELATION
+        inputModel.related = RelationConstants.ON_DEMAND_VIDEO_RELATION
         inputModel.order = "CreatedAt DESC"
         inputModel.limit = OtherConstants.LIMIT_10
         inputModel.offset = offset

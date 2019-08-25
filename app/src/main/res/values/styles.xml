@@ -189,6 +189,16 @@
         <item name="android:foreground">?android:attr/selectableItemBackground</item>
     </style>
 
+    <style name="headerIcon" parent="Widget.AppCompat.ImageButton">
+        <item name="android:layout_width">@dimen/size40</item>
+        <item name="android:layout_height">?attr/actionBarSize</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+        <item name="android:onClick">onClick</item>
+        <item name="android:contentDescription">@string/app_name</item>
+        <item name="android:background">@null</item>
+        <item name="android:layout_gravity">end</item>
+    </style>
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
 </resources>

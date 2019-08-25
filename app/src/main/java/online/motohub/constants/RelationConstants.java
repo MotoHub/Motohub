@@ -17,4 +17,5 @@ public class RelationConstants {
     public static final String EVENT_RELATION = "whosgoing_by_EventID, event_groups_by_EventID, racing_by_EventID, event_registration_question_by_group_id," +
             "event_registration_answer_by_EventID,promoter_by_UserID, livestream_by_EventID, livestreampayment_by_EventID, eventad_by_EventID";
 
+    public static final String ON_DEMAND_VIDEO_RELATION = "promoter_by_UserID,videocomments_by_VideoID,videolikes_by_VideoID,videoshares_by_OriginalVideoID,profiles_by_ProfileID,event_by_EventID";
 }
