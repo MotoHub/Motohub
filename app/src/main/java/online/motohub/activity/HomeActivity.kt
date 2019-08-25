@@ -3,6 +3,7 @@ package online.motohub.activity
 import android.os.Bundle
 import android.view.View
 import online.motohub.R
+import online.motohub.constants.BundleConstants
 
 
 class HomeActivity : BaseActivity(), View.OnClickListener {
@@ -35,7 +36,7 @@ class HomeActivity : BaseActivity(), View.OnClickListener {
             }
             else -> {
                 val bundle = Bundle()
-                bundle.putInt("ID", v.id)
+                bundle.putInt(BundleConstants.FOOTER_NAVIGATION_ID, v.id)
                 nextScreen(MainHomeActivity::class.java, bundle)
             }
         }

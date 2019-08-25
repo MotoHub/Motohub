@@ -10,24 +10,22 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.google.gson.Gson
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import kotlinx.android.synthetic.main.fragment_news_feed.*
 import kotlinx.android.synthetic.main.view_header_news_feed.*
 import online.motohub.R
-import online.motohub.activity.BaseActivity
-import online.motohub.activity.MyMotoFileActivity
-import online.motohub.activity.ReportActivity
-import online.motohub.activity.WritePostActivity
+import online.motohub.activity.*
 import online.motohub.activity.club.ClubProfileActivity
 import online.motohub.activity.news_and_media.NewsAndMediaProfileActivity
-import online.motohub.activity.performance_shop.PerformanceShopListActivity
 import online.motohub.activity.performance_shop.PerformanceShopProfileActivity
 import online.motohub.activity.promoter.PromoterProfileActivity
 import online.motohub.activity.promoter.PromotersImgListActivity
 import online.motohub.activity.track.TrackProfileActivity
 import online.motohub.adapter.NewsFeedAdapter
 import online.motohub.constants.AppConstants
+import online.motohub.constants.BundleConstants
 import online.motohub.fragment.dialog.AppDialogFragment
 import online.motohub.interfaces.AdapterClickCallBack
 import online.motohub.interfaces.OnLoadMoreListener
@@ -136,18 +134,14 @@ class NewsFeedFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener, A
     }
 
     override fun onClick(v: View?) {
+        //TODO If you are adding any additional view here please mention tag in xml
+        val tag = v!!.tag as String
+        val bundle = Bundle()
+        bundle.putString(BundleConstants.MY_PROFILE_OBJ, Gson().toJson(model!!.profileObj))
+        bundle.putString(BundleConstants.BUSINESS_PROFILE_TYPE, tag)
         when (view?.id) {
-            R.id.performanceShopLay -> {
-                EventBus.getDefault().postSticky(model!!.profileObj)
-                startActivity(Intent(activity, PerformanceShopListActivity::class.java))
-            }
-            R.id.newsAndMediaLay -> {
-            }
-            R.id.tracksLay -> {
-            }
-            R.id.clubsLay -> {
-            }
-            R.id.promoterLay -> {
+            R.id.performanceShopLay, R.id.newsAndMediaLay, R.id.tracksLay, R.id.clubsLay, R.id.promoterLay -> {
+                startActivity(Intent(activity, BusinessProfileListActivity::class.java).putExtras(bundle))
             }
             R.id.writePostBtn -> {
                 EventBus.getDefault().postSticky(model!!.profileObj)

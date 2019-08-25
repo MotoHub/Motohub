@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/colorWhite"
-    style="@style/LayoutMatch">
+    style="@style/LayoutMatch"
+    android:background="@color/colorWhite">
 
     <Button
         android:id="@+id/writePostBtn"
@@ -10,6 +10,7 @@
         android:layout_height="@dimen/size35"
         android:layout_margin="@dimen/size10"
         android:background="@drawable/grey_orange_btn_bg"
+        android:tag="@string/write_a_post1"
         android:text="@string/write_a_post1"
         android:textAllCaps="false"
         android:textColor="@color/colorBlack"
@@ -21,9 +22,9 @@
     <LinearLayout
         android:id="@+id/topLay"
         style="@style/LayoutMatchWrap"
-        android:padding="@dimen/size5"
         android:baselineAligned="false"
         android:orientation="horizontal"
+        android:padding="@dimen/size5"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -33,10 +34,10 @@
             android:layout_width="@dimen/size0"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:tag="@string/app_name"
             android:background="@drawable/white_orange_bg"
             android:clickable="true"
-            android:focusable="true">
+            android:focusable="true"
+            android:tag="@string/tag_shop">
 
             <ImageView
                 android:id="@+id/performanceShopIcon"
@@ -56,11 +57,7 @@
                 android:textSize="@dimen/text10" />
 
         </RelativeLayout>
-        <View
-            android:layout_width="@dimen/size1"
-            android:layout_height="@dimen/size30"
-            android:layout_gravity="center"
-            android:background="@color/colorGrey" />
+
         <RelativeLayout
             android:id="@+id/newsAndMediaLay"
             android:layout_width="@dimen/size0"
@@ -68,7 +65,8 @@
             android:layout_weight="1"
             android:background="@drawable/white_orange_bg"
             android:clickable="true"
-            android:focusable="true">
+            android:focusable="true"
+            android:tag="@string/tag_newsmedia">
 
             <ImageView
                 android:id="@+id/newsAndMediaIcon"
@@ -88,11 +86,7 @@
                 android:textSize="@dimen/text10" />
 
         </RelativeLayout>
-        <View
-            android:layout_width="@dimen/size1"
-            android:layout_height="@dimen/size30"
-            android:layout_gravity="center"
-            android:background="@color/colorGrey" />
+
         <RelativeLayout
             android:id="@+id/tracksLay"
             android:layout_width="@dimen/size0"
@@ -100,7 +94,8 @@
             android:layout_weight="1"
             android:background="@drawable/white_orange_bg"
             android:clickable="true"
-            android:focusable="true">
+            android:focusable="true"
+            android:tag="@string/tag_track">
 
             <ImageView
                 android:id="@+id/tracksIcon"
@@ -120,11 +115,7 @@
                 android:textSize="@dimen/text10" />
 
         </RelativeLayout>
-        <View
-            android:layout_width="@dimen/size1"
-            android:layout_height="@dimen/size30"
-            android:layout_gravity="center"
-            android:background="@color/colorGrey" />
+
         <RelativeLayout
             android:id="@+id/clubsLay"
             android:layout_width="@dimen/size0"
@@ -132,7 +123,8 @@
             android:layout_weight="1"
             android:background="@drawable/white_orange_bg"
             android:clickable="true"
-            android:focusable="true">
+            android:focusable="true"
+            android:tag="@string/tag_club">
 
             <ImageView
                 android:id="@+id/clubsIcon"
@@ -152,11 +144,7 @@
                 android:textSize="@dimen/text10" />
 
         </RelativeLayout>
-        <View
-            android:layout_width="@dimen/size1"
-            android:layout_height="@dimen/size30"
-            android:layout_gravity="center"
-            android:background="@color/colorGrey" />
+
         <RelativeLayout
             android:id="@+id/promotersLay"
             android:layout_width="@dimen/size0"
@@ -164,7 +152,8 @@
             android:layout_weight="1"
             android:background="@drawable/white_orange_bg"
             android:clickable="true"
-            android:focusable="true">
+            android:focusable="true"
+            android:tag="@string/tag_promoter">
 
             <ImageView
                 android:id="@+id/promotersIcon"
@@ -186,6 +175,30 @@
 
         </RelativeLayout>
 
+        <View
+            android:layout_width="@dimen/size1"
+            android:layout_height="@dimen/size30"
+            android:layout_gravity="center"
+            android:background="@color/colorGrey" />
+
+        <View
+            android:layout_width="@dimen/size1"
+            android:layout_height="@dimen/size30"
+            android:layout_gravity="center"
+            android:background="@color/colorGrey" />
+
+        <View
+            android:layout_width="@dimen/size1"
+            android:layout_height="@dimen/size30"
+            android:layout_gravity="center"
+            android:background="@color/colorGrey" />
+
+        <View
+            android:layout_width="@dimen/size1"
+            android:layout_height="@dimen/size30"
+            android:layout_gravity="center"
+            android:background="@color/colorGrey" />
+
     </LinearLayout>
 
     <View
@@ -203,8 +216,8 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/size10"
         android:layout_below="@+id/topLay"
-        android:background="@color/colorLighterGrey"
         android:layout_marginTop="@dimen/size10"
+        android:background="@color/colorLighterGrey"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/writePostBtn" />

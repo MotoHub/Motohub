@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">MotoHUB</string>
     <item name="glide_tag" type="id" />
+    <string name="app_name">MotoHUB</string>
     <!--TODO New Key - df.motohub.online-->
     <string name="dream_factory_api_key">08cd4cbab53c7513cfea748e1291ba5ca9a0e816c2d12bbc6bbf6b30d58df56b</string>
     <!--TODO OLD KEY - motodev.spotya.online -->
@@ -667,10 +667,10 @@
 
     <string name="err">Oops! Something went wrong. Please try again!</string>
 
-    <string name="tag">shop</string>
-    <string name="tag">shop</string>
-    <string name="tag">shop</string>
-    <string name="tag">shop</string>
-    <string name="tag">promoter</string>
+    <string name="tag_shop">shop</string>
+    <string name="tag_newsmedia">newsmedia</string>
+    <string name="tag_club">club</string>
+    <string name="tag_track">track</string>
+    <string name="tag_promoter">promoter</string>
 
 </resources>

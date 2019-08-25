@@ -1,8 +1,10 @@
 package online.motohub.activity
 
 import android.os.Bundle
+import kotlinx.android.synthetic.main.common_header.*
 
 import online.motohub.R
+import online.motohub.constants.BundleConstants
 
 class BusinessProfileListActivity : BaseActivity() {
 
@@ -13,8 +15,14 @@ class BusinessProfileListActivity : BaseActivity() {
     }
 
     private fun initView() {
+        val bundle = intent.extras
+        val businessProfileType = bundle!!.getString(BundleConstants.BUSINESS_PROFILE_TYPE)
 
+        setTitleTxt(businessProfileType!!)
     }
 
+    private fun setTitleTxt(sTitle: String) {
+        titleTxt.text = sTitle
+    }
 
 }

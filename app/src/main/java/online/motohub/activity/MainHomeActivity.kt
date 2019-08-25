@@ -45,7 +45,7 @@ class MainHomeActivity : BaseActivity(), View.OnClickListener, OnMenuItemClickLi
     private fun initView() {
         initMenuFragment()
         val bundle = intent.extras
-        navigationID = bundle.getInt("ID")
+        navigationID = bundle!!.getInt(BundleConstants.FOOTER_NAVIGATION_ID)
 
         navigationView.setOnNavigationItemSelectedListener { item ->
             navigationAction(item.itemId)
