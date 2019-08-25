@@ -11,6 +11,8 @@ class ApiInputModel {
     var offset: Int = 0
     var includeCount: Boolean = false
     var apiKey: String = ""
+    var businessProfileType: String = ""
+
 
 
 

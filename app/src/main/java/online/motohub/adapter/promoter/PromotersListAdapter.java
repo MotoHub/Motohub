@@ -81,14 +81,6 @@ public class PromotersListAdapter extends RecyclerView.Adapter<RecyclerView.View
         @Override
         public void onClick(View view) {
             mAdapterPos = getLayoutPosition();
-            /*Bundle mBundle = new Bundle();
-            mBundle.putSerializable(PromotersModel.PROMOTERS_RES_MODEL, mPromotersList.get(getLayoutPosition()));
-            mBundle.putSerializable(ProfileModel.MY_PROFILE_RES_MODEL, mMyProfileResModel);
-            ((BaseActivity)mContext).startActivityForResult(
-                    new Intent(mContext, PromoterProfileActivity.class).putExtras(mBundle),
-                    PromotersListActivity.PROMOTER_FOLLOW_RESPONSE);*/
-            /*MotoHub.getApplicationInstance().setmProfileResModel(mMyProfileResModel);
-            MotoHub.getApplicationInstance().setmPromoterResModel(mPromotersList.get(getLayoutPosition()));*/
             EventBus.getDefault().postSticky(mMyProfileResModel);
             EventBus.getDefault().postSticky(mPromotersList.get(getLayoutPosition()));
             ((BaseActivity) mContext).startActivityForResult(

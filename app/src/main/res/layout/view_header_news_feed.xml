@@ -33,6 +33,7 @@
             android:layout_width="@dimen/size0"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:tag="@string/app_name"
             android:background="@drawable/white_orange_bg"
             android:clickable="true"
             android:focusable="true">

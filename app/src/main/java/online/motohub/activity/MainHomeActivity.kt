@@ -14,6 +14,7 @@ import com.yalantis.contextmenu.lib.interfaces.OnMenuItemClickListener
 import kotlinx.android.synthetic.main.activity_main_home.*
 import kotlinx.android.synthetic.main.main_home_header.*
 import online.motohub.R
+import online.motohub.bl.MotoHubApp
 import online.motohub.constants.AppConstants
 import online.motohub.constants.BundleConstants
 import online.motohub.fragment.*
@@ -197,6 +198,8 @@ class MainHomeActivity : BaseActivity(), View.OnClickListener, OnMenuItemClickLi
         super.retrofitOnResponse(responseObj, responseType)
         if (responseObj is PushTokenModel) run {
             clearBeforeLogout()
+            //TODO Clear File Cache
+            MotoHubApp.getInstance().onUserLogout()
             val loginActivity = Intent(this, LoginActivity::class.java)
             loginActivity.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
             startActivity(loginActivity)

@@ -3,35 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="online.motohub">
 
-    <uses-permission android:name="com.android.vending.BILLING" />
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.FLASHLIGHT" />
-    <uses-permission android:name="android.permission.RECORD_AUDIO" />
-    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.VIBRATE" />
-    <uses-permission android:name="android.permission.READ_CONTACTS" />
-    <uses-permission android:name="android.permission.WRITE_CONTACTS" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
-
-    <uses-feature android:name="android.hardware.camera" />
-    <uses-feature
-        android:name="android.hardware.camera.any"
-        android:required="false" />
-    <uses-feature
-        android:name="android.hardware.camera.autofocus"
-        android:required="false" />
-    <uses-feature
-        android:name="android.hardware.camera.flash"
-        android:required="false" />
-    <uses-feature
-        android:name="android.hardware.microphone"
-        android:required="false" />
-
     <application
         android:name=".application.MotoHub"
         android:allowBackup="false"
@@ -43,19 +14,6 @@
         tools:replace="android:allowBackup">
 
 
-        <meta-data
-            android:name="com.facebook.sdk.ApplicationId"
-            android:value="@string/facebook_app_id" />
-        <meta-data
-            android:name="firebase_crash_collection_enabled"
-            android:value="true" />
-        <meta-data
-            android:name="com.google.android.geo.API_KEY"
-            android:value="@string/google_map_api_key" />
-        <meta-data
-            android:name="com.google.android.gms.version"
-            android:value="@integer/google_play_services_version" />
-
         <activity
             android:name=".activity.MainSplashScreenActivity"
             android:configChanges="orientation"
@@ -66,14 +24,21 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.HomeActivity"
+        <activity
+            android:name=".activity.HomeActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme"/>
-        <activity android:name=".activity.MainHomeActivity"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".activity.MainHomeActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme"/>
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".activity.BusinessProfileListActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
         <activity
             android:name=".activity.MotoVideoScreen"
             android:configChanges="orientation"
@@ -465,35 +430,6 @@
             android:configChanges="orientation"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
-
-        <provider
-            android:name="android.support.v4.content.FileProvider"
-            android:authorities="@string/file_provider_authority"
-            android:exported="false"
-            android:grantUriPermissions="true">
-            <meta-data
-                android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_paths" />
-        </provider>
-        <provider
-            android:name="com.facebook.FacebookContentProvider"
-            android:authorities="com.facebook.app.FacebookContentProvider1356755097715445"
-            android:exported="true" />
-
-        <service
-            android:name=".fcm.MyFireBaseMessagingService"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT" />
-            </intent-filter>
-        </service>
-        <service
-            android:name=".services.UploadFileService"
-            android:exported="false" />
-        <service
-            android:name=".services.UpdateVideoFileService"
-            android:exported="false" />
-
         <activity
             android:name=".activity.promoter.PromotersImgListActivity"
             android:configChanges="orientation"
@@ -519,15 +455,6 @@
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="stateHidden|adjustPan" />
 
-        <service
-            android:name=".services.ProfileUploadService"
-            android:enabled="true"
-            android:exported="true" />
-        <service
-            android:name=".services.ProfileImageService"
-            android:enabled="true"
-            android:exported="true" />
-
         <activity
             android:name=".activity.ViewRequestUsersActivity"
             android:configChanges="orientation"
@@ -540,6 +467,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="stateHidden|adjustPan" />
+
         <activity
             android:name=".activity.ViewLiveVideoViewScreen2"
             android:configChanges="orientation"
@@ -558,6 +486,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="stateHidden|adjustPan" />
+
         <activity
             android:name=".activity.VideoPreviewScreen"
             android:configChanges="orientation"
@@ -582,6 +511,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="stateHidden|adjustPan" />
+
         <activity
             android:name=".activity.PostCommentsActivity"
             android:configChanges="orientation|screenSize"
@@ -594,6 +524,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="stateHidden|adjustResize" />
+
         <activity
             android:name=".activity.PromoterVideoGalleryActivity"
             android:configChanges="orientation|screenSize"
@@ -715,11 +646,62 @@
             android:configChanges="orientation"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
-
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_id" />
+        <meta-data
+            android:name="firebase_crash_collection_enabled"
+            android:value="true" />
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/google_map_api_key" />
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="68c43689443ecd5646028eddeb91b3cf2e440cb7" />
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="@string/file_provider_authority"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+        <provider
+            android:name="com.facebook.FacebookContentProvider"
+            android:authorities="com.facebook.app.FacebookContentProvider1356755097715445"
+            android:exported="true" />
+        <receiver android:name=".util.ConnectivityChangeReceiver">
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+            </intent-filter>
+        </receiver>
+        <service
+            android:name=".fcm.MyFireBaseMessagingService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+        <service
+            android:name=".services.UploadFileService"
+            android:exported="false" />
+        <service
+            android:name=".services.UpdateVideoFileService"
+            android:exported="false" />
 
+        <service
+            android:name=".services.ProfileUploadService"
+            android:enabled="true"
+            android:exported="true" />
+
+        <service
+            android:name=".services.ProfileImageService"
+            android:enabled="true"
+            android:exported="true" />
         <service
             android:name="com.amazonaws.mobileconnectors.s3.transferutility.TransferService"
             android:enabled="true" />
@@ -735,16 +717,40 @@
             android:name=".services.SpectatorFileUploadService"
             android:enabled="true"
             android:exported="true" />
+
         <service
             android:name=".services.SpectatorFileUploadOfflineService"
             android:enabled="true"
             android:exported="true" />
-
-        <receiver android:name=".util.ConnectivityChangeReceiver">
-            <intent-filter>
-                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
-            </intent-filter>
-        </receiver>
     </application>
+    <uses-feature android:name="android.hardware.camera" />
+    <uses-feature
+        android:name="android.hardware.camera.any"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.camera.autofocus"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.camera.flash"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.microphone"
+        android:required="false" />
+    <uses-permission android:name="com.android.vending.BILLING" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.FLASHLIGHT" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.WRITE_CONTACTS" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
 </manifest>

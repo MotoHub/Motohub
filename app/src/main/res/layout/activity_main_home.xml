@@ -1,17 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     style="@style/LayoutMatch"
-    android:background="@color/colorWhite"
-    tools:context=".activity.HomeActivity">
+    android:background="@color/colorWhite">
 
-    <include
-        android:id="@+id/header"
-        layout="@layout/main_home_header"
+    <FrameLayout
+        android:id="@+id/contentFrame"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/colorBlack"
+        app:layout_constraintBottom_toTopOf="@+id/navigationView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/header" />
 
     <android.support.design.widget.BottomNavigationView
         android:id="@+id/navigationView"
@@ -25,14 +26,11 @@
         app:layout_constraintStart_toStartOf="parent"
         app:menu="@menu/footer_menu" />
 
-    <FrameLayout
-        android:id="@+id/contentFrame"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:background="@color/colorBlack"
-        app:layout_constraintBottom_toTopOf="@+id/navigationView"
+    <include
+        android:id="@+id/header"
+        layout="@layout/main_home_header"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/header" />
+        app:layout_constraintTop_toTopOf="parent" />
 
 </android.support.constraint.ConstraintLayout>

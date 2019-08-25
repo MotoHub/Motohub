@@ -100,11 +100,7 @@ public class PromotersListActivity extends BaseActivity {
 
     @OnClick(R.id.toolbar_back_img_btn)
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.toolbar_back_img_btn:
-                finish();
-                break;
-        }
+        finish();
     }
 
     @Override

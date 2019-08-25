@@ -80,6 +80,7 @@ import retrofit2.http.PATCH;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Part;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 import rx.Observable;
 
@@ -766,7 +767,6 @@ public interface RetrofitApiInterface {
 //    Call<DeviceInfoModel> callGetDeviceInfo(@Query("device") String device);
 //    @GET("http://18.221.84.245:10088/api/v1/getdevicestream?device=1234567890123&channel=1&protocol=rtmp&reserve=1")
 //    Call<GetDeviceStreamModel> callGetDeviceStream();
-
     @GET(UrlUtils.ALL_POST)
     Call<PostsModel> getAllFeeds(@Query("userid") int userID, @Query("related") String related, @Query("order") String order,
                                  @Query("limit") int limit, @Query("offset") int offset, @Query("include_count") boolean count);
@@ -778,13 +778,16 @@ public interface RetrofitApiInterface {
     @GET(UrlUtils.EVENTS)
     Call<EventsModel> getEvents(@Query("filter") String filter, @Query("related") String related, @Query("order") String order);
 
-    @Headers("Content-Type: application/json")
     @GET(UrlUtils.GALLERY_VIDEO)
     Call<PromoterVideoModel> getOnDemandVideos(@Query("fields") String fields, @Query("filter") String mFilter,
-                                                    @Query("related") String related, @Query("order") String order,
-                                                    @Query("limit") int mLimit, @Query("offset") int mOffset, @Query("include_count") boolean isIncludeCount);
+                                               @Query("related") String related, @Query("order") String order,
+                                               @Query("limit") int mLimit, @Query("offset") int mOffset, @Query("include_count") boolean isIncludeCount);
 
-    @Headers("Content-Type: application/json")
     @GET(UrlUtils.NEW_ONDEMAND)
     Call<ArrayList<OndemandNewResponse>> getOnDemandEvents(@Query("api_key") String key);
+
+    @Headers({"SAVE_RESPONSE_AS: {businessProfileType}"})
+    @GET(UrlUtils.PROMOTERS)
+    Call<PromotersModel> getBusinessProfileList(@Path("businessProfileType") String businessProfileType, @Query("filter") String filter,
+                                                @Query("order") String order, @Query("related") String related);
 }
