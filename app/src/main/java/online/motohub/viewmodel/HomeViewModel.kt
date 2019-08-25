@@ -3,6 +3,7 @@ package online.motohub.viewmodel
 import android.app.Application
 import android.arch.lifecycle.MutableLiveData
 import android.os.Bundle
+import online.motohub.R
 import online.motohub.constants.RelationConstants
 import online.motohub.interfaces.ResponseCallback
 import online.motohub.model.ApiInputModel
@@ -59,5 +60,14 @@ class HomeViewModel(application: Application, bundle: Bundle?) : BaseViewModel(a
             }
         }
         profileListLiveData.value = list
+    }
+
+    fun changeProfile(pos: Int) {
+        if (profileListLiveData.value!!.size > pos) {
+            profileObj = profileListLiveData.value!![pos]
+            profileListLiveData.value = profileListLiveData.value
+        } else {
+            callback!!.showMessage(context.getString(R.string.err))
+        }
     }
 }

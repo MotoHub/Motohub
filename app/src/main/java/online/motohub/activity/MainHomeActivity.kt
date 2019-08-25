@@ -122,7 +122,7 @@ class MainHomeActivity : BaseActivity(), View.OnClickListener, OnMenuItemClickLi
 
         when (dialogType) {
             AppDialogFragment.ALERT_OTHER_PROFILE_DIALOG -> {
-
+                model!!.changeProfile(position)
             }
             AppDialogFragment.LOG_OUT_DIALOG -> {
                 logout()
@@ -163,24 +163,29 @@ class MainHomeActivity : BaseActivity(), View.OnClickListener, OnMenuItemClickLi
         bundle.putString(BundleConstants.MY_PROFILE_OBJ, Gson().toJson(model!!.profileObj))
         when (itemId) {
             R.id.eventVideosView -> {
+                navigationID = R.id.eventVideosView
                 setTitleTxt(getString(R.string.event_videos))
                 replaceFragment(EventVideosFragment(), bundle)
             }
             R.id.onDemandView -> {
+                navigationID = R.id.onDemandView
                 setTitleTxt(getString(R.string.on_demand))
                 replaceFragment(OnDemandFragment(), bundle)
             }
             R.id.newsFeedView -> {
+                navigationID = R.id.newsFeedView
                 setTitleTxt(getString(R.string.news_feed))
                 bundle.putString(BundleConstants.MY_PROFILE_OBJ, Gson().toJson(model!!.profileObj))
                 replaceFragment(NewsFeedFragment(), bundle)
             }
             R.id.findEventView -> {
+                navigationID = R.id.findEventView
                 setTitleTxt(getString(R.string.find_event))
                 replaceFragment(FindEventFragment(), bundle)
 
             }
             R.id.myProfileView -> {
+                navigationID = R.id.myProfileView
                 setTitleTxt(getString(R.string.profile_my))
                 replaceFragment(MyProfileFragment(), bundle)
             }

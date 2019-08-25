@@ -664,4 +664,6 @@
 
     <string name="profile_my">My Profile</string>
     <string name="athlete_feed">Athlete Feed</string>
+
+    <string name="err">Oops! Something went wrong. Please try again!</string>
 </resources>
