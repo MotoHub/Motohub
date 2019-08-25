@@ -69,6 +69,12 @@ class NewsFeedFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener, A
     }
 
     private fun initView() {
+        performanceShopLay.setOnClickListener(this)
+        newsAndMediaLay.setOnClickListener(this)
+        tracksLay.setOnClickListener(this)
+        clubsLay.setOnClickListener(this)
+        promotersLay.setOnClickListener(this)
+        writePostBtn.setOnClickListener(this)
 
         var activeBundle = arguments
         if (activeBundle == null) {
@@ -106,12 +112,7 @@ class NewsFeedFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener, A
             }
         })
 
-        performanceShopLay.setOnClickListener(this)
-        newsAndMediaLay.setOnClickListener(this)
-        tracksLay.setOnClickListener(this)
-        clubsLay.setOnClickListener(this)
-        promotersLay.setOnClickListener(this)
-        writePostBtn.setOnClickListener(this)
+
     }
 
     override fun onRefresh() {

@@ -34,7 +34,7 @@
             android:layout_width="@dimen/size0"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@drawable/white_orange_bg"
+            android:background="@drawable/white_gray_bg"
             android:clickable="true"
             android:focusable="true"
             android:tag="@string/tag_shop">
@@ -63,7 +63,7 @@
             android:layout_width="@dimen/size0"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@drawable/white_orange_bg"
+            android:background="@drawable/white_gray_bg"
             android:clickable="true"
             android:focusable="true"
             android:tag="@string/tag_newsmedia">
@@ -92,7 +92,7 @@
             android:layout_width="@dimen/size0"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@drawable/white_orange_bg"
+            android:background="@drawable/white_gray_bg"
             android:clickable="true"
             android:focusable="true"
             android:tag="@string/tag_track">
@@ -121,7 +121,7 @@
             android:layout_width="@dimen/size0"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@drawable/white_orange_bg"
+            android:background="@drawable/white_gray_bg"
             android:clickable="true"
             android:focusable="true"
             android:tag="@string/tag_club">
@@ -150,7 +150,7 @@
             android:layout_width="@dimen/size0"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@drawable/white_orange_bg"
+            android:background="@drawable/white_gray_bg"
             android:clickable="true"
             android:focusable="true"
             android:tag="@string/tag_promoter">
@@ -174,30 +174,6 @@
                 android:textSize="@dimen/text10" />
 
         </RelativeLayout>
-
-        <View
-            android:layout_width="@dimen/size1"
-            android:layout_height="@dimen/size30"
-            android:layout_gravity="center"
-            android:background="@color/colorGrey" />
-
-        <View
-            android:layout_width="@dimen/size1"
-            android:layout_height="@dimen/size30"
-            android:layout_gravity="center"
-            android:background="@color/colorGrey" />
-
-        <View
-            android:layout_width="@dimen/size1"
-            android:layout_height="@dimen/size30"
-            android:layout_gravity="center"
-            android:background="@color/colorGrey" />
-
-        <View
-            android:layout_width="@dimen/size1"
-            android:layout_height="@dimen/size30"
-            android:layout_gravity="center"
-            android:background="@color/colorGrey" />
 
     </LinearLayout>
 
