@@ -1,5 +1,6 @@
 package online.motohub.model
 
+import android.text.TextUtils
 import com.google.gson.annotations.SerializedName
 
 import org.json.JSONException
@@ -50,6 +51,9 @@ class NotificationModel1 {
                 Type = mainObj!!.getString("Type")
             } catch (e: JSONException) {
                 e.printStackTrace()
+            }
+            if(TextUtils.isEmpty(Type)){
+                return ""
             }
 
             return Type

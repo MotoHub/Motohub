@@ -153,7 +153,7 @@ class NewsFeedFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener, A
         }
     }
 
-    var clickPos = 0
+    private var clickPos = 0
     override fun onClick(view: View?, tag: AdapterTag) {
         if (swipeRefreshLay.isRefreshing) {
             return
@@ -205,13 +205,13 @@ class NewsFeedFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener, A
     }
 
     private fun moveCommentsListScreen(pos: Int) {
-        (activity as BaseActivity).movePostCommentScreen(activity, feedsList.get(pos)!!.id!!, model!!.profileObj!!)
+        (activity as BaseActivity).movePostCommentScreen(activity, feedsList[pos]!!.id!!, model!!.profileObj!!)
     }
 
     private fun moveImgVideoScreen(pos: Int) {
         var finalArr: Array<String>? = null
-        val mImgArray = Utility.getInstance().getImgVideoList(feedsList.get(pos)!!.postPicture)
-        val mVideoArray = Utility.getInstance().getImgVideoList(feedsList.get(pos)!!.postVideoThumbnailURL)
+        val mImgArray = Utility.getInstance().getImgVideoList(feedsList[pos]!!.postPicture)
+        val mVideoArray = Utility.getInstance().getImgVideoList(feedsList[pos]!!.postVideoThumbnailURL)
         if (mImgArray != null && mVideoArray != null) {
             finalArr = Utility.getInstance().mergeArrayList(mVideoArray, mImgArray)
         } else if (mVideoArray != null && mVideoArray.size == 1) {
@@ -241,7 +241,7 @@ class NewsFeedFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener, A
     private fun showFeedMenuPopup(pos: Int) {
         val mPos = ArrayList<String>()
         mPos.add(pos.toString())
-        if (feedsList.get(pos)!!.profileID == model!!.profileObj!!.id) {
+        if (feedsList[pos]!!.profileID == model!!.profileObj!!.id) {
             (activity as BaseActivity).showAppDialog(AppDialogFragment.BOTTOM_POST_ACTION_DIALOG, mPos)
         } else {
             (activity as BaseActivity).showAppDialog(AppDialogFragment.BOTTOM_REPORT_ACTION_DIALOG, mPos)
@@ -266,74 +266,72 @@ class NewsFeedFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener, A
     }
 
     private fun moveProfileScreen(pos: Int) {
-        if (feedsList.get(pos)!!.newSharedPostID == null) {
-            if (feedsList.get(pos)!!.profileID == model!!.profileObj!!.id) {
+        if (feedsList[pos]!!.newSharedPostID == null) {
+            if (feedsList[pos]!!.profileID == model!!.profileObj!!.id) {
                 if (activity !is MyMotoFileActivity) {
                     (activity as BaseActivity).moveMyProfileScreenWithResult(activity, 0, AppConstants.FOLLOWERS_FOLLOWING_RESULT)
                 }
                 return
             }
         } else {
-            if (feedsList.get(pos)!!.whoPostedProfileID == model!!.profileObj!!.id) {
+            if (feedsList[pos]!!.whoPostedProfileID == model!!.profileObj!!.id) {
                 if (activity !is MyMotoFileActivity) {
                     (activity as BaseActivity).moveMyProfileScreenWithResult(activity, 0, AppConstants.FOLLOWERS_FOLLOWING_RESULT)
                 }
                 return
             }
         }
-        val mPostUserType = feedsList.get(pos)!!.userType.trim({ it <= ' ' })
+        val mPostUserType = feedsList[pos]!!.userType.trim { it <= ' ' }
         if (mPostUserType == PromotersModel.PROMOTER || mPostUserType == PromotersModel.NEWS_AND_MEDIA ||
                 mPostUserType == PromotersModel.TRACK || mPostUserType == PromotersModel.CLUB
                 || mPostUserType == PromotersModel.SHOP || mPostUserType == AppConstants.SHARED_POST || mPostUserType == AppConstants.VIDEO_SHARED_POST) {
             val mClassName: Class<*>
             var mUserType = ""
-            if (feedsList.get(pos)!!.promoterByWhoPostedProfileID != null) {
-                EventBus.getDefault().postSticky(feedsList.get(pos)!!.promoterByWhoPostedProfileID)
-                mUserType = feedsList.get(pos)!!
+            if (feedsList[pos]!!.promoterByWhoPostedProfileID != null) {
+                EventBus.getDefault().postSticky(feedsList[pos]!!.promoterByWhoPostedProfileID)
+                mUserType = feedsList[pos]!!
                         .promoterByWhoPostedProfileID.userType
             } else {
-                //mBundle.putSerializable(PromotersModel.PROMOTERS_RES_MODEL, feedsList.get(pos)!!.getPromoterByProfileID());
-                //MotoHub.getApplicationInstance().setmPromoterResModel(feedsList.get(pos)!!.getPromoterByProfileID());
-                if (feedsList.get(pos)!!.promoterByProfileID != null) {
-                    EventBus.getDefault().postSticky(feedsList.get(pos)!!.promoterByProfileID)
-                    mUserType = feedsList.get(pos)!!
+                //mBundle.putSerializable(PromotersModel.PROMOTERS_RES_MODEL, feedsList[pos]!!.getPromoterByProfileID());
+                //MotoHub.getApplicationInstance().setmPromoterResModel(feedsList[pos]!!.getPromoterByProfileID());
+                if (feedsList[pos]!!.promoterByProfileID != null) {
+                    EventBus.getDefault().postSticky(feedsList[pos]!!.promoterByProfileID)
+                    mUserType = feedsList[pos]!!
                             .promoterByProfileID.userType
                 }
             }
 
-            when (mUserType) {
-                PromotersModel.NEWS_AND_MEDIA -> mClassName = NewsAndMediaProfileActivity::class.java
-                PromotersModel.CLUB -> mClassName = ClubProfileActivity::class.java
-                PromotersModel.PROMOTER -> mClassName = PromoterProfileActivity::class.java
-                PromotersModel.TRACK -> mClassName = TrackProfileActivity::class.java
-                PromotersModel.SHOP -> mClassName = PerformanceShopProfileActivity::class.java
-                else -> mClassName = PromoterProfileActivity::class.java
+            mClassName = when (mUserType) {
+                PromotersModel.NEWS_AND_MEDIA -> NewsAndMediaProfileActivity::class.java
+                PromotersModel.CLUB -> ClubProfileActivity::class.java
+                PromotersModel.PROMOTER -> PromoterProfileActivity::class.java
+                PromotersModel.TRACK -> TrackProfileActivity::class.java
+                PromotersModel.SHOP -> PerformanceShopProfileActivity::class.java
+                else -> PromoterProfileActivity::class.java
             }
             EventBus.getDefault().postSticky(model!!.profileObj!!)
             (activity as BaseActivity).startActivityForResult(Intent(activity, mClassName), AppConstants.FOLLOWERS_FOLLOWING_RESULT)
 
         } else {
             (activity as BaseActivity).moveOtherProfileScreen(activity, model!!.profileObj!!.id,
-                    feedsList.get(pos)!!.profilesByWhoPostedProfileID.id)
+                    feedsList[pos]!!.profilesByWhoPostedProfileID.id)
         }
     }
 
     override fun moveProfileScreen(pos: Int, isSharedProfile: Boolean) {
         super.moveProfileScreen(pos, isSharedProfile)
         if (isSharedProfile) {
-            val sharedProfileID: Int
-            if (Integer.parseInt(feedsList.get(pos)!!.whoSharedProfileID) == model!!.profileObj!!.id) {
+            if (Integer.parseInt(feedsList[pos]!!.whoSharedProfileID) == model!!.profileObj!!.id) {
                 if (activity !is MyMotoFileActivity) {
                     (activity as BaseActivity).moveMyProfileScreenWithResult(activity, 0, AppConstants.FOLLOWERS_FOLLOWING_RESULT)
                 }
                 return
             }
-            if (feedsList.get(pos)!!.userType.trim({ it <= ' ' }) == AppConstants.VIDEO_SHARED_POST || feedsList.get(pos)!!.userType.trim({ it <= ' ' }) == AppConstants.USER_VIDEO_SHARED_POST) {
-
-                sharedProfileID = feedsList.get(pos)!!.videoSharesByNewSharedPostID.profiles_by_ProfileID.id
+            val sharedProfileID: Int = if (feedsList[pos]!!.userType.trim { it <= ' ' } == AppConstants.VIDEO_SHARED_POST ||
+                    feedsList[pos]!!.userType.trim { it <= ' ' } == AppConstants.USER_VIDEO_SHARED_POST) {
+                feedsList[pos]!!.videoSharesByNewSharedPostID.profiles_by_ProfileID.id
             } else {
-                sharedProfileID = feedsList.get(pos)!!.newSharedPost.profiles_by_ProfileID.id
-
+                feedsList[pos]!!.newSharedPost.profiles_by_ProfileID.id
             }
             (activity as BaseActivity).moveOtherProfileScreen(activity, model!!.profileObj!!.id,
                     sharedProfileID)
@@ -343,15 +341,15 @@ class NewsFeedFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener, A
     }
 
     private fun blockNotification(pos: Int) {
-        val postID = feedsList.get(pos)!!.id!!
-        val mUserID = model!!.profileObj!!.userID
-        val ProfileID = model!!.profileObj!!.id
+        val postID = feedsList[pos]!!.id!!
+        val userID = model!!.profileObj!!.userID
+        val profileID = model!!.profileObj!!.id
 
         val mJsonArray = JsonArray()
         val jsonObject = JsonObject()
         jsonObject.addProperty(NotificationBlockedUsersModel.PostID, postID)
-        jsonObject.addProperty(NotificationBlockedUsersModel.UserID, mUserID)
-        jsonObject.addProperty(NotificationBlockedUsersModel.ProfileID, ProfileID)
+        jsonObject.addProperty(NotificationBlockedUsersModel.UserID, userID)
+        jsonObject.addProperty(NotificationBlockedUsersModel.ProfileID, profileID)
         mJsonArray.add(jsonObject)
 
         val mJsonObj = JsonObject()
@@ -361,7 +359,7 @@ class NewsFeedFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener, A
     }
 
     private fun unBlockNotification(pos: Int) {
-        val postID = feedsList.get(pos)!!.id!!
+        val postID = feedsList[pos]!!.id!!
         val profileID = model!!.profileObj!!.id
         val filter = "((ProfileID=$profileID)AND(PostID=$postID))"
 
@@ -369,7 +367,7 @@ class NewsFeedFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener, A
     }
 
     private fun unLikePost(pos: Int) {
-        val postID = feedsList.get(pos)!!.id!!
+        val postID = feedsList[pos]!!.id!!
         val profileID = model!!.profileObj!!.id
         val filter = "((ProfileID=$profileID)AND(PostID=$postID))"
         RetrofitClient.getRetrofitInstance().callUnLikeForPosts(this, filter, RetrofitClient.POST_UNLIKE)
@@ -379,7 +377,7 @@ class NewsFeedFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener, A
         val mJsonObject = JsonObject()
         val mItem = JsonObject()
 
-        mItem.addProperty("PostID", feedsList.get(pos)!!.id!!)
+        mItem.addProperty("PostID", feedsList[pos]!!.id!!)
         mItem.addProperty("ProfileID", model!!.profileObj!!.id)
 
         val mJsonArray = JsonArray()
@@ -392,35 +390,35 @@ class NewsFeedFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener, A
     private fun sharePost(pos: Int) {
         var content: String? = null
         try {
-            content = URLDecoder.decode(feedsList.get(pos)!!.postText, "UTF-8")
+            content = URLDecoder.decode(feedsList[pos]!!.postText, "UTF-8")
         } catch (e: Exception) {
             e.printStackTrace()
         }
 
         val isImgFile: Boolean
-        val mImgList = Utility.getInstance().getImgVideoList(feedsList.get(pos)!!.postPicture)
-        if (mImgList == null) {
-            isImgFile = false
+        val mImgList = Utility.getInstance().getImgVideoList(feedsList[pos]!!.postPicture)
+        isImgFile = if (mImgList == null) {
+            false
         } else
-            isImgFile = !(mImgList.size == 1 && mImgList[0].trim { it <= ' ' } == "")
+            !(mImgList.size == 1 && mImgList[0].trim { it <= ' ' } == "")
         val isVideoFile: Boolean
-        val mVideoList = Utility.getInstance().getImgVideoList(feedsList.get(pos)!!.postVideoURL)
-        if (mVideoList == null) {
-            isVideoFile = false
+        val mVideoList = Utility.getInstance().getImgVideoList(feedsList[pos]!!.postVideoURL)
+        isVideoFile = if (mVideoList == null) {
+            false
         } else
-            isVideoFile = !(mVideoList.size == 1 && mVideoList[0].trim { it <= ' ' } == "")
-        val mIsOtherMotoProfile = feedsList.get(pos)!!.profileID != model!!.profileObj!!.id
+            !(mVideoList.size == 1 && mVideoList[0].trim { it <= ' ' } == "")
+        val isOtherMotoProfile = feedsList[pos]!!.profileID != model!!.profileObj!!.id
         if (isImgFile) {
             val mBitmapList = (activity as BaseActivity).getBitmapImageGlide(mImgList)
             if (mBitmapList != null) {
-                (activity as BaseActivity).showFBShareDialog(AppDialogFragment.BOTTOM_SHARE_DIALOG, content, mBitmapList, null, pos, mIsOtherMotoProfile)
+                (activity as BaseActivity).showFBShareDialog(AppDialogFragment.BOTTOM_SHARE_DIALOG, content, mBitmapList, null, pos, isOtherMotoProfile)
             }
         } else if (isVideoFile) {
-            val mVideosList = Utility.getInstance().getImgVideoList(feedsList.get(pos)!!.postVideoURL)
-            (activity as BaseActivity).showFBShareDialog(AppDialogFragment.BOTTOM_SHARE_DIALOG, content, null, mVideosList, pos, mIsOtherMotoProfile)
+            val mVideosList = Utility.getInstance().getImgVideoList(feedsList[pos]!!.postVideoURL)
+            (activity as BaseActivity).showFBShareDialog(AppDialogFragment.BOTTOM_SHARE_DIALOG, content, null, mVideosList, pos, isOtherMotoProfile)
 
         } else {
-            (activity as BaseActivity).showFBShareDialog(AppDialogFragment.BOTTOM_SHARE_DIALOG, content, null, null, pos, mIsOtherMotoProfile)
+            (activity as BaseActivity).showFBShareDialog(AppDialogFragment.BOTTOM_SHARE_DIALOG, content, null, null, pos, isOtherMotoProfile)
         }
     }
 

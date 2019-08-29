@@ -58,6 +58,12 @@
 
         </RelativeLayout>
 
+        <View
+            android:layout_width="1dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center"
+            android:background="@drawable/black_btn" />
+
         <RelativeLayout
             android:id="@+id/newsAndMediaLay"
             android:layout_width="@dimen/size0"
@@ -86,6 +92,12 @@
                 android:textSize="@dimen/text10" />
 
         </RelativeLayout>
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center"
+            android:background="@drawable/black_btn" />
 
         <RelativeLayout
             android:id="@+id/tracksLay"
@@ -116,6 +128,12 @@
 
         </RelativeLayout>
 
+        <View
+            android:layout_width="1dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center"
+            android:background="@drawable/black_btn" />
+
         <RelativeLayout
             android:id="@+id/clubsLay"
             android:layout_width="@dimen/size0"
@@ -144,6 +162,12 @@
                 android:textSize="@dimen/text10" />
 
         </RelativeLayout>
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center"
+            android:background="@drawable/black_btn" />
 
         <RelativeLayout
             android:id="@+id/promotersLay"
