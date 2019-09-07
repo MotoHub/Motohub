@@ -141,7 +141,7 @@ class NewsFeedFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener, A
         bundle.putString(BundleConstants.MY_PROFILE_OBJ, Gson().toJson(model!!.profileObj))
         bundle.putString(BundleConstants.BUSINESS_PROFILE_TYPE, tag)
         when (view?.id) {
-            R.id.performanceShopLay, R.id.newsAndMediaLay, R.id.tracksLay, R.id.clubsLay, R.id.promoterLay -> {
+            R.id.performanceShopLay, R.id.newsAndMediaLay, R.id.tracksLay, R.id.clubsLay, R.id.promotersLay -> {
                 startActivity(Intent(activity, BusinessProfileListActivity::class.java).putExtras(bundle))
             }
             R.id.writePostBtn -> {
@@ -149,6 +149,9 @@ class NewsFeedFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener, A
                 startActivityForResult(Intent(activity, WritePostActivity::class.java)
                         .putExtra(AppConstants.IS_NEWSFEED_POST, false)
                         .putExtra(AppConstants.USER_TYPE, "user"), AppConstants.WRITE_POST_REQUEST)
+            }
+            else -> {
+                startActivity(Intent(activity, BusinessProfileListActivity::class.java).putExtras(bundle))
             }
         }
     }

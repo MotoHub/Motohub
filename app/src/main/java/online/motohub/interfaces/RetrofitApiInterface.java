@@ -786,8 +786,8 @@ public interface RetrofitApiInterface {
     @GET(UrlUtils.NEW_ONDEMAND)
     Call<ArrayList<OndemandNewResponse>> getOnDemandEvents(@Query("api_key") String key);
 
-    @Headers({"SAVE_RESPONSE_AS: {businessProfileType}"})
+    @Headers({"SAVE_RESPONSE_AS: BusinessProfile"})
     @GET(UrlUtils.PROMOTERS)
-    Call<PromotersModel> getBusinessProfileList(@Path("businessProfileType") String businessProfileType, @Query("filter") String filter,
+    Call<PromotersModel> getBusinessProfileList(@Query("filter") String filter,
                                                 @Query("order") String order, @Query("related") String related);
 }

@@ -6,6 +6,6 @@ import online.motohub.tags.AdapterTag;
 
 public interface AdapterClickCallBack {
 
-    void onClick(View view, AdapterTag pos);
+    void onClick(View view, AdapterTag tag);
 
 }

@@ -18,7 +18,7 @@ class BusinessProfileListViewModel(application: Application, bundle: Bundle?) : 
     private val provider = BusinessProfileProvider()
     val businessProfileListLiveData = MutableLiveData<ArrayList<PromotersResModel>>()
 
-    private var profileObj: ProfileResModel? = null
+     var profileObj: ProfileResModel? = null
 
     private var businessProfileType: String? = null
 
@@ -32,7 +32,7 @@ class BusinessProfileListViewModel(application: Application, bundle: Bundle?) : 
     override fun initialize(firstTime: Boolean) {
         super.initialize(firstTime)
         //TODO pass usertype in header for save response in cache based on user type
-//        cacheProfile = provider.fetchBusinessProfileListFromCache(getInputModel())
+        cacheProfile = provider.fetchBusinessProfileListFromCache(getInputModel())
         if (cacheProfile == null) {
             getBusinessProfileList()
         } else {
