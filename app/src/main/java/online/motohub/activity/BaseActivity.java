@@ -264,6 +264,7 @@ public class BaseActivity extends AppCompatActivity implements ViewModelCallback
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        hideSoftKeyboard(this);
         mActivity = this;
     }
 

@@ -80,7 +80,6 @@ import retrofit2.http.PATCH;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Part;
-import retrofit2.http.Path;
 import retrofit2.http.Query;
 import rx.Observable;
 
@@ -790,4 +789,7 @@ public interface RetrofitApiInterface {
     @GET(UrlUtils.PROMOTERS)
     Call<PromotersModel> getBusinessProfileList(@Query("filter") String filter,
                                                 @Query("order") String order, @Query("related") String related);
+
+//    Call<PromotersModel> getBusinessProfileList(@Header("SAVE_RESPONSE_AS:") String header, @Query("filter") String filter,
+//                                                @Query("order") String order, @Query("related") String related);
 }

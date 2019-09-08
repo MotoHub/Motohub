@@ -97,7 +97,7 @@ class OnDemandFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener, A
                         val mSearchStrTemp = charSequence.toString()
                         searchOnDemand(mSearchStrTemp)
                     }
-                });
+                })
 
         listView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {

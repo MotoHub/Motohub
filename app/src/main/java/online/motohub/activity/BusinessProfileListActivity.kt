@@ -5,6 +5,8 @@ import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.View
 import kotlinx.android.synthetic.main.activity_business_profile_list.*
 import kotlinx.android.synthetic.main.common_header.*
@@ -26,7 +28,6 @@ class BusinessProfileListActivity : BaseActivity(), View.OnClickListener, Adapte
     private var model: BusinessProfileListViewModel? = null
     private var businessProfileList = ArrayList<PromotersResModel>()
     private var businessProfileListAdapter: BusinessProfileListAdapter? = null
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_business_profile_list)
@@ -34,6 +35,7 @@ class BusinessProfileListActivity : BaseActivity(), View.OnClickListener, Adapte
     }
 
     private fun initView() {
+        setupUI(parentLay)
         val activeBundle = intent.extras
         val businessProfileType = activeBundle!!.getString(BundleConstants.BUSINESS_PROFILE_TYPE)
         val layoutManager = LinearLayoutManager(activity)
@@ -44,11 +46,25 @@ class BusinessProfileListActivity : BaseActivity(), View.OnClickListener, Adapte
         model = ViewModelProviders.of(this, BaseViewModelFactory(activity!!.application, activeBundle)).get(BusinessProfileListViewModel::class.java)
         registerModel(model)
         model!!.businessProfileListLiveData.observe(this, Observer {
+            businessProfileList.clear()
             if (it != null)
                 businessProfileList.addAll(it)
             setAdapter()
         })
         model!!.initialize()
+        searchEdt.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {
+
+            }
+
+            override fun onTextChanged(c: CharSequence, i: Int, i1: Int, i2: Int) {
+                model!!.searchProfile(c.toString())
+            }
+
+            override fun afterTextChanged(editable: Editable) {
+
+            }
+        })
     }
 
     private fun setAdapter() {
