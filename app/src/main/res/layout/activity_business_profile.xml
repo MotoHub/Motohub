@@ -2,7 +2,7 @@
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/promoterCoLayout"
+    android:id="@+id/parentLay"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -10,7 +10,7 @@
 
         <include
             android:id="@+id/include"
-            layout="@layout/widget_toolbar" />
+            layout="@layout/common_header" />
 
         <android.support.design.widget.CoordinatorLayout
             android:id="@+id/inner_co_layout"
@@ -34,7 +34,7 @@
                     <RelativeLayout style="@style/LayoutMatchWrap">
 
                         <ImageView
-                            android:id="@+id/cover_photo_img_view"
+                            android:id="@+id/coverImg"
                             android:layout_width="match_parent"
                             android:layout_height="@dimen/size100"
                             android:adjustViewBounds="true"
@@ -42,21 +42,21 @@
                             app:srcCompat="@drawable/default_cover_img" />
 
                         <View
-                            android:id="@+id/cover_line"
+                            android:id="@+id/view1"
                             android:layout_width="match_parent"
                             android:layout_height="@dimen/size10"
-                            android:layout_below="@+id/cover_photo_img_view"
+                            android:layout_below="@+id/coverImg"
                             android:background="@color/colorLighterGrey" />
 
                         <RelativeLayout
-                            android:id="@+id/promoter_box"
+                            android:id="@+id/profileLay"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_below="@+id/cover_line"
+                            android:layout_below="@+id/view1"
                             android:padding="@dimen/size5">
 
                             <de.hdodenhof.circleimageview.CircleImageView
-                                android:id="@+id/profile_img"
+                                android:id="@+id/profileImg"
                                 android:layout_width="@dimen/size60"
                                 android:layout_height="@dimen/size60"
                                 android:layout_centerVertical="true"
@@ -70,10 +70,10 @@
                                 android:layout_centerVertical="true"
                                 android:layout_marginStart="@dimen/size5"
                                 android:layout_toStartOf="@+id/followers_box"
-                                android:layout_toEndOf="@id/profile_img">
+                                android:layout_toEndOf="@id/profileImg">
 
                                 <TextView
-                                    android:id="@+id/promoterName"
+                                    android:id="@+id/profileName"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_margin="@dimen/size2"
@@ -97,7 +97,7 @@
                                 android:orientation="vertical">
 
                                 <TextView
-                                    android:id="@+id/followers_count_tv"
+                                    android:id="@+id/followersCountTxt"
                                     style="@style/LayoutMatchWrap"
                                     android:gravity="center"
                                     android:padding="@dimen/size3"
@@ -107,7 +107,7 @@
                                     android:textStyle="bold" />
 
                                 <TextView
-                                    android:id="@+id/followers_tv"
+                                    android:id="@+id/followersTxt"
                                     style="@style/LayoutMatchWrap"
                                     android:gravity="center"
                                     android:padding="@dimen/size3"
@@ -121,29 +121,31 @@
                         </RelativeLayout>
 
                         <View
-                            android:id="@+id/userBoxSeparator"
+                            android:id="@+id/view2"
                             android:layout_width="match_parent"
                             android:layout_height="@dimen/size10"
-                            android:layout_below="@+id/promoter_box"
+                            android:layout_below="@+id/profileLay"
                             android:background="@color/colorLighterGrey" />
 
                         <Button
                             android:id="@+id/writePostBtn"
                             android:layout_width="match_parent"
                             android:layout_height="@dimen/size35"
-                            android:layout_below="@id/userBoxSeparator"
+                            android:layout_below="@id/view2"
                             android:layout_margin="@dimen/size10"
                             android:background="@drawable/black_orange_btn_bg"
                             android:text="@string/write_a_post"
                             android:textAllCaps="false"
-                            android:textColor="@color/text_color" />
+                            android:textColor="@color/text_color"
+                            android:visibility="gone" />
 
                         <View
-                            android:id="@+id/writePostSeparator"
+                            android:id="@+id/view3"
                             android:layout_width="match_parent"
                             android:layout_height="@dimen/size10"
                             android:layout_below="@+id/writePostBtn"
-                            android:background="@color/colorLighterGrey" />
+                            android:background="@color/colorLighterGrey"
+                            android:visibility="gone" />
 
                     </RelativeLayout>
 
@@ -152,12 +154,12 @@
             </android.support.design.widget.AppBarLayout>
 
             <android.support.v4.view.ViewPager
-                android:id="@+id/view_pager"
+                android:id="@+id/viewPager"
                 style="@style/LayoutMatchWrap"
                 app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
                 <android.support.design.widget.TabLayout
-                    android:id="@+id/view_pager_tab_layout"
+                    android:id="@+id/viewPagerTabLay"
                     style="@style/LayoutMatchWrap"
                     app:tabGravity="fill"
                     app:tabMode="fixed"

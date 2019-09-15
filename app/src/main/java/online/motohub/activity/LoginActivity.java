@@ -33,7 +33,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import online.motohub.R;
-import online.motohub.activity.business.BusinessProfileActivity;
 import online.motohub.adapter.RecentUsersAdapter;
 import online.motohub.constants.AppConstants;
 import online.motohub.database.DatabaseHandler;

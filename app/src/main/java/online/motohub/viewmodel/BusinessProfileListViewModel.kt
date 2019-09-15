@@ -31,7 +31,7 @@ class BusinessProfileListViewModel(application: Application, bundle: Bundle?) : 
 
     override fun initialize(firstTime: Boolean) {
         super.initialize(firstTime)
-        //TODO pass usertype in header for save response in cache based on user type
+        //TODO pass usertype in headers for save response in cache based on user type
         cacheProfile = provider.fetchBusinessProfileListFromCache(getInputModel())
         if (cacheProfile == null) {
             getBusinessProfileList()

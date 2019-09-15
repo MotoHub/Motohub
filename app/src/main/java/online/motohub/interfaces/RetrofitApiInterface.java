@@ -792,4 +792,9 @@ public interface RetrofitApiInterface {
 
 //    Call<PromotersModel> getBusinessProfileList(@Header("SAVE_RESPONSE_AS:") String header, @Query("filter") String filter,
 //                                                @Query("order") String order, @Query("related") String related);
+
+    @Headers("Content-Type: application/json")
+    @GET(UrlUtils.PROMOTER_FOLLOWERS)
+    Call<PromotersFollowers1> getBusinessFollowersCount(@Query("filter") String filter, @Query("limit") int limit,
+                                                        @Query("include_count") boolean count);
 }

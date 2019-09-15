@@ -8,15 +8,16 @@ import android.support.v7.widget.LinearLayoutManager
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
+import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_business_profile_list.*
 import kotlinx.android.synthetic.main.common_header.*
 import online.motohub.R
-import online.motohub.activity.business.BusinessProfileActivity
 import online.motohub.adapter.BusinessProfileListAdapter
 import online.motohub.constants.BundleConstants
 import online.motohub.interfaces.AdapterClickCallBack
 import online.motohub.model.promoter_club_news_media.PromotersResModel
 import online.motohub.tags.AdapterTag
+import online.motohub.util.PreferenceUtils
 import online.motohub.viewmodel.BaseViewModelFactory
 import online.motohub.viewmodel.BusinessProfileListViewModel
 import org.greenrobot.eventbus.EventBus
@@ -86,8 +87,9 @@ class BusinessProfileListActivity : BaseActivity(), View.OnClickListener, Adapte
 
     override fun onClick(view: View?, tag: AdapterTag?) {
         val pos = tag!!.pos
-        EventBus.getDefault().postSticky(model!!.profileObj)
-        EventBus.getDefault().postSticky(pos)
+        val bundle = Bundle()
+        bundle.putString(BundleConstants.MY_PROFILE_OBJ, Gson().toJson(model!!.profileObj))
+        bundle.putString(BundleConstants.BUSINESS_PROFILE_OBJ, Gson().toJson(businessProfileList[pos]))
         startActivity(Intent(activity, BusinessProfileActivity::class.java))
     }
 
