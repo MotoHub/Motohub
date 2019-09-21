@@ -38,7 +38,7 @@ class BusinessNewsFeedViewModel(application: Application, bundle: Bundle?) : Bas
     fun getFeeds(offset: Int, showProgress: Boolean) {
         if (showProgress)
             callback!!.showProgress()
-        provider.getAllFeeds(getInputModel(offset), ResponseCallback {
+        provider.getAllFeeds1(getInputModel(offset), ResponseCallback {
             if (showProgress)
                 callback!!.hideProgress()
             if (it.isSuccess && it.data != null && it.data.resource != null) {
@@ -53,8 +53,8 @@ class BusinessNewsFeedViewModel(application: Application, bundle: Bundle?) : Bas
 
     private fun getInputModel(offset: Int): ApiInputModel {
         val inputModel = ApiInputModel()
-//        val filter = "(ProfileID=" + businessProfileObj!!.userId + ") AND (user_type=" + businessProfileObj!!.userType + ")"
-        val filter = "ProfileID=" + businessProfileObj!!.userId
+        val filter = "(ProfileID=" + businessProfileObj!!.userId + ") AND (user_type=" + businessProfileObj!!.userType + ")"
+//        val filter = "ProfileID=" + businessProfileObj!!.userId
         inputModel.filter = filter
         inputModel.related = RelationConstants.POST_FEED_RELATION
         inputModel.order = "CreatedAt DESC"

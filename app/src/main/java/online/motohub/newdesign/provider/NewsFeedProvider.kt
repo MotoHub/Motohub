@@ -15,4 +15,11 @@ class NewsFeedProvider : BaseProvider() {
         call.enqueue(DefaultResponse(response, ResponseSuccessCallback {}))
         return call
     }
+
+    fun getAllFeeds1(inputModel: ApiInputModel, response: ResponseCallback<PostsModel>): Call<PostsModel> {
+        val call = apiService.apiInterface.getAllFeeds(inputModel.filter, inputModel.related, inputModel.order,
+                inputModel.limit, inputModel.offset, inputModel.includeCount)
+        call.enqueue(DefaultResponse(response, ResponseSuccessCallback {}))
+        return call
+    }
 }
