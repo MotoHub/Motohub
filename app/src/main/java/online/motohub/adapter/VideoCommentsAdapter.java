@@ -48,7 +48,7 @@ import online.motohub.model.VideoCommentLikeModel;
 import online.motohub.model.VideoCommentReplyModel;
 import online.motohub.model.VideoCommentsModel;
 import online.motohub.retrofit.RetrofitClient;
-import online.motohub.constants.AppConstants;
+import online.motohub.newdesign.constants.AppConstants;
 import online.motohub.util.UrlUtils;
 
 

@@ -18,7 +18,7 @@ import online.motohub.R;
 import online.motohub.activity.BaseActivity;
 import online.motohub.model.FeedShareModel;
 import online.motohub.model.ProfileResModel;
-import online.motohub.constants.AppConstants;
+import online.motohub.newdesign.constants.AppConstants;
 import online.motohub.util.Utility;
 
 public class FeedSharesAdapter extends RecyclerView.Adapter<FeedSharesAdapter.Holder> {

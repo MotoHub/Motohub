@@ -15,6 +15,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import online.motohub.R;
 import online.motohub.dialog.DialogManager;
+import online.motohub.newdesign.activity.LoginActivity;
 import online.motohub.util.UrlUtils;
 
 public class BrowserActivity extends BaseActivity {

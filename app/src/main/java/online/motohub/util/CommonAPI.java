@@ -10,7 +10,7 @@ import java.net.URLEncoder;
 
 import online.motohub.activity.BaseActivity;
 import online.motohub.application.MotoHub;
-import online.motohub.constants.AppConstants;
+import online.motohub.newdesign.constants.AppConstants;
 import online.motohub.interfaces.RetrofitResInterface;
 import online.motohub.model.PostsModel;
 import online.motohub.model.PostsResModel;

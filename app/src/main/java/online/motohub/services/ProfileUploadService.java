@@ -36,7 +36,7 @@ import online.motohub.model.ImageModel;
 import online.motohub.model.OnDemandVideoUploadedResponse;
 import online.motohub.model.VideoUploadModel;
 import online.motohub.retrofit.RetrofitClient;
-import online.motohub.constants.AppConstants;
+import online.motohub.newdesign.constants.AppConstants;
 import online.motohub.util.NotificationUtils;
 import online.motohub.util.PreferenceUtils;
 import online.motohub.util.ProgressRequestBody;

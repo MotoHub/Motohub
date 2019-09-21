@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     style="@style/LayoutMatch"
     android:background="@color/colorWhite"
-    tools:context=".activity.HomeActivity">
+    tools:context=".newdesign.activity.HomeActivity">
 
     <include
         android:id="@+id/header"

@@ -1,6 +1,6 @@
 package online.motohub.interfaces;
 
-import online.motohub.bl.ApiResponse;
+import online.motohub.newdesign.bl.ApiResponse;
 
 public interface ResponseCallback<T> {
 

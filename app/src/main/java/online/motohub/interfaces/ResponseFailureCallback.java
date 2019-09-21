@@ -1,7 +1,7 @@
 package online.motohub.interfaces;
 
 
-import online.motohub.bl.MTError;
+import online.motohub.newdesign.bl.MTError;
 
 public interface ResponseFailureCallback<T> {
 

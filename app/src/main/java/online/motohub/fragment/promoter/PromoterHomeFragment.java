@@ -39,7 +39,7 @@ import online.motohub.model.ProfileResModel;
 import online.motohub.model.SessionModel;
 import online.motohub.model.promoter_club_news_media.PromotersResModel;
 import online.motohub.retrofit.RetrofitClient;
-import online.motohub.constants.AppConstants;
+import online.motohub.newdesign.constants.AppConstants;
 import online.motohub.util.CommonAPI;
 import online.motohub.dialog.DialogManager;
 

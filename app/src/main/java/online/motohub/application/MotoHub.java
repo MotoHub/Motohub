@@ -19,7 +19,7 @@ import java.util.ArrayList;
 
 import io.fabric.sdk.android.Fabric;
 import online.motohub.R;
-import online.motohub.bl.MotoHubApp;
+import online.motohub.newdesign.bl.MotoHubApp;
 import online.motohub.model.EventAddOnModel;
 import online.motohub.model.EventCategoryModel;
 import online.motohub.model.ProfileResModel;

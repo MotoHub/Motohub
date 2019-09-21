@@ -34,7 +34,7 @@ import online.motohub.model.LiveStreamResponse;
 import online.motohub.model.ProfileResModel;
 import online.motohub.retrofit.APIConstants;
 import online.motohub.retrofit.RetrofitClient;
-import online.motohub.constants.AppConstants;
+import online.motohub.newdesign.constants.AppConstants;
 import online.motohub.util.PreferenceUtils;
 import online.motohub.util.StringUtils;
 

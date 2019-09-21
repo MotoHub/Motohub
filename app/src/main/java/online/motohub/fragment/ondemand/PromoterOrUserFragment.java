@@ -58,7 +58,7 @@ import online.motohub.model.VideoCommentsModel;
 import online.motohub.model.VideoLikesModel;
 import online.motohub.model.VideoShareModel;
 import online.motohub.retrofit.RetrofitClient;
-import online.motohub.constants.AppConstants;
+import online.motohub.newdesign.constants.AppConstants;
 import online.motohub.util.PreferenceUtils;
 import online.motohub.util.Utility;
 import rx.Observer;

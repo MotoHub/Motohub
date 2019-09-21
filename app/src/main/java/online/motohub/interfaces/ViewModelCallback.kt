@@ -1,6 +1,6 @@
 package online.motohub.interfaces
 
-import online.motohub.bl.ViewModelAlert
+import online.motohub.newdesign.bl.ViewModelAlert
 
 interface ViewModelCallback {
 

@@ -42,7 +42,7 @@ import online.motohub.model.EventGrpChatMsgResModel;
 import online.motohub.model.ProfileResModel;
 import online.motohub.model.promoter_club_news_media.PromotersModel;
 import online.motohub.model.promoter_club_news_media.PromotersResModel;
-import online.motohub.constants.AppConstants;
+import online.motohub.newdesign.constants.AppConstants;
 import online.motohub.util.PreferenceUtils;
 import online.motohub.util.UrlUtils;
 

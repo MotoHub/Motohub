@@ -178,6 +178,7 @@
     <string name="mainObj">Message</string>
     <string name="Tracks">Tracks</string>
     <string name="followers">Followers</string>
+    <string name="follower">Follower</string>
     <string name="following">Following</string>
     <string name="UnFollow">UnFollow</string>
     <string name="my_moto_file">My Profile</string>
@@ -673,4 +674,5 @@
     <string name="tag_track">track</string>
     <string name="tag_promoter">promoter</string>
 
+    <string name="no_feeds_found_err">No Feeds found!</string>
 </resources>

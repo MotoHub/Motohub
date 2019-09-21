@@ -23,7 +23,7 @@ import online.motohub.activity.ViewLiveVideoViewScreen2;
 import online.motohub.application.MotoHub;
 import online.motohub.model.LiveStreamEntity;
 import online.motohub.model.ProfileResModel;
-import online.motohub.constants.AppConstants;
+import online.motohub.newdesign.constants.AppConstants;
 
 
 public class FriendsStreamAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {

@@ -12,7 +12,7 @@ import online.motohub.model.ProfileResModel;
 import online.motohub.model.SpectatorLiveEntity;
 import online.motohub.model.SpectatorLiveModel;
 import online.motohub.model.VideoUploadModel;
-import online.motohub.constants.AppConstants;
+import online.motohub.newdesign.constants.AppConstants;
 
 public class DatabaseHandler extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION = 4;

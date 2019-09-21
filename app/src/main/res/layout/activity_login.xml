@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/login_co_layout"
     style="@style/LayoutMatch"
-    tools:context="online.motohub.activity.LoginActivity">
+    tools:context="online.motohub.newdesign.activity.LoginActivity">
 
     <ScrollView style="@style/LayoutMatch">
 

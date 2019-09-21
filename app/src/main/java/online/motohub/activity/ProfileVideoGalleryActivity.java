@@ -42,7 +42,7 @@ import online.motohub.model.GalleryVideoModel;
 import online.motohub.model.GalleryVideoResModel;
 import online.motohub.model.SessionModel;
 import online.motohub.retrofit.RetrofitClient;
-import online.motohub.constants.AppConstants;
+import online.motohub.newdesign.constants.AppConstants;
 import online.motohub.dialog.DialogManager;
 import online.motohub.util.PreferenceUtils;
 import online.motohub.services.ProfileUploadService;

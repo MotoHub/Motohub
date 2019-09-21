@@ -15,7 +15,7 @@
 
 
         <activity
-            android:name=".activity.MainSplashScreenActivity"
+            android:name=".newdesign.activity.MainSplashScreenActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait">
             <intent-filter>
@@ -25,18 +25,18 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activity.HomeActivity"
+            android:name=".newdesign.activity.HomeActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".activity.MainHomeActivity"
+            android:name=".newdesign.activity.MainHomeActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
-            android:name=".activity.BusinessProfileListActivity"
+            android:name=".newdesign.activity.BusinessProfileListActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"
@@ -52,7 +52,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".activity.LoginActivity"
+            android:name=".newdesign.activity.LoginActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustPan">
@@ -103,7 +103,7 @@
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="stateHidden|adjustPan" />
         <activity
-            android:name=".activity.SignUpActivity"
+            android:name=".newdesign.activity.SignUpActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"
@@ -423,7 +423,7 @@
             android:windowSoftInputMode="stateHidden|adjustPan"
             tools:replace="android:configChanges,android:theme" />
         <activity
-            android:name=".activity.ComingSoonActivity"
+            android:name=".newdesign.activity.ComingSoonActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
@@ -639,7 +639,7 @@
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name=".activity.BusinessProfileActivity"
+            android:name=".newdesign.activity.BusinessProfileActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />

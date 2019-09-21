@@ -32,7 +32,7 @@ import online.motohub.model.SpectatorLiveEntity;
 import online.motohub.model.SpectatorLiveModel;
 import online.motohub.model.VideoUploadModel;
 import online.motohub.retrofit.RetrofitClient;
-import online.motohub.constants.AppConstants;
+import online.motohub.newdesign.constants.AppConstants;
 import online.motohub.util.NotificationUtils;
 import online.motohub.util.ProgressRequestBody;
 import online.motohub.util.UrlUtils;

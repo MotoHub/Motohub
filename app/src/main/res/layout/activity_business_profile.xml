@@ -69,7 +69,7 @@
                                 style="@style/LayoutWrap"
                                 android:layout_centerVertical="true"
                                 android:layout_marginStart="@dimen/size5"
-                                android:layout_toStartOf="@+id/followers_box"
+                                android:layout_toStartOf="@+id/followersLay"
                                 android:layout_toEndOf="@id/profileImg">
 
                                 <TextView
@@ -88,11 +88,12 @@
                             </RelativeLayout>
 
                             <LinearLayout
-                                android:id="@+id/followers_box"
+                                android:id="@+id/followersLay"
                                 style="@style/LayoutWrap"
                                 android:layout_alignParentEnd="true"
                                 android:layout_centerVertical="true"
                                 android:clickable="true"
+                                android:visibility="gone"
                                 android:focusable="true"
                                 android:orientation="vertical">
 

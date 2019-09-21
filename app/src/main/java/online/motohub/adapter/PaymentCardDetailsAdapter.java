@@ -21,7 +21,7 @@ import online.motohub.R;
 import online.motohub.activity.BaseActivity;
 import online.motohub.activity.PaymentActivity;
 import online.motohub.model.PaymentCardDetailsModel;
-import online.motohub.constants.AppConstants;
+import online.motohub.newdesign.constants.AppConstants;
 import online.motohub.util.CryptLib;
 
 public class PaymentCardDetailsAdapter extends RecyclerView.Adapter<PaymentCardDetailsAdapter.ViewHolder> {

@@ -52,7 +52,7 @@ import online.motohub.model.ProfileResModel;
 import online.motohub.model.ReplyLikeModel;
 import online.motohub.model.promoter_club_news_media.PromotersModel;
 import online.motohub.retrofit.RetrofitClient;
-import online.motohub.constants.AppConstants;
+import online.motohub.newdesign.constants.AppConstants;
 import online.motohub.util.UrlUtils;
 import online.motohub.util.Utility;
 

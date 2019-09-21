@@ -18,6 +18,7 @@ import butterknife.OnClick;
 import online.motohub.R;
 import online.motohub.model.CommonResponse;
 import online.motohub.model.ErrorMessage;
+import online.motohub.newdesign.activity.LoginActivity;
 import online.motohub.retrofit.APIConstants;
 import online.motohub.retrofit.RetrofitClient;
 import online.motohub.dialog.DialogManager;

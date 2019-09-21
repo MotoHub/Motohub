@@ -24,7 +24,7 @@ import online.motohub.model.FollowProfileModel;
 import online.motohub.model.ProfileResModel;
 import online.motohub.model.SessionModel;
 import online.motohub.retrofit.RetrofitClient;
-import online.motohub.constants.AppConstants;
+import online.motohub.newdesign.constants.AppConstants;
 import online.motohub.util.CommonAPI;
 import online.motohub.dialog.DialogManager;
 import online.motohub.util.PreferenceUtils;

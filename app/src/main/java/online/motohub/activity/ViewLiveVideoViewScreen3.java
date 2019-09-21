@@ -25,7 +25,7 @@ import online.motohub.model.LiveStreamResponse;
 import online.motohub.model.SessionModel;
 import online.motohub.retrofit.APIConstants;
 import online.motohub.retrofit.RetrofitClient;
-import online.motohub.constants.AppConstants;
+import online.motohub.newdesign.constants.AppConstants;
 import online.motohub.dialog.DialogManager;
 import online.motohub.util.PreferenceUtils;
 

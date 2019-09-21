@@ -93,8 +93,9 @@ import butterknife.BindString;
 import butterknife.ButterKnife;
 import online.motohub.R;
 import online.motohub.adapter.EventsFindAdapter;
-import online.motohub.bl.ViewModelAlert;
-import online.motohub.constants.AppConstants;
+import online.motohub.newdesign.activity.LoginActivity;
+import online.motohub.newdesign.bl.ViewModelAlert;
+import online.motohub.newdesign.constants.AppConstants;
 import online.motohub.dialog.DialogManager;
 import online.motohub.fragment.dialog.AppDialogFragment;
 import online.motohub.interfaces.CommonInterface;
@@ -113,7 +114,7 @@ import online.motohub.retrofit.RetrofitClient;
 import online.motohub.util.PreferenceUtils;
 import online.motohub.util.UrlUtils;
 import online.motohub.util.ZoomImageView;
-import online.motohub.viewmodel.BaseViewModel;
+import online.motohub.newdesign.viewmodel.BaseViewModel;
 
 @SuppressLint("Registered")
 public class BaseActivity extends AppCompatActivity implements ViewModelCallback, PermissionViewModelCallback {

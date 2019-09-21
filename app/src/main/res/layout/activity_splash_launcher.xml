@@ -5,4 +5,4 @@
     android:layout_centerHorizontal="true"
     android:layout_gravity="center"
     android:background="@drawable/app_logo"
-    tools:context="online.motohub.activity.MainSplashScreenActivity" />
+    tools:context="online.motohub.newdesign.activity.MainSplashScreenActivity" />
