@@ -78,7 +78,6 @@ class BusinessNewsFeedFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshLis
         layoutManager.orientation = LinearLayoutManager.VERTICAL
         listView.layoutManager = layoutManager
 
-        swipeRefreshLay.setOnRefreshListener(this)
         model = ViewModelProviders.of(this, BaseViewModelFactory(activity!!.application, activeBundle)).get(BusinessNewsFeedViewModel::class.java)
         registerModel(model)
         model!!.newsFeedLiveData.observe(this, Observer {
@@ -115,6 +114,7 @@ class BusinessNewsFeedFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshLis
     }
 
     private fun setAdapter() {
+        errTxt.visibility = if (feedsList.isEmpty()) View.VISIBLE else View.GONE
         if (feedAdapter == null) {
             feedAdapter = BusinessNewsFeedAdapter(activity, feedsList, model!!.profileObj, model!!.businessProfileObj,
                     this, this)
@@ -125,15 +125,10 @@ class BusinessNewsFeedFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshLis
         hasNextPage = model!!.totalCount > feedsList.size
         isLoadMoreCalled = false
         isLoading = false
-        if (swipeRefreshLay.isRefreshing)
-            swipeRefreshLay.isRefreshing = false
     }
 
     private var clickPos = 0
     override fun onClick(view: View?, tag: AdapterTag) {
-        if (swipeRefreshLay.isRefreshing) {
-            return
-        }
         clickPos = tag.pos
         val pos = tag.pos
         val isBlocked = tag.isBlocked

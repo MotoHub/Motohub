@@ -107,9 +107,9 @@ public class NewsandMediaPhotosFragment extends BaseFragment {
         switch (responseType) {
             case RetrofitClient.GET_GALLERY_DATA_RESPONSE:
                 GalleryImgModel model = (GalleryImgModel) responseObj;
-                if (model.getGalleryResModelList() != null && model.getGalleryResModelList().size() > 0) {
+                if (model.getResource() != null && model.getResource().size() > 0) {
                     mGalleryResModels.clear();
-                    mGalleryResModels.addAll(model.getGalleryResModelList());
+                    mGalleryResModels.addAll(model.getResource());
                     mAdapter.notifyDataSetChanged();
                 } else {
                     ((BaseActivity) getActivity()).showToast(getActivity(), getString(R.string.picture_not_found));

@@ -5,6 +5,7 @@ import android.os.Parcelable;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class GalleryImgModel implements Parcelable {
@@ -30,21 +31,21 @@ public class GalleryImgModel implements Parcelable {
         }
     };
     @SerializedName("resource")
-    private List<GalleryImgResModel> galleryResModelList;
+    private ArrayList<GalleryImgResModel> resource;
 
     public GalleryImgModel() {
     }
 
     private GalleryImgModel(Parcel in) {
-        galleryResModelList = in.createTypedArrayList(GalleryImgResModel.CREATOR);
+        resource = in.createTypedArrayList(GalleryImgResModel.CREATOR);
     }
 
-    public List<GalleryImgResModel> getGalleryResModelList() {
-        return galleryResModelList;
+    public ArrayList<GalleryImgResModel> getResource() {
+        return resource;
     }
 
-    public void setGalleryResModelList(List<GalleryImgResModel> galleryResModelList) {
-        this.galleryResModelList = galleryResModelList;
+    public void setResource(ArrayList<GalleryImgResModel> resource) {
+        this.resource = resource;
     }
 
     @Override
@@ -54,7 +55,7 @@ public class GalleryImgModel implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeTypedList(galleryResModelList);
+        parcel.writeTypedList(resource);
     }
 
 }

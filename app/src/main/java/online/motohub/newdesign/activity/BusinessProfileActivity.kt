@@ -15,21 +15,24 @@ import online.motohub.activity.BaseActivity
 import online.motohub.activity.business.BusinessWritePostActivity
 import online.motohub.adapter.business.BusinessPostAdapter
 import online.motohub.adapter.business.BusinessViewPagerAdapter
-import online.motohub.newdesign.constants.AppConstants
 import online.motohub.fragment.BaseFragment
-import online.motohub.fragment.Business.*
+import online.motohub.fragment.Business.BusinessContactFragment
+import online.motohub.fragment.Business.BusinessSubScribedUserFragment
 import online.motohub.fragment.dialog.AppDialogFragment
 import online.motohub.fragment.promoter.PromoterVideosFragment
 import online.motohub.model.*
-import online.motohub.model.promoter_club_news_media.PromotersModel
 import online.motohub.model.promoter_club_news_media.PromotersResModel
+import online.motohub.newdesign.constants.AppConstants
 import online.motohub.newdesign.constants.BundleConstants
+import online.motohub.newdesign.fragment.BusinessEventFragment
 import online.motohub.newdesign.fragment.BusinessNewsFeedFragment
+import online.motohub.newdesign.fragment.BusinessPhotosFragment
+import online.motohub.newdesign.fragment.BusinessVideosFragment
+import online.motohub.newdesign.viewmodel.BaseViewModelFactory
+import online.motohub.newdesign.viewmodel.BusinessProfileViewModel
 import online.motohub.retrofit.RetrofitClient
 import online.motohub.util.PreferenceUtils
 import online.motohub.util.UrlUtils
-import online.motohub.newdesign.viewmodel.BaseViewModelFactory
-import online.motohub.newdesign.viewmodel.BusinessProfileViewModel
 import org.greenrobot.eventbus.EventBus
 import java.util.*
 
@@ -57,7 +60,7 @@ class BusinessProfileActivity : BaseActivity(), TabLayout.OnTabSelectedListener,
         model!!.followersCount.observe(this, android.arch.lifecycle.Observer {
             if (it != null) {
                 followersLay.visibility = if (it > 0) View.VISIBLE else View.GONE
-                followersTxt.text= if (it > 1) getString(R.string.followers) else getString(R.string.follower)
+                followersTxt.text = if (it > 1) getString(R.string.followers) else getString(R.string.follower)
                 followersCountTxt.text = it.toString()
             }
 
@@ -82,7 +85,7 @@ class BusinessProfileActivity : BaseActivity(), TabLayout.OnTabSelectedListener,
         }
         profileName.text = businessProfileObj!!.name
 
-        var mBundle =  Bundle()
+        val mBundle = Bundle()
         mBundle.putString(BundleConstants.MY_PROFILE_OBJ, Gson().toJson(model!!.profileObj))
         mBundle.putString(BundleConstants.BUSINESS_PROFILE_OBJ, Gson().toJson(businessProfileObj!!))
         //MotoHub.getApplicationInstance().setmPromoterResModel(mPromotersResModel);
@@ -92,13 +95,13 @@ class BusinessProfileActivity : BaseActivity(), TabLayout.OnTabSelectedListener,
         mBusinessHomeFragment.arguments = mBundle
         this.fragmentList.add(mBusinessHomeFragment)
         val mBusinessEventsFragment = BusinessEventFragment()
-        //mBusinessEventsFragment.setArguments(mBundle);
+        mBusinessEventsFragment.arguments = mBundle
         this.fragmentList.add(mBusinessEventsFragment)
         val mBusinessPhotosFragment = BusinessPhotosFragment()
-        //mBusinessPhotosFragment.setArguments(mBundle);
+        mBusinessPhotosFragment.arguments = mBundle
         this.fragmentList.add(mBusinessPhotosFragment)
         val mBusinessVideosFrgment = BusinessVideosFragment()
-        //mBusinessVideosFrgment.setArguments(mBundle);
+        mBusinessVideosFrgment.arguments = mBundle
         this.fragmentList.add(mBusinessVideosFrgment)
 
 

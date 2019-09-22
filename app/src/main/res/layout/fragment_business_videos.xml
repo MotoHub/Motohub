@@ -21,7 +21,7 @@
         android:gravity="center|top"
         android:visibility="gone"
         android:layout_margin="@dimen/size20"
-        android:text="@string/no_events_err"
+        android:text="@string/no_videos_found_err"
         android:textColor="@color/colorOrange"
         android:textSize="@dimen/text25"
         android:textStyle="italic|bold"
@@ -29,6 +29,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
 
 </android.support.constraint.ConstraintLayout>

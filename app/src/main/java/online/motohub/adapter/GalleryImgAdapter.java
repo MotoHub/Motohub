@@ -33,10 +33,6 @@ public class GalleryImgAdapter extends RecyclerView.Adapter<GalleryImgAdapter.Ho
         mSelectedItemsIds = new SparseBooleanArray();
     }
 
-    /*public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
-        this.mOnItemClickListener = onItemClickListener;
-    }*/
-
     @Override
     public Holder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -49,16 +45,6 @@ public class GalleryImgAdapter extends RecyclerView.Adapter<GalleryImgAdapter.Ho
         try {
 
             GalleryImgResModel model = models.get(position);
-
-      /*  GlideUrl glideUrl = new GlideUrl(UrlUtils.FILE_URL + model.getGalleryImage(),
-                new LazyHeaders.Builder()
-                        .addHeader("X-DreamFactory-Api-Key", mContext.getString(R.string.dream_factory_api_key))
-                        .build());*/
-
-            GlideUrl glideUrl = new GlideUrl(UrlUtils.AWS_FILE_URL + model.getGalleryImage(),
-                    new LazyHeaders.Builder()
-                            .addHeader("X-DreamFactory-Api-Key", mContext.getString(R.string.dream_factory_api_key))
-                            .build());
 
             Glide.with(mContext)
                     .load(UrlUtils.AWS_S3_BASE_URL + model.getGalleryImage())
@@ -87,14 +73,9 @@ public class GalleryImgAdapter extends RecyclerView.Adapter<GalleryImgAdapter.Ho
         return models.size();
     }
 
-    //Toggle selection methods
     public void toggleSelection(int position) {
         selectView(position, !mSelectedItemsIds.get(position));
     }
-
-    /*public interface OnItemClickListener {
-        void onItemClick(int position);
-    }*/
 
     //Remove selected selections
     public void removeSelection() {

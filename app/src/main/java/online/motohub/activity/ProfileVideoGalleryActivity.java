@@ -277,9 +277,9 @@ public class ProfileVideoGalleryActivity extends BaseActivity {
             case RetrofitClient.GET_VIDEO_FILE_RESPONSE:
                 try {
                     GalleryVideoModel videoModel = (GalleryVideoModel) responseObj;
-                    if (videoModel != null && videoModel.getResModelList().size() > 0) {
+                    if (videoModel != null && videoModel.getResource().size() > 0) {
                         videoResModels.clear();
-                        videoResModels.addAll(videoModel.getResModelList());
+                        videoResModels.addAll(videoModel.getResource());
                         mAdapter.notifyDataSetChanged();
                         mRv.setVisibility(View.VISIBLE);
                     } else {

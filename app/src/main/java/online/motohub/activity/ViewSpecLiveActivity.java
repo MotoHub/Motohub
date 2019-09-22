@@ -261,9 +261,9 @@ public class ViewSpecLiveActivity extends BaseActivity {
     public void retrofitOnResponse(Object responseObj, int responseType) {
         super.retrofitOnResponse(responseObj, responseType);
         GalleryVideoModel videoModel = (GalleryVideoModel) responseObj;
-        if (videoModel != null && videoModel.getResModelList().size() > 0) {
+        if (videoModel != null && videoModel.getResource().size() > 0) {
             mListLiveVideos = new ArrayList<>();
-            mListLiveVideos.addAll(videoModel.getResModelList());
+            mListLiveVideos.addAll(videoModel.getResource());
             if (mListLiveVideos.size() > 0)
                 playVideo();
         } else {

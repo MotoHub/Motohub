@@ -282,10 +282,10 @@ public class ProfileImgGalleryActivity extends BaseActivity {
         switch (responseType) {
             case RetrofitClient.GET_GALLERY_DATA_RESPONSE:
                 GalleryImgModel model = (GalleryImgModel) responseObj;
-                if (model.getGalleryResModelList() != null && model.getGalleryResModelList().size() > 0) {
+                if (model.getResource() != null && model.getResource().size() > 0) {
                     try {
                         mGalleryResModels.clear();
-                        mGalleryResModels.addAll(model.getGalleryResModelList());
+                        mGalleryResModels.addAll(model.getResource());
                         mAdapter.notifyDataSetChanged();
                         visibleViewPager(false);
                         mCustomPagerAdapter.notifyDataSetChanged();
@@ -298,7 +298,7 @@ public class ProfileImgGalleryActivity extends BaseActivity {
                 break;
             case RetrofitClient.POST_GALLERY_DATA_RESPONSE:
                 model = (GalleryImgModel) responseObj;
-                if (model.getGalleryResModelList() != null && model.getGalleryResModelList().size() > 0) {
+                if (model.getResource() != null && model.getResource().size() > 0) {
                     getGalleryImages();
                 }
                 break;

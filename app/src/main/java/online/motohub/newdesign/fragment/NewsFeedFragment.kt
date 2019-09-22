@@ -16,7 +16,10 @@ import com.google.gson.JsonObject
 import kotlinx.android.synthetic.main.fragment_news_feed.*
 import kotlinx.android.synthetic.main.view_header_news_feed.*
 import online.motohub.R
-import online.motohub.activity.*
+import online.motohub.activity.BaseActivity
+import online.motohub.activity.MyMotoFileActivity
+import online.motohub.activity.ReportActivity
+import online.motohub.activity.WritePostActivity
 import online.motohub.activity.club.ClubProfileActivity
 import online.motohub.activity.news_and_media.NewsAndMediaProfileActivity
 import online.motohub.activity.performance_shop.PerformanceShopProfileActivity
@@ -24,28 +27,27 @@ import online.motohub.activity.promoter.PromoterProfileActivity
 import online.motohub.activity.promoter.PromotersImgListActivity
 import online.motohub.activity.track.TrackProfileActivity
 import online.motohub.fragment.BaseFragment
-import online.motohub.newdesign.adapter.NewsFeedAdapter
-import online.motohub.newdesign.constants.AppConstants
-import online.motohub.newdesign.constants.BundleConstants
 import online.motohub.fragment.dialog.AppDialogFragment
 import online.motohub.interfaces.AdapterClickCallBack
 import online.motohub.interfaces.OnLoadMoreListener
 import online.motohub.model.*
 import online.motohub.model.promoter_club_news_media.PromotersModel
-import online.motohub.activity.BaseActivity
 import online.motohub.newdesign.activity.BusinessProfileListActivity
+import online.motohub.newdesign.adapter.NewsFeedAdapter
+import online.motohub.newdesign.constants.AppConstants
+import online.motohub.newdesign.constants.BundleConstants
+import online.motohub.newdesign.viewmodel.BaseViewModelFactory
+import online.motohub.newdesign.viewmodel.NewsFeedViewModel
 import online.motohub.retrofit.RetrofitClient
 import online.motohub.tags.AdapterTag
 import online.motohub.util.UrlUtils
 import online.motohub.util.Utility
-import online.motohub.newdesign.viewmodel.BaseViewModelFactory
-import online.motohub.newdesign.viewmodel.NewsFeedViewModel
 import org.greenrobot.eventbus.EventBus
 import java.net.URLDecoder
 import java.util.*
 import kotlin.collections.ArrayList
 
-class NewsFeedFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener, AdapterClickCallBack, View.OnClickListener {
+class NewsFeedFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener, AdapterClickCallBack {
 
 
     private var model: NewsFeedViewModel? = null
@@ -72,12 +74,7 @@ class NewsFeedFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener, A
     }
 
     private fun initView() {
-        performanceShopLay.setOnClickListener(this)
-        newsAndMediaLay.setOnClickListener(this)
-        tracksLay.setOnClickListener(this)
-        clubsLay.setOnClickListener(this)
-        promotersLay.setOnClickListener(this)
-        writePostBtn.setOnClickListener(this)
+
 
         var activeBundle = arguments
         if (activeBundle == null) {
@@ -115,7 +112,27 @@ class NewsFeedFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener, A
             }
         })
 
-
+        performanceShopLay.setOnClickListener {
+            moveToBusinessListScreen(it!!.tag as String)
+        }
+        newsAndMediaLay.setOnClickListener {
+            moveToBusinessListScreen(it!!.tag as String)
+        }
+        tracksLay.setOnClickListener {
+            moveToBusinessListScreen(it!!.tag as String)
+        }
+        clubsLay.setOnClickListener {
+            moveToBusinessListScreen(it!!.tag as String)
+        }
+        promotersLay.setOnClickListener {
+            moveToBusinessListScreen(it!!.tag as String)
+        }
+        writePostBtn.setOnClickListener {
+            EventBus.getDefault().postSticky(model!!.profileObj)
+            startActivityForResult(Intent(activity, WritePostActivity::class.java)
+                    .putExtra(AppConstants.IS_NEWSFEED_POST, false)
+                    .putExtra(AppConstants.USER_TYPE, "user"), AppConstants.WRITE_POST_REQUEST)
+        }
     }
 
     override fun onRefresh() {
@@ -137,27 +154,28 @@ class NewsFeedFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener, A
             swipeRefreshLay.isRefreshing = false
     }
 
-    override fun onClick(v: View?) {
-        //TODO If you are adding any additional view here please mention tag in xml
-        val tag = v!!.tag as String
+    private fun moveToBusinessListScreen(tag: String?) {
         val bundle = Bundle()
         bundle.putString(BundleConstants.MY_PROFILE_OBJ, Gson().toJson(model!!.profileObj))
         bundle.putString(BundleConstants.BUSINESS_PROFILE_TYPE, tag)
-        when (view?.id) {
-            R.id.performanceShopLay, R.id.newsAndMediaLay, R.id.tracksLay, R.id.clubsLay, R.id.promotersLay -> {
-                startActivity(Intent(activity, BusinessProfileListActivity::class.java).putExtras(bundle))
-            }
-            R.id.writePostBtn -> {
-                EventBus.getDefault().postSticky(model!!.profileObj)
-                startActivityForResult(Intent(activity, WritePostActivity::class.java)
-                        .putExtra(AppConstants.IS_NEWSFEED_POST, false)
-                        .putExtra(AppConstants.USER_TYPE, "user"), AppConstants.WRITE_POST_REQUEST)
-            }
-            else -> {
-                startActivity(Intent(activity, BusinessProfileListActivity::class.java).putExtras(bundle))
-            }
-        }
+        startActivity(Intent(activity, BusinessProfileListActivity::class.java).putExtras(bundle))
     }
+
+//    override fun onClick(v: View?) {
+//        //TODO If you are adding any additional view here please mention tag in xml
+//        val tag = v!!.tag as String
+//        val bundle = Bundle()
+//        bundle.putString(BundleConstants.MY_PROFILE_OBJ, Gson().toJson(model!!.profileObj))
+//        bundle.putString(BundleConstants.BUSINESS_PROFILE_TYPE, tag)
+//        when (view?.id) {
+//            R.id.performanceShopLay, R.id.newsAndMediaLay, R.id.tracksLay, R.id.clubsLay, R.id.promotersLay -> {
+//                startActivity(Intent(activity, BusinessProfileListActivity::class.java).putExtras(bundle))
+//            }
+//            R.id.writePostBtn -> {
+//
+//            }
+//        }
+//    }
 
     private var clickPos = 0
     override fun onClick(view: View?, tag: AdapterTag) {

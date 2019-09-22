@@ -242,9 +242,9 @@ public class TrackVideosFragment extends BaseFragment {
             case RetrofitClient.GET_VIDEO_FILE_RESPONSE:
                 mRefresh = false;
                 Isvisible = true;
-                if (videoModel != null && videoModel.getResModelList().size() > 0) {
+                if (videoModel != null && videoModel.getResource().size() > 0) {
                     videoResModels.clear();
-                    videoResModels.addAll(videoModel.getResModelList());
+                    videoResModels.addAll(videoModel.getResource());
                     mRv.setVisibility(View.VISIBLE);
                     txtNoData.setVisibility(View.GONE);
                 } else {
@@ -257,9 +257,9 @@ public class TrackVideosFragment extends BaseFragment {
                 break;
             case RetrofitClient.SEARCH_VIDEO_FILE_RESPONSE:
                 mRefresh = false;
-                if (videoModel != null && videoModel.getResModelList().size() > 0) {
+                if (videoModel != null && videoModel.getResource().size() > 0) {
                     videoResModels.clear();
-                    videoResModels.addAll(videoModel.getResModelList());
+                    videoResModels.addAll(videoModel.getResource());
                     mRv.setVisibility(View.VISIBLE);
                     txtNoData.setVisibility(View.GONE);
                 } else {

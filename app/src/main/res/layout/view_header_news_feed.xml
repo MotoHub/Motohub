@@ -37,6 +37,7 @@
             android:background="@drawable/white_gray_bg"
             android:clickable="true"
             android:focusable="true"
+
             android:tag="@string/tag_shop">
 
             <ImageView

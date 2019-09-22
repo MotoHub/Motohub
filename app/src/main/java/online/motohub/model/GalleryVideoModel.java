@@ -6,6 +6,7 @@ import android.os.Parcelable;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class GalleryVideoModel implements Parcelable {
@@ -22,13 +23,13 @@ public class GalleryVideoModel implements Parcelable {
         }
     };
     @SerializedName("resource")
-    private List<GalleryVideoResModel> resModelList;
+    private ArrayList<GalleryVideoResModel> resource;
     @SerializedName("meta")
     @Expose
     private MetaModel meta;
 
     private GalleryVideoModel(Parcel in) {
-        resModelList = in.createTypedArrayList(GalleryVideoResModel.CREATOR);
+        resource = in.createTypedArrayList(GalleryVideoResModel.CREATOR);
     }
 
     public MetaModel getMeta() {
@@ -39,12 +40,12 @@ public class GalleryVideoModel implements Parcelable {
         this.meta = meta;
     }
 
-    public List<GalleryVideoResModel> getResModelList() {
-        return resModelList;
+    public ArrayList<GalleryVideoResModel> getResource() {
+        return resource;
     }
 
-    public void setResModelList(List<GalleryVideoResModel> resModelList) {
-        this.resModelList = resModelList;
+    public void setResource(ArrayList<GalleryVideoResModel> resource) {
+        this.resource = resource;
     }
 
     @Override
@@ -54,7 +55,7 @@ public class GalleryVideoModel implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeTypedList(resModelList);
+        parcel.writeTypedList(resource);
     }
 
 }
