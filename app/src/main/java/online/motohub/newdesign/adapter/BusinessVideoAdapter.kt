@@ -58,14 +58,11 @@ class BusinessVideoAdapter(private val context: Context, private val videosList:
             }
 
             if (!TextUtils.isEmpty(data.caption)) {
-                titleTv.visibility = View.VISIBLE
                 if (data.caption.contains(" "))
                     titleTv.text = data.caption
                 else {
                     titleTv.text = URLDecoder.decode(data.caption, "UTF-8")
                 }
-            } else {
-                titleTv.visibility = View.GONE
             }
         }
     }
