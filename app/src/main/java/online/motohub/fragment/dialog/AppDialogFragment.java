@@ -1,6 +1,8 @@
 package online.motohub.fragment.dialog;
 
 import android.app.Activity;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -86,6 +88,7 @@ import online.motohub.model.promoter_club_news_media.PromotersModel;
 import online.motohub.model.promoter_club_news_media.PromotersResModel;
 import online.motohub.retrofit.RetrofitClient;
 import online.motohub.util.PreferenceUtils;
+import online.motohub.util.UrlUtils;
 
 import static online.motohub.retrofit.RetrofitClient.GET_PROMOTERS_RESPONSE;
 
@@ -119,7 +122,7 @@ public class AppDialogFragment extends DialogFragment implements
     public ShareDialog shareFBDialog;
     private Unbinder mUnBinder;
     private ArrayList<String> mProfileTypes;
-    private String mShareContent;
+    private static String mShareContent, mPostID;
     private int mProfilePosition;
     private ArrayList<PromotersResModel> mTaggedSponsorsList;
     private TagSponsorsHorAdapter mTagSponsorsHorAdapter;
@@ -273,9 +276,10 @@ public class AppDialogFragment extends DialogFragment implements
 
     }
 
-    public static AppDialogFragment newInstance(String dialog_type, String content, ArrayList<Bitmap> imgUrl, String[] videoUrl, int position, boolean isFromOtherMotoFile) {
+    public static AppDialogFragment newInstance(String dialog_type, String postID, String content, ArrayList<Bitmap> imgUrl, String[] videoUrl, int position, boolean isFromOtherMotoFile) {
 
         mAppDialogFragment = new AppDialogFragment();
+        mPostID = postID;
 
         mShareImage = imgUrl;
 
@@ -292,6 +296,7 @@ public class AppDialogFragment extends DialogFragment implements
         Bundle mBundle = new Bundle();
         mBundle.putString("dialogType", dialog_type);
         mBundle.putString("shareContent", content);
+        mBundle.putString("postID", postID);
         mBundle.putInt("profilePosition", position);
         mBundle.putBoolean("otherMotoProfile", isFromOtherMotoFile);
         mAppDialogFragment.setArguments(mBundle);
@@ -678,6 +683,7 @@ public class AppDialogFragment extends DialogFragment implements
 
                 setDialogProperties(Gravity.BOTTOM, WindowManager.LayoutParams.MATCH_PARENT);
 
+                mPostID = getArguments().getString("postID");
                 mShareContent = getArguments().getString("shareContent");
 
                 mProfilePosition = getArguments().getInt("profilePosition");
@@ -949,10 +955,19 @@ public class AppDialogFragment extends DialogFragment implements
 
     }
 
+    void copyLink() {
+        String link = UrlUtils.SHARE_LINK + mPostID;
+        ClipboardManager clipboard = (ClipboardManager) getContext().getSystemService(Context.CLIPBOARD_SERVICE);
+        ClipData clip = ClipData.newPlainText("link", link);
+        clipboard.setPrimaryClip(clip);
+
+        Toast.makeText(getContext(), "Copied to Clipboard", Toast.LENGTH_SHORT).show();
+    }
+
     @Optional
     @OnClick({R.id.cameraLayout, R.id.close_btn, R.id.save_btn, R.id.galleryLayout, R.id.dialog_positive_btn, R.id.dialog_negative_btn,
             R.id.done_btn, R.id.buy_monthly_btn, R.id.buy_yearly_btn, R.id.editLayout, R.id.deleteLayout, R.id.un_follow_btn, R.id.block_btn,
-            R.id.tag_profiles_done_btn, R.id.ok_no_session_tv, R.id.facebook_lay, R.id.Friends_lay, R.id.txtvwCancel, R.id.btnGoLive, R.id.btnGoWatch,
+            R.id.tag_profiles_done_btn, R.id.ok_no_session_tv, R.id.facebook_lay, R.id.Friends_lay, R.id.copyLinkLay, R.id.txtvwCancel, R.id.btnGoLive, R.id.btnGoWatch,
             R.id.searchSponsorBtn, R.id.send_email_btn, R.id.cameraLayout_video, R.id.galleryLayout_video, R.id.single_stream_btn, R.id.multi_stream_btn, R.id.deleteConversationsLayout,
             R.id.reportLayout, R.id.cameraLayoutBusiness, R.id.galleryLayoutBusiness})
     public void onClick(View v) {
@@ -1073,6 +1088,9 @@ public class AppDialogFragment extends DialogFragment implements
                 ((BaseActivity) getActivity()).alertDialogPositiveBtnClick((BaseActivity) getActivity(), mDialogType, null, null, mProfilePosition);
                 dismiss();
                 break;
+            case R.id.copyLinkLay:
+                copyLink();
+                dismiss();
             case R.id.txtvwCancel:
                 dismiss();
                 break;

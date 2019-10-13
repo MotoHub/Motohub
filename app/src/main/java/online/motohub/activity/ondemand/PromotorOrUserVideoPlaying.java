@@ -59,6 +59,7 @@ import online.motohub.R;
 import online.motohub.activity.BaseActivity;
 import online.motohub.model.EventsResModel;
 import online.motohub.model.FollowProfileModel;
+import online.motohub.model.ListModel;
 import online.motohub.model.PostsModel;
 import online.motohub.model.ProfileModel;
 import online.motohub.model.ProfileResModel;
@@ -135,7 +136,8 @@ public class PromotorOrUserVideoPlaying extends BaseActivity {
 
         setSwipeListenerForVideoView();
         checkPosition = getIntent().getIntExtra(AppConstants.POSITION, 0);
-        mPostsList = (ArrayList<PromoterVideoModel.Resource>) getIntent().getSerializableExtra(AppConstants.ONDEMAND_DATA);
+        ListModel listModel=EventBus.getDefault().getStickyEvent(ListModel.class);
+        mPostsList = listModel.getPostList();
         mOtherProfileID = Integer.parseInt(mPostsList.get(pos).getProfileID());
         //mMyProfileResModel = (ProfileResModel) getIntent().getSerializableExtra(AppConstants.MY_PROFILE_OBJ);
         //mMyProfileResModel = MotoHub.getApplicationInstance().getmProfileResModel();

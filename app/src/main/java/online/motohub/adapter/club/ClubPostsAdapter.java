@@ -54,6 +54,7 @@ import online.motohub.activity.TaggedProfilesListActivity;
 import online.motohub.activity.promoter.PromotersImgListActivity;
 import online.motohub.adapter.FeedLikesAdapter;
 import online.motohub.adapter.FeedSharesAdapter;
+import online.motohub.constants.AppConstants;
 import online.motohub.fragment.dialog.AppDialogFragment;
 import online.motohub.model.FeedCommentModel;
 import online.motohub.model.FeedLikesModel;
@@ -64,7 +65,6 @@ import online.motohub.model.PostsResModel;
 import online.motohub.model.ProfileResModel;
 import online.motohub.model.promoter_club_news_media.PromotersResModel;
 import online.motohub.retrofit.RetrofitClient;
-import online.motohub.constants.AppConstants;
 import online.motohub.util.UrlUtils;
 import online.motohub.util.Utility;
 
@@ -555,6 +555,7 @@ public class ClubPostsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                         public void onClick(View view) {
 
                             mTempPosition = position;
+                            final String postID = String.valueOf(mPostsList.get(position).getID());
                             final String content = mPostsList.get(position).getPostText();
                             boolean mIsOtherMotoProfile;
                             mIsOtherMotoProfile = mPostsList.get(position).getProfileID() != mCurrentProfileResModel.getID();
@@ -563,20 +564,19 @@ public class ClubPostsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
                             String[] mVideosList = ((BaseActivity) mContext).getImgVideoList(mPostsList.get(position).getPostVideoURL());
                             if (mVideosList != null && mVideosList.length > 0) {
-
-                                ((BaseActivity) mContext).showFBShareDialog(AppDialogFragment.BOTTOM_SHARE_DIALOG, content, null, mVideosList, position, mIsOtherMotoProfile);
+                                ((BaseActivity) mContext).showFBShareDialog(AppDialogFragment.BOTTOM_SHARE_DIALOG, postID, content, null, mVideosList, position, mIsOtherMotoProfile);
 
                             } else if (mImgList != null) {
 
                                 ArrayList<Bitmap> mBitmapList = ((BaseActivity) mContext).getBitmapImageGlide(mImgList);
 
                                 if (mBitmapList != null) {
-                                    ((BaseActivity) mContext).showFBShareDialog(AppDialogFragment.BOTTOM_SHARE_DIALOG, content, mBitmapList, null, position, mIsOtherMotoProfile);
+                                    ((BaseActivity) mContext).showFBShareDialog(AppDialogFragment.BOTTOM_SHARE_DIALOG, postID, content, mBitmapList, null, position, mIsOtherMotoProfile);
                                 }
 
                             } else {
 
-                                ((BaseActivity) mContext).showFBShareDialog(AppDialogFragment.BOTTOM_SHARE_DIALOG, content, null, null, position, mIsOtherMotoProfile);
+                                ((BaseActivity) mContext).showFBShareDialog(AppDialogFragment.BOTTOM_SHARE_DIALOG, postID, content, null, null, position, mIsOtherMotoProfile);
                             }
 
                         }

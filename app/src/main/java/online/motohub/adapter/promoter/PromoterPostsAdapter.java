@@ -537,6 +537,7 @@ public class PromoterPostsAdapter extends RecyclerView.Adapter<RecyclerView.View
                 mViewHolderPost.mShareBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+                        final String postID = String.valueOf(mPostsList.get(position).getID());
                         final String content = mPostsList.get(position).getPostText();
 
                         String[] mImgList = ((BaseActivity) mContext).getImgVideoList(mPostsList.get(position).getPostPicture());
@@ -547,19 +548,19 @@ public class PromoterPostsAdapter extends RecyclerView.Adapter<RecyclerView.View
                         String[] mVideosList = ((BaseActivity) mContext).getImgVideoList(mPostsList.get(position).getPostVideoURL());
                         if (mVideosList != null && mVideosList.length > 0) {
 
-                            ((BaseActivity) mContext).showFBShareDialog(AppDialogFragment.BOTTOM_SHARE_DIALOG, content, null, mVideosList, position, mIsOtherMotoProfile);
+                            ((BaseActivity) mContext).showFBShareDialog(AppDialogFragment.BOTTOM_SHARE_DIALOG,postID, content, null, mVideosList, position, mIsOtherMotoProfile);
 
                         } else if (mImgList != null) {
 
                             ArrayList<Bitmap> mBitmapList = ((BaseActivity) mContext).getBitmapImageGlide(mImgList);
 
                             if (mBitmapList != null) {
-                                ((BaseActivity) mContext).showFBShareDialog(AppDialogFragment.BOTTOM_SHARE_DIALOG, content, mBitmapList, null, position, mIsOtherMotoProfile);
+                                ((BaseActivity) mContext).showFBShareDialog(AppDialogFragment.BOTTOM_SHARE_DIALOG,postID, content, mBitmapList, null, position, mIsOtherMotoProfile);
                             }
 
                         } else {
 
-                            ((BaseActivity) mContext).showFBShareDialog(AppDialogFragment.BOTTOM_SHARE_DIALOG, content, null, null, position, mIsOtherMotoProfile);
+                            ((BaseActivity) mContext).showFBShareDialog(AppDialogFragment.BOTTOM_SHARE_DIALOG, postID,content, null, null, position, mIsOtherMotoProfile);
                         }
                     }
                 });

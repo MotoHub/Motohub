@@ -292,7 +292,7 @@ public class BaseFragment extends Fragment {
         }
     }
 
-    public void showFBShareDialog(final String dialogType, final String shareContent, final ArrayList<Bitmap> shareImg, final String[] videoUrl, final int mPos, final boolean mIsFromOtherMotoProfile) {
+    public void showFBShareDialog(final String dialogType, final String postID, final String shareContent, final ArrayList<Bitmap> shareImg, final String[] videoUrl, final int mPos, final boolean mIsFromOtherMotoProfile) {
 
         new Handler().post(new Runnable() {
             @Override
@@ -301,7 +301,7 @@ public class BaseFragment extends Fragment {
                 if (mDialogFragment != null && mDialogFragment.isAdded()) {
                     getActivity().getSupportFragmentManager().beginTransaction().remove(mDialogFragment).commit();
                 }
-                AppDialogFragment.newInstance(dialogType, shareContent, shareImg, videoUrl, mPos, mIsFromOtherMotoProfile).show(getActivity().getSupportFragmentManager(), AppDialogFragment.TAG);
+                AppDialogFragment.newInstance(dialogType, postID, shareContent, shareImg, videoUrl, mPos, mIsFromOtherMotoProfile).show(getActivity().getSupportFragmentManager(), AppDialogFragment.TAG);
             }
         });
     }

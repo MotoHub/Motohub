@@ -68,8 +68,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintLeft_toRightOf="@+id/space"
-            app:layout_constraintRight_toRightOf="parent">
+            app:layout_constraintLeft_toRightOf="@+id/space">
 
             <ImageView
                 android:id="@+id/imgvwFacebook"
@@ -92,7 +91,42 @@
                 android:textSize="@dimen/text14" />
 
         </LinearLayout>
+        <Space
+            android:id="@+id/space1"
+            android:layout_width="30dp"
+            android:layout_height="31dp"
+            android:layout_weight="0.3"
+            app:layout_constraintLeft_toRightOf="@+id/facebook_lay" />
+        <LinearLayout
+            android:id="@+id/copyLinkLay"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintLeft_toRightOf="@+id/space1"
+            app:layout_constraintRight_toRightOf="parent">
 
+            <ImageView
+                android:id="@+id/copyLinkIcon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:contentDescription="@string/app_name"
+                android:scaleType="center"
+                android:src="@drawable/ic_content_copy_black" />
+
+            <TextView
+                android:id="@+id/copyLinkTxt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="5dp"
+                android:gravity="center"
+                android:text="@string/copy_link"
+                android:textColor="@color/colorBlack"
+                android:textSize="@dimen/text14" />
+
+
+        </LinearLayout>
     </android.support.constraint.ConstraintLayout>
 
     <TextView

@@ -345,6 +345,7 @@
     <string name="share_post">Share This Post</string>
     <string name="friends">Friends</string>
     <string name="facebook">Facebook</string>
+    <string name="copy_link">Copy Link</string>
     <string name="facebook_login">Facebook Login</string>
     <!-- NewsAndMedia/Clubs/Promoters -->
     <string name="home">Home</string>
@@ -413,7 +414,7 @@
     <string name="wz_video_enabled_default_value">true</string>
 
     <string name="wz_video_preset_title">Commonly used presets</string>
-    <string name="wz_video_preset_summary">Select from a list of optimized frame size / bitrate combinations</string>
+    <string name="wz_video_preset_summary">Select from a postList of optimized frame size / bitrate combinations</string>
 
     <string name="wz_video_frame_size_title">Video frame size (px)</string>
     <string name="wz_video_frame_size_summary">The video frame size</string>

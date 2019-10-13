@@ -180,7 +180,25 @@
             android:configChanges="orientation"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"
-            android:windowSoftInputMode="stateHidden|adjustPan" />
+            android:windowSoftInputMode="stateHidden|adjustPan"/>
+        <activity
+            android:name=".activity.PostLinkViewActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"
+            android:windowSoftInputMode="stateHidden|adjustPan">
+
+            <intent-filter android:label="@string/app_name">
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="sharedpost"
+                    android:scheme="online.motohub.sharedpost" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".activity.MyMotoFileActivity"
             android:configChanges="orientation"

@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Objects;
 
 import online.motohub.R;
 import online.motohub.activity.ViewProfileActivity;
@@ -101,7 +102,7 @@ public class NotificationUtils1 {
         //If needed generate random number for notificationID
         NotificationManager mNotificationManager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
         try {
-            if(mNotificationManager!=null) {
+            if (mNotificationManager != null) {
                 if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
                     mNotificationManager.createNotificationChannel(getNotificationChannel(model));
                 }
@@ -136,7 +137,7 @@ public class NotificationUtils1 {
                 .setWhen(System.currentTimeMillis())
                 .setColor(ContextCompat.getColor(mContext, R.color.colorOrange));
         if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.O) {
-            if (allow_sound_status) {
+            if (allow_sound_status && getNotificationSound(model) != null) {
                 mNotificationBuilder.setSound(getNotificationSound(model));
             }
             if (allow_sound_vib) {
@@ -170,11 +171,12 @@ public class NotificationUtils1 {
             mNotificationChannel.enableLights(true);
             // Sets whether notification posted to this channel should vibrate.
 
-            if (allow_sound_status) {
+            if (allow_sound_status && getNotificationSound(model) != null) {
                 AudioAttributes att = new AudioAttributes.Builder()
                         .setUsage(AudioAttributes.USAGE_NOTIFICATION)
                         .setContentType(AudioAttributes.CONTENT_TYPE_SPEECH)
                         .build();
+
                 mNotificationChannel.setSound(getNotificationSound(model), att);
             }
             if (allow_sound_vib) {
@@ -371,10 +373,9 @@ public class NotificationUtils1 {
     }
 
     private Uri getNotificationSound(NotificationModel1 model) {
-        switch (model.getType()) {
+        switch (Objects.requireNonNull(model.getType())) {
             case "POST":
             case "FOLLOWER_POST":
-                return Uri.parse("android.resource://" + mContext.getPackageName() + "/raw/notification_sound");
             case "POST_SHARE":
             case "LIVE_STREAM":
             case "LIVE_REQUEST":
@@ -390,7 +391,6 @@ public class NotificationUtils1 {
             case "POST_LIKES":
             case "VIDEO_SHARE":
             case "VEHICLE_LIKE":
-            case "EVENT_CREATION":
             case "VIDEO_COMMENT_LIKE":
             case "TAGGED_VIDEO_COMMENT_REPLY":
             case "VIDEO_COMMENT_REPLY":
@@ -398,14 +398,16 @@ public class NotificationUtils1 {
             case "TAGGED_POST_VIDEO_COMMENTS":
             case "VIDEO_COMMENTS":
             case "VIDEO_LIKES":
+                return Uri.parse("android.resource://" + mContext.getPackageName() + "/raw/notification_sound");
             case "EVENT_CHAT":
             case "EVENT_LIVE_CHAT":
             case "GROUP_CHAT_MSG":
             case "SINGLE_CHAT":
-            default:
-                return Uri.parse("android.resource://" + mContext.getPackageName() + "/raw/notification_sound");
-//                return RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+            case "EVENT_CREATION":
+                return null;
         }
+        return null;
+
     }
 
 }

@@ -469,6 +469,7 @@ public class PostsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                         public void onClick(View view) {
                             String content = null;
                             mAdapterPosition = position;
+                            final String postID = String.valueOf(mPostsList.get(position).getID());
                             try {
                                 /*if (mPostsList.get(position).getPostText().contains(" "))
                                     content = mPostsList.get(position).getPostText();
@@ -496,14 +497,14 @@ public class PostsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                             if (isImgFile) {
                                 ArrayList<Bitmap> mBitmapList = ((BaseActivity) mContext).getBitmapImageGlide(mImgList);
                                 if (mBitmapList != null) {
-                                    ((BaseActivity) mContext).showFBShareDialog(AppDialogFragment.BOTTOM_SHARE_DIALOG, content, mBitmapList, null, position, mIsOtherMotoProfile);
+                                    ((BaseActivity) mContext).showFBShareDialog(AppDialogFragment.BOTTOM_SHARE_DIALOG,postID, content, mBitmapList, null, position, mIsOtherMotoProfile);
                                 }
                             } else if (isVideoFile) {
                                 String[] mVideosList = ((BaseActivity) mContext).getImgVideoList(mPostsList.get(position).getPostVideoURL());
-                                ((BaseActivity) mContext).showFBShareDialog(AppDialogFragment.BOTTOM_SHARE_DIALOG, content, null, mVideosList, position, mIsOtherMotoProfile);
+                                ((BaseActivity) mContext).showFBShareDialog(AppDialogFragment.BOTTOM_SHARE_DIALOG, postID,content, null, mVideosList, position, mIsOtherMotoProfile);
 
                             } else {
-                                ((BaseActivity) mContext).showFBShareDialog(AppDialogFragment.BOTTOM_SHARE_DIALOG, content, null, null, position, mIsOtherMotoProfile);
+                                ((BaseActivity) mContext).showFBShareDialog(AppDialogFragment.BOTTOM_SHARE_DIALOG, postID,content, null, null, position, mIsOtherMotoProfile);
                             }
                             /*} else {
                                 Toast.makeText(mContext, mContext.getResources().getString(R.string.alert_share), Toast.LENGTH_SHORT).show();

@@ -89,6 +89,8 @@ import butterknife.BindString;
 import butterknife.ButterKnife;
 import online.motohub.R;
 import online.motohub.adapter.EventsFindAdapter;
+import online.motohub.constants.AppConstants;
+import online.motohub.dialog.DialogManager;
 import online.motohub.fragment.dialog.AppDialogFragment;
 import online.motohub.interfaces.CommonInterface;
 import online.motohub.interfaces.PermissionCallback;
@@ -101,8 +103,6 @@ import online.motohub.model.PostsModel;
 import online.motohub.model.ProfileResModel;
 import online.motohub.model.SingleChatRoomResModel;
 import online.motohub.retrofit.RetrofitClient;
-import online.motohub.constants.AppConstants;
-import online.motohub.dialog.DialogManager;
 import online.motohub.util.PreferenceUtils;
 import online.motohub.util.UrlUtils;
 import online.motohub.util.ZoomImageView;
@@ -1675,7 +1675,7 @@ public class BaseActivity extends AppCompatActivity {
         return String.valueOf(PreferenceUtils.getInstance(BaseActivity.this).getIntData(PreferenceUtils.USER_ID));
     }
 
-    public void showFBShareDialog(final String dialogType, final String shareContent, final ArrayList<Bitmap> shareImg, final String[] videoUrl, final int mPos, final boolean mIsFromOtherMotoProfile) {
+    public void showFBShareDialog(final String dialogType, final String postID, final String shareContent, final ArrayList<Bitmap> shareImg, final String[] videoUrl, final int mPos, final boolean mIsFromOtherMotoProfile) {
 
         new Handler().post(new Runnable() {
             @Override
@@ -1684,7 +1684,7 @@ public class BaseActivity extends AppCompatActivity {
                 if (mDialogFragment != null && mDialogFragment.isAdded()) {
                     getSupportFragmentManager().beginTransaction().remove(mDialogFragment).commit();
                 }
-                AppDialogFragment.newInstance(dialogType, shareContent, shareImg, videoUrl, mPos, mIsFromOtherMotoProfile).show(getSupportFragmentManager(), AppDialogFragment.TAG);
+                AppDialogFragment.newInstance(dialogType, postID, shareContent, shareImg, videoUrl, mPos, mIsFromOtherMotoProfile).show(getSupportFragmentManager(), AppDialogFragment.TAG);
             }
         });
     }

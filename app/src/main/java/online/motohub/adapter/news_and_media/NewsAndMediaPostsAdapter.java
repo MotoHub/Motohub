@@ -551,6 +551,8 @@ public class NewsAndMediaPostsAdapter extends RecyclerView.Adapter<RecyclerView.
                     public void onClick(View view) {
 
                         mTempPosition = position;
+                        final String postID = String.valueOf(mPostsList.get(position).getID());
+
                         final String content = mPostsList.get(position).getPostText();
 
                         boolean mIsOtherMotoProfile;
@@ -563,19 +565,19 @@ public class NewsAndMediaPostsAdapter extends RecyclerView.Adapter<RecyclerView.
                                 .getLayoutPosition()).getPostVideoURL());
 
                         if (mVideosList != null && mVideosList.length > 0) {
-                            ((BaseActivity) mContext).showFBShareDialog(AppDialogFragment.BOTTOM_SHARE_DIALOG, content, null, mVideosList, position, mIsOtherMotoProfile);
+                            ((BaseActivity) mContext).showFBShareDialog(AppDialogFragment.BOTTOM_SHARE_DIALOG,postID, content, null, mVideosList, position, mIsOtherMotoProfile);
 
                         } else if (mImgList != null) {
 
                             ArrayList<Bitmap> mBitmapList = ((BaseActivity) mContext).getBitmapImageGlide(mImgList);
 
                             if (mBitmapList != null) {
-                                ((BaseActivity) mContext).showFBShareDialog(AppDialogFragment.BOTTOM_SHARE_DIALOG, content, mBitmapList, null, position, mIsOtherMotoProfile);
+                                ((BaseActivity) mContext).showFBShareDialog(AppDialogFragment.BOTTOM_SHARE_DIALOG, postID,content, mBitmapList, null, position, mIsOtherMotoProfile);
                             }
 
                         } else {
 
-                            ((BaseActivity) mContext).showFBShareDialog(AppDialogFragment.BOTTOM_SHARE_DIALOG, content, null, null, position, mIsOtherMotoProfile);
+                            ((BaseActivity) mContext).showFBShareDialog(AppDialogFragment.BOTTOM_SHARE_DIALOG, postID,content, null, null, position, mIsOtherMotoProfile);
                         }
 
                     }

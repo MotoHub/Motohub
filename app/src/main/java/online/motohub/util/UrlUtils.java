@@ -13,6 +13,8 @@ public class UrlUtils {
 
     public static final String FACEBOOK_LOGIN = "user/session?service=facebook";
 
+    public static final String SHARE_LINK = "https://df.motohub.online/MotohubSharedPost.php?PostID=";
+
     //public static final String FACEBOOK_CALLBACK = "user/session?oauth_callback=true";
     public static final String FACEBOOK_CALLBACK = "user/session?oauth_callback=true&remember_me=true";
 

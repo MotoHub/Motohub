@@ -58,6 +58,8 @@ import online.motohub.activity.track.TrackProfileActivity;
 import online.motohub.adapter.VideoLikesAdapter;
 import online.motohub.adapter.VideoSharesAdapter;
 import online.motohub.application.MotoHub;
+import online.motohub.constants.AppConstants;
+import online.motohub.dialog.DialogManager;
 import online.motohub.fragment.dialog.AppDialogFragment;
 import online.motohub.interfaces.CommonReturnInterface;
 import online.motohub.interfaces.RetrofitResInterface;
@@ -71,8 +73,6 @@ import online.motohub.model.VideoLikesModel;
 import online.motohub.model.VideoShareModel;
 import online.motohub.model.promoter_club_news_media.PromotersModel;
 import online.motohub.retrofit.RetrofitClient;
-import online.motohub.constants.AppConstants;
-import online.motohub.dialog.DialogManager;
 import online.motohub.util.UrlUtils;
 import online.motohub.util.Utility;
 
@@ -413,6 +413,7 @@ public class PromoterVideoPostAdapter extends RecyclerView.Adapter<RecyclerView.
                         public void onClick(View view) {
                             String content = null;
                             mAdapterPosition = position;
+                            final String postID = String.valueOf(mPostsList.get(position).getID());
                             String mMyFollowingsID = Utility.getInstance().getMyFollowersFollowingsID(mCurrentProfileResModel.getFollowprofile_by_ProfileID(), false);
                             if (mMyFollowingsID != null) {
                                 try {
@@ -432,9 +433,9 @@ public class PromoterVideoPostAdapter extends RecyclerView.Adapter<RecyclerView.
                                 }
                                 if (isVideoFile) {
                                     String[] mVideosList = getImgVideoList(mPostsList.get(position).getVideoUrl());
-                                    ((BaseActivity) mContext).showFBShareDialog(AppDialogFragment.BOTTOM_SHARE_DIALOG, content, null, mVideosList, position, true);
+                                    ((BaseActivity) mContext).showFBShareDialog(AppDialogFragment.BOTTOM_SHARE_DIALOG, postID, content, null, mVideosList, position, true);
                                 } else {
-                                    ((BaseActivity) mContext).showFBShareDialog(AppDialogFragment.BOTTOM_SHARE_DIALOG, content, null, null, position, true);
+                                    ((BaseActivity) mContext).showFBShareDialog(AppDialogFragment.BOTTOM_SHARE_DIALOG, postID, content, null, null, position, true);
                                 }
                             } else {
                                 Toast.makeText(mContext, mContext.getResources().getString(R.string.check_follower), Toast.LENGTH_SHORT).show();

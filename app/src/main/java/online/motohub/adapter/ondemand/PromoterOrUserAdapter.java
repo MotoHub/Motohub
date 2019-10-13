@@ -62,6 +62,7 @@ import online.motohub.fragment.ondemand.PromoterOrUserFragment;
 import online.motohub.interfaces.CommonReturnInterface;
 import online.motohub.interfaces.RetrofitResInterface;
 import online.motohub.model.GalleryImgModel;
+import online.motohub.model.ListModel;
 import online.motohub.model.PostsModel;
 import online.motohub.model.ProfileModel;
 import online.motohub.model.ProfileResModel;
@@ -313,11 +314,16 @@ public class PromoterOrUserAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                     public void onClick(View v) {
                         if (mPostsList != null && isNetwork() && mCurrentProfileResModel != null) {
                             Intent intent = new Intent(mContext, PromotorOrUserVideoPlaying.class);
-                            intent.putExtra(AppConstants.ONDEMAND_DATA, mPostsList);
+//                            intent.putExtra(AppConstants.ONDEMAND_DATA, mPostsList);
                             intent.putExtra("Filter", "(UserType != usereventvideos) AND (ReportStatus == 0)");
                             intent.putExtra(AppConstants.POSITION, position);
                             //intent.putExtra(AppConstants.MY_PROFILE_OBJ, mCurrentProfileResModel);
                             //MotoHub.getApplicationInstance().setmProfileResModel(mCurrentProfileResModel);
+
+                            ListModel listModel=new ListModel();
+                            listModel.setPostList(mPostsList);
+                            EventBus.getDefault().postSticky(listModel);
+
                             EventBus.getDefault().postSticky(mCurrentProfileResModel);
                             //EventBus.getDefault().postSticky(mCurrentProfileResModel);
                             /*mContext.startActivity(intent);*/
@@ -419,6 +425,7 @@ public class PromoterOrUserAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                         }
                         String content = null;
                         mAdapterPosition = position;
+                        final String postID = String.valueOf(mPostsList.get(position).getID());
                         String mMyFollowingsID = Utility.getInstance().getMyFollowersFollowingsID(mCurrentProfileResModel.getFollowprofile_by_ProfileID(), false);
                         if (mMyFollowingsID != null) {
                             try {
@@ -441,9 +448,9 @@ public class PromoterOrUserAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                             }
                             if (isVideoFile) {
                                 String[] mVideosList = getImgVideoList(mPostsList.get(position).getVideoUrl());
-                                ((BaseActivity) mContext).showFBShareDialog(AppDialogFragment.BOTTOM_SHARE_DIALOG, content, null, mVideosList, position, true);
+                                ((BaseActivity) mContext).showFBShareDialog(AppDialogFragment.BOTTOM_SHARE_DIALOG, postID,content, null, mVideosList, position, true);
                             } else {
-                                ((BaseActivity) mContext).showFBShareDialog(AppDialogFragment.BOTTOM_SHARE_DIALOG, content, null, null, position, true);
+                                ((BaseActivity) mContext).showFBShareDialog(AppDialogFragment.BOTTOM_SHARE_DIALOG, postID,content, null, null, position, true);
                             }
                         } else {
                             Toast.makeText(mContext, mContext.getResources().getString(R.string.check_follower), Toast.LENGTH_SHORT).show();

@@ -51,7 +51,8 @@ class NotificationModel1 {
             } catch (e: JSONException) {
                 e.printStackTrace()
             }
-
+            if (Type == null)
+                Type = ""
             return Type
         }
 
