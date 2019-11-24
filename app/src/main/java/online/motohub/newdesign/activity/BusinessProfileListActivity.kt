@@ -13,13 +13,13 @@ import kotlinx.android.synthetic.main.activity_business_profile_list.*
 import kotlinx.android.synthetic.main.common_header.*
 import online.motohub.R
 import online.motohub.activity.BaseActivity
-import online.motohub.newdesign.adapter.BusinessProfileListAdapter
-import online.motohub.newdesign.constants.BundleConstants
 import online.motohub.interfaces.AdapterClickCallBack
 import online.motohub.model.promoter_club_news_media.PromotersResModel
-import online.motohub.tags.AdapterTag
+import online.motohub.newdesign.adapter.BusinessProfileListAdapter
+import online.motohub.newdesign.constants.BundleConstants
 import online.motohub.newdesign.viewmodel.BaseViewModelFactory
 import online.motohub.newdesign.viewmodel.BusinessProfileListViewModel
+import online.motohub.tags.AdapterTag
 import java.util.*
 
 class BusinessProfileListActivity : BaseActivity(), View.OnClickListener, AdapterClickCallBack {

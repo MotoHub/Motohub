@@ -19,11 +19,11 @@ import butterknife.OnClick;
 import butterknife.OnItemSelected;
 import online.motohub.R;
 import online.motohub.adapter.EventsResultAdapter;
+import online.motohub.dialog.DialogManager;
 import online.motohub.model.EventsModel;
 import online.motohub.model.EventsResModel;
 import online.motohub.model.SessionModel;
 import online.motohub.retrofit.RetrofitClient;
-import online.motohub.dialog.DialogManager;
 import online.motohub.util.PreferenceUtils;
 
 import static butterknife.OnItemSelected.Callback.NOTHING_SELECTED;

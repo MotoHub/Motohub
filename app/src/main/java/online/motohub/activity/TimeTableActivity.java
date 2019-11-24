@@ -21,6 +21,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import online.motohub.R;
 import online.motohub.adapter.TimeTableAdapter;
+import online.motohub.dialog.DialogManager;
 import online.motohub.fragment.dialog.AppDialogFragment;
 import online.motohub.model.EventCategoryModel;
 import online.motohub.model.EventsModel;
@@ -29,7 +30,6 @@ import online.motohub.model.SessionModel;
 import online.motohub.retrofit.RetrofitClient;
 import online.motohub.util.DateComparator;
 import online.motohub.util.DateUtil;
-import online.motohub.dialog.DialogManager;
 import online.motohub.util.PreferenceUtils;
 
 public class TimeTableActivity extends BaseActivity {

@@ -36,11 +36,11 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import online.motohub.R;
+import online.motohub.dialog.DialogManager;
 import online.motohub.interfaces.PermissionCallback;
 import online.motohub.model.EventsModel;
 import online.motohub.model.EventsResModel;
 import online.motohub.util.CustomWatermarkFilter;
-import online.motohub.dialog.DialogManager;
 import online.motohub.util.story.ControlView;
 
 public class CameraStoryActivity extends BaseActivity implements View.OnClickListener {

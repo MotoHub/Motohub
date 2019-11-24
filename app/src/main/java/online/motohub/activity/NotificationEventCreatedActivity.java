@@ -24,6 +24,7 @@ import butterknife.OnClick;
 import online.motohub.R;
 import online.motohub.adapter.EventsFindAdapter;
 import online.motohub.application.MotoHub;
+import online.motohub.dialog.DialogManager;
 import online.motohub.fcm.MyFireBaseMessagingService;
 import online.motohub.fragment.dialog.AppDialogFragment;
 import online.motohub.interfaces.EventsInterface;
@@ -38,9 +39,8 @@ import online.motohub.model.ProfileResModel;
 import online.motohub.model.PurchasedAddOnModel;
 import online.motohub.model.RacingModel;
 import online.motohub.model.SessionModel;
-import online.motohub.retrofit.RetrofitClient;
 import online.motohub.newdesign.constants.AppConstants;
-import online.motohub.dialog.DialogManager;
+import online.motohub.retrofit.RetrofitClient;
 import online.motohub.util.PreferenceUtils;
 
 

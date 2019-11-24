@@ -29,11 +29,11 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import online.motohub.R;
+import online.motohub.dialog.DialogManager;
 import online.motohub.model.EventsResModel;
 import online.motohub.model.ProfileResModel;
-import online.motohub.retrofit.RetrofitClient;
 import online.motohub.newdesign.constants.AppConstants;
-import online.motohub.dialog.DialogManager;
+import online.motohub.retrofit.RetrofitClient;
 import online.motohub.services.ProfileUploadService;
 
 public class VideoPreviewOnDemandActivity extends BaseActivity implements MediaPlayer.OnPreparedListener, MediaPlayer.OnCompletionListener {

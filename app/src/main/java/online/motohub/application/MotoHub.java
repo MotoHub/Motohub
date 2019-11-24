@@ -19,11 +19,11 @@ import java.util.ArrayList;
 
 import io.fabric.sdk.android.Fabric;
 import online.motohub.R;
-import online.motohub.newdesign.bl.MotoHubApp;
 import online.motohub.model.EventAddOnModel;
 import online.motohub.model.EventCategoryModel;
 import online.motohub.model.ProfileResModel;
 import online.motohub.model.PromoterVideoModel;
+import online.motohub.newdesign.bl.MotoHubApp;
 import online.motohub.util.CommonAPI;
 import online.motohub.util.ConnectivityChangeReceiver;
 import online.motohub.util.DateUtil;

@@ -39,8 +39,8 @@ import online.motohub.model.RacingModel;
 import online.motohub.model.SessionModel;
 import online.motohub.model.TrackResModel;
 import online.motohub.model.promoter_club_news_media.PromotersResModel;
-import online.motohub.retrofit.RetrofitClient;
 import online.motohub.newdesign.constants.AppConstants;
+import online.motohub.retrofit.RetrofitClient;
 import online.motohub.util.PreferenceUtils;
 
 import static android.app.Activity.RESULT_OK;

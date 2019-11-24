@@ -15,13 +15,13 @@ import com.jakewharton.rxbinding.widget.RxTextView
 import kotlinx.android.synthetic.main.fragment_on_demand.*
 import online.motohub.R
 import online.motohub.fragment.BaseFragment
-import online.motohub.newdesign.adapter.OnDemandVideoAdapter
 import online.motohub.interfaces.AdapterClickCallBack
 import online.motohub.interfaces.OnLoadMoreListener
 import online.motohub.model.PromoterVideoModel
-import online.motohub.tags.AdapterTag
+import online.motohub.newdesign.adapter.OnDemandVideoAdapter
 import online.motohub.newdesign.viewmodel.BaseViewModelFactory
 import online.motohub.newdesign.viewmodel.OnDemandVideosViewModel
+import online.motohub.tags.AdapterTag
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
 import java.io.UnsupportedEncodingException

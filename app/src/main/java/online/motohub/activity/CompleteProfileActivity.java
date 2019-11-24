@@ -32,6 +32,7 @@ import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import online.motohub.R;
+import online.motohub.dialog.DialogManager;
 import online.motohub.fragment.dialog.AppDialogFragment;
 import online.motohub.model.ImageModel;
 import online.motohub.model.ProfileModel;
@@ -42,9 +43,8 @@ import online.motohub.model.promoter_club_news_media.PromoterFollowerResModel;
 import online.motohub.model.promoter_club_news_media.PromotersModel;
 import online.motohub.model.promoter_club_news_media.PromotersResModel;
 import online.motohub.newdesign.activity.LoginActivity;
-import online.motohub.retrofit.RetrofitClient;
 import online.motohub.newdesign.constants.AppConstants;
-import online.motohub.dialog.DialogManager;
+import online.motohub.retrofit.RetrofitClient;
 import online.motohub.util.PreferenceUtils;
 
 public class CompleteProfileActivity extends BaseActivity {

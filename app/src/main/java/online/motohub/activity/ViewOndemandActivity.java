@@ -18,14 +18,14 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import online.motohub.R;
-import online.motohub.newdesign.adapter.OnDemandEventsAdapter;
+import online.motohub.dialog.DialogManager;
 import online.motohub.fragment.dialog.AppDialogFragment;
 import online.motohub.model.OndemandNewResponse;
 import online.motohub.model.ProfileModel;
 import online.motohub.model.ProfileResModel;
-import online.motohub.retrofit.RetrofitClient;
+import online.motohub.newdesign.adapter.OnDemandEventsAdapter;
 import online.motohub.newdesign.constants.AppConstants;
-import online.motohub.dialog.DialogManager;
+import online.motohub.retrofit.RetrofitClient;
 
 /**
  * Created by Prithiv on 5/14/2018.

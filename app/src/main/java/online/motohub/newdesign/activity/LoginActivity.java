@@ -1,8 +1,6 @@
 package online.motohub.newdesign.activity;
 
-import android.Manifest;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
@@ -26,7 +24,6 @@ import com.google.gson.JsonObject;
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.BindString;
 import butterknife.BindView;
@@ -38,7 +35,6 @@ import online.motohub.activity.CreateProfileActivity;
 import online.motohub.activity.ForgotPasswordScreen;
 import online.motohub.activity.TermsAndConActivity;
 import online.motohub.adapter.RecentUsersAdapter;
-import online.motohub.newdesign.constants.AppConstants;
 import online.motohub.database.DatabaseHandler;
 import online.motohub.dialog.DialogManager;
 import online.motohub.fcm.MyFireBaseMessagingService;
@@ -47,6 +43,7 @@ import online.motohub.model.LoginModel;
 import online.motohub.model.ProfileModel;
 import online.motohub.model.ProfileResModel;
 import online.motohub.model.promoter_club_news_media.PromotersModel;
+import online.motohub.newdesign.constants.AppConstants;
 import online.motohub.retrofit.RetrofitClient;
 import online.motohub.util.PreferenceUtils;
 import online.motohub.util.UrlUtils;

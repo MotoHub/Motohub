@@ -28,10 +28,10 @@ import butterknife.OnClick;
 import online.motohub.R;
 import online.motohub.adapter.VehicleInfoLikeAdapter;
 import online.motohub.application.MotoHub;
+import online.motohub.dialog.DialogManager;
 import online.motohub.model.ProfileResModel;
 import online.motohub.model.VehicleInfoLikeModel;
 import online.motohub.retrofit.RetrofitClient;
-import online.motohub.dialog.DialogManager;
 
 public class VehicleInfoOtherProfiles extends BaseActivity {
 

@@ -26,7 +26,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import online.motohub.R;
-import online.motohub.newdesign.adapter.OnDemandEventsAdapter;
 import online.motohub.application.MotoHub;
 import online.motohub.fragment.BaseFragment;
 import online.motohub.interfaces.OnLoadMoreListener;
@@ -34,8 +33,9 @@ import online.motohub.model.OndemandNewResponse;
 import online.motohub.model.ProfileModel;
 import online.motohub.model.ProfileResModel;
 import online.motohub.model.PromoterVideoModel;
-import online.motohub.retrofit.RetrofitClient;
+import online.motohub.newdesign.adapter.OnDemandEventsAdapter;
 import online.motohub.newdesign.constants.AppConstants;
+import online.motohub.retrofit.RetrofitClient;
 
 import static android.app.Activity.RESULT_OK;
 

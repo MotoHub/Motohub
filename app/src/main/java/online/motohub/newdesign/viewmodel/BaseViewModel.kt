@@ -4,9 +4,9 @@ import android.app.Application
 import android.arch.lifecycle.AndroidViewModel
 import android.arch.lifecycle.Observer
 import android.content.Context
-import online.motohub.newdesign.bl.MotoHubApp
 import online.motohub.interfaces.PermissionViewModelCallback
 import online.motohub.interfaces.ViewModelCallback
+import online.motohub.newdesign.bl.MotoHubApp
 import java.lang.ref.WeakReference
 
 open class BaseViewModel(application: Application) : AndroidViewModel(application) {

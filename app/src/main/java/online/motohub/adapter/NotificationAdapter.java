@@ -44,8 +44,8 @@ import online.motohub.fcm.MyFireBaseMessagingService;
 import online.motohub.model.NotificationResModel;
 import online.motohub.model.PostsModel;
 import online.motohub.model.ProfileResModel;
-import online.motohub.retrofit.APIConstants;
 import online.motohub.newdesign.constants.AppConstants;
+import online.motohub.retrofit.APIConstants;
 import online.motohub.util.Utility;
 
 public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements View.OnClickListener {

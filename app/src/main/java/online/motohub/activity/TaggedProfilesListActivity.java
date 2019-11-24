@@ -18,12 +18,12 @@ import butterknife.OnClick;
 import butterknife.OnItemClick;
 import online.motohub.R;
 import online.motohub.adapter.TaggedProfilesListAdapter;
+import online.motohub.dialog.DialogManager;
 import online.motohub.model.ProfileModel;
 import online.motohub.model.ProfileResModel;
 import online.motohub.model.SessionModel;
-import online.motohub.retrofit.RetrofitClient;
 import online.motohub.newdesign.constants.AppConstants;
-import online.motohub.dialog.DialogManager;
+import online.motohub.retrofit.RetrofitClient;
 import online.motohub.util.PreferenceUtils;
 
 public class TaggedProfilesListActivity extends BaseActivity {

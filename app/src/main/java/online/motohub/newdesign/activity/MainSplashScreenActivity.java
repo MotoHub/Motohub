@@ -9,8 +9,8 @@ import online.motohub.activity.BaseActivity;
 import online.motohub.activity.CreateProfileActivity;
 import online.motohub.activity.MotoVideoScreen;
 import online.motohub.activity.TutorialScreen;
-import online.motohub.newdesign.constants.AppConstants;
 import online.motohub.dialog.DialogManager;
+import online.motohub.newdesign.constants.AppConstants;
 import online.motohub.util.PreferenceUtils;
 
 import static online.motohub.application.MotoHub.setmIsFirstLaunch;

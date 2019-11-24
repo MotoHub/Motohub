@@ -25,8 +25,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import online.motohub.R;
-import online.motohub.model.TutorialEntity;
 import online.motohub.dialog.DialogManager;
+import online.motohub.model.TutorialEntity;
 import online.motohub.newdesign.activity.LoginActivity;
 import online.motohub.util.PreferenceUtils;
 

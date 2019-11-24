@@ -41,6 +41,7 @@ import online.motohub.R;
 import online.motohub.activity.BaseActivity;
 import online.motohub.activity.PickerImageActivity;
 import online.motohub.database.DatabaseHandler;
+import online.motohub.dialog.DialogManager;
 import online.motohub.fragment.dialog.AppDialogFragment;
 import online.motohub.model.GalleryImgModel;
 import online.motohub.model.ImageModel;
@@ -48,9 +49,8 @@ import online.motohub.model.ImageResModel;
 import online.motohub.model.PostsModel;
 import online.motohub.model.promoter_club_news_media.PromotersResModel;
 import online.motohub.retrofit.RetrofitClient;
-import online.motohub.dialog.DialogManager;
-import online.motohub.util.PreferenceUtils;
 import online.motohub.services.UploadFileService;
+import online.motohub.util.PreferenceUtils;
 
 public class BusinessWritePostActivity extends BaseActivity {
 

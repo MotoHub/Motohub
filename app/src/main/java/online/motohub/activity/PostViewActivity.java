@@ -24,6 +24,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import online.motohub.R;
 import online.motohub.adapter.PostViewAdapter;
+import online.motohub.dialog.DialogManager;
 import online.motohub.fcm.MyFireBaseMessagingService;
 import online.motohub.fragment.dialog.AppDialogFragment;
 import online.motohub.interfaces.SharePostInterface;
@@ -35,10 +36,9 @@ import online.motohub.model.PostsResModel;
 import online.motohub.model.ProfileModel;
 import online.motohub.model.ProfileResModel;
 import online.motohub.model.SessionModel;
-import online.motohub.retrofit.RetrofitClient;
 import online.motohub.newdesign.constants.AppConstants;
+import online.motohub.retrofit.RetrofitClient;
 import online.motohub.util.CommonAPI;
-import online.motohub.dialog.DialogManager;
 import online.motohub.util.PreferenceUtils;
 
 public class PostViewActivity extends BaseActivity implements PostViewAdapter.TotalRetrofitPostsResultCount {

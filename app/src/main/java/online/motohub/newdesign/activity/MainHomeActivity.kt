@@ -15,16 +15,16 @@ import kotlinx.android.synthetic.main.activity_main_home.*
 import kotlinx.android.synthetic.main.main_home_header.*
 import online.motohub.R
 import online.motohub.activity.*
+import online.motohub.fragment.dialog.AppDialogFragment
+import online.motohub.model.PushTokenModel
 import online.motohub.newdesign.bl.MotoHubApp
 import online.motohub.newdesign.constants.AppConstants
 import online.motohub.newdesign.constants.BundleConstants
-import online.motohub.fragment.dialog.AppDialogFragment
-import online.motohub.model.PushTokenModel
 import online.motohub.newdesign.fragment.*
-import online.motohub.retrofit.RetrofitClient
-import online.motohub.util.PreferenceUtils
 import online.motohub.newdesign.viewmodel.BaseViewModelFactory
 import online.motohub.newdesign.viewmodel.HomeViewModel
+import online.motohub.retrofit.RetrofitClient
+import online.motohub.util.PreferenceUtils
 import org.greenrobot.eventbus.EventBus
 import java.util.*
 

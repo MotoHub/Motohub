@@ -21,6 +21,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import online.motohub.R;
 import online.motohub.adapter.ChatTabPagerAdapter;
+import online.motohub.dialog.DialogManager;
 import online.motohub.fragment.BaseFragment;
 import online.motohub.model.GroupChatRoomModel;
 import online.motohub.model.GroupChatRoomResModel;
@@ -31,7 +32,6 @@ import online.motohub.model.SingleChatRoomModel;
 import online.motohub.model.SingleChatRoomResModel;
 import online.motohub.model.SingleChatUnreadMsgModel;
 import online.motohub.retrofit.RetrofitClient;
-import online.motohub.dialog.DialogManager;
 import online.motohub.util.PreferenceUtils;
 
 public class ChatHomeActivity extends BaseActivity implements TabLayout.OnTabSelectedListener {

@@ -14,12 +14,12 @@ import com.jakewharton.rxbinding.widget.RxTextView
 import kotlinx.android.synthetic.main.fragment_event_videos.*
 import online.motohub.R
 import online.motohub.fragment.BaseFragment
-import online.motohub.newdesign.adapter.OnDemandEventsAdapter
 import online.motohub.interfaces.AdapterClickCallBack
 import online.motohub.model.OndemandNewResponse
-import online.motohub.tags.AdapterTag
+import online.motohub.newdesign.adapter.OnDemandEventsAdapter
 import online.motohub.newdesign.viewmodel.BaseViewModelFactory
 import online.motohub.newdesign.viewmodel.OnDemandEventsViewModel
+import online.motohub.tags.AdapterTag
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
 import java.util.concurrent.TimeUnit

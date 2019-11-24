@@ -20,8 +20,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import online.motohub.R;
-import online.motohub.model.ImageModel;
 import online.motohub.dialog.DialogManager;
+import online.motohub.model.ImageModel;
 import online.motohub.util.UrlUtils;
 import uk.co.senab.photoview.PhotoViewAttacher;
 

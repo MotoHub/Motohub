@@ -19,14 +19,14 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import online.motohub.R;
+import online.motohub.dialog.DialogManager;
 import online.motohub.fragment.dialog.AppDialogFragment;
 import online.motohub.model.LiveStreamEntity;
 import online.motohub.model.LiveStreamResponse;
 import online.motohub.model.SessionModel;
+import online.motohub.newdesign.constants.AppConstants;
 import online.motohub.retrofit.APIConstants;
 import online.motohub.retrofit.RetrofitClient;
-import online.motohub.newdesign.constants.AppConstants;
-import online.motohub.dialog.DialogManager;
 import online.motohub.util.PreferenceUtils;
 
 

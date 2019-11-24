@@ -4,7 +4,6 @@ import android.app.Application
 import android.arch.lifecycle.MutableLiveData
 import android.os.Bundle
 import com.google.gson.Gson
-import online.motohub.R
 import online.motohub.interfaces.ResponseCallback
 import online.motohub.model.ApiInputModel
 import online.motohub.model.EventsResModel

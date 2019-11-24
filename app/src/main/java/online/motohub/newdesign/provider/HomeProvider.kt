@@ -1,13 +1,13 @@
 package online.motohub.newdesign.provider
 
-import online.motohub.newdesign.bl.DefaultResponse
 import online.motohub.interfaces.ResponseCallback
 import online.motohub.interfaces.ResponseSuccessCallback
 import online.motohub.model.ApiInputModel
 import online.motohub.model.ProfileModel
 import online.motohub.model.ProfileResModel
+import online.motohub.newdesign.bl.DefaultResponse
 import retrofit2.Call
-import java.util.ArrayList
+import java.util.*
 
 class HomeProvider : BaseProvider() {
 

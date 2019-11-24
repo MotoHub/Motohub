@@ -16,13 +16,13 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import online.motohub.R;
 import online.motohub.adapter.ReportAdapter;
+import online.motohub.dialog.DialogManager;
 import online.motohub.model.PostReportModel;
 import online.motohub.model.PostsModel;
 import online.motohub.model.ProfileModel;
-import online.motohub.retrofit.RetrofitClient;
 import online.motohub.newdesign.constants.AppConstants;
+import online.motohub.retrofit.RetrofitClient;
 import online.motohub.util.CommonAPI;
-import online.motohub.dialog.DialogManager;
 
 public class ReportActivity extends BaseActivity {
 

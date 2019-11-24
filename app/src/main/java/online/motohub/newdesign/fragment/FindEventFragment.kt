@@ -11,11 +11,11 @@ import android.view.View
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.fragment_find_event.*
 import online.motohub.R
-import online.motohub.newdesign.activity.ComingSoonActivity
 import online.motohub.activity.EventsFindActivity
 import online.motohub.fragment.BaseFragment
-import online.motohub.newdesign.adapter.FindEventsAdapter
 import online.motohub.model.EventsResModel
+import online.motohub.newdesign.activity.ComingSoonActivity
+import online.motohub.newdesign.adapter.FindEventsAdapter
 import online.motohub.newdesign.viewmodel.BaseViewModelFactory
 import online.motohub.newdesign.viewmodel.FindEventViewModel
 import java.util.*

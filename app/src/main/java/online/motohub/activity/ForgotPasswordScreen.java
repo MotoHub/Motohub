@@ -13,11 +13,11 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import online.motohub.R;
+import online.motohub.dialog.DialogManager;
 import online.motohub.model.CommonResponse;
 import online.motohub.model.ErrorMessage;
 import online.motohub.retrofit.APIConstants;
 import online.motohub.retrofit.RetrofitClient;
-import online.motohub.dialog.DialogManager;
 import online.motohub.util.Utility;
 
 

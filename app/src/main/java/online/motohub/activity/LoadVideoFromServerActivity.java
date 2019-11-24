@@ -42,8 +42,8 @@ import com.google.android.exoplayer2.upstream.cache.SimpleCache;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import online.motohub.R;
-import online.motohub.newdesign.constants.AppConstants;
 import online.motohub.dialog.DialogManager;
+import online.motohub.newdesign.constants.AppConstants;
 
 public class LoadVideoFromServerActivity extends BaseActivity {
 

@@ -19,13 +19,13 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import online.motohub.R;
 import online.motohub.adapter.StreamRequestedUserAdapter;
+import online.motohub.dialog.DialogManager;
 import online.motohub.fragment.dialog.AppDialogFragment;
 import online.motohub.model.LiveStreamRequestEntity;
 import online.motohub.model.LiveStreamRequestResponse;
 import online.motohub.model.SessionModel;
-import online.motohub.retrofit.RetrofitClient;
 import online.motohub.newdesign.constants.AppConstants;
-import online.motohub.dialog.DialogManager;
+import online.motohub.retrofit.RetrofitClient;
 import online.motohub.util.PreferenceUtils;
 
 public class ViewRequestUsersActivity extends BaseActivity {

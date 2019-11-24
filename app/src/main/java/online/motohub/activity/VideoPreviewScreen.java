@@ -19,8 +19,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import online.motohub.R;
-import online.motohub.newdesign.constants.AppConstants;
 import online.motohub.dialog.DialogManager;
+import online.motohub.newdesign.constants.AppConstants;
 
 
 public class VideoPreviewScreen extends BaseActivity {

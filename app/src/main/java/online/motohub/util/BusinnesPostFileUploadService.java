@@ -26,12 +26,12 @@ import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
-import online.motohub.newdesign.constants.AppConstants;
 import online.motohub.database.DatabaseHandler;
 import online.motohub.model.GalleryImgModel;
 import online.motohub.model.PostsModel;
 import online.motohub.model.PostsResModel;
 import online.motohub.model.VideoUploadModel;
+import online.motohub.newdesign.constants.AppConstants;
 import online.motohub.retrofit.APIConstants;
 import online.motohub.retrofit.RetrofitClient;
 import retrofit2.Call;

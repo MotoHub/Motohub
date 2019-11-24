@@ -13,8 +13,8 @@ import android.widget.Toast;
 import com.google.zxing.Result;
 
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
-import online.motohub.interfaces.CommonInterface;
 import online.motohub.dialog.DialogManager;
+import online.motohub.interfaces.CommonInterface;
 
 import static android.Manifest.permission.CAMERA;
 

@@ -20,13 +20,13 @@ import butterknife.OnClick;
 import de.hdodenhof.circleimageview.CircleImageView;
 import online.motohub.R;
 import online.motohub.adapter.GrpChatMemAdapter;
+import online.motohub.dialog.DialogManager;
 import online.motohub.model.GroupChatRoomModel;
 import online.motohub.model.GroupChatRoomResModel;
 import online.motohub.model.ProfileModel;
 import online.motohub.model.ProfileResModel;
 import online.motohub.model.SessionModel;
 import online.motohub.retrofit.RetrofitClient;
-import online.motohub.dialog.DialogManager;
 import online.motohub.util.PreferenceUtils;
 
 public class ChatViewGrpMemActivity extends BaseActivity {

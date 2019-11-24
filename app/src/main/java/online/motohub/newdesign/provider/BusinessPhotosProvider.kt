@@ -1,11 +1,10 @@
 package online.motohub.newdesign.provider
 
-import online.motohub.newdesign.bl.DefaultResponse
 import online.motohub.interfaces.ResponseCallback
 import online.motohub.interfaces.ResponseSuccessCallback
 import online.motohub.model.ApiInputModel
 import online.motohub.model.GalleryImgModel
-import online.motohub.model.PostsModel
+import online.motohub.newdesign.bl.DefaultResponse
 import retrofit2.Call
 
 class BusinessPhotosProvider : BaseProvider() {

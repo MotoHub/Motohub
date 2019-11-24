@@ -54,6 +54,7 @@ import okhttp3.RequestBody;
 import online.motohub.R;
 import online.motohub.adapter.TaggedProfilesAdapter;
 import online.motohub.database.DatabaseHandler;
+import online.motohub.dialog.DialogManager;
 import online.motohub.fragment.dialog.AppDialogFragment;
 import online.motohub.model.ImageModel;
 import online.motohub.model.PostsModel;
@@ -62,9 +63,8 @@ import online.motohub.model.ProfileModel;
 import online.motohub.model.ProfileResModel;
 import online.motohub.model.SessionModel;
 import online.motohub.retrofit.RetrofitClient;
-import online.motohub.dialog.DialogManager;
-import online.motohub.util.PreferenceUtils;
 import online.motohub.services.UpdateVideoFileService;
+import online.motohub.util.PreferenceUtils;
 import online.motohub.util.UrlUtils;
 import online.motohub.util.Utility;
 

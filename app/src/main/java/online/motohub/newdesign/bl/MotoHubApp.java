@@ -4,10 +4,10 @@ import android.content.Context;
 
 import java.io.File;
 
-import online.motohub.newdesign.constants.AppConstants;
-import online.motohub.newdesign.constants.ConfigConstants;
 import online.motohub.interfaces.UserPreferenceCallback;
 import online.motohub.interfaces.UserPreferences;
+import online.motohub.newdesign.constants.AppConstants;
+import online.motohub.newdesign.constants.ConfigConstants;
 
 /***
  * Stores access to all manager that will be used by Providers.

@@ -36,6 +36,7 @@ import okhttp3.RequestBody;
 import online.motohub.R;
 import online.motohub.adapter.ChatBoxGroupMsgAdapter;
 import online.motohub.application.MotoHub;
+import online.motohub.dialog.DialogManager;
 import online.motohub.fcm.MyFireBaseMessagingService;
 import online.motohub.fragment.dialog.AppDialogFragment;
 import online.motohub.model.GroupChatMsgModel;
@@ -47,9 +48,8 @@ import online.motohub.model.NotificationModel1;
 import online.motohub.model.ProfileModel;
 import online.motohub.model.ProfileResModel;
 import online.motohub.model.SessionModel;
-import online.motohub.retrofit.RetrofitClient;
 import online.motohub.newdesign.constants.AppConstants;
-import online.motohub.dialog.DialogManager;
+import online.motohub.retrofit.RetrofitClient;
 import online.motohub.util.NotificationUtils1;
 import online.motohub.util.PreferenceUtils;
 

@@ -36,7 +36,6 @@ import java.util.List;
 import java.util.Locale;
 
 import online.motohub.R;
-import online.motohub.newdesign.bl.ViewModelAlert;
 import online.motohub.dialog.DialogManager;
 import online.motohub.fragment.dialog.AppDialogFragment;
 import online.motohub.interfaces.PermissionViewModelCallback;
@@ -45,8 +44,9 @@ import online.motohub.model.GroupChatRoomResModel;
 import online.motohub.model.OndemandNewResponse;
 import online.motohub.model.ProfileResModel;
 import online.motohub.model.SingleChatRoomResModel;
-import online.motohub.util.PreferenceUtils;
+import online.motohub.newdesign.bl.ViewModelAlert;
 import online.motohub.newdesign.viewmodel.BaseViewModel;
+import online.motohub.util.PreferenceUtils;
 
 import static android.content.Context.INPUT_METHOD_SERVICE;
 

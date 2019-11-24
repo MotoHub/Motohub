@@ -22,11 +22,11 @@ import online.motohub.R;
 import online.motohub.adapter.EventAddOnAdapter;
 import online.motohub.adapter.EventsFindAdapter;
 import online.motohub.application.MotoHub;
+import online.motohub.dialog.DialogManager;
 import online.motohub.model.EventAddOnModel;
 import online.motohub.model.EventsModel;
-import online.motohub.retrofit.RetrofitClient;
 import online.motohub.newdesign.constants.AppConstants;
-import online.motohub.dialog.DialogManager;
+import online.motohub.retrofit.RetrofitClient;
 
 public class EventsAddOnActivity extends BaseActivity {
 

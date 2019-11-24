@@ -24,12 +24,12 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import online.motohub.R;
 import online.motohub.activity.BaseActivity;
 import online.motohub.adapter.EventLivePromoterChatAdapter;
-import online.motohub.newdesign.constants.AppConstants;
 import online.motohub.interfaces.CommonInterface;
 import online.motohub.interfaces.CommonReturnInterface;
 import online.motohub.interfaces.SharePostInterface;
 import online.motohub.model.EventGrpChatMsgResModel;
 import online.motohub.model.ProfileResModel;
+import online.motohub.newdesign.constants.AppConstants;
 import online.motohub.util.Utility;
 
 

@@ -42,6 +42,7 @@ import online.motohub.R;
 import online.motohub.adapter.CommentTagAdapter;
 import online.motohub.adapter.TaggedProfilesAdapter;
 import online.motohub.adapter.VideoCommentsAdapter;
+import online.motohub.dialog.DialogManager;
 import online.motohub.fcm.MyFireBaseMessagingService;
 import online.motohub.fragment.dialog.AppDialogFragment;
 import online.motohub.model.ImageModel;
@@ -52,9 +53,8 @@ import online.motohub.model.SessionModel;
 import online.motohub.model.VideoCommentLikeModel;
 import online.motohub.model.VideoCommentReplyModel;
 import online.motohub.model.VideoCommentsModel;
-import online.motohub.retrofit.RetrofitClient;
 import online.motohub.newdesign.constants.AppConstants;
-import online.motohub.dialog.DialogManager;
+import online.motohub.retrofit.RetrofitClient;
 import online.motohub.util.PreferenceUtils;
 import online.motohub.util.Utility;
 

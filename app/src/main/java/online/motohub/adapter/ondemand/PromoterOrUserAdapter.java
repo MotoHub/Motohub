@@ -57,6 +57,7 @@ import online.motohub.activity.promoter.PromotersListActivity;
 import online.motohub.activity.track.TrackProfileActivity;
 import online.motohub.adapter.VideoLikesAdapter;
 import online.motohub.adapter.VideoSharesAdapter;
+import online.motohub.dialog.DialogManager;
 import online.motohub.fragment.dialog.AppDialogFragment;
 import online.motohub.fragment.ondemand.PromoterOrUserFragment;
 import online.motohub.interfaces.CommonReturnInterface;
@@ -70,9 +71,8 @@ import online.motohub.model.VideoCommentsModel;
 import online.motohub.model.VideoLikesModel;
 import online.motohub.model.VideoShareModel;
 import online.motohub.model.promoter_club_news_media.PromotersModel;
-import online.motohub.retrofit.RetrofitClient;
 import online.motohub.newdesign.constants.AppConstants;
-import online.motohub.dialog.DialogManager;
+import online.motohub.retrofit.RetrofitClient;
 import online.motohub.util.UrlUtils;
 import online.motohub.util.Utility;
 

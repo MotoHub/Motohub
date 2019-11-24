@@ -36,11 +36,11 @@ import butterknife.OnClick;
 import online.motohub.R;
 import online.motohub.adapter.GalleryPickerAdapter;
 import online.motohub.database.DatabaseHandler;
+import online.motohub.dialog.DialogManager;
 import online.motohub.interfaces.PermissionCallback;
 import online.motohub.model.LocalFolderModel;
 import online.motohub.model.LocalImgModel;
 import online.motohub.model.VideoUploadModel;
-import online.motohub.dialog.DialogManager;
 import online.motohub.services.ProfileImageService;
 import online.motohub.util.ZoomImageView;
 

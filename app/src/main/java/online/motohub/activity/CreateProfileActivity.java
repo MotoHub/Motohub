@@ -18,11 +18,11 @@ import butterknife.ButterKnife;
 import butterknife.OnCheckedChanged;
 import butterknife.OnClick;
 import online.motohub.R;
-import online.motohub.newdesign.activity.LoginActivity;
-import online.motohub.newdesign.constants.AppConstants;
 import online.motohub.dialog.DialogManager;
 import online.motohub.fragment.dialog.AppDialogFragment;
 import online.motohub.model.PushTokenModel;
+import online.motohub.newdesign.activity.LoginActivity;
+import online.motohub.newdesign.constants.AppConstants;
 import online.motohub.retrofit.RetrofitClient;
 import online.motohub.util.PreferenceUtils;
 

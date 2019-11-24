@@ -21,13 +21,13 @@ import online.motohub.R;
 import online.motohub.activity.BaseActivity;
 import online.motohub.activity.promoter.PromotersListActivity;
 import online.motohub.adapter.news_and_media.NewsAndMediaListAdapter;
+import online.motohub.dialog.DialogManager;
 import online.motohub.model.ProfileResModel;
 import online.motohub.model.PromotersFollowers1;
 import online.motohub.model.SessionModel;
 import online.motohub.model.promoter_club_news_media.PromotersModel;
 import online.motohub.model.promoter_club_news_media.PromotersResModel;
 import online.motohub.retrofit.RetrofitClient;
-import online.motohub.dialog.DialogManager;
 import online.motohub.util.PreferenceUtils;
 
 public class NewsAndMediaListActivity extends BaseActivity {

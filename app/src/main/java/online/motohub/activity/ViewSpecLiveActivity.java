@@ -43,14 +43,14 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import online.motohub.R;
+import online.motohub.dialog.DialogManager;
 import online.motohub.model.EventsModel;
 import online.motohub.model.EventsResModel;
 import online.motohub.model.GalleryVideoModel;
 import online.motohub.model.GalleryVideoResModel;
+import online.motohub.newdesign.constants.AppConstants;
 import online.motohub.retrofit.APIConstants;
 import online.motohub.retrofit.RetrofitClient;
-import online.motohub.newdesign.constants.AppConstants;
-import online.motohub.dialog.DialogManager;
 import online.motohub.util.OnSwipeTouchListener;
 import online.motohub.util.UrlUtils;
 

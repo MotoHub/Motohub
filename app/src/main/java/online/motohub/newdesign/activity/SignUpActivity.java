@@ -16,10 +16,10 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import online.motohub.R;
 import online.motohub.activity.BaseActivity;
+import online.motohub.dialog.DialogManager;
 import online.motohub.model.ErrorMessage;
 import online.motohub.model.SignUpResModel;
 import online.motohub.retrofit.RetrofitClient;
-import online.motohub.dialog.DialogManager;
 
 public class SignUpActivity extends BaseActivity {
 

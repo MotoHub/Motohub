@@ -20,13 +20,13 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import online.motohub.R;
 import online.motohub.adapter.NotificationAdapter;
+import online.motohub.dialog.DialogManager;
 import online.motohub.model.NotificationModel;
 import online.motohub.model.NotificationResModel;
 import online.motohub.model.ProfileResModel;
 import online.motohub.model.SessionModel;
-import online.motohub.retrofit.RetrofitClient;
 import online.motohub.newdesign.constants.AppConstants;
-import online.motohub.dialog.DialogManager;
+import online.motohub.retrofit.RetrofitClient;
 import online.motohub.util.PreferenceUtils;
 
 public class NotificationActivity extends BaseActivity implements View.OnClickListener, SwipeRefreshLayout.OnRefreshListener, NotificationAdapter.TotalNotificationResultCount {

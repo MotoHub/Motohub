@@ -23,12 +23,12 @@ import butterknife.OnClick;
 import online.motohub.R;
 import online.motohub.adapter.EventRegistrationQuestionAdapter;
 import online.motohub.application.MotoHub;
+import online.motohub.dialog.DialogManager;
 import online.motohub.model.EventAnswersModel;
 import online.motohub.model.EventCategoryModel;
 import online.motohub.model.EventRegistrationQuestionModel;
 import online.motohub.model.SessionModel;
 import online.motohub.retrofit.RetrofitClient;
-import online.motohub.dialog.DialogManager;
 import online.motohub.util.PreferenceUtils;
 
 
