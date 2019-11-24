@@ -75,7 +75,6 @@
                 android:background="@color/colorGrey" />
 
             <EditText
-                android:id="@+id/phone_number_et"
                 style="@style/LayoutMatchWrap"
                 android:layout_height="@dimen/size40"
                 android:background="@null"

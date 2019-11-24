@@ -179,7 +179,6 @@
                         android:orientation="horizontal">
 
                         <TextView
-                            android:id="@+id/make_tv"
                             android:layout_width="@dimen/size0"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
@@ -215,7 +214,6 @@
                         android:orientation="horizontal">
 
                         <TextView
-                            android:id="@+id/model_tv"
                             android:layout_width="@dimen/size0"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
@@ -251,7 +249,6 @@
                         android:orientation="horizontal">
 
                         <TextView
-                            android:id="@+id/phone_tv"
                             android:layout_width="@dimen/size0"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
@@ -318,7 +315,6 @@
                 </RelativeLayout>
 
                 <TextView
-                    android:id="@+id/phoneAlertMsgTv"
                     style="@style/LayoutMatchWrap"
                     android:layout_below="@+id/upgrade_box"
                     android:layout_marginTop="@dimen/size10"

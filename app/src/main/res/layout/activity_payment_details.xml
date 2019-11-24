@@ -92,7 +92,6 @@
                     android:padding="@dimen/size10">
 
                     <de.hdodenhof.circleimageview.CircleImageView
-                        android:id="@+id/newCardImage"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:src="@drawable/new_card" />

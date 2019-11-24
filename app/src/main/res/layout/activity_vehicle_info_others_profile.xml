@@ -2,7 +2,6 @@
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/vehicle_info_others_co_layout"
     style="@style/LayoutMatch"
     tools:context="online.motohub.activity.CompleteProfileActivity">
 
@@ -74,7 +73,6 @@
                     android:textStyle="bold" />
 
                 <LinearLayout
-                    android:id="@+id/linearLikeLay"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
@@ -114,7 +112,6 @@
                     android:orientation="vertical">
 
                     <LinearLayout
-                        android:id="@+id/driverBox"
                         style="@style/LayoutMatchWrap"
                         android:orientation="horizontal">
 
@@ -192,7 +189,6 @@
                         android:orientation="horizontal">
 
                         <TextView
-                            android:id="@+id/make_tv"
                             android:layout_width="@dimen/size0"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
@@ -228,7 +224,6 @@
                         android:orientation="horizontal">
 
                         <TextView
-                            android:id="@+id/model_tv"
                             android:layout_width="@dimen/size0"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
@@ -265,7 +260,6 @@
                         android:visibility="gone">
 
                         <TextView
-                            android:id="@+id/phone_tv"
                             android:layout_width="@dimen/size0"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
@@ -338,7 +332,6 @@
                         android:orientation="horizontal">
 
                         <TextView
-                            android:id="@+id/engine_specs_tv"
                             android:layout_width="@dimen/size0"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
@@ -374,7 +367,6 @@
                         android:orientation="horizontal">
 
                         <TextView
-                            android:id="@+id/ecu"
                             android:layout_width="@dimen/size0"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
@@ -410,7 +402,6 @@
                         android:orientation="horizontal">
 
                         <TextView
-                            android:id="@+id/gear_tv"
                             android:layout_width="@dimen/size0"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
@@ -446,7 +437,6 @@
                         android:orientation="horizontal">
 
                         <TextView
-                            android:id="@+id/diff_tv"
                             android:layout_width="@dimen/size0"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
@@ -482,7 +472,6 @@
                         android:orientation="horizontal">
 
                         <TextView
-                            android:id="@+id/clutch_tv"
                             android:layout_width="@dimen/size0"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
@@ -518,7 +507,6 @@
                         android:orientation="horizontal">
 
                         <TextView
-                            android:id="@+id/injection_tv"
                             android:layout_width="@dimen/size0"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
@@ -554,7 +542,6 @@
                         android:orientation="horizontal">
 
                         <TextView
-                            android:id="@+id/fuel_tv"
                             android:layout_width="@dimen/size0"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
@@ -590,7 +577,6 @@
                         android:orientation="horizontal">
 
                         <TextView
-                            android:id="@+id/turbo_tv"
                             android:layout_width="@dimen/size0"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
@@ -626,7 +612,6 @@
                         android:orientation="horizontal">
 
                         <TextView
-                            android:id="@+id/suspension_tv"
                             android:layout_width="@dimen/size0"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
@@ -662,7 +647,6 @@
                         android:orientation="horizontal">
 
                         <TextView
-                            android:id="@+id/tyres_tv"
                             android:layout_width="@dimen/size0"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
@@ -698,7 +682,6 @@
                         android:orientation="horizontal">
 
                         <TextView
-                            android:id="@+id/exhaust_tv"
                             android:layout_width="@dimen/size0"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
@@ -734,7 +717,6 @@
                         android:orientation="horizontal">
 
                         <TextView
-                            android:id="@+id/fork_tv"
                             android:layout_width="@dimen/size0"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
@@ -770,7 +752,6 @@
                         android:orientation="horizontal">
 
                         <TextView
-                            android:id="@+id/shock_tv"
                             android:layout_width="@dimen/size0"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
@@ -806,7 +787,6 @@
                         android:orientation="horizontal">
 
                         <TextView
-                            android:id="@+id/lap_timer_tv"
                             android:layout_width="@dimen/size0"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
@@ -842,7 +822,6 @@
                         android:orientation="horizontal">
 
                         <TextView
-                            android:id="@+id/rear_set_tv"
                             android:layout_width="@dimen/size0"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
@@ -878,7 +857,6 @@
                         android:orientation="horizontal">
 
                         <TextView
-                            android:id="@+id/handle_bar_tv"
                             android:layout_width="@dimen/size0"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
@@ -914,7 +892,6 @@
                         android:orientation="horizontal">
 
                         <TextView
-                            android:id="@+id/fairings_tv"
                             android:layout_width="@dimen/size0"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
@@ -950,7 +927,6 @@
                         android:orientation="horizontal">
 
                         <TextView
-                            android:id="@+id/chain_tv"
                             android:layout_width="@dimen/size0"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
@@ -986,7 +962,6 @@
                         android:orientation="horizontal">
 
                         <TextView
-                            android:id="@+id/sprockets_tv"
                             android:layout_width="@dimen/size0"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
@@ -1022,7 +997,6 @@
                         android:orientation="horizontal">
 
                         <TextView
-                            android:id="@+id/engine_cover_tv"
                             android:layout_width="@dimen/size0"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
@@ -1058,7 +1032,6 @@
                         android:orientation="horizontal">
 
                         <TextView
-                            android:id="@+id/brake_master_tv"
                             android:layout_width="@dimen/size0"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
@@ -1094,7 +1067,6 @@
                         android:orientation="horizontal">
 
                         <TextView
-                            android:id="@+id/brake_pad_tv"
                             android:layout_width="@dimen/size0"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
@@ -1130,7 +1102,6 @@
                         android:orientation="horizontal">
 
                         <TextView
-                            android:id="@+id/filter_tv"
                             android:layout_width="@dimen/size0"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
@@ -1166,7 +1137,6 @@
                         android:orientation="horizontal">
 
                         <TextView
-                            android:id="@+id/brake_fluid_tv"
                             android:layout_width="@dimen/size0"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
@@ -1202,7 +1172,6 @@
                         android:orientation="horizontal">
 
                         <TextView
-                            android:id="@+id/engine_oil_tv"
                             android:layout_width="@dimen/size0"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
@@ -1238,7 +1207,6 @@
                         android:orientation="horizontal">
 
                         <TextView
-                            android:id="@+id/chain_lube_tv"
                             android:layout_width="@dimen/size0"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
@@ -1274,7 +1242,6 @@
                         android:orientation="horizontal">
 
                         <TextView
-                            android:id="@+id/panel_and_paint_tv"
                             android:layout_width="@dimen/size0"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
@@ -1310,7 +1277,6 @@
                         android:orientation="horizontal">
 
                         <TextView
-                            android:id="@+id/wheels_and_tyres_tv"
                             android:layout_width="@dimen/size0"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
@@ -1346,7 +1312,6 @@
                         android:orientation="horizontal">
 
                         <TextView
-                            android:id="@+id/trailer_tv"
                             android:layout_width="@dimen/size0"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
@@ -1369,7 +1334,6 @@
                             android:textSize="@dimen/text12" />
 
                         <ImageView
-                            android:id="@+id/tag_sponsor_trailer"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:contentDescription="@string/app_name"
@@ -1394,7 +1358,6 @@
                         android:orientation="horizontal">
 
                         <TextView
-                            android:id="@+id/boots_tv"
                             android:layout_width="@dimen/size0"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
@@ -1430,7 +1393,6 @@
                         android:orientation="horizontal">
 
                         <TextView
-                            android:id="@+id/helmet_tv"
                             android:layout_width="@dimen/size0"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
@@ -1466,7 +1428,6 @@
                         android:orientation="horizontal">
 
                         <TextView
-                            android:id="@+id/suit_tv"
                             android:layout_width="@dimen/size0"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
@@ -1502,7 +1463,6 @@
                         android:orientation="horizontal">
 
                         <TextView
-                            android:id="@+id/gloves_tv"
                             android:layout_width="@dimen/size0"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
@@ -1539,7 +1499,6 @@
                         android:visibility="gone">
 
                         <TextView
-                            android:id="@+id/back_protection_tv"
                             android:layout_width="@dimen/size0"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
@@ -1577,7 +1536,6 @@
                         android:visibility="gone">
 
                         <TextView
-                            android:id="@+id/chest_protection_tv"
                             android:layout_width="@dimen/size0"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
@@ -1614,7 +1572,6 @@
                         android:orientation="horizontal">
 
                         <TextView
-                            android:id="@+id/more_info_tv"
                             android:layout_width="@dimen/size0"
                             android:layout_height="match_parent"
                             android:layout_weight="1"

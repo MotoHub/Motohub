@@ -21,7 +21,6 @@
             android:layout_height="match_parent" />
 
         <android.support.design.widget.CoordinatorLayout
-            android:id="@+id/inner_co_layout"
             style="@style/LayoutMatchWrap"
             android:layout_above="@+id/bottom_box"
             android:layout_below="@id/include">
@@ -202,7 +201,6 @@
                                 android:src="@drawable/ic_performance_shop" />
 
                             <TextView
-                                android:id="@+id/performance_shop_tv"
                                 style="@style/LayoutMatch"
                                 android:layout_below="@+id/performance_shop_img_view"
                                 android:gravity="center"
@@ -238,7 +236,6 @@
                                 android:src="@drawable/news_and_media_icon" />
 
                             <TextView
-                                android:id="@+id/news_and_media_tv"
                                 style="@style/LayoutMatchWrap"
                                 android:layout_below="@+id/news_and_media_img_view"
                                 android:gravity="center"
@@ -273,7 +270,6 @@
                                 android:src="@drawable/tracks_icon" />
 
                             <TextView
-                                android:id="@+id/tracks_tv"
                                 style="@style/LayoutMatchWrap"
                                 android:layout_below="@+id/tracks_img_view"
                                 android:gravity="center"
@@ -308,7 +304,6 @@
                                 android:src="@drawable/clubs_icon" />
 
                             <TextView
-                                android:id="@+id/clubs_tv"
                                 style="@style/LayoutMatchWrap"
                                 android:layout_below="@+id/clubs_img_view"
                                 android:gravity="center"
@@ -343,7 +338,6 @@
                                 android:src="@drawable/promoters_icon" />
 
                             <TextView
-                                android:id="@+id/promoter_tv"
                                 style="@style/LayoutMatchWrap"
                                 android:layout_below="@+id/promoter_img_view"
                                 android:gravity="center"
@@ -567,7 +561,6 @@
                         </RelativeLayout>
 
                         <View
-                            android:id="@+id/searchPhoneEmailView"
                             android:layout_width="match_parent"
                             android:layout_height="@dimen/size10"
                             android:layout_below="@+id/searchPhoneEmailBox"
@@ -635,7 +628,6 @@
             android:layout_alignParentBottom="true">
 
             <View
-                android:id="@+id/bottom_line"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/size1"
                 android:background="@color/colorGrey" />
@@ -667,7 +659,6 @@
                         android:src="@drawable/user_icon" />
 
                     <TextView
-                        android:id="@+id/txt_motoFile"
                         style="@style/LayoutMatchWrap"
                         android:layout_below="@+id/my_moto_file_img_btn"
                         android:gravity="center"
@@ -697,7 +688,6 @@
                         android:src="@drawable/event_ondemand_icon" />
 
                     <TextView
-                        android:id="@+id/txt_live"
                         style="@style/LayoutMatchWrap"
                         android:layout_below="@+id/live_img_btn"
                         android:gravity="center"
@@ -727,7 +717,6 @@
                         android:src="@drawable/upcoming_events_icon" />
 
                     <TextView
-                        android:id="@+id/txt_Event"
                         style="@style/LayoutMatchWrap"
                         android:layout_below="@+id/events_img_btn"
                         android:gravity="center"

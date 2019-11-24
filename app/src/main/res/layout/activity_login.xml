@@ -47,7 +47,6 @@
                 </RelativeLayout>
 
                 <RelativeLayout
-                    android:id="@+id/login_box"
                     style="@style/LayoutMatchWrap"
                     android:layout_below="@+id/recent_users_lay"
                     android:layout_centerHorizontal="true"

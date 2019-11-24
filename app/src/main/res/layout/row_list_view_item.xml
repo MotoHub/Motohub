@@ -23,7 +23,6 @@
         android:src="@drawable/default_profile_icon" />
 
     <LinearLayout
-        android:id="@+id/text_view_box"
         style="@style/LayoutWrapMatch"
         android:layout_marginStart="@dimen/size5"
         android:layout_marginLeft="@dimen/size5"
@@ -83,7 +82,6 @@
             app:srcCompat="@drawable/right_arrow_icon" />
 
         <TextView
-            android:id="@+id/action_btn"
             android:layout_width="@dimen/size90"
             android:layout_height="wrap_content"
             android:layout_gravity="end"
@@ -100,7 +98,6 @@
             android:visibility="gone" />
 
         <TextView
-            android:id="@+id/follow_following_btn"
             android:layout_width="@dimen/size90"
             android:layout_height="wrap_content"
             android:layout_gravity="end"

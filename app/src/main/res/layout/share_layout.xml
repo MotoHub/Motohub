@@ -2,7 +2,6 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/popup_window"
     style="@style/LayoutMatchWrap"
     android:background="@color/colorWhite"
     android:paddingTop="@dimen/size10"
@@ -35,7 +34,6 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <ImageView
-                android:id="@+id/imgvwFriends"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -44,7 +42,6 @@
                 android:src="@drawable/followers_icon" />
 
             <TextView
-                android:id="@+id/txtvwFriends"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -81,7 +78,6 @@
                 android:src="@drawable/fb_icon" />
 
             <TextView
-                android:id="@+id/txtvwFacebook"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"

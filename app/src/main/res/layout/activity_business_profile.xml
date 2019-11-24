@@ -13,18 +13,15 @@
             layout="@layout/common_header" />
 
         <android.support.design.widget.CoordinatorLayout
-            android:id="@+id/inner_co_layout"
             style="@style/LayoutMatchWrap"
             android:layout_below="@+id/include">
 
             <android.support.design.widget.AppBarLayout
-                android:id="@+id/appBarLayout"
                 style="@style/LayoutMatchWrap"
                 android:fitsSystemWindows="true"
                 android:theme="@style/ThemeOverlay.AppCompat.Light">
 
                 <android.support.design.widget.CollapsingToolbarLayout
-                    android:id="@+id/collapsing_toolbar"
                     style="@style/LayoutMatchWrap"
                     android:background="@color/colorWhite"
                     android:fitsSystemWindows="true"
@@ -141,7 +138,6 @@
                             android:visibility="gone" />
 
                         <View
-                            android:id="@+id/view3"
                             android:layout_width="match_parent"
                             android:layout_height="@dimen/size10"
                             android:layout_below="@+id/writePostBtn"

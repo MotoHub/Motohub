@@ -28,7 +28,6 @@
 
 
         <TextView
-            android:id="@+id/delete_txt"
             style="@style/LayoutWrap"
             android:layout_alignTop="@+id/delete_icon"
             android:layout_alignBottom="@+id/delete_icon"
@@ -60,7 +59,6 @@
             app:srcCompat="@drawable/ic_block_recyclerview" />
 
         <TextView
-            android:id="@+id/gallery_tv"
             style="@style/LayoutWrap"
             android:layout_alignTop="@+id/gallery_icon"
             android:layout_alignBottom="@+id/gallery_icon"
@@ -74,7 +72,6 @@
     </RelativeLayout>
 
     <RelativeLayout
-        android:id="@+id/reviewLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/blockLayout"
@@ -93,7 +90,6 @@
             app:srcCompat="@drawable/ic_rate_review_recyclerview" />
 
         <TextView
-            android:id="@+id/review_txt"
             style="@style/LayoutWrap"
             android:layout_alignTop="@+id/review_icon"
             android:layout_alignBottom="@+id/review_icon"

@@ -10,7 +10,6 @@
     app:cardUseCompatPadding="false">
 
     <RelativeLayout
-        android:id="@+id/write_post_card"
         style="@style/LayoutMatchWrap"
         android:paddingStart="@dimen/size10"
         android:paddingLeft="@dimen/size10"
@@ -192,7 +191,6 @@
                     android:src="@drawable/live" />
 
                 <TextView
-                    android:id="@+id/live_tv"
                     style="@style/LayoutMatchWrap"
                     android:layout_centerVertical="true"
                     android:layout_margin="@dimen/size5"

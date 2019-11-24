@@ -6,7 +6,6 @@
     <!--<include layout="@layout/widget_toolbar" />-->
 
     <RelativeLayout
-        android:id="@+id/relativeLayoutVideoPlayBack"
         style="@style/LayoutMatch"
         android:background="@android:color/black"
         android:visibility="visible">

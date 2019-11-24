@@ -2,7 +2,6 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/tagFollowingProfileDialog"
     style="@style/LayoutWrap"
     android:layout_gravity="center"
     android:layout_marginLeft="@dimen/size20"

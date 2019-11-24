@@ -103,7 +103,6 @@
                 android:src="@drawable/default_profile_icon" />
 
             <LinearLayout
-                android:id="@+id/text_view_box"
                 style="@style/LayoutMatchWrap"
                 android:layout_alignTop="@+id/circular_img_view"
                 android:layout_centerVertical="true"
@@ -208,7 +207,6 @@
         </RelativeLayout>
 
         <LinearLayout
-            android:id="@+id/comment_lay"
             style="@style/LayoutMatchWrap"
             android:layout_below="@id/img_lay"
             android:orientation="vertical">

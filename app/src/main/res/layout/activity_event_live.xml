@@ -62,7 +62,6 @@
         android:background="@color/colorGrey">
 
         <android.support.v7.widget.CardView
-            android:id="@+id/eventTimeTableCardView"
             style="@style/LayoutMatchWrap"
             android:layout_margin="@dimen/size5">
 
@@ -100,7 +99,6 @@
                     android:textSize="@dimen/text16" />
 
                 <TextView
-                    android:id="@+id/event_end_time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/event_start_time"
@@ -343,7 +341,6 @@
             android:visibility="gone" />
 
         <RelativeLayout
-            android:id="@+id/sendBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/size5"

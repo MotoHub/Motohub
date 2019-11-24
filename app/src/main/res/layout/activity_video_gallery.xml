@@ -110,7 +110,6 @@
                 android:visibility="visible" />
 
             <Button
-                android:id="@+id/picker_video_select_btn"
                 style="@style/LayoutMatchWrap"
                 android:layout_width="0dp"
                 android:layout_height="@dimen/size40"

@@ -12,14 +12,12 @@
             layout="@layout/widget_toolbar" />
 
         <ScrollView
-            android:id="@+id/svReply"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_above="@+id/footer_lay"
             android:layout_below="@+id/include">
 
             <RelativeLayout
-                android:id="@+id/commentRelativeLay"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/colorGrey">
@@ -55,7 +53,6 @@
                         </RelativeLayout>
 
                         <LinearLayout
-                            android:id="@+id/commentLinearLay"
                             style="@style/LayoutMatchWrap"
                             android:layout_centerVertical="true"
                             android:layout_toEndOf="@+id/comment_user_img_lay"

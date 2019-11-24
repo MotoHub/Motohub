@@ -27,7 +27,6 @@
                 android:padding="@dimen/size10">
 
                 <ImageView
-                    android:id="@+id/logo"
                     style="@style/LayoutWrap"
                     android:layout_marginTop="@dimen/size10"
                     android:layout_marginBottom="@dimen/size10"

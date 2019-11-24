@@ -13,7 +13,6 @@
             layout="@layout/widget_toolbar" />
 
         <android.support.design.widget.CoordinatorLayout
-            android:id="@+id/inner_co_layout"
             style="@style/LayoutMatchWrap"
             android:layout_below="@+id/include">
 
@@ -23,7 +22,6 @@
                 android:theme="@style/ThemeOverlay.AppCompat.Light">
 
                 <android.support.design.widget.CollapsingToolbarLayout
-                    android:id="@+id/collapsing_toolbar"
                     style="@style/LayoutMatchWrap"
                     android:background="@color/colorWhite"
                     android:fitsSystemWindows="true"
@@ -64,7 +62,6 @@
                                 android:src="@drawable/default_profile_icon" />
 
                             <RelativeLayout
-                                android:id="@+id/profileDetailsBox"
                                 style="@style/LayoutWrap"
                                 android:layout_marginStart="@dimen/size5"
                                 android:layout_toStartOf="@id/followers_box"
@@ -123,7 +120,6 @@
                                     android:textStyle="bold" />
 
                                 <TextView
-                                    android:id="@+id/followers_tv"
                                     style="@style/LayoutMatchWrap"
                                     android:gravity="center"
                                     android:padding="@dimen/size3"

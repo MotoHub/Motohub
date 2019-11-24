@@ -13,7 +13,6 @@
         android:padding="@dimen/size15" />
 
     <View
-        android:id="@+id/name2"
         android:layout_width="75dp"
         android:layout_height="@dimen/placeholder_text_height"
         android:layout_below="@+id/name1"

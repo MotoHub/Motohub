@@ -36,7 +36,6 @@
         android:background="@color/placeholder_bg" />
 
     <View
-        android:id="@+id/thumbnail5"
         android:layout_width="@dimen/placeholder_image"
         android:layout_height="@dimen/placeholder_image"
         android:layout_marginEnd="@dimen/activity_padding"
@@ -83,7 +82,6 @@
         android:background="@color/placeholder_bg" />
 
     <View
-        android:id="@+id/u5"
         android:layout_width="@dimen/placeholder_image"
         android:layout_height="@dimen/placeholder_text_height"
         android:layout_below="@id/thumbnail2"

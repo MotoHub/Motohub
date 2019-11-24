@@ -45,7 +45,6 @@
             tools:targetApi="lollipop" />
 
         <android.support.design.widget.FloatingActionButton
-            android:id="@+id/add_users_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"

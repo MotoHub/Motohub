@@ -44,7 +44,6 @@
                     android:src="@drawable/find_an_event_bg" />
 
                 <TextView
-                    android:id="@+id/find_event_tv"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_below="@+id/find_event_img_view"
@@ -86,7 +85,6 @@
                     android:src="@drawable/event_result_bg" />
 
                 <TextView
-                    android:id="@+id/event_results_tv"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_below="@+id/event_results_img_view"

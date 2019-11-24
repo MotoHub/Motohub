@@ -73,7 +73,6 @@
     <string name="shop">Shop</string>
     <string name="performance_shop">Performance \n Shop</string>
     <string name="bike">Bike</string>
-    <string name="media_and_photography">Media &amp; \n Photography</string>
     <string name="kart">Kart</string>
     <string name="memo">For all Race Tracks/Promoters/Clubs/News and Media Please go to
         www.motohub.online to create your profile.</string>
@@ -182,7 +181,6 @@
     <string name="following">Following</string>
     <string name="UnFollow">UnFollow</string>
     <string name="my_moto_file">My Profile</string>
-    <string name="my_profile">My\nProfile</string>
     <string name="create_new_profile">Create a New Profile</string>
     <string name="other_profiles">Other Profiles</string>
     <string name="blocked_users">Blocked Users</string>
@@ -502,7 +500,6 @@
     <string name="purchase_racer_profile">Upgrade to Racing Profile for booking.</string>
     <string name="purchase_racer_profile_win_car">Upgrade to Racing Profile for access win a car or pay $</string>
     <string name="card_holder_name">Card Holder Name</string>
-    <string name="cvv">CVV</string>
     <string name="event_questions">Event Questions</string>
     <string name="notification_sound">Notification Sound</string>
     <string name="enable_notificaton">Enable/Disable Notifications</string>
@@ -555,7 +552,6 @@
     <string name="payment_must_update">Payment Succeeded! You must update this record. \nPlease try again</string>
     <string name="alert_live_pay_amount">To view stream, please pay $</string>
     <string name="un_subscribe">UnSubscribe</string>
-    <string name="subscribe_success">You have successfully subscribed the club.</string>
     <string name="un_subscribe_success">You have successfully unsubscribed the club.</string>
     <string name="comment_likes">Comment Likes</string>
     <string name="replies">Replies</string>
@@ -652,9 +648,6 @@
     <string name="no_result_err">No result found.</string>
     <string name="img_comment">Commented on this post.</string>
     <string name="credit_card_number_hint">XXXX XXXX XXXX XXXX</string>
-    <string name="permission_request_denied">Permission request denied</string>
-    <string name="error_gif">x or y bound size should be at least %1$dpx and file size should be no more than %2$sM</string>
-    <string name="alert_share">Own post can not be share</string>
     <string name="notification_channel_id">MotoHUB</string>
 
     <string name="file_upload_success">File Uploaded</string>

@@ -17,7 +17,6 @@
         android:src="@drawable/default_profile_icon" />
 
     <LinearLayout
-        android:id="@+id/text_view_box"
         style="@style/LayoutWrapMatch"
         android:layout_marginStart="@dimen/size10"
         android:layout_marginLeft="@dimen/size10"

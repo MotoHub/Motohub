@@ -26,7 +26,6 @@
             android:src="@drawable/camera_icon" />
 
         <TextView
-            android:id="@+id/camera_tv"
             style="@style/LayoutWrap"
             android:layout_alignTop="@+id/camera_icon"
             android:layout_alignBottom="@+id/camera_icon"
@@ -58,7 +57,6 @@
             android:src="@drawable/gallery_icon" />
 
         <TextView
-            android:id="@+id/gallery_tv"
             style="@style/LayoutWrap"
             android:layout_alignTop="@+id/gallery_icon"
             android:layout_alignBottom="@+id/gallery_icon"

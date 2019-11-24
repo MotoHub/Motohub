@@ -22,13 +22,9 @@
         android:layout_below="@+id/include"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <android.support.design.widget.CoordinatorLayout
-            android:id="@+id/ll"
-            style="@style/LayoutMatch">
+        <android.support.design.widget.CoordinatorLayout style="@style/LayoutMatch">
 
-            <RelativeLayout
-                android:id="@+id/RootLayout"
-                style="@style/LayoutMatchWrap">
+            <RelativeLayout style="@style/LayoutMatchWrap">
 
                 <ImageView
                     android:id="@+id/cover_photo_img_view"
@@ -168,7 +164,6 @@
                             android:layout_height="@dimen/size5" />
 
                         <TextView
-                            android:id="@+id/name_of_followers_tv"
                             style="@style/LayoutMatchWrap"
                             android:gravity="center"
                             android:text="@string/followers"
@@ -208,7 +203,6 @@
                             android:layout_height="@dimen/size5" />
 
                         <TextView
-                            android:id="@+id/name_of_following_tv"
                             style="@style/LayoutMatchWrap"
                             android:gravity="center"
                             android:text="@string/following"
@@ -265,7 +259,6 @@
                             android:src="@drawable/build_icon" />
 
                         <TextView
-                            android:id="@+id/your_build_tv"
                             style="@style/LayoutMatch"
                             android:layout_below="@+id/your_build_img_view"
                             android:gravity="center"
@@ -303,7 +296,6 @@
                             android:src="@drawable/photos_icon" />
 
                         <TextView
-                            android:id="@+id/photos_tv"
                             style="@style/LayoutMatch"
                             android:layout_below="@+id/photos_img_view"
                             android:gravity="center"
@@ -341,7 +333,6 @@
                             android:src="@drawable/video_icon" />
 
                         <TextView
-                            android:id="@+id/videos_tv"
                             style="@style/LayoutMatch"
                             android:layout_below="@+id/videos_img_view"
                             android:gravity="center"
@@ -379,7 +370,6 @@
                             android:src="@drawable/vehicle_info_icon" />
 
                         <TextView
-                            android:id="@+id/followers_tv"
                             style="@style/LayoutMatch"
                             android:layout_below="@+id/vehicle_info_img_view"
                             android:gravity="center"

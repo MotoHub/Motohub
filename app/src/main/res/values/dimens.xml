@@ -51,7 +51,6 @@
 
     <dimen name="sizeMinus9">-9dp</dimen>
     <dimen name="sizeMinus10">-10dp</dimen>
-    <dimen name="sizeMinus20">-20dp</dimen>
     <dimen name="sizeMinus30">-30dp</dimen>
     <dimen name="size330">330dp</dimen>
     <dimen name="size350">350dp</dimen>
@@ -60,7 +59,4 @@
     <dimen name="size8">8dp</dimen>
     <dimen name="size14">14dp</dimen>
 
-    <dimen name="grid_expected_size">120dp</dimen>
-    <dimen name="item_margin_horizontal">24dp</dimen>
-    <dimen name="item_margin_vertical">8dp</dimen>
 </resources>

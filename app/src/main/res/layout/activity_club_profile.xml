@@ -13,18 +13,15 @@
             layout="@layout/widget_toolbar" />
 
         <android.support.design.widget.CoordinatorLayout
-            android:id="@+id/inner_co_layout"
             style="@style/LayoutMatchWrap"
             android:layout_below="@+id/include">
 
             <android.support.design.widget.AppBarLayout
-                android:id="@+id/appBarLayout"
                 style="@style/LayoutMatchWrap"
                 android:fitsSystemWindows="true"
                 android:theme="@style/ThemeOverlay.AppCompat.Light">
 
                 <android.support.design.widget.CollapsingToolbarLayout
-                    android:id="@+id/collapsing_toolbar"
                     style="@style/LayoutMatchWrap"
                     android:background="@color/colorWhite"
                     android:fitsSystemWindows="true"
@@ -149,7 +146,6 @@
                                     android:textStyle="bold" />
 
                                 <TextView
-                                    android:id="@+id/followers_tv"
                                     style="@style/LayoutMatchWrap"
                                     android:gravity="center"
                                     android:padding="@dimen/size3"

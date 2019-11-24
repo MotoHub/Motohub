@@ -13,7 +13,6 @@
             layout="@layout/widget_toolbar" />
 
         <android.support.design.widget.CoordinatorLayout
-            android:id="@+id/inner_co_layout"
             style="@style/LayoutMatch"
             android:layout_above="@+id/bottom_box"
             android:layout_below="@+id/include">
@@ -24,7 +23,6 @@
                 android:theme="@style/ThemeOverlay.AppCompat.Light">
 
                 <android.support.design.widget.CollapsingToolbarLayout
-                    android:id="@+id/collapsing_toolbar"
                     style="@style/LayoutMatchWrap"
                     android:background="@color/colorWhite"
                     android:fitsSystemWindows="true"
@@ -158,7 +156,6 @@
                                     android:layout_height="@dimen/size5" />
 
                                 <TextView
-                                    android:id="@+id/name_of_followers_tv"
                                     style="@style/LayoutMatchWrap"
                                     android:gravity="center"
                                     android:text="@string/followers"
@@ -198,7 +195,6 @@
                                     android:layout_height="@dimen/size5" />
 
                                 <TextView
-                                    android:id="@+id/name_of_following_tv"
                                     style="@style/LayoutMatchWrap"
                                     android:gravity="center"
                                     android:text="@string/following"
@@ -255,7 +251,6 @@
                                     android:src="@drawable/build_icon" />
 
                                 <TextView
-                                    android:id="@+id/your_build_tv"
                                     style="@style/LayoutMatch"
                                     android:layout_below="@+id/your_build_img_view"
                                     android:gravity="center"
@@ -293,7 +288,6 @@
                                     android:src="@drawable/chat_icon" />
 
                                 <TextView
-                                    android:id="@+id/photos_tv"
                                     style="@style/LayoutMatch"
                                     android:layout_below="@+id/chat_img_view"
                                     android:gravity="center"
@@ -331,7 +325,6 @@
                                     android:src="@drawable/photos_and_videos_icon" />
 
                                 <TextView
-                                    android:id="@+id/photos_videos_tv"
                                     style="@style/LayoutMatch"
                                     android:layout_below="@+id/photos_videos_img_view"
                                     android:gravity="center"
@@ -371,7 +364,6 @@
                                     android:src="@drawable/vehicle_info_icon" />
 
                                 <TextView
-                                    android:id="@+id/followers_tv"
                                     style="@style/LayoutMatch"
                                     android:layout_below="@+id/vehicle_info_img_view"
                                     android:gravity="center"
@@ -413,7 +405,6 @@
             android:gravity="center_horizontal|bottom">
 
             <View
-                android:id="@+id/bottom_line"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/size1"
                 android:background="@color/colorGrey" />
@@ -471,7 +462,6 @@
                         android:src="@drawable/live" />
 
                     <TextView
-                        android:id="@+id/live_tv"
                         style="@style/LayoutMatchWrap"
                         android:layout_below="@+id/live_btn"
                         android:layout_centerHorizontal="true"

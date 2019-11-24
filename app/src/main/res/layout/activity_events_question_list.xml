@@ -6,9 +6,7 @@
     android:focusable="true"
     android:focusableInTouchMode="true">
 
-    <RelativeLayout
-        android:id="@+id/parent_recycler_lay"
-        style="@style/LayoutMatch">
+    <RelativeLayout style="@style/LayoutMatch">
 
         <include
             android:id="@+id/include"

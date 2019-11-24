@@ -46,7 +46,6 @@
             android:textSize="@dimen/text14" />
 
         <RelativeLayout
-            android:id="@+id/result_box"
             style="@style/LayoutMatchWrap"
             android:layout_below="@+id/moto_event_name_tv"
             android:layout_marginTop="@dimen/size10"
@@ -68,7 +67,6 @@
                     android:src="@drawable/default_profile_icon" />
 
                 <RelativeLayout
-                    android:id="@+id/winner_name_box"
                     style="@style/LayoutMatchWrap"
                     android:layout_centerInParent="true"
                     android:layout_toStartOf="@+id/winner_profile_img_two"
@@ -87,7 +85,6 @@
                         android:textSize="@dimen/text14" />
 
                     <TextView
-                        android:id="@+id/first_tv"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/winner_name_tv"
@@ -148,7 +145,6 @@
                     android:textSize="@dimen/text14" />
 
                 <TextView
-                    android:id="@+id/second_tv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/runner_name_tv"
@@ -169,7 +165,6 @@
                 android:layout_centerInParent="true" />
 
             <RelativeLayout
-                android:id="@+id/third_box"
                 style="@style/LayoutWrap"
                 android:layout_below="@+id/winner_box"
                 android:layout_alignParentEnd="true"
@@ -205,7 +200,6 @@
                     android:textSize="@dimen/text14" />
 
                 <TextView
-                    android:id="@+id/third_tv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/third_name_tv"
@@ -220,7 +214,6 @@
         </RelativeLayout>
 
         <Button
-            android:id="@+id/more_info_btn"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/size40"
             android:layout_alignParentBottom="true"

@@ -6,7 +6,6 @@
     android:orientation="vertical">
 
     <LinearLayout
-        android:id="@+id/search_lay_vid"
         style="@style/LayoutMatchWrap"
         android:layout_margin="@dimen/size5"
         android:background="@drawable/orange_border_bg"

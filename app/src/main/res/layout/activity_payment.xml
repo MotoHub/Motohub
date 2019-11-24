@@ -21,7 +21,6 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/tv_card_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/size20"
@@ -48,7 +47,6 @@
 
 
         <TextView
-            android:id="@+id/input_layout_number"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/size20"
@@ -75,7 +73,6 @@
             android:textSize="@dimen/text16" />
 
         <RelativeLayout
-            android:id="@+id/rl_payment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="@dimen/size30">
@@ -105,7 +102,6 @@
                 android:textSize="@dimen/text16" />
 
             <TextView
-                android:id="@+id/tv_cvc"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/size10"

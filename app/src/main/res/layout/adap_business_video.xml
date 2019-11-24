@@ -25,7 +25,6 @@
                 android:scaleType="centerCrop" />
 
             <ImageView
-                android:id="@+id/playIcon"
                 android:layout_width="@dimen/size50"
                 android:layout_height="@dimen/size50"
                 android:layout_centerInParent="true"
