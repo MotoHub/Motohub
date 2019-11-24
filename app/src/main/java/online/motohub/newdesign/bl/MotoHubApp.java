@@ -16,33 +16,15 @@ import online.motohub.newdesign.constants.ConfigConstants;
 public class MotoHubApp implements UserPreferenceCallback {
 
     /**
-     * Allows for simple constructing of a {@code Configuration} object.
+     * Setting up singleton access
      */
-    public static final class Builder {
-        /**
-         * Members of Builder
-         */
-        public Context context;
-        public UserPreferences userPreferences;
-        /**
-         * Initialize a builder with a given context.
-         *
-         * @param context The active {@link Context} for your application. Cannot be null.
-         */
-        public Builder(Context context) {
-            if (context == null) {
-                throw new AssertionError("context cannot be null");
-            }
-            this.context = context;
-        }
-
-    }
-
-
+    private static final Object LOCK = new Object();
+    private static MotoHubApp instance;
     public ApiClient apiClients;
     public UserPreferences userPreferences;
     public ConnectivityLiveData internetUtil;
     public MHFileCacheImplementor fileCacheImplementor;
+
     /**
      * Initialize the MotoHub app with given configuration
      */
@@ -53,7 +35,7 @@ public class MotoHubApp implements UserPreferenceCallback {
         if (configuration.context == null) {
             throw new AssertionError("Context in Configuration cannot be null");
         }
-        String url= ConfigConstants.getBaseUrl();
+        String url = ConfigConstants.getBaseUrl();
 //        if (TextUtils.isEmpty(configuration.baseURL)) {
 //            url = ConfigConstants.getBaseUrl();
 //        } else {
@@ -75,12 +57,6 @@ public class MotoHubApp implements UserPreferenceCallback {
         return mh;
     }
 
-    /**
-     * Setting up singleton access
-     */
-    private static final Object LOCK = new Object();
-    private static MotoHubApp instance;
-
     public static MotoHubApp getInstance() {
         if (instance == null) {
             synchronized (LOCK) {
@@ -98,6 +74,30 @@ public class MotoHubApp implements UserPreferenceCallback {
     }
 
     public void onUserLogout() {
+
+    }
+
+    /**
+     * Allows for simple constructing of a {@code Configuration} object.
+     */
+    public static final class Builder {
+        /**
+         * Members of Builder
+         */
+        public Context context;
+        public UserPreferences userPreferences;
+
+        /**
+         * Initialize a builder with a given context.
+         *
+         * @param context The active {@link Context} for your application. Cannot be null.
+         */
+        public Builder(Context context) {
+            if (context == null) {
+                throw new AssertionError("context cannot be null");
+            }
+            this.context = context;
+        }
 
     }
 

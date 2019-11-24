@@ -21,7 +21,7 @@ class BaseViewModelFactory : ViewModelProvider.AndroidViewModelFactory {
         this.application = application
     }
 
-    public  constructor(application: Application, bundle: Bundle?) : super(application) {
+    public constructor(application: Application, bundle: Bundle?) : super(application) {
         this.application = application
         this.bundle = bundle
     }

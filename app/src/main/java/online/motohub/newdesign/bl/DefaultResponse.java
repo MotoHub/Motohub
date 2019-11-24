@@ -29,7 +29,8 @@ public class DefaultResponse<T> implements Callback<T> {
         this.callback = callback;
         this.successCallback = successCallback;
     }
-//    private ErrorMessage getErrorMessage(Converter<ResponseBody, ErrorMessage> errorConverter,Response response) {
+
+    //    private ErrorMessage getErrorMessage(Converter<ResponseBody, ErrorMessage> errorConverter,Response response) {
 //        ErrorMessage error = null;
 //        try {
 //            error = errorConverter.convert(response.errorBody());

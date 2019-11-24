@@ -38,8 +38,8 @@ class BusinessProfileViewModel(application: Application, bundle: Bundle?) : Base
         provider.getBusinessFollowersCount(getInputModel(), ResponseCallback {
             //            callback!!.hideProgress()
             if (it.isSuccess && it.data != null && it.data.resource != null) {
-                if(it.data.meta!=null)
-                followersCount.value = it.data.meta.count
+                if (it.data.meta != null)
+                    followersCount.value = it.data.meta.count
             }
         })
     }

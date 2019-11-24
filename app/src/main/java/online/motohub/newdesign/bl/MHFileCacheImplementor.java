@@ -46,6 +46,29 @@ public class MHFileCacheImplementor implements FileCacheImplementor {
         }
     }
 
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    public static String urlToKey(Request request) {
+        String header = request.header("SAVE_RESPONSE_AS");
+        if (TextUtils.isEmpty(header)) {
+            return md5Hex(request.url().toString());
+        } else {
+            return header.trim();
+        }
+    }
+
+    /**
+     * Returns a 32 character string containing an MD5 hash of {@code s}.
+     */
+    public static String md5Hex(String s) {
+        try {
+            MessageDigest messageDigest = MessageDigest.getInstance("MD5");
+            byte[] md5bytes = messageDigest.digest(s.getBytes("UTF-8"));
+            return ByteString.of(md5bytes).hex();
+        } catch (NoSuchAlgorithmException | UnsupportedEncodingException e) {
+            throw new AssertionError(e);
+        }
+    }
+
     // Cache response
     @Override
     public void saveResponseBody(Response response, String overRideFileName) {
@@ -102,29 +125,6 @@ public class MHFileCacheImplementor implements FileCacheImplementor {
             }
         } catch (Exception e) {
             Log.e(TAG, e.getMessage());
-        }
-    }
-
-    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
-    public static String urlToKey(Request request) {
-        String header = request.header("SAVE_RESPONSE_AS");
-        if (TextUtils.isEmpty(header)) {
-            return md5Hex(request.url().toString());
-        } else {
-            return header.trim();
-        }
-    }
-
-    /**
-     * Returns a 32 character string containing an MD5 hash of {@code s}.
-     */
-    public static String md5Hex(String s) {
-        try {
-            MessageDigest messageDigest = MessageDigest.getInstance("MD5");
-            byte[] md5bytes = messageDigest.digest(s.getBytes("UTF-8"));
-            return ByteString.of(md5bytes).hex();
-        } catch (NoSuchAlgorithmException | UnsupportedEncodingException e) {
-            throw new AssertionError(e);
         }
     }
 

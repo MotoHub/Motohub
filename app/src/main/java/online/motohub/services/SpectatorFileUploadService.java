@@ -294,7 +294,7 @@ public class SpectatorFileUploadService extends IntentService implements Progres
             ArrayList<SpectatorLiveEntity> mList = handler.getSpectatorLiveVideos();
             if (mList.size() > 0) {
                 for (int i = 0; i < mList.size(); i++) {
-                    if(AppConstants.UPLOAD_STATUS == UploadStatus.STARTED){
+                    if (AppConstants.UPLOAD_STATUS == UploadStatus.STARTED) {
                         break;
                     }
                     Intent service_intent = new Intent(context, SpectatorFileUploadService.class);

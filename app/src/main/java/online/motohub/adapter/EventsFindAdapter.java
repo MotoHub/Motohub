@@ -100,6 +100,16 @@ public class EventsFindAdapter extends RecyclerView.Adapter<EventsFindAdapter.Ho
     private String mToken = "";
     private boolean isUpdatePayment = false;
     private String mTransactionID = "";
+    CommonInterface mCommonInterface = new CommonInterface() {
+        @Override
+        public void onSuccess() {
+            if (isUpdatePayment) {
+                callUpdateLiveStreamPayment();
+            } else {
+                callPayViewLiveStream();
+            }
+        }
+    };
     private ArrayList<PromoterFollowerResModel> mPromoterFollowerList = new ArrayList<>();
     RetrofitResInterface mRetrofitResInterface = new RetrofitResInterface() {
         @Override
@@ -190,16 +200,6 @@ public class EventsFindAdapter extends RecyclerView.Adapter<EventsFindAdapter.Ho
         public void retrofitOnFailure() {
             ((BaseActivity) mContext).showToast(mContext, mContext.getString(R.string.internet_err));
 //            DialogManager.showRetryAlertDialogWithCallback(mContext, mCommonInterface, mContext.getString(R.string.internet_err));
-        }
-    };
-    CommonInterface mCommonInterface = new CommonInterface() {
-        @Override
-        public void onSuccess() {
-            if (isUpdatePayment) {
-                callUpdateLiveStreamPayment();
-            } else {
-                callPayViewLiveStream();
-            }
         }
     };
     private boolean isFromEventList = false;

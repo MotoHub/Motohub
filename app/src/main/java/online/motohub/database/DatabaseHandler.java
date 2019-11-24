@@ -28,16 +28,16 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     private String VIDEO_UPLOAD_TABLE = "VIDEO_UPLOAD_TABLE";
 
-    private String FLAG="FLAG";
-    private String NOTIFICATION_ID="NOTIFICATION_ID";
-    private String VIDEO_PATH="VIDEO_PATH";
-    private String IMAGE_PATH="IMAGE_PATH";
-    private String USER_TYPE="USER_TYPE";
-    private String POST_CONTENT="POST_CONTENT";
-    private String PROFILE_ID="PROFILE_ID";
-    private String TAGGED_PROFILE_ID="TAGGED_PROFILE_ID";
-    private String SUBSCRIPTION_ID="SUBSCRIPTION_ID";
-    private String STATUS="STATUS";
+    private String FLAG = "FLAG";
+    private String NOTIFICATION_ID = "NOTIFICATION_ID";
+    private String VIDEO_PATH = "VIDEO_PATH";
+    private String IMAGE_PATH = "IMAGE_PATH";
+    private String USER_TYPE = "USER_TYPE";
+    private String POST_CONTENT = "POST_CONTENT";
+    private String PROFILE_ID = "PROFILE_ID";
+    private String TAGGED_PROFILE_ID = "TAGGED_PROFILE_ID";
+    private String SUBSCRIPTION_ID = "SUBSCRIPTION_ID";
+    private String STATUS = "STATUS";
 
 
     public DatabaseHandler(Context context) {

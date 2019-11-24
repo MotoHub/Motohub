@@ -60,6 +60,7 @@ public class BaseFragment extends Fragment implements ViewModelCallback, Permiss
     protected static final String GROUP_IMAGE_NAME_TYPE = "grp_chat_img";
     public String mCompressedVideoPath = "";
     private String COMPRESSED_VIDEO_FOLDER = "MotoHub";
+    private WeakReference<BaseViewModel> registeredModel = null;
 
     @Override
     public void onAttach(Context context) {
@@ -77,12 +78,12 @@ public class BaseFragment extends Fragment implements ViewModelCallback, Permiss
         super.onViewCreated(view, savedInstanceState);
     }
 
+//    public void callGetEvents(ArrayList<ProfileResModel> fullMPList) {}
+
     public void showSnackBar(View view, String msg) {
         Snackbar snackbar = Snackbar.make(view, msg, Snackbar.LENGTH_LONG);
         snackbar.show();
     }
-
-//    public void callGetEvents(ArrayList<ProfileResModel> fullMPList) {}
 
     public void callFeedPost(ProfileResModel mProfileResModel) {
     }
@@ -314,8 +315,6 @@ public class BaseFragment extends Fragment implements ViewModelCallback, Permiss
             }
         });
     }
-
-    private WeakReference<BaseViewModel> registeredModel = null;
 
     public void registerModel(BaseViewModel model) {
         if (getActivity() instanceof ViewModelCallback) {

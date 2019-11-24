@@ -22,12 +22,12 @@ import retrofit2.Response;
 
 public class MTError extends Exception {
 
+    final String errorMessage;
     private final int serverErrorCode;
     private final String errTag = "Error: --";
+    Throwable error = null;
     private String url_path = null;
     private MTErrorModel errorModel;
-    Throwable error = null;
-    final String errorMessage;
 
     public MTError(Throwable error, String errorMessage) {
         super();

@@ -322,14 +322,14 @@
                 <TextView
                     android:id="@+id/commentsCountTxt"
                     style="@style/LayoutWrap"
-                    android:layout_toStartOf="@+id/shareCountTxt"
                     android:layout_marginEnd="@dimen/size5"
+                    android:layout_toStartOf="@+id/shareCountTxt"
                     android:padding="@dimen/size5"
                     android:textColor="@color/colorDarkGrey"
                     android:textSize="@dimen/text14"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/shareCountTxt"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintWidth_percent="1"
                     tools:text="123 Comments" />
 

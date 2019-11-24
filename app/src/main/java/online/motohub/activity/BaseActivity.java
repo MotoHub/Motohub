@@ -220,6 +220,7 @@ public class BaseActivity extends AppCompatActivity implements ViewModelCallback
 
 
     };
+    private WeakReference<BaseViewModel> registeredModel = null;
 
     private static String getRealPathFromURI(Context mContext, Uri contentURI) {
         Cursor cursor = mContext.getContentResolver().query(contentURI, null, null, null, null);
@@ -1799,6 +1800,15 @@ public class BaseActivity extends AppCompatActivity implements ViewModelCallback
         }
     }
 
+   /* public String getCompressedVideoPath() {
+        CreateCompressedVideoPath();
+        mCompressedVideoPath = Environment.getExternalStorageDirectory()
+                + File.separator
+                + COMPRESSED_VIDEO_FOLDER + System.currentTimeMillis() + "COMPRESSED_VIDEO.mp4";
+        return mCompressedVideoPath;
+
+    }*/
+
     public boolean isPermission(PermissionCallback permissionCallback, List<String> camera) {
         mPermissionCallback = permissionCallback;
         listPermissionsNeeded = new ArrayList<>();
@@ -1811,15 +1821,6 @@ public class BaseActivity extends AppCompatActivity implements ViewModelCallback
 
         return true;
     }
-
-   /* public String getCompressedVideoPath() {
-        CreateCompressedVideoPath();
-        mCompressedVideoPath = Environment.getExternalStorageDirectory()
-                + File.separator
-                + COMPRESSED_VIDEO_FOLDER + System.currentTimeMillis() + "COMPRESSED_VIDEO.mp4";
-        return mCompressedVideoPath;
-
-    }*/
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
@@ -2023,6 +2024,10 @@ public class BaseActivity extends AppCompatActivity implements ViewModelCallback
         return mWordToSpan;
     }
 
+    // https://stackoverflow.com/questions/9769554/how-to-convert-number-into-k-thousands-m-million-and-b-billion-suffix-in-jsp
+    // Converts the number to K, M suffix
+    // Ex: 5500 will be displayed as 5.5k
+
     public String setPaymentCardNumber(String cardNumber) {
         cardNumber = cardNumber.replace(" ", "");
         String mFirstSubStr = cardNumber.substring(0, 4);
@@ -2030,10 +2035,6 @@ public class BaseActivity extends AppCompatActivity implements ViewModelCallback
         String resStrTxt = mFirstSubStr + "-xxxx-xxxx-" + mLastSubStr;
         return resStrTxt;
     }
-
-    // https://stackoverflow.com/questions/9769554/how-to-convert-number-into-k-thousands-m-million-and-b-billion-suffix-in-jsp
-    // Converts the number to K, M suffix
-    // Ex: 5500 will be displayed as 5.5k
 
     public SpannableString setCommentTagText(final Context mContext, String mCommentTagString, String mTagList, final String mTaggedUserIds) {
         SpannableString mWordToSpan = new SpannableString(mCommentTagString);
@@ -2148,8 +2149,6 @@ public class BaseActivity extends AppCompatActivity implements ViewModelCallback
         mActivity.overridePendingTransition(R.anim.slide_in_right,
                 R.anim.slide_out_left);
     }
-
-    private WeakReference<BaseViewModel> registeredModel = null;
 
     public void registerModel(BaseViewModel model) {
         if (getActivity() instanceof ViewModelCallback) {

@@ -52,7 +52,7 @@ class NotificationModel1 {
             } catch (e: JSONException) {
                 e.printStackTrace()
             }
-            if(TextUtils.isEmpty(Type)){
+            if (TextUtils.isEmpty(Type)) {
                 return ""
             }
 

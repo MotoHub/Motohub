@@ -100,6 +100,16 @@ public class FindEventsAdapter extends RecyclerView.Adapter<FindEventsAdapter.Ho
     private String mToken = "";
     private boolean isUpdatePayment = false;
     private String mTransactionID = "";
+    CommonInterface mCommonInterface = new CommonInterface() {
+        @Override
+        public void onSuccess() {
+            if (isUpdatePayment) {
+                callUpdateLiveStreamPayment();
+            } else {
+                callPayViewLiveStream();
+            }
+        }
+    };
     private ArrayList<PromoterFollowerResModel> mPromoterFollowerList = new ArrayList<>();
     RetrofitResInterface mRetrofitResInterface = new RetrofitResInterface() {
         @Override
@@ -192,19 +202,9 @@ public class FindEventsAdapter extends RecyclerView.Adapter<FindEventsAdapter.Ho
 //            DialogManager.showRetryAlertDialogWithCallback(mContext, mCommonInterface, mContext.getString(R.string.internet_err));
         }
     };
-    CommonInterface mCommonInterface = new CommonInterface() {
-        @Override
-        public void onSuccess() {
-            if (isUpdatePayment) {
-                callUpdateLiveStreamPayment();
-            } else {
-                callPayViewLiveStream();
-            }
-        }
-    };
     private boolean isFromEventList = false;
 
-    public FindEventsAdapter( Context context, ArrayList<EventsResModel> eventsFindListData, ProfileResModel myProfileResModel,  boolean isFromEventList) {
+    public FindEventsAdapter(Context context, ArrayList<EventsResModel> eventsFindListData, ProfileResModel myProfileResModel, boolean isFromEventList) {
         this.mContext = context;
         this.mOriginalEventsFindListData = eventsFindListData;
         this.mMyProfileResModel = myProfileResModel;

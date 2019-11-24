@@ -20,7 +20,7 @@ class MyProfileFragment : BaseFragment() {
     }
 
     private fun initView() {
-        Log.e("CURRENT_FRAGMENT","MyProfileFragment")
+        Log.e("CURRENT_FRAGMENT", "MyProfileFragment")
         getMyProfile()
         getFeeds()
     }

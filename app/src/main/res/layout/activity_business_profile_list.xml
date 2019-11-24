@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    style="@style/LayoutMatch"
     android:id="@+id/parentLay"
+    style="@style/LayoutMatch"
     android:background="@color/colorWhite">
 
     <android.support.constraint.ConstraintLayout

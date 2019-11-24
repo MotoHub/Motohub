@@ -36,7 +36,7 @@ class FindEventViewModel(application: Application, bundle: Bundle?) : BaseViewMo
         provider.getUpcomingEvents(getInputModel(), ResponseCallback {
             callback!!.hideProgress()
             if (it.isSuccess && it.data != null && it.data.resource != null) {
-                if(it.data.resource.isEmpty())
+                if (it.data.resource.isEmpty())
                     callback!!.showMessage(context.getString(R.string.no_events_err))
                 eventsLiveData.value = it.data.resource
             }
@@ -45,7 +45,7 @@ class FindEventViewModel(application: Application, bundle: Bundle?) : BaseViewMo
 
     private fun getInputModel(): ApiInputModel {
         val status = AppConstants.EVENT_STATUS
-        val currentDate =Utility.getInstance().currentDateTime
+        val currentDate = Utility.getInstance().currentDateTime
         val filter = "(( Date >= $currentDate ) OR ( Finish >= $currentDate )) AND ( EventStatus = $status)"
         val inputModel = ApiInputModel()
         inputModel.filter = filter

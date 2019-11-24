@@ -86,7 +86,7 @@ public class ResponseInterceptor implements Interceptor {
                 CacheControl c = originalResponse.cacheControl();
                 if (c.noCache()) {
 
-                    Log.e("","Using local etag mechanism");
+                    Log.e("", "Using local etag mechanism");
                     return originalResponse.newBuilder()
                             .removeHeader("CACHE_MAX_AGE_SEC")
                             .header("Cache-Control", "max-age=" + max_age)

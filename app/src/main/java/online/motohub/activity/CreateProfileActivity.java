@@ -172,7 +172,7 @@ public class CreateProfileActivity extends BaseActivity implements PopupMenu.OnM
         }
     }
 
-    private void changeButtonBg(int id){
+    private void changeButtonBg(int id) {
 
     }
 

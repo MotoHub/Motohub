@@ -1537,6 +1537,7 @@ public class RetrofitClient {
                 });
 
     }
+
     public void callDeleteProfilePosts(final BaseFragment fragment, int postID, final int responseType) {
 
         String mFilter = "ID=" + postID;
@@ -2637,6 +2638,7 @@ public class RetrofitClient {
             }
         });
     }
+
     public void postLikesForPosts(final BaseFragment activity, JsonObject mFeedLikesEntity, final int responseType) {
 
         DialogManager.showProgress(activity.getActivity());
@@ -2666,6 +2668,7 @@ public class RetrofitClient {
             }
         });
     }
+
     public void callPostFeedComments(final BaseActivity activity, JsonObject jsonArray, final int responseType) {
 
         DialogManager.showProgress(activity);
@@ -2713,6 +2716,7 @@ public class RetrofitClient {
             }
         });
     }
+
     public void callUnLikeForPosts(final BaseFragment activity, String mFilter, final int responseType) {
         DialogManager.showProgress(activity.getActivity());
         RetrofitClient.getRetrofitInstance().getRetrofitApiInterface()
@@ -2735,6 +2739,7 @@ public class RetrofitClient {
             }
         });
     }
+
     public void callPostShares(final Context context, JsonObject jsonObject, final int responseType) {
         DialogManager.showProgress(context);
         RetrofitClient.getRetrofitInstance().getRetrofitApiInterface()
@@ -5156,6 +5161,7 @@ public class RetrofitClient {
                     }
                 });
     }
+
     public void blockNotifications(final BaseFragment activity, JsonObject jsonobj, final int responseType) {
         DialogManager.showProgress(activity.getActivity());
 
@@ -5179,6 +5185,7 @@ public class RetrofitClient {
                     }
                 });
     }
+
     public void getViewCount(final BaseActivity activity, String filter, final int responseType) {
         RetrofitClient.getRetrofitInstance().getRetrofitApiInterface().callGetViewCount(filter)
                 .enqueue(new Callback<PostsModel>() {
@@ -5285,6 +5292,7 @@ public class RetrofitClient {
                     }
                 });
     }
+
     public void unBlockNotifications(final BaseFragment activity, String filter, final int responseType) {
         DialogManager.showProgress(activity.getActivity());
         RetrofitClient.getRetrofitInstance().getRetrofitApiInterface().unBlockNotifications("*", filter)
@@ -5307,6 +5315,7 @@ public class RetrofitClient {
                     }
                 });
     }
+
     public void getPromotersSubs(final BaseActivity activity, String mFilter, final int responseType, int limit, int offset) {
         DialogManager.showProgress(activity);
         String mRelated = "profiles_by_ProfileID";

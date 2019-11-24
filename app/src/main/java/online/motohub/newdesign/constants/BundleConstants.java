@@ -8,5 +8,5 @@ public class BundleConstants {
 
     public static final String BUSINESS_PROFILE_TYPE = "BUSINESS_PROFILE_TYPE";
 
-    public static final String FOOTER_NAVIGATION_ID =  "FOOTER_NAVIGATION_ID";
+    public static final String FOOTER_NAVIGATION_ID = "FOOTER_NAVIGATION_ID";
 }

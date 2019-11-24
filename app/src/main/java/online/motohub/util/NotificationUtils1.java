@@ -101,7 +101,7 @@ public class NotificationUtils1 {
         //If needed generate random number for notificationID
         NotificationManager mNotificationManager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
         try {
-            if(mNotificationManager!=null) {
+            if (mNotificationManager != null) {
                 if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
                     mNotificationManager.createNotificationChannel(getNotificationChannel(model));
                 }

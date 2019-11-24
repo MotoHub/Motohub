@@ -102,9 +102,9 @@ public class AppConstants {
     public static final String ACTION_PICK = "motohub.ACTION_PICK";
     public static final String ACTION_MULTIPLE_PICK = "motohub.ACTION_MULTIPLE_PICK";
     public static final String CACHE_DIR = ".MotoHUB/Cache";
-    public static final String FILE_CACHE_FOLDER_NAME = "MH" ;
+    public static final String FILE_CACHE_FOLDER_NAME = "MH";
 
-    public static UploadStatus UPLOAD_STATUS =UploadStatus.FAILED;
+    public static UploadStatus UPLOAD_STATUS = UploadStatus.FAILED;
     public static String TAG = "MOTOHUB";
     public static CommonInterface LIVE_STREAM_CALL_BACK = null;
 }

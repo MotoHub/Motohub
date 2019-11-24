@@ -78,12 +78,12 @@ public class BusinessNewsFeedAdapter extends RecyclerView.Adapter<RecyclerView.V
     private AdapterClickCallBack callBack;
     private BaseFragment fragment;
 
-    public BusinessNewsFeedAdapter(Context ctx, ArrayList<PostsResModel> postsList, ProfileResModel myProfile,PromotersResModel businessProfile,
+    public BusinessNewsFeedAdapter(Context ctx, ArrayList<PostsResModel> postsList, ProfileResModel myProfile, PromotersResModel businessProfile,
                                    AdapterClickCallBack callBack, BaseFragment fragment) {
         this.context = ctx;
         this.feedsList = postsList;
         this.myProfile = myProfile;
-        this.businessProfile=businessProfile;
+        this.businessProfile = businessProfile;
         this.callBack = callBack;
         this.fragment = fragment;
 

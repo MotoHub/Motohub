@@ -806,6 +806,6 @@ public interface RetrofitApiInterface {
 
     @GET(UrlUtils.GALLERY_VIDEO)
     Call<GalleryVideoModel> getVideosList(@Query("filter") String filter, @Query("order") String order,
-                                                 @Query("limit") int limit, @Query("offset") int offset,
-                                                 @Query("include_count") boolean count);
+                                          @Query("limit") int limit, @Query("offset") int offset,
+                                          @Query("include_count") boolean count);
 }

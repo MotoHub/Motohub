@@ -93,9 +93,9 @@
                                 android:layout_alignParentEnd="true"
                                 android:layout_centerVertical="true"
                                 android:clickable="true"
-                                android:visibility="gone"
                                 android:focusable="true"
-                                android:orientation="vertical">
+                                android:orientation="vertical"
+                                android:visibility="gone">
 
                                 <TextView
                                     android:id="@+id/followersCountTxt"

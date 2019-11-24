@@ -23,6 +23,8 @@ import online.motohub.model.promoter_club_news_media.PromoterFollowerResModel;
 
 public class Utility {
 
+    private long mLastClickTime = 0;
+
     public static Utility getInstance() {
 
         return MotoHub.UTILITY_INSTANCE;
@@ -247,7 +249,7 @@ public class Utility {
         }
         return diffTime;
     }
-    private long mLastClickTime = 0;
+
     public boolean isMultiClicked() {
         if (SystemClock.elapsedRealtime() - mLastClickTime < 3000) {
             return true;
@@ -255,6 +257,7 @@ public class Utility {
         mLastClickTime = SystemClock.elapsedRealtime();
         return false;
     }
+
     public String[] mergeArrayList(String[]... arrays) {
         int length = 0;
         for (String[] array : arrays) {
@@ -268,6 +271,7 @@ public class Utility {
         }
         return result;
     }
+
     public String[] getImgVideoList(String str) {
         String[] mArray = null;
         if (!TextUtils.isEmpty(str)) {
