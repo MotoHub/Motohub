@@ -52,10 +52,14 @@
                     android:layout_centerHorizontal="true"
                     android:layout_margin="@dimen/size10">
 
+                    <include layout="@layout/view_profile_type"/>
+
                     <LinearLayout
                         android:id="@+id/form_box"
                         style="@style/LayoutMatchWrap"
+                        android:layout_below="@+id/viewProfileType"
                         android:layout_marginBottom="@dimen/size10"
+                        android:layout_marginTop="@dimen/size10"
                         android:background="@drawable/gray_border_bg"
                         android:orientation="vertical">
 

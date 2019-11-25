@@ -13,10 +13,12 @@ import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.util.Patterns;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
+import android.widget.Spinner;
 
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.gson.JsonObject;
@@ -60,6 +62,9 @@ public class LoginActivity extends BaseActivity {
 
     @BindView(R.id.login_co_layout)
     CoordinatorLayout mCoordinatorLayout;
+
+    @BindView(R.id.profileTypeSpinner)
+    Spinner profileTypeSpinner;
 
     @BindView(R.id.email_et)
     EditText mEmailEt;
@@ -166,6 +171,10 @@ public class LoginActivity extends BaseActivity {
             RetrofitClient.getRetrofitInstance().callFacebookLogin(this, data.getQueryParameter("service"),
                     data.getQueryParameter("code"), data.getQueryParameter("state"), RetrofitClient.FACEBOOK_LOGIN_RESPONSE);
         }
+
+        ArrayAdapter<CharSequence> mMPSpinnerAdapter = new ArrayAdapter<>(this, R.layout.widget_spinner_item, getResources().getStringArray(R.array.profile_type));
+        mMPSpinnerAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
+        profileTypeSpinner.setAdapter(mMPSpinnerAdapter);
 
         setRecentUserAdapter();
 

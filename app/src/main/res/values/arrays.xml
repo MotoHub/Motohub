@@ -61,4 +61,17 @@
         <item>Something else</item>
     </string-array>
 
+    <string-array name="profile_type">
+        <item>Spectator</item>
+        <item>Car</item>
+        <item>Bike</item>
+        <item>Boat</item>
+        <item>Kart</item>
+        <item>Promoters</item>
+        <item>Performance Shop</item>
+        <item>News &amp; Media</item>
+        <item>Tracks</item>
+        <item>Clubs</item>
+    </string-array>
+
 </resources>
