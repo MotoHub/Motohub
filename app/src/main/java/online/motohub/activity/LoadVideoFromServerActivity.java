@@ -3,35 +3,22 @@ package online.motohub.activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ProgressBar;
 
-import com.google.android.exoplayer2.DefaultLoadControl;
-import com.google.android.exoplayer2.DefaultRenderersFactory;
 import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.ExoPlayer;
-import com.google.android.exoplayer2.ExoPlayerFactory;
-import com.google.android.exoplayer2.LoadControl;
-import com.google.android.exoplayer2.PlaybackParameters;
+import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.SimpleExoPlayer;
-import com.google.android.exoplayer2.Timeline;
 import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
 import com.google.android.exoplayer2.source.ExtractorMediaSource;
 import com.google.android.exoplayer2.source.MediaSource;
-import com.google.android.exoplayer2.source.TrackGroupArray;
-import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
-import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
-import com.google.android.exoplayer2.trackselection.TrackSelection;
-import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
-import com.google.android.exoplayer2.trackselection.TrackSelector;
 import com.google.android.exoplayer2.ui.AspectRatioFrameLayout;
-import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
-import com.google.android.exoplayer2.upstream.BandwidthMeter;
+import com.google.android.exoplayer2.ui.PlayerView;
 import com.google.android.exoplayer2.upstream.DataSource;
-import com.google.android.exoplayer2.upstream.DefaultAllocator;
-import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
 import com.google.android.exoplayer2.upstream.cache.Cache;
 import com.google.android.exoplayer2.upstream.cache.CacheDataSource;
@@ -44,13 +31,14 @@ import butterknife.ButterKnife;
 import online.motohub.R;
 import online.motohub.dialog.DialogManager;
 import online.motohub.newdesign.constants.AppConstants;
+import online.motohub.util.ExoPlayerUtils;
 
 public class LoadVideoFromServerActivity extends BaseActivity {
 
     /* @BindView(R.id.toolbar)
      Toolbar mToolbar;*/
     @BindView(R.id.video_player)
-    SimpleExoPlayerView mExoPlayerView;
+    PlayerView mExoPlayerView;
     @BindView(R.id.videoProgress)
     ProgressBar mProgressBar;
 
@@ -85,33 +73,10 @@ public class LoadVideoFromServerActivity extends BaseActivity {
     private void initializePlayer() {
 
         mExoPlayerView.setUseController(true);
-        BandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
-        TrackSelection.Factory videoTrackSelectionFactory = new AdaptiveTrackSelection.Factory(bandwidthMeter);
-        TrackSelector mTrackSelector = new DefaultTrackSelector(videoTrackSelectionFactory);
-        LoadControl mLoadControl = new DefaultLoadControl(new DefaultAllocator(true, 16 * 1024),
-                25000, 30000, 2500, 5000);
-//        LoadControl mLoadControl = new DefaultLoadControl();
-        mExoPlayer = ExoPlayerFactory.newSimpleInstance(
-                new DefaultRenderersFactory(this),
-                mTrackSelector, mLoadControl);
-        mExoPlayer.addListener(new ExoPlayer.EventListener() {
-            @Override
-            public void onTimelineChanged(Timeline timeline, Object manifest) {
-                sysOut("Listener-onTimelineChanged...");
-            }
-
-            @Override
-            public void onTracksChanged(TrackGroupArray trackGroups, TrackSelectionArray trackSelections) {
-                sysOut("Listener-onTracksChanged...");
-            }
-
-            @Override
-            public void onLoadingChanged(boolean isLoading) {
-            }
-
+        mExoPlayer = ExoPlayerUtils.Companion.getInstance().getExoPlayer();
+        mExoPlayer.addListener(new Player.EventListener() {
             @Override
             public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
-                sysOut("Listener-onPlayerStateChanged..." + playbackState);
                 if (playbackState == ExoPlayer.STATE_BUFFERING) {
                     mProgressBar.setVisibility(View.VISIBLE);
                 } else if (playbackState == ExoPlayer.STATE_READY) {
@@ -120,28 +85,19 @@ public class LoadVideoFromServerActivity extends BaseActivity {
                     mExoPlayer.setPlayWhenReady(false);
                     mProgressBar.setVisibility(View.GONE);
                 }
-
             }
 
             @Override
             public void onPlayerError(ExoPlaybackException error) {
-                sysOut("Listener-onPlayerError...");
-                showToast(LoadVideoFromServerActivity.this, "Can't play this video");
+                String err = error.getMessage();
+                if (TextUtils.isEmpty(err)) {
+                    err = "Can't play this video";
+                }
+                showToast(LoadVideoFromServerActivity.this, err);
                 mExoPlayer.stop();
                 mExoPlayer.setPlayWhenReady(false);
                 mProgressBar.setVisibility(View.GONE);
             }
-
-            @Override
-            public void onPositionDiscontinuity() {
-                sysOut("Listener-onPositionDiscontinuity...");
-            }
-
-            @Override
-            public void onPlaybackParametersChanged(PlaybackParameters playbackParameters) {
-                sysOut("Listener-onPlaybackParametersChanged...");
-            }
-
         });
         mExoPlayerView.requestFocus();
         mExoPlayerView.setPlayer(mExoPlayer);

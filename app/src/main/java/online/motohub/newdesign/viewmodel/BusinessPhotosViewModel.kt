@@ -1,7 +1,7 @@
 package online.motohub.newdesign.viewmodel
 
 import android.app.Application
-import android.arch.lifecycle.MutableLiveData
+import androidx.lifecycle.MutableLiveData
 import android.os.Bundle
 import com.google.gson.Gson
 import online.motohub.interfaces.ResponseCallback

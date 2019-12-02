@@ -1,11 +1,11 @@
 package online.motohub.newdesign.activity
 
-import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.support.v4.app.FragmentManager
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import android.view.View
 import com.google.gson.Gson
 import com.yalantis.contextmenu.lib.ContextMenuDialogFragment
@@ -34,7 +34,7 @@ class MainHomeActivity : BaseActivity(), View.OnClickListener, OnMenuItemClickLi
 
     var model: HomeViewModel? = null
     var navigationID: Int = 0
-    private var fragmentManager: FragmentManager? = null
+    private var fragmentManager: androidx.fragment.app.FragmentManager? = null
     private var settingsMenuFragment: ContextMenuDialogFragment? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -154,7 +154,7 @@ class MainHomeActivity : BaseActivity(), View.OnClickListener, OnMenuItemClickLi
             }
             R.id.settingsIcon -> {
                 if (!settingsMenuFragment!!.isVisible)
-                    settingsMenuFragment!!.show(fragmentManager, ContextMenuDialogFragment.TAG)
+                    fragmentManager?.let { settingsMenuFragment!!.show(it, ContextMenuDialogFragment.TAG) }
             }
         }
 
@@ -208,7 +208,7 @@ class MainHomeActivity : BaseActivity(), View.OnClickListener, OnMenuItemClickLi
         }
     }
 
-    fun addFragment(mFragment: Fragment?) {
+    fun addFragment(mFragment: androidx.fragment.app.Fragment?) {
         if (mFragment != null) {
             val fragmentManager = supportFragmentManager
             fragmentManager.beginTransaction().addToBackStack(mFragment.javaClass.simpleName).add(R.id.contentFrame, mFragment)
@@ -218,7 +218,7 @@ class MainHomeActivity : BaseActivity(), View.OnClickListener, OnMenuItemClickLi
         }
     }
 
-    private fun replaceFragment(fragment: Fragment?, bundle: Bundle) {
+    private fun replaceFragment(fragment: androidx.fragment.app.Fragment?, bundle: Bundle) {
         if (fragment != null) {
             fragment.arguments = bundle
             val fragmentManager = supportFragmentManager

@@ -1,8 +1,8 @@
 package online.motohub.newdesign.fragment
 
-import android.arch.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
-import android.support.v7.widget.LinearLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -36,13 +36,13 @@ class BusinessEventFragment : BaseFragment() {
             activeBundle = Bundle()
         }
 
-        val layoutManager = LinearLayoutManager(activity)
-        layoutManager.orientation = LinearLayoutManager.VERTICAL
+        val layoutManager = androidx.recyclerview.widget.LinearLayoutManager(activity)
+        layoutManager.orientation = androidx.recyclerview.widget.LinearLayoutManager.VERTICAL
         listView.layoutManager = layoutManager
 
         model = ViewModelProviders.of(this, BaseViewModelFactory(activity!!.application, activeBundle)).get(BusinessEventViewModel::class.java)
         registerModel(model)
-        model!!.eventsLiveData.observe(this, android.arch.lifecycle.Observer {
+        model!!.eventsLiveData.observe(this, androidx.lifecycle.Observer {
             if (it != null)
 
                 setAdapter(it)

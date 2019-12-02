@@ -2,8 +2,8 @@ package online.motohub.activity;
 
 import android.Manifest;
 import android.os.Bundle;
-import android.support.v4.view.GestureDetectorCompat;
-import android.support.v7.widget.Toolbar;
+import androidx.core.view.GestureDetectorCompat;
+import androidx.appcompat.widget.Toolbar;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageButton;

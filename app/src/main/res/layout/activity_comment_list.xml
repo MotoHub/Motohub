@@ -12,7 +12,7 @@
             layout="@layout/widget_toolbar" />
 
 
-        <android.support.v7.widget.RecyclerView
+        <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/feeds_comments_list_view"
             style="@style/LayoutMatchWrap"
             android:layout_above="@+id/footer_lay"
@@ -22,7 +22,7 @@
             android:listSelector="@android:color/transparent"
             android:scrollbars="none" />
 
-        <android.support.v7.widget.RecyclerView
+        <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvTagList"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -73,7 +73,7 @@
                     android:textSize="@dimen/text14"
                     android:textStyle="bold" />
 
-                <android.support.constraint.ConstraintLayout
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/imageConstraintLay"
                     style="@style/LayoutMatchWrap"
                     android:visibility="gone">
@@ -94,7 +94,7 @@
                         app:layout_constraintTop_toTopOf="@+id/iv_post_image"
                         app:srcCompat="@drawable/cancel_orange_circle_icon" />
 
-                </android.support.constraint.ConstraintLayout>
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <RelativeLayout style="@style/LayoutMatchWrap">
 

@@ -10,7 +10,7 @@
         android:background="@android:color/black"
         android:visibility="visible">
 
-        <com.google.android.exoplayer2.ui.SimpleExoPlayerView
+        <com.google.android.exoplayer2.ui.PlayerView
             android:id="@+id/video_player"
             style="@style/LayoutMatch"
             android:layout_centerInParent="true" />

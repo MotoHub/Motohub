@@ -1,6 +1,6 @@
 package online.motohub.model.promoter_club_news_media;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;

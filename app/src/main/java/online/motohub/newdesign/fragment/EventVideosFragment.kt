@@ -1,11 +1,11 @@
 package online.motohub.newdesign.fragment
 
-import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.os.SystemClock
-import android.support.v4.widget.SwipeRefreshLayout
-import android.support.v7.widget.LinearLayoutManager
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import androidx.recyclerview.widget.LinearLayoutManager
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -24,7 +24,7 @@ import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
 import java.util.concurrent.TimeUnit
 
-class EventVideosFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener, AdapterClickCallBack {
+class EventVideosFragment : BaseFragment(), androidx.swiperefreshlayout.widget.SwipeRefreshLayout.OnRefreshListener, AdapterClickCallBack {
 
     private var model: OnDemandEventsViewModel? = null
     private var onDemandAdapter: OnDemandEventsAdapter? = null
@@ -49,8 +49,8 @@ class EventVideosFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener
         if (activeBundle == null) {
             activeBundle = Bundle()
         }
-        val layoutManager = LinearLayoutManager(activity)
-        layoutManager.orientation = LinearLayoutManager.VERTICAL
+        val layoutManager = androidx.recyclerview.widget.LinearLayoutManager(activity)
+        layoutManager.orientation = androidx.recyclerview.widget.LinearLayoutManager.VERTICAL
         listView.layoutManager = layoutManager
 
         swipeRefreshLay.setOnRefreshListener(this)

@@ -21,15 +21,15 @@
 
     </com.facebook.shimmer.ShimmerFrameLayout>
 
-    <android.support.v4.widget.SwipeRefreshLayout
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipeRefreshLayout"
         style="@style/LayoutMatchWrap"
         android:visibility="gone">
 
-        <android.support.v7.widget.RecyclerView
+        <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_view"
             style="@style/LayoutMatchWrap"
             android:background="@color/colorLighterGrey" />
-    </android.support.v4.widget.SwipeRefreshLayout>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 </RelativeLayout>

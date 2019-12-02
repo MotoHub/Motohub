@@ -16,7 +16,7 @@
         android:layout_above="@+id/lChat"
         android:layout_below="@+id/toolbarLayout">
 
-        <android.support.v7.widget.RecyclerView
+        <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -42,7 +42,7 @@
              android:textSize="@dimen/text14"
              android:textStyle="bold" />-->
 
-        <android.support.constraint.ConstraintLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/imageConstraintLay"
             style="@style/LayoutMatchWrap"
             android:background="@color/colorGrey"
@@ -69,7 +69,7 @@
                 app:layout_constraintTop_toTopOf="@+id/iv_post_image"
                 app:srcCompat="@drawable/cancel_orange_circle_icon" />
 
-        </android.support.constraint.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <include
             android:id="@+id/replyChatLayout"

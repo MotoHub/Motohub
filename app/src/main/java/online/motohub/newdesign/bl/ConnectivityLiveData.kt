@@ -1,6 +1,6 @@
 package online.motohub.newdesign.bl
 
-import android.arch.lifecycle.LiveData
+import androidx.lifecycle.LiveData
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -10,8 +10,8 @@ import android.net.Network
 import android.net.NetworkInfo
 import android.net.NetworkRequest
 import android.os.Build
-import android.support.annotation.RequiresPermission
-import android.support.annotation.VisibleForTesting
+import androidx.annotation.RequiresPermission
+import androidx.annotation.VisibleForTesting
 
 class ConnectivityLiveData @VisibleForTesting internal constructor(private val context: Context,
                                                                    private val connectivityManager: ConnectivityManager)

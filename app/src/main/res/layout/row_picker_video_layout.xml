@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     style="@style/LayoutMatchWrap">
 
-    <android.support.v7.widget.CardView
+    <androidx.cardview.widget.CardView
         android:id="@+id/row_adapter_picker_video_container"
         style="@style/LayoutMatchWrap"
         android:layout_width="0dp"
@@ -50,5 +50,5 @@
                 android:textSize="@dimen/text12" />
         </LinearLayout>
 
-    </android.support.v7.widget.CardView>
+    </androidx.cardview.widget.CardView>
 </LinearLayout>

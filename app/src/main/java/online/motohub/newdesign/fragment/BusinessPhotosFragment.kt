@@ -1,11 +1,11 @@
 package online.motohub.newdesign.fragment
 
-import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
-import android.support.v7.widget.GridLayoutManager
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -54,8 +54,8 @@ class BusinessPhotosFragment : BaseFragment(), AdapterClickCallBack {
         if (activeBundle == null) {
             activeBundle = Bundle()
         }
-        val layoutManager = GridLayoutManager(activity, 3)
-        layoutManager.orientation = LinearLayoutManager.VERTICAL
+        val layoutManager = androidx.recyclerview.widget.GridLayoutManager(activity, 3)
+        layoutManager.orientation = androidx.recyclerview.widget.LinearLayoutManager.VERTICAL
         listView.layoutManager = layoutManager
 
         model = ViewModelProviders.of(this, BaseViewModelFactory(activity!!.application, activeBundle)).get(BusinessPhotosViewModel::class.java)
@@ -69,8 +69,8 @@ class BusinessPhotosFragment : BaseFragment(), AdapterClickCallBack {
         })
         model!!.initialize()
 
-        listView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+        listView.addOnScrollListener(object : androidx.recyclerview.widget.RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: androidx.recyclerview.widget.RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
                 val mVisibleItemCount = layoutManager.childCount
                 val mTotalItemCount = layoutManager.itemCount

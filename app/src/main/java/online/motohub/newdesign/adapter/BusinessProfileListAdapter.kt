@@ -1,7 +1,7 @@
 package online.motohub.newdesign.adapter
 
 import android.content.Context
-import android.support.v7.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,7 +15,7 @@ import online.motohub.tags.AdapterTag
 import java.util.*
 
 class BusinessProfileListAdapter(private val context: Context, private val businessProfileList: ArrayList<PromotersResModel>,
-                                 private val callback: AdapterClickCallBack) : RecyclerView.Adapter<BusinessProfileListAdapter.Holder>() {
+                                 private val callback: AdapterClickCallBack) : androidx.recyclerview.widget.RecyclerView.Adapter<BusinessProfileListAdapter.Holder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
         val mView = LayoutInflater.from(parent.context).inflate(R.layout.row_list_view_item, parent, false)
@@ -30,7 +30,7 @@ class BusinessProfileListAdapter(private val context: Context, private val busin
         return businessProfileList.size
     }
 
-    inner class Holder internal constructor(view: View) : RecyclerView.ViewHolder(view), View.OnClickListener {
+    inner class Holder internal constructor(view: View) : androidx.recyclerview.widget.RecyclerView.ViewHolder(view), View.OnClickListener {
 
         private val profileImg: CircleImageView = view.findViewById(R.id.circular_img_view)
         private val profileName: TextView = view.findViewById(R.id.top_tv)

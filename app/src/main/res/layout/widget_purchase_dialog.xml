@@ -82,7 +82,6 @@
         android:src="@drawable/ic_money"
         app:civ_border_color="@color/colorWhite"
         app:civ_border_width="@dimen/size5"
-        app:civ_fill_color="@color/colorBlack"
         tools:ignore="VectorDrawableCompat" />
 
 </RelativeLayout>

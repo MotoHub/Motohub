@@ -1,8 +1,8 @@
 package online.motohub.newdesign.viewmodel
 
 import android.app.Application
-import android.arch.lifecycle.AndroidViewModel
-import android.arch.lifecycle.Observer
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.Observer
 import android.content.Context
 import online.motohub.interfaces.PermissionViewModelCallback
 import online.motohub.interfaces.ViewModelCallback

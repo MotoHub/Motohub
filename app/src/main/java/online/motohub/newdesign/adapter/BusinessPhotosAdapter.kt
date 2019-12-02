@@ -1,8 +1,8 @@
 package online.motohub.newdesign.adapter
 
 import android.content.Context
-import android.support.v7.widget.CardView
-import android.support.v7.widget.RecyclerView
+import androidx.cardview.widget.CardView
+import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,7 +20,7 @@ import online.motohub.tags.AdapterTag
 import online.motohub.util.UrlUtils
 
 class BusinessPhotosAdapter(private val context: Context, private val photosList: ArrayList<GalleryImgResModel>,
-                            private val callBack: AdapterClickCallBack) : RecyclerView.Adapter<BusinessPhotosAdapter.Holder>() {
+                            private val callBack: AdapterClickCallBack) : androidx.recyclerview.widget.RecyclerView.Adapter<BusinessPhotosAdapter.Holder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
         val inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
@@ -36,10 +36,10 @@ class BusinessPhotosAdapter(private val context: Context, private val photosList
         return photosList.size
     }
 
-    inner class Holder(v: View) : RecyclerView.ViewHolder(v) {
+    inner class Holder(v: View) : androidx.recyclerview.widget.RecyclerView.ViewHolder(v) {
 
         var img: ImageView = v.img
-        var cardView: CardView = v.cardView
+        var cardView: androidx.cardview.widget.CardView = v.cardView
 
         fun bindView(data: GalleryImgResModel) {
             val tag = AdapterTag()

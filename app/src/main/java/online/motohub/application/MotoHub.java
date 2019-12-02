@@ -5,8 +5,8 @@ import android.content.Context;
 import android.content.IntentFilter;
 import android.os.Build;
 import android.os.StrictMode;
-import android.support.multidex.MultiDex;
-import android.support.v7.app.AppCompatDelegate;
+import androidx.multidex.MultiDex;
+import androidx.appcompat.app.AppCompatDelegate;
 
 import com.bumptech.glide.request.target.ViewTarget;
 import com.crashlytics.android.Crashlytics;

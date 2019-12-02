@@ -1,11 +1,11 @@
 package online.motohub.newdesign.fragment
 
-import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.os.Bundle
-import android.support.v4.widget.SwipeRefreshLayout
-import android.support.v7.widget.LinearLayoutManager
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import androidx.recyclerview.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,7 +20,7 @@ import online.motohub.newdesign.viewmodel.BaseViewModelFactory
 import online.motohub.newdesign.viewmodel.FindEventViewModel
 import java.util.*
 
-class FindEventFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener {
+class FindEventFragment : BaseFragment(), androidx.swiperefreshlayout.widget.SwipeRefreshLayout.OnRefreshListener {
 
     var model: FindEventViewModel? = null
     var eventAdapter: FindEventsAdapter? = null
@@ -39,8 +39,8 @@ class FindEventFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener {
         if (activeBundle == null) {
             activeBundle = Bundle()
         }
-        val layoutManager = LinearLayoutManager(activity)
-        layoutManager.orientation = LinearLayoutManager.VERTICAL
+        val layoutManager = androidx.recyclerview.widget.LinearLayoutManager(activity)
+        layoutManager.orientation = androidx.recyclerview.widget.LinearLayoutManager.VERTICAL
         listView.layoutManager = layoutManager
 
         swipeRefreshLay.setOnRefreshListener(this)

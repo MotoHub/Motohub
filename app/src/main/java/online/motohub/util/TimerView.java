@@ -25,7 +25,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-public class TimerView extends android.support.v7.widget.AppCompatTextView {
+public class TimerView extends androidx.appcompat.widget.AppCompatTextView {
 
     final public static long DEFAULT_REFRESH_INTERVAL = 1000L;
 

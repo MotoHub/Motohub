@@ -7,7 +7,7 @@ buildscript {
     }
     dependencies {
         // NOTE: Do not place your application dependencies here; they belong in the individual module build.gradle files
-        classpath 'com.android.tools.build:gradle:3.1.0'
+        classpath 'com.android.tools.build:gradle:3.5.2'
         classpath 'com.google.gms:google-services:4.2.0'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
@@ -16,9 +16,14 @@ buildscript {
 allprojects {
     repositories {
         google()
-        mavenCentral()
-        maven { url "https://jitpack.io" }
         jcenter()
+        mavenCentral()
+        maven {
+            url 'https://google.bintray.com/exoplayer/'
+        }
+        maven {
+            url "https://jitpack.io"
+        }
     }
 }
 
@@ -26,7 +31,7 @@ task clean(type: Delete) {
     delete rootProject.buildDir
 }
 
-ext{
+ext {
     compileSdkVersion = 28
     buildToolsVersion = '28.0.3'
     minSdkVersion = 22

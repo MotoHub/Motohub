@@ -36,7 +36,7 @@
 
         </RelativeLayout>
 
-        <android.support.v7.widget.RecyclerView
+        <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvEventChat"
             style="@style/LayoutMatchWrap"
             android:layout_below="@+id/title_box"

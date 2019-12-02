@@ -5,7 +5,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
+import androidx.core.content.ContextCompat;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -32,7 +32,7 @@ import com.google.android.exoplayer2.trackselection.TrackSelection;
 import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
 import com.google.android.exoplayer2.trackselection.TrackSelector;
 import com.google.android.exoplayer2.ui.AspectRatioFrameLayout;
-import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
+import com.google.android.exoplayer2.ui.PlayerView;
 import com.google.android.exoplayer2.upstream.BandwidthMeter;
 import com.google.android.exoplayer2.upstream.DefaultAllocator;
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
@@ -92,7 +92,7 @@ public class PromotorOrUserVideoPlaying extends BaseActivity {
     @BindView(R.id.tv_caption)
     TextView mCaption;
     @BindView(R.id.video_view)
-    SimpleExoPlayerView mVideoView;
+    PlayerView mVideoView;
     @BindView(R.id.progress_bar)
     ProgressBar mProgressBar;
     @BindView(R.id.likeBtn)

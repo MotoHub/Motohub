@@ -1,10 +1,9 @@
 package online.motohub.newdesign.activity
 
-import android.arch.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.os.Bundle
-import android.support.design.widget.TabLayout
-import android.support.v4.app.Fragment
+import com.google.android.material.tabs.TabLayout
 import android.text.TextUtils
 import android.view.View
 import com.google.gson.Gson
@@ -39,7 +38,7 @@ import java.util.*
 class BusinessProfileActivity : BaseActivity(), TabLayout.OnTabSelectedListener, BusinessPostAdapter.TotalRetrofitPostsResultCount {
 
 
-    private val fragmentList = ArrayList<Fragment>()
+    private val fragmentList = ArrayList<androidx.fragment.app.Fragment>()
 
     private var viewPagerAdapter: BusinessViewPagerAdapter? = null
 
@@ -57,7 +56,7 @@ class BusinessProfileActivity : BaseActivity(), TabLayout.OnTabSelectedListener,
         val activeBundle = intent.extras
         model = ViewModelProviders.of(this, BaseViewModelFactory(activity!!.application, activeBundle)).get(BusinessProfileViewModel::class.java)
         registerModel(model)
-        model!!.followersCount.observe(this, android.arch.lifecycle.Observer {
+        model!!.followersCount.observe(this, androidx.lifecycle.Observer {
             if (it != null) {
                 followersLay.visibility = if (it > 0) View.VISIBLE else View.GONE
                 followersTxt.text = if (it > 1) getString(R.string.followers) else getString(R.string.follower)

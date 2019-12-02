@@ -1,8 +1,8 @@
 package online.motohub.activity;
 
 import android.os.Bundle;
-import android.support.design.widget.CoordinatorLayout;
-import android.support.v7.widget.Toolbar;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.appcompat.widget.Toolbar;
 import android.view.SurfaceView;
 import android.view.View;
 import android.widget.ImageView;

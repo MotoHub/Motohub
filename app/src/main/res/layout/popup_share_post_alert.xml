@@ -5,7 +5,7 @@
     style="@style/LayoutMatch"
     android:background="@color/transparent50">
 
-    <android.support.constraint.ConstraintLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         style="@style/LayoutMatchWrap"
         android:layout_centerInParent="true"
         android:layout_margin="@dimen/text20"
@@ -20,7 +20,7 @@
             android:textColor="@color/colorOrange"
             android:textSize="@dimen/text16" />
 
-        <android.support.v7.widget.AppCompatEditText
+        <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/shareEdt"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -62,5 +62,5 @@
                 android:textColor="@color/text_color" />
 
         </LinearLayout>
-    </android.support.constraint.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </RelativeLayout>

@@ -2,7 +2,7 @@ package online.motohub.activity;
 
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -23,8 +23,6 @@ import online.motohub.R;
 import online.motohub.dialog.DialogManager;
 import online.motohub.model.ImageModel;
 import online.motohub.util.UrlUtils;
-import uk.co.senab.photoview.PhotoViewAttacher;
-
 
 public class ViewImageActivity extends BaseActivity {
 
@@ -92,9 +90,6 @@ public class ViewImageActivity extends BaseActivity {
                     )
                     .into(mPhotoView);
         }
-
-        PhotoViewAttacher mAttacher = new PhotoViewAttacher(mPhotoView);
-
     }
 
     @Override

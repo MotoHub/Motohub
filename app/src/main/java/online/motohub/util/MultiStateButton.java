@@ -29,7 +29,7 @@ import online.motohub.R;
 /**
  * A utility class for a multi-state toggle button
  */
-public class MultiStateButton extends android.support.v7.widget.AppCompatImageView {
+public class MultiStateButton extends androidx.appcompat.widget.AppCompatImageView {
 
     private Drawable mOnDrawable = null;
     private Drawable mOffDrawable = null;

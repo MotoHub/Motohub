@@ -1,6 +1,6 @@
 package online.motohub.interfaces;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.widget.Filter;
 
 import online.motohub.model.EventsWhoIsGoingResModel;

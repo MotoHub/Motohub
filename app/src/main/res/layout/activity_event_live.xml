@@ -61,7 +61,7 @@
         android:layout_marginBottom="@dimen/size5"
         android:background="@color/colorGrey">
 
-        <android.support.v7.widget.CardView
+        <androidx.cardview.widget.CardView
             style="@style/LayoutMatchWrap"
             android:layout_margin="@dimen/size5">
 
@@ -119,7 +119,7 @@
 
             </RelativeLayout>
 
-        </android.support.v7.widget.CardView>
+        </androidx.cardview.widget.CardView>
     </RelativeLayout>
 
     <RelativeLayout
@@ -133,7 +133,7 @@
         android:layout_marginBottom="@dimen/size5"
         android:background="@drawable/orange_border_bg">
 
-        <android.support.v7.widget.CardView
+        <androidx.cardview.widget.CardView
             android:id="@+id/promoterCardView"
             style="@style/LayoutMatchWrap"
             android:layout_marginStart="@dimen/size5"
@@ -205,9 +205,9 @@
                 </LinearLayout>
 
             </RelativeLayout>
-        </android.support.v7.widget.CardView>
+        </androidx.cardview.widget.CardView>
 
-        <android.support.v7.widget.RecyclerView
+        <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -301,7 +301,7 @@
         android:gravity="center"
         android:orientation="vertical">
 
-        <android.support.constraint.ConstraintLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/imageConstraintLay"
             style="@style/LayoutMatchWrap"
             android:background="@color/colorGrey"
@@ -328,7 +328,7 @@
                 app:layout_constraintTop_toTopOf="@+id/iv_post_image"
                 app:srcCompat="@drawable/cancel_orange_circle_icon" />
 
-        </android.support.constraint.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <include
             android:id="@+id/replyChatLayout"

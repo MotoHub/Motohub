@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/view_profile_co_layout"
     style="@style/LayoutMatch">
 
     <RelativeLayout style="@style/LayoutMatchWrap">
 
-        <android.support.v4.widget.SwipeRefreshLayout
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/swipe_refresh_view"
             style="@style/LayoutMatchWrap"
             android:visibility="gone" />
@@ -20,12 +20,12 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
-        <android.support.design.widget.CoordinatorLayout
+        <androidx.coordinatorlayout.widget.CoordinatorLayout
             style="@style/LayoutMatchWrap"
             android:layout_above="@+id/bottom_box"
             android:layout_below="@id/include">
 
-            <android.support.v4.widget.NestedScrollView
+            <androidx.core.widget.NestedScrollView
                 android:id="@+id/postNextedScrollView"
                 style="@style/LayoutMatchWrap"
                 android:orientation="vertical"
@@ -377,7 +377,7 @@
                         </LinearLayout>
                     </com.facebook.shimmer.ShimmerFrameLayout>
 
-                    <android.support.v7.widget.RecyclerView
+                    <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/hor_recycler_view"
                         android:layout_width="wrap_content"
                         android:layout_height="@dimen/size100"
@@ -387,7 +387,7 @@
                         android:layout_marginTop="@dimen/size10"
                         android:layout_marginBottom="@dimen/size10"
                         android:orientation="horizontal"
-                        app:layoutManager="android.support.v7.widget.LinearLayoutManager" />
+                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
 
                     <RelativeLayout
@@ -509,7 +509,7 @@
 
                         </com.facebook.shimmer.ShimmerFrameLayout>
 
-                        <android.support.v7.widget.RecyclerView
+                        <androidx.recyclerview.widget.RecyclerView
                             android:id="@+id/hor_phone_email_friends_recycler_view"
                             android:layout_width="wrap_content"
                             android:layout_height="@dimen/size100"
@@ -518,7 +518,7 @@
                             android:layout_marginTop="@dimen/size10"
                             android:layout_marginBottom="@dimen/size10"
                             android:orientation="horizontal"
-                            app:layoutManager="android.support.v7.widget.LinearLayoutManager" />
+                            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
                         <View
                             android:id="@+id/hor_phone_email_friends_view"
@@ -574,7 +574,7 @@
                         android:orientation="vertical"
                         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-                        <android.support.v7.widget.RecyclerView
+                        <androidx.recyclerview.widget.RecyclerView
                             android:id="@+id/live_events_recycler_view"
                             style="@style/LayoutMatchWrap"
                             android:layout_height="wrap_content"
@@ -600,7 +600,7 @@
 
                         </com.facebook.shimmer.ShimmerFrameLayout>
 
-                        <android.support.v7.widget.RecyclerView
+                        <androidx.recyclerview.widget.RecyclerView
                             android:id="@+id/news_feed_recycler_view"
                             style="@style/LayoutMatchWrap"
                             android:background="@color/colorLighterGrey"
@@ -613,14 +613,14 @@
 
                 </RelativeLayout>
 
-            </android.support.v4.widget.NestedScrollView>
+            </androidx.core.widget.NestedScrollView>
             <!--<android.support.v7.widget.RecyclerView
                 android:id="@+id/news_feed_recycler_view"
                 style="@style/LayoutMatchWrap"
                 android:background="@color/colorLighterGrey"
                 app:layout_behavior="@string/appbar_scrolling_view_behavior" />-->
 
-        </android.support.design.widget.CoordinatorLayout>
+        </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
         <RelativeLayout
             android:id="@+id/bottom_box"
@@ -731,7 +731,7 @@
 
         </RelativeLayout>
 
-        <android.support.design.widget.FloatingActionButton
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/refresh_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -746,4 +746,4 @@
 
     </RelativeLayout>
 
-</android.support.design.widget.CoordinatorLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

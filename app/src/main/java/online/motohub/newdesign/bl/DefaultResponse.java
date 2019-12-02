@@ -1,6 +1,6 @@
 package online.motohub.newdesign.bl;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import online.motohub.interfaces.ResponseCallback;
 import online.motohub.interfaces.ResponseSuccessCallback;

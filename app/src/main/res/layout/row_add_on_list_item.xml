@@ -5,7 +5,7 @@
     android:layout_marginTop="@dimen/size10"
     android:background="@color/colorGrey">
 
-    <android.support.v7.widget.CardView
+    <androidx.cardview.widget.CardView
         style="@style/LayoutMatchWrap"
         android:layout_margin="@dimen/size5"
         android:background="@color/colorGrey">
@@ -34,5 +34,5 @@
                 android:textColor="@color/text_color_changed" />
 
         </LinearLayout>
-    </android.support.v7.widget.CardView>
+    </androidx.cardview.widget.CardView>
 </RelativeLayout>

@@ -1,8 +1,8 @@
 package online.motohub.newdesign.adapter
 
 import android.content.Context
-import android.support.v7.widget.CardView
-import android.support.v7.widget.RecyclerView
+import androidx.cardview.widget.CardView
+import androidx.recyclerview.widget.RecyclerView
 import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
@@ -20,7 +20,7 @@ import online.motohub.util.UrlUtils
 import java.net.URLDecoder
 
 class BusinessVideoAdapter(private val context: Context, private val videosList: ArrayList<GalleryVideoResModel>,
-                           private val callBack: AdapterClickCallBack) : RecyclerView.Adapter<BusinessVideoAdapter.Holder>() {
+                           private val callBack: AdapterClickCallBack) : androidx.recyclerview.widget.RecyclerView.Adapter<BusinessVideoAdapter.Holder>() {
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
@@ -38,10 +38,10 @@ class BusinessVideoAdapter(private val context: Context, private val videosList:
     }
 
 
-    inner class Holder(v: View) : RecyclerView.ViewHolder(v) {
+    inner class Holder(v: View) : androidx.recyclerview.widget.RecyclerView.ViewHolder(v) {
         var img: ImageView = v.img
         var titleTv: TextView = v.titleTxt
-        var cardView: CardView = v.cardView
+        var cardView: androidx.cardview.widget.CardView = v.cardView
 
         fun bindView(data: GalleryVideoResModel) {
             val tag = AdapterTag()

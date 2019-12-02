@@ -2,8 +2,8 @@ package online.motohub.util;
 
 import android.content.Context;
 import android.os.Build;
-import android.support.v4.view.MenuItemCompat;
-import android.support.v7.view.ActionMode;
+import androidx.core.view.MenuItemCompat;
+import androidx.appcompat.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuItem;
 

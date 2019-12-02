@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/parent_lay"
     style="@style/LayoutMatch"
@@ -16,7 +16,7 @@
             android:layout_above="@+id/go_live_btn"
             android:layout_below="@+id/include">
 
-            <android.support.v4.widget.NestedScrollView style="@style/LayoutMatchWrap">
+            <androidx.core.widget.NestedScrollView style="@style/LayoutMatchWrap">
 
                 <LinearLayout
                     style="@style/LayoutMatchWrap"
@@ -34,7 +34,7 @@
                         android:textSize="@dimen/text16"
                         android:textStyle="bold" />
 
-                    <android.support.v7.widget.RecyclerView
+                    <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/promoters_stream_list_view"
                         style="@style/LayoutMatchWrap"
                         android:background="@android:color/transparent"
@@ -63,7 +63,7 @@
                         android:textStyle="bold"
                         android:visibility="gone" />
 
-                    <android.support.v7.widget.RecyclerView
+                    <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/friends_stream_list_view"
                         style="@style/LayoutMatchWrap"
                         android:background="@android:color/transparent"
@@ -74,7 +74,7 @@
                         android:visibility="gone"
                         tools:targetApi="lollipop" />
                 </LinearLayout>
-            </android.support.v4.widget.NestedScrollView>
+            </androidx.core.widget.NestedScrollView>
         </RelativeLayout>
 
         <Button
@@ -93,4 +93,4 @@
             android:visibility="gone" />
     </RelativeLayout>
 
-</android.support.design.widget.CoordinatorLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

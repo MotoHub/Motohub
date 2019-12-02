@@ -1,6 +1,6 @@
 package online.motohub.model;
 
-import android.databinding.BaseObservable;
+import androidx.databinding.BaseObservable;
 
 public class User extends BaseObservable {
 
