@@ -10,11 +10,6 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.net.Uri;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.fragment.app.DialogFragment;
-import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -37,6 +32,12 @@ import android.widget.Space;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.fragment.app.DialogFragment;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -415,8 +416,8 @@ public class AppDialogFragment extends DialogFragment implements
 
                 mUnBinder = ButterKnife.bind(this, mView);
 
-                TextView mPictureTv = ButterKnife.findById(mView, R.id.edit_tv);
-                TextView mVideoTv = ButterKnife.findById(mView, R.id.delete_tv);
+                TextView mPictureTv = mView.findViewById(R.id.edit_tv);
+                TextView mVideoTv = mView.findViewById(R.id.delete_tv);
 
                 mPictureTv.setText(R.string.view_photos);
                 mVideoTv.setText(R.string.view_videos);
@@ -429,10 +430,10 @@ public class AppDialogFragment extends DialogFragment implements
 
                 mView = inflater.inflate(R.layout.dialog_profile_type, container, false);
 
-                CheckBox mBikeChkBox = ButterKnife.findById(mView, R.id.bike_cb);
-                CheckBox mBoatChkBox = ButterKnife.findById(mView, R.id.boat_cb);
-                CheckBox mCarChkBox = ButterKnife.findById(mView, R.id.car_cb);
-                CheckBox mKartChkBox = ButterKnife.findById(mView, R.id.kart_cb);
+                CheckBox mBikeChkBox = mView.findViewById( R.id.bike_cb);
+                CheckBox mBoatChkBox = mView.findViewById( R.id.boat_cb);
+                CheckBox mCarChkBox = mView.findViewById( R.id.car_cb);
+                CheckBox mKartChkBox = mView.findViewById( R.id.kart_cb);
 
                 mProfileTypes = getArguments().getStringArrayList("profileTypes");
 
@@ -469,9 +470,9 @@ public class AppDialogFragment extends DialogFragment implements
 
                 mUnBinder = ButterKnife.bind(this, mView);
 
-                final Spinner mMPSpinner = ButterKnife.findById(mView, R.id.moto_type_spinner);
+                final Spinner mMPSpinner = mView.findViewById( R.id.moto_type_spinner);
 
-                TextView mOkBtn = ButterKnife.findById(mView, R.id.okay_btn);
+                TextView mOkBtn = mView.findViewById( R.id.okay_btn);
 
                 ArrayList<String> mMPSpinnerList = new ArrayList<>();
 
@@ -511,11 +512,11 @@ public class AppDialogFragment extends DialogFragment implements
                 @SuppressWarnings("unchecked")
                 List<ProfileResModel> mFollowersList = (List<ProfileResModel>) getArguments().getSerializable(ProfileModel.OTHERS_PROFILE_RES_MODEL);
 
-                final ListView mFollowingListView = ButterKnife.findById(mView, R.id.following_list_view);
+                final ListView mFollowingListView = mView.findViewById( R.id.following_list_view);
                 final TagFollowingProfileAdapter mTagFollowingProfileAdapter = new TagFollowingProfileAdapter(getActivity(), mFollowersList);
                 mFollowingListView.setAdapter(mTagFollowingProfileAdapter);
 
-                final EditText mSearchFollowingEt = ButterKnife.findById(mView, R.id.search_following_et);
+                final EditText mSearchFollowingEt = mView.findViewById( R.id.search_following_et);
 
                 mSearchFollowingEt.addTextChangedListener(new TextWatcher() {
                     @Override
@@ -547,7 +548,7 @@ public class AppDialogFragment extends DialogFragment implements
 
                 mUnBinder = ButterKnife.bind(this, mView);
 
-                RecyclerView mTagSponsorsRv = ButterKnife.findById(mView, R.id.add_sponsor_recycler_view);
+                RecyclerView mTagSponsorsRv = mView.findViewById( R.id.add_sponsor_recycler_view);
 
                 LinearLayoutManager mHorLayoutManager = new LinearLayoutManager(getContext());
                 mHorLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
@@ -562,7 +563,7 @@ public class AppDialogFragment extends DialogFragment implements
 
                 mTaggedSponsorsAdapter = new TaggedSponsorsAdapter(this, mTaggedSponsorsList);
 
-                RecyclerView mTagRecyclerView = ButterKnife.findById(mView, R.id.tag_selected_sponsors_list_view);
+                RecyclerView mTagRecyclerView = mView.findViewById( R.id.tag_selected_sponsors_list_view);
 
                 FlexboxLayoutManager mFlexBoxLayoutManager = new FlexboxLayoutManager(getContext());
                 mFlexBoxLayoutManager.setFlexWrap(FlexWrap.WRAP);
@@ -572,9 +573,9 @@ public class AppDialogFragment extends DialogFragment implements
 
                 mTagRecyclerView.setAdapter(mTaggedSponsorsAdapter);
 
-                mSearchSponsorEt = ButterKnife.findById(mView, R.id.search_sponsor_et);
+                mSearchSponsorEt = mView.findViewById( R.id.search_sponsor_et);
 
-                mSponsorEmailEt = ButterKnife.findById(mView, R.id.enter_sponsor_email_et);
+                mSponsorEmailEt = mView.findViewById( R.id.enter_sponsor_email_et);
 
                 setDialogProperties(Gravity.CENTER, WindowManager.LayoutParams.WRAP_CONTENT);
 
@@ -586,9 +587,9 @@ public class AppDialogFragment extends DialogFragment implements
 
                 mUnBinder = ButterKnife.bind(this, mView);
 
-                TextView mSetProfileTypeTv = ButterKnife.findById(mView, R.id.profile_type_tv);
-                TextView mSetMonthValTv = ButterKnife.findById(mView, R.id.monthly_val_tv);
-                TextView mSetYearValTv = ButterKnife.findById(mView, R.id.yearly_val_tv);
+                TextView mSetProfileTypeTv = mView.findViewById( R.id.profile_type_tv);
+                TextView mSetMonthValTv = mView.findViewById( R.id.monthly_val_tv);
+                TextView mSetYearValTv = mView.findViewById( R.id.yearly_val_tv);
 
                 mProfileTypes = getArguments().getStringArrayList("profileTypes");
 
@@ -614,8 +615,8 @@ public class AppDialogFragment extends DialogFragment implements
                 TextView mBlockBtn = mView.findViewById(R.id.block_btn);
                 mBlockBtn.setVisibility(View.GONE);
 
-                TextView mProfileNameTxt = ButterKnife.findById(mView, R.id.profile_name_tv);
-                CircleImageView mProfileImgView = ButterKnife.findById(mView, R.id.profile_img);
+                TextView mProfileNameTxt = mView.findViewById( R.id.profile_name_tv);
+                CircleImageView mProfileImgView = mView.findViewById( R.id.profile_img);
 
                 assert mProfileTypes != null;
 
@@ -638,8 +639,8 @@ public class AppDialogFragment extends DialogFragment implements
 
                 mProfileTypes = getArguments().getStringArrayList("profileTypes");
 
-                TextView mProfileNameTv = ButterKnife.findById(mView, R.id.profile_name_tv);
-                CircleImageView mProfileImg = ButterKnife.findById(mView, R.id.profile_img);
+                TextView mProfileNameTv = mView.findViewById( R.id.profile_name_tv);
+                CircleImageView mProfileImg = mView.findViewById( R.id.profile_img);
 
                 assert mProfileTypes != null;
 
@@ -721,7 +722,7 @@ public class AppDialogFragment extends DialogFragment implements
 
                 ArrayList<EventCategoryModel> mEventCategoryList = (ArrayList<EventCategoryModel>) getArguments().getSerializable(EventCategoryModel.EVENT_CATEGORY_RES_MODEL);
 
-                RecyclerView mEventCategoryRecyclerView = ButterKnife.findById(mView, R.id.rvEventCategory);
+                RecyclerView mEventCategoryRecyclerView = mView.findViewById( R.id.rvEventCategory);
 
                 RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
                 mEventCategoryRecyclerView.setLayoutManager(mLayoutManager);
@@ -730,9 +731,9 @@ public class AppDialogFragment extends DialogFragment implements
                 mEventCategoryAdapter = new EventCategoryAdapter(getActivity(), mEventCategoryList);
                 mEventCategoryRecyclerView.setAdapter(mEventCategoryAdapter);
 
-                ImageButton closeDialogBtn = ButterKnife.findById(mView, R.id.close_btn);
+                ImageButton closeDialogBtn = mView.findViewById( R.id.close_btn);
 
-                Button mDoneCategoryBtn = ButterKnife.findById(mView, R.id.doneCategoryBtn);
+                Button mDoneCategoryBtn = mView.findViewById( R.id.doneCategoryBtn);
 
                 mDoneCategoryBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -772,11 +773,11 @@ public class AppDialogFragment extends DialogFragment implements
 
                 mUnBinder = ButterKnife.bind(this, mView);
 
-                TextView mDialogTv = ButterKnife.findById(mView, R.id.dialog_tv);
+                TextView mDialogTv = mView.findViewById( R.id.dialog_tv);
 
-                TextView mDialogPosBtn = ButterKnife.findById(mView, R.id.dialog_positive_btn);
-                TextView mDialogNegBtn = ButterKnife.findById(mView, R.id.dialog_negative_btn);
-                Space mSpace = ButterKnife.findById(mView, R.id.btn_space);
+                TextView mDialogPosBtn = mView.findViewById( R.id.dialog_positive_btn);
+                TextView mDialogNegBtn = mView.findViewById( R.id.dialog_negative_btn);
+                Space mSpace = mView.findViewById( R.id.btn_space);
 
                 switch (mDialogType) {
                     case ALERT_EXIT_DIALOG:

@@ -26,15 +26,6 @@ import android.os.Handler;
 import android.os.SystemClock;
 import android.provider.MediaStore;
 import android.provider.Settings;
-import androidx.annotation.Nullable;
-import androidx.annotation.RequiresPermission;
-import com.google.android.material.snackbar.Snackbar;
-import androidx.core.app.ActivityCompat;
-import androidx.fragment.app.DialogFragment;
-import androidx.core.content.ContextCompat;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.PopupMenu;
-import androidx.appcompat.widget.Toolbar;
 import android.text.SpannableString;
 import android.text.TextPaint;
 import android.text.TextUtils;
@@ -52,6 +43,15 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
+import androidx.annotation.RequiresPermission;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.PopupMenu;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.DialogFragment;
+
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestBuilder;
 import com.bumptech.glide.load.model.GlideUrl;
@@ -59,6 +59,7 @@ import com.bumptech.glide.load.model.LazyHeaders;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.gson.Gson;
 import com.yalantis.contextmenu.lib.MenuObject;
@@ -90,7 +91,6 @@ import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindString;
-import butterknife.ButterKnife;
 import online.motohub.R;
 import online.motohub.adapter.EventsFindAdapter;
 import online.motohub.dialog.DialogManager;
@@ -284,7 +284,7 @@ public class BaseActivity extends AppCompatActivity implements ViewModelCallback
         if (toolbar != null) {
             toolbar.setTitle("");
             toolbar.setContentInsetsAbsolute(0, 0);
-            TextView mToolbarTitle = ButterKnife.findById(toolbar, R.id.toolbar_title);
+            TextView mToolbarTitle = toolbar.findViewById(R.id.toolbar_title);
             mToolbarTitle.setText(toolbarTitle);
             setSupportActionBar(toolbar);
         }
@@ -402,14 +402,14 @@ public class BaseActivity extends AppCompatActivity implements ViewModelCallback
 
     protected void setToolbarLeftBtn(Toolbar toolbar) {
         if (toolbar != null) {
-            ImageButton mToolbarLeftBtn = ButterKnife.findById(toolbar, R.id.toolbar_back_img_btn);
+            ImageButton mToolbarLeftBtn = toolbar.findViewById(R.id.toolbar_back_img_btn);
             mToolbarLeftBtn.setVisibility(View.VISIBLE);
         }
     }
 
     protected void showToolbarBtn(Toolbar toolbar, int resourceID) {
         if (toolbar != null) {
-            ImageView mToolbarRightImgBtn = ButterKnife.findById(toolbar, resourceID);
+            ImageView mToolbarRightImgBtn = toolbar.findViewById(resourceID);
             mToolbarRightImgBtn.setVisibility(View.VISIBLE);
         }
     }

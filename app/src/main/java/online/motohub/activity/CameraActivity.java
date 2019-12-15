@@ -2,12 +2,13 @@ package online.motohub.activity;
 
 import android.Manifest;
 import android.os.Bundle;
-import androidx.core.view.GestureDetectorCompat;
-import androidx.appcompat.widget.Toolbar;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
+
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GestureDetectorCompat;
 
 import com.wowza.gocoder.sdk.api.devices.WZCamera;
 
@@ -86,7 +87,7 @@ public class CameraActivity extends CameraActivityBase {
         if (toolbar != null) {
             toolbar.setTitle("");
             toolbar.setContentInsetsAbsolute(0, 0);
-            TextView mToolbarTitle = ButterKnife.findById(toolbar, R.id.toolbar_title);
+            TextView mToolbarTitle = toolbar.findViewById(R.id.toolbar_title);
             mToolbarTitle.setText(toolbarTitle);
             setSupportActionBar(toolbar);
         }
@@ -94,7 +95,7 @@ public class CameraActivity extends CameraActivityBase {
 
     protected void setToolbarLeftBtn(Toolbar toolbar) {
         if (toolbar != null) {
-            ImageButton mToolbarLeftBtn = ButterKnife.findById(toolbar, R.id.toolbar_back_img_btn);
+            ImageButton mToolbarLeftBtn = toolbar.findViewById(R.id.toolbar_back_img_btn);
             mToolbarLeftBtn.setVisibility(View.VISIBLE);
         }
     }
