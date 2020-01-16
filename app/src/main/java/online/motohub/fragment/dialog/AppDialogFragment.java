@@ -976,7 +976,7 @@ public class AppDialogFragment extends DialogFragment implements
                 }
 
                 if (!android.util.Patterns.EMAIL_ADDRESS.matcher(mEmailAddr).matches()) {
-                    ((BaseActivity) getActivity()).showToast(getContext(), getContext().getString(R.string.enter_valid_email_err));
+                    ((BaseActivity) getActivity()).showToast(getContext(), getContext().getString(R.string.valid_email_msg));
                     return;
                 }
 

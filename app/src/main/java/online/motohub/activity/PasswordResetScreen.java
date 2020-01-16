@@ -20,6 +20,7 @@ import online.motohub.dialog.DialogManager;
 import online.motohub.model.CommonResponse;
 import online.motohub.model.ErrorMessage;
 import online.motohub.newdesign.activity.LoginActivity;
+import online.motohub.newdesign.utils.ValidationUtils;
 import online.motohub.retrofit.APIConstants;
 import online.motohub.retrofit.RetrofitClient;
 import online.motohub.util.Utility;
@@ -106,8 +107,8 @@ public class PasswordResetScreen extends BaseActivity {
             showSnackBar(mCoordinatorLayout, getString(R.string.empty_all));
         } else if (mEmail.isEmpty()) {
             showSnackBar(mCoordinatorLayout, getString(R.string.empty_email));
-        } else if (!Utility.isEmailValid(mEmail)) {
-            showSnackBar(mCoordinatorLayout, getString(R.string.valid_email));
+        } else if (!ValidationUtils.Companion.isValidEmail(mEmail)) {
+            showSnackBar(mCoordinatorLayout, getString(R.string.valid_email_msg));
         } else if (mResetCode.isEmpty()) {
             showSnackBar(mCoordinatorLayout, getString(R.string.empty_reset_code));
         } else if (mPwd.isEmpty()) {

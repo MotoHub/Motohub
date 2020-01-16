@@ -232,7 +232,7 @@
     <string name="no_sponsor_found_err">No Sponsors Found!</string>
     <string name="enter_sponsor_email">Couldn\'t find them? Enter email address here</string>
     <string name="enter_email_err">Please give Email Address!</string>
-    <string name="enter_valid_email_err">Please give a valid Email Address!</string>
+
     <string name="add">Add</string>
     <string name="email">Email</string>
     <string name="send">Send</string>
@@ -671,4 +671,16 @@
     <string name="no_photos_found_err">Photos are not available!</string>
     <string name="no_videos_found_err">Videos are not available!</string>
     <string name="recent_users">Recent Users</string>
+
+
+    <!--Validation Messages-->
+
+    <string name="valid_all_fields_msg">Please enter all the mandatory fields</string>
+    <string name="valid_email_msg">Please enter your valid Email Address</string>
+    <string name="valid_pwd_msg">Please enter your valid Password</string>
+    <string name="valid_terms_and_con_msg">Please accept the Terms and Conditions</string>
+    <string name="valid_first_name_msg">Please enter your First Name</string>
+    <string name="valid_last_name_msg">Please enter your Last Name</string>
+    <string name="valid_conf_pwd_msg">Please enter your Confirm Password</string>
+    <string name="valid_mismatch_pwd_msg">Password and Confirm Password does not match</string>
 </resources>

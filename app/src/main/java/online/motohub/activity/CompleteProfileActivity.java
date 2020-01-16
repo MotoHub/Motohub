@@ -482,6 +482,7 @@ public class CompleteProfileActivity extends BaseActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
                 case CAMERA_CAPTURE_REQ:
@@ -700,7 +701,7 @@ public class CompleteProfileActivity extends BaseActivity {
 
     private void setResultIntent() {
         String mTAG = getIntent().getStringExtra(AppConstants.TAG);
-        if (mTAG.equals(LoginActivity.TAG)) {
+        if (mTAG.equals("LoginActivity")) {
             PreferenceUtils.getInstance(this).saveBooleanData(PreferenceUtils.USER_PROFILE_COMPLETED, true);
             startActivity(new Intent(this, ViewProfileActivity.class));
         } else {

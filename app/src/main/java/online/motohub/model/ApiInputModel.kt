@@ -12,4 +12,7 @@ class ApiInputModel {
     var includeCount: Boolean = false
     var apiKey: String = ""
     var businessProfileType: String = ""
+    var email: String = ""
+    var pwd: String = ""
+    var type: String = ""
 }

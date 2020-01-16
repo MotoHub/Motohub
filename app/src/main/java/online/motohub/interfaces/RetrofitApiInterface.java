@@ -66,6 +66,7 @@ import online.motohub.model.VideoReplyLikeModel;
 import online.motohub.model.VideoShareModel;
 import online.motohub.model.promoter_club_news_media.PromoterFollowerModel;
 import online.motohub.model.promoter_club_news_media.PromotersModel;
+import online.motohub.newdesign.constants.APIConstants;
 import online.motohub.util.UrlUtils;
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -774,9 +775,7 @@ public interface RetrofitApiInterface {
     Call<PostsModel> getAllFeeds(@Query("filter") String filter, @Query("related") String related, @Query("order") String order,
                                  @Query("limit") int limit, @Query("offset") int offset, @Query("include_count") boolean count);
 
-    @Headers({"SAVE_RESPONSE_AS: Profile"})
-    @GET(UrlUtils.PROFILES)
-    Call<ProfileModel> getProfiles(@Query("filter") String filter, @Query("related") String related);
+
 
     @GET(UrlUtils.EVENTS)
     Call<EventsModel> getEvents(@Query("filter") String filter, @Query("related") String related, @Query("order") String order);
@@ -808,4 +807,13 @@ public interface RetrofitApiInterface {
     Call<GalleryVideoModel> getVideosList(@Query("filter") String filter, @Query("order") String order,
                                           @Query("limit") int limit, @Query("offset") int offset,
                                           @Query("include_count") boolean count);
+
+
+    @Headers({"SAVE_RESPONSE_AS: Profile"})
+    @GET(APIConstants.PROFILE)
+    Call<ProfileModel> getProfiles(@Query("filter") String filter, @Query("related") String related);
+
+    @Headers({"SAVE_RESPONSE_AS: Profile"})
+    @GET(APIConstants.LOGIN)
+    Call<ProfileModel> callEmailLogin(@Query("email") String email, @Query("password") String pwd,@Query("type") String type);
 }

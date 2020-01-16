@@ -21,9 +21,24 @@ class ProfileViewModel(application: Application, bundle: Bundle?) : BaseViewMode
     private var cacheProfile: ArrayList<ProfileResModel>? = null
     var profileSpinnerList = ArrayList<String>()
 
-    private fun getProfileList() {
+    fun getProfileList() {
         callback!!.showProgress()
         provider.getProfiles(getInputModel(), ResponseCallback {
+            callback!!.hideProgress()
+            if (it.isSuccess && it.data != null && it.data.resource != null && it.data.resource.size > 0) {
+                setProfileObj(it.data.resource)
+            }
+        })
+    }
+
+    fun callLogin(email: String, pwd: String, type: String) {
+        callback!!.showProgress()
+        val inputModel = ApiInputModel()
+        inputModel.email = email
+        inputModel.pwd = pwd
+        inputModel.type=type
+
+        provider.callLogin(inputModel, ResponseCallback {
             callback!!.hideProgress()
             if (it.isSuccess && it.data != null && it.data.resource != null && it.data.resource.size > 0) {
                 setProfileObj(it.data.resource)

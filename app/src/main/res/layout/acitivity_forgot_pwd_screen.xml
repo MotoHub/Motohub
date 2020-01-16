@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/forgot_pwd_parent"
+    android:id="@+id/patentLay"
     style="@style/LayoutMatch"
     android:background="@color/colorWhite">
 
@@ -43,7 +43,7 @@
                     android:textSize="@dimen/text12" />
 
                 <EditText
-                    android:id="@+id/email_edt"
+                    android:id="@+id/emailEdt"
                     style="@style/LayoutMatchWrap"
                     android:layout_height="@dimen/size40"
                     android:background="@drawable/gray_border_bg"
@@ -55,7 +55,7 @@
                     android:textSize="@dimen/text12" />
 
                 <Button
-                    android:id="@+id/send_code_btn"
+                    android:id="@+id/sendCodeBtn"
                     style="@style/LayoutMatchWrap"
                     android:layout_height="@dimen/size40"
                     android:layout_marginTop="@dimen/size10"
@@ -66,7 +66,7 @@
                     android:textSize="@dimen/text14" />
 
                 <Button
-                    android:id="@+id/already_have_code_btn"
+                    android:id="@+id/alreadyHaveCodeBtn"
                     style="@style/LayoutMatchWrap"
                     android:layout_height="@dimen/size40"
                     android:layout_marginTop="@dimen/size20"

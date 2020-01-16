@@ -17,6 +17,12 @@ class ProfileProvider : BaseProvider() {
         return call
     }
 
+    fun callLogin(inputModel: ApiInputModel, response: ResponseCallback<ProfileModel>): Call<ProfileModel> {
+        val call = apiService.apiInterface.callEmailLogin(inputModel.email, inputModel.pwd,inputModel.type)
+        call.enqueue(DefaultResponse(response, ResponseSuccessCallback {}))
+        return call
+    }
+
     fun fetchProfileFromCache(inputModel: ApiInputModel): ArrayList<ProfileResModel>? {
         val call = apiService.apiInterface.getProfiles(inputModel.filter, inputModel.related)
         return fileCache.getCachedResponseBody(call, ProfileModel::class.java)?.resource

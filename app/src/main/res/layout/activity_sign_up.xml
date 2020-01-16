@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/sign_up_co_layout"
+    android:id="@+id/parentLay"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -13,12 +13,11 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_above="@+id/form_box"
+            android:layout_above="@+id/inputLay"
             android:layout_below="@id/include"
             android:layout_marginBottom="@dimen/size5">
 
             <ImageView
-                android:id="@+id/app_logo"
                 android:layout_width="@dimen/size150"
                 android:layout_height="match_parent"
                 android:layout_alignParentTop="true"
@@ -31,15 +30,17 @@
         </RelativeLayout>
 
         <LinearLayout
-            android:id="@+id/form_box"
+            android:id="@+id/inputLay"
             style="@style/LayoutMatchWrap"
             android:layout_centerInParent="true"
             android:layout_margin="@dimen/size10"
             android:background="@drawable/gray_border_bg"
             android:orientation="vertical">
 
+            <include layout="@layout/view_profile_type" />
+
             <EditText
-                android:id="@+id/first_name_et"
+                android:id="@+id/firstNameEdt"
                 style="@style/LayoutMatchWrap"
                 android:layout_height="@dimen/size40"
                 android:background="@null"
@@ -57,7 +58,7 @@
                 android:background="@color/colorGrey" />
 
             <EditText
-                android:id="@+id/last_name_et"
+                android:id="@+id/lastNameEdt"
                 style="@style/LayoutMatchWrap"
                 android:layout_height="@dimen/size40"
                 android:background="@null"
@@ -75,11 +76,12 @@
                 android:background="@color/colorGrey" />
 
             <EditText
+                android:id="@+id/phoneEdt"
                 style="@style/LayoutMatchWrap"
                 android:layout_height="@dimen/size40"
                 android:background="@null"
                 android:hint="@string/phone_number"
-                android:inputType="number"
+                android:inputType="phone"
                 android:paddingStart="@dimen/size5"
                 android:paddingEnd="@dimen/size5"
                 android:textColor="@color/colorBlack"
@@ -94,7 +96,7 @@
 
 
             <EditText
-                android:id="@+id/email_et"
+                android:id="@+id/emailEdt"
                 style="@style/LayoutMatchWrap"
                 android:layout_height="@dimen/size40"
                 android:background="@null"
@@ -112,7 +114,7 @@
                 android:background="@color/colorGrey" />
 
             <EditText
-                android:id="@+id/pwd_et"
+                android:id="@+id/pwdEdt"
                 style="@style/LayoutMatchWrap"
                 android:layout_height="@dimen/size40"
                 android:background="@null"
@@ -130,7 +132,7 @@
                 android:background="@color/colorGrey" />
 
             <EditText
-                android:id="@+id/conf_pwd_et"
+                android:id="@+id/confPwdEdt"
                 style="@style/LayoutMatchWrap"
                 android:layout_height="@dimen/size40"
                 android:background="@null"
@@ -145,10 +147,10 @@
         </LinearLayout>
 
         <Button
-            android:id="@+id/submit_btn"
+            android:id="@+id/submitBtn"
             android:layout_width="match_parent"
             android:layout_height="@dimen/size40"
-            android:layout_below="@+id/form_box"
+            android:layout_below="@+id/inputLay"
             android:layout_marginLeft="@dimen/size10"
             android:layout_marginRight="@dimen/size10"
             android:background="@drawable/black_orange_btn_bg"
